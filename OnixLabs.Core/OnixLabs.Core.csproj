@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>OnixLabs.Core</Title>
+        <Authors>ONIXLabs</Authors>
+        <Description>ONIXLabs Core API for .NET</Description>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <NeutralLanguage>en</NeutralLanguage>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <Optimize>true</Optimize>
+      <DocumentationFile>bin\Debug\net5.0\OnixLabs.Core.xml</DocumentationFile>
+    </PropertyGroup>
+
+</Project>

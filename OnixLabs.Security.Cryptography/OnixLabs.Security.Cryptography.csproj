@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Title>OnixLabs.Security.Cryptography</Title>
+        <Authors>ONIXLabs</Authors>
+        <Description>ONIXLabs Cryptography API for .NET</Description>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <NeutralLanguage>en</NeutralLanguage>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
+    </ItemGroup>
+
+</Project>

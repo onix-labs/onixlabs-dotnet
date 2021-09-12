@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+
 # User-specific files
 *.rsuser
 *.suo
@@ -348,3 +354,16 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Visual Studio Code
+.vscode
+
+# Jetbrains Rider
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+#nuget
+nuget.config

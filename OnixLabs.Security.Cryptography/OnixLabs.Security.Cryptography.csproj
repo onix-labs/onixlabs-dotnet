@@ -5,12 +5,13 @@
         <Title>OnixLabs.Security.Cryptography</Title>
         <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Cryptography API for .NET</Description>
-        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Copyright>Copyright © ONIXLabs 2020-2021</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
+        <PackageVersion>2.0.0</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -19,6 +20,7 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationFile>bin\Release\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
+      <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
     <ItemGroup>

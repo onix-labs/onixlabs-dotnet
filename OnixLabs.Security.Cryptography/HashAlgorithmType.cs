@@ -31,72 +31,99 @@ namespace OnixLabs.Security.Cryptography
         /// <summary>
         /// An unknown hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Unknown = new(0, nameof(Unknown), UnknownLength);
+        public static readonly HashAlgorithmType Unknown = new(0, nameof(Unknown), UnknownLength, false);
 
         /// <summary>
         /// The MD5 hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Md5Hash = new(1, nameof(Md5Hash), 16);
+        public static readonly HashAlgorithmType Md5Hash = new(1, nameof(Md5Hash), 16, false);
 
         /// <summary>
         /// The SHA-1 hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha1Hash = new(3, nameof(Sha1Hash), 20);
+        public static readonly HashAlgorithmType Sha1Hash = new(2, nameof(Sha1Hash), 20, false);
 
         /// <summary>
         /// The SHA-2 256-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha2Hash256 = new(4, nameof(Sha2Hash256), 32);
+        public static readonly HashAlgorithmType Sha2Hash256 = new(3, nameof(Sha2Hash256), 32, false);
 
         /// <summary>
         /// The SHA-2 384-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha2Hash384 = new(5, nameof(Sha2Hash384), 48);
+        public static readonly HashAlgorithmType Sha2Hash384 = new(4, nameof(Sha2Hash384), 48, false);
 
         /// <summary>
         /// The SHA-2 512-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha2Hash512 = new(6, nameof(Sha2Hash512), 64);
+        public static readonly HashAlgorithmType Sha2Hash512 = new(5, nameof(Sha2Hash512), 64, false);
 
         /// <summary>
         /// The SHA-3 224-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha3Hash224 = new(7, nameof(Sha3Hash224), 28);
+        public static readonly HashAlgorithmType Sha3Hash224 = new(6, nameof(Sha3Hash224), 28, false);
 
         /// <summary>
         /// The SHA-3 256-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha3Hash256 = new(8, nameof(Sha3Hash256), 32);
+        public static readonly HashAlgorithmType Sha3Hash256 = new(7, nameof(Sha3Hash256), 32, false);
 
         /// <summary>
         /// The SHA-3 384-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha3Hash384 = new(9, nameof(Sha3Hash384), 48);
+        public static readonly HashAlgorithmType Sha3Hash384 = new(8, nameof(Sha3Hash384), 48, false);
 
         /// <summary>
         /// The SHA-3 512-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha3Hash512 = new(10, nameof(Sha3Hash512), 64);
+        public static readonly HashAlgorithmType Sha3Hash512 = new(9, nameof(Sha3Hash512), 64, false);
 
         /// <summary>
         /// The SHA-3 Shake 128-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha3Shake128 = new(11, nameof(Sha3Shake128), UnknownLength);
+        public static readonly HashAlgorithmType Sha3Shake128 = new(10, nameof(Sha3Shake128), UnknownLength, false);
 
         /// <summary>
         /// The SHA-3 Shake 256-bit hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha3Shake256 = new(12, nameof(Sha3Shake256), UnknownLength);
+        public static readonly HashAlgorithmType Sha3Shake256 = new(11, nameof(Sha3Shake256), UnknownLength, false);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Enumeration{T}"/> class.
+        /// The MD5 HMAC keyed hash algorithm.
+        /// </summary>
+        public static readonly HashAlgorithmType Md5HmacHash = new(12, nameof(Md5HmacHash), 16, true);
+
+        /// <summary>
+        /// The SHA-1 HMAC keyed hash algorithm.
+        /// </summary>
+        public static readonly HashAlgorithmType Sha1HmacHash = new(13, nameof(Sha1HmacHash), 20, true);
+
+        /// <summary>
+        /// The SHA-2 256-bit HMAC keyed hash algorithm.
+        /// </summary>
+        public static readonly HashAlgorithmType Sha2HmacHash256 = new(14, nameof(Sha2HmacHash256), 32, true);
+
+        /// <summary>
+        /// The SHA-2 384-bit HMAC keyed hash algorithm.
+        /// </summary>
+        public static readonly HashAlgorithmType Sha2HmacHash384 = new(15, nameof(Sha2HmacHash384), 48, true);
+
+        /// <summary>
+        /// The SHA-2 512-bit HMAC keyed hash algorithm.
+        /// </summary>
+        public static readonly HashAlgorithmType Sha2HmacHash512 = new(16, nameof(Sha2HmacHash512), 64, true);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HashAlgorithmType"/> class.
         /// </summary>
         /// <param name="value">The value of the hash algorithm type.</param>
         /// <param name="name">The name of the hash algorithm type.</param>
         /// <param name="length">The length in bytes of the hash algorithm type.</param>
-        private HashAlgorithmType(int value, string name, int length) : base(value, name)
+        /// <param name="keyed">Determines whether the algorithm is a keyed hash algorithm.</param>
+        private HashAlgorithmType(int value, string name, int length, bool keyed) : base(value, name)
         {
             Length = length;
+            Keyed = keyed;
         }
 
         /// <summary>
@@ -104,6 +131,11 @@ namespace OnixLabs.Security.Cryptography
         /// -1 Means that the algorithm's hash is of variable length, or is unknown.
         /// </summary>
         public int Length { get; }
+
+        /// <summary>
+        /// Gets a value that determines whether the algorithm is a keyed hash algorithm.
+        /// </summary>
+        public bool Keyed { get; }
 
         /// <summary>
         /// Gets the hash algorithm for this <see cref="HashAlgorithmType"/> instance.
@@ -132,7 +164,26 @@ namespace OnixLabs.Security.Cryptography
                 nameof(Sha3Hash512) => Sha3.CreateSha3Hash512(),
                 nameof(Sha3Shake128) => Sha3.CreateSha3Shake128(length),
                 nameof(Sha3Shake256) => Sha3.CreateSha3Shake256(length),
-                _ => throw new ArgumentException($"Unknown hash algorithm: {Name}.")
+                _ => throw new ArgumentException($"Hash algorithm '{Name}' is unknown.")
+            };
+        }
+
+        /// <summary>
+        /// Gets the keyed hash algorithm for this <see cref="HashAlgorithmType"/> instance.
+        /// </summary>
+        /// <param name="key">The key that should be used by the keyed hash algorithm.</param>
+        /// <returns>Returns a <see cref="KeyedHashAlgorithm"/> for this <see cref="HashAlgorithmType"/>.</returns>
+        /// <exception cref="ArgumentException">If the hash algorithm is unknown.</exception>
+        public KeyedHashAlgorithm GetKeyedHashAlgorithm(byte[]? key = null)
+        {
+            return Name switch
+            {
+                nameof(Md5HmacHash) => key is null ? new HMACMD5() : new HMACMD5(key),
+                nameof(Sha1HmacHash) => key is null ? new HMACSHA1() : new HMACSHA1(key),
+                nameof(Sha2HmacHash256) => key is null ? new HMACSHA256() : new HMACSHA256(key),
+                nameof(Sha2HmacHash384) => key is null ? new HMACSHA384() : new HMACSHA384(key),
+                nameof(Sha2HmacHash512) => key is null ? new HMACSHA512() : new HMACSHA512(key),
+                _ => throw new ArgumentException($"Hash algorithm '{Name}' is unknown.")
             };
         }
 
@@ -150,7 +201,7 @@ namespace OnixLabs.Security.Cryptography
                 nameof(Sha2Hash256) => HashAlgorithmName.SHA256,
                 nameof(Sha2Hash384) => HashAlgorithmName.SHA384,
                 nameof(Sha2Hash512) => HashAlgorithmName.SHA512,
-                _ => throw new ArgumentException($"No corresponding {nameof(HashAlgorithmName)} for {Name}.")
+                _ => throw new ArgumentException($"No corresponding {nameof(HashAlgorithmName)} for '{Name}'.")
             };
         }
 

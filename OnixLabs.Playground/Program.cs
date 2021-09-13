@@ -12,12 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Security.Cryptography;
+using System.Text;
+using OnixLabs.Security.Cryptography;
+
 namespace OnixLabs.Playground
 {
     internal static class Program
     {
         private static void Main(string[] args)
         {
+            byte[] key = Encoding.ASCII.GetBytes("Test");
+            byte[] data = Encoding.ASCII.GetBytes("Hello, World!");
+            
+            using HMAC hmac = new HMACSHA256(key);
+            byte[] result = hmac.ComputeHash(data);
+            
+            Console.WriteLine(Hash.FromByteArray(result));
         }
     }
 }

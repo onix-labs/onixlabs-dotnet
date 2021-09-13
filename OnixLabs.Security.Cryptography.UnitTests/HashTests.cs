@@ -39,5 +39,34 @@ namespace OnixLabs.Security.Cryptography.UnitTests
             // Assert
             Assert.NotEqual(a, b);
         }
+
+        [Fact(DisplayName = "Parse should be able to parse a known hash")]
+        public void ParseShouldBeAbleToParseAKnownHash()
+        {
+            // Arrange
+            const string expected = "Sha2Hash256:dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
+
+            // Act
+            Hash hash = Hash.Parse(expected);
+            string actual = hash.ToStringWithAlgorithmType();
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact(DisplayName = "Parse should be able to parse an unknown hash")]
+        public void ParseShouldBeAbleToParseAnUnknownHash()
+        {
+            // Arrange
+            const string value = "dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
+            const string expected = "Unknown:dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
+
+            // Act
+            Hash hash = Hash.Parse(value);
+            string actual = hash.ToStringWithAlgorithmType();
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
     }
 }

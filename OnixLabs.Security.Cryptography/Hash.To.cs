@@ -96,5 +96,14 @@ namespace OnixLabs.Security.Cryptography
         {
             return Convert.ToHexString(value).ToLower();
         }
+
+        /// <summary>
+        /// Returns a <see cref="string"/> that represents the current object, including the hash algorithm type.
+        /// </summary>
+        /// <returns>A <see cref="string"/> that represents the current object, including the hash algorithm type.</returns>
+        public string ToStringWithAlgorithmType()
+        {
+            return $"{AlgorithmType.Name}:{ToString()}";
+        }
     }
 }

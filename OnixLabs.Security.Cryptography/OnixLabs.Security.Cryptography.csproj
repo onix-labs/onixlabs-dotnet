@@ -13,6 +13,14 @@
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
     </ItemGroup>

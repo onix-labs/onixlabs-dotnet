@@ -19,4 +19,8 @@
       <DocumentationFile>bin\Debug\net5.0\OnixLabs.Core.xml</DocumentationFile>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\net5.0\OnixLabs.Core.xml</DocumentationFile>
+    </PropertyGroup>
+
 </Project>

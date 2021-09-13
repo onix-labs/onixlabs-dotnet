@@ -20,7 +20,7 @@ namespace OnixLabs.Security.Cryptography
     public readonly partial struct Hash
     {
         /// <summary>
-        /// The underlying hexadecimal value of the hash.
+        /// The underlying value of the hash.
         /// </summary>
         private readonly byte[] value;
 

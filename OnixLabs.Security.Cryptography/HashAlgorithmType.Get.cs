@@ -61,13 +61,18 @@ namespace OnixLabs.Security.Cryptography
         /// <exception cref="ArgumentException">If the hash algorithm is unknown.</exception>
         public KeyedHashAlgorithm GetKeyedHashAlgorithm(byte[]? key = null)
         {
+            if (!Keyed)
+            {
+                throw new ArgumentException($"Hash algorithm type '{Name}' is not a keyed hash algorithm.");
+            }
+
             return Name switch
             {
-                nameof(Md5HmacHash) => key is null ? new HMACMD5() : new HMACMD5(key),
-                nameof(Sha1HmacHash) => key is null ? new HMACSHA1() : new HMACSHA1(key),
-                nameof(Sha2HmacHash256) => key is null ? new HMACSHA256() : new HMACSHA256(key),
-                nameof(Sha2HmacHash384) => key is null ? new HMACSHA384() : new HMACSHA384(key),
-                nameof(Sha2HmacHash512) => key is null ? new HMACSHA512() : new HMACSHA512(key),
+                nameof(Md5Hmac) => key is null ? new HMACMD5() : new HMACMD5(key),
+                nameof(Sha1Hmac) => key is null ? new HMACSHA1() : new HMACSHA1(key),
+                nameof(Sha2Hmac256) => key is null ? new HMACSHA256() : new HMACSHA256(key),
+                nameof(Sha2Hmac384) => key is null ? new HMACSHA384() : new HMACSHA384(key),
+                nameof(Sha2Hmac512) => key is null ? new HMACSHA512() : new HMACSHA512(key),
                 _ => throw new ArgumentException($"Hash algorithm '{Name}' is unknown.")
             };
         }

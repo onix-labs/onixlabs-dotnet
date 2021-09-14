@@ -23,13 +23,14 @@ namespace OnixLabs.Playground
     {
         private static void Main(string[] args)
         {
-            byte[] key = Encoding.ASCII.GetBytes("Test");
-            byte[] data = Encoding.ASCII.GetBytes("Hello, World!");
+            Hmac hmac = Hmac.ComputeSha2Hmac256("Hello, World!", "Test key");
+            Console.WriteLine(hmac.ToStringWithAlgorithmType());
             
-            using HMAC hmac = new HMACSHA256(key);
-            byte[] result = hmac.ComputeHash(data);
+            Hmac hmac2 = Hmac.Parse(hmac.ToStringWithAlgorithmType());
             
-            Console.WriteLine(Hash.FromByteArray(result));
+            Console.WriteLine(hmac2.ToStringWithAlgorithmType());
+            
+            Console.WriteLine(hmac == hmac2);
         }
     }
 }

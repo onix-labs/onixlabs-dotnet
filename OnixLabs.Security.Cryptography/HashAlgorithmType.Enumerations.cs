@@ -82,26 +82,26 @@ namespace OnixLabs.Security.Cryptography
         /// <summary>
         /// The MD5 HMAC keyed hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Md5HmacHash = new(12, nameof(Md5HmacHash), 16, true);
+        public static readonly HashAlgorithmType Md5Hmac = new(12, nameof(Md5Hmac), 16, true);
 
         /// <summary>
         /// The SHA-1 HMAC keyed hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha1HmacHash = new(13, nameof(Sha1HmacHash), 20, true);
+        public static readonly HashAlgorithmType Sha1Hmac = new(13, nameof(Sha1Hmac), 20, true);
 
         /// <summary>
         /// The SHA-2 256-bit HMAC keyed hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha2HmacHash256 = new(14, nameof(Sha2HmacHash256), 32, true);
+        public static readonly HashAlgorithmType Sha2Hmac256 = new(14, nameof(Sha2Hmac256), 32, true);
 
         /// <summary>
         /// The SHA-2 384-bit HMAC keyed hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha2HmacHash384 = new(15, nameof(Sha2HmacHash384), 48, true);
+        public static readonly HashAlgorithmType Sha2Hmac384 = new(15, nameof(Sha2Hmac384), 48, true);
 
         /// <summary>
         /// The SHA-2 512-bit HMAC keyed hash algorithm.
         /// </summary>
-        public static readonly HashAlgorithmType Sha2HmacHash512 = new(16, nameof(Sha2HmacHash512), 64, true);
+        public static readonly HashAlgorithmType Sha2Hmac512 = new(16, nameof(Sha2Hmac512), 64, true);
     }
 }

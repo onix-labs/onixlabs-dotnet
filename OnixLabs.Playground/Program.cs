@@ -12,25 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Security.Cryptography;
-using System.Text;
-using OnixLabs.Security.Cryptography;
-
 namespace OnixLabs.Playground
 {
     internal static class Program
     {
         private static void Main(string[] args)
         {
-            Hmac hmac = Hmac.ComputeSha2Hmac256("Hello, World!", "Test key");
-            Console.WriteLine(hmac.ToStringWithAlgorithmType());
-            
-            Hmac hmac2 = Hmac.Parse(hmac.ToStringWithAlgorithmType());
-            
-            Console.WriteLine(hmac2.ToStringWithAlgorithmType());
-            
-            Console.WriteLine(hmac == hmac2);
         }
     }
 }

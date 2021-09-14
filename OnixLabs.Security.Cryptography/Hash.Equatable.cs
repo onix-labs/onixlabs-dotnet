@@ -51,7 +51,8 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
         public bool Equals(Hash other)
         {
-            return other.value.SequenceEqual(value) && other.AlgorithmType == AlgorithmType;
+            return other.AlgorithmType == AlgorithmType 
+                   && other.Value.SequenceEqual(Value);
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
         public override bool Equals(object? obj)
         {
-            return obj is Hash hash && Equals(hash);
+            return obj is Hash other && Equals(other);
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(value, AlgorithmType);
+            return HashCode.Combine(Value, AlgorithmType);
         }
     }
 }

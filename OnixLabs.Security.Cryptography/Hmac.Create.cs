@@ -12,25 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Core.Text
+namespace OnixLabs.Security.Cryptography
 {
     /// <summary>
-    /// Represents a Base-16 (hexadecimal) value.
+    /// Represents a hashed message authentication code (HMAC).
     /// </summary>
-    public readonly partial struct Base16
+    public readonly partial struct Hmac
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Base16"/> struct.
+        /// Creates a hashed message authentication code (HMAC).
         /// </summary>
-        /// <param name="value">The underlying value.</param>
-        private Base16(byte[] value)
+        /// <param name="hash">The <see cref="Hash"/> representing the HMAC.</param>
+        /// <param name="data">The underlying un-hashed data.</param>
+        /// <returns>Returns a new <see cref="Hmac"/> instance.</returns>
+        public static Hmac Create(Hash hash, byte[] data)
         {
-            Value = value;
+            return new Hmac(hash, data);
         }
-
-        /// <summary>
-        /// Gets the underlying value.
-        /// </summary>
-        private byte[] Value { get; }
     }
 }

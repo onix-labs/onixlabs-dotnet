@@ -29,7 +29,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A <see cref="byte"/> array containing the underlying hash data.</returns>
         public byte[] ToByteArray()
         {
-            return value.Copy();
+            return Value.Copy();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="Base16"/> value that represents the underlying hash data.</returns>
         public Base16 ToBase16()
         {
-            return Base16.FromByteArray(value);
+            return Base16.FromByteArray(Value);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="Base32"/> value that represents the underlying hash data.</returns>
         public Base32 ToBase32(Base32Alphabet alphabet)
         {
-            return Base32.FromByteArray(value, alphabet);
+            return Base32.FromByteArray(Value, alphabet);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="Base58"/> value that represents the underlying hash data.</returns>
         public Base58 ToBase58(Base58Alphabet alphabet)
         {
-            return Base58.FromByteArray(value, alphabet);
+            return Base58.FromByteArray(Value, alphabet);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="Base64"/> value that represents the underlying hash data.</returns>
         public Base64 ToBase64()
         {
-            return Base64.FromByteArray(value);
+            return Base64.FromByteArray(Value);
         }
 
         /// <summary>
@@ -94,7 +94,16 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A <see cref="string"/> that represents the current object.</returns>
         public override string ToString()
         {
-            return Convert.ToHexString(value).ToLower();
+            return Convert.ToHexString(Value).ToLower();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="string"/> that represents the current object, including the hash algorithm type.
+        /// </summary>
+        /// <returns>A <see cref="string"/> that represents the current object, including the hash algorithm type.</returns>
+        public string ToStringWithAlgorithmType()
+        {
+            return $"{AlgorithmType.Name}:{ToString()}";
         }
     }
 }

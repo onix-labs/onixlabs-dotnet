@@ -27,7 +27,7 @@ namespace OnixLabs.Core.Text
         /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
         public byte[] ToByteArray()
         {
-            return value.Copy();
+            return Value.Copy();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace OnixLabs.Core.Text
         /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
         public string ToPlainTextString(Encoding encoding)
         {
-            return encoding.GetString(value);
+            return encoding.GetString(Value);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace OnixLabs.Core.Text
         /// <returns>A <see cref="string"/> that represents the current object.</returns>
         public override string ToString()
         {
-            return Encode(value, alphabet.Alphabet, padding);
+            return Encode(Value, Alphabet.Alphabet, Padding);
         }
     }
 }

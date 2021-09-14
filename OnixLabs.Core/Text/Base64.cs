@@ -20,17 +20,17 @@ namespace OnixLabs.Core.Text
     public readonly partial struct Base64
     {
         /// <summary>
-        /// The underlying value.
-        /// </summary>
-        private readonly byte[] value;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Base64"/> struct.
         /// </summary>
         /// <param name="value">The underlying value.</param>
         private Base64(byte[] value)
         {
-            this.value = value;
+            Value = value;
         }
+
+        /// <summary>
+        /// Gets the underlying value.
+        /// </summary>
+        private byte[] Value { get; }
     }
 }

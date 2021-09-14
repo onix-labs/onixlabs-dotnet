@@ -12,32 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Core;
+
 namespace OnixLabs.Security.Cryptography
 {
     /// <summary>
-    /// Represents a cryptographic public/private key pair.
+    /// Represents a hashed message authentication code (HMAC).
     /// </summary>
-    public sealed partial class KeyPair
+    public readonly partial struct Hmac
     {
         /// <summary>
-        /// Prevents new instances of the <see cref="KeyPair"/> class from being created.
+        /// Represents the underlying un-hashed data.
         /// </summary>
-        /// <param name="privateKey">The private key component of this key pair.</param>
-        /// <param name="publicKey">The public key component of this key pair.</param>
-        private KeyPair(PrivateKey privateKey, PublicKey publicKey)
+        private readonly byte[] data;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Hmac"/> struct.
+        /// </summary>
+        /// <param name="hash">The <see cref="Hash"/> representing the HMAC.</param>
+        /// <param name="data">The underlying un-hashed data.</param>
+        private Hmac(Hash hash, byte[] data)
         {
-            PrivateKey = privateKey;
-            PublicKey = publicKey;
+            Hash = hash;
+            this.data = data;
         }
 
         /// <summary>
-        /// Gets the private key component of this key pair.
+        /// Gets the <see cref="Hash"/> representing the HMAC.
         /// </summary>
-        public PrivateKey PrivateKey { get; }
+        public Hash Hash { get; }
 
         /// <summary>
-        /// Gets the public key component of this key pair.
+        /// Gets the underlying un-hashed data.
         /// </summary>
-        public PublicKey PublicKey { get; }
+        public byte[] Data => data.Copy();
     }
 }

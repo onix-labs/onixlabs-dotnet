@@ -20,17 +20,17 @@ namespace OnixLabs.Security.Cryptography
     public readonly partial struct DigitalSignature
     {
         /// <summary>
-        /// The underlying digitally signed data.
-        /// </summary>
-        private readonly byte[] value;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DigitalSignature"/> struct.
         /// </summary>
         /// <param name="value">The digitally signed data.</param>
         private DigitalSignature(byte[] value)
         {
-            this.value = value;
+            Value = value;
         }
+
+        /// <summary>
+        /// Gets the underlying digitally signed data.
+        /// </summary>
+        private byte[] Value { get; }
     }
 }

@@ -12,32 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Security.Cryptography
 {
     /// <summary>
-    /// Represents a cryptographic public/private key pair.
+    /// Represents a hashed message authentication code (HMAC).
     /// </summary>
-    public sealed partial class KeyPair
+    public readonly partial struct Hmac
     {
         /// <summary>
-        /// Prevents new instances of the <see cref="KeyPair"/> class from being created.
+        /// Returns a <see cref="string"/> that represents the current object.
         /// </summary>
-        /// <param name="privateKey">The private key component of this key pair.</param>
-        /// <param name="publicKey">The public key component of this key pair.</param>
-        private KeyPair(PrivateKey privateKey, PublicKey publicKey)
+        /// <returns>A <see cref="string"/> that represents the current object.</returns>
+        public override string ToString()
         {
-            PrivateKey = privateKey;
-            PublicKey = publicKey;
+            return $"{Hash}:{Convert.ToHexString(Data).ToLower()}";
         }
 
         /// <summary>
-        /// Gets the private key component of this key pair.
+        /// Returns a <see cref="string"/> that represents the current object, including the hash algorithm type.
         /// </summary>
-        public PrivateKey PrivateKey { get; }
-
-        /// <summary>
-        /// Gets the public key component of this key pair.
-        /// </summary>
-        public PublicKey PublicKey { get; }
+        /// <returns>A <see cref="string"/> that represents the current object, including the hash algorithm type.</returns>
+        public string ToStringWithAlgorithmType()
+        {
+            return $"{Hash.AlgorithmType.Name}:{ToString()}";
+        }
     }
 }

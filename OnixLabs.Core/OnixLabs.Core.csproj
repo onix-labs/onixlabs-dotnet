@@ -8,15 +8,21 @@
         <Title>OnixLabs.Core</Title>
         <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Core API for .NET</Description>
-        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>Copyright © ONIXLabs 2020-2021</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
+        <PackageVersion>2.0.0</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <Optimize>true</Optimize>
       <DocumentationFile>bin\Debug\net5.0\OnixLabs.Core.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\net5.0\OnixLabs.Core.xml</DocumentationFile>
+      <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
 </Project>

@@ -51,7 +51,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
         public bool Equals(DigitalSignature other)
         {
-            return other.value.SequenceEqual(value);
+            return other.Value.SequenceEqual(Value);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(value);
+            return HashCode.Combine(Value);
         }
     }
 }

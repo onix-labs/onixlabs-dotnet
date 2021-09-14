@@ -20,24 +20,24 @@ namespace OnixLabs.Core.Text
     public readonly partial struct Base58
     {
         /// <summary>
-        /// The underlying value.
-        /// </summary>
-        private readonly byte[] value;
-
-        /// <summary>
-        /// The alphabet that will be used for Base-58 encoding and decoding operations.
-        /// </summary>
-        private readonly Base58Alphabet alphabet;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Base58"/> struct.
         /// </summary>
         /// <param name="value">The underlying value.</param>
         /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
         private Base58(byte[] value, Base58Alphabet alphabet)
         {
-            this.value = value;
-            this.alphabet = alphabet;
+            Value = value;
+            Alphabet = alphabet;
         }
+
+        /// <summary>
+        /// Gets the underlying value.
+        /// </summary>
+        private byte[] Value { get; }
+
+        /// <summary>
+        /// Gets the alphabet that will be used for Base-58 encoding and decoding operations.
+        /// </summary>
+        private Base58Alphabet Alphabet { get; }
     }
 }

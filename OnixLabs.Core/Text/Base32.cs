@@ -20,21 +20,6 @@ namespace OnixLabs.Core.Text
     public readonly partial struct Base32
     {
         /// <summary>
-        /// The underlying value.
-        /// </summary>
-        private readonly byte[] value;
-
-        /// <summary>
-        /// The alphabet that will be used for Base-32 encoding and decoding operations.
-        /// </summary>
-        private readonly Base32Alphabet alphabet;
-
-        /// <summary>
-        /// Determines whether padding should be applied for Base-32 encoding and decoding operations.
-        /// </summary>
-        private readonly bool padding;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Base32"/> struct.
         /// </summary>
         /// <param name="value">The underlying value.</param>
@@ -42,9 +27,24 @@ namespace OnixLabs.Core.Text
         /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
         private Base32(byte[] value, Base32Alphabet alphabet, bool padding)
         {
-            this.value = value;
-            this.alphabet = alphabet;
-            this.padding = padding;
+            Value = value;
+            Alphabet = alphabet;
+            Padding = padding;
         }
+
+        /// <summary>
+        /// Gets the underlying value.
+        /// </summary>
+        private byte[] Value { get; }
+
+        /// <summary>
+        /// Gets the alphabet that will be used for Base-32 encoding and decoding operations.
+        /// </summary>
+        private Base32Alphabet Alphabet { get; }
+
+        /// <summary>
+        /// Gets a value that determines whether padding should be applied for Base-32 encoding and decoding operations.
+        /// </summary>
+        private bool Padding { get; }
     }
 }

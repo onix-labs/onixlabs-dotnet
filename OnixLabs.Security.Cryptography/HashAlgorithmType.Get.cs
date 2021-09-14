@@ -58,7 +58,7 @@ namespace OnixLabs.Security.Cryptography
         /// </summary>
         /// <param name="key">The key that should be used by the keyed hash algorithm.</param>
         /// <returns>Returns a <see cref="KeyedHashAlgorithm"/> for this <see cref="HashAlgorithmType"/>.</returns>
-        /// <exception cref="ArgumentException">If the hash algorithm is unknown.</exception>
+        /// <exception cref="ArgumentException">If the hash algorithm is unknown or is not a keyed hash algorithm.</exception>
         public KeyedHashAlgorithm GetKeyedHashAlgorithm(byte[]? key = null)
         {
             if (!Keyed)

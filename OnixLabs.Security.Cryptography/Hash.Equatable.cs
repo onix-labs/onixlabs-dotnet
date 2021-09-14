@@ -52,7 +52,7 @@ namespace OnixLabs.Security.Cryptography
         public bool Equals(Hash other)
         {
             return other.AlgorithmType == AlgorithmType 
-                   && other.value.SequenceEqual(value);
+                   && other.Value.SequenceEqual(Value);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(value, AlgorithmType);
+            return HashCode.Combine(Value, AlgorithmType);
         }
     }
 }

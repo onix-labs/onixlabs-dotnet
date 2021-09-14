@@ -13,14 +13,13 @@
 // limitations under the License.
 
 using System;
-using System.Linq;
 
-namespace OnixLabs.Core.Text
+namespace OnixLabs.Security.Cryptography
 {
     /// <summary>
-    /// Represents a Base-32 value.
+    /// Represents a cryptographic public/private key pair.
     /// </summary>
-    public readonly partial struct Base32 : IEquatable<Base32>
+    public sealed partial class KeyPair : IEquatable<KeyPair>
     {
         /// <summary>
         /// Performs an equality check between two object instances.
@@ -28,7 +27,7 @@ namespace OnixLabs.Core.Text
         /// <param name="a">Instance a.</param>
         /// <param name="b">Instance b.</param>
         /// <returns>True if the instances are equal; otherwise, false.</returns>
-        public static bool operator ==(Base32 a, Base32 b)
+        public static bool operator ==(KeyPair a, KeyPair b)
         {
             return Equals(a, b);
         }
@@ -39,7 +38,7 @@ namespace OnixLabs.Core.Text
         /// <param name="a">Instance a.</param>
         /// <param name="b">Instance b.</param>
         /// <returns>True if the instances are not equal; otherwise, false.</returns>
-        public static bool operator !=(Base32 a, Base32 b)
+        public static bool operator !=(KeyPair a, KeyPair b)
         {
             return !Equals(a, b);
         }
@@ -49,11 +48,12 @@ namespace OnixLabs.Core.Text
         /// </summary>
         /// <param name="other">The object to check for equality.</param>
         /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public bool Equals(Base32 other)
+        public bool Equals(KeyPair? other)
         {
-            return other.Value.SequenceEqual(Value)
-                   && other.Alphabet == Alphabet
-                   && other.Padding == Padding;
+            return ReferenceEquals(this, other)
+                   || other is not null
+                   && other.PrivateKey == PrivateKey
+                   && other.PublicKey == PublicKey;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace OnixLabs.Core.Text
         /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
         public override bool Equals(object? obj)
         {
-            return obj is Base32 other && Equals(other);
+            return Equals(obj as KeyPair);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace OnixLabs.Core.Text
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Value);
+            return HashCode.Combine(PrivateKey, PublicKey);
         }
     }
 }

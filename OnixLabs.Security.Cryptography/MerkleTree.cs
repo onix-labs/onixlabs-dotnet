@@ -81,7 +81,7 @@ namespace OnixLabs.Security.Cryptography
         /// </summary>
         /// <param name="merkleTrees">The <see cref="IEnumerable{MerkleTree}"/> to check.</param>
         /// <exception cref="ArgumentException">if the elements of the <see cref="IEnumerable{MerkleTree}"/> do not have the same hash algorithm type.</exception>
-        private static void CheckNodesHaveEqualHashAlgorithms(IReadOnlyList<MerkleTree> merkleTrees)
+        private static void CheckNodesHaveEqualHashAlgorithms(IEnumerable<MerkleTree> merkleTrees)
         {
             if (!merkleTrees.AllEqualBy(merkleTree => merkleTree.Hash.AlgorithmType))
             {

@@ -20,11 +20,6 @@ namespace OnixLabs.Security.Cryptography
     public readonly partial struct Hash
     {
         /// <summary>
-        /// The underlying value of the hash.
-        /// </summary>
-        private readonly byte[] value;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Hash"/> struct.
         /// </summary>
         /// <param name="value">The underlying hexadecimal value of the hash.</param>
@@ -33,13 +28,18 @@ namespace OnixLabs.Security.Cryptography
         {
             type.VerifyHashLength(value);
 
-            this.value = value;
             AlgorithmType = type;
+            Value = value;
         }
 
         /// <summary>
         /// Gets the hash algorithm type of the hash.
         /// </summary>
         public HashAlgorithmType AlgorithmType { get; }
+
+        /// <summary>
+        /// Gets the underlying value of the hash.
+        /// </summary>
+        private byte[] Value { get; }
     }
 }

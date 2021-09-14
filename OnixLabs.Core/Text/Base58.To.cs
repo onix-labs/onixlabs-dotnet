@@ -27,7 +27,7 @@ namespace OnixLabs.Core.Text
         /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
         public byte[] ToByteArray()
         {
-            return value.Copy();
+            return Value.Copy();
         }
 
         /// <summary>
@@ -36,8 +36,8 @@ namespace OnixLabs.Core.Text
         /// <returns>A <see cref="string"/> that represents the current object, with a checksum.</returns>
         public string ToStringWithChecksum()
         {
-            byte[] valueWithChecksum = AddChecksum(value);
-            return Encode(valueWithChecksum, alphabet.Alphabet);
+            byte[] valueWithChecksum = AddChecksum(Value);
+            return Encode(valueWithChecksum, Alphabet.Alphabet);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace OnixLabs.Core.Text
         /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
         public string ToPlainTextString(Encoding encoding)
         {
-            return encoding.GetString(value);
+            return encoding.GetString(Value);
         }
 
 
@@ -66,7 +66,7 @@ namespace OnixLabs.Core.Text
         /// <returns>A <see cref="string"/> that represents the current object.</returns>
         public override string ToString()
         {
-            return Encode(value, alphabet.Alphabet);
+            return Encode(Value, Alphabet.Alphabet);
         }
     }
 }

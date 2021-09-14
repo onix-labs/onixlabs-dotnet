@@ -51,8 +51,8 @@ namespace OnixLabs.Core.Text
         /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
         public bool Equals(Base58 other)
         {
-            return other.value.SequenceEqual(value)
-                   && other.alphabet == alphabet;
+            return other.Value.SequenceEqual(Value)
+                   && other.Alphabet == Alphabet;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace OnixLabs.Core.Text
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(value);
+            return HashCode.Combine(Value);
         }
     }
 }

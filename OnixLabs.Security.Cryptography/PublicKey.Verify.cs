@@ -16,9 +16,6 @@ using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents the base class for public key implementations.
-    /// </summary>
     public abstract partial class PublicKey
     {
         /// <summary>

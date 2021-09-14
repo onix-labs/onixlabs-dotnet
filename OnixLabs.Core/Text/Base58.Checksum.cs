@@ -18,9 +18,6 @@ using System.Security.Cryptography;
 
 namespace OnixLabs.Core.Text
 {
-    /// <summary>
-    /// Represents a Base-58 value.
-    /// </summary>
     public readonly partial struct Base58
     {
         /// <summary>

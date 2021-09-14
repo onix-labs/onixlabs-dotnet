@@ -17,9 +17,6 @@ using System.Linq;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents a digital signature.
-    /// </summary>
     public readonly partial struct DigitalSignature : IEquatable<DigitalSignature>
     {
         /// <summary>

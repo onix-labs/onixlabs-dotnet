@@ -16,9 +16,6 @@ using System.Runtime.CompilerServices;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Computes the FIPS 202 SHA-3 hash for the input data.
-    /// </summary>
     public abstract partial class Sha3
     {
         /// <summary>

@@ -16,9 +16,6 @@ using System;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Specifies values that define known hash algorithm types.
-    /// </summary>
     public sealed partial class HashAlgorithmType
     {
         /// <summary>

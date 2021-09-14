@@ -17,9 +17,6 @@ using System.Linq;
 
 namespace OnixLabs.Core.Text
 {
-    /// <summary>
-    /// Represents a Base-64 value.
-    /// </summary>
     public readonly partial struct Base64 : IEquatable<Base64>
     {
         /// <summary>

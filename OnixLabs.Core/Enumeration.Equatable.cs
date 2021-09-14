@@ -16,9 +16,6 @@ using System;
 
 namespace OnixLabs.Core
 {
-    /// <summary>
-    /// Represents the base class for implementing enumeration classes.
-    /// </summary>
     public abstract partial class Enumeration<T> : IEquatable<T>
     {
         /// <summary>

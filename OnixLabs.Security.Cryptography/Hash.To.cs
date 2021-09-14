@@ -18,9 +18,6 @@ using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents a cryptographic hash.
-    /// </summary>
     public readonly partial struct Hash
     {
         /// <summary>

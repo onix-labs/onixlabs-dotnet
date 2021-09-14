@@ -16,9 +16,6 @@ using System;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents a cryptographic public/private key pair.
-    /// </summary>
     public sealed partial class KeyPair : IEquatable<KeyPair>
     {
         /// <summary>

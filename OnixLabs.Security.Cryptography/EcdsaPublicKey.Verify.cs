@@ -28,7 +28,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using ECDsa publicKey = ECDsa.Create();
 
-            publicKey.ImportSubjectPublicKeyInfo(PublicKeyData, out int _);
+            publicKey.ImportSubjectPublicKeyInfo(KeyData, out int _);
             byte[] signatureData = signature.ToByteArray();
             HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
 
@@ -45,7 +45,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using ECDsa publicKey = ECDsa.Create();
 
-            publicKey.ImportSubjectPublicKeyInfo(PublicKeyData, out int _);
+            publicKey.ImportSubjectPublicKeyInfo(KeyData, out int _);
             byte[] signatureData = signature.ToByteArray();
 
             return publicKey.VerifyHash(unsignedHash, signatureData);

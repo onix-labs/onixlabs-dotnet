@@ -70,7 +70,11 @@ namespace OnixLabs.Core
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(GetType(), Name, Value);
+            return new HashCode()
+                .AddItem(GetType())
+                .AddItem(Name)
+                .AddItem(Value)
+                .ToHashCode();
         }
     }
 }

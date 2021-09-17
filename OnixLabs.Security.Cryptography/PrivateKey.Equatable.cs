@@ -14,6 +14,7 @@
 
 using System;
 using System.Linq;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography
 {
@@ -51,7 +52,7 @@ namespace OnixLabs.Security.Cryptography
             return ReferenceEquals(this, other)
                    || other is not null
                    && other.GetType() == GetType()
-                   && other.PrivateKeyData.SequenceEqual(PrivateKeyData)
+                   && other.KeyData.SequenceEqual(KeyData)
                    && other.AlgorithmType == AlgorithmType;
         }
 
@@ -71,7 +72,11 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(GetType(), PrivateKeyData, AlgorithmType);
+            return new HashCode()
+                .AddItem(GetType())
+                .AddItem(AlgorithmType)
+                .AddItems(KeyData)
+                .ToHashCode();
         }
     }
 }

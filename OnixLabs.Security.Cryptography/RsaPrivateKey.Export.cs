@@ -27,7 +27,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using RSA privateKey = RSA.Create();
 
-            privateKey.ImportRSAPrivateKey(PrivateKeyData, out int _);
+            privateKey.ImportRSAPrivateKey(KeyData, out int _);
 
             return privateKey.ExportPkcs8PrivateKey();
         }
@@ -42,7 +42,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using RSA privateKey = RSA.Create();
 
-            privateKey.ImportRSAPrivateKey(PrivateKeyData, out int _);
+            privateKey.ImportRSAPrivateKey(KeyData, out int _);
 
             return privateKey.ExportEncryptedPkcs8PrivateKey(password, parameters);
         }

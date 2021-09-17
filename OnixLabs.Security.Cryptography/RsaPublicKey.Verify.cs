@@ -28,7 +28,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using RSA publicKey = RSA.Create();
 
-            publicKey.ImportRSAPublicKey(PublicKeyData, out int _);
+            publicKey.ImportRSAPublicKey(KeyData, out int _);
             byte[] signatureData = signature.ToByteArray();
             HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
 
@@ -45,7 +45,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using RSA publicKey = RSA.Create();
 
-            publicKey.ImportRSAPublicKey(PublicKeyData, out int _);
+            publicKey.ImportRSAPublicKey(KeyData, out int _);
             byte[] signatureData = signature.ToByteArray();
             HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
 

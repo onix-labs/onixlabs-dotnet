@@ -27,15 +27,15 @@ namespace OnixLabs.Security.Cryptography
         protected PublicKey(byte[] data, HashAlgorithmType type)
         {
             type.GetHashAlgorithmName();
-            
-            PublicKeyData = data;
+
+            KeyData = data;
             AlgorithmType = type;
         }
 
         /// <summary>
         /// Gets the underlying public key data.
         /// </summary>
-        protected byte[] PublicKeyData { get; }
+        protected byte[] KeyData { get; }
 
         /// <summary>
         /// Gets the hash algorithm type for computing signature data.

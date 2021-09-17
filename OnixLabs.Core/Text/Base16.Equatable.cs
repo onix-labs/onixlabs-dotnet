@@ -67,7 +67,9 @@ namespace OnixLabs.Core.Text
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Value);
+            return new HashCode()
+                .AddItems(Value)
+                .ToHashCode();
         }
     }
 }

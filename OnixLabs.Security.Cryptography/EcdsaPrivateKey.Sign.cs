@@ -27,7 +27,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using ECDsa privateKey = ECDsa.Create();
 
-            privateKey.ImportECPrivateKey(PrivateKeyData, out int _);
+            privateKey.ImportECPrivateKey(KeyData, out int _);
             HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
             byte[] signedData = privateKey.SignData(unsignedData, name);
 
@@ -43,7 +43,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using ECDsa privateKey = ECDsa.Create();
 
-            privateKey.ImportECPrivateKey(PrivateKeyData, out int _);
+            privateKey.ImportECPrivateKey(KeyData, out int _);
             byte[] signedData = privateKey.SignHash(unsignedHash);
 
             return DigitalSignature.FromByteArray(signedData);

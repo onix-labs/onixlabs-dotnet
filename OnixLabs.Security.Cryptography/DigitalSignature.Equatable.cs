@@ -14,12 +14,10 @@
 
 using System;
 using System.Linq;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents a digital signature.
-    /// </summary>
     public readonly partial struct DigitalSignature : IEquatable<DigitalSignature>
     {
         /// <summary>
@@ -70,7 +68,9 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Value);
+            return new HashCode()
+                .AddItems(Value)
+                .ToHashCode();
         }
     }
 }

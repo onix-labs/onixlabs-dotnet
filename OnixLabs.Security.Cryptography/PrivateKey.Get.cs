@@ -14,9 +14,6 @@
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents the base class for private key implementations.
-    /// </summary>
     public abstract partial class PrivateKey
     {
         /// <summary>

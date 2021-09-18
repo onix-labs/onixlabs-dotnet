@@ -16,9 +16,6 @@ using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents an ECDSA private key.
-    /// </summary>
     public sealed partial class EcdsaPrivateKey
     {
         /// <summary>
@@ -29,7 +26,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using ECDsa privateKey = ECDsa.Create();
 
-            privateKey.ImportECPrivateKey(PrivateKeyData, out int _);
+            privateKey.ImportECPrivateKey(KeyData, out int _);
             byte[] publicKey = privateKey.ExportSubjectPublicKeyInfo();
 
             return new EcdsaPublicKey(publicKey, AlgorithmType);

@@ -16,9 +16,6 @@ using System;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents a Merkle tree.
-    /// </summary>
     public abstract partial class MerkleTree : IEquatable<MerkleTree>
     {
         /// <summary>

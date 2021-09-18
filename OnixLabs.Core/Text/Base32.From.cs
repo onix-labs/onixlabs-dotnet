@@ -18,9 +18,6 @@ using System.Text;
 
 namespace OnixLabs.Core.Text
 {
-    /// <summary>
-    /// Represents a Base-32 value.
-    /// </summary>
     public readonly partial struct Base32
     {
         /// <summary>

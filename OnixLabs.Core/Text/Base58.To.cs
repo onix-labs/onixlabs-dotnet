@@ -16,9 +16,6 @@ using System.Text;
 
 namespace OnixLabs.Core.Text
 {
-    /// <summary>
-    /// Represents a Base-58 value.
-    /// </summary>
     public readonly partial struct Base58
     {
         /// <summary>

@@ -28,14 +28,14 @@ namespace OnixLabs.Security.Cryptography
         {
             type.GetHashAlgorithmName();
 
-            PrivateKeyData = data;
+            KeyData = data;
             AlgorithmType = type;
         }
 
         /// <summary>
         /// Gets the underlying private key data.
         /// </summary>
-        protected byte[] PrivateKeyData { get; }
+        protected byte[] KeyData { get; }
 
         /// <summary>
         /// Gets the hash algorithm type for computing signature data.

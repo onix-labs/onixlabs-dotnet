@@ -19,6 +19,21 @@ namespace OnixLabs.Core.UnitTests
 {
     public sealed class Base32Base32HexAlphabetTests
     {
+        [Fact(DisplayName = "Identical Base32 values produce identical hash codes.")]
+        public void IdenticalBase32ValuesProduceIdenticalHashCodes()
+        {
+            // Arrange
+            Base32 a = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Base32Hex);
+            Base32 b = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Base32Hex);
+            
+            // Act
+            int hashCodeA = a.GetHashCode();
+            int hashCodeB = b.GetHashCode();
+
+            // Assert
+            Assert.Equal(hashCodeA, hashCodeB);
+        }
+        
         [Theory(DisplayName = "Base32_FromString without padding should produce the expected Base-32 value.")]
         [InlineData("64P36D1L6ORJGE9G", "1234567890")]
         [InlineData("85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]

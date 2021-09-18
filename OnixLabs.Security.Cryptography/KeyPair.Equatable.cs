@@ -13,12 +13,10 @@
 // limitations under the License.
 
 using System;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents a cryptographic public/private key pair.
-    /// </summary>
     public sealed partial class KeyPair : IEquatable<KeyPair>
     {
         /// <summary>
@@ -72,7 +70,10 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(PrivateKey, PublicKey);
+            return new HashCode()
+                .AddItem(PrivateKey)
+                .AddItem(PublicKey)
+                .ToHashCode();
         }
     }
 }

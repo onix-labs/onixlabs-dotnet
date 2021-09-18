@@ -14,9 +14,6 @@
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents an RSA public key.
-    /// </summary>
     public sealed partial class RsaPublicKey
     {
         /// <summary>

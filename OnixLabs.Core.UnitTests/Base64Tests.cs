@@ -19,6 +19,21 @@ namespace OnixLabs.Core.UnitTests
 {
     public sealed class Base64Tests
     {
+        [Fact(DisplayName = "Identical Base64 values produce identical hash codes.")]
+        public void IdenticalBase64ValuesProduceIdenticalHashCodes()
+        {
+            // Arrange
+            Base64 a = Base64.FromString("abcdefghijklmnopqrstuvwxyz");
+            Base64 b = Base64.FromString("abcdefghijklmnopqrstuvwxyz");
+            
+            // Act
+            int hashCodeA = a.GetHashCode();
+            int hashCodeB = b.GetHashCode();
+
+            // Assert
+            Assert.Equal(hashCodeA, hashCodeB);
+        }
+        
         [Theory(DisplayName = "Base64_FromString should produce the expected Base-64 value.")]
         [InlineData("MTIzNDU2Nzg5MA==", "1234567890")]
         [InlineData("QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]

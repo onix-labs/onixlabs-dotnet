@@ -17,9 +17,6 @@ using System.Text;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents a hashed message authentication code (HMAC).
-    /// </summary>
     public readonly partial struct Hmac
     {
         /// <summary>

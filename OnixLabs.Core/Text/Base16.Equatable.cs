@@ -17,9 +17,6 @@ using System.Linq;
 
 namespace OnixLabs.Core.Text
 {
-    /// <summary>
-    /// Represents a Base-16 (hexadecimal) value.
-    /// </summary>
     public readonly partial struct Base16 : IEquatable<Base16>
     {
         /// <summary>
@@ -70,7 +67,9 @@ namespace OnixLabs.Core.Text
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Value);
+            return new HashCode()
+                .AddItems(Value)
+                .ToHashCode();
         }
     }
 }

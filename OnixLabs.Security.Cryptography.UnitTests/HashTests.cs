@@ -18,12 +18,27 @@ namespace OnixLabs.Security.Cryptography.UnitTests
 {
     public sealed class HashTests
     {
+        [Fact(DisplayName = "Identical Hash values produce identical hash codes.")]
+        public void IdenticalHashValuesProduceIdenticalHashCodes()
+        {
+            // Arrange
+            Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
+            Hash b = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
+            
+            // Act
+            int hashCodeA = a.GetHashCode();
+            int hashCodeB = b.GetHashCode();
+
+            // Assert
+            Assert.Equal(hashCodeA, hashCodeB);
+        }
+        
         [Fact(DisplayName = "Identical hashes should be considered equal")]
         public void IdenticalHashesShouldBeConsideredEqual()
         {
             // Arrange
-            Hash a = Hash.ComputeSha2Hash256("abc");
-            Hash b = Hash.ComputeSha2Hash256("abc");
+            Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
+            Hash b = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
 
             // Assert
             Assert.Equal(a, b);
@@ -33,8 +48,8 @@ namespace OnixLabs.Security.Cryptography.UnitTests
         public void DifferentHashesShouldNotBeConsideredEqual()
         {
             // Arrange
-            Hash a = Hash.ComputeSha2Hash256("abc");
-            Hash b = Hash.ComputeSha2Hash256("xyz");
+            Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
+            Hash b = Hash.ComputeSha2Hash256("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
             // Assert
             Assert.NotEqual(a, b);

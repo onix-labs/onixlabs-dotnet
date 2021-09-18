@@ -16,9 +16,6 @@ using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents an ECDSA public key.
-    /// </summary>
     public sealed partial class EcdsaPublicKey
     {
         /// <summary>

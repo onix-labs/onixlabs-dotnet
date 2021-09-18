@@ -18,9 +18,6 @@ using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents the base class for private key implementations.
-    /// </summary>
     public abstract partial class PrivateKey
     {
         /// <summary>
@@ -29,7 +26,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="byte"/> array that represents the underlying private key data.</returns>
         public byte[] ToByteArray()
         {
-            return PrivateKeyData.Copy();
+            return KeyData.Copy();
         }
 
         /// <summary>
@@ -38,7 +35,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="Base16"/> value that represents the underlying private key data.</returns>
         public Base16 ToBase16()
         {
-            return Base16.FromByteArray(PrivateKeyData);
+            return Base16.FromByteArray(KeyData);
         }
 
         /// <summary>
@@ -57,7 +54,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="Base32"/> value that represents the underlying private key data.</returns>
         public Base32 ToBase32(Base32Alphabet alphabet)
         {
-            return Base32.FromByteArray(PrivateKeyData, alphabet);
+            return Base32.FromByteArray(KeyData, alphabet);
         }
 
         /// <summary>
@@ -76,7 +73,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="Base58"/> value that represents the underlying private key data.</returns>
         public Base58 ToBase58(Base58Alphabet alphabet)
         {
-            return Base58.FromByteArray(PrivateKeyData, alphabet);
+            return Base58.FromByteArray(KeyData, alphabet);
         }
 
         /// <summary>
@@ -85,7 +82,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>Returns a <see cref="Base64"/> value that represents the underlying private key data.</returns>
         public Base64 ToBase64()
         {
-            return Base64.FromByteArray(PrivateKeyData);
+            return Base64.FromByteArray(KeyData);
         }
 
         /// <summary>
@@ -94,7 +91,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A <see cref="string"/> that represents the current object.</returns>
         public override string ToString()
         {
-            return Convert.ToHexString(PrivateKeyData).ToLower();
+            return Convert.ToHexString(KeyData).ToLower();
         }
     }
 }

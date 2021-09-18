@@ -16,9 +16,6 @@ using System;
 
 namespace OnixLabs.Core
 {
-    /// <summary>
-    /// Represents the base class for implementing enumeration classes.
-    /// </summary>
     public abstract partial class Enumeration<T> : IEquatable<T>
     {
         /// <summary>
@@ -73,7 +70,11 @@ namespace OnixLabs.Core
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(GetType(), Name, Value);
+            return new HashCode()
+                .AddItem(GetType())
+                .AddItem(Name)
+                .AddItem(Value)
+                .ToHashCode();
         }
     }
 }

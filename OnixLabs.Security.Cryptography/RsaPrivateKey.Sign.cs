@@ -16,9 +16,6 @@ using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents an RSA private key.
-    /// </summary>
     public sealed partial class RsaPrivateKey
     {
         /// <summary>
@@ -30,7 +27,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using RSA privateKey = RSA.Create();
 
-            privateKey.ImportRSAPrivateKey(PrivateKeyData, out int _);
+            privateKey.ImportRSAPrivateKey(KeyData, out int _);
             HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
             byte[] signedData = privateKey.SignData(unsignedData, name, Padding);
 
@@ -46,7 +43,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using RSA privateKey = RSA.Create();
 
-            privateKey.ImportRSAPrivateKey(PrivateKeyData, out int _);
+            privateKey.ImportRSAPrivateKey(KeyData, out int _);
             HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
             byte[] signedData = privateKey.SignHash(unsignedHash, name, Padding);
 

@@ -14,12 +14,10 @@
 
 using System;
 using System.Linq;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents a hashed message authentication code (HMAC).
-    /// </summary>
     public readonly partial struct Hmac : IEquatable<Hmac>
     {
         /// <summary>
@@ -71,7 +69,10 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Hash, Data);
+            return new HashCode()
+                .AddItem(Hash)
+                .AddItems(Data)
+                .ToHashCode();
         }
     }
 }

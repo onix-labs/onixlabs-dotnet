@@ -17,9 +17,6 @@ using System.Text;
 
 namespace OnixLabs.Core.Text
 {
-    /// <summary>
-    /// Represents a Base-16 (hexadecimal) value.
-    /// </summary>
     public readonly partial struct Base16
     {
         /// <summary>

@@ -16,9 +16,6 @@ using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography
 {
-    /// <summary>
-    /// Represents an RSA public key.
-    /// </summary>
     public sealed partial class RsaPublicKey
     {
         /// <summary>
@@ -31,7 +28,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using RSA publicKey = RSA.Create();
 
-            publicKey.ImportRSAPublicKey(PublicKeyData, out int _);
+            publicKey.ImportRSAPublicKey(KeyData, out int _);
             byte[] signatureData = signature.ToByteArray();
             HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
 
@@ -48,7 +45,7 @@ namespace OnixLabs.Security.Cryptography
         {
             using RSA publicKey = RSA.Create();
 
-            publicKey.ImportRSAPublicKey(PublicKeyData, out int _);
+            publicKey.ImportRSAPublicKey(KeyData, out int _);
             byte[] signatureData = signature.ToByteArray();
             HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
 

@@ -19,6 +19,21 @@ namespace OnixLabs.Core.UnitTests
 {
     public sealed class Base58DefaultAlphabetTests
     {
+        [Fact(DisplayName = "Identical Base58 values produce identical hash codes.")]
+        public void IdenticalBase58ValuesProduceIdenticalHashCodes()
+        {
+            // Arrange
+            Base58 a = Base58.FromString("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Default);
+            Base58 b = Base58.FromString("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Default);
+            
+            // Act
+            int hashCodeA = a.GetHashCode();
+            int hashCodeB = b.GetHashCode();
+
+            // Assert
+            Assert.Equal(hashCodeA, hashCodeB);
+        }
+        
         [Theory(DisplayName = "Base58_FromString should produce the expected Base-58 value.")]
         [InlineData("3mJr7AoUCHxNqd", "1234567890")]
         [InlineData("2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]

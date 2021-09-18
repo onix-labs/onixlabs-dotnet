@@ -19,6 +19,21 @@ namespace OnixLabs.Core.UnitTests
 {
     public sealed class Base32CrockfordAlphabetTests
     {
+        [Fact(DisplayName = "Identical Base32 values produce identical hash codes.")]
+        public void IdenticalBase32ValuesProduceIdenticalHashCodes()
+        {
+            // Arrange
+            Base32 a = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Crockford);
+            Base32 b = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Crockford);
+            
+            // Act
+            int hashCodeA = a.GetHashCode();
+            int hashCodeB = b.GetHashCode();
+
+            // Assert
+            Assert.Equal(hashCodeA, hashCodeB);
+        }
+        
         [Theory(DisplayName = "Base32_FromString without padding should produce the expected Base-32 value.")]
         [InlineData("64S36D1N6RVKGE9G", "1234567890")]
         [InlineData("85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]

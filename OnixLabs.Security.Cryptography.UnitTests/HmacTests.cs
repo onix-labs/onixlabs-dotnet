@@ -18,12 +18,27 @@ namespace OnixLabs.Security.Cryptography.UnitTests
 {
     public sealed class HmacTests
     {
+        [Fact(DisplayName = "Identical Hmac values produce identical hash codes.")]
+        public void IdenticalHmacValuesProduceIdenticalHashCodes()
+        {
+            // Arrange
+            Hmac a = Hmac.ComputeSha2Hmac256("abcdefghijklmnopqrstuvwxyz", "key");
+            Hmac b = Hmac.ComputeSha2Hmac256("abcdefghijklmnopqrstuvwxyz", "key");
+
+            // Act
+            int hashCodeA = a.GetHashCode();
+            int hashCodeB = b.GetHashCode();
+
+            // Assert
+            Assert.Equal(hashCodeA, hashCodeB);
+        }
+
         [Fact(DisplayName = "Identical HMACs should be considered equal")]
         public void IdenticalHashesShouldBeConsideredEqual()
         {
             // Arrange
-            Hmac a = Hmac.ComputeSha2Hmac256("abc", "key");
-            Hmac b = Hmac.ComputeSha2Hmac256("abc", "key");
+            Hmac a = Hmac.ComputeSha2Hmac256("abcdefghijklmnopqrstuvwxyz", "key");
+            Hmac b = Hmac.ComputeSha2Hmac256("abcdefghijklmnopqrstuvwxyz", "key");
 
             // Assert
             Assert.Equal(a, b);
@@ -33,8 +48,8 @@ namespace OnixLabs.Security.Cryptography.UnitTests
         public void DifferentHashesShouldNotBeConsideredEqualWithDifferentData()
         {
             // Arrange
-            Hmac a = Hmac.ComputeSha2Hmac256("abc", "key");
-            Hmac b = Hmac.ComputeSha2Hmac256("xyz", "key");
+            Hmac a = Hmac.ComputeSha2Hmac256("abcdefghijklmnopqrstuvwxyz", "key");
+            Hmac b = Hmac.ComputeSha2Hmac256("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "key");
 
             // Assert
             Assert.NotEqual(a, b);
@@ -44,8 +59,8 @@ namespace OnixLabs.Security.Cryptography.UnitTests
         public void DifferentHashesShouldNotBeConsideredEqualWithDifferentKeys()
         {
             // Arrange
-            Hmac a = Hmac.ComputeSha2Hmac256("abc", "key");
-            Hmac b = Hmac.ComputeSha2Hmac256("abc", "123");
+            Hmac a = Hmac.ComputeSha2Hmac256("abcdefghijklmnopqrstuvwxyz", "key");
+            Hmac b = Hmac.ComputeSha2Hmac256("abcdefghijklmnopqrstuvwxyz", "123");
 
             // Assert
             Assert.NotEqual(a, b);

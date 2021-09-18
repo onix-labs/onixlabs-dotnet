@@ -19,6 +19,21 @@ namespace OnixLabs.Core.UnitTests
 {
     public sealed class Base16Tests
     {
+        [Fact(DisplayName = "Identical Base16 values produce identical hash codes.")]
+        public void IdenticalBase16ValuesProduceIdenticalHashCodes()
+        {
+            // Arrange
+            Base16 a = Base16.FromString("abcdefghijklmnopqrstuvwxyz");
+            Base16 b = Base16.FromString("abcdefghijklmnopqrstuvwxyz");
+            
+            // Act
+            int hashCodeA = a.GetHashCode();
+            int hashCodeB = b.GetHashCode();
+
+            // Assert
+            Assert.Equal(hashCodeA, hashCodeB);
+        }
+
         [Theory(DisplayName = "Base16_FromString should produce the expected Base-16 value.")]
         [InlineData("31323334353637383930", "1234567890")]
         [InlineData("4142434445464748494a4b4c4d4e4f505152535455565758595a", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]

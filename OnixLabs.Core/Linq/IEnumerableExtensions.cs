@@ -92,11 +92,7 @@ namespace OnixLabs.Core.Linq
         /// <returns>Returns the  computed content hash code of this <see cref="IEnumerable{T}"/>.</returns>
         public static int ComputeContentHashCode<T>(this IEnumerable<T> enumerable)
         {
-            HashCode hashCode = new();
-            
-            enumerable.ForEach(element => hashCode.Add(element));
-            
-            return hashCode.ToHashCode();
+            return new HashCode().AddItems(enumerable).ToHashCode();
         }
 
         /// <summary>

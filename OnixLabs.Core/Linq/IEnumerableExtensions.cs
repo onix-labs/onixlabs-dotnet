@@ -85,6 +85,21 @@ namespace OnixLabs.Core.Linq
         }
 
         /// <summary>
+        /// Computes the content hash code of the elements of this <see cref="IEnumerable{T}"/>.
+        /// </summary>
+        /// <param name="enumerable">The <see cref="IEnumerable{T}"/> from which to compute a content hash code.</param>
+        /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+        /// <returns>Returns the  computed content hash code of this <see cref="IEnumerable{T}"/>.</returns>
+        public static int ComputeContentHashCode<T>(this IEnumerable<T> enumerable)
+        {
+            HashCode hashCode = new();
+            
+            enumerable.ForEach(element => hashCode.Add(element));
+            
+            return hashCode.ToHashCode();
+        }
+
+        /// <summary>
         /// Performs the specified <see cref="Action{T}"/> for each element of this <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <param name="enumerable">The <see cref="IEnumerable{T}"/> over which to iterate.</param>

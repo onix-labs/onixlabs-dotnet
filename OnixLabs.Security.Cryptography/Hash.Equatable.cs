@@ -14,7 +14,7 @@
 
 using System;
 using System.Linq;
-using OnixLabs.Core;
+using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography
 {
@@ -49,7 +49,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
         public bool Equals(Hash other)
         {
-            return other.AlgorithmType == AlgorithmType 
+            return other.AlgorithmType == AlgorithmType
                    && other.Value.SequenceEqual(Value);
         }
 
@@ -69,10 +69,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return new HashCode()
-                .AddItem(AlgorithmType)
-                .AddItems(Value)
-                .ToHashCode();
+            return HashCode.Combine(AlgorithmType, Value.ComputeContentHashCode());
         }
     }
 }

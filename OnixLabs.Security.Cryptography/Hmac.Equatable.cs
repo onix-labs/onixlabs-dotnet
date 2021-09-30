@@ -14,7 +14,7 @@
 
 using System;
 using System.Linq;
-using OnixLabs.Core;
+using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography
 {
@@ -69,10 +69,7 @@ namespace OnixLabs.Security.Cryptography
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return new HashCode()
-                .AddItem(Hash)
-                .AddItems(Data)
-                .ToHashCode();
+            return HashCode.Combine(Hash, Data.ComputeContentHashCode());
         }
     }
 }

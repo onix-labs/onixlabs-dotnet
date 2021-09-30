@@ -14,6 +14,7 @@
 
 using System;
 using System.Linq;
+using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text
 {
@@ -69,9 +70,7 @@ namespace OnixLabs.Core.Text
         /// <returns>A hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return new HashCode()
-                .AddItems(Value)
-                .ToHashCode();
+            return HashCode.Combine(Value.ComputeContentHashCode());
         }
     }
 }

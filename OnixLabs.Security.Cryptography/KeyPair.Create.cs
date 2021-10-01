@@ -30,7 +30,7 @@ namespace OnixLabs.Security.Cryptography
             PrivateKey privateKey = new EcdsaPrivateKey(asymmetricAlgorithm.ExportECPrivateKey(), type);
             PublicKey publicKey = new EcdsaPublicKey(asymmetricAlgorithm.ExportSubjectPublicKeyInfo(), type);
 
-            return new KeyPair(privateKey, publicKey);
+            return new KeyPair(privateKey, publicKey, type);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace OnixLabs.Security.Cryptography
             PrivateKey privateKey = new EcdsaPrivateKey(asymmetricAlgorithm.ExportECPrivateKey(), type);
             PublicKey publicKey = new EcdsaPublicKey(asymmetricAlgorithm.ExportSubjectPublicKeyInfo(), type);
 
-            return new KeyPair(privateKey, publicKey);
+            return new KeyPair(privateKey, publicKey, type);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace OnixLabs.Security.Cryptography
             PrivateKey privateKey = new EcdsaPrivateKey(asymmetricAlgorithm.ExportECPrivateKey(), type);
             PublicKey publicKey = new EcdsaPublicKey(asymmetricAlgorithm.ExportSubjectPublicKeyInfo(), type);
 
-            return new KeyPair(privateKey, publicKey);
+            return new KeyPair(privateKey, publicKey, type);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace OnixLabs.Security.Cryptography
             PrivateKey privateKey = new RsaPrivateKey(asymmetricAlgorithm.ExportRSAPrivateKey(), type, padding);
             PublicKey publicKey = new RsaPublicKey(asymmetricAlgorithm.ExportRSAPublicKey(), type, padding);
 
-            return new KeyPair(privateKey, publicKey);
+            return new KeyPair(privateKey, publicKey, type);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace OnixLabs.Security.Cryptography
             PrivateKey privateKey = new RsaPrivateKey(asymmetricAlgorithm.ExportRSAPrivateKey(), type, padding);
             PublicKey publicKey = new RsaPublicKey(asymmetricAlgorithm.ExportRSAPublicKey(), type, padding);
 
-            return new KeyPair(privateKey, publicKey);
+            return new KeyPair(privateKey, publicKey, type);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace OnixLabs.Security.Cryptography
             PrivateKey privateKey = new RsaPrivateKey(asymmetricAlgorithm.ExportRSAPrivateKey(), type, padding);
             PublicKey publicKey = new RsaPublicKey(asymmetricAlgorithm.ExportRSAPublicKey(), type, padding);
 
-            return new KeyPair(privateKey, publicKey);
+            return new KeyPair(privateKey, publicKey, type);
         }
     }
 }

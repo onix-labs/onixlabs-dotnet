@@ -24,10 +24,12 @@ namespace OnixLabs.Security.Cryptography
         /// </summary>
         /// <param name="privateKey">The private key component of this key pair.</param>
         /// <param name="publicKey">The public key component of this key pair.</param>
-        private KeyPair(PrivateKey privateKey, PublicKey publicKey)
+        /// <param name="algorithmType">The hash algorithm type of this key pair.</param>
+        private KeyPair(PrivateKey privateKey, PublicKey publicKey, HashAlgorithmType algorithmType)
         {
             PrivateKey = privateKey;
             PublicKey = publicKey;
+            AlgorithmType = algorithmType;
         }
 
         /// <summary>
@@ -39,5 +41,10 @@ namespace OnixLabs.Security.Cryptography
         /// Gets the public key component of this key pair.
         /// </summary>
         public PublicKey PublicKey { get; }
+
+        /// <summary>
+        /// Gets the hash algorithm type of this key pair.
+        /// </summary>
+        public HashAlgorithmType AlgorithmType { get; }
     }
 }

@@ -15,6 +15,7 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -28,14 +29,12 @@ public readonly partial struct Hash
     /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
     public static Hash Concatenate(Hash a, Hash b)
     {
-        if (a.AlgorithmType != b.AlgorithmType)
-        {
-            throw new ArgumentException("Cannot concatenate hashes of different algorithm types.");
-        }
+        Check(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
 
         using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm();
         byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();
         byte[] hashedValue = algorithm.ComputeHash(concatenatedValue);
+
         return FromByteArray(hashedValue, a.AlgorithmType);
     }
 
@@ -48,10 +47,7 @@ public readonly partial struct Hash
     /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
     public static Hash Concatenate(Hash a, Hash b, int length)
     {
-        if (a.AlgorithmType != b.AlgorithmType)
-        {
-            throw new ArgumentException("Cannot concatenate hashes of different algorithm types.");
-        }
+        Check(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
 
         using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm(length);
         byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();

@@ -47,9 +47,7 @@ public abstract partial class MerkleTree : IEquatable<MerkleTree>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public virtual bool Equals(MerkleTree? other)
     {
-        return ReferenceEquals(this, other)
-               || other is not null
-               && other.Hash == Hash;
+        return ReferenceEquals(this, other) || other is not null && other.Hash == Hash;
     }
 
     /// <summary>

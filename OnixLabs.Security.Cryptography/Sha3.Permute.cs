@@ -47,7 +47,7 @@ public abstract partial class Sha3
             Iota(round);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void Theta()
         {
             c0 = state[0] ^ state[5] ^ state[10] ^ state[15] ^ state[20];
@@ -89,7 +89,7 @@ public abstract partial class Sha3
             state[24] ^= d4;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void RhoPi()
         {
             ulong final = RotateLeft(state[1], 1);
@@ -120,7 +120,7 @@ public abstract partial class Sha3
             state[10] = final;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void Chi()
         {
             for (int i = 0; i < 25; i += 5)
@@ -139,13 +139,13 @@ public abstract partial class Sha3
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void Iota(int round)
         {
             state[0] ^= roundConstants[round];
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         ulong RotateLeft(ulong x, byte y)
         {
             return (x << y) | (x >> (64 - y));

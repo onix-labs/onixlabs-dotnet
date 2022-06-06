@@ -27,8 +27,6 @@ public sealed partial class HashAlgorithmType
     /// </returns>
     public override bool Equals(HashAlgorithmType? other)
     {
-        return !ReferenceEquals(this, Unknown)
-               && !ReferenceEquals(other, Unknown)
-               && base.Equals(other);
+        return !ReferenceEquals(this, Unknown) && !ReferenceEquals(other, Unknown) && base.Equals(other);
     }
 }

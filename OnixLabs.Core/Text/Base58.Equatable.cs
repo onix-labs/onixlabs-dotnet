@@ -49,8 +49,7 @@ public readonly partial struct Base58 : IEquatable<Base58>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public bool Equals(Base58 other)
     {
-        return other.Value.SequenceEqual(Value)
-               && other.Alphabet == Alphabet;
+        return other.Value.SequenceEqual(Value) && other.Alphabet == Alphabet;
     }
 
     /// <summary>

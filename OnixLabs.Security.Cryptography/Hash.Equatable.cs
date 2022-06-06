@@ -49,8 +49,7 @@ public readonly partial struct Hash : IEquatable<Hash>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public bool Equals(Hash other)
     {
-        return other.AlgorithmType == AlgorithmType
-               && other.Value.SequenceEqual(Value);
+        return other.AlgorithmType == AlgorithmType && other.Value.SequenceEqual(Value);
     }
 
     /// <summary>

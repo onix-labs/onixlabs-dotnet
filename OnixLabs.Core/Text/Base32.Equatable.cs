@@ -49,9 +49,7 @@ public readonly partial struct Base32 : IEquatable<Base32>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public bool Equals(Base32 other)
     {
-        return other.Value.SequenceEqual(Value)
-               && other.Alphabet == Alphabet
-               && other.Padding == Padding;
+        return other.Value.SequenceEqual(Value) && other.Alphabet == Alphabet && other.Padding == Padding;
     }
 
     /// <summary>

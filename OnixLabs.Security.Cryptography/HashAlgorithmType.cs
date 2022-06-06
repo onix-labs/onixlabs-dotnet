@@ -24,7 +24,7 @@ public sealed partial class HashAlgorithmType : Enumeration<HashAlgorithmType>
     /// <summary>
     /// A constant that defines an unknown hash algorithm length.
     /// </summary>
-    public const int UnknownLength = -1;
+    private const int UnknownLength = -1;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HashAlgorithmType"/> class.
@@ -32,11 +32,11 @@ public sealed partial class HashAlgorithmType : Enumeration<HashAlgorithmType>
     /// <param name="value">The value of the hash algorithm type.</param>
     /// <param name="name">The name of the hash algorithm type.</param>
     /// <param name="length">The length in bytes of the hash algorithm type.</param>
-    /// <param name="keyed">Determines whether the algorithm is a keyed hash algorithm.</param>
-    private HashAlgorithmType(int value, string name, int length, bool keyed) : base(value, name)
+    /// <param name="isKeyBased">Determines whether the algorithm is a key based hash algorithm.</param>
+    private HashAlgorithmType(int value, string name, int length, bool isKeyBased) : base(value, name)
     {
         Length = length;
-        Keyed = keyed;
+        IsKeyBased = isKeyBased;
     }
 
     /// <summary>
@@ -46,7 +46,12 @@ public sealed partial class HashAlgorithmType : Enumeration<HashAlgorithmType>
     public int Length { get; }
 
     /// <summary>
-    /// Gets a value that determines whether the algorithm is a keyed hash algorithm.
+    /// Gets a value that determines whether the algorithm is a key based hash algorithm.
     /// </summary>
-    public bool Keyed { get; }
+    public bool IsKeyBased { get; }
+
+    /// <summary>
+    /// Gets a value that determines whether the algorithm type is unknown.
+    /// </summary>
+    public bool IsUnknown => ReferenceEquals(this, Unknown);
 }

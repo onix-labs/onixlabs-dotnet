@@ -25,7 +25,7 @@ public abstract partial class Enumeration<T>
     /// Gets all of the enumeration entries for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration entries for the current type.</returns>
-    public static IImmutableList<T> GetAll()
+    public static ImmutableList<T> GetAll()
     {
         return typeof(T)
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
@@ -38,32 +38,26 @@ public abstract partial class Enumeration<T>
     /// Gets all of the enumeration entries for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration entries for the current type.</returns>
-    public static IImmutableList<(int Value, string Name)> GetEntries()
+    public static ImmutableList<(int Value, string Name)> GetEntries()
     {
-        return GetAll()
-            .Select(entry => (entry.Value, entry.Name))
-            .ToImmutableList();
+        return GetAll().Select(entry => (entry.Value, entry.Name)).ToImmutableList();
     }
 
     /// <summary>
     /// Gets all of the enumeration names for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration names for the current type.</returns>
-    public static IImmutableList<string> GetNames()
+    public static ImmutableList<string> GetNames()
     {
-        return GetAll()
-            .Select(entry => entry.Name)
-            .ToImmutableList();
+        return GetAll().Select(entry => entry.Name).ToImmutableList();
     }
 
     /// <summary>
     /// Gets all of the enumeration values for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration values for the current type.</returns>
-    public static IImmutableList<int> GetValues()
+    public static ImmutableList<int> GetValues()
     {
-        return GetAll()
-            .Select(entry => entry.Value)
-            .ToImmutableList();
+        return GetAll().Select(entry => entry.Value).ToImmutableList();
     }
 }

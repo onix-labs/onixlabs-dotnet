@@ -41,11 +41,7 @@ public readonly partial struct Hmac
     /// <param name="type">The hash algorithm type of the computed HMAC.</param>
     /// <param name="encoding">The encoding which will be used to convert the value and key into a byte array.</param>
     /// <returns>Returns a <see cref="Hmac"/> representing the specified value and key.</returns>
-    public static async Task<Hmac> ComputeHmacAsync(
-        string value,
-        string key,
-        HashAlgorithmType type,
-        Encoding encoding)
+    public static async Task<Hmac> ComputeHmacAsync(string value, string key, HashAlgorithmType type, Encoding encoding)
     {
         byte[] valueBytes = encoding.GetBytes(value);
         byte[] keyBytes = encoding.GetBytes(key);

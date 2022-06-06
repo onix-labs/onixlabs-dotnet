@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -35,9 +36,6 @@ public sealed partial class HashAlgorithmType
     /// <exception cref="ArgumentException">If the length of the byte array is invalid.</exception>
     public void VerifyHashLength(byte[] value)
     {
-        if (!IsValidHashLength(value))
-        {
-            throw new ArgumentException("The length of the hash is invalid.", nameof(value));
-        }
+        Check(IsValidHashLength(value), "The length of the hash is invalid.", nameof(value));
     }
 }

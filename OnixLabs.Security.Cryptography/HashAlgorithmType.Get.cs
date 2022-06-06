@@ -14,6 +14,7 @@
 
 using System;
 using System.Security.Cryptography;
+using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -22,16 +23,22 @@ public sealed partial class HashAlgorithmType
     /// <summary>
     /// Gets the hash algorithm for this <see cref="HashAlgorithmType"/> instance.
     /// </summary>
+    /// <returns>Returns a <see cref="HashAlgorithm"/> for this <see cref="HashAlgorithmType"/>.</returns>
+    public HashAlgorithm GetHashAlgorithm()
+    {
+        return GetHashAlgorithm(Length);
+    }
+
+    /// <summary>
+    /// Gets the hash algorithm for this <see cref="HashAlgorithmType"/> instance.
+    /// </summary>
     /// <param name="length">Specifies the expected output hash length.</param>
     /// <returns>Returns a <see cref="HashAlgorithm"/> for this <see cref="HashAlgorithmType"/>.</returns>
     /// <exception cref="ArgumentException">If the hash algorithm does not expect an output length.</exception>
     /// <exception cref="ArgumentException">If the hash algorithm is unknown.</exception>
-    public HashAlgorithm GetHashAlgorithm(int length = UnknownLength)
+    public HashAlgorithm GetHashAlgorithm(int length)
     {
-        if (length != UnknownLength && Length > UnknownLength)
-        {
-            throw new ArgumentException($"Output length not expected for the specified hash algorithm: {Name}");
-        }
+        Check(IsUnknown || length == Length, $"Output length not expected for the specified hash algorithm: {Name}");
 
         return Name switch
         {
@@ -58,10 +65,7 @@ public sealed partial class HashAlgorithmType
     /// <exception cref="ArgumentException">If the hash algorithm is unknown or is not a keyed hash algorithm.</exception>
     public KeyedHashAlgorithm GetKeyedHashAlgorithm(byte[]? key = null)
     {
-        if (!Keyed)
-        {
-            throw new ArgumentException($"Hash algorithm type '{Name}' is not a keyed hash algorithm.");
-        }
+        Check(IsKeyBased, $"Hash algorithm type '{Name}' is not a keyed hash algorithm.");
 
         return Name switch
         {

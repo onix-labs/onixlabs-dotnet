@@ -54,10 +54,7 @@ public sealed partial class EcdsaPrivateKey
     /// <param name="password">The password to decrypt the key data.</param>
     /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
     /// <returns>Returns an <see cref="EcdsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static EcdsaPrivateKey ImportPkcs8Key(
-        ReadOnlySpan<byte> data,
-        ReadOnlySpan<char> password,
-        HashAlgorithmType type)
+    public static EcdsaPrivateKey ImportPkcs8Key(ReadOnlySpan<byte> data, ReadOnlySpan<char> password, HashAlgorithmType type)
     {
         ECDsa privateKey = ECDsa.Create();
 

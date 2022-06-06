@@ -49,8 +49,7 @@ public readonly partial struct Hmac : IEquatable<Hmac>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public bool Equals(Hmac other)
     {
-        return other.Hash == Hash
-               && other.Data.SequenceEqual(Data);
+        return other.Hash == Hash && other.Data.SequenceEqual(Data);
     }
 
     /// <summary>

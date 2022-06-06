@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 
@@ -36,11 +35,9 @@ public static class IEnumerableExtensions
     /// <typeparam name="TElement">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
     /// <returns>Returns true if all selected element properties are equal; otherwise false.</returns>
-    public static bool AllEqualBy<TElement, TProperty>(
-        this IEnumerable<TElement> enumerable,
-        Func<TElement, TProperty> selector)
+    public static bool AllEqualBy<TElement, TProperty>(this IEnumerable<TElement> enumerable, Func<TElement, TProperty> selector)
     {
-        IImmutableList<TElement> elements = enumerable.ToImmutableList();
+        IEnumerable<TElement> elements = enumerable.ToArray();
 
         if (elements.IsEmpty())
         {
@@ -52,7 +49,7 @@ public static class IEnumerableExtensions
             return true;
         }
 
-        TProperty first = selector(elements[0]);
+        TProperty first = selector(elements.First());
         return elements.All(element => Equals(first, selector(element)));
     }
 
@@ -64,11 +61,9 @@ public static class IEnumerableExtensions
     /// <typeparam name="TElement">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
     /// <returns>Returns true if any selected element properties are equal; otherwise false.</returns>
-    public static bool AnyEqualBy<TElement, TProperty>(
-        this IEnumerable<TElement> enumerable,
-        Func<TElement, TProperty> selector)
+    public static bool AnyEqualBy<TElement, TProperty>(this IEnumerable<TElement> enumerable, Func<TElement, TProperty> selector)
     {
-        IImmutableList<TElement> elements = enumerable.ToImmutableList();
+        IEnumerable<TElement> elements = enumerable.ToArray();
 
         if (elements.IsEmpty())
         {
@@ -80,7 +75,7 @@ public static class IEnumerableExtensions
             return true;
         }
 
-        TProperty first = selector(elements[0]);
+        TProperty first = selector(elements.First());
         return elements.Any(element => Equals(first, selector(element)));
     }
 
@@ -128,7 +123,7 @@ public static class IEnumerableExtensions
     /// <returns>Returns true if the <see cref="IEnumerable{T}"/> is not empty; otherwise, false.</returns>
     public static bool IsNotEmpty<T>(this IEnumerable<T> enumerable)
     {
-        return enumerable.Any();
+        return !enumerable.IsEmpty();
     }
 
     /// <summary>
@@ -161,7 +156,7 @@ public static class IEnumerableExtensions
     /// <returns>Returns true if the <see cref="IEnumerable{T}"/> contains an odd number of elements; otherwise, false.</returns>
     public static bool IsCountOdd<T>(this IEnumerable<T> enumerable)
     {
-        return !IsCountEven(enumerable);
+        return !enumerable.IsCountEven();
     }
 
     /// <summary>

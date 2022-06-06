@@ -64,11 +64,7 @@ public readonly partial struct Hash
     /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
     /// <param name="length">The output length of the computed hash in bytes.</param>
     /// <returns>Returns a <see cref="Hash"/> representing a twice-hashed hash of the specified value.</returns>
-    public static async Task<Hash> ComputeHashTwiceAsync(
-        string value,
-        HashAlgorithmType type,
-        Encoding encoding,
-        int length)
+    public static async Task<Hash> ComputeHashTwiceAsync(string value, HashAlgorithmType type, Encoding encoding, int length)
     {
         return await ComputeHashTwiceAsync(encoding.GetBytes(value), type, length);
     }

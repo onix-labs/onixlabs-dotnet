@@ -104,7 +104,7 @@ public readonly partial struct Base32
 
         if (padding && value.Length % InputSize != 0)
         {
-            throw new FormatException("Base-32 string is invalid. Insufficient padding has been applied.");
+            throw new FormatException("Base32 string is invalid. Insufficient padding has been applied.");
         }
 
         ReadOnlySpan<char> valueWithoutPadding = padding ? value.TrimEnd('=') : value;
@@ -113,7 +113,7 @@ public readonly partial struct Base32
 
         if (outputBytes.Length == 0)
         {
-            throw new FormatException("Base-32 string is invalid. Not enough data to construct byte array.");
+            throw new FormatException("Base32 string is invalid. Not enough data to construct byte array.");
         }
 
         int inputPosition = 0;
@@ -128,7 +128,7 @@ public readonly partial struct Base32
 
             if (index < 0)
             {
-                throw new FormatException($"Invalid Base-32 character '{character}' at position {inputPosition}");
+                throw new FormatException($"Invalid Base32 character '{character}' at position {inputPosition}");
             }
 
             int availableBits = Math.Min(OutputSize - inputSubPosition, InputSize - outputSubPosition);

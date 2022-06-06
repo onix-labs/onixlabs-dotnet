@@ -23,8 +23,6 @@ public sealed partial class RsaPrivateKey
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public override bool Equals(PrivateKey? other)
     {
-        return base.Equals(other)
-               && other is RsaPrivateKey rsaOther
-               && rsaOther.Padding == Padding;
+        return base.Equals(other) && other is RsaPrivateKey rsaOther && rsaOther.Padding == Padding;
     }
 }

@@ -44,10 +44,7 @@ public abstract partial class MerkleTree
     /// <returns>Returns a new <see cref="MerkleTree"/> instance from the specified leaf nodes.</returns>
     public static MerkleTree Build(IEnumerable<Hash> nodes)
     {
-        IReadOnlyList<MerkleTree> leafNodes = nodes
-            .Select(MerkleTreeLeafNode.CreateHashNode)
-            .ToList();
-
+        IReadOnlyList<MerkleTree> leafNodes = nodes.Select(MerkleTreeLeafNode.CreateHashNode).ToList();
         return Build(leafNodes);
     }
 
@@ -94,7 +91,7 @@ public abstract partial class MerkleTree
     /// <returns>Returns a new <see cref="IReadOnlyList{MerkleTree}"/> containing an even number of elements.</returns>
     private static IReadOnlyList<MerkleTree> EnsureEvenNumberOfNodes(IReadOnlyList<MerkleTree> merkleTrees)
     {
-        if (!merkleTrees.IsCountOdd()) return merkleTrees;
+        if (merkleTrees.IsCountEven()) return merkleTrees;
 
         HashAlgorithmType hashAlgorithmType = merkleTrees[0].Hash.AlgorithmType;
         return merkleTrees.Append(MerkleTreeLeafNode.CreateEmptyNode(hashAlgorithmType)).ToList();

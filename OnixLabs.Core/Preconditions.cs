@@ -27,13 +27,14 @@ public static class Preconditions
     /// </summary>
     /// <param name="value">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the condition fails.</param>
+    /// <param name="paramName">The name of the parameter which is invalid.</param>
     /// <exception cref="ArgumentException">If the condition fails.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static void Check(bool value, string message = "Argument check failed.")
+    public static void Check(bool value, string message = "Argument check failed.", string? paramName = null)
     {
         if (!value)
         {
-            throw new ArgumentException(message);
+            throw new ArgumentException(message, paramName);
         }
     }
 

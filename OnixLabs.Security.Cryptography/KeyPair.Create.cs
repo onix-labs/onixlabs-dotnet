@@ -105,10 +105,7 @@ public sealed partial class KeyPair
     /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
     /// <param name="parameters">The parameters for the RSA algorithm.</param>
     /// <returns>Returns an ECDSA public/private key pair.</returns>
-    public static KeyPair CreateRsaKeyPair(
-        HashAlgorithmType type,
-        RSASignaturePadding padding,
-        RSAParameters parameters)
+    public static KeyPair CreateRsaKeyPair(HashAlgorithmType type, RSASignaturePadding padding, RSAParameters parameters)
     {
         using RSA asymmetricAlgorithm = RSA.Create(parameters);
 

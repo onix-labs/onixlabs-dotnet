@@ -26,10 +26,7 @@ public sealed partial class RsaPrivateKey
     /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
     /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
     /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(
-        ReadOnlySpan<byte> data,
-        HashAlgorithmType type,
-        RSASignaturePadding padding)
+    public static RsaPrivateKey ImportPkcs8Key(ReadOnlySpan<byte> data, HashAlgorithmType type, RSASignaturePadding padding)
     {
         RSA privateKey = RSA.Create();
 

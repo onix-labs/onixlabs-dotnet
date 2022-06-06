@@ -14,6 +14,7 @@
 
 using System;
 using System.Linq;
+using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -48,11 +49,8 @@ public readonly partial struct Hash
     /// <exception cref="ArgumentException">If the length of the hash is unexpected.</exception>
     public static Hash CreateAllOneHash(HashAlgorithmType type, int length)
     {
-        if (type.Length != HashAlgorithmType.UnknownLength && type.Length != length)
-        {
-            throw new ArgumentException("Unexpected hash algorithm output length.");
-        }
-
+        Check(type.IsUnknown || type.Length == length, "Unexpected hash algorithm output length.");
+        
         byte[] bytes = Enumerable.Repeat(byte.MaxValue, length).ToArray();
         return FromByteArray(bytes, type);
     }

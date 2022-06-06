@@ -36,10 +36,7 @@ public static class StringExtensions
     /// <param name="delimiter">The delimiter to find within the original string.</param>
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <returns>Returns a substring before the first occurrence of the specified delimiter.</returns>
-    public static string SubstringBefore(
-        this string value,
-        char delimiter,
-        string? defaultValue = null)
+    public static string SubstringBefore(this string value, char delimiter, string? defaultValue = null)
     {
         int index = value.IndexOf(delimiter);
 
@@ -80,10 +77,7 @@ public static class StringExtensions
     /// <param name="delimiter">The delimiter to find within the original string.</param>
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <returns>Returns a substring before the last occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeLast(
-        this string value,
-        char delimiter,
-        string? defaultValue = null)
+    public static string SubstringBeforeLast(this string value, char delimiter, string? defaultValue = null)
     {
         int index = value.LastIndexOf(delimiter);
 
@@ -124,10 +118,7 @@ public static class StringExtensions
     /// <param name="delimiter">The delimiter to find within the original string.</param>
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <returns>Returns a substring after the first occurrence of the specified delimiter.</returns>
-    public static string SubstringAfter(
-        this string value,
-        char delimiter,
-        string? defaultValue = null)
+    public static string SubstringAfter(this string value, char delimiter, string? defaultValue = null)
     {
         int index = value.IndexOf(delimiter);
 
@@ -168,10 +159,7 @@ public static class StringExtensions
     /// <param name="delimiter">The delimiter to find within the original string.</param>
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <returns>Returns a substring after the last occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterLast(
-        this string value,
-        char delimiter,
-        string? defaultValue = null)
+    public static string SubstringAfterLast(this string value, char delimiter, string? defaultValue = null)
     {
         int index = value.LastIndexOf(delimiter);
 
@@ -224,5 +212,17 @@ public static class StringExtensions
     public static byte[] ToByteArray(this string value, Encoding encoding)
     {
         return encoding.GetBytes(value);
+    }
+
+    /// <summary>
+    /// Converts the current <see cref="string"/> between the specified before and after <see cref="string"/> values.
+    /// </summary>
+    /// <param name="value">The current value to wrap.</param>
+    /// <param name="before">The <see cref="string"/> that should precede the current value.</param>
+    /// <param name="after">The <see cref="string"/> that should succeed the current value.</param>
+    /// <returns>Returns the current <see cref="string"/> wrapped between the specified before and after <see cref="string"/> values.</returns>
+    public static string Wrap(this string value, string before, string after)
+    {
+        return $"{before}{value}{after}";
     }
 }

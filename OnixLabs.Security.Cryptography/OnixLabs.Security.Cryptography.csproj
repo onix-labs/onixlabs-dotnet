@@ -1,17 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <Title>OnixLabs.Security.Cryptography</Title>
         <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Cryptography API for .NET</Description>
-        <AssemblyVersion>4.0.0</AssemblyVersion>
+        <AssemblyVersion>5.0.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Copyright>Copyright © ONIXLabs 2020-2021</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>4.0.0</PackageVersion>
+        <PackageVersion>5.0.0</PackageVersion>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

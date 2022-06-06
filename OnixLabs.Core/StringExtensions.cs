@@ -205,11 +205,22 @@ public static class StringExtensions
         };
     }
 
+    /// <summary>
+    /// Converts the current <see cref="string"/> to a <see cref="byte"/> array using the default <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The original <see cref="string"/> from which to obtain a byte array.</param>
+    /// <returns>Returns a <see cref="byte"/> array using the default <see cref="Encoding"/>.</returns>
     public static byte[] ToByteArray(this string value)
     {
         return ToByteArray(value, Encoding.Default);
     }
 
+    /// <summary>
+    /// Converts the current <see cref="string"/> to a <see cref="byte"/> array using the specified <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The original <see cref="string"/> from which to obtain a byte array.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the current <see cref="string"/> to a <see cref="byte"/> array.</param>
+    /// <returns>Returns a <see cref="byte"/> array using the specified <see cref="Encoding"/>.</returns>
     public static byte[] ToByteArray(this string value, Encoding encoding)
     {
         return encoding.GetBytes(value);

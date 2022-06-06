@@ -148,7 +148,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns true if the <see cref="IEnumerable{T}"/> contains an even number of elements; otherwise, false.</returns>
-    public static bool IsEvenCount<T>(this IEnumerable<T> enumerable)
+    public static bool IsCountEven<T>(this IEnumerable<T> enumerable)
     {
         return enumerable.LongCount() % 2 == 0;
     }
@@ -159,9 +159,9 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns true if the <see cref="IEnumerable{T}"/> contains an odd number of elements; otherwise, false.</returns>
-    public static bool IsOddCount<T>(this IEnumerable<T> enumerable)
+    public static bool IsCountOdd<T>(this IEnumerable<T> enumerable)
     {
-        return enumerable.LongCount() % 2 != 0;
+        return !IsCountEven(enumerable);
     }
 
     /// <summary>
@@ -170,7 +170,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a new <see cref="IEnumerable{T}"/> containing only elements of the specified type.</returns>
-    public static IEnumerable<T> WhereInstanceOf<T>(this IEnumerable<object?> enumerable)
+    public static IEnumerable<T> WhereIs<T>(this IEnumerable<object?> enumerable)
     {
         foreach (object? element in enumerable)
         {

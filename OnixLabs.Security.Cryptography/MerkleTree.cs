@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using OnixLabs.Core.Linq;
+using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -70,10 +71,7 @@ public abstract partial class MerkleTree
     /// <exception cref="ArgumentException">if the <see cref="IEnumerable{MerkleTree}"/> is empty.</exception>
     private static void CheckIfMerkleTreesAreEmpty(IEnumerable<MerkleTree> merkleTrees)
     {
-        if (merkleTrees.IsEmpty())
-        {
-            throw new ArgumentException("Cannot construct a merkle tree from an empty list.");
-        }
+        Check(merkleTrees.IsNotEmpty(), "Cannot construct a merkle tree from an empty list.");
     }
 
     /// <summary>
@@ -83,10 +81,8 @@ public abstract partial class MerkleTree
     /// <exception cref="ArgumentException">if the elements of the <see cref="IEnumerable{MerkleTree}"/> do not have the same hash algorithm type.</exception>
     private static void CheckNodesHaveEqualHashAlgorithms(IEnumerable<MerkleTree> merkleTrees)
     {
-        if (!merkleTrees.AllEqualBy(merkleTree => merkleTree.Hash.AlgorithmType))
-        {
-            throw new ArgumentException("Cannot construct a merkle tree with different hash types.");
-        }
+        Check(merkleTrees.AllEqualBy(merkleTree => merkleTree.Hash.AlgorithmType),
+            "Cannot construct a merkle tree with different hash types.");
     }
 
     /// <summary>
@@ -98,7 +94,7 @@ public abstract partial class MerkleTree
     /// <returns>Returns a new <see cref="IReadOnlyList{MerkleTree}"/> containing an even number of elements.</returns>
     private static IReadOnlyList<MerkleTree> EnsureEvenNumberOfNodes(IReadOnlyList<MerkleTree> merkleTrees)
     {
-        if (!merkleTrees.IsOddCount()) return merkleTrees;
+        if (!merkleTrees.IsCountOdd()) return merkleTrees;
 
         HashAlgorithmType hashAlgorithmType = merkleTrees[0].Hash.AlgorithmType;
         return merkleTrees.Append(MerkleTreeLeafNode.CreateEmptyNode(hashAlgorithmType)).ToList();

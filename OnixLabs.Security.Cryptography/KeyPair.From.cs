@@ -14,42 +14,41 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public sealed partial class KeyPair
 {
-    public sealed partial class KeyPair
+    /// <summary>
+    /// Creates a key pair from the specified public and private key components.
+    /// </summary>
+    /// <param name="privateKey">The private key component of the key pair.</param>
+    /// <param name="publicKey">The public key component of the key pair.</param>
+    /// <param name="type">The hash algorithm type of the key pair.</param>
+    /// <returns>Returns a new <see cref="KeyPair"/> instance from the key components.</returns>
+    /// <exception cref="ArgumentException">If the private key hash algorithm type is mismatched.</exception>
+    /// <exception cref="ArgumentException">If the public key hash algorithm type is mismatched.</exception>
+    /// <exception cref="ArgumentException">If the private and public key components are mismatched.</exception>
+    public static KeyPair FromKeyComponents(PrivateKey privateKey, PublicKey publicKey, HashAlgorithmType type)
     {
-        /// <summary>
-        /// Creates a key pair from the specified public and private key components.
-        /// </summary>
-        /// <param name="privateKey">The private key component of the key pair.</param>
-        /// <param name="publicKey">The public key component of the key pair.</param>
-        /// <param name="type">The hash algorithm type of the key pair.</param>
-        /// <returns>Returns a new <see cref="KeyPair"/> instance from the key components.</returns>
-        /// <exception cref="ArgumentException">If the private key hash algorithm type is mismatched.</exception>
-        /// <exception cref="ArgumentException">If the public key hash algorithm type is mismatched.</exception>
-        /// <exception cref="ArgumentException">If the private and public key components are mismatched.</exception>
-        public static KeyPair FromKeyComponents(PrivateKey privateKey, PublicKey publicKey, HashAlgorithmType type)
+        if (privateKey.AlgorithmType != type)
         {
-            if (privateKey.AlgorithmType != type)
-            {
-                throw new ArgumentException($"Private key hash algorithm type is mismatched with '{type}'.");
-            }
-
-            if (publicKey.AlgorithmType != type)
-            {
-                throw new ArgumentException($"Public key hash algorithm type is mismatched with '{type}'.");
-            }
-
-            byte[] random = Guid.NewGuid().ToByteArray();
-            Hash hash = Hash.ComputeSha2Hash256(random);
-            DigitalSignature signature = privateKey.SignHash(hash);
-
-            if (!signature.IsHashValid(hash, publicKey))
-            {
-                throw new ArgumentException("Invalid key pair. The specified public and private keys are mismatched.");
-            }
-
-            return new KeyPair(privateKey, publicKey, type);
+            throw new ArgumentException($"Private key hash algorithm type is mismatched with '{type}'.");
         }
+
+        if (publicKey.AlgorithmType != type)
+        {
+            throw new ArgumentException($"Public key hash algorithm type is mismatched with '{type}'.");
+        }
+
+        byte[] random = Guid.NewGuid().ToByteArray();
+        Hash hash = Hash.ComputeSha2Hash256(random);
+        DigitalSignature signature = privateKey.SignHash(hash);
+
+        if (!signature.IsHashValid(hash, publicKey))
+        {
+            throw new ArgumentException("Invalid key pair. The specified public and private keys are mismatched.");
+        }
+
+        return new KeyPair(privateKey, publicKey, type);
     }
 }

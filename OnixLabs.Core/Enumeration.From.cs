@@ -17,62 +17,61 @@ using System.Collections.Immutable;
 using System.Linq;
 using OnixLabs.Core.Linq;
 
-namespace OnixLabs.Core
+namespace OnixLabs.Core;
+
+public abstract partial class Enumeration<T>
 {
-    public abstract partial class Enumeration<T>
+    /// <summary>
+    /// Gets an enumeration entry for the specified name.
+    /// </summary>
+    /// <param name="name">The name of the enumeration entry.</param>
+    /// <returns>Returns an enumeration entry for the specified name.</returns>
+    /// <exception cref="ArgumentException">If a single enumeration entry for the specified name does not exist.</exception>
+    public static T FromName(string name)
     {
-        /// <summary>
-        /// Gets an enumeration entry for the specified name.
-        /// </summary>
-        /// <param name="name">The name of the enumeration entry.</param>
-        /// <returns>Returns an enumeration entry for the specified name.</returns>
-        /// <exception cref="ArgumentException">If a single enumeration entry for the specified name does not exist.</exception>
-        public static T FromName(string name)
+        IImmutableList<T> results = GetAll()
+            .Where(entry => entry.Name == name)
+            .ToImmutableArray();
+
+        if (results.IsEmpty())
         {
-            IImmutableList<T> results = GetAll()
-                .Where(entry => entry.Name == name)
-                .ToImmutableArray();
-
-            if (results.IsEmpty())
-            {
-                string type = typeof(T).Name;
-                throw new ArgumentException($"Enumeration entry for name '{name}' not found in {type}.");
-            }
-
-            if (!results.IsSingle())
-            {
-                string type = typeof(T).Name;
-                throw new ArgumentException($"Multiple enumeration entries for name '{name}' found in {type}.");
-            }
-
-            return results.Single();
+            string type = typeof(T).Name;
+            throw new ArgumentException($"Enumeration entry for name '{name}' not found in {type}.");
         }
 
-        /// <summary>
-        /// Gets an enumeration entry for the specified value.
-        /// </summary>
-        /// <param name="value">The value of the enumeration entry.</param>
-        /// <returns>Returns an enumeration entry for the specified value.</returns>
-        /// <exception cref="ArgumentException">If a single enumeration entry for the specified value does not exist.</exception>
-        public static T FromValue(int value)
+        if (!results.IsSingle())
         {
-            IImmutableList<T> results = GetAll()
-                .Where(entry => entry.Value == value)
-                .ToImmutableArray();
-
-            if (results.IsEmpty())
-            {
-                string type = typeof(T).Name;
-                throw new ArgumentException($"Enumeration entry for value '{value}' not found in {type}.");
-            }
-
-            if (!results.IsSingle())
-            {
-                string type = typeof(T).Name;
-                throw new ArgumentException($"Multiple enumeration entries for value '{value}' found in {type}.");
-            }
-
-            return results.Single();
+            string type = typeof(T).Name;
+            throw new ArgumentException($"Multiple enumeration entries for name '{name}' found in {type}.");
         }
+
+        return results.Single();
+    }
+
+    /// <summary>
+    /// Gets an enumeration entry for the specified value.
+    /// </summary>
+    /// <param name="value">The value of the enumeration entry.</param>
+    /// <returns>Returns an enumeration entry for the specified value.</returns>
+    /// <exception cref="ArgumentException">If a single enumeration entry for the specified value does not exist.</exception>
+    public static T FromValue(int value)
+    {
+        IImmutableList<T> results = GetAll()
+            .Where(entry => entry.Value == value)
+            .ToImmutableArray();
+
+        if (results.IsEmpty())
+        {
+            string type = typeof(T).Name;
+            throw new ArgumentException($"Enumeration entry for value '{value}' not found in {type}.");
+        }
+
+        if (!results.IsSingle())
+        {
+            string type = typeof(T).Name;
+            throw new ArgumentException($"Multiple enumeration entries for value '{value}' found in {type}.");
+        }
+
+        return results.Single();
     }
 }

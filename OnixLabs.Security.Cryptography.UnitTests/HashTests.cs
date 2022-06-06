@@ -14,74 +14,73 @@
 
 using Xunit;
 
-namespace OnixLabs.Security.Cryptography.UnitTests
+namespace OnixLabs.Security.Cryptography.UnitTests;
+
+public sealed class HashTests
 {
-    public sealed class HashTests
+    [Fact(DisplayName = "Identical Hash values produce identical hash codes.")]
+    public void IdenticalHashValuesProduceIdenticalHashCodes()
     {
-        [Fact(DisplayName = "Identical Hash values produce identical hash codes.")]
-        public void IdenticalHashValuesProduceIdenticalHashCodes()
-        {
-            // Arrange
-            Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
-            Hash b = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
-            
-            // Act
-            int hashCodeA = a.GetHashCode();
-            int hashCodeB = b.GetHashCode();
+        // Arrange
+        Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
+        Hash b = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
 
-            // Assert
-            Assert.Equal(hashCodeA, hashCodeB);
-        }
-        
-        [Fact(DisplayName = "Identical hashes should be considered equal")]
-        public void IdenticalHashesShouldBeConsideredEqual()
-        {
-            // Arrange
-            Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
-            Hash b = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
+        // Act
+        int hashCodeA = a.GetHashCode();
+        int hashCodeB = b.GetHashCode();
 
-            // Assert
-            Assert.Equal(a, b);
-        }
+        // Assert
+        Assert.Equal(hashCodeA, hashCodeB);
+    }
 
-        [Fact(DisplayName = "Different hashes should not be considered equal")]
-        public void DifferentHashesShouldNotBeConsideredEqual()
-        {
-            // Arrange
-            Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
-            Hash b = Hash.ComputeSha2Hash256("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    [Fact(DisplayName = "Identical hashes should be considered equal")]
+    public void IdenticalHashesShouldBeConsideredEqual()
+    {
+        // Arrange
+        Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
+        Hash b = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
 
-            // Assert
-            Assert.NotEqual(a, b);
-        }
+        // Assert
+        Assert.Equal(a, b);
+    }
 
-        [Fact(DisplayName = "Parse should be able to parse a known hash")]
-        public void ParseShouldBeAbleToParseAKnownHash()
-        {
-            // Arrange
-            const string expected = "Sha2Hash256:dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
+    [Fact(DisplayName = "Different hashes should not be considered equal")]
+    public void DifferentHashesShouldNotBeConsideredEqual()
+    {
+        // Arrange
+        Hash a = Hash.ComputeSha2Hash256("abcdefghijklmnopqrstuvwxyz");
+        Hash b = Hash.ComputeSha2Hash256("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-            // Act
-            Hash hash = Hash.Parse(expected);
-            string actual = hash.ToStringWithAlgorithmType();
+        // Assert
+        Assert.NotEqual(a, b);
+    }
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
+    [Fact(DisplayName = "Parse should be able to parse a known hash")]
+    public void ParseShouldBeAbleToParseAKnownHash()
+    {
+        // Arrange
+        const string expected = "Sha2Hash256:dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
 
-        [Fact(DisplayName = "Parse should be able to parse an unknown hash")]
-        public void ParseShouldBeAbleToParseAnUnknownHash()
-        {
-            // Arrange
-            const string value = "dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
-            const string expected = "Unknown:dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
+        // Act
+        Hash hash = Hash.Parse(expected);
+        string actual = hash.ToStringWithAlgorithmType();
 
-            // Act
-            Hash hash = Hash.Parse(value);
-            string actual = hash.ToStringWithAlgorithmType();
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
+    [Fact(DisplayName = "Parse should be able to parse an unknown hash")]
+    public void ParseShouldBeAbleToParseAnUnknownHash()
+    {
+        // Arrange
+        const string value = "dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
+        const string expected = "Unknown:dffd6021bb2bd5b0af676290809ec3a53191dd81c7f70a4b28688a362182986f";
+
+        // Act
+        Hash hash = Hash.Parse(value);
+        string actual = hash.ToStringWithAlgorithmType();
+
+        // Assert
+        Assert.Equal(expected, actual);
     }
 }

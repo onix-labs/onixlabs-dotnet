@@ -14,21 +14,20 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
-{
-    public readonly partial struct Hmac
-    {
-        /// <summary>
-        /// Gets an empty hashed message authentication code (HMAC) value.
-        /// </summary>
-        public static readonly Hmac Empty;
+namespace OnixLabs.Security.Cryptography;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="Hmac"/> class.
-        /// </summary>
-        static Hmac()
-        {
-            Empty = Create(Hash.Empty, Array.Empty<byte>());
-        }
+public readonly partial struct Hmac
+{
+    /// <summary>
+    /// Gets an empty hashed message authentication code (HMAC) value.
+    /// </summary>
+    public static readonly Hmac Empty;
+
+    /// <summary>
+    /// Initializes static members of the <see cref="Hmac"/> class.
+    /// </summary>
+    static Hmac()
+    {
+        Empty = Create(Hash.Empty, Array.Empty<byte>());
     }
 }

@@ -14,41 +14,40 @@
 
 using System;
 
-namespace OnixLabs.Core.Text
+namespace OnixLabs.Core.Text;
+
+public readonly partial struct Base16
 {
-    public readonly partial struct Base16
+    /// <summary>
+    /// Parses a Base-16 (hexadecimal) value into a <see cref="Base16"/> instance.
+    /// </summary>
+    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
+    /// <returns>Returns a new <see cref="Base16"/> instance.</returns>
+    public static Base16 Parse(string value)
     {
-        /// <summary>
-        /// Parses a Base-16 (hexadecimal) value into a <see cref="Base16"/> instance.
-        /// </summary>
-        /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-        /// <returns>Returns a new <see cref="Base16"/> instance.</returns>
-        public static Base16 Parse(string value)
-        {
-            ReadOnlySpan<char> characters = value.AsSpan();
-            return Parse(characters);
-        }
+        ReadOnlySpan<char> characters = value.AsSpan();
+        return Parse(characters);
+    }
 
-        /// <summary>
-        /// Parses a Base-16 (hexadecimal) value into a <see cref="Base16"/> instance.
-        /// </summary>
-        /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-        /// <returns>Returns a new <see cref="Base16"/> instance.</returns>
-        public static Base16 Parse(char[] value)
-        {
-            ReadOnlySpan<char> characters = value.AsSpan();
-            return Parse(characters);
-        }
+    /// <summary>
+    /// Parses a Base-16 (hexadecimal) value into a <see cref="Base16"/> instance.
+    /// </summary>
+    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
+    /// <returns>Returns a new <see cref="Base16"/> instance.</returns>
+    public static Base16 Parse(char[] value)
+    {
+        ReadOnlySpan<char> characters = value.AsSpan();
+        return Parse(characters);
+    }
 
-        /// <summary>
-        /// Parses a Base-16 (hexadecimal) value into a <see cref="Base16"/> instance.
-        /// </summary>
-        /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-        /// <returns>Returns a new <see cref="Base16"/> instance.</returns>
-        public static Base16 Parse(ReadOnlySpan<char> value)
-        {
-            byte[] bytes = Convert.FromHexString(value);
-            return FromByteArray(bytes);
-        }
+    /// <summary>
+    /// Parses a Base-16 (hexadecimal) value into a <see cref="Base16"/> instance.
+    /// </summary>
+    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
+    /// <returns>Returns a new <see cref="Base16"/> instance.</returns>
+    public static Base16 Parse(ReadOnlySpan<char> value)
+    {
+        byte[] bytes = Convert.FromHexString(value);
+        return FromByteArray(bytes);
     }
 }

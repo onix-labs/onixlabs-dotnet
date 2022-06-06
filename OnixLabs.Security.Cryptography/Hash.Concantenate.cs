@@ -16,68 +16,67 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hash
 {
-    public readonly partial struct Hash
+    /// <summary>
+    /// Concatenates two hashes.
+    /// </summary>
+    /// <param name="a">The first <see cref="Hash"/> to concatenate.</param>
+    /// <param name="b">The second <see cref="Hash"/> to concatenate.</param>
+    /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
+    public static Hash Concatenate(Hash a, Hash b)
     {
-        /// <summary>
-        /// Concatenates two hashes.
-        /// </summary>
-        /// <param name="a">The first <see cref="Hash"/> to concatenate.</param>
-        /// <param name="b">The second <see cref="Hash"/> to concatenate.</param>
-        /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
-        public static Hash Concatenate(Hash a, Hash b)
+        if (a.AlgorithmType != b.AlgorithmType)
         {
-            if (a.AlgorithmType != b.AlgorithmType)
-            {
-                throw new ArgumentException("Cannot concatenate hashes of different algorithm types.");
-            }
-
-            using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm();
-            byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();
-            byte[] hashedValue = algorithm.ComputeHash(concatenatedValue);
-            return FromByteArray(hashedValue, a.AlgorithmType);
+            throw new ArgumentException("Cannot concatenate hashes of different algorithm types.");
         }
 
-        /// <summary>
-        /// Concatenates two hashes.
-        /// </summary>
-        /// <param name="a">The first <see cref="Hash"/> to concatenate.</param>
-        /// <param name="b">The second <see cref="Hash"/> to concatenate.</param>
-        /// <param name="length">The length of the hash in bytes.</param>
-        /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
-        public static Hash Concatenate(Hash a, Hash b, int length)
-        {
-            if (a.AlgorithmType != b.AlgorithmType)
-            {
-                throw new ArgumentException("Cannot concatenate hashes of different algorithm types.");
-            }
+        using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm();
+        byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();
+        byte[] hashedValue = algorithm.ComputeHash(concatenatedValue);
+        return FromByteArray(hashedValue, a.AlgorithmType);
+    }
 
-            using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm(length);
-            byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();
-            byte[] hashedValue = algorithm.ComputeHash(concatenatedValue);
-            return FromByteArray(hashedValue, a.AlgorithmType);
+    /// <summary>
+    /// Concatenates two hashes.
+    /// </summary>
+    /// <param name="a">The first <see cref="Hash"/> to concatenate.</param>
+    /// <param name="b">The second <see cref="Hash"/> to concatenate.</param>
+    /// <param name="length">The length of the hash in bytes.</param>
+    /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
+    public static Hash Concatenate(Hash a, Hash b, int length)
+    {
+        if (a.AlgorithmType != b.AlgorithmType)
+        {
+            throw new ArgumentException("Cannot concatenate hashes of different algorithm types.");
         }
 
-        /// <summary>
-        /// Concatenates this hash with another hash.
-        /// </summary>
-        /// <param name="other">The other hash to concatenate with this hash.</param>
-        /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
-        public Hash Concatenate(Hash other)
-        {
-            return Concatenate(this, other);
-        }
+        using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm(length);
+        byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();
+        byte[] hashedValue = algorithm.ComputeHash(concatenatedValue);
+        return FromByteArray(hashedValue, a.AlgorithmType);
+    }
 
-        /// <summary>
-        /// Concatenates this hash with another hash.
-        /// </summary>
-        /// <param name="other">The other hash to concatenate with this hash.</param>
-        /// <param name="length">The length of the hash in bytes.</param>
-        /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
-        public Hash Concatenate(Hash other, int length)
-        {
-            return Concatenate(this, other, length);
-        }
+    /// <summary>
+    /// Concatenates this hash with another hash.
+    /// </summary>
+    /// <param name="other">The other hash to concatenate with this hash.</param>
+    /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
+    public Hash Concatenate(Hash other)
+    {
+        return Concatenate(this, other);
+    }
+
+    /// <summary>
+    /// Concatenates this hash with another hash.
+    /// </summary>
+    /// <param name="other">The other hash to concatenate with this hash.</param>
+    /// <param name="length">The length of the hash in bytes.</param>
+    /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
+    public Hash Concatenate(Hash other, int length)
+    {
+        return Concatenate(this, other, length);
     }
 }

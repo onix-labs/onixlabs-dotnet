@@ -16,91 +16,90 @@ using System;
 using OnixLabs.Core;
 using OnixLabs.Core.Text;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hash
 {
-    public readonly partial struct Hash
+    /// <summary>
+    /// Returns a <see cref="byte"/> array containing the underlying hash data.
+    /// </summary>
+    /// <returns>A <see cref="byte"/> array containing the underlying hash data.</returns>
+    public byte[] ToByteArray()
     {
-        /// <summary>
-        /// Returns a <see cref="byte"/> array containing the underlying hash data.
-        /// </summary>
-        /// <returns>A <see cref="byte"/> array containing the underlying hash data.</returns>
-        public byte[] ToByteArray()
-        {
-            return Value.Copy();
-        }
+        return Value.Copy();
+    }
 
-        /// <summary>
-        /// Returns a <see cref="Base16"/> value that represents the underlying hash data.
-        /// </summary>
-        /// <returns>Returns a <see cref="Base16"/> value that represents the underlying hash data.</returns>
-        public Base16 ToBase16()
-        {
-            return Base16.FromByteArray(Value);
-        }
+    /// <summary>
+    /// Returns a <see cref="Base16"/> value that represents the underlying hash data.
+    /// </summary>
+    /// <returns>Returns a <see cref="Base16"/> value that represents the underlying hash data.</returns>
+    public Base16 ToBase16()
+    {
+        return Base16.FromByteArray(Value);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="Base32"/> value that represents the underlying hash data.
-        /// </summary>
-        /// <returns>Returns a <see cref="Base32"/> value that represents the underlying hash data.</returns>
-        public Base32 ToBase32()
-        {
-            return ToBase32(Base32Alphabet.Default);
-        }
+    /// <summary>
+    /// Returns a <see cref="Base32"/> value that represents the underlying hash data.
+    /// </summary>
+    /// <returns>Returns a <see cref="Base32"/> value that represents the underlying hash data.</returns>
+    public Base32 ToBase32()
+    {
+        return ToBase32(Base32Alphabet.Default);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="Base32"/> value that represents the underlying hash data.
-        /// </summary>
-        /// <param name="alphabet">The Base-32 alphabet to use to encode the hash data.</param>
-        /// <returns>Returns a <see cref="Base32"/> value that represents the underlying hash data.</returns>
-        public Base32 ToBase32(Base32Alphabet alphabet)
-        {
-            return Base32.FromByteArray(Value, alphabet);
-        }
+    /// <summary>
+    /// Returns a <see cref="Base32"/> value that represents the underlying hash data.
+    /// </summary>
+    /// <param name="alphabet">The Base-32 alphabet to use to encode the hash data.</param>
+    /// <returns>Returns a <see cref="Base32"/> value that represents the underlying hash data.</returns>
+    public Base32 ToBase32(Base32Alphabet alphabet)
+    {
+        return Base32.FromByteArray(Value, alphabet);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="Base58"/> value that represents the underlying hash data.
-        /// </summary>
-        /// <returns>Returns a <see cref="Base58"/> value that represents the underlying hash data.</returns>
-        public Base58 ToBase58()
-        {
-            return ToBase58(Base58Alphabet.Default);
-        }
+    /// <summary>
+    /// Returns a <see cref="Base58"/> value that represents the underlying hash data.
+    /// </summary>
+    /// <returns>Returns a <see cref="Base58"/> value that represents the underlying hash data.</returns>
+    public Base58 ToBase58()
+    {
+        return ToBase58(Base58Alphabet.Default);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="Base58"/> value that represents the underlying hash data.
-        /// </summary>
-        /// <param name="alphabet">The Base-58 alphabet to use to encode the hash data.</param>
-        /// <returns>Returns a <see cref="Base58"/> value that represents the underlying hash data.</returns>
-        public Base58 ToBase58(Base58Alphabet alphabet)
-        {
-            return Base58.FromByteArray(Value, alphabet);
-        }
+    /// <summary>
+    /// Returns a <see cref="Base58"/> value that represents the underlying hash data.
+    /// </summary>
+    /// <param name="alphabet">The Base-58 alphabet to use to encode the hash data.</param>
+    /// <returns>Returns a <see cref="Base58"/> value that represents the underlying hash data.</returns>
+    public Base58 ToBase58(Base58Alphabet alphabet)
+    {
+        return Base58.FromByteArray(Value, alphabet);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="Base64"/> value that represents the underlying hash data.
-        /// </summary>
-        /// <returns>Returns a <see cref="Base64"/> value that represents the underlying hash data.</returns>
-        public Base64 ToBase64()
-        {
-            return Base64.FromByteArray(Value);
-        }
+    /// <summary>
+    /// Returns a <see cref="Base64"/> value that represents the underlying hash data.
+    /// </summary>
+    /// <returns>Returns a <see cref="Base64"/> value that represents the underlying hash data.</returns>
+    public Base64 ToBase64()
+    {
+        return Base64.FromByteArray(Value);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents the current object.</returns>
-        public override string ToString()
-        {
-            return Convert.ToHexString(Value).ToLower();
-        }
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    public override string ToString()
+    {
+        return Convert.ToHexString(Value).ToLower();
+    }
 
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object, including the hash algorithm type.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents the current object, including the hash algorithm type.</returns>
-        public string ToStringWithAlgorithmType()
-        {
-            return $"{AlgorithmType.Name}:{ToString()}";
-        }
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object, including the hash algorithm type.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents the current object, including the hash algorithm type.</returns>
+    public string ToStringWithAlgorithmType()
+    {
+        return $"{AlgorithmType.Name}:{ToString()}";
     }
 }

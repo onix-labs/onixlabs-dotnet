@@ -14,27 +14,26 @@
 
 using System.Security.Cryptography;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Represents an RSA public key.
+/// </summary>
+public sealed partial class RsaPublicKey : PublicKey
 {
     /// <summary>
-    /// Represents an RSA public key.
+    /// Creates a new instance of the <see cref="RsaPublicKey"/> class.
     /// </summary>
-    public sealed partial class RsaPublicKey : PublicKey
+    /// <param name="data">The public key data.</param>
+    /// <param name="type">The hash algorithm type for computing signature data.</param>
+    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
+    internal RsaPublicKey(byte[] data, HashAlgorithmType type, RSASignaturePadding padding) : base(data, type)
     {
-        /// <summary>
-        /// Creates a new instance of the <see cref="RsaPublicKey"/> class.
-        /// </summary>
-        /// <param name="data">The public key data.</param>
-        /// <param name="type">The hash algorithm type for computing signature data.</param>
-        /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-        internal RsaPublicKey(byte[] data, HashAlgorithmType type, RSASignaturePadding padding) : base(data, type)
-        {
-            Padding = padding;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="RSASignaturePadding" /> for computing signature data.
-        /// </summary>
-        public RSASignaturePadding Padding { get; }
+        Padding = padding;
     }
+
+    /// <summary>
+    /// Gets the <see cref="RSASignaturePadding" /> for computing signature data.
+    /// </summary>
+    public RSASignaturePadding Padding { get; }
 }

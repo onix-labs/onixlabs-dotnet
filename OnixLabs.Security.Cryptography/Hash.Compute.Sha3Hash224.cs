@@ -14,40 +14,39 @@
 
 using System.Text;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hash
 {
-    public readonly partial struct Hash
+    /// <summary>
+    /// Computes a SHA-3 224-bit hash from the specified value.
+    /// This will use the default encoding to convert the input string into a byte array.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static Hash ComputeSha3Hash224(string value)
     {
-        /// <summary>
-        /// Computes a SHA-3 224-bit hash from the specified value.
-        /// This will use the default encoding to convert the input string into a byte array.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static Hash ComputeSha3Hash224(string value)
-        {
-            return ComputeSha3Hash224(value, Encoding.Default);
-        }
+        return ComputeSha3Hash224(value, Encoding.Default);
+    }
 
-        /// <summary>
-        /// Computes a SHA-3 224-bit hash from the specified value.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static Hash ComputeSha3Hash224(string value, Encoding encoding)
-        {
-            return ComputeHash(value, HashAlgorithmType.Sha3Hash224, encoding);
-        }
+    /// <summary>
+    /// Computes a SHA-3 224-bit hash from the specified value.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static Hash ComputeSha3Hash224(string value, Encoding encoding)
+    {
+        return ComputeHash(value, HashAlgorithmType.Sha3Hash224, encoding);
+    }
 
-        /// <summary>
-        /// Computes a SHA-3 224-bit hash from the specified value.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static Hash ComputeSha3Hash224(byte[] value)
-        {
-            return ComputeHash(value, HashAlgorithmType.Sha3Hash224);
-        }
+    /// <summary>
+    /// Computes a SHA-3 224-bit hash from the specified value.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static Hash ComputeSha3Hash224(byte[] value)
+    {
+        return ComputeHash(value, HashAlgorithmType.Sha3Hash224);
     }
 }

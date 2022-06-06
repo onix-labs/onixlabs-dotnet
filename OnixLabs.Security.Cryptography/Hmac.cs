@@ -14,37 +14,36 @@
 
 using OnixLabs.Core;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Represents a hashed message authentication code (HMAC).
+/// </summary>
+public readonly partial struct Hmac
 {
     /// <summary>
-    /// Represents a hashed message authentication code (HMAC).
+    /// Represents the underlying un-hashed data.
     /// </summary>
-    public readonly partial struct Hmac
+    private readonly byte[] data;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Hmac"/> struct.
+    /// </summary>
+    /// <param name="hash">The <see cref="Hash"/> representing the HMAC.</param>
+    /// <param name="data">The underlying un-hashed data.</param>
+    private Hmac(Hash hash, byte[] data)
     {
-        /// <summary>
-        /// Represents the underlying un-hashed data.
-        /// </summary>
-        private readonly byte[] data;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hmac"/> struct.
-        /// </summary>
-        /// <param name="hash">The <see cref="Hash"/> representing the HMAC.</param>
-        /// <param name="data">The underlying un-hashed data.</param>
-        private Hmac(Hash hash, byte[] data)
-        {
-            Hash = hash;
-            this.data = data;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="Hash"/> representing the HMAC.
-        /// </summary>
-        public Hash Hash { get; }
-
-        /// <summary>
-        /// Gets the underlying un-hashed data.
-        /// </summary>
-        public byte[] Data => data.Copy();
+        Hash = hash;
+        this.data = data;
     }
+
+    /// <summary>
+    /// Gets the <see cref="Hash"/> representing the HMAC.
+    /// </summary>
+    public Hash Hash { get; }
+
+    /// <summary>
+    /// Gets the underlying un-hashed data.
+    /// </summary>
+    public byte[] Data => data.Copy();
 }

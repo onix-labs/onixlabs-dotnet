@@ -14,26 +14,25 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
-{
-    public readonly partial struct Hmac
-    {
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents the current object.</returns>
-        public override string ToString()
-        {
-            return $"{Hash}:{Convert.ToHexString(Data).ToLower()}";
-        }
+namespace OnixLabs.Security.Cryptography;
 
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object, including the hash algorithm type.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents the current object, including the hash algorithm type.</returns>
-        public string ToStringWithAlgorithmType()
-        {
-            return $"{Hash.AlgorithmType.Name}:{ToString()}";
-        }
+public readonly partial struct Hmac
+{
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    public override string ToString()
+    {
+        return $"{Hash}:{Convert.ToHexString(Data).ToLower()}";
+    }
+
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object, including the hash algorithm type.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents the current object, including the hash algorithm type.</returns>
+    public string ToStringWithAlgorithmType()
+    {
+        return $"{Hash.AlgorithmType.Name}:{ToString()}";
     }
 }

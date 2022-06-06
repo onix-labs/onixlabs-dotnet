@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Core
+namespace OnixLabs.Core;
+
+public abstract partial class Enumeration<T>
 {
-    public abstract partial class Enumeration<T>
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    public override string ToString()
     {
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents the current object.</returns>
-        public override string ToString()
-        {
-            return Name;
-        }
+        return Name;
     }
 }

@@ -14,21 +14,20 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
-{
-    public readonly partial struct Hash
-    {
-        /// <summary>
-        /// Gets an empty hash value.
-        /// </summary>
-        public static readonly Hash Empty;
+namespace OnixLabs.Security.Cryptography;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="Hash"/> class.
-        /// </summary>
-        static Hash()
-        {
-            Empty = FromByteArray(Array.Empty<byte>(), HashAlgorithmType.Unknown);
-        }
+public readonly partial struct Hash
+{
+    /// <summary>
+    /// Gets an empty hash value.
+    /// </summary>
+    public static readonly Hash Empty;
+
+    /// <summary>
+    /// Initializes static members of the <see cref="Hash"/> class.
+    /// </summary>
+    static Hash()
+    {
+        Empty = FromByteArray(Array.Empty<byte>(), HashAlgorithmType.Unknown);
     }
 }

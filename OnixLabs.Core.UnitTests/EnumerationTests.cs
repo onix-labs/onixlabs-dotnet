@@ -16,62 +16,61 @@ using System.Collections.Generic;
 using OnixLabs.Core.UnitTests.MockData;
 using Xunit;
 
-namespace OnixLabs.Core.UnitTests
+namespace OnixLabs.Core.UnitTests;
+
+public sealed class EnumerationTests
 {
-    public sealed class EnumerationTests
+    [Fact(DisplayName = "Enumerations should be equal")]
+    public void EnumerationsShouldBeEqual()
     {
-        [Fact(DisplayName = "Enumerations should be equal")]
-        public void EnumerationsShouldBeEqual()
-        {
-            // Arrange
-            Color a = Color.Red;
-            Color b = Color.Red;
+        // Arrange
+        Color a = Color.Red;
+        Color b = Color.Red;
 
-            // Assert
-            Assert.Equal(a, b);
-        }
+        // Assert
+        Assert.Equal(a, b);
+    }
 
-        [Fact(DisplayName = "Enumerations should not be equal")]
-        public void EnumerationsShouldNotBeEqual()
-        {
-            // Arrange
-            Color a = Color.Red;
-            Color b = Color.Blue;
+    [Fact(DisplayName = "Enumerations should not be equal")]
+    public void EnumerationsShouldNotBeEqual()
+    {
+        // Arrange
+        Color a = Color.Red;
+        Color b = Color.Blue;
 
-            // Assert
-            Assert.NotEqual(a, b);
-        }
+        // Assert
+        Assert.NotEqual(a, b);
+    }
 
-        [Fact(DisplayName = "Enumeration should return all enumeration instances")]
-        public void EnumerationsShouldReturnAllEnumerationInstances()
-        {
-            // Arrange
-            IEnumerable<Color> colors = Color.GetAll();
+    [Fact(DisplayName = "Enumeration should return all enumeration instances")]
+    public void EnumerationsShouldReturnAllEnumerationInstances()
+    {
+        // Arrange
+        IEnumerable<Color> colors = Color.GetAll();
 
-            // Assert
-            Assert.Contains(colors, item => item == Color.Red);
-            Assert.Contains(colors, item => item == Color.Green);
-            Assert.Contains(colors, item => item == Color.Blue);
-        }
+        // Assert
+        Assert.Contains(colors, item => item == Color.Red);
+        Assert.Contains(colors, item => item == Color.Green);
+        Assert.Contains(colors, item => item == Color.Blue);
+    }
 
-        [Fact(DisplayName = "Enumeration_FromName should return the expected enumeration entry")]
-        public void EnumerationFromNameShouldReturnTheExpectedEnumerationEntry()
-        {
-            // Arrange
-            Color color = Color.FromName("Green");
+    [Fact(DisplayName = "Enumeration_FromName should return the expected enumeration entry")]
+    public void EnumerationFromNameShouldReturnTheExpectedEnumerationEntry()
+    {
+        // Arrange
+        Color color = Color.FromName("Green");
 
-            // Assert
-            Assert.Equal(Color.Green, color);
-        }
+        // Assert
+        Assert.Equal(Color.Green, color);
+    }
 
-        [Fact(DisplayName = "Enumeration_FromValue should return the expected enumeration entry")]
-        public void EnumerationFromValueShouldReturnTheExpectedEnumerationEntry()
-        {
-            // Arrange
-            Color color = Color.FromValue(2);
+    [Fact(DisplayName = "Enumeration_FromValue should return the expected enumeration entry")]
+    public void EnumerationFromValueShouldReturnTheExpectedEnumerationEntry()
+    {
+        // Arrange
+        Color color = Color.FromValue(2);
 
-            // Assert
-            Assert.Equal(Color.Green, color);
-        }
+        // Assert
+        Assert.Equal(Color.Green, color);
     }
 }

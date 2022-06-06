@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public abstract partial class PrivateKey
 {
-    public abstract partial class PrivateKey
-    {
-        /// <summary>
-        /// Gets the public key component from this private key.
-        /// </summary>
-        /// <returns>Returns the public key component from this private key.</returns>
-        public abstract PublicKey GetPublicKey();
-    }
+    /// <summary>
+    /// Gets the public key component from this private key.
+    /// </summary>
+    /// <returns>Returns the public key component from this private key.</returns>
+    public abstract PublicKey GetPublicKey();
 }

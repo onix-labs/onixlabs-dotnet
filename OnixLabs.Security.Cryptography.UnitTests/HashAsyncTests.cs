@@ -14,30 +14,29 @@
 
 using Xunit;
 
-namespace OnixLabs.Security.Cryptography.UnitTests
+namespace OnixLabs.Security.Cryptography.UnitTests;
+
+public sealed class HashAsyncTests
 {
-    public sealed class HashAsyncTests
+    [Fact(DisplayName = "Identical hashes should be considered equal")]
+    public async void IdenticalHashesShouldBeConsideredEqual()
     {
-        [Fact(DisplayName = "Identical hashes should be considered equal")]
-        public async void IdenticalHashesShouldBeConsideredEqual()
-        {
-            // Arrange
-            Hash a = await Hash.ComputeSha2Hash256Async("abcdefghijklmnopqrstuvwxyz");
-            Hash b = await Hash.ComputeSha2Hash256Async("abcdefghijklmnopqrstuvwxyz");
+        // Arrange
+        Hash a = await Hash.ComputeSha2Hash256Async("abcdefghijklmnopqrstuvwxyz");
+        Hash b = await Hash.ComputeSha2Hash256Async("abcdefghijklmnopqrstuvwxyz");
 
-            // Assert
-            Assert.Equal(a, b);
-        }
+        // Assert
+        Assert.Equal(a, b);
+    }
 
-        [Fact(DisplayName = "Different hashes should not be considered equal")]
-        public async void DifferentHashesShouldNotBeConsideredEqual()
-        {
-            // Arrange
-            Hash a = await Hash.ComputeSha2Hash256Async("abcdefghijklmnopqrstuvwxyz");
-            Hash b = await Hash.ComputeSha2Hash256Async("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    [Fact(DisplayName = "Different hashes should not be considered equal")]
+    public async void DifferentHashesShouldNotBeConsideredEqual()
+    {
+        // Arrange
+        Hash a = await Hash.ComputeSha2Hash256Async("abcdefghijklmnopqrstuvwxyz");
+        Hash b = await Hash.ComputeSha2Hash256Async("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-            // Assert
-            Assert.NotEqual(a, b);
-        }
+        // Assert
+        Assert.NotEqual(a, b);
     }
 }

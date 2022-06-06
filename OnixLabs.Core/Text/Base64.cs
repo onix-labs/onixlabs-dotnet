@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Core.Text
+namespace OnixLabs.Core.Text;
+
+/// <summary>
+/// Represents a Base-64 value.
+/// </summary>
+public readonly partial struct Base64
 {
     /// <summary>
-    /// Represents a Base-64 value.
+    /// Initializes a new instance of the <see cref="Base64"/> struct.
     /// </summary>
-    public readonly partial struct Base64
+    /// <param name="value">The underlying value.</param>
+    private Base64(byte[] value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Base64"/> struct.
-        /// </summary>
-        /// <param name="value">The underlying value.</param>
-        private Base64(byte[] value)
-        {
-            Value = value;
-        }
-
-        /// <summary>
-        /// Gets the underlying value.
-        /// </summary>
-        private byte[] Value { get; }
+        Value = value;
     }
+
+    /// <summary>
+    /// Gets the underlying value.
+    /// </summary>
+    private byte[] Value { get; }
 }

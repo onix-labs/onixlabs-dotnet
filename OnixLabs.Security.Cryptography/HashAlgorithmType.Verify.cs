@@ -14,31 +14,30 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
-{
-    public sealed partial class HashAlgorithmType
-    {
-        /// <summary>
-        /// Determines whether the length of a byte array is valid.
-        /// </summary>
-        /// <param name="value">The byte array to length check.</param>
-        /// <returns>Returns true if the length of the byte array is valid; otherwise, false.</returns>
-        public bool IsValidHashLength(byte[] value)
-        {
-            return Length == -1 || Length == value.Length;
-        }
+namespace OnixLabs.Security.Cryptography;
 
-        /// <summary>
-        /// Verifies that the length of a byte array is valid.
-        /// </summary>
-        /// <param name="value">The byte array to length check.</param>
-        /// <exception cref="ArgumentException">If the length of the byte array is invalid.</exception>
-        public void VerifyHashLength(byte[] value)
+public sealed partial class HashAlgorithmType
+{
+    /// <summary>
+    /// Determines whether the length of a byte array is valid.
+    /// </summary>
+    /// <param name="value">The byte array to length check.</param>
+    /// <returns>Returns true if the length of the byte array is valid; otherwise, false.</returns>
+    public bool IsValidHashLength(byte[] value)
+    {
+        return Length == -1 || Length == value.Length;
+    }
+
+    /// <summary>
+    /// Verifies that the length of a byte array is valid.
+    /// </summary>
+    /// <param name="value">The byte array to length check.</param>
+    /// <exception cref="ArgumentException">If the length of the byte array is invalid.</exception>
+    public void VerifyHashLength(byte[] value)
+    {
+        if (!IsValidHashLength(value))
         {
-            if (!IsValidHashLength(value))
-            {
-                throw new ArgumentException("The length of the hash is invalid.", nameof(value));
-            }
+            throw new ArgumentException("The length of the hash is invalid.", nameof(value));
         }
     }
 }

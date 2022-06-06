@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public sealed partial class RsaPublicKey
 {
-    public sealed partial class RsaPublicKey
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="other">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public override bool Equals(PublicKey? other)
     {
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="other">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public override bool Equals(PublicKey? other)
-        {
-            return base.Equals(other)
-                   && other is RsaPublicKey rsaOther
-                   && rsaOther.Padding == Padding;
-        }
+        return base.Equals(other)
+               && other is RsaPublicKey rsaOther
+               && rsaOther.Padding == Padding;
     }
 }

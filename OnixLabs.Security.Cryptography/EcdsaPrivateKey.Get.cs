@@ -14,22 +14,21 @@
 
 using System.Security.Cryptography;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public sealed partial class EcdsaPrivateKey
 {
-    public sealed partial class EcdsaPrivateKey
+    /// <summary>
+    /// Gets the public key component from this private key.
+    /// </summary>
+    /// <returns>Returns the public key component from this private key.</returns>
+    public override PublicKey GetPublicKey()
     {
-        /// <summary>
-        /// Gets the public key component from this private key.
-        /// </summary>
-        /// <returns>Returns the public key component from this private key.</returns>
-        public override PublicKey GetPublicKey()
-        {
-            using ECDsa privateKey = ECDsa.Create();
+        using ECDsa privateKey = ECDsa.Create();
 
-            privateKey.ImportECPrivateKey(KeyData, out int _);
-            byte[] publicKey = privateKey.ExportSubjectPublicKeyInfo();
+        privateKey.ImportECPrivateKey(KeyData, out int _);
+        byte[] publicKey = privateKey.ExportSubjectPublicKeyInfo();
 
-            return new EcdsaPublicKey(publicKey, AlgorithmType);
-        }
+        return new EcdsaPublicKey(publicKey, AlgorithmType);
     }
 }

@@ -15,40 +15,39 @@
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hash
 {
-    public readonly partial struct Hash
+    /// <summary>
+    /// Computes an MD5 hash from the specified value.
+    /// This will use the default encoding to convert the input string into a byte array.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static async Task<Hash> ComputeMd5HashAsync(string value)
     {
-        /// <summary>
-        /// Computes an MD5 hash from the specified value.
-        /// This will use the default encoding to convert the input string into a byte array.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static async Task<Hash> ComputeMd5HashAsync(string value)
-        {
-            return await ComputeMd5HashAsync(value, Encoding.Default);
-        }
+        return await ComputeMd5HashAsync(value, Encoding.Default);
+    }
 
-        /// <summary>
-        /// Computes an MD5 hash from the specified value.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static async Task<Hash> ComputeMd5HashAsync(string value, Encoding encoding)
-        {
-            return await ComputeHashAsync(value, HashAlgorithmType.Md5Hash, encoding);
-        }
+    /// <summary>
+    /// Computes an MD5 hash from the specified value.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static async Task<Hash> ComputeMd5HashAsync(string value, Encoding encoding)
+    {
+        return await ComputeHashAsync(value, HashAlgorithmType.Md5Hash, encoding);
+    }
 
-        /// <summary>
-        /// Computes an MD5 hash from the specified value.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static async Task<Hash> ComputeMd5HashAsync(byte[] value)
-        {
-            return await ComputeHashAsync(value, HashAlgorithmType.Md5Hash);
-        }
+    /// <summary>
+    /// Computes an MD5 hash from the specified value.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static async Task<Hash> ComputeMd5HashAsync(byte[] value)
+    {
+        return await ComputeHashAsync(value, HashAlgorithmType.Md5Hash);
     }
 }

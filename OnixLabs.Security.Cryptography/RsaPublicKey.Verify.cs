@@ -14,42 +14,41 @@
 
 using System.Security.Cryptography;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public sealed partial class RsaPublicKey
 {
-    public sealed partial class RsaPublicKey
+    /// <summary>
+    /// Determines whether the specified <see cref="DigitalSignature"/> was signed by the private component of this public key.
+    /// </summary>
+    /// <param name="signature">The <see cref="DigitalSignature"/> to validate.</param>
+    /// <param name="unsignedData">The unsigned data to validate.</param>
+    /// <returns>Returns true if the specified <see cref="DigitalSignature"/> was signed by the private component of this public key; otherwise, false.</returns>
+    public override bool IsDataValid(DigitalSignature signature, byte[] unsignedData)
     {
-        /// <summary>
-        /// Determines whether the specified <see cref="DigitalSignature"/> was signed by the private component of this public key.
-        /// </summary>
-        /// <param name="signature">The <see cref="DigitalSignature"/> to validate.</param>
-        /// <param name="unsignedData">The unsigned data to validate.</param>
-        /// <returns>Returns true if the specified <see cref="DigitalSignature"/> was signed by the private component of this public key; otherwise, false.</returns>
-        public override bool IsDataValid(DigitalSignature signature, byte[] unsignedData)
-        {
-            using RSA publicKey = RSA.Create();
+        using RSA publicKey = RSA.Create();
 
-            publicKey.ImportRSAPublicKey(KeyData, out int _);
-            byte[] signatureData = signature.ToByteArray();
-            HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
+        publicKey.ImportRSAPublicKey(KeyData, out int _);
+        byte[] signatureData = signature.ToByteArray();
+        HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
 
-            return publicKey.VerifyData(unsignedData, signatureData, name, Padding);
-        }
+        return publicKey.VerifyData(unsignedData, signatureData, name, Padding);
+    }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="DigitalSignature"/> was signed by the private component of this public key.
-        /// </summary>
-        /// <param name="signature">The <see cref="DigitalSignature"/> to validate.</param>
-        /// <param name="unsignedHash">The unsigned hash to validate.</param>
-        /// <returns>Returns true if the specified <see cref="DigitalSignature"/> was signed by the private component of this public key; otherwise, false.</returns>
-        public override bool IsHashValid(DigitalSignature signature, byte[] unsignedHash)
-        {
-            using RSA publicKey = RSA.Create();
+    /// <summary>
+    /// Determines whether the specified <see cref="DigitalSignature"/> was signed by the private component of this public key.
+    /// </summary>
+    /// <param name="signature">The <see cref="DigitalSignature"/> to validate.</param>
+    /// <param name="unsignedHash">The unsigned hash to validate.</param>
+    /// <returns>Returns true if the specified <see cref="DigitalSignature"/> was signed by the private component of this public key; otherwise, false.</returns>
+    public override bool IsHashValid(DigitalSignature signature, byte[] unsignedHash)
+    {
+        using RSA publicKey = RSA.Create();
 
-            publicKey.ImportRSAPublicKey(KeyData, out int _);
-            byte[] signatureData = signature.ToByteArray();
-            HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
+        publicKey.ImportRSAPublicKey(KeyData, out int _);
+        byte[] signatureData = signature.ToByteArray();
+        HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
 
-            return publicKey.VerifyHash(unsignedHash, signatureData, name, Padding);
-        }
+        return publicKey.VerifyHash(unsignedHash, signatureData, name, Padding);
     }
 }

@@ -14,22 +14,21 @@
 
 using System.Security.Cryptography;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public sealed partial class RsaPrivateKey
 {
-    public sealed partial class RsaPrivateKey
+    /// <summary>
+    /// Gets the public key component from this private key.
+    /// </summary>
+    /// <returns>Returns the public key component from this private key.</returns>
+    public override PublicKey GetPublicKey()
     {
-        /// <summary>
-        /// Gets the public key component from this private key.
-        /// </summary>
-        /// <returns>Returns the public key component from this private key.</returns>
-        public override PublicKey GetPublicKey()
-        {
-            using RSA privateKey = RSA.Create();
+        using RSA privateKey = RSA.Create();
 
-            privateKey.ImportRSAPrivateKey(KeyData, out int _);
-            byte[] publicKey = privateKey.ExportRSAPublicKey();
+        privateKey.ImportRSAPrivateKey(KeyData, out int _);
+        byte[] publicKey = privateKey.ExportRSAPublicKey();
 
-            return new RsaPublicKey(publicKey, AlgorithmType, Padding);
-        }
+        return new RsaPublicKey(publicKey, AlgorithmType, Padding);
     }
 }

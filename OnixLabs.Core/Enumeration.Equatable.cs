@@ -14,63 +14,62 @@
 
 using System;
 
-namespace OnixLabs.Core
+namespace OnixLabs.Core;
+
+public abstract partial class Enumeration<T> : IEquatable<T>
 {
-    public abstract partial class Enumeration<T> : IEquatable<T>
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(Enumeration<T> a, Enumeration<T> b)
     {
-        /// <summary>
-        /// Performs an equality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are equal; otherwise, false.</returns>
-        public static bool operator ==(Enumeration<T> a, Enumeration<T> b)
-        {
-            return Equals(a, b);
-        }
+        return Equals(a, b);
+    }
 
-        /// <summary>
-        /// Performs an inequality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are not equal; otherwise, false.</returns>
-        public static bool operator !=(Enumeration<T> a, Enumeration<T> b)
-        {
-            return !Equals(a, b);
-        }
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(Enumeration<T> a, Enumeration<T> b)
+    {
+        return !Equals(a, b);
+    }
 
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">An object to compare with this object.</param>
-        /// <returns>Returns true if the current object is equal to the other parameter; otherwise, false.</returns>
-        public virtual bool Equals(T? other)
-        {
-            return ReferenceEquals(this, other)
-                   || other is not null
-                   && other.GetType() == GetType()
-                   && other.Value == Value
-                   && other.Name == Name;
-        }
+    /// <summary>
+    /// Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    /// <param name="other">An object to compare with this object.</param>
+    /// <returns>Returns true if the current object is equal to the other parameter; otherwise, false.</returns>
+    public virtual bool Equals(T? other)
+    {
+        return ReferenceEquals(this, other)
+               || other is not null
+               && other.GetType() == GetType()
+               && other.Value == Value
+               && other.Name == Name;
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="obj">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as T);
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="obj">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as T);
+    }
 
-        /// <summary>
-        /// Serves as a hash code function for this instance.
-        /// </summary>
-        /// <returns>A hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(GetType(), Name, Value);
-        }
+    /// <summary>
+    /// Serves as a hash code function for this instance.
+    /// </summary>
+    /// <returns>A hash code for this instance.</returns>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(GetType(), Name, Value);
     }
 }

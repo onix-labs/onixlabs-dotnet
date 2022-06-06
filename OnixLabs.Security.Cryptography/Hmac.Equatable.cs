@@ -16,60 +16,59 @@ using System;
 using System.Linq;
 using OnixLabs.Core.Linq;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hmac : IEquatable<Hmac>
 {
-    public readonly partial struct Hmac : IEquatable<Hmac>
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(Hmac a, Hmac b)
     {
-        /// <summary>
-        /// Performs an equality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are equal; otherwise, false.</returns>
-        public static bool operator ==(Hmac a, Hmac b)
-        {
-            return Equals(a, b);
-        }
+        return Equals(a, b);
+    }
 
-        /// <summary>
-        /// Performs an inequality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are not equal; otherwise, false.</returns>
-        public static bool operator !=(Hmac a, Hmac b)
-        {
-            return !Equals(a, b);
-        }
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(Hmac a, Hmac b)
+    {
+        return !Equals(a, b);
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="other">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public bool Equals(Hmac other)
-        {
-            return other.Hash == Hash
-                   && other.Data.SequenceEqual(Data);
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="other">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public bool Equals(Hmac other)
+    {
+        return other.Hash == Hash
+               && other.Data.SequenceEqual(Data);
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="obj">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public override bool Equals(object? obj)
-        {
-            return obj is Hmac other && Equals(other);
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="obj">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public override bool Equals(object? obj)
+    {
+        return obj is Hmac other && Equals(other);
+    }
 
-        /// <summary>
-        /// Serves as a hash code function for this instance.
-        /// </summary>
-        /// <returns>A hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Hash, Data.ComputeContentHashCode());
-        }
+    /// <summary>
+    /// Serves as a hash code function for this instance.
+    /// </summary>
+    /// <returns>A hash code for this instance.</returns>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Hash, Data.GetContentHashCode());
     }
 }

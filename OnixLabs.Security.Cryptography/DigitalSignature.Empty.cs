@@ -14,21 +14,20 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
-{
-    public readonly partial struct DigitalSignature
-    {
-        /// <summary>
-        /// Gets an empty digital signature value.
-        /// </summary>
-        public static readonly DigitalSignature Empty;
+namespace OnixLabs.Security.Cryptography;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="DigitalSignature"/> class.
-        /// </summary>
-        static DigitalSignature()
-        {
-            Empty = FromByteArray(Array.Empty<byte>());
-        }
+public readonly partial struct DigitalSignature
+{
+    /// <summary>
+    /// Gets an empty digital signature value.
+    /// </summary>
+    public static readonly DigitalSignature Empty;
+
+    /// <summary>
+    /// Initializes static members of the <see cref="DigitalSignature"/> class.
+    /// </summary>
+    static DigitalSignature()
+    {
+        Empty = FromByteArray(Array.Empty<byte>());
     }
 }

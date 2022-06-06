@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Computes the FIPS 202 SHA-3 512-bit hash for the input data.
+/// </summary>
+public sealed class Sha3Hash512 : Sha3
 {
     /// <summary>
-    /// Computes the FIPS 202 SHA-3 512-bit hash for the input data.
+    /// The rate in bytes of the sponge state.
     /// </summary>
-    public sealed class Sha3Hash512 : Sha3
-    {
-        /// <summary>
-        /// The rate in bytes of the sponge state.
-        /// </summary>
-        private const int RateBytes = 72;
+    private const int RateBytes = 72;
 
-        /// <summary>
-        /// The length of the hash in bits.
-        /// </summary>
-        private const int BitLength = 512;
-        
-        /// <summary>
-        /// Creates a new instance of the <see cref="Sha3Hash512"/> class.
-        /// </summary>
-        public Sha3Hash512() : base(RateBytes, HashDelimiter, BitLength)
-        {
-        }
+    /// <summary>
+    /// The length of the hash in bits.
+    /// </summary>
+    private const int BitLength = 512;
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Sha3Hash512"/> class.
+    /// </summary>
+    public Sha3Hash512() : base(RateBytes, HashDelimiter, BitLength)
+    {
     }
 }

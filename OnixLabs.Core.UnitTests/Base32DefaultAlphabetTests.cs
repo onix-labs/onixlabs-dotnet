@@ -15,71 +15,70 @@
 using OnixLabs.Core.Text;
 using Xunit;
 
-namespace OnixLabs.Core.UnitTests
+namespace OnixLabs.Core.UnitTests;
+
+public sealed class Base32DefaultAlphabetTests
 {
-    public sealed class Base32DefaultAlphabetTests
+    [Fact(DisplayName = "Identical Base32 values produce identical hash codes.")]
+    public void IdenticalBase32ValuesProduceIdenticalHashCodes()
     {
-        [Fact(DisplayName = "Identical Base32 values produce identical hash codes.")]
-        public void IdenticalBase32ValuesProduceIdenticalHashCodes()
-        {
-            // Arrange
-            Base32 a = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Default);
-            Base32 b = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Default);
-            
-            // Act
-            int hashCodeA = a.GetHashCode();
-            int hashCodeB = b.GetHashCode();
+        // Arrange
+        Base32 a = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Default);
+        Base32 b = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Default);
 
-            // Assert
-            Assert.Equal(hashCodeA, hashCodeB);
-        }
-        
-        [Theory(DisplayName = "Base32_FromString without padding should produce the expected Base-32 value.")]
-        [InlineData("GEZDGNBVGY3TQOJQ", "1234567890")]
-        [InlineData("IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-        [InlineData("MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI======", "abcdefghijklmnopqrstuvwxyz")]
-        public void Base32FromStringWithPaddingShouldProduceTheExpectedBase32Value(string expected, string value)
-        {
-            // Arrange
-            Base32 candidate = Base32.FromString(value, Base32Alphabet.Default, true);
+        // Act
+        int hashCodeA = a.GetHashCode();
+        int hashCodeB = b.GetHashCode();
 
-            // Act
-            string actual = candidate.ToString();
+        // Assert
+        Assert.Equal(hashCodeA, hashCodeB);
+    }
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
+    [Theory(DisplayName = "Base32_FromString without padding should produce the expected Base-32 value.")]
+    [InlineData("GEZDGNBVGY3TQOJQ", "1234567890")]
+    [InlineData("IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI======", "abcdefghijklmnopqrstuvwxyz")]
+    public void Base32FromStringWithPaddingShouldProduceTheExpectedBase32Value(string expected, string value)
+    {
+        // Arrange
+        Base32 candidate = Base32.FromString(value, Base32Alphabet.Default, true);
 
-        [Theory(DisplayName = "Base32_FromString without padding should produce the expected Base-32 value.")]
-        [InlineData("GEZDGNBVGY3TQOJQ", "1234567890")]
-        [InlineData("IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-        [InlineData("MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI", "abcdefghijklmnopqrstuvwxyz")]
-        public void Base32FromStringWithoutPaddingShouldProduceTheExpectedBase32Value(string expected, string value)
-        {
-            // Arrange
-            Base32 candidate = Base32.FromString(value, Base32Alphabet.Default, false);
+        // Act
+        string actual = candidate.ToString();
 
-            // Act
-            string actual = candidate.ToString();
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
+    [Theory(DisplayName = "Base32_FromString without padding should produce the expected Base-32 value.")]
+    [InlineData("GEZDGNBVGY3TQOJQ", "1234567890")]
+    [InlineData("IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI", "abcdefghijklmnopqrstuvwxyz")]
+    public void Base32FromStringWithoutPaddingShouldProduceTheExpectedBase32Value(string expected, string value)
+    {
+        // Arrange
+        Base32 candidate = Base32.FromString(value, Base32Alphabet.Default, false);
 
-        [Theory(DisplayName = "Base32_Parse should produce the expected plain text value.")]
-        [InlineData("1234567890", "GEZDGNBVGY3TQOJQ")]
-        [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI")]
-        [InlineData("abcdefghijklmnopqrstuvwxyz", "MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI")]
-        public void Base32ParseShouldProduceTheExpectedPlainTextValue(string expected, string value)
-        {
-            // Arrange
-            Base32 candidate = Base32.Parse(value, Base32Alphabet.Default);
+        // Act
+        string actual = candidate.ToString();
 
-            // Act
-            string actual = candidate.ToPlainTextString();
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
+    [Theory(DisplayName = "Base32_Parse should produce the expected plain text value.")]
+    [InlineData("1234567890", "GEZDGNBVGY3TQOJQ")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI")]
+    public void Base32ParseShouldProduceTheExpectedPlainTextValue(string expected, string value)
+    {
+        // Arrange
+        Base32 candidate = Base32.Parse(value, Base32Alphabet.Default);
+
+        // Act
+        string actual = candidate.ToPlainTextString();
+
+        // Assert
+        Assert.Equal(expected, actual);
     }
 }

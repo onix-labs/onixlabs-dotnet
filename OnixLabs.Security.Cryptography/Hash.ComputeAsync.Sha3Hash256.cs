@@ -15,40 +15,39 @@
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hash
 {
-    public readonly partial struct Hash
+    /// <summary>
+    /// Computes a SHA-3 256-bit hash from the specified value.
+    /// This will use the default encoding to convert the input string into a byte array.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static async Task<Hash> ComputeSha3Hash256Async(string value)
     {
-        /// <summary>
-        /// Computes a SHA-3 256-bit hash from the specified value.
-        /// This will use the default encoding to convert the input string into a byte array.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static async Task<Hash> ComputeSha3Hash256Async(string value)
-        {
-            return await ComputeSha3Hash256Async(value, Encoding.Default);
-        }
+        return await ComputeSha3Hash256Async(value, Encoding.Default);
+    }
 
-        /// <summary>
-        /// Computes a SHA-3 256-bit hash from the specified value.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static async Task<Hash> ComputeSha3Hash256Async(string value, Encoding encoding)
-        {
-            return await ComputeHashAsync(value, HashAlgorithmType.Sha3Hash256, encoding);
-        }
+    /// <summary>
+    /// Computes a SHA-3 256-bit hash from the specified value.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static async Task<Hash> ComputeSha3Hash256Async(string value, Encoding encoding)
+    {
+        return await ComputeHashAsync(value, HashAlgorithmType.Sha3Hash256, encoding);
+    }
 
-        /// <summary>
-        /// Computes a SHA-3 256-bit hash from the specified value.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static async Task<Hash> ComputeSha3Hash256Async(byte[] value)
-        {
-            return await ComputeHashAsync(value, HashAlgorithmType.Sha3Hash256);
-        }
+    /// <summary>
+    /// Computes a SHA-3 256-bit hash from the specified value.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static async Task<Hash> ComputeSha3Hash256Async(byte[] value)
+    {
+        return await ComputeHashAsync(value, HashAlgorithmType.Sha3Hash256);
     }
 }

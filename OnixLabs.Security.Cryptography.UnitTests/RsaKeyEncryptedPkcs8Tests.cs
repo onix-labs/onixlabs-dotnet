@@ -16,98 +16,97 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using Xunit;
 
-namespace OnixLabs.Security.Cryptography.UnitTests
+namespace OnixLabs.Security.Cryptography.UnitTests;
+
+public sealed class RsaKeyEncryptedPkcs8Tests : KeyTestBase
 {
-    public sealed class RsaKeyEncryptedPkcs8Tests : KeyTestBase
+    [Fact(DisplayName = "Two identical RSA PKCS #8 private keys should be considered equal")]
+    public void TwoIdenticalPrivateKeysShouldBeConsideredEqual()
     {
-        [Fact(DisplayName = "Two identical RSA PKCS #8 private keys should be considered equal")]
-        public void TwoIdenticalPrivateKeysShouldBeConsideredEqual()
+        // Arrange
+        HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
+        RSASignaturePadding padding = RSASignaturePadding.Pss;
+        KeyPair pair = KeyPair.CreateRsaKeyPair(type, padding);
+        PrivateKey privateKey1 = pair.PrivateKey;
+        const string password = "This is a secret!";
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 64);
+
+        // Act
+        byte[] pkcs8PrivateKey = privateKey1.ExportPkcs8Key(password, parameters);
+        PrivateKey privateKey2 = RsaPrivateKey.ImportPkcs8Key(pkcs8PrivateKey, password, type, padding);
+
+        // Assert
+        Assert.Equal(privateKey1, privateKey2);
+    }
+
+    [Fact(DisplayName = "Two identical RSA PKCS #8 keys should be able to sign and verify the same data")]
+    public void TwoIdenticalRsaKeysShouldBeAbleToSignAndVerifyTheSameData()
+    {
+        // Arrange
+        IList<(DigitalSignature, byte[])> signatures = new List<(DigitalSignature, byte[])>();
+        HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
+        RSASignaturePadding padding = RSASignaturePadding.Pss;
+        KeyPair pair = KeyPair.CreateRsaKeyPair(type, padding);
+        PrivateKey privateKey1 = pair.PrivateKey;
+        const string password = "This is a secret!";
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 64);
+        byte[] pkcs8PrivateKey = privateKey1.ExportPkcs8Key(password, parameters);
+        PrivateKey privateKey2 = RsaPrivateKey.ImportPkcs8Key(pkcs8PrivateKey, password, type, padding);
+        PublicKey publicKey1 = pair.PublicKey;
+        PublicKey publicKey2 = privateKey1.GetPublicKey();
+
+        // Act
+        for (int index = 0; index < 5; index++)
         {
-            // Arrange
-            HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
-            RSASignaturePadding padding = RSASignaturePadding.Pss;
-            KeyPair pair = KeyPair.CreateRsaKeyPair(type, padding);
-            PrivateKey privateKey1 = pair.PrivateKey;
-            const string password = "This is a secret!";
-            PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 64);
+            byte[] data = GenerateRandomData();
+            DigitalSignature signature1 = privateKey1.SignData(data);
+            DigitalSignature signature2 = privateKey2.SignData(data);
 
-            // Act
-            byte[] pkcs8PrivateKey = privateKey1.ExportPkcs8Key(password, parameters);
-            PrivateKey privateKey2 = RsaPrivateKey.ImportPkcs8Key(pkcs8PrivateKey, password, type, padding);
-
-            // Assert
-            Assert.Equal(privateKey1, privateKey2);
+            signatures.Add((signature1, data));
+            signatures.Add((signature2, data));
         }
 
-        [Fact(DisplayName = "Two identical RSA PKCS #8 keys should be able to sign and verify the same data")]
-        public void TwoIdenticalRsaKeysShouldBeAbleToSignAndVerifyTheSameData()
+        // Assert
+        foreach ((DigitalSignature signature, byte[] data) in signatures)
         {
-            // Arrange
-            IList<(DigitalSignature, byte[])> signatures = new List<(DigitalSignature, byte[])>();
-            HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
-            RSASignaturePadding padding = RSASignaturePadding.Pss;
-            KeyPair pair = KeyPair.CreateRsaKeyPair(type, padding);
-            PrivateKey privateKey1 = pair.PrivateKey;
-            const string password = "This is a secret!";
-            PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 64);
-            byte[] pkcs8PrivateKey = privateKey1.ExportPkcs8Key(password, parameters);
-            PrivateKey privateKey2 = RsaPrivateKey.ImportPkcs8Key(pkcs8PrivateKey, password, type, padding);
-            PublicKey publicKey1 = pair.PublicKey;
-            PublicKey publicKey2 = privateKey1.GetPublicKey();
+            Assert.True(signature.IsDataValid(data, publicKey1));
+            Assert.True(signature.IsDataValid(data, publicKey2));
+        }
+    }
 
-            // Act
-            for (int index = 0; index < 5; index++)
-            {
-                byte[] data = GenerateRandomData();
-                DigitalSignature signature1 = privateKey1.SignData(data);
-                DigitalSignature signature2 = privateKey2.SignData(data);
+    [Fact(DisplayName = "Two identical RSA PKCS #8 keys should be able to sign and verify the same hash")]
+    public void TwoIdenticalRsaKeysShouldBeAbleToSignAndVerifyTheSameHash()
+    {
+        // Arrange
+        IList<(DigitalSignature, Hash)> signatures = new List<(DigitalSignature, Hash)>();
+        HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
+        RSASignaturePadding padding = RSASignaturePadding.Pss;
+        KeyPair pair = KeyPair.CreateRsaKeyPair(type, padding);
+        PrivateKey privateKey1 = pair.PrivateKey;
+        const string password = "This is a secret!";
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 64);
+        byte[] pkcs8PrivateKey = privateKey1.ExportPkcs8Key(password, parameters);
+        PrivateKey privateKey2 = RsaPrivateKey.ImportPkcs8Key(pkcs8PrivateKey, password, type, padding);
+        PublicKey publicKey1 = pair.PublicKey;
+        PublicKey publicKey2 = privateKey1.GetPublicKey();
 
-                signatures.Add((signature1, data));
-                signatures.Add((signature2, data));
-            }
+        // Act
+        for (int index = 0; index < 5; index++)
+        {
+            byte[] data = GenerateRandomData();
+            Hash hashedData = Hash.ComputeSha2Hash256(data);
+            DigitalSignature signature1 = privateKey1.SignHash(hashedData);
+            DigitalSignature signature2 = privateKey2.SignHash(hashedData);
 
-            // Assert
-            foreach ((DigitalSignature signature, byte[] data) in signatures)
-            {
-                Assert.True(signature.IsDataValid(data, publicKey1));
-                Assert.True(signature.IsDataValid(data, publicKey2));
-            }
+            signatures.Add((signature1, hashedData));
+            signatures.Add((signature2, hashedData));
         }
 
-        [Fact(DisplayName = "Two identical RSA PKCS #8 keys should be able to sign and verify the same hash")]
-        public void TwoIdenticalRsaKeysShouldBeAbleToSignAndVerifyTheSameHash()
+        // Assert
+        foreach ((DigitalSignature signature, Hash hashedData) in signatures)
         {
-            // Arrange
-            IList<(DigitalSignature, Hash)> signatures = new List<(DigitalSignature, Hash)>();
-            HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
-            RSASignaturePadding padding = RSASignaturePadding.Pss;
-            KeyPair pair = KeyPair.CreateRsaKeyPair(type, padding);
-            PrivateKey privateKey1 = pair.PrivateKey;
-            const string password = "This is a secret!";
-            PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 64);
-            byte[] pkcs8PrivateKey = privateKey1.ExportPkcs8Key(password, parameters);
-            PrivateKey privateKey2 = RsaPrivateKey.ImportPkcs8Key(pkcs8PrivateKey, password, type, padding);
-            PublicKey publicKey1 = pair.PublicKey;
-            PublicKey publicKey2 = privateKey1.GetPublicKey();
-
-            // Act
-            for (int index = 0; index < 5; index++)
-            {
-                byte[] data = GenerateRandomData();
-                Hash hashedData = Hash.ComputeSha2Hash256(data);
-                DigitalSignature signature1 = privateKey1.SignHash(hashedData);
-                DigitalSignature signature2 = privateKey2.SignHash(hashedData);
-
-                signatures.Add((signature1, hashedData));
-                signatures.Add((signature2, hashedData));
-            }
-
-            // Assert
-            foreach ((DigitalSignature signature, Hash hashedData) in signatures)
-            {
-                Assert.True(signature.IsHashValid(hashedData, publicKey1));
-                Assert.True(signature.IsHashValid(hashedData, publicKey2));
-            }
+            Assert.True(signature.IsHashValid(hashedData, publicKey1));
+            Assert.True(signature.IsHashValid(hashedData, publicKey2));
         }
     }
 }

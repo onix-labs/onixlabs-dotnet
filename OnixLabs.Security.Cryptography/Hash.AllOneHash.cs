@@ -15,46 +15,45 @@
 using System;
 using System.Linq;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hash
 {
-    public readonly partial struct Hash
+    /// <summary>
+    /// Creates an all-one hash of the specified length. This will create a hash of an unknown type.
+    /// </summary>
+    /// <param name="length">The length of the hash in bytes.</param>
+    /// <returns>Returns an all-one <see cref="Hash"/> of the specified length.</returns>
+    public static Hash CreateAllOneHash(int length)
     {
-        /// <summary>
-        /// Creates an all-one hash of the specified length. This will create a hash of an unknown type.
-        /// </summary>
-        /// <param name="length">The length of the hash in bytes.</param>
-        /// <returns>Returns an all-one <see cref="Hash"/> of the specified length.</returns>
-        public static Hash CreateAllOneHash(int length)
+        return CreateAllOneHash(HashAlgorithmType.Unknown, length);
+    }
+
+    /// <summary>
+    /// Creates an all-one hash of the specified hash algorithm type.
+    /// </summary>
+    /// <param name="type">The type of hash to create.</param>
+    /// <returns>Returns an all-one <see cref="Hash"/> of the specified hash algorithm type.</returns>
+    public static Hash CreateAllOneHash(HashAlgorithmType type)
+    {
+        return CreateAllOneHash(type, type.Length);
+    }
+
+    /// <summary>
+    /// Creates an all-one hash of the specified hash algorithm type and length.
+    /// </summary>
+    /// <param name="type">The type of hash to create.</param>
+    /// <param name="length">The length of the hash in bytes.</param>
+    /// <returns>Returns an all-one <see cref="Hash"/> of the specified hash algorithm type and length.</returns>
+    /// <exception cref="ArgumentException">If the length of the hash is unexpected.</exception>
+    public static Hash CreateAllOneHash(HashAlgorithmType type, int length)
+    {
+        if (type.Length != HashAlgorithmType.UnknownLength && type.Length != length)
         {
-            return CreateAllOneHash(HashAlgorithmType.Unknown, length);
+            throw new ArgumentException("Unexpected hash algorithm output length.");
         }
 
-        /// <summary>
-        /// Creates an all-one hash of the specified hash algorithm type.
-        /// </summary>
-        /// <param name="type">The type of hash to create.</param>
-        /// <returns>Returns an all-one <see cref="Hash"/> of the specified hash algorithm type.</returns>
-        public static Hash CreateAllOneHash(HashAlgorithmType type)
-        {
-            return CreateAllOneHash(type, type.Length);
-        }
-
-        /// <summary>
-        /// Creates an all-one hash of the specified hash algorithm type and length.
-        /// </summary>
-        /// <param name="type">The type of hash to create.</param>
-        /// <param name="length">The length of the hash in bytes.</param>
-        /// <returns>Returns an all-one <see cref="Hash"/> of the specified hash algorithm type and length.</returns>
-        /// <exception cref="ArgumentException">If the length of the hash is unexpected.</exception>
-        public static Hash CreateAllOneHash(HashAlgorithmType type, int length)
-        {
-            if (type.Length != HashAlgorithmType.UnknownLength && type.Length != length)
-            {
-                throw new ArgumentException("Unexpected hash algorithm output length.");
-            }
-
-            byte[] bytes = Enumerable.Repeat(byte.MaxValue, length).ToArray();
-            return FromByteArray(bytes, type);
-        }
+        byte[] bytes = Enumerable.Repeat(byte.MaxValue, length).ToArray();
+        return FromByteArray(bytes, type);
     }
 }

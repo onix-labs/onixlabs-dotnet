@@ -14,61 +14,60 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public abstract partial class MerkleTree : IEquatable<MerkleTree>
 {
-    public abstract partial class MerkleTree : IEquatable<MerkleTree>
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(MerkleTree a, MerkleTree b)
     {
-        /// <summary>
-        /// Performs an equality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are equal; otherwise, false.</returns>
-        public static bool operator ==(MerkleTree a, MerkleTree b)
-        {
-            return Equals(a, b);
-        }
+        return Equals(a, b);
+    }
 
-        /// <summary>
-        /// Performs an inequality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are not equal; otherwise, false.</returns>
-        public static bool operator !=(MerkleTree a, MerkleTree b)
-        {
-            return !Equals(a, b);
-        }
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(MerkleTree a, MerkleTree b)
+    {
+        return !Equals(a, b);
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="other">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public virtual bool Equals(MerkleTree? other)
-        {
-            return ReferenceEquals(this, other)
-                   || other is not null
-                   && other.Hash == Hash;
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="other">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public virtual bool Equals(MerkleTree? other)
+    {
+        return ReferenceEquals(this, other)
+               || other is not null
+               && other.Hash == Hash;
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="obj">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as MerkleTree);
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="obj">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as MerkleTree);
+    }
 
-        /// <summary>
-        /// Serves as a hash code function for this instance.
-        /// </summary>
-        /// <returns>A hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(GetType(), Hash);
-        }
+    /// <summary>
+    /// Serves as a hash code function for this instance.
+    /// </summary>
+    /// <returns>A hash code for this instance.</returns>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(GetType(), Hash);
     }
 }

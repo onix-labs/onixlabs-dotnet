@@ -17,29 +17,28 @@ using System.Security.Cryptography;
 using System.Text;
 using Xunit;
 
-namespace OnixLabs.Security.Cryptography.UnitTests
+namespace OnixLabs.Security.Cryptography.UnitTests;
+
+public abstract class Sha3ShakeTestBase
 {
-    public abstract class Sha3ShakeTestBase
+    protected Sha3 HashAlgorithm { get; set; }
+
+    public virtual void TestSha3WithLiteralString(string expected, string literal, int length)
     {
-        protected Sha3 HashAlgorithm { get; set; }
+        string actual = ComputeHash(HashAlgorithm, literal);
+        Assert.Equal(expected, actual);
+    }
 
-        public virtual void TestSha3WithLiteralString(string expected, string literal, int length)
-        {
-            string actual = ComputeHash(HashAlgorithm, literal);
-            Assert.Equal(expected, actual);
-        }
+    public virtual void TestSha3WithGeneratedString(string expected, string template, int iterations, int length)
+    {
+        string actual = ComputeHash(HashAlgorithm, string.Concat(Enumerable.Repeat(template, iterations)));
+        Assert.Equal(expected, actual);
+    }
 
-        public virtual void TestSha3WithGeneratedString(string expected, string template, int iterations, int length)
-        {
-            string actual = ComputeHash(HashAlgorithm, string.Concat(Enumerable.Repeat(template, iterations)));
-            Assert.Equal(expected, actual);
-        }
-
-        private static string ComputeHash(HashAlgorithm algorithm, string plainText)
-        {
-            byte[] plainTextBytes = Encoding.Default.GetBytes(plainText);
-            byte[] hashedBytes = algorithm.ComputeHash(plainTextBytes);
-            return Hash.FromByteArray(hashedBytes).ToString();
-        }
+    private static string ComputeHash(HashAlgorithm algorithm, string plainText)
+    {
+        byte[] plainTextBytes = Encoding.Default.GetBytes(plainText);
+        byte[] hashedBytes = algorithm.ComputeHash(plainTextBytes);
+        return Hash.FromByteArray(hashedBytes).ToString();
     }
 }

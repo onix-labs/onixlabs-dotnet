@@ -16,63 +16,62 @@ using System;
 using System.Linq;
 using OnixLabs.Core.Linq;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public abstract partial class PrivateKey : IEquatable<PrivateKey>
 {
-    public abstract partial class PrivateKey : IEquatable<PrivateKey>
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(PrivateKey a, PrivateKey b)
     {
-        /// <summary>
-        /// Performs an equality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are equal; otherwise, false.</returns>
-        public static bool operator ==(PrivateKey a, PrivateKey b)
-        {
-            return Equals(a, b);
-        }
+        return Equals(a, b);
+    }
 
-        /// <summary>
-        /// Performs an inequality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are not equal; otherwise, false.</returns>
-        public static bool operator !=(PrivateKey a, PrivateKey b)
-        {
-            return !Equals(a, b);
-        }
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(PrivateKey a, PrivateKey b)
+    {
+        return !Equals(a, b);
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="other">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public virtual bool Equals(PrivateKey? other)
-        {
-            return ReferenceEquals(this, other)
-                   || other is not null
-                   && other.GetType() == GetType()
-                   && other.KeyData.SequenceEqual(KeyData)
-                   && other.AlgorithmType == AlgorithmType;
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="other">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public virtual bool Equals(PrivateKey? other)
+    {
+        return ReferenceEquals(this, other)
+               || other is not null
+               && other.GetType() == GetType()
+               && other.KeyData.SequenceEqual(KeyData)
+               && other.AlgorithmType == AlgorithmType;
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="obj">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as PrivateKey);
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="obj">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as PrivateKey);
+    }
 
-        /// <summary>
-        /// Serves as a hash code function for this instance.
-        /// </summary>
-        /// <returns>A hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(GetType(), AlgorithmType, KeyData.ComputeContentHashCode());
-        }
+    /// <summary>
+    /// Serves as a hash code function for this instance.
+    /// </summary>
+    /// <returns>A hash code for this instance.</returns>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(GetType(), AlgorithmType, KeyData.GetContentHashCode());
     }
 }

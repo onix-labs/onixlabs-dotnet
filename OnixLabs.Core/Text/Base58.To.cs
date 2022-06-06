@@ -14,56 +14,55 @@
 
 using System.Text;
 
-namespace OnixLabs.Core.Text
+namespace OnixLabs.Core.Text;
+
+public readonly partial struct Base58
 {
-    public readonly partial struct Base58
+    /// <summary>
+    /// Returns a <see cref="byte"/> array that represents the current object.
+    /// </summary>
+    /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
+    public byte[] ToByteArray()
     {
-        /// <summary>
-        /// Returns a <see cref="byte"/> array that represents the current object.
-        /// </summary>
-        /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
-        public byte[] ToByteArray()
-        {
-            return Value.Copy();
-        }
+        return Value.Copy();
+    }
 
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object, with a checksum.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents the current object, with a checksum.</returns>
-        public string ToStringWithChecksum()
-        {
-            byte[] valueWithChecksum = AddChecksum(Value);
-            return Encode(valueWithChecksum, Alphabet.Alphabet);
-        }
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object, with a checksum.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents the current object, with a checksum.</returns>
+    public string ToStringWithChecksum()
+    {
+        byte[] valueWithChecksum = AddChecksum(Value);
+        return Encode(valueWithChecksum, Alphabet.Alphabet);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object in plain text.
-        /// </summary>
-        /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
-        public string ToPlainTextString()
-        {
-            return ToPlainTextString(Encoding.Default);
-        }
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object in plain text.
+    /// </summary>
+    /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
+    public string ToPlainTextString()
+    {
+        return ToPlainTextString(Encoding.Default);
+    }
 
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object in plain text.
-        /// </summary>
-        /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
-        /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
-        public string ToPlainTextString(Encoding encoding)
-        {
-            return encoding.GetString(Value);
-        }
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object in plain text.
+    /// </summary>
+    /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
+    /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
+    public string ToPlainTextString(Encoding encoding)
+    {
+        return encoding.GetString(Value);
+    }
 
 
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents the current object.</returns>
-        public override string ToString()
-        {
-            return Encode(Value, Alphabet.Alphabet);
-        }
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    public override string ToString()
+    {
+        return Encode(Value, Alphabet.Alphabet);
     }
 }

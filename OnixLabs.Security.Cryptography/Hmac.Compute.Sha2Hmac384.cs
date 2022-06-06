@@ -14,46 +14,45 @@
 
 using System.Text;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hmac
 {
-    public readonly partial struct Hmac
+    /// <summary>
+    /// Computes a SHA-2 384-bit HMAC from the specified value and key.
+    /// This will use the default encoding to convert the input value and key into a byte array.
+    /// </summary>
+    /// <param name="value">The value for which to compute a HMAC.</param>
+    /// <param name="key">The key for which to compute a HMAC.</param>
+    /// <returns>Returns a <see cref="Hmac"/> of the input value and key.</returns>
+    public static Hmac ComputeSha2Hmac384(string value, string key)
     {
-        /// <summary>
-        /// Computes a SHA-2 384-bit HMAC from the specified value and key.
-        /// This will use the default encoding to convert the input value and key into a byte array.
-        /// </summary>
-        /// <param name="value">The value for which to compute a HMAC.</param>
-        /// <param name="key">The key for which to compute a HMAC.</param>
-        /// <returns>Returns a <see cref="Hmac"/> of the input value and key.</returns>
-        public static Hmac ComputeSha2Hmac384(string value, string key)
-        {
-            return ComputeSha2Hmac384(value, key, Encoding.Default);
-        }
+        return ComputeSha2Hmac384(value, key, Encoding.Default);
+    }
 
-        /// <summary>
-        /// Computes a SHA-2 384-bit HMAC from the specified value and key.
-        /// </summary>
-        /// <param name="value">The value for which to compute a HMAC.</param>
-        /// <param name="key">The key for which to compute a HMAC.</param>
-        /// <param name="encoding">The encoding which will be used to convert the value and key into a byte array.</param>
-        /// <returns>Returns a <see cref="Hmac"/> of the input value and key.</returns>
-        public static Hmac ComputeSha2Hmac384(string value, string key, Encoding encoding)
-        {
-            byte[] valueBytes = encoding.GetBytes(value);
-            byte[] keyBytes = encoding.GetBytes(key);
+    /// <summary>
+    /// Computes a SHA-2 384-bit HMAC from the specified value and key.
+    /// </summary>
+    /// <param name="value">The value for which to compute a HMAC.</param>
+    /// <param name="key">The key for which to compute a HMAC.</param>
+    /// <param name="encoding">The encoding which will be used to convert the value and key into a byte array.</param>
+    /// <returns>Returns a <see cref="Hmac"/> of the input value and key.</returns>
+    public static Hmac ComputeSha2Hmac384(string value, string key, Encoding encoding)
+    {
+        byte[] valueBytes = encoding.GetBytes(value);
+        byte[] keyBytes = encoding.GetBytes(key);
 
-            return ComputeSha2Hmac384(valueBytes, keyBytes);
-        }
+        return ComputeSha2Hmac384(valueBytes, keyBytes);
+    }
 
-        /// <summary>
-        /// Computes a SHA-2 384-bit HMAC from the specified value and key.
-        /// </summary>
-        /// <param name="value">The value for which to compute a HMAC.</param>
-        /// <param name="key">The key for which to compute a HMAC.</param>
-        /// <returns>Returns a <see cref="Hmac"/> of the input value and key.</returns>
-        public static Hmac ComputeSha2Hmac384(byte[] value, byte[] key)
-        {
-            return ComputeHmac(value, key, HashAlgorithmType.Sha2Hmac384);
-        }
+    /// <summary>
+    /// Computes a SHA-2 384-bit HMAC from the specified value and key.
+    /// </summary>
+    /// <param name="value">The value for which to compute a HMAC.</param>
+    /// <param name="key">The key for which to compute a HMAC.</param>
+    /// <returns>Returns a <see cref="Hmac"/> of the input value and key.</returns>
+    public static Hmac ComputeSha2Hmac384(byte[] value, byte[] key)
+    {
+        return ComputeHmac(value, key, HashAlgorithmType.Sha2Hmac384);
     }
 }

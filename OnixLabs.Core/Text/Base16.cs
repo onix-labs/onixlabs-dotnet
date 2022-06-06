@@ -12,25 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Core.Text
+namespace OnixLabs.Core.Text;
+
+/// <summary>
+/// Represents a Base-16 (hexadecimal) value.
+/// </summary>
+public readonly partial struct Base16
 {
     /// <summary>
-    /// Represents a Base-16 (hexadecimal) value.
+    /// Initializes a new instance of the <see cref="Base16"/> struct.
     /// </summary>
-    public readonly partial struct Base16
+    /// <param name="value">The underlying value.</param>
+    private Base16(byte[] value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Base16"/> struct.
-        /// </summary>
-        /// <param name="value">The underlying value.</param>
-        private Base16(byte[] value)
-        {
-            Value = value;
-        }
-
-        /// <summary>
-        /// Gets the underlying value.
-        /// </summary>
-        private byte[] Value { get; }
+        Value = value;
     }
+
+    /// <summary>
+    /// Gets the underlying value.
+    /// </summary>
+    private byte[] Value { get; }
 }

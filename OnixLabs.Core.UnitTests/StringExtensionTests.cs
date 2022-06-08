@@ -21,7 +21,7 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "SubstringBefore should return the expected result (char)")]
     [InlineData("First:Second", "First", ':')]
     [InlineData("12345+678910", "12345", '+')]
-    public void SubstringBeforeShouldReturnTheExpectedResultC(string value, string expected, char delimiter)
+    public void SubstringBeforeShouldReturnTheExpectedResultChar(string value, string expected, char delimiter)
     {
         // Arrange / Act
         string actual = value.SubstringBefore(delimiter);
@@ -33,7 +33,7 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "SubstringBefore should return the expected result (string)")]
     [InlineData("First:Second", "First", ":")]
     [InlineData("12345+678910", "12345", "+")]
-    public void SubstringBeforeShouldReturnTheExpectedResultS(string value, string expected, string delimiter)
+    public void SubstringBeforeShouldReturnTheExpectedResultString(string value, string expected, string delimiter)
     {
         // Arrange / Act
         string actual = value.SubstringBefore(delimiter);
@@ -45,7 +45,7 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "SubstringBeforeLast should return the expected result (char)")]
     [InlineData("First:Second:Third", "First:Second", ':')]
     [InlineData("12345+678910+12345", "12345+678910", '+')]
-    public void SubstringBeforeLastShouldReturnTheExpectedResultC(string value, string expected, char delimiter)
+    public void SubstringBeforeLastShouldReturnTheExpectedResultChar(string value, string expected, char delimiter)
     {
         // Arrange / Act
         string actual = value.SubstringBeforeLast(delimiter);
@@ -57,7 +57,7 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "SubstringBeforeLast should return the expected result (string)")]
     [InlineData("First:Second:Third", "First:Second", ":")]
     [InlineData("12345+678910+12345", "12345+678910", "+")]
-    public void SubstringBeforeLastShouldReturnTheExpectedResultS(string value, string expected, string delimiter)
+    public void SubstringBeforeLastShouldReturnTheExpectedResultString(string value, string expected, string delimiter)
     {
         // Arrange / Act
         string actual = value.SubstringBeforeLast(delimiter);
@@ -69,7 +69,7 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "SubstringAfter should return the expected result (char)")]
     [InlineData("First:Second", "Second", ':')]
     [InlineData("12345+678910", "678910", '+')]
-    public void SubstringAfterShouldReturnTheExpectedResultC(string value, string expected, char delimiter)
+    public void SubstringAfterShouldReturnTheExpectedResultChar(string value, string expected, char delimiter)
     {
         // Arrange / Act
         string actual = value.SubstringAfter(delimiter);
@@ -81,7 +81,7 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "SubstringAfter should return the expected result (string)")]
     [InlineData("First:Second", "Second", ":")]
     [InlineData("12345+678910", "678910", "+")]
-    public void SubstringAfterShouldReturnTheExpectedResultS(string value, string expected, string delimiter)
+    public void SubstringAfterShouldReturnTheExpectedResultString(string value, string expected, string delimiter)
     {
         // Arrange / Act
         string actual = value.SubstringAfter(delimiter);
@@ -93,7 +93,7 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "SubstringAfterLast should return the expected result (char)")]
     [InlineData("First:Second:Third", "Third", ':')]
     [InlineData("12345+678910+12345", "12345", '+')]
-    public void SubstringAfterLastShouldReturnTheExpectedResultC(string value, string expected, char delimiter)
+    public void SubstringAfterLastShouldReturnTheExpectedResultChar(string value, string expected, char delimiter)
     {
         // Arrange / Act
         string actual = value.SubstringAfterLast(delimiter);
@@ -105,10 +105,33 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "SubstringAfterLast should return the expected result (string)")]
     [InlineData("First:Second:Third", "Third", ":")]
     [InlineData("12345+678910+12345", "12345", "+")]
-    public void SubstringAfterLastShouldReturnTheExpectedResultS(string value, string expected, string delimiter)
+    public void SubstringAfterLastShouldReturnTheExpectedResultString(string value, string expected, string delimiter)
     {
         // Arrange / Act
         string actual = value.SubstringAfterLast(delimiter);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "ToByteArray should return the expected result")]
+    [InlineData("Hello, World!", new byte[] {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21})]
+    public void ToByteArrayShouldReturnTheExpectedResult(string value, byte[] expected)
+    {
+        // Arrange / Act
+        byte[] actual = value.ToByteArray();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Wrap should return the expected result")]
+    [InlineData("<", "value", ">", "<value>")]
+    [InlineData("BEFORE:", "value", ":AFTER", "BEFORE:value:AFTER")]
+    public void WrapShouldReturnTheExpectedResult(string before, string value, string after, string expected)
+    {
+        // Arrange / Act
+        string actual = value.Wrap(before, after);
 
         // Assert
         Assert.Equal(expected, actual);

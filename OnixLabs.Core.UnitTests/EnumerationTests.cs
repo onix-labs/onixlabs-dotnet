@@ -54,7 +54,7 @@ public sealed class EnumerationTests
         Assert.Contains(colors, item => item == Color.Blue);
     }
 
-    [Fact(DisplayName = "Enumeration_FromName should return the expected enumeration entry")]
+    [Fact(DisplayName = "Enumeration.FromName should return the expected enumeration entry")]
     public void EnumerationFromNameShouldReturnTheExpectedEnumerationEntry()
     {
         // Arrange
@@ -64,7 +64,7 @@ public sealed class EnumerationTests
         Assert.Equal(Color.Green, color);
     }
 
-    [Fact(DisplayName = "Enumeration_FromValue should return the expected enumeration entry")]
+    [Fact(DisplayName = "Enumeration.FromValue should return the expected enumeration entry")]
     public void EnumerationFromValueShouldReturnTheExpectedEnumerationEntry()
     {
         // Arrange
@@ -72,5 +72,53 @@ public sealed class EnumerationTests
 
         // Assert
         Assert.Equal(Color.Green, color);
+    }
+
+    [Fact(DisplayName = "Enumeration.GetAll should return all enumeration entries")]
+    public void EnumerationGetAllShouldReturnAllEnumerationEntries()
+    {
+        // Arrange
+        IEnumerable<Color> entries = Color.GetAll();
+
+        // Assert
+        Assert.Contains(Color.Blue, entries);
+        Assert.Contains(Color.Green, entries);
+        Assert.Contains(Color.Red, entries);
+    }
+
+    [Fact(DisplayName = "Enumeration.GetEntries should return all enumeration entries")]
+    public void EnumerationGetEntriesShouldReturnAllEnumerationEntries()
+    {
+        // Arrange
+        IEnumerable<(int Value, string Name)> entries = Color.GetEntries();
+
+        // Assert
+        Assert.Contains(Color.Blue.ToEntry(), entries);
+        Assert.Contains(Color.Green.ToEntry(), entries);
+        Assert.Contains(Color.Red.ToEntry(), entries);
+    }
+
+    [Fact(DisplayName = "Enumeration.GetNames should return all enumeration names")]
+    public void EnumerationGetNamesShouldReturnAllEnumerationNames()
+    {
+        // Arrange
+        IEnumerable<string> entries = Color.GetNames();
+
+        // Assert
+        Assert.Contains(Color.Blue.Name, entries);
+        Assert.Contains(Color.Green.Name, entries);
+        Assert.Contains(Color.Red.Name, entries);
+    }
+
+    [Fact(DisplayName = "Enumeration.GetValues should return all enumeration values")]
+    public void EnumerationGetValuesShouldReturnAllEnumerationValues()
+    {
+        // Arrange
+        IEnumerable<int> entries = Color.GetValues();
+
+        // Assert
+        Assert.Contains(Color.Blue.Value, entries);
+        Assert.Contains(Color.Green.Value, entries);
+        Assert.Contains(Color.Red.Value, entries);
     }
 }

@@ -12,10 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Core;
 
 public abstract partial class Enumeration<T>
 {
+    /// <summary>
+    /// Returns a <see cref="ValueTuple"/> that represents the current object.
+    /// </summary>
+    /// <returns>Returns a tuple that represents the current object.</returns>
+    public (int Value, string Name) ToEntry()
+    {
+        return (Value, Name);
+    }
+
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>

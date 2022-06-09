@@ -25,39 +25,39 @@ public abstract partial class Enumeration<T>
     /// Gets all of the enumeration entries for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration entries for the current type.</returns>
-    public static ImmutableList<T> GetAll()
+    public static ImmutableHashSet<T> GetAll()
     {
         return typeof(T)
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
             .Select(field => field.GetValue(null))
             .WhereIs<T>()
-            .ToImmutableList();
+            .ToImmutableHashSet();
     }
 
     /// <summary>
     /// Gets all of the enumeration entries for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration entries for the current type.</returns>
-    public static ImmutableList<(int Value, string Name)> GetEntries()
+    public static ImmutableHashSet<(int Value, string Name)> GetEntries()
     {
-        return GetAll().Select(entry => (entry.Value, entry.Name)).ToImmutableList();
+        return GetAll().Select(entry => entry.ToEntry()).ToImmutableHashSet();
     }
 
     /// <summary>
     /// Gets all of the enumeration names for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration names for the current type.</returns>
-    public static ImmutableList<string> GetNames()
+    public static ImmutableHashSet<string> GetNames()
     {
-        return GetAll().Select(entry => entry.Name).ToImmutableList();
+        return GetAll().Select(entry => entry.Name).ToImmutableHashSet();
     }
 
     /// <summary>
     /// Gets all of the enumeration values for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration values for the current type.</returns>
-    public static ImmutableList<int> GetValues()
+    public static ImmutableHashSet<int> GetValues()
     {
-        return GetAll().Select(entry => entry.Value).ToImmutableList();
+        return GetAll().Select(entry => entry.Value).ToImmutableHashSet();
     }
 }

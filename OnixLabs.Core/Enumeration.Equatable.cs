@@ -45,7 +45,7 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     /// </summary>
     /// <param name="other">An object to compare with this object.</param>
     /// <returns>Returns true if the current object is equal to the other parameter; otherwise, false.</returns>
-    public virtual bool Equals(T? other)
+    public bool Equals(T? other)
     {
         return ReferenceEquals(this, other)
                || other is not null
@@ -59,7 +59,7 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-    public override bool Equals(object? obj)
+    public sealed override bool Equals(object? obj)
     {
         return Equals(obj as T);
     }

@@ -25,7 +25,7 @@ public abstract partial class Enumeration<T> : IComparable, IComparable<T>
     /// </summary>
     /// <param name="obj">An object to compare with this instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public virtual int CompareTo(object? obj)
+    public int CompareTo(object? obj)
     {
         return CompareTo(obj as T);
     }
@@ -37,7 +37,7 @@ public abstract partial class Enumeration<T> : IComparable, IComparable<T>
     /// </summary>
     /// <param name="other">An object to compare with this instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public virtual int CompareTo(T? other)
+    public int CompareTo(T? other)
     {
         return Value.CompareTo(other?.Value);
     }

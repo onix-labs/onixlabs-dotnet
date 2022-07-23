@@ -15,7 +15,7 @@
 using OnixLabs.Core.Text;
 using Xunit;
 
-namespace OnixLabs.Core.UnitTests;
+namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base16Tests
 {

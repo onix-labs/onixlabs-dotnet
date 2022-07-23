@@ -15,16 +15,16 @@
 using OnixLabs.Core.Text;
 using Xunit;
 
-namespace OnixLabs.Core.UnitTests;
+namespace OnixLabs.Core.UnitTests.Text;
 
-public sealed class Base58FlickrAlphabetTests
+public sealed class Base58DefaultAlphabetTests
 {
     [Fact(DisplayName = "Identical Base58 values produce identical hash codes.")]
     public void IdenticalBase58ValuesProduceIdenticalHashCodes()
     {
         // Arrange
-        Base58 a = Base58.FromString("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Flickr);
-        Base58 b = Base58.FromString("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Flickr);
+        Base58 a = Base58.FromString("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Default);
+        Base58 b = Base58.FromString("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Default);
 
         // Act
         int hashCodeA = a.GetHashCode();
@@ -35,13 +35,13 @@ public sealed class Base58FlickrAlphabetTests
     }
 
     [Theory(DisplayName = "Base58_FromString should produce the expected Base-58 value.")]
-    [InlineData("3LiR7aNtchXnQC", "1234567890")]
-    [InlineData("2ZUfwsirsqj6erKTQGm2pdbKcMh1t46cMXzd", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("3YXt3U1HFx8vKFTJj92EAipcC4byHHs1V25E", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("3mJr7AoUCHxNqd", "1234567890")]
+    [InlineData("2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f", "abcdefghijklmnopqrstuvwxyz")]
     public void Base58FromStringShouldProduceTheExpectedBase58Value(string expected, string value)
     {
         // Arrange
-        Base58 candidate = Base58.FromString(value, Base58Alphabet.Flickr);
+        Base58 candidate = Base58.FromString(value, Base58Alphabet.Default);
 
         // Act
         string actual = candidate.ToString();
@@ -51,13 +51,13 @@ public sealed class Base58FlickrAlphabetTests
     }
 
     [Theory(DisplayName = "Base58_Parse should produce the expected plain text value.")]
-    [InlineData("1234567890", "3LiR7aNtchXnQC")]
-    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "2ZUfwsirsqj6erKTQGm2pdbKcMh1t46cMXzd")]
-    [InlineData("abcdefghijklmnopqrstuvwxyz", "3YXt3U1HFx8vKFTJj92EAipcC4byHHs1V25E")]
+    [InlineData("1234567890", "3mJr7AoUCHxNqd")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f")]
     public void Base58ParseShouldProduceTheExpectedPlainTextValue(string expected, string value)
     {
         // Arrange
-        Base58 candidate = Base58.Parse(value, Base58Alphabet.Flickr);
+        Base58 candidate = Base58.Parse(value, Base58Alphabet.Default);
 
         // Act
         string actual = candidate.ToPlainTextString();

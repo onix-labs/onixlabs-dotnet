@@ -15,16 +15,16 @@
 using OnixLabs.Core.Text;
 using Xunit;
 
-namespace OnixLabs.Core.UnitTests;
+namespace OnixLabs.Core.UnitTests.Text;
 
-public sealed class Base32CrockfordAlphabetTests
+public sealed class Base32ZBase32AlphabetTests
 {
     [Fact(DisplayName = "Identical Base32 values produce identical hash codes.")]
     public void IdenticalBase32ValuesProduceIdenticalHashCodes()
     {
         // Arrange
-        Base32 a = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Crockford);
-        Base32 b = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.Crockford);
+        Base32 a = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.ZBase32);
+        Base32 b = Base32.FromString("abcdefghijklmnopqrstuvwxyz", Base32Alphabet.ZBase32);
 
         // Act
         int hashCodeA = a.GetHashCode();
@@ -35,13 +35,13 @@ public sealed class Base32CrockfordAlphabetTests
     }
 
     [Theory(DisplayName = "Base32_FromString without padding should produce the expected Base-32 value.")]
-    [InlineData("64S36D1N6RVKGE9G", "1234567890")]
-    [InlineData("85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8======", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("gr3dgpbiga5uoqjo", "1234567890")]
+    [InlineData("efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe======", "abcdefghijklmnopqrstuvwxyz")]
     public void Base32FromStringWithPaddingShouldProduceTheExpectedBase32Value(string expected, string value)
     {
         // Arrange
-        Base32 candidate = Base32.FromString(value, Base32Alphabet.Crockford, true);
+        Base32 candidate = Base32.FromString(value, Base32Alphabet.ZBase32, true);
 
         // Act
         string actual = candidate.ToString();
@@ -51,13 +51,13 @@ public sealed class Base32CrockfordAlphabetTests
     }
 
     [Theory(DisplayName = "Base32_FromString without padding should produce the expected Base-32 value.")]
-    [InlineData("64S36D1N6RVKGE9G", "1234567890")]
-    [InlineData("85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("gr3dgpbiga5uoqjo", "1234567890")]
+    [InlineData("efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe", "abcdefghijklmnopqrstuvwxyz")]
     public void Base32FromStringWithoutPaddingShouldProduceTheExpectedBase32Value(string expected, string value)
     {
         // Arrange
-        Base32 candidate = Base32.FromString(value, Base32Alphabet.Crockford, false);
+        Base32 candidate = Base32.FromString(value, Base32Alphabet.ZBase32, false);
 
         // Act
         string actual = candidate.ToString();
@@ -67,13 +67,13 @@ public sealed class Base32CrockfordAlphabetTests
     }
 
     [Theory(DisplayName = "Base32_Parse should produce the expected plain text value.")]
-    [InlineData("1234567890", "64S36D1N6RVKGE9G")]
-    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8")]
-    [InlineData("abcdefghijklmnopqrstuvwxyz", "C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8")]
+    [InlineData("1234567890", "gr3dgpbiga5uoqjo")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe")]
     public void Base32ParseShouldProduceTheExpectedPlainTextValue(string expected, string value)
     {
         // Arrange
-        Base32 candidate = Base32.Parse(value, Base32Alphabet.Crockford);
+        Base32 candidate = Base32.Parse(value, Base32Alphabet.ZBase32);
 
         // Act
         string actual = candidate.ToPlainTextString();

@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,57 +15,56 @@
 using System;
 using System.ComponentModel;
 
-namespace OnixLabs.Core
+namespace OnixLabs.Core;
+
+/// <summary>
+/// Provides extension methods for arrays.
+/// </summary>
+[EditorBrowsable(EditorBrowsableState.Never)]
+public static class ArrayExtensions
 {
     /// <summary>
-    /// Provides extension methods for arrays.
+    /// Copies this array.
     /// </summary>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public static class ArrayExtensions
+    /// <param name="array">The array to copy.</param>
+    /// <typeparam name="T">The underlying type of the array.</typeparam>
+    /// <returns>Returns an exact copy of this array.</returns>
+    public static T[] Copy<T>(this T[] array)
     {
-        /// <summary>
-        /// Copies this array.
-        /// </summary>
-        /// <param name="array">The array to copy.</param>
-        /// <typeparam name="T">The underlying type of the array.</typeparam>
-        /// <returns>Returns an exact copy of this array.</returns>
-        public static T[] Copy<T>(this T[] array)
-        {
-            return Copy(array, 0, array.Length);
-        }
+        return Copy(array, 0, array.Length);
+    }
 
-        /// <summary>
-        /// Copies this array.
-        /// </summary>
-        /// <param name="array">The array to copy.</param>
-        /// <param name="index">The index of the array to begin copying from.</param>
-        /// <param name="count">The number of elements of the array to copy.</param>
-        /// <typeparam name="T">The underlying type of the array.</typeparam>
-        /// <returns>Returns an exact copy of this array.</returns>
-        public static T[] Copy<T>(this T[] array, int index, int count)
-        {
-            T[] result = new T[count];
-            Array.Copy(array, index, result, 0, count);
+    /// <summary>
+    /// Copies this array.
+    /// </summary>
+    /// <param name="array">The array to copy.</param>
+    /// <param name="index">The index of the array to begin copying from.</param>
+    /// <param name="count">The number of elements of the array to copy.</param>
+    /// <typeparam name="T">The underlying type of the array.</typeparam>
+    /// <returns>Returns an exact copy of this array.</returns>
+    public static T[] Copy<T>(this T[] array, int index, int count)
+    {
+        T[] result = new T[count];
+        Array.Copy(array, index, result, 0, count);
 
-            return result;
-        }
+        return result;
+    }
 
-        /// <summary>
-        /// Concatenates this array with another array.
-        /// </summary>
-        /// <param name="array">The source array to concatenate with the other array.</param>
-        /// <param name="other">The other array to concatenate with the source array.</param>
-        /// <typeparam name="T">The underlying type of the array.</typeparam>
-        /// <returns>Returns this array concatenated with the other array.</returns>
-        public static T[] ConcatenateWith<T>(this T[] array, T[] other)
-        {
-            int length = array.Length + other.Length;
-            T[] result = new T[length];
+    /// <summary>
+    /// Concatenates this array with another array.
+    /// </summary>
+    /// <param name="array">The source array to concatenate with the other array.</param>
+    /// <param name="other">The other array to concatenate with the source array.</param>
+    /// <typeparam name="T">The underlying type of the array.</typeparam>
+    /// <returns>Returns this array concatenated with the other array.</returns>
+    public static T[] ConcatenateWith<T>(this T[] array, T[] other)
+    {
+        int length = array.Length + other.Length;
+        T[] result = new T[length];
 
-            Array.Copy(array, 0, result, 0, array.Length);
-            Array.Copy(other, 0, result, array.Length, other.Length);
+        Array.Copy(array, 0, result, 0, array.Length);
+        Array.Copy(other, 0, result, array.Length, other.Length);
 
-            return result;
-        }
+        return result;
     }
 }

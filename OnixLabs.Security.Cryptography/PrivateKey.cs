@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,34 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Represents the base class for private key implementations.
+/// </summary>
+public abstract partial class PrivateKey
 {
     /// <summary>
-    /// Represents the base class for private key implementations.
+    /// Initializes a new instance of the <see cref="PrivateKey"/> class.
     /// </summary>
-    public abstract partial class PrivateKey
+    /// <param name="data">The private key data.</param>
+    /// <param name="type">The hash algorithm type for computing signature data.</param>
+    protected PrivateKey(byte[] data, HashAlgorithmType type)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PrivateKey"/> class.
-        /// </summary>
-        /// <param name="data">The private key data.</param>
-        /// <param name="type">The hash algorithm type for computing signature data.</param>
-        protected PrivateKey(byte[] data, HashAlgorithmType type)
-        {
-            type.GetHashAlgorithmName();
+        type.GetHashAlgorithmName();
 
-            KeyData = data;
-            AlgorithmType = type;
-        }
-
-        /// <summary>
-        /// Gets the underlying private key data.
-        /// </summary>
-        protected byte[] KeyData { get; }
-
-        /// <summary>
-        /// Gets the hash algorithm type for computing signature data.
-        /// </summary>
-        public HashAlgorithmType AlgorithmType { get; }
+        KeyData = data;
+        AlgorithmType = type;
     }
+
+    /// <summary>
+    /// Gets the underlying private key data.
+    /// </summary>
+    protected byte[] KeyData { get; }
+
+    /// <summary>
+    /// Gets the hash algorithm type for computing signature data.
+    /// </summary>
+    public HashAlgorithmType AlgorithmType { get; }
 }

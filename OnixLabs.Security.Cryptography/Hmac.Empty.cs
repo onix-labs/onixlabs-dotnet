@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,20 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
-{
-    public readonly partial struct Hmac
-    {
-        /// <summary>
-        /// Gets an empty hashed message authentication code (HMAC) value.
-        /// </summary>
-        public static readonly Hmac Empty;
+namespace OnixLabs.Security.Cryptography;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="Hmac"/> class.
-        /// </summary>
-        static Hmac()
-        {
-            Empty = Create(Hash.Empty, Array.Empty<byte>());
-        }
+public readonly partial struct Hmac
+{
+    /// <summary>
+    /// Gets an empty hashed message authentication code (HMAC) value.
+    /// </summary>
+    public static readonly Hmac Empty;
+
+    /// <summary>
+    /// Initializes static members of the <see cref="Hmac"/> class.
+    /// </summary>
+    static Hmac()
+    {
+        Empty = Create(Hash.Empty, Array.Empty<byte>());
     }
 }

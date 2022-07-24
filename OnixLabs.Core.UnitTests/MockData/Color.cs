@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Core.UnitTests.MockData
-{
-    public sealed class Color : Enumeration<Color>
-    {
-        public static readonly Color Red = new(1, nameof(Red));
-        public static readonly Color Green = new(2, nameof(Green));
-        public static readonly Color Blue = new(3, nameof(Blue));
+namespace OnixLabs.Core.UnitTests.MockData;
 
-        private Color(int value, string name) : base(value, name)
-        {
-        }
+public sealed class Color : Enumeration<Color>
+{
+    public static readonly Color Red = new(1, nameof(Red));
+    public static readonly Color Green = new(2, nameof(Green));
+    public static readonly Color Blue = new(3, nameof(Blue));
+
+    private Color(int value, string name) : base(value, name)
+    {
     }
 }

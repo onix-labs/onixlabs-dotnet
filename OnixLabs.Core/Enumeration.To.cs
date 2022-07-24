@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Core
+using System;
+
+namespace OnixLabs.Core;
+
+public abstract partial class Enumeration<T>
 {
-    public abstract partial class Enumeration<T>
+    /// <summary>
+    /// Returns a <see cref="ValueTuple"/> that represents the current object.
+    /// </summary>
+    /// <returns>Returns a tuple that represents the current object.</returns>
+    public (int Value, string Name) ToEntry()
     {
-        /// <summary>
-        /// Returns a <see cref="string"/> that represents the current object.
-        /// </summary>
-        /// <returns>A <see cref="string"/> that represents the current object.</returns>
-        public override string ToString()
-        {
-            return Name;
-        }
+        return (Value, Name);
+    }
+
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    public override string ToString()
+    {
+        return Name;
     }
 }

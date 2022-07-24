@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,20 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography
-{
-    public readonly partial struct DigitalSignature
-    {
-        /// <summary>
-        /// Gets an empty digital signature value.
-        /// </summary>
-        public static readonly DigitalSignature Empty;
+namespace OnixLabs.Security.Cryptography;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="DigitalSignature"/> class.
-        /// </summary>
-        static DigitalSignature()
-        {
-            Empty = FromByteArray(Array.Empty<byte>());
-        }
+public readonly partial struct DigitalSignature
+{
+    /// <summary>
+    /// Gets an empty digital signature value.
+    /// </summary>
+    public static readonly DigitalSignature Empty;
+
+    /// <summary>
+    /// Initializes static members of the <see cref="DigitalSignature"/> class.
+    /// </summary>
+    static DigitalSignature()
+    {
+        Empty = FromByteArray(Array.Empty<byte>());
     }
 }

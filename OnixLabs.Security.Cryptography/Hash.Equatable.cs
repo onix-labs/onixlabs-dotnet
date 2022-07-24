@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,60 +16,58 @@ using System;
 using System.Linq;
 using OnixLabs.Core.Linq;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hash : IEquatable<Hash>
 {
-    public readonly partial struct Hash : IEquatable<Hash>
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(Hash a, Hash b)
     {
-        /// <summary>
-        /// Performs an equality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are equal; otherwise, false.</returns>
-        public static bool operator ==(Hash a, Hash b)
-        {
-            return Equals(a, b);
-        }
+        return Equals(a, b);
+    }
 
-        /// <summary>
-        /// Performs an inequality check between two object instances.
-        /// </summary>
-        /// <param name="a">Instance a.</param>
-        /// <param name="b">Instance b.</param>
-        /// <returns>True if the instances are not equal; otherwise, false.</returns>
-        public static bool operator !=(Hash a, Hash b)
-        {
-            return !Equals(a, b);
-        }
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="a">Instance a.</param>
+    /// <param name="b">Instance b.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(Hash a, Hash b)
+    {
+        return !Equals(a, b);
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="other">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public bool Equals(Hash other)
-        {
-            return other.AlgorithmType == AlgorithmType
-                   && other.Value.SequenceEqual(Value);
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="other">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public bool Equals(Hash other)
+    {
+        return other.AlgorithmType == AlgorithmType && other.Value.SequenceEqual(Value);
+    }
 
-        /// <summary>
-        /// Checks for equality between this instance and another object.
-        /// </summary>
-        /// <param name="obj">The object to check for equality.</param>
-        /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-        public override bool Equals(object? obj)
-        {
-            return obj is Hash other && Equals(other);
-        }
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="obj">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    public override bool Equals(object? obj)
+    {
+        return obj is Hash other && Equals(other);
+    }
 
-        /// <summary>
-        /// Serves as a hash code function for this instance.
-        /// </summary>
-        /// <returns>A hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(AlgorithmType, Value.ComputeContentHashCode());
-        }
+    /// <summary>
+    /// Serves as a hash code function for this instance.
+    /// </summary>
+    /// <returns>A hash code for this instance.</returns>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(AlgorithmType, Value.GetContentHashCode());
     }
 }

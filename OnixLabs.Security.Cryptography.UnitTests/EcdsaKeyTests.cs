@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,103 +16,102 @@ using System.Collections.Generic;
 using OnixLabs.Core.Text;
 using Xunit;
 
-namespace OnixLabs.Security.Cryptography.UnitTests
+namespace OnixLabs.Security.Cryptography.UnitTests;
+
+public sealed class EcdsaKeyTests : KeyTestBase
 {
-    public sealed class EcdsaKeyTests : KeyTestBase
+    [Fact(DisplayName = "Two identical ECDSA private keys should be considered equal")]
+    public void TwoIdenticalPrivateKeysShouldBeConsideredEqual()
     {
-        [Fact(DisplayName = "Two identical ECDSA private keys should be considered equal")]
-        public void TwoIdenticalPrivateKeysShouldBeConsideredEqual()
+        // Arrange
+        HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
+        KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
+        PrivateKey privateKey1 = pair.PrivateKey;
+
+        // Act
+        Base58 base58PrivateKey = privateKey1.ToBase58();
+        PrivateKey privateKey2 = EcdsaPrivateKey.FromBase58(base58PrivateKey, type);
+
+        // Assert
+        Assert.Equal(privateKey1, privateKey2);
+    }
+
+    [Fact(DisplayName = "Two identical ECDSA public keys should be considered equal")]
+    public void TwoIdenticalPublicKeysShouldBeConsideredEqual()
+    {
+        // Arrange
+        HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
+        KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
+        PublicKey publicKey1 = pair.PublicKey;
+
+        // Act
+        Base58 base58PublicKey = publicKey1.ToBase58();
+        PublicKey publicKey2 = EcdsaPublicKey.FromBase58(base58PublicKey, type);
+
+        // Assert
+        Assert.Equal(publicKey1, publicKey2);
+    }
+
+    [Fact(DisplayName = "Two identical ECDSA keys should be able to sign and verify the same data")]
+    public void TwoIdenticalEcdsaKeysShouldBeAbleToSignAndVerifyTheSameData()
+    {
+        // Arrange
+        IList<(DigitalSignature, byte[])> signatures = new List<(DigitalSignature, byte[])>();
+        HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
+        KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
+        PrivateKey privateKey1 = pair.PrivateKey;
+        PrivateKey privateKey2 = EcdsaPrivateKey.FromBase64(privateKey1.ToBase64(), type);
+        PublicKey publicKey1 = pair.PublicKey;
+        PublicKey publicKey2 = privateKey1.GetPublicKey();
+
+        // Act
+        for (int index = 0; index < 5; index++)
         {
-            // Arrange
-            HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
-            KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
-            PrivateKey privateKey1 = pair.PrivateKey;
+            byte[] data = GenerateRandomData();
+            DigitalSignature signature1 = privateKey1.SignData(data);
+            DigitalSignature signature2 = privateKey2.SignData(data);
 
-            // Act
-            Base58 base58PrivateKey = privateKey1.ToBase58();
-            PrivateKey privateKey2 = EcdsaPrivateKey.FromBase58(base58PrivateKey, type);
-
-            // Assert
-            Assert.Equal(privateKey1, privateKey2);
+            signatures.Add((signature1, data));
+            signatures.Add((signature2, data));
         }
 
-        [Fact(DisplayName = "Two identical ECDSA public keys should be considered equal")]
-        public void TwoIdenticalPublicKeysShouldBeConsideredEqual()
+        // Assert
+        foreach ((DigitalSignature signature, byte[] data) in signatures)
         {
-            // Arrange
-            HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
-            KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
-            PublicKey publicKey1 = pair.PublicKey;
+            Assert.True(signature.IsDataValid(data, publicKey1));
+            Assert.True(signature.IsDataValid(data, publicKey2));
+        }
+    }
 
-            // Act
-            Base58 base58PublicKey = publicKey1.ToBase58();
-            PublicKey publicKey2 = EcdsaPublicKey.FromBase58(base58PublicKey, type);
+    [Fact(DisplayName = "Two identical ECDSA keys should be able to sign and verify the same hash")]
+    public void TwoIdenticalEcdsaKeysShouldBeAbleToSignAndVerifyTheSameHash()
+    {
+        // Arrange
+        IList<(DigitalSignature, Hash)> signatures = new List<(DigitalSignature, Hash)>();
+        HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
+        KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
+        PrivateKey privateKey1 = pair.PrivateKey;
+        PrivateKey privateKey2 = EcdsaPrivateKey.FromBase64(privateKey1.ToBase64(), type);
+        PublicKey publicKey1 = pair.PublicKey;
+        PublicKey publicKey2 = privateKey1.GetPublicKey();
 
-            // Assert
-            Assert.Equal(publicKey1, publicKey2);
+        // Act
+        for (int index = 0; index < 5; index++)
+        {
+            byte[] data = GenerateRandomData();
+            Hash hashedData = Hash.ComputeSha2Hash256(data);
+            DigitalSignature signature1 = privateKey1.SignHash(hashedData);
+            DigitalSignature signature2 = privateKey2.SignHash(hashedData);
+
+            signatures.Add((signature1, hashedData));
+            signatures.Add((signature2, hashedData));
         }
 
-        [Fact(DisplayName = "Two identical ECDSA keys should be able to sign and verify the same data")]
-        public void TwoIdenticalEcdsaKeysShouldBeAbleToSignAndVerifyTheSameData()
+        // Assert
+        foreach ((DigitalSignature signature, Hash hashedData) in signatures)
         {
-            // Arrange
-            IList<(DigitalSignature, byte[])> signatures = new List<(DigitalSignature, byte[])>();
-            HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
-            KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
-            PrivateKey privateKey1 = pair.PrivateKey;
-            PrivateKey privateKey2 = EcdsaPrivateKey.FromBase64(privateKey1.ToBase64(), type);
-            PublicKey publicKey1 = pair.PublicKey;
-            PublicKey publicKey2 = privateKey1.GetPublicKey();
-
-            // Act
-            for (int index = 0; index < 5; index++)
-            {
-                byte[] data = GenerateRandomData();
-                DigitalSignature signature1 = privateKey1.SignData(data);
-                DigitalSignature signature2 = privateKey2.SignData(data);
-
-                signatures.Add((signature1, data));
-                signatures.Add((signature2, data));
-            }
-
-            // Assert
-            foreach ((DigitalSignature signature, byte[] data) in signatures)
-            {
-                Assert.True(signature.IsDataValid(data, publicKey1));
-                Assert.True(signature.IsDataValid(data, publicKey2));
-            }
-        }
-
-        [Fact(DisplayName = "Two identical ECDSA keys should be able to sign and verify the same hash")]
-        public void TwoIdenticalEcdsaKeysShouldBeAbleToSignAndVerifyTheSameHash()
-        {
-            // Arrange
-            IList<(DigitalSignature, Hash)> signatures = new List<(DigitalSignature, Hash)>();
-            HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
-            KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
-            PrivateKey privateKey1 = pair.PrivateKey;
-            PrivateKey privateKey2 = EcdsaPrivateKey.FromBase64(privateKey1.ToBase64(), type);
-            PublicKey publicKey1 = pair.PublicKey;
-            PublicKey publicKey2 = privateKey1.GetPublicKey();
-
-            // Act
-            for (int index = 0; index < 5; index++)
-            {
-                byte[] data = GenerateRandomData();
-                Hash hashedData = Hash.ComputeSha2Hash256(data);
-                DigitalSignature signature1 = privateKey1.SignHash(hashedData);
-                DigitalSignature signature2 = privateKey2.SignHash(hashedData);
-
-                signatures.Add((signature1, hashedData));
-                signatures.Add((signature2, hashedData));
-            }
-
-            // Assert
-            foreach ((DigitalSignature signature, Hash hashedData) in signatures)
-            {
-                Assert.True(signature.IsHashValid(hashedData, publicKey1));
-                Assert.True(signature.IsHashValid(hashedData, publicKey2));
-            }
+            Assert.True(signature.IsHashValid(hashedData, publicKey1));
+            Assert.True(signature.IsHashValid(hashedData, publicKey2));
         }
     }
 }

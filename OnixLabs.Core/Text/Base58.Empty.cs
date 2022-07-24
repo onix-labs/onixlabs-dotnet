@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,20 @@
 
 using System;
 
-namespace OnixLabs.Core.Text
-{
-    public readonly partial struct Base58
-    {
-        /// <summary>
-        /// Gets an empty Base-58 value.
-        /// </summary>
-        public static readonly Base58 Empty;
+namespace OnixLabs.Core.Text;
 
-        /// <summary>
-        /// Initializes static members of the <see cref="Base58"/> class.
-        /// </summary>
-        static Base58()
-        {
-            Empty = FromByteArray(Array.Empty<byte>());
-        }
+public readonly partial struct Base58
+{
+    /// <summary>
+    /// Gets an empty Base-58 value.
+    /// </summary>
+    public static readonly Base58 Empty;
+
+    /// <summary>
+    /// Initializes static members of the <see cref="Base58"/> class.
+    /// </summary>
+    static Base58()
+    {
+        Empty = FromByteArray(Array.Empty<byte>());
     }
 }

@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,54 +17,47 @@ using System.Linq;
 using System.Reflection;
 using OnixLabs.Core.Linq;
 
-namespace OnixLabs.Core
+namespace OnixLabs.Core;
+
+public abstract partial class Enumeration<T>
 {
-    public abstract partial class Enumeration<T>
+    /// <summary>
+    /// Gets all of the enumeration entries for the current type.
+    /// </summary>
+    /// <returns>Returns all of the enumeration entries for the current type.</returns>
+    public static ImmutableHashSet<T> GetAll()
     {
-        /// <summary>
-        /// Gets all of the enumeration entries for the current type.
-        /// </summary>
-        /// <returns>Returns all of the enumeration entries for the current type.</returns>
-        public static IImmutableList<T> GetAll()
-        {
-            return typeof(T)
-                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
-                .Select(field => field.GetValue(null))
-                .WhereInstanceOf<T>()
-                .ToImmutableList();
-        }
+        return typeof(T)
+            .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
+            .Select(field => field.GetValue(null))
+            .WhereIs<T>()
+            .ToImmutableHashSet();
+    }
 
-        /// <summary>
-        /// Gets all of the enumeration entries for the current type.
-        /// </summary>
-        /// <returns>Returns all of the enumeration entries for the current type.</returns>
-        public static IImmutableList<(int Value, string Name)> GetEntries()
-        {
-            return GetAll()
-                .Select(entry => (entry.Value, entry.Name))
-                .ToImmutableList();
-        }
+    /// <summary>
+    /// Gets all of the enumeration entries for the current type.
+    /// </summary>
+    /// <returns>Returns all of the enumeration entries for the current type.</returns>
+    public static ImmutableHashSet<(int Value, string Name)> GetEntries()
+    {
+        return GetAll().Select(entry => entry.ToEntry()).ToImmutableHashSet();
+    }
 
-        /// <summary>
-        /// Gets all of the enumeration names for the current type.
-        /// </summary>
-        /// <returns>Returns all of the enumeration names for the current type.</returns>
-        public static IImmutableList<string> GetNames()
-        {
-            return GetAll()
-                .Select(entry => entry.Name)
-                .ToImmutableList();
-        }
+    /// <summary>
+    /// Gets all of the enumeration names for the current type.
+    /// </summary>
+    /// <returns>Returns all of the enumeration names for the current type.</returns>
+    public static ImmutableHashSet<string> GetNames()
+    {
+        return GetAll().Select(entry => entry.Name).ToImmutableHashSet();
+    }
 
-        /// <summary>
-        /// Gets all of the enumeration values for the current type.
-        /// </summary>
-        /// <returns>Returns all of the enumeration values for the current type.</returns>
-        public static IImmutableList<int> GetValues()
-        {
-            return GetAll()
-                .Select(entry => entry.Value)
-                .ToImmutableList();
-        }
+    /// <summary>
+    /// Gets all of the enumeration values for the current type.
+    /// </summary>
+    /// <returns>Returns all of the enumeration values for the current type.</returns>
+    public static ImmutableHashSet<int> GetValues()
+    {
+        return GetAll().Select(entry => entry.Value).ToImmutableHashSet();
     }
 }

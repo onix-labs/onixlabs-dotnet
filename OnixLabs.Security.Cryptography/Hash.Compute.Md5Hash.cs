@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,40 +14,39 @@
 
 using System.Text;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public readonly partial struct Hash
 {
-    public readonly partial struct Hash
+    /// <summary>
+    /// Computes an MD5 hash from the specified value.
+    /// This will use the default encoding to convert the input string into a byte array.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static Hash ComputeMd5Hash(string value)
     {
-        /// <summary>
-        /// Computes an MD5 hash from the specified value.
-        /// This will use the default encoding to convert the input string into a byte array.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static Hash ComputeMd5Hash(string value)
-        {
-            return ComputeMd5Hash(value, Encoding.Default);
-        }
+        return ComputeMd5Hash(value, Encoding.Default);
+    }
 
-        /// <summary>
-        /// Computes an MD5 hash from the specified value.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static Hash ComputeMd5Hash(string value, Encoding encoding)
-        {
-            return ComputeHash(value, HashAlgorithmType.Md5Hash, encoding);
-        }
+    /// <summary>
+    /// Computes an MD5 hash from the specified value.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <param name="encoding">The encoding which will be used to convert the input string into a byte array.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static Hash ComputeMd5Hash(string value, Encoding encoding)
+    {
+        return ComputeHash(value, HashAlgorithmType.Md5Hash, encoding);
+    }
 
-        /// <summary>
-        /// Computes an MD5 hash from the specified value.
-        /// </summary>
-        /// <param name="value">The input value to hash.</param>
-        /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
-        public static Hash ComputeMd5Hash(byte[] value)
-        {
-            return ComputeHash(value, HashAlgorithmType.Md5Hash);
-        }
+    /// <summary>
+    /// Computes an MD5 hash from the specified value.
+    /// </summary>
+    /// <param name="value">The input value to hash.</param>
+    /// <returns>Returns a <see cref="Hash"/> of the input value.</returns>
+    public static Hash ComputeMd5Hash(byte[] value)
+    {
+        return ComputeHash(value, HashAlgorithmType.Md5Hash);
     }
 }

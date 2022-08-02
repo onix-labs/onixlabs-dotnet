@@ -25,4 +25,9 @@
       <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Numerics" />
+      <Folder Include="Units" />
+    </ItemGroup>
+
 </Project>

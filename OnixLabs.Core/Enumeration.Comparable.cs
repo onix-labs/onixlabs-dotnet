@@ -27,7 +27,7 @@ public abstract partial class Enumeration<T> : IComparable, IComparable<T>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public int CompareTo(object? obj)
     {
-        return CompareTo(obj as T);
+        return this.CompareObject(obj);
     }
 
     /// <summary>

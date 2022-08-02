@@ -68,7 +68,7 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     /// Serves as a hash code function for this instance.
     /// </summary>
     /// <returns>A hash code for this instance.</returns>
-    public override int GetHashCode()
+    public sealed override int GetHashCode()
     {
         return HashCode.Combine(GetType(), Name, Value);
     }

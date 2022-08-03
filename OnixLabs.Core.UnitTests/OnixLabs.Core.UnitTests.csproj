@@ -25,8 +25,4 @@
       <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Numerics" />
-    </ItemGroup>
-
 </Project>

@@ -26,7 +26,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the absolute value of a <see cref="BigDecimal"/> object.</returns>
     public static BigDecimal Abs(BigDecimal value)
     {
-        return new BigDecimal(BigInteger.Abs(value.UnscaledValue), value.Precision);
+        return new BigDecimal(BigInteger.Abs(value.UnscaledValue), value.Scale);
     }
 
     /// <summary>

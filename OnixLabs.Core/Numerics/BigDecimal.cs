@@ -33,7 +33,7 @@ public readonly partial struct BigDecimal
         BigInteger unscaledValue = new(value[..length]);
         int scale = BitConverter.ToInt32(value.Slice(length, 4));
 
-        Check(scale >= 0, "BigDecimal Precision cannot be non-negative.");
+        Check(scale >= 0, "BigDecimal scale cannot be non-negative.");
 
         UnscaledValue = unscaledValue;
         Scale = scale;
@@ -54,7 +54,7 @@ public readonly partial struct BigDecimal
     /// <param name="scale">The scale from which to construct a new <see cref="BigDecimal"/> instance.</param>
     public BigDecimal(BigInteger unscaledValue, int scale)
     {
-        Check(scale >= 0, "BigDecimal Precision cannot be non-negative.");
+        Check(scale >= 0, "BigDecimal scale cannot be non-negative.");
 
         UnscaledValue = unscaledValue;
         Scale = scale;

@@ -71,9 +71,9 @@ public readonly partial struct BigDecimal
         Check(signIndex is -1 or 0, "Cannot parse decimal value containing misplaced sign operator.");
 
         string unscaledValue = ParseDigits(value);
-        int precision = firstSeparatorIndex is -1 ? 0 : ParseDigits(value[fractionStartIndex..]).Length;
+        int scale = firstSeparatorIndex is -1 ? 0 : ParseDigits(value[fractionStartIndex..]).Length;
 
-        return new BigDecimal(BigInteger.Parse(unscaledValue), precision);
+        return new BigDecimal(BigInteger.Parse(unscaledValue), scale);
     }
 
     /// <summary>

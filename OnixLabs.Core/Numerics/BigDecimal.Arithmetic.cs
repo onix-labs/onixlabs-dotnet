@@ -34,15 +34,30 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="left">The left value to balance.</param>
     /// <param name="right">The right value to balance.</param>
-    /// <returns>Returns the left and right <see cref="BigDecimal"/> values with balanced scales.</returns>
+    /// <returns>Returns the left and right balanced <see cref="BigDecimal"/> values.</returns>
     public static (BigDecimal left, BigDecimal right) Balance(BigDecimal left, BigDecimal right)
     {
         int scale = Math.Max(left.Scale, right.Scale);
-        BigInteger magnitude = BigInteger.Min(left.Magnitude, right.Magnitude);
-        BigDecimal leftResult = new(left.UnscaledValue * right.Magnitude / magnitude, scale);
-        BigDecimal rightValue = new(right.UnscaledValue * left.Magnitude / magnitude, scale);
+        (BigInteger leftUnscaled, BigInteger rightUnscaled) = BalanceUnscaled(left, right);
+        BigDecimal leftResult = new(leftUnscaled, scale);
+        BigDecimal rightResult = new(rightUnscaled, scale);
 
-        return (leftResult, rightValue);
+        return (leftResult, rightResult);
+    }
+
+    /// <summary>
+    /// Balances the scale of the specified <see cref="BigDecimal"/> values and obtains their unscaled values.
+    /// </summary>
+    /// <param name="left">The left value to balance.</param>
+    /// <param name="right">The right value to balance.</param>
+    /// <returns>Returns the left and right balanced, unscaled <see cref="BigInteger"/> values.</returns>
+    public static (BigInteger left, BigInteger right) BalanceUnscaled(BigDecimal left, BigDecimal right)
+    {
+        BigInteger magnitude = BigInteger.Min(left.Magnitude, right.Magnitude);
+        BigInteger leftResult = left.UnscaledValue * right.Magnitude / magnitude;
+        BigInteger rightResult = right.UnscaledValue * left.Magnitude / magnitude;
+
+        return (leftResult, rightResult);
     }
 
     /// <summary>
@@ -52,6 +67,17 @@ public readonly partial struct BigDecimal
     /// <param name="right">The right value to compare.</param>
     /// <returns>Returns the smallest and the largest of the specified <see cref="BigDecimal"/> values.</returns>
     public static (BigDecimal min, BigDecimal max) MinMax(BigDecimal left, BigDecimal right)
+    {
+        return left < right ? (left, right) : (right, left);
+    }
+
+    /// <summary>
+    /// Gets the smallest and the largest of the specified <see cref="BigInteger"/> values.
+    /// </summary>
+    /// <param name="left">The left value to compare.</param>
+    /// <param name="right">The right value to compare.</param>
+    /// <returns>Returns the smallest and the largest of the specified <see cref="BigInteger"/> values.</returns>
+    private static (BigInteger min, BigInteger max) MinMax(BigInteger left, BigInteger right)
     {
         return left < right ? (left, right) : (right, left);
     }
@@ -79,6 +105,17 @@ public readonly partial struct BigDecimal
     }
 
     /// <summary>
+    /// Negates the specified <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The value to negate.</param>
+    /// <returns>The result of the value parameter multiplied by negative one (-1).</returns>
+    public static BigDecimal Negate(BigDecimal value)
+    {
+        BigInteger unscaledValue = BigInteger.Negate(value.UnscaledValue);
+        return new BigDecimal(unscaledValue, value.Scale);
+    }
+
+    /// <summary>
     /// Gets the sum of the specified <see cref="BigDecimal"/> values.
     /// </summary>
     /// <param name="left">The left-hand value to add to.</param>
@@ -87,7 +124,7 @@ public readonly partial struct BigDecimal
     public static BigDecimal Add(BigDecimal left, BigDecimal right)
     {
         (BigDecimal leftBalanced, BigDecimal rightBalanced) = Balance(left, right);
-        BigInteger unscaledValue = BigInteger.Add(leftBalanced.UnscaledValue, rightBalanced.UnscaledValue);
+        BigInteger unscaledValue = leftBalanced.UnscaledValue + rightBalanced.UnscaledValue;
 
         return new BigDecimal(unscaledValue, leftBalanced.Scale);
     }
@@ -101,7 +138,7 @@ public readonly partial struct BigDecimal
     public static BigDecimal Subtract(BigDecimal left, BigDecimal right)
     {
         (BigDecimal leftBalanced, BigDecimal rightBalanced) = Balance(left, right);
-        BigInteger unscaledValue = BigInteger.Subtract(leftBalanced.UnscaledValue, rightBalanced.UnscaledValue);
+        BigInteger unscaledValue = leftBalanced.UnscaledValue - rightBalanced.UnscaledValue;
 
         return new BigDecimal(unscaledValue, leftBalanced.Scale);
     }
@@ -114,7 +151,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the product of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Multiply(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        return new BigDecimal(left.UnscaledValue * right.UnscaledValue, left.Scale + right.Scale);
     }
 
     /// <summary>
@@ -125,6 +162,14 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Divide(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        (BigInteger min, BigInteger max) = MinMax(left.Magnitude, right.Magnitude);
+        BigInteger magnitude = left > right ? min : max;
+
+        BigInteger leftUnscaled = BigInteger.Multiply(left.UnscaledValue, magnitude);
+        BigInteger rightUnscaled = right.UnscaledValue;
+
+        BigInteger unscaledValue = BigInteger.Divide(leftUnscaled, rightUnscaled);
+
+        return new BigDecimal(unscaledValue, left.Scale);
     }
 }

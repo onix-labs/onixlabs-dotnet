@@ -52,8 +52,12 @@ public static class NumericsExtensions
     /// <returns>Returns the digit length of the current <see cref="BigInteger"/>.</returns>
     public static int GetDigitLength(this BigInteger value)
     {
-        double log10 = BigInteger.Log10(value);
-        return (int) Math.Ceiling(log10) + 1;
+        if (value >= 0 && value < 10)
+        {
+            return 1;
+        }
+
+        return (int) Math.Ceiling(BigInteger.Log10(value));
     }
 
     /// <summary>

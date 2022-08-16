@@ -186,6 +186,16 @@ public readonly partial struct BigDecimal
     public int Precision => UnscaledValue.GetDigitLength();
 
     /// <summary>
+    /// Gets the integral value of the current <see cref="BigDecimal"/> value.
+    /// </summary>
+    public BigInteger IntegralValue => Sign is -1 ? -AbsoluteIntegralValue : AbsoluteIntegralValue;
+
+    /// <summary>
+    /// Gets the fractional value of the current <see cref="BigDecimal"/> value.
+    /// </summary>
+    public BigInteger FractionalValue => Sign is -1 ? -AbsoluteFractionalValue : AbsoluteFractionalValue;
+
+    /// <summary>
     /// Gets the absolute, integral value of the current <see cref="BigDecimal"/> value.
     /// </summary>
     public BigInteger AbsoluteIntegralValue => BigInteger.Abs(UnscaledValue) / Magnitude;

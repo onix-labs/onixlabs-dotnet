@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Numerics;
-using OnixLabs.Playground.Examples;
+using System;
 
-Example.Run();
+namespace OnixLabs.Playground.Examples;
+
+public sealed class TitleAttribute : Attribute
+{
+    public TitleAttribute(string title)
+    {
+        Title = title;
+    }
+
+    public string Title { get; }
+}

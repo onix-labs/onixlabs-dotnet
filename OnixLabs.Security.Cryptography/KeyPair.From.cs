@@ -31,8 +31,8 @@ public sealed partial class KeyPair
     /// <exception cref="ArgumentException">If the private and public key components are mismatched.</exception>
     public static KeyPair FromKeyComponents(PrivateKey privateKey, PublicKey publicKey, HashAlgorithmType type)
     {
-        Check(privateKey.AlgorithmType == type, $"Private key hash algorithm type is mismatched with '{type}'.", nameof(privateKey));
-        Check(publicKey.AlgorithmType == type, $"Public key hash algorithm type is mismatched with '{type}'.", nameof(publicKey));
+        Require(privateKey.AlgorithmType == type, $"Private key hash algorithm type is mismatched with '{type}'.", nameof(privateKey));
+        Require(publicKey.AlgorithmType == type, $"Public key hash algorithm type is mismatched with '{type}'.", nameof(publicKey));
 
         byte[] random = Guid.NewGuid().ToByteArray();
         Hash hash = Hash.ComputeSha2Hash256(random);

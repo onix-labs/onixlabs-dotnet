@@ -68,7 +68,7 @@ public abstract partial class MerkleTree
     /// <exception cref="ArgumentException">if the <see cref="IEnumerable{MerkleTree}"/> is empty.</exception>
     private static void CheckIfMerkleTreesAreEmpty(IEnumerable<MerkleTree> merkleTrees)
     {
-        Check(merkleTrees.IsNotEmpty(), "Cannot construct a merkle tree from an empty list.");
+        Require(merkleTrees.IsNotEmpty(), "Cannot construct a merkle tree from an empty list.", nameof(merkleTrees));
     }
 
     /// <summary>
@@ -78,8 +78,8 @@ public abstract partial class MerkleTree
     /// <exception cref="ArgumentException">if the elements of the <see cref="IEnumerable{MerkleTree}"/> do not have the same hash algorithm type.</exception>
     private static void CheckNodesHaveEqualHashAlgorithms(IEnumerable<MerkleTree> merkleTrees)
     {
-        Check(merkleTrees.AllEqualBy(merkleTree => merkleTree.Hash.AlgorithmType),
-            "Cannot construct a merkle tree with different hash types.");
+        Require(merkleTrees.AllEqualBy(merkleTree => merkleTree.Hash.AlgorithmType),
+            "Cannot construct a merkle tree with different hash types.", nameof(merkleTrees));
     }
 
     /// <summary>

@@ -32,8 +32,8 @@ public abstract partial class Enumeration<T>
     {
         IEnumerable<T> results = GetAll().Where(entry => entry.Name == name).ToArray();
 
-        Check(results.IsNotEmpty(), $"Enumeration entry for name '{name}' not found in {typeof(T).Name}.");
-        Check(results.IsSingle(), $"Multiple enumeration entries for name '{name}' found in {typeof(T).Name}.");
+        Require(results.IsNotEmpty(), $"Enumeration entry for name '{name}' not found in {typeof(T).Name}.", nameof(name));
+        Require(results.IsSingle(), $"Multiple enumeration entries for name '{name}' found in {typeof(T).Name}.", nameof(name));
 
         return results.Single();
     }
@@ -48,8 +48,8 @@ public abstract partial class Enumeration<T>
     {
         IEnumerable<T> results = GetAll().Where(entry => entry.Value == value).ToArray();
 
-        Check(results.IsNotEmpty(), $"Enumeration entry for value '{value}' not found in {typeof(T).Name}.");
-        Check(results.IsSingle(), $"Multiple enumeration entries for value '{value}' found in {typeof(T).Name}.");
+        Require(results.IsNotEmpty(), $"Enumeration entry for value '{value}' not found in {typeof(T).Name}.", nameof(value));
+        Require(results.IsSingle(), $"Multiple enumeration entries for value '{value}' found in {typeof(T).Name}.", nameof(value));
 
         return results.Single();
     }

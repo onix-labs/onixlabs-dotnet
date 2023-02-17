@@ -49,7 +49,7 @@ public readonly partial struct Hash
     /// <exception cref="ArgumentException">If the length of the hash is unexpected.</exception>
     public static Hash CreateAllOneHash(HashAlgorithmType type, int length)
     {
-        Check(type.IsUnknown || type.Length == length, "Unexpected hash algorithm output length.");
+        Require(type.IsUnknown || type.Length == length, "Unexpected hash algorithm output length.", nameof(length));
         
         byte[] bytes = Enumerable.Repeat(byte.MaxValue, length).ToArray();
         return FromByteArray(bytes, type);

@@ -29,7 +29,7 @@ public readonly partial struct Hash
     /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
     public static Hash Concatenate(Hash a, Hash b)
     {
-        Check(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
+        Require(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
 
         using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm();
         byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();
@@ -47,7 +47,7 @@ public readonly partial struct Hash
     /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
     public static Hash Concatenate(Hash a, Hash b, int length)
     {
-        Check(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
+        Require(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
 
         using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm(length);
         byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();

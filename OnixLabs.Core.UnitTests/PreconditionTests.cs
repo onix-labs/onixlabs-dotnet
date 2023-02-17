@@ -23,12 +23,24 @@ public sealed class PreconditionTests
     [Fact(DisplayName = "Check should throw an ArgumentException when the condition is false")]
     public void CheckShouldThrowAnArgumentExceptionWhenTheConditionIsFalse()
     {
-        Assert.Throws<ArgumentException>(() => Check(false));
+        Assert.Throws<InvalidOperationException>(() => Check(false));
     }
 
     [Fact(DisplayName = "CheckNotNull should throw an ArgumentNullException when the condition is null")]
     public void CheckNotNullShouldThrowAnArgumentNullExceptionWhenTheConditionIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => CheckNotNull<object>(null));
+        Assert.Throws<InvalidOperationException>(() => CheckNotNull<object>(null));
+    }
+
+    [Fact(DisplayName = "Require should throw an ArgumentException when the condition is false")]
+    public void RequireShouldThrowAnArgumentExceptionWhenTheConditionIsFalse()
+    {
+        Assert.Throws<ArgumentException>(() => Require(false));
+    }
+
+    [Fact(DisplayName = "RequireNotNull should throw an ArgumentNullException when the condition is null")]
+    public void RequireNotNullShouldThrowAnArgumentNullExceptionWhenTheConditionIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => RequireNotNull<object>(null));
     }
 }

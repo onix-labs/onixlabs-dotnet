@@ -38,7 +38,7 @@ public sealed partial class HashAlgorithmType
     /// <exception cref="ArgumentException">If the hash algorithm is unknown.</exception>
     public HashAlgorithm GetHashAlgorithm(int length)
     {
-        Check(IsUnknown || length == Length, $"Output length not expected for the specified hash algorithm: {Name}");
+        Require(IsUnknown || length == Length, $"Output length not expected for the specified hash algorithm: {Name}", nameof(length));
 
         return Name switch
         {

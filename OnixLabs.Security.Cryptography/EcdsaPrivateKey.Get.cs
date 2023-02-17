@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,22 +14,21 @@
 
 using System.Security.Cryptography;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public sealed partial class EcdsaPrivateKey
 {
-    public sealed partial class EcdsaPrivateKey
+    /// <summary>
+    /// Gets the public key component from this private key.
+    /// </summary>
+    /// <returns>Returns the public key component from this private key.</returns>
+    public override PublicKey GetPublicKey()
     {
-        /// <summary>
-        /// Gets the public key component from this private key.
-        /// </summary>
-        /// <returns>Returns the public key component from this private key.</returns>
-        public override PublicKey GetPublicKey()
-        {
-            using ECDsa privateKey = ECDsa.Create();
+        using ECDsa privateKey = ECDsa.Create();
 
-            privateKey.ImportECPrivateKey(KeyData, out int _);
-            byte[] publicKey = privateKey.ExportSubjectPublicKeyInfo();
+        privateKey.ImportECPrivateKey(KeyData, out int _);
+        byte[] publicKey = privateKey.ExportSubjectPublicKeyInfo();
 
-            return new EcdsaPublicKey(publicKey, AlgorithmType);
-        }
+        return new EcdsaPublicKey(publicKey, AlgorithmType);
     }
 }

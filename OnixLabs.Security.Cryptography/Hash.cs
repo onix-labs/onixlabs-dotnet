@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,34 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Represents a cryptographic hash.
+/// </summary>
+public readonly partial struct Hash
 {
     /// <summary>
-    /// Represents a cryptographic hash.
+    /// Initializes a new instance of the <see cref="Hash"/> struct.
     /// </summary>
-    public readonly partial struct Hash
+    /// <param name="value">The underlying hexadecimal value of the hash.</param>
+    /// <param name="type">The hash algorithm type of the hash.</param>
+    private Hash(byte[] value, HashAlgorithmType type)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Hash"/> struct.
-        /// </summary>
-        /// <param name="value">The underlying hexadecimal value of the hash.</param>
-        /// <param name="type">The hash algorithm type of the hash.</param>
-        private Hash(byte[] value, HashAlgorithmType type)
-        {
-            type.VerifyHashLength(value);
+        type.VerifyHashLength(value);
 
-            AlgorithmType = type;
-            Value = value;
-        }
-
-        /// <summary>
-        /// Gets the hash algorithm type of the hash.
-        /// </summary>
-        public HashAlgorithmType AlgorithmType { get; }
-
-        /// <summary>
-        /// Gets the underlying value of the hash.
-        /// </summary>
-        private byte[] Value { get; }
+        AlgorithmType = type;
+        Value = value;
     }
+
+    /// <summary>
+    /// Gets the hash algorithm type of the hash.
+    /// </summary>
+    public HashAlgorithmType AlgorithmType { get; }
+
+    /// <summary>
+    /// Gets the underlying value of the hash.
+    /// </summary>
+    private byte[] Value { get; }
 }

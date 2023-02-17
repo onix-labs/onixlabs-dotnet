@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,29 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Computes the FIPS 202 SHA-3 Shake 256-bit hash for the input data.
+/// </summary>
+public sealed class Sha3Shake256 : Sha3
 {
     /// <summary>
-    /// Computes the FIPS 202 SHA-3 Shake 256-bit hash for the input data.
+    /// The rate in bytes of the sponge state.
     /// </summary>
-    public sealed class Sha3Shake256 : Sha3
+    private const int RateBytes = 136;
+
+    /// <summary>
+    /// The length multiplier of the hash in bits.
+    /// </summary>
+    private const int BitLengthMultiplier = 8;
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Sha3Shake256"/> class.
+    /// </summary>
+    /// <param name="length">The hash output length in bytes.</param>
+    public Sha3Shake256(int length) : base(RateBytes, ShakeDelimiter, length * BitLengthMultiplier)
     {
-        /// <summary>
-        /// The rate in bytes of the sponge state.
-        /// </summary>
-        private const int RateBytes = 136;
-
-        /// <summary>
-        /// The length multiplier of the hash in bits.
-        /// </summary>
-        private const int BitLengthMultiplier = 8;
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Sha3Shake256"/> class.
-        /// </summary>
-        /// <param name="length">The hash output length in bytes.</param>
-        public Sha3Shake256(int length) : base(RateBytes, ShakeDelimiter, length * BitLengthMultiplier)
-        {
-        }
     }
 }

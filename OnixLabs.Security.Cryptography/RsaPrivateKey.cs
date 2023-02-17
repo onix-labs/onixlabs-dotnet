@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,27 +14,26 @@
 
 using System.Security.Cryptography;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Represents an RSA private key.
+/// </summary>
+public sealed partial class RsaPrivateKey : PrivateKey
 {
     /// <summary>
-    /// Represents an RSA private key.
+    /// Creates a new instance of the <see cref="RsaPrivateKey"/> class.
     /// </summary>
-    public sealed partial class RsaPrivateKey : PrivateKey
+    /// <param name="data">The private key data.</param>
+    /// <param name="type">The hash algorithm type for computing signature data.</param>
+    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
+    internal RsaPrivateKey(byte[] data, HashAlgorithmType type, RSASignaturePadding padding) : base(data, type)
     {
-        /// <summary>
-        /// Creates a new instance of the <see cref="RsaPrivateKey"/> class.
-        /// </summary>
-        /// <param name="data">The private key data.</param>
-        /// <param name="type">The hash algorithm type for computing signature data.</param>
-        /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-        internal RsaPrivateKey(byte[] data, HashAlgorithmType type, RSASignaturePadding padding) : base(data, type)
-        {
-            Padding = padding;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="RSASignaturePadding" /> for computing signature data.
-        /// </summary>
-        public RSASignaturePadding Padding { get; }
+        Padding = padding;
     }
+
+    /// <summary>
+    /// Gets the <see cref="RSASignaturePadding" /> for computing signature data.
+    /// </summary>
+    public RSASignaturePadding Padding { get; }
 }

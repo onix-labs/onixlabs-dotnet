@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,17 @@
 
 using System;
 
-namespace OnixLabs.Security.Cryptography.UnitTests
+namespace OnixLabs.Security.Cryptography.UnitTests;
+
+public abstract class KeyTestBase
 {
-    public abstract class KeyTestBase
+    protected static byte[] GenerateRandomData(int length = 1024)
     {
-        protected static byte[] GenerateRandomData(int length = 1024)
-        {
-            byte[] result = new byte[length];
-            Random random = new(Guid.NewGuid().GetHashCode());
+        byte[] result = new byte[length];
+        Random random = new(Guid.NewGuid().GetHashCode());
 
-            random.NextBytes(result);
+        random.NextBytes(result);
 
-            return result;
-        }
+        return result;
     }
 }

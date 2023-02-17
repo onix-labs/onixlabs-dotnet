@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,32 +14,31 @@
 
 using System;
 
-namespace OnixLabs.Core
-{
-    public abstract partial class Enumeration<T> : IComparable, IComparable<T>
-    {
-        /// <summary>
-        /// Compares the current instance with another object of the same type and returns an integer that indicates
-        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
-        /// other object.
-        /// </summary>
-        /// <param name="obj">An object to compare with this instance.</param>
-        /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-        public virtual int CompareTo(object? obj)
-        {
-            return CompareTo(obj as T);
-        }
+namespace OnixLabs.Core;
 
-        /// <summary>
-        /// Compares the current instance with another object of the same type and returns an integer that indicates
-        /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
-        /// other object.
-        /// </summary>
-        /// <param name="other">An object to compare with this instance.</param>
-        /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-        public virtual int CompareTo(T? other)
-        {
-            return Value.CompareTo(other?.Value);
-        }
+public abstract partial class Enumeration<T> : IComparable, IComparable<T>
+{
+    /// <summary>
+    /// Compares the current instance with another object of the same type and returns an integer that indicates
+    /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
+    /// other object.
+    /// </summary>
+    /// <param name="obj">An object to compare with this instance.</param>
+    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    public int CompareTo(object? obj)
+    {
+        return CompareTo(obj as T);
+    }
+
+    /// <summary>
+    /// Compares the current instance with another object of the same type and returns an integer that indicates
+    /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
+    /// other object.
+    /// </summary>
+    /// <param name="other">An object to compare with this instance.</param>
+    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    public int CompareTo(T? other)
+    {
+        return Value.CompareTo(other?.Value);
     }
 }

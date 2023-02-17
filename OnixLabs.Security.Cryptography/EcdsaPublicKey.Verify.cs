@@ -1,4 +1,4 @@
-// Copyright 2020-2021 ONIXLabs
+// Copyright 2020-2022 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,41 +14,40 @@
 
 using System.Security.Cryptography;
 
-namespace OnixLabs.Security.Cryptography
+namespace OnixLabs.Security.Cryptography;
+
+public sealed partial class EcdsaPublicKey
 {
-    public sealed partial class EcdsaPublicKey
+    /// <summary>
+    /// Determines whether the specified <see cref="DigitalSignature"/> was signed by the private component of this public key.
+    /// </summary>
+    /// <param name="signature">The <see cref="DigitalSignature"/> to validate.</param>
+    /// <param name="unsignedData">The unsigned data to validate.</param>
+    /// <returns>Returns true if the specified <see cref="DigitalSignature"/> was signed by the private component of this public key; otherwise, false.</returns>
+    public override bool IsDataValid(DigitalSignature signature, byte[] unsignedData)
     {
-        /// <summary>
-        /// Determines whether the specified <see cref="DigitalSignature"/> was signed by the private component of this public key.
-        /// </summary>
-        /// <param name="signature">The <see cref="DigitalSignature"/> to validate.</param>
-        /// <param name="unsignedData">The unsigned data to validate.</param>
-        /// <returns>Returns true if the specified <see cref="DigitalSignature"/> was signed by the private component of this public key; otherwise, false.</returns>
-        public override bool IsDataValid(DigitalSignature signature, byte[] unsignedData)
-        {
-            using ECDsa publicKey = ECDsa.Create();
+        using ECDsa publicKey = ECDsa.Create();
 
-            publicKey.ImportSubjectPublicKeyInfo(KeyData, out int _);
-            byte[] signatureData = signature.ToByteArray();
-            HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
+        publicKey.ImportSubjectPublicKeyInfo(KeyData, out int _);
+        byte[] signatureData = signature.ToByteArray();
+        HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
 
-            return publicKey.VerifyData(unsignedData, signatureData, name);
-        }
+        return publicKey.VerifyData(unsignedData, signatureData, name);
+    }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="DigitalSignature"/> was signed by the private component of this public key.
-        /// </summary>
-        /// <param name="signature">The <see cref="DigitalSignature"/> to validate.</param>
-        /// <param name="unsignedHash">The unsigned hash to validate.</param>
-        /// <returns>Returns true if the specified <see cref="DigitalSignature"/> was signed by the private component of this public key; otherwise, false.</returns>
-        public override bool IsHashValid(DigitalSignature signature, byte[] unsignedHash)
-        {
-            using ECDsa publicKey = ECDsa.Create();
+    /// <summary>
+    /// Determines whether the specified <see cref="DigitalSignature"/> was signed by the private component of this public key.
+    /// </summary>
+    /// <param name="signature">The <see cref="DigitalSignature"/> to validate.</param>
+    /// <param name="unsignedHash">The unsigned hash to validate.</param>
+    /// <returns>Returns true if the specified <see cref="DigitalSignature"/> was signed by the private component of this public key; otherwise, false.</returns>
+    public override bool IsHashValid(DigitalSignature signature, byte[] unsignedHash)
+    {
+        using ECDsa publicKey = ECDsa.Create();
 
-            publicKey.ImportSubjectPublicKeyInfo(KeyData, out int _);
-            byte[] signatureData = signature.ToByteArray();
+        publicKey.ImportSubjectPublicKeyInfo(KeyData, out int _);
+        byte[] signatureData = signature.ToByteArray();
 
-            return publicKey.VerifyHash(unsignedHash, signatureData);
-        }
+        return publicKey.VerifyHash(unsignedHash, signatureData);
     }
 }

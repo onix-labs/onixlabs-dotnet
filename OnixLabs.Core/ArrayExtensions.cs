@@ -59,8 +59,7 @@ public static class ArrayExtensions
     /// <returns>Returns this array concatenated with the other array.</returns>
     public static T[] ConcatenateWith<T>(this T[] array, T[] other)
     {
-        int length = array.Length + other.Length;
-        T[] result = new T[length];
+        T[] result = new T[array.Length + other.Length];
 
         Array.Copy(array, 0, result, 0, array.Length);
         Array.Copy(other, 0, result, array.Length, other.Length);

@@ -14,6 +14,8 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Net.Http;
 
 namespace OnixLabs.Core;
 
@@ -87,6 +89,18 @@ public static partial class Collections
     }
 
     /// <summary>
+    /// Create a dictionary of the specified items.
+    /// </summary>
+    /// <param name="items">The items which wil populate the dictionary.</param>
+    /// <typeparam name="TKey">The underlying type of the dictionary key.</typeparam>
+    /// <typeparam name="TValue">The underlying type of the dictionary value.</typeparam>
+    /// <returns>Returns a dictionary populated with the specified items.</returns>
+    public static Dictionary<TKey, TValue> DictionaryOf<TKey, TValue>(params (TKey key, TValue value)[] items) where TKey : notnull
+    {
+        return DictionaryOf(items.Select(item => new KeyValuePair<TKey, TValue>(item.key, item.value)).ToArray());
+    }
+
+    /// <summary>
     /// Create an immutable dictionary of the specified items.
     /// </summary>
     /// <param name="items">The items which wil populate the immutable dictionary.</param>
@@ -95,6 +109,19 @@ public static partial class Collections
     /// <returns>Returns an immutable dictionary populated with the specified items.</returns>
     public static ImmutableDictionary<TKey, TValue> ImmutableDictionaryOf<TKey, TValue>(
         params KeyValuePair<TKey, TValue>[] items) where TKey : notnull
+    {
+        return DictionaryOf(items).ToImmutableDictionary();
+    }
+    
+    /// <summary>
+    /// Create an immutable dictionary of the specified items.
+    /// </summary>
+    /// <param name="items">The items which wil populate the immutable dictionary.</param>
+    /// <typeparam name="TKey">The underlying type of the immutable dictionary key.</typeparam>
+    /// <typeparam name="TValue">The underlying type of the immutable dictionary value.</typeparam>
+    /// <returns>Returns an immutable dictionary populated with the specified items.</returns>
+    public static ImmutableDictionary<TKey, TValue> ImmutableDictionaryOf<TKey, TValue>(
+        params (TKey key, TValue value)[] items) where TKey : notnull
     {
         return DictionaryOf(items).ToImmutableDictionary();
     }
@@ -111,7 +138,20 @@ public static partial class Collections
     {
         return new SortedDictionary<TKey, TValue>(DictionaryOf(items));
     }
-
+    
+    /// <summary>
+    /// Create a sorted dictionary of the specified items.
+    /// </summary>
+    /// <param name="items">The items which wil populate the sorted dictionary.</param>
+    /// <typeparam name="TKey">The underlying type of the sorted dictionary key.</typeparam>
+    /// <typeparam name="TValue">The underlying type of the sorted dictionary value.</typeparam>
+    /// <returns>Returns a sorted dictionary populated with the specified items.</returns>
+    public static SortedDictionary<TKey, TValue> SortedDictionaryOf<TKey, TValue>(
+        params (TKey key, TValue value)[] items) where TKey : notnull
+    {
+        return new SortedDictionary<TKey, TValue>(DictionaryOf(items));
+    }
+    
     /// <summary>
     /// Create an immutable sorted dictionary of the specified items.
     /// </summary>
@@ -121,6 +161,19 @@ public static partial class Collections
     /// <returns>Returns an immutable sorted dictionary populated with the specified items.</returns>
     public static ImmutableSortedDictionary<TKey, TValue> ImmutableSortedDictionaryOf<TKey, TValue>(
         params KeyValuePair<TKey, TValue>[] items) where TKey : notnull
+    {
+        return SortedDictionaryOf(items).ToImmutableSortedDictionary();
+    }
+
+    /// <summary>
+    /// Create an immutable sorted dictionary of the specified items.
+    /// </summary>
+    /// <param name="items">The items which wil populate the immutable sorted dictionary.</param>
+    /// <typeparam name="TKey">The underlying type of the immutable sorted dictionary key.</typeparam>
+    /// <typeparam name="TValue">The underlying type of the immutable sorted dictionary value.</typeparam>
+    /// <returns>Returns an immutable sorted dictionary populated with the specified items.</returns>
+    public static ImmutableSortedDictionary<TKey, TValue> ImmutableSortedDictionaryOf<TKey, TValue>(
+        params (TKey key, TValue value)[] items) where TKey : notnull
     {
         return SortedDictionaryOf(items).ToImmutableSortedDictionary();
     }

@@ -55,7 +55,7 @@ public readonly partial struct Base32
             int availableBits = Math.Min(InputSize - inputSubPosition, OutputSize - outputSubPosition);
 
             outputPosition <<= availableBits;
-            outputPosition |= (byte) (value[inputPosition] >> (InputSize - (inputSubPosition + availableBits)));
+            outputPosition |= (byte)(value[inputPosition] >> (InputSize - (inputSubPosition + availableBits)));
             inputSubPosition += availableBits;
 
             if (inputSubPosition >= InputSize)
@@ -134,7 +134,7 @@ public readonly partial struct Base32
             int availableBits = Math.Min(OutputSize - inputSubPosition, InputSize - outputSubPosition);
 
             outputBytes[outputPosition] <<= availableBits;
-            outputBytes[outputPosition] |= (byte) (index >> (OutputSize - (inputSubPosition + availableBits)));
+            outputBytes[outputPosition] |= (byte)(index >> (OutputSize - (inputSubPosition + availableBits)));
             outputSubPosition += availableBits;
 
             if (outputSubPosition >= InputSize)

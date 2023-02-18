@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Numerics;
+using OnixLabs.Core;
 using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
@@ -55,6 +57,51 @@ public sealed class HashTests
         Assert.NotEqual(a, b);
     }
 
+    [Fact(DisplayName = "Hashes should produce a negative-one sort order when the left-hand hash is less than the right-hand hash")]
+    public void HashesShouldProduceANegativeOneSortOrderWhenTheLeftHandHashIsLessThanTheRightHandHash()
+    {
+        // Arrange
+        Hash a = Hash.FromByteArray(Collections.ArrayOf<byte>(1));
+        Hash b = Hash.FromByteArray(Collections.ArrayOf<byte>(2));
+        const int expected = -1;
+        
+        // Act
+        int actual = a.CompareTo(b);
+        
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+    
+    [Fact(DisplayName = "Hashes should produce a positive-one sort order when the left-hand hash is greater than the right-hand hash")]
+    public void HashesShouldProduceAPositiveOneSortOrderWhenTheLeftHandHashIsGreaterThanTheRightHandHash()
+    {
+        // Arrange
+        Hash a = Hash.FromByteArray(Collections.ArrayOf<byte>(2));
+        Hash b = Hash.FromByteArray(Collections.ArrayOf<byte>(1));
+        const int expected = 1;
+        
+        // Act
+        int actual = a.CompareTo(b);
+        
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+    
+    [Fact(DisplayName = "Hashes should produce a zero sort order when the left-hand hash is equal to the right-hand hash")]
+    public void HashesShouldProduceAZeroSortOrderWhenTheLeftHandHashIsEqualToTheRightHandHash()
+    {
+        // Arrange
+        Hash a = Hash.FromByteArray(Collections.ArrayOf<byte>(1));
+        Hash b = Hash.FromByteArray(Collections.ArrayOf<byte>(1));
+        const int expected = 0;
+        
+        // Act
+        int actual = a.CompareTo(b);
+        
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+    
     [Fact(DisplayName = "Parse should be able to parse a known hash")]
     public void ParseShouldBeAbleToParseAKnownHash()
     {

@@ -121,4 +121,32 @@ public sealed class EnumerationTests
         Assert.Contains(Color.Green.Value, entries);
         Assert.Contains(Color.Red.Value, entries);
     }
+    
+    [Fact(DisplayName = "Enumeration.CompareTo as Enumeration should return the correct value")]
+    public void EnumerationCompareToAsEnumerationShouldReturnTheCorrectValue()
+    {
+        // Arrange
+        Color left = Color.Red;
+        Color right = Color.Blue;
+
+        // Act
+        int actual = left.CompareTo(right);
+
+        // Assert
+        Assert.Equal(-1, actual);
+    }
+
+    [Fact(DisplayName = "Enumeration.CompareTo as Object should return the correct value")]
+    public void EnumerationCompareToAsObjectShouldReturnTheCorrectValue()
+    {
+        // Arrange
+        Color left = Color.Red;
+        object right = Color.Blue;
+
+        // Act
+        int actual = left.CompareTo(right);
+
+        // Assert
+        Assert.Equal(-1, actual);
+    }
 }

@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// ReSharper disable InconsistentNaming
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,6 +22,7 @@ namespace OnixLabs.Core.Linq;
 /// <summary>
 /// Provides LINQ-like extension methods for <see cref="IEnumerable{T}"/>.
 /// </summary>
+// ReSharper disable InconsistentNaming
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class IEnumerableExtensions
 {

@@ -339,8 +339,8 @@ public class CollectionTests
     public void CollectionsSortedSetOfShouldReturnTheExpectedResult()
     {
         // Arrange
-        SortedSet<object> expected = new(EnumerableInitializers);
-        SortedSet<object> actual = Collections.SortedSetOf(EnumerableInitializers);
+        SortedSet<int> expected = new(NumericInitializers);
+        SortedSet<int> actual = Collections.SortedSetOf(NumericInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));

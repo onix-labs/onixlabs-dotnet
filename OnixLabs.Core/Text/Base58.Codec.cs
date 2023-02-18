@@ -37,7 +37,7 @@ public readonly partial struct Base58
         {
             BigInteger remainder = data % 58;
             data /= 58;
-            result.Insert(0, alphabet[(int) remainder]);
+            result.Insert(0, alphabet[(int)remainder]);
         }
 
         for (int index = 0; index < value.Length && value[index] == 0; index++)

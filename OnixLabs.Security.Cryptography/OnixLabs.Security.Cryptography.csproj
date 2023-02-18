@@ -9,9 +9,9 @@
         <NeutralLanguage>en</NeutralLanguage>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Copyright>Copyright © ONIXLabs 2020-2022</Copyright>
+        <Copyright>Copyright © ONIXLabs 2020-2023</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>5.0.0</PackageVersion>
+        <PackageVersion>6.0.0</PackageVersion>
         <LangVersion>11</LangVersion>
     </PropertyGroup>
 

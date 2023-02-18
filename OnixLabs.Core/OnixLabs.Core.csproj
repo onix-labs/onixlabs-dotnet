@@ -10,9 +10,9 @@
         <Description>ONIXLabs Core API for .NET</Description>
         <AssemblyVersion>5.0.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
-        <Copyright>Copyright © ONIXLabs 2020-2022</Copyright>
+        <Copyright>Copyright © ONIXLabs 2020-2023</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>5.0.0</PackageVersion>
+        <PackageVersion>6.0.0</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

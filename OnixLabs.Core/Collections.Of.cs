@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Net.Http;
 
 namespace OnixLabs.Core;
 
@@ -112,7 +111,7 @@ public static partial class Collections
     {
         return DictionaryOf(items).ToImmutableDictionary();
     }
-    
+
     /// <summary>
     /// Create an immutable dictionary of the specified items.
     /// </summary>
@@ -138,7 +137,7 @@ public static partial class Collections
     {
         return new SortedDictionary<TKey, TValue>(DictionaryOf(items));
     }
-    
+
     /// <summary>
     /// Create a sorted dictionary of the specified items.
     /// </summary>
@@ -151,7 +150,7 @@ public static partial class Collections
     {
         return new SortedDictionary<TKey, TValue>(DictionaryOf(items));
     }
-    
+
     /// <summary>
     /// Create an immutable sorted dictionary of the specified items.
     /// </summary>

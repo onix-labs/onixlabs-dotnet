@@ -22,7 +22,7 @@ namespace OnixLabs.Core;
 /// </summary>
 // ReSharper disable InconsistentNaming
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal static class IComparableExtensions
+public static class IComparableExtensions
 {
     /// <summary>
     /// Provides a mechanism to compare the current <see cref="IComparable{T}"/> to compare to the specified object.

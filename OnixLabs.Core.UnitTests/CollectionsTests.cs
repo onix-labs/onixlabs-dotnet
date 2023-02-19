@@ -6,7 +6,7 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests;
 
-public class CollectionTests
+public sealed class CollectionTests
 {
     private static readonly object[] EnumerableInitializers = { true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23 };
 

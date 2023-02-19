@@ -72,13 +72,135 @@ public sealed class BigDecimalArithmeticTests
     public void BigDecimalBalanceShouldReturnTheExpectedResult(decimal left, decimal right)
     {
         // Arrange
-        BigDecimal leftValue = new(left);
-        BigDecimal rightValue = new(right);
+        BigDecimal leftCandidate = new(left);
+        BigDecimal rightCandidate = new(right);
 
         // Act
-        (BigDecimal leftBalanced, BigDecimal rightBalanced) = BigDecimal.Balance(leftValue, rightValue);
+        (BigDecimal leftBalanced, BigDecimal rightBalanced) = BigDecimal.Balance(leftCandidate, rightCandidate);
 
         // Assert
         Assert.Equal(leftBalanced.Scale, rightBalanced.Scale);
+    }
+
+    [Theory(DisplayName = "BigDecimal.MinMax should return the expected result")]
+    [InlineData(sbyte.MinValue, sbyte.MaxValue)]
+    [InlineData(byte.MinValue, byte.MaxValue)]
+    [InlineData(short.MinValue, short.MaxValue)]
+    [InlineData(ushort.MinValue, ushort.MaxValue)]
+    [InlineData(int.MinValue, int.MaxValue)]
+    [InlineData(uint.MinValue, uint.MaxValue)]
+    [InlineData(long.MinValue, long.MaxValue)]
+    [InlineData(ulong.MinValue, ulong.MaxValue)]
+    public void BigDecimalMinMaxShouldReturnTheExpectedResult(decimal min, decimal max)
+    {
+        // Arrange / Act
+        (BigDecimal minCandidate, BigDecimal maxCandidate) = BigDecimal.MinMax(min.ToBigDecimal(), max.ToBigDecimal());
+
+        // Assert
+        Assert.True(minCandidate <= maxCandidate);
+    }
+
+    [Theory(DisplayName = "BigDecimal.Min should return the expected result")]
+    [InlineData(sbyte.MinValue, sbyte.MaxValue)]
+    [InlineData(byte.MinValue, byte.MaxValue)]
+    [InlineData(short.MinValue, short.MaxValue)]
+    [InlineData(ushort.MinValue, ushort.MaxValue)]
+    [InlineData(int.MinValue, int.MaxValue)]
+    [InlineData(uint.MinValue, uint.MaxValue)]
+    [InlineData(long.MinValue, long.MaxValue)]
+    [InlineData(ulong.MinValue, ulong.MaxValue)]
+    public void BigDecimalMinShouldReturnTheExpectedResult(decimal min, decimal max)
+    {
+        // Arrange / Act
+        BigDecimal candidate = BigDecimal.Min(min.ToBigDecimal(), max.ToBigDecimal());
+
+        // Assert
+        Assert.Equal(candidate, min);
+    }
+
+    [Theory(DisplayName = "BigDecimal.Max should return the expected result")]
+    [InlineData(sbyte.MinValue, sbyte.MaxValue)]
+    [InlineData(byte.MinValue, byte.MaxValue)]
+    [InlineData(short.MinValue, short.MaxValue)]
+    [InlineData(ushort.MinValue, ushort.MaxValue)]
+    [InlineData(int.MinValue, int.MaxValue)]
+    [InlineData(uint.MinValue, uint.MaxValue)]
+    [InlineData(long.MinValue, long.MaxValue)]
+    [InlineData(ulong.MinValue, ulong.MaxValue)]
+    public void BigDecimalMaxShouldReturnTheExpectedResult(decimal min, decimal max)
+    {
+        // Arrange / Act
+        BigDecimal candidate = BigDecimal.Max(min.ToBigDecimal(), max.ToBigDecimal());
+
+        // Assert
+        Assert.Equal(candidate, max);
+    }
+
+    [Theory(DisplayName = "BigDecimal.Negate should return the expected result")]
+    [InlineData(1, -1)]
+    [InlineData(-1, 1)]
+    [InlineData(1.0001, -1.0001)]
+    [InlineData(-1.0001, 1.0001)]
+    [InlineData(123.456789, -123.456789)]
+    [InlineData(-123.456789, 123.456789)]
+    public void BigDecimalNegateShouldReturnTheExpectedResult(decimal value, decimal expected)
+    {
+        // Arrange
+        BigDecimal candidate = value.ToBigDecimal();
+
+        // Act
+        BigDecimal actual = BigDecimal.Negate(candidate);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "BigDecimal.Truncate should return the expected result")]
+    [InlineData(1.0, 1)]
+    [InlineData(1.01, 1)]
+    [InlineData(123.456, 123)]
+    [InlineData(1000.01, 1000)]
+    public void BigDecimalTruncateShouldReturnTheExpectedResult(decimal value, decimal expected)
+    {
+        // Arrange
+        BigDecimal candidate = value.ToBigDecimal();
+
+        // Act
+        BigDecimal actual = BigDecimal.Truncate(candidate);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "BigDecimal.SetScale should return the expected result")]
+    [InlineData(1, 0, 1)]
+    [InlineData(1, 1, 0.1)]
+    [InlineData(1, 2, 0.01)]
+    [InlineData(1, 3, 0.001)]
+    [InlineData(1, 4, 0.0001)]
+    [InlineData(1, 5, 0.00001)]
+    [InlineData(1, 6, 0.000001)]
+    [InlineData(1, 7, 0.0000001)]
+    [InlineData(1, 8, 0.00000001)]
+    [InlineData(1, 9, 0.000000001)]
+    [InlineData(0.1, 0, 1)]
+    [InlineData(0.01, 0, 1)]
+    [InlineData(0.001, 0, 1)]
+    [InlineData(0.0001, 0, 1)]
+    [InlineData(0.00001, 0, 1)]
+    [InlineData(0.000001, 0, 1)]
+    [InlineData(0.0000001, 0, 1)]
+    [InlineData(0.00000001, 0, 1)]
+    [InlineData(0.000000001, 0, 1)]
+    public void BigDecimalSetScaleShouldReturnTheExpectedResult(decimal value, int scale, decimal expected)
+    {
+        // Arrange
+        BigDecimal candidate = value.ToBigDecimal();
+
+        // Act
+        BigDecimal actual = candidate.SetScale(scale);
+
+        // Assert
+        Assert.Equal(expected, actual);
     }
 }

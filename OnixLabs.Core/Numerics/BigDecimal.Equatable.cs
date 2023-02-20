@@ -16,74 +16,8 @@ using System;
 
 namespace OnixLabs.Core.Numerics;
 
-public readonly partial struct BigDecimal : IEquatable<BigDecimal>
+public readonly partial struct BigDecimal
 {
-    /// <summary>
-    /// Performs an equality check between two object instances.
-    /// </summary>
-    /// <param name="left">The first value to compare.</param>
-    /// <param name="right">The second value to compare.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(BigDecimal left, BigDecimal right)
-    {
-        return left.Equals(right);
-    }
-
-    /// <summary>
-    /// Performs an inequality check between two object instances.
-    /// </summary>
-    /// <param name="left">The first value to compare.</param>
-    /// <param name="right">The second value to compare.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(BigDecimal left, BigDecimal right)
-    {
-        return !left.Equals(right);
-    }
-
-    /// <summary>
-    /// Performs an equality check between two object instances.
-    /// </summary>
-    /// <param name="left">The first value to compare.</param>
-    /// <param name="right">The second value to compare.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(BigDecimal left, decimal right)
-    {
-        return left.Equals(right.ToBigDecimal());
-    }
-
-    /// <summary>
-    /// Performs an inequality check between two object instances.
-    /// </summary>
-    /// <param name="left">The first value to compare.</param>
-    /// <param name="right">The second value to compare.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(BigDecimal left, decimal right)
-    {
-        return !left.Equals(right.ToBigDecimal());
-    }
-
-    /// <summary>
-    /// Performs an equality check between two object instances.
-    /// </summary>
-    /// <param name="left">The first value to compare.</param>
-    /// <param name="right">The second value to compare.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(decimal left, BigDecimal right)
-    {
-        return left.ToBigDecimal().Equals(right);
-    }
-
-    /// <summary>
-    /// Performs an inequality check between two object instances.
-    /// </summary>
-    /// <param name="left">The first value to compare.</param>
-    /// <param name="right">The second value to compare.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(decimal left, BigDecimal right)
-    {
-        return !left.ToBigDecimal().Equals(right);
-    }
-
     /// <summary>
     /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are equal.
     /// </summary>
@@ -122,5 +56,27 @@ public readonly partial struct BigDecimal : IEquatable<BigDecimal>
     public override int GetHashCode()
     {
         return HashCode.Combine(UnscaledValue, Scale);
+    }
+
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="left">The first value to compare.</param>
+    /// <param name="right">The second value to compare.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(BigDecimal left, BigDecimal right)
+    {
+        return left.Equals(right);
+    }
+
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="left">The first value to compare.</param>
+    /// <param name="right">The second value to compare.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(BigDecimal left, BigDecimal right)
+    {
+        return !left.Equals(right);
     }
 }

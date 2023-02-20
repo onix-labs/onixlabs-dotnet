@@ -20,45 +20,47 @@ namespace OnixLabs.Core.Numerics;
 public readonly partial struct BigDecimal
 {
     /// <summary>
+    /// Gets the radix, or base, for the type.
+    /// </summary>
+    public static int Radix => 10;
+
+    /// <summary>
     /// Represents a negative one <see cref="BigDecimal"/> value.
     /// </summary>
-    public static readonly BigDecimal MinusOne;
+    public static BigDecimal NegativeOne => new(BigInteger.MinusOne, 0);
 
     /// <summary>
     /// Represents a zero <see cref="BigDecimal"/> value.
     /// </summary>
-    public static readonly BigDecimal Zero;
+    public static BigDecimal Zero => new(BigInteger.Zero, 0);
 
     /// <summary>
     /// Represents a one <see cref="BigDecimal"/> value.
     /// </summary>
-    public static readonly BigDecimal One;
+    public static BigDecimal One => new(BigInteger.One, 0);
 
     /// <summary>
     /// Represents a two <see cref="BigDecimal"/> value.
     /// </summary>
-    public static readonly BigDecimal Two;
+    public static BigDecimal Two => new(2, 0);
 
     /// <summary>
     /// Represents a ten <see cref="BigDecimal"/> value.
     /// </summary>
-    public static readonly BigDecimal Ten;
+    public static BigDecimal Ten => new(10, 0);
 
     /// <summary>
     /// Gets the current culture's decimal separator.
     /// </summary>
-    private static readonly string DecimalSeparator;
+    private static string DecimalSeparator => CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 
     /// <summary>
-    /// Initializes static members of the <see cref="BigDecimal"/> class.
+    /// Gets the additive identity for the <see cref="BigDecimal"/> type, which is zero.
     /// </summary>
-    static BigDecimal()
-    {
-        MinusOne = new BigDecimal(BigInteger.MinusOne, 0);
-        Zero = new BigDecimal(BigInteger.Zero, 0);
-        One = new BigDecimal(BigInteger.One, 0);
-        Two = new BigDecimal(2, 0);
-        Ten = new BigDecimal(10, 0);
-        DecimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-    }
+    static BigDecimal IAdditiveIdentity<BigDecimal, BigDecimal>.AdditiveIdentity => Zero;
+
+    /// <summary>
+    /// Gets the multiplicative identity for the <see cref="BigDecimal"/> type, which is one.
+    /// </summary>
+    static BigDecimal IMultiplicativeIdentity<BigDecimal, BigDecimal>.MultiplicativeIdentity => One;
 }

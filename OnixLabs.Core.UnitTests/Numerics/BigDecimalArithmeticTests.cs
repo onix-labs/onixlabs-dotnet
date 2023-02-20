@@ -82,79 +82,6 @@ public sealed class BigDecimalArithmeticTests
         Assert.Equal(leftBalanced.Scale, rightBalanced.Scale);
     }
 
-    [Theory(DisplayName = "BigDecimal.MinMax should return the expected result")]
-    [InlineData(sbyte.MinValue, sbyte.MaxValue)]
-    [InlineData(byte.MinValue, byte.MaxValue)]
-    [InlineData(short.MinValue, short.MaxValue)]
-    [InlineData(ushort.MinValue, ushort.MaxValue)]
-    [InlineData(int.MinValue, int.MaxValue)]
-    [InlineData(uint.MinValue, uint.MaxValue)]
-    [InlineData(long.MinValue, long.MaxValue)]
-    [InlineData(ulong.MinValue, ulong.MaxValue)]
-    public void BigDecimalMinMaxShouldReturnTheExpectedResult(decimal min, decimal max)
-    {
-        // Arrange / Act
-        (BigDecimal minCandidate, BigDecimal maxCandidate) = BigDecimal.MinMax(min.ToBigDecimal(), max.ToBigDecimal());
-
-        // Assert
-        Assert.True(minCandidate <= maxCandidate);
-    }
-
-    [Theory(DisplayName = "BigDecimal.Min should return the expected result")]
-    [InlineData(sbyte.MinValue, sbyte.MaxValue)]
-    [InlineData(byte.MinValue, byte.MaxValue)]
-    [InlineData(short.MinValue, short.MaxValue)]
-    [InlineData(ushort.MinValue, ushort.MaxValue)]
-    [InlineData(int.MinValue, int.MaxValue)]
-    [InlineData(uint.MinValue, uint.MaxValue)]
-    [InlineData(long.MinValue, long.MaxValue)]
-    [InlineData(ulong.MinValue, ulong.MaxValue)]
-    public void BigDecimalMinShouldReturnTheExpectedResult(decimal min, decimal max)
-    {
-        // Arrange / Act
-        BigDecimal candidate = BigDecimal.Min(min.ToBigDecimal(), max.ToBigDecimal());
-
-        // Assert
-        Assert.Equal(candidate, min);
-    }
-
-    [Theory(DisplayName = "BigDecimal.Max should return the expected result")]
-    [InlineData(sbyte.MinValue, sbyte.MaxValue)]
-    [InlineData(byte.MinValue, byte.MaxValue)]
-    [InlineData(short.MinValue, short.MaxValue)]
-    [InlineData(ushort.MinValue, ushort.MaxValue)]
-    [InlineData(int.MinValue, int.MaxValue)]
-    [InlineData(uint.MinValue, uint.MaxValue)]
-    [InlineData(long.MinValue, long.MaxValue)]
-    [InlineData(ulong.MinValue, ulong.MaxValue)]
-    public void BigDecimalMaxShouldReturnTheExpectedResult(decimal min, decimal max)
-    {
-        // Arrange / Act
-        BigDecimal candidate = BigDecimal.Max(min.ToBigDecimal(), max.ToBigDecimal());
-
-        // Assert
-        Assert.Equal(candidate, max);
-    }
-
-    [Theory(DisplayName = "BigDecimal.Negate should return the expected result")]
-    [InlineData(1, -1)]
-    [InlineData(-1, 1)]
-    [InlineData(1.0001, -1.0001)]
-    [InlineData(-1.0001, 1.0001)]
-    [InlineData(123.456789, -123.456789)]
-    [InlineData(-123.456789, 123.456789)]
-    public void BigDecimalNegateShouldReturnTheExpectedResult(decimal value, decimal expected)
-    {
-        // Arrange
-        BigDecimal candidate = value.ToBigDecimal();
-
-        // Act
-        BigDecimal actual = BigDecimal.Negate(candidate);
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
     [Theory(DisplayName = "BigDecimal.Truncate should return the expected result")]
     [InlineData(1.0, 1)]
     [InlineData(1.01, 1)]
@@ -198,7 +125,7 @@ public sealed class BigDecimalArithmeticTests
         BigDecimal candidate = value.ToBigDecimal();
 
         // Act
-        BigDecimal actual = candidate.SetScale(scale);
+        BigDecimal actual = BigDecimal.SetScale(candidate, scale);
 
         // Assert
         Assert.Equal(expected, actual);

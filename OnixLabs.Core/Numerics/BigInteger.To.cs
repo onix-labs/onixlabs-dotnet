@@ -45,4 +45,10 @@ public readonly partial struct BigDecimal
             ? $"{sign}{integralValue}"
             : $"{sign}{integralValue}{separator}{fractionalValue}";
     }
+    
+    public string ToString(string? format, IFormatProvider? formatProvider)
+    {
+        // TODO : Not implemented!
+        return ToString();
+    }
 }

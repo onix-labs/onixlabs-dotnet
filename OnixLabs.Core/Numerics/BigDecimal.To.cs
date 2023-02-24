@@ -37,7 +37,7 @@ public readonly partial struct BigDecimal
     public override string ToString()
     {
         string sign = Sign < 0 ? "-" : string.Empty;
-        string separator = DecimalSeparator;
+        string separator = CurrentCultureNumberFormat.NumberDecimalSeparator;
         string integralValue = AbsoluteIntegralValue.ToString();
         string fractionalValue = FractionalValue.ToString().PadLeft(Scale, '0');
 
@@ -45,10 +45,10 @@ public readonly partial struct BigDecimal
             ? $"{sign}{integralValue}"
             : $"{sign}{integralValue}{separator}{fractionalValue}";
     }
-    
+
     public string ToString(string? format, IFormatProvider? formatProvider)
     {
-        // TODO : Not implemented!
-        return ToString();
+        // http://www.independent-software.com/net-string-formatting-in-csharp-cheat-sheet.html
+        throw new NotImplementedException();
     }
 }

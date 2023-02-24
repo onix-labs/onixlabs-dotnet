@@ -50,9 +50,14 @@ public readonly partial struct BigDecimal
     public static BigDecimal Ten => new(10, 0);
 
     /// <summary>
-    /// Gets the current culture's decimal separator.
+    /// Gets the current culture's number format information.
     /// </summary>
-    private static string DecimalSeparator => CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+    private static NumberFormatInfo CurrentCultureNumberFormat => CultureInfo.CurrentCulture.NumberFormat;
+
+    /// <summary>
+    /// Gets the default number styles for parsing decimal values.
+    /// </summary>
+    private static NumberStyles DefaultNumberStyles => NumberStyles.Any;
 
     /// <summary>
     /// Gets the additive identity for the <see cref="BigDecimal"/> type, which is zero.

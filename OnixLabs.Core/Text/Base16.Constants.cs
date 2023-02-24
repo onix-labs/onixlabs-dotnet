@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base16
@@ -21,13 +19,5 @@ public readonly partial struct Base16
     /// <summary>
     /// Gets an empty Base-16 value.
     /// </summary>
-    public static readonly Base16 Empty;
-
-    /// <summary>
-    /// Initializes static members of the <see cref="Base16"/> class.
-    /// </summary>
-    static Base16()
-    {
-        Empty = FromByteArray(Array.Empty<byte>());
-    }
+    public static Base16 Empty => FromByteArray(Collections.EmptyArray<byte>());
 }

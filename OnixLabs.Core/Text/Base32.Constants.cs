@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base32
@@ -21,13 +19,5 @@ public readonly partial struct Base32
     /// <summary>
     /// Gets an empty Base-32 value.
     /// </summary>
-    public static readonly Base32 Empty;
-
-    /// <summary>
-    /// Initializes static members of the <see cref="Base32"/> class.
-    /// </summary>
-    static Base32()
-    {
-        Empty = FromByteArray(Array.Empty<byte>());
-    }
+    public static Base32 Empty => FromByteArray(Collections.EmptyArray<byte>());
 }

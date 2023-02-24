@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -21,13 +21,5 @@ public readonly partial struct DigitalSignature
     /// <summary>
     /// Gets an empty digital signature value.
     /// </summary>
-    public static readonly DigitalSignature Empty;
-
-    /// <summary>
-    /// Initializes static members of the <see cref="DigitalSignature"/> class.
-    /// </summary>
-    static DigitalSignature()
-    {
-        Empty = FromByteArray(Array.Empty<byte>());
-    }
+    public static DigitalSignature Empty => FromByteArray(Collections.EmptyArray<byte>());
 }

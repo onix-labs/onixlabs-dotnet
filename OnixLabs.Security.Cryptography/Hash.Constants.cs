@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -21,13 +21,5 @@ public readonly partial struct Hash
     /// <summary>
     /// Gets an empty hash value.
     /// </summary>
-    public static readonly Hash Empty;
-
-    /// <summary>
-    /// Initializes static members of the <see cref="Hash"/> class.
-    /// </summary>
-    static Hash()
-    {
-        Empty = FromByteArray(Array.Empty<byte>(), HashAlgorithmType.Unknown);
-    }
+    public static Hash Empty => FromByteArray(Collections.EmptyArray<byte>());
 }

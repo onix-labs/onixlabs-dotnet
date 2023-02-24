@@ -14,6 +14,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Text;
 
 namespace OnixLabs.Core;
@@ -212,6 +213,42 @@ public static class StringExtensions
     public static byte[] ToByteArray(this string value, Encoding encoding)
     {
         return encoding.GetBytes(value);
+    }
+
+    /// <summary>
+    /// Converts the current <see cref="string"/> to a <see cref="DateTime"/>.
+    /// </summary>
+    /// <param name="value">The original <see cref="string"/> from which to obtain a <see cref="DateTime"/>.</param>
+    /// <param name="provider">An object that supplies culture-specific formatting information.</param>
+    /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
+    /// <returns>Returns a <see cref="DateTime"/> parsed from the current <see cref="string"/> value.</returns>
+    public static DateTime ToDateTime(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
+    {
+        return DateTime.Parse(value, provider, styles);
+    }
+
+    /// <summary>
+    /// Converts the current <see cref="string"/> to a <see cref="DateOnly"/>.
+    /// </summary>
+    /// <param name="value">The original <see cref="string"/> from which to obtain a <see cref="DateOnly"/>.</param>
+    /// <param name="provider">An object that supplies culture-specific formatting information.</param>
+    /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
+    /// <returns>Returns a <see cref="DateOnly"/> parsed from the current <see cref="string"/> value.</returns>
+    public static DateOnly ToDateOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
+    {
+        return DateOnly.Parse(value, provider, styles);
+    }
+
+    /// <summary>
+    /// Converts the current <see cref="string"/> to a <see cref="TimeOnly"/>.
+    /// </summary>
+    /// <param name="value">The original <see cref="string"/> from which to obtain a <see cref="TimeOnly"/>.</param>
+    /// <param name="provider">An object that supplies culture-specific formatting information.</param>
+    /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
+    /// <returns>Returns a <see cref="TimeOnly"/> parsed from the current <see cref="string"/> value.</returns>
+    public static TimeOnly ToTimeOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
+    {
+        return TimeOnly.Parse(value, provider, styles);
     }
 
     /// <summary>

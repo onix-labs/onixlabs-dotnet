@@ -13,22 +13,35 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using System.Linq;
+using OnixLabs.Core;
+using OnixLabs.Security.Cryptography.UnitTests.MockData;
 using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 
-public sealed class MerkleTreeTests
+public sealed class MerkleTreeGenericTests
 {
-    private readonly IEnumerable<Hash> setA = Enumerable.Range(123, 1357).Select(i => Hash.ComputeSha2Hash256($"A{i}")).ToList();
-    private readonly IEnumerable<Hash> setB = Enumerable.Range(100, 1000).Select(i => Hash.ComputeSha2Hash256($"B{i}")).ToList();
+    private readonly IEnumerable<Person> setA = Collections.EnumerableOf(
+        new Person("Alice", "Anderson", "1953-05-08".ToDateOnly()),
+        new Person("Bob", "Brown", "1971-07-16".ToDateOnly()),
+        new Person("Charlie", "Campbell", "2011-03-23".ToDateOnly()),
+        new Person("Dave", "Davis", "1988-01-30".ToDateOnly()),
+        new Person("Eve", "Everton", "2022-03-05".ToDateOnly())
+    );
+
+    private readonly IEnumerable<Person> setB = Collections.EnumerableOf(
+        new Person("Frank", "Foster", "1904-04-04".ToDateOnly()),
+        new Person("Greg", "Green", "1996-12-30".ToDateOnly()),
+        new Person("Holly", "Hamilton", "1993-02-21".ToDateOnly()),
+        new Person("Ivan", "Ingram", "1946-05-26".ToDateOnly())
+    );
 
     [Fact(DisplayName = "Identical Merkle trees should be considered equal")]
     public void IdenticalMerkleTreesShouldBeConsideredEqual()
     {
         // Arrange / Act
-        MerkleTree a = MerkleTree.Create(setA);
-        MerkleTree b = MerkleTree.Create(setA);
+        MerkleTree<Person> a = MerkleTree.Create(setA);
+        MerkleTree<Person> b = MerkleTree.Create(setA);
 
         // Assert
         Assert.Equal(a, b);
@@ -38,8 +51,8 @@ public sealed class MerkleTreeTests
     public void DifferentMerkleTreesShouldNotBeConsideredEqual()
     {
         // Arrange / Act
-        MerkleTree a = MerkleTree.Create(setA);
-        MerkleTree b = MerkleTree.Create(setB);
+        MerkleTree<Person> a = MerkleTree.Create(setA);
+        MerkleTree<Person> b = MerkleTree.Create(setB);
 
         // Assert
         Assert.NotEqual(a, b);

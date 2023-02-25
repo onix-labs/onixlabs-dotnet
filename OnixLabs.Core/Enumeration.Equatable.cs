@@ -19,28 +19,6 @@ namespace OnixLabs.Core;
 public abstract partial class Enumeration<T> : IEquatable<T>
 {
     /// <summary>
-    /// Performs an equality check between two object instances.
-    /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(Enumeration<T> a, Enumeration<T> b)
-    {
-        return Equals(a, b);
-    }
-
-    /// <summary>
-    /// Performs an inequality check between two object instances.
-    /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(Enumeration<T> a, Enumeration<T> b)
-    {
-        return !Equals(a, b);
-    }
-
-    /// <summary>
     /// Indicates whether the current object is equal to another object of the same type.
     /// </summary>
     /// <param name="other">An object to compare with this object.</param>
@@ -71,5 +49,27 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     public sealed override int GetHashCode()
     {
         return HashCode.Combine(GetType(), Name, Value);
+    }
+    
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(Enumeration<T> left, Enumeration<T> right)
+    {
+        return Equals(left, right);
+    }
+
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(Enumeration<T> left, Enumeration<T> right)
+    {
+        return !Equals(left, right);
     }
 }

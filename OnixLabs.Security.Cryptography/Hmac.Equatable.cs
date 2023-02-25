@@ -52,22 +52,22 @@ public readonly partial struct Hmac : IEquatable<Hmac>
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(Hmac a, Hmac b)
+    public static bool operator ==(Hmac left, Hmac right)
     {
-        return Equals(a, b);
+        return Equals(left, right);
     }
 
     /// <summary>
     /// Performs an inequality check between two object instances.
     /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(Hmac a, Hmac b)
+    public static bool operator !=(Hmac left, Hmac right)
     {
-        return !Equals(a, b);
+        return !Equals(left, right);
     }
 }

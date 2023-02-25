@@ -50,22 +50,22 @@ public abstract partial class MerkleTree<T> : IEquatable<MerkleTree<T>>
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(MerkleTree<T> a, MerkleTree<T> b)
+    public static bool operator ==(MerkleTree<T> left, MerkleTree<T> right)
     {
-        return Equals(a, b);
+        return Equals(left, right);
     }
 
     /// <summary>
     /// Performs an inequality check between two object instances.
     /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(MerkleTree<T> a, MerkleTree<T> b)
+    public static bool operator !=(MerkleTree<T> left, MerkleTree<T> right)
     {
-        return !Equals(a, b);
+        return !Equals(left, right);
     }
 }

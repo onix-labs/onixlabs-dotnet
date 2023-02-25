@@ -50,7 +50,7 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     {
         return HashCode.Combine(GetType(), Name, Value);
     }
-    
+
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>

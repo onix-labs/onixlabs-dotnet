@@ -52,7 +52,7 @@ public abstract partial class PublicKey : IEquatable<PublicKey>
     {
         return HashCode.Combine(GetType(), AlgorithmType, KeyData.GetContentHashCode());
     }
-    
+
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>

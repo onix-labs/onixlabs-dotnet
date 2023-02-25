@@ -48,7 +48,7 @@ public readonly partial struct Hmac : IEquatable<Hmac>
     {
         return HashCode.Combine(Hash, Data.GetContentHashCode());
     }
-    
+
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>

@@ -49,7 +49,7 @@ public sealed partial class KeyPair : IEquatable<KeyPair>
     {
         return HashCode.Combine(PrivateKey, PublicKey);
     }
-    
+
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>

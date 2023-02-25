@@ -48,7 +48,7 @@ public readonly partial struct Hash : IEquatable<Hash>
     {
         return HashCode.Combine(AlgorithmType, Value.GetContentHashCode());
     }
-    
+
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>

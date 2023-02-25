@@ -48,7 +48,7 @@ public readonly partial struct Base64 : IEquatable<Base64>
     {
         return HashCode.Combine(Value.GetContentHashCode());
     }
-    
+
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>

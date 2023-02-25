@@ -48,7 +48,7 @@ public readonly partial struct DigitalSignature : IEquatable<DigitalSignature>
     {
         return HashCode.Combine(Value.GetContentHashCode());
     }
-    
+
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>

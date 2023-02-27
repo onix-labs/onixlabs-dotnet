@@ -30,7 +30,8 @@ public readonly partial struct BigDecimal : ISignedNumber<BigDecimal>
     public BigDecimal(ReadOnlySpan<byte> value)
     {
         int length = value.Length - 4;
-        BigInteger unscaledValue = new(value[..length]);
+        ReadOnlySpan<byte> bytes = value[..length];
+        BigInteger unscaledValue = new(bytes);
         int scale = BitConverter.ToInt32(value.Slice(length, 4));
 
         Check(scale >= 0, "BigDecimal scale cannot be non-negative.");

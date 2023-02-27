@@ -49,6 +49,6 @@ public readonly partial struct BigDecimal
     public string ToString(string? format, IFormatProvider? formatProvider)
     {
         // http://www.independent-software.com/net-string-formatting-in-csharp-cheat-sheet.html
-        throw new NotImplementedException();
+        return ToString();
     }
 }

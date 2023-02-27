@@ -57,7 +57,7 @@ public readonly partial struct BigDecimal
     /// <summary>
     /// Gets the default number styles for parsing decimal values.
     /// </summary>
-    private static NumberStyles DefaultNumberStyles => NumberStyles.Any;
+    private static NumberStyles DefaultNumberStyles => NumberStyles.None;
 
     /// <summary>
     /// Gets the additive identity for the <see cref="BigDecimal"/> type, which is zero.

@@ -47,7 +47,7 @@ public sealed class MerkleTreeTests
         Assert.NotEqual(a.Hash, b.Hash);
     }
 
-    [Fact(DisplayName = "MerkleTree.GetLeafHashes should produce the same leaf hashes that the tree was constructed with.")]
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should produce the same leaf hashes that the tree was constructed with")]
     public void MerkleTreeGetLeafHashesShouldProduceTheSameLeafHashesThatTheTreeWasConstructedWith()
     {
         // Arrange
@@ -60,7 +60,7 @@ public sealed class MerkleTreeTests
         Assert.Equal(setA, actual);
     }
 
-    [Fact(DisplayName = "MerkleTree.GetLeafHashes should obtain all leaf hashes from a Merkle tree constructed with 1 million hashes.")]
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should obtain all leaf hashes from a Merkle tree constructed with 1 million hashes")]
     public void MerkleTreeGetLeafHashesShouldObtainAllLeafHashesFromAMerkleTreeConstructedWith1MillionHashes()
     {
         // Arrange

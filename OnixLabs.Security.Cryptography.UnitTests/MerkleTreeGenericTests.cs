@@ -61,7 +61,7 @@ public sealed class MerkleTreeGenericTests
         Assert.NotEqual(a.Hash, b.Hash);
     }
 
-    [Fact(DisplayName = "MerkleTree.GetLeafHashes should produce the same leaf hashes that the tree was constructed with.")]
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should produce the same leaf hashes that the tree was constructed with")]
     public void MerkleTreeGetLeafHashesShouldProduceTheSameLeafHashesThatTheTreeWasConstructedWith()
     {
         // Arrange
@@ -75,7 +75,7 @@ public sealed class MerkleTreeGenericTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "MerkleTree.GetLeafValues should produce the same leaf values that the tree was constructed with.")]
+    [Fact(DisplayName = "MerkleTree.GetLeafValues should produce the same leaf values that the tree was constructed with")]
     public void MerkleTreeGetLeafValuesShouldProduceTheSameLeafValuesThatTheTreeWasConstructedWith()
     {
         // Arrange
@@ -88,7 +88,7 @@ public sealed class MerkleTreeGenericTests
         Assert.Equal(setA, actual);
     }
 
-    [Fact(DisplayName = "MerkleTree.ToMerkleTree should produce a hash-only, non-generic Merkle tree that is equal in value.")]
+    [Fact(DisplayName = "MerkleTree.ToMerkleTree should produce a hash-only, non-generic Merkle tree that is equal in value")]
     public void MerkleTreeToMerkleTreeShouldProduceAHashOnlyNonGenericMerkleTreeThatIsEqualInValue()
     {
         // Arrange

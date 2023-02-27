@@ -20,42 +20,61 @@ namespace OnixLabs.Security.Cryptography.UnitTests;
 
 public sealed class MerkleTreeTests
 {
+    private readonly IEnumerable<Hash> setA = Enumerable.Range(123, 1357).Select(i => Hash.ComputeSha2Hash256($"A{i}")).ToList();
+    private readonly IEnumerable<Hash> setB = Enumerable.Range(100, 1000).Select(i => Hash.ComputeSha2Hash256($"B{i}")).ToList();
+
     [Fact(DisplayName = "Identical Merkle trees should be considered equal")]
     public void IdenticalMerkleTreesShouldBeConsideredEqual()
     {
-        // Arrange
-        List<Hash> hashes = Enumerable
-            .Range(1, 937)
-            .Select(i => Hash.ComputeSha2Hash256(i.ToString()))
-            .ToList();
-
-        // Act
-        MerkleTree a = MerkleTree.Build(hashes);
-        MerkleTree b = MerkleTree.Build(hashes);
+        // Arrange / Act
+        MerkleTree a = MerkleTree.Create(setA);
+        MerkleTree b = MerkleTree.Create(setA);
 
         // Assert
         Assert.Equal(a, b);
+        Assert.Equal(a.Hash, b.Hash);
     }
 
     [Fact(DisplayName = "Different Merkle trees should not be considered equal")]
     public void DifferentMerkleTreesShouldNotBeConsideredEqual()
     {
-        // Arrange
-        List<Hash> hashesForMerkleTreeA = Enumerable
-            .Range(1, 937)
-            .Select(i => Hash.ComputeSha2Hash256($"A{i}"))
-            .ToList();
-
-        List<Hash> hashesForMerkleTreeB = Enumerable
-            .Range(1, 677)
-            .Select(i => Hash.ComputeSha2Hash256($"B{i}"))
-            .ToList();
-
-        // Act
-        MerkleTree a = MerkleTree.Build(hashesForMerkleTreeA);
-        MerkleTree b = MerkleTree.Build(hashesForMerkleTreeB);
+        // Arrange / Act
+        MerkleTree a = MerkleTree.Create(setA);
+        MerkleTree b = MerkleTree.Create(setB);
 
         // Assert
         Assert.NotEqual(a, b);
+        Assert.NotEqual(a.Hash, b.Hash);
+    }
+
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should produce the same leaf hashes that the tree was constructed with")]
+    public void MerkleTreeGetLeafHashesShouldProduceTheSameLeafHashesThatTheTreeWasConstructedWith()
+    {
+        // Arrange
+        MerkleTree candidate = MerkleTree.Create(setA);
+
+        // Act
+        IEnumerable<Hash> actual = candidate.GetLeafHashes();
+
+        // Assert
+        Assert.Equal(setA, actual);
+    }
+
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should obtain all leaf hashes from a Merkle tree constructed with 1 million hashes")]
+    public void MerkleTreeGetLeafHashesShouldObtainAllLeafHashesFromAMerkleTreeConstructedWith1MillionHashes()
+    {
+        // Arrange
+        IEnumerable<Hash> expected = Enumerable
+            .Range(0, 1_000_000)
+            .Select(value => Hash.ComputeSha2Hash256(value.ToString()))
+            .ToList();
+
+        MerkleTree tree = MerkleTree.Create(expected);
+
+        // Act
+        IEnumerable<Hash> actual = tree.GetLeafHashes();
+
+        // Assert
+        Assert.Equal(expected, actual);
     }
 }

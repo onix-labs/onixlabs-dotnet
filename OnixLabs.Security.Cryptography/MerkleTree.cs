@@ -12,12 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using OnixLabs.Core.Linq;
-using static OnixLabs.Core.Preconditions;
-
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
@@ -33,106 +27,80 @@ public abstract partial class MerkleTree
     }
 
     /// <summary>
-    /// Gets the hash of this <see cref="MerkleTree"/> node.
+    /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
     /// </summary>
     public abstract Hash Hash { get; }
 
     /// <summary>
-    /// Builds a Merkle tree from the specified leaf node hashes.
+    /// Represents a Merkle tree branch node.
     /// </summary>
-    /// <param name="nodes">The leaf nodes from which to build a Merkle tree.</param>
-    /// <returns>Returns a new <see cref="MerkleTree"/> instance from the specified leaf nodes.</returns>
-    public static MerkleTree Build(IEnumerable<Hash> nodes)
+    private sealed class MerkleTreeBranchNode : MerkleTree
     {
-        IReadOnlyList<MerkleTree> leafNodes = nodes.Select(MerkleTreeLeafNode.CreateHashNode).ToList();
-        return Build(leafNodes);
-    }
-
-    /// <summary>
-    /// Builds a Merkle tree from the specified Merkle tree nodes.
-    /// </summary>
-    /// <param name="nodes">The Merkle tree nodes from which to build a Merkle tree.</param>
-    /// <returns>Returns a new <see cref="MerkleTree"/> instance from the specified nodes.</returns>
-    private static MerkleTree Build(IReadOnlyList<MerkleTree> nodes)
-    {
-        CheckIfMerkleTreesAreEmpty(nodes);
-        CheckNodesHaveEqualHashAlgorithms(nodes);
-
-        return MergeMerkleTreeNodes(nodes);
-    }
-
-    /// <summary>
-    /// Checks whether an <see cref="IEnumerable{MerkleTree}"/> is empty.
-    /// </summary>
-    /// <param name="merkleTrees">The <see cref="IEnumerable{MerkleTree}"/> to check.</param>
-    /// <exception cref="ArgumentException">if the <see cref="IEnumerable{MerkleTree}"/> is empty.</exception>
-    private static void CheckIfMerkleTreesAreEmpty(IEnumerable<MerkleTree> merkleTrees)
-    {
-        Require(merkleTrees.IsNotEmpty(), "Cannot construct a merkle tree from an empty list.", nameof(merkleTrees));
-    }
-
-    /// <summary>
-    /// Checks whether all elements of an <see cref="IEnumerable{MerkleTree}"/> have the same hash algorithm type.
-    /// </summary>
-    /// <param name="merkleTrees">The <see cref="IEnumerable{MerkleTree}"/> to check.</param>
-    /// <exception cref="ArgumentException">if the elements of the <see cref="IEnumerable{MerkleTree}"/> do not have the same hash algorithm type.</exception>
-    private static void CheckNodesHaveEqualHashAlgorithms(IEnumerable<MerkleTree> merkleTrees)
-    {
-        Require(merkleTrees.AllEqualBy(merkleTree => merkleTree.Hash.AlgorithmType),
-            "Cannot construct a merkle tree with different hash types.", nameof(merkleTrees));
-    }
-
-    /// <summary>
-    /// Ensures that an <see cref="IReadOnlyList{MerkleTree}"/> has an even number of elements.
-    /// If the <see cref="IReadOnlyList{MerkleTree}"/> contains an odd number of elements, then an all-zero hash
-    /// of the same <see cref="HashAlgorithmType"/> will be inserted at the end of the list.
-    /// </summary>
-    /// <param name="merkleTrees">The <see cref="IReadOnlyList{MerkleTree}"/> to ensure has an even number of elements.</param>
-    /// <returns>Returns a new <see cref="IReadOnlyList{MerkleTree}"/> containing an even number of elements.</returns>
-    private static IReadOnlyList<MerkleTree> EnsureEvenNumberOfNodes(IReadOnlyList<MerkleTree> merkleTrees)
-    {
-        if (merkleTrees.IsCountEven()) return merkleTrees;
-
-        HashAlgorithmType hashAlgorithmType = merkleTrees[0].Hash.AlgorithmType;
-        return merkleTrees.Append(MerkleTreeLeafNode.CreateEmptyNode(hashAlgorithmType)).ToList();
-    }
-
-    /// <summary>
-    /// Merges an <see cref="IReadOnlyList{MerkleTree}"/> of Merkle tree nodes.
-    /// </summary>
-    /// <param name="merkleTrees">The <see cref="IReadOnlyList{MerkleTree}"/> of Merkle tree nodes to merge.</param>
-    /// <returns>Returns a merged <see cref="IReadOnlyList{MerkleTree}"/> of Merkle tree nodes.</returns>
-    private static MerkleTree MergeMerkleTreeNodes(IReadOnlyList<MerkleTree> merkleTrees)
-    {
-        while (true)
+        /// <summary>
+        /// Creates a new instance of the <see cref="MerkleTree.MerkleTreeBranchNode"/> class.
+        /// </summary>
+        /// <param name="left">The left-hand <see cref="MerkleTree"/> node.</param>
+        /// <param name="right">The right-hand <see cref="MerkleTree"/> node.</param>
+        public MerkleTreeBranchNode(MerkleTree left, MerkleTree right)
         {
-            if (merkleTrees.IsSingle())
-            {
-                return merkleTrees[0];
-            }
-
-            merkleTrees = EnsureEvenNumberOfNodes(merkleTrees);
-
-            List<MerkleTree> mutableMerkleTrees = new();
-
-            for (int index = 0; index < merkleTrees.Count; index += 2)
-            {
-                MerkleTree leftMerkleTree = merkleTrees[index];
-                MerkleTree rightMerkleTree = merkleTrees[index + 1];
-                MerkleTree merkleTreeNode = new MerkleTreeBranchNode(leftMerkleTree, rightMerkleTree);
-                mutableMerkleTrees.Add(merkleTreeNode);
-            }
-
-            merkleTrees = mutableMerkleTrees;
+            Left = left;
+            Right = right;
+            Hash = Left.Hash.Concatenate(Right.Hash);
         }
+
+        /// <summary>
+        /// Gets the left-hand <see cref="MerkleTree"/> node.
+        /// </summary>
+        public MerkleTree Left { get; }
+
+        /// <summary>
+        /// Gets the right-hand <see cref="MerkleTree"/> node.
+        /// </summary>
+        public MerkleTree Right { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
+        /// </summary>
+        public override Hash Hash { get; }
     }
 
     /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object.
+    /// Represents a Merkle tree leaf node.
     /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object.</returns>
-    public override string ToString()
+    private sealed class MerkleTreeLeafNode : MerkleTree
     {
-        return Hash.ToString();
+        /// <summary>
+        /// Creates a new instance of the <see cref="MerkleTree.MerkleTreeLeafNode"/> class.
+        /// </summary>
+        /// <param name="hash">The <see cref="Hash"/> value for the current node.</param>
+        public MerkleTreeLeafNode(Hash hash)
+        {
+            Hash = hash;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
+        /// </summary>
+        public override Hash Hash { get; }
+    }
+
+    /// <summary>
+    /// Represents an empty Merkle tree node.
+    /// </summary>
+    private sealed class MerkleTreeEmptyNode : MerkleTree
+    {
+        /// <summary>
+        /// Creates a new instance of the <see cref="MerkleTree.MerkleTreeEmptyNode"/> class.
+        /// </summary>
+        /// <param name="type">The <see cref="HashAlgorithmType"/> for the current node.</param>
+        public MerkleTreeEmptyNode(HashAlgorithmType type)
+        {
+            Hash = Hash.CreateAllZeroHash(type);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
+        /// </summary>
+        public override Hash Hash { get; }
     }
 }

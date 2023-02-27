@@ -16,18 +16,18 @@ using System;
 using System.Linq;
 using OnixLabs.Core.Linq;
 
-namespace OnixLabs.Core.Text;
+namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct Base32 : IEquatable<Base32>
+public readonly partial struct Salt : IEquatable<Salt>
 {
     /// <summary>
     /// Checks for equality between this instance and another object.
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-    public bool Equals(Base32 other)
+    public bool Equals(Salt other)
     {
-        return other.Value.SequenceEqual(Value) && other.Alphabet == Alphabet && other.Padding == Padding;
+        return other.Value.SequenceEqual(Value);
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public readonly partial struct Base32 : IEquatable<Base32>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
-        return obj is Base32 other && Equals(other);
+        return obj is Salt other && Equals(other);
     }
 
     /// <summary>
@@ -52,10 +52,10 @@ public readonly partial struct Base32 : IEquatable<Base32>
     /// <summary>
     /// Performs an equality check between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
+    /// <param name="left">Instance a.</param>
+    /// <param name="right">Instance b.</param>
     /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(Base32 left, Base32 right)
+    public static bool operator ==(Salt left, Salt right)
     {
         return Equals(left, right);
     }
@@ -63,10 +63,10 @@ public readonly partial struct Base32 : IEquatable<Base32>
     /// <summary>
     /// Performs an inequality check between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
+    /// <param name="left">Instance a.</param>
+    /// <param name="right">Instance b.</param>
     /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(Base32 left, Base32 right)
+    public static bool operator !=(Salt left, Salt right)
     {
         return !Equals(left, right);
     }

@@ -12,14 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core;
-
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct DigitalSignature
+/// <summary>
+/// Represents a cryptographically secure random value.
+/// </summary>
+public readonly partial struct Salt
 {
     /// <summary>
-    /// Gets an empty digital signature value.
+    /// Initializes a new instance of the <see cref="Salt"/> struct.
     /// </summary>
-    public static DigitalSignature Empty => FromByteArray(Collections.EmptyArray<byte>());
+    /// <param name="value">The underlying cryptographically secure random value.</param>
+    private Salt(byte[] value)
+    {
+        Value = value;
+    }
+
+    /// <summary>
+    /// Gets the underlying cryptographically secure random value.
+    /// </summary>
+    private byte[] Value { get; }
 }

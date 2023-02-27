@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core;
-
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct DigitalSignature
+public abstract partial class MerkleTree
 {
     /// <summary>
-    /// Gets an empty digital signature value.
+    /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    public static DigitalSignature Empty => FromByteArray(Collections.EmptyArray<byte>());
+    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    public sealed override string ToString()
+    {
+        return Hash.ToString();
+    }
 }

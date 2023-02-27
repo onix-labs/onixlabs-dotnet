@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core;
-
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct DigitalSignature
+/// <summary>
+/// Defines a mechanism for computing the hash of a data structure.
+/// </summary>
+public interface IHashable
 {
     /// <summary>
-    /// Gets an empty digital signature value.
+    /// Computes the hash of the current object.
     /// </summary>
-    public static DigitalSignature Empty => FromByteArray(Collections.EmptyArray<byte>());
+    /// <returns>Return the computed hash of the current object.</returns>
+    Hash ComputeHash();
 }

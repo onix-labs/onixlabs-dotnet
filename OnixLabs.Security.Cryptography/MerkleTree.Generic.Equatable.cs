@@ -13,21 +13,19 @@
 // limitations under the License.
 
 using System;
-using System.Linq;
-using OnixLabs.Core.Linq;
 
-namespace OnixLabs.Core.Text;
+namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct Base32 : IEquatable<Base32>
+public abstract partial class MerkleTree<T> : IEquatable<MerkleTree<T>>
 {
     /// <summary>
     /// Checks for equality between this instance and another object.
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
-    public bool Equals(Base32 other)
+    public virtual bool Equals(MerkleTree<T>? other)
     {
-        return other.Value.SequenceEqual(Value) && other.Alphabet == Alphabet && other.Padding == Padding;
+        return ReferenceEquals(this, other) || other is not null && other.Hash == Hash;
     }
 
     /// <summary>
@@ -37,7 +35,7 @@ public readonly partial struct Base32 : IEquatable<Base32>
     /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
-        return obj is Base32 other && Equals(other);
+        return Equals(obj as MerkleTree<T>);
     }
 
     /// <summary>
@@ -46,7 +44,7 @@ public readonly partial struct Base32 : IEquatable<Base32>
     /// <returns>A hash code for this instance.</returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Value.GetContentHashCode());
+        return HashCode.Combine(GetType(), Hash);
     }
 
     /// <summary>
@@ -55,7 +53,7 @@ public readonly partial struct Base32 : IEquatable<Base32>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(Base32 left, Base32 right)
+    public static bool operator ==(MerkleTree<T> left, MerkleTree<T> right)
     {
         return Equals(left, right);
     }
@@ -66,7 +64,7 @@ public readonly partial struct Base32 : IEquatable<Base32>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(Base32 left, Base32 right)
+    public static bool operator !=(MerkleTree<T> left, MerkleTree<T> right)
     {
         return !Equals(left, right);
     }

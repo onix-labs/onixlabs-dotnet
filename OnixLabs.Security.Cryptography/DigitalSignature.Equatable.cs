@@ -21,28 +21,6 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct DigitalSignature : IEquatable<DigitalSignature>
 {
     /// <summary>
-    /// Performs an equality check between two object instances.
-    /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(DigitalSignature a, DigitalSignature b)
-    {
-        return Equals(a, b);
-    }
-
-    /// <summary>
-    /// Performs an inequality check between two object instances.
-    /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(DigitalSignature a, DigitalSignature b)
-    {
-        return !Equals(a, b);
-    }
-
-    /// <summary>
     /// Checks for equality between this instance and another object.
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
@@ -69,5 +47,27 @@ public readonly partial struct DigitalSignature : IEquatable<DigitalSignature>
     public override int GetHashCode()
     {
         return HashCode.Combine(Value.GetContentHashCode());
+    }
+
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(DigitalSignature left, DigitalSignature right)
+    {
+        return Equals(left, right);
+    }
+
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(DigitalSignature left, DigitalSignature right)
+    {
+        return !Equals(left, right);
     }
 }

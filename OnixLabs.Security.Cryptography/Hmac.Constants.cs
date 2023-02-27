@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -21,13 +21,5 @@ public readonly partial struct Hmac
     /// <summary>
     /// Gets an empty hashed message authentication code (HMAC) value.
     /// </summary>
-    public static readonly Hmac Empty;
-
-    /// <summary>
-    /// Initializes static members of the <see cref="Hmac"/> class.
-    /// </summary>
-    static Hmac()
-    {
-        Empty = Create(Hash.Empty, Array.Empty<byte>());
-    }
+    public static Hmac Empty => Create(Hash.Empty, Collections.EmptyArray<byte>());
 }

@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core;
-
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct DigitalSignature
+public readonly partial struct Salt
 {
     /// <summary>
-    /// Gets an empty digital signature value.
+    /// Creates a <see cref="Salt"/> instance from a <see cref="byte"/> array.
     /// </summary>
-    public static DigitalSignature Empty => FromByteArray(Collections.EmptyArray<byte>());
+    /// <param name="value">The <see cref="byte"/> array to represent as a salt.</param>
+    /// <returns>A new <see cref="Salt"/> instance.</returns>
+    public static Salt FromByteArray(byte[] value)
+    {
+        return new Salt(value);
+    }
 }

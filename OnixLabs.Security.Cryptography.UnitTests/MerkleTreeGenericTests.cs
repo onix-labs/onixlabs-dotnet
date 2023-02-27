@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Linq;
 using OnixLabs.Core;
 using OnixLabs.Security.Cryptography.UnitTests.MockData;
 using Xunit;
@@ -45,6 +46,7 @@ public sealed class MerkleTreeGenericTests
 
         // Assert
         Assert.Equal(a, b);
+        Assert.Equal(a.Hash, b.Hash);
     }
 
     [Fact(DisplayName = "Different Merkle trees should not be considered equal")]
@@ -56,5 +58,47 @@ public sealed class MerkleTreeGenericTests
 
         // Assert
         Assert.NotEqual(a, b);
+        Assert.NotEqual(a.Hash, b.Hash);
+    }
+
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should produce the same leaf hashes that the tree was constructed with.")]
+    public void MerkleTreeGetLeafHashesShouldProduceTheSameLeafHashesThatTheTreeWasConstructedWith()
+    {
+        // Arrange
+        IEnumerable<Hash> expected = setA.Select(value => value.ComputeHash());
+        MerkleTree<Person> candidate = MerkleTree.Create(setA);
+
+        // Act
+        IEnumerable<Hash> actual = candidate.GetLeafHashes();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "MerkleTree.GetLeafValues should produce the same leaf values that the tree was constructed with.")]
+    public void MerkleTreeGetLeafValuesShouldProduceTheSameLeafValuesThatTheTreeWasConstructedWith()
+    {
+        // Arrange
+        MerkleTree<Person> candidate = MerkleTree.Create(setA);
+
+        // Act
+        IEnumerable<Person> actual = candidate.GetLeafValues();
+
+        // Assert
+        Assert.Equal(setA, actual);
+    }
+
+    [Fact(DisplayName = "MerkleTree.ToMerkleTree should produce a hash-only, non-generic Merkle tree that is equal in value.")]
+    public void MerkleTreeToMerkleTreeShouldProduceAHashOnlyNonGenericMerkleTreeThatIsEqualInValue()
+    {
+        // Arrange
+        MerkleTree<Person> a = MerkleTree.Create(setA);
+
+        // Act
+        MerkleTree b = a.ToMerkleTree();
+
+        // Assert
+        Assert.Equal(a, b);
+        Assert.Equal(a.Hash, b.Hash);
     }
 }

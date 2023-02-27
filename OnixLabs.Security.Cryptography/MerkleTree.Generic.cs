@@ -39,17 +39,17 @@ public abstract partial class MerkleTree<T> : MerkleTree where T : IHashable
         /// <summary>
         /// Gets the left-hand <see cref="MerkleTree{T}"/> node.
         /// </summary>
-        private MerkleTree<THashable> Left { get; }
+        public MerkleTree<THashable> Left { get; }
 
         /// <summary>
         /// Gets the right-hand <see cref="MerkleTree{T}"/> node.
         /// </summary>
-        private MerkleTree<THashable> Right { get; }
+        public MerkleTree<THashable> Right { get; }
 
         /// <summary>
         /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree{T}"/> node.
         /// </summary>
-        protected override Hash Hash { get; }
+        public override Hash Hash { get; }
     }
 
     /// <summary>
@@ -64,18 +64,17 @@ public abstract partial class MerkleTree<T> : MerkleTree where T : IHashable
         public MerkleTreeLeafNode(THashable value)
         {
             Value = value;
-            Hash = value.ComputeHash();
         }
 
         /// <summary>
         /// Gets the underlying value of the current node.
         /// </summary>
-        private THashable Value { get; }
+        public THashable Value { get; }
 
         /// <summary>
         /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree{T}"/> node.
         /// </summary>
-        protected override Hash Hash { get; }
+        public override Hash Hash => Value.ComputeHash();
     }
 
     /// <summary>
@@ -95,6 +94,6 @@ public abstract partial class MerkleTree<T> : MerkleTree where T : IHashable
         /// <summary>
         /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree{T}"/> node.
         /// </summary>
-        protected override Hash Hash { get; }
+        public override Hash Hash { get; }
     }
 }

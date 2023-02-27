@@ -32,6 +32,7 @@ public sealed class MerkleTreeTests
 
         // Assert
         Assert.Equal(a, b);
+        Assert.Equal(a.Hash, b.Hash);
     }
 
     [Fact(DisplayName = "Different Merkle trees should not be considered equal")]
@@ -43,5 +44,37 @@ public sealed class MerkleTreeTests
 
         // Assert
         Assert.NotEqual(a, b);
+        Assert.NotEqual(a.Hash, b.Hash);
+    }
+
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should produce the same leaf hashes that the tree was constructed with.")]
+    public void MerkleTreeGetLeafHashesShouldProduceTheSameLeafHashesThatTheTreeWasConstructedWith()
+    {
+        // Arrange
+        MerkleTree candidate = MerkleTree.Create(setA);
+
+        // Act
+        IEnumerable<Hash> actual = candidate.GetLeafHashes();
+
+        // Assert
+        Assert.Equal(setA, actual);
+    }
+
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should obtain all leaf hashes from a Merkle tree constructed with 1 million hashes.")]
+    public void MerkleTreeGetLeafHashesShouldObtainAllLeafHashesFromAMerkleTreeConstructedWith1MillionHashes()
+    {
+        // Arrange
+        IEnumerable<Hash> expected = Enumerable
+            .Range(0, 1_000_000)
+            .Select(value => Hash.ComputeSha2Hash256(value.ToString()))
+            .ToList();
+
+        MerkleTree tree = MerkleTree.Create(expected);
+
+        // Act
+        IEnumerable<Hash> actual = tree.GetLeafHashes();
+
+        // Assert
+        Assert.Equal(expected, actual);
     }
 }

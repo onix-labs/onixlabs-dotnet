@@ -29,7 +29,7 @@ public abstract partial class MerkleTree
     /// <summary>
     /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
     /// </summary>
-    protected abstract Hash Hash { get; }
+    public abstract Hash Hash { get; }
 
     /// <summary>
     /// Represents a Merkle tree branch node.
@@ -51,17 +51,17 @@ public abstract partial class MerkleTree
         /// <summary>
         /// Gets the left-hand <see cref="MerkleTree"/> node.
         /// </summary>
-        private MerkleTree Left { get; }
+        public MerkleTree Left { get; }
 
         /// <summary>
         /// Gets the right-hand <see cref="MerkleTree"/> node.
         /// </summary>
-        private MerkleTree Right { get; }
+        public MerkleTree Right { get; }
 
         /// <summary>
         /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
         /// </summary>
-        protected override Hash Hash { get; }
+        public override Hash Hash { get; }
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public abstract partial class MerkleTree
         /// <summary>
         /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
         /// </summary>
-        protected override Hash Hash { get; }
+        public override Hash Hash { get; }
     }
 
     /// <summary>
@@ -101,6 +101,6 @@ public abstract partial class MerkleTree
         /// <summary>
         /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
         /// </summary>
-        protected override Hash Hash { get; }
+        public override Hash Hash { get; }
     }
 }

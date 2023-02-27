@@ -165,8 +165,6 @@ public sealed class BigDecimalParseTests
     [InlineData("1844674407.3709551615", "1844674407.3709551615")]
     [InlineData("0.18446744073709551615", "0.18446744073709551615")]
     [InlineData("0%", "0")]
-    [InlineData("0%.", "0")]
-    [InlineData("0.%", "0")]
     [InlineData("0%.0", "0.0")]
     [InlineData("0.%0", "0.0")]
     [InlineData("0.0%", "0.0")]

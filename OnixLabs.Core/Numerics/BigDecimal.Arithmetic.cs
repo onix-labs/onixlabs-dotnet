@@ -61,51 +61,6 @@ public readonly partial struct BigDecimal
     }
 
     /// <summary>
-    /// Raises the specified <see cref="BigDecimal"/> value by the specified exponent power.
-    /// </summary>
-    /// <param name="value">The <see cref="BigDecimal"/> value to raise to the exponent power.</param>
-    /// <param name="exponent">The exponent to raise by.</param>
-    /// <param name="additionalScale">
-    /// Provides additional scale digits for values that are raised by a negative exponent.
-    /// By default, negative exponents will only scale to the first non-zero significant digit to the right of the decimal point.
-    /// The default value for this parameter is zero (0) meaning that no additional scale digits will be applied.
-    /// </param>
-    /// <returns>Returns a <see cref="BigDecimal"/> result of raising the value by the specified exponent power.</returns>
-    public static BigDecimal Pow(BigDecimal value, int exponent, int additionalScale = 0)
-    {
-        if (exponent is 0)
-        {
-            return One;
-        }
-
-        if (exponent is 1)
-        {
-            return value;
-        }
-
-        BigDecimal result = value;
-        int abs = int.Abs(exponent);
-        int count = abs;
-
-        while (--count > 0)
-        {
-            result *= value;
-        }
-
-        if (exponent > 0)
-        {
-            return result;
-        }
-
-        int scale = result.UnscaledValue.GetDigitLength() + additionalScale;
-        BigDecimal n = BigInteger.Pow(10, scale).ToBigDecimal(scale);
-
-        result = n / result;
-
-        return value > 0 && value < 1 ? result.IntegralValue : result;
-    }
-
-    /// <summary>
     /// Applies the specified scale to the specified <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The <see cref="BigDecimal"/> value for which to apply the specified scale.</param>

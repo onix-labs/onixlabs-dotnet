@@ -12,18 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Numerics;
-using OnixLabs.Core.Numerics;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main(string[] args)
     {
-        Console.WriteLine(BigDecimal.Pow(0.1, -2));
     }
 }

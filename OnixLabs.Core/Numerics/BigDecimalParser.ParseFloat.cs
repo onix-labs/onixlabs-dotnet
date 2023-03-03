@@ -66,9 +66,14 @@ internal sealed partial class BigDecimalParser
                 BigDecimal power = BigDecimal.Pow(BigDecimal.Ten, exponent);
 
                 result *= power;
+
+                if (result.FractionalValue == BigInteger.Zero)
+                {
+                    result = result.FractionalValue;
+                }
             }
 
-            return result.FractionalValue == BigInteger.Zero ? result.FractionalValue : result;
+            return result;
         }
         catch (Exception exception)
         {

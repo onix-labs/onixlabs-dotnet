@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Core.Numerics;
 
-public readonly partial struct BigDecimal : IComparable, IComparable<BigDecimal>
+public readonly partial struct BigDecimal
 {
     /// <summary>
     /// Compares two <see cref="BigDecimal"/> values and returns an integer that indicates

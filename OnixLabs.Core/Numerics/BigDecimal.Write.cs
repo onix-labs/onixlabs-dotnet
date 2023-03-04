@@ -12,16 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
-    
-    /// <summary>Computes the unary plus of a value.</summary>
-    /// <param name="value">The value for which to compute its unary plus.</param>
-    /// <returns>The unary plus of <paramref name="value" />.</returns>
-    public static BigDecimal operator +(BigDecimal value)
+    public bool TryWriteExponentBigEndian(Span<byte> destination, out int bytesWritten)
     {
-        return value;
+        throw new NotImplementedException();
+    }
+
+    public bool TryWriteExponentLittleEndian(Span<byte> destination, out int bytesWritten)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool TryWriteSignificandBigEndian(Span<byte> destination, out int bytesWritten)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool TryWriteSignificandLittleEndian(Span<byte> destination, out int bytesWritten)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -12,28 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Numerics;
-
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
     /// <summary>
-    /// Negates the specified <see cref="BigDecimal"/> value.
+    /// Computes the unary subtraction of the specified <see cref="BigDecimal"/> value.
     /// </summary>
-    /// <param name="value">The value to negate.</param>
-    /// <returns>The result of the value parameter multiplied by negative one (-1).</returns>
-    public static BigDecimal Negate(BigDecimal value)
+    /// <param name="value">The value for which to perform unary subtraction.</param>
+    /// <returns>Returns the unary subtraction of the specified <see cref="BigDecimal"/> value.</returns>
+    public static BigDecimal UnarySubtract(BigDecimal value)
     {
-        BigInteger unscaledValue = BigInteger.Negate(value.UnscaledValue);
-        return new BigDecimal(unscaledValue, value.Scale);
+        return new BigDecimal(-value.UnscaledValue, value.Scale);
     }
 
-    /// <summary>Computes the unary negation of a value.</summary>
-    /// <param name="value">The value for which to compute its unary negation.</param>
-    /// <returns>The unary negation of <paramref name="value" />.</returns>
+    /// <summary>
+    /// Computes the unary subtraction of the specified <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The value for which to perform unary subtraction.</param>
+    /// <returns>Returns the unary subtraction of the specified <see cref="BigDecimal"/> value.</returns>
     public static BigDecimal operator -(BigDecimal value)
     {
-        return Negate(value);
+        return UnarySubtract(value);
     }
 }

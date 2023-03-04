@@ -21,7 +21,7 @@ namespace OnixLabs.Core.Numerics;
 /// <summary>
 /// Represents an arbitrarily large signed decimal.
 /// </summary>
-public readonly partial struct BigDecimal : ISignedNumber<BigDecimal>
+public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
@@ -144,7 +144,7 @@ public readonly partial struct BigDecimal : ISignedNumber<BigDecimal>
     public BigDecimal(double value) : this((decimal)value)
     {
     }
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
     /// </summary>

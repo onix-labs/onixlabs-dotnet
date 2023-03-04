@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Core.Numerics;
 
@@ -31,24 +32,23 @@ public readonly partial struct BigDecimal
     }
 
     /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object.
+    /// Formats the value of the current instance using the specified format.
     /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object.</returns>
-    public override string ToString()
+    /// <param name="format">The format to use, or null to use the default format.</param>
+    /// <param name="formatProvider">The provider to use to format the value.</param>
+    /// <returns>The value of the current instance in the specified format.</returns>
+    public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
-        string sign = Sign < 0 ? "-" : string.Empty;
-        string separator = CurrentCultureNumberFormat.NumberDecimalSeparator;
-        string integralValue = AbsoluteIntegralValue.ToString();
-        string fractionalValue = FractionalValue.ToString().PadLeft(Scale, '0');
-
-        return Scale == 0
-            ? $"{sign}{integralValue}"
-            : $"{sign}{integralValue}{separator}{fractionalValue}";
+        CultureInfo info = formatProvider as CultureInfo ?? CurrentCulture;
+        return BigDecimalFormatter.Format(this, format ?? DefaultNumberFormatSpecifier, info);
     }
 
-    public string ToString(string? format, IFormatProvider? formatProvider)
+    /// <summary>
+    /// Formats the value of the current instance using the default format.
+    /// </summary>
+    /// <returns>The value of the current instance in the default format.</returns>
+    public override string ToString()
     {
-        // http://www.independent-software.com/net-string-formatting-in-csharp-cheat-sheet.html
-        return ToString();
+        return ToString(DefaultNumberFormatSpecifier, CurrentCulture);
     }
 }

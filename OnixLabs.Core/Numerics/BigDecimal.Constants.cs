@@ -49,15 +49,24 @@ public readonly partial struct BigDecimal
     /// </summary>
     public static BigDecimal Ten => new(10, 0);
 
+    public static BigDecimal E { get; }
+    public static BigDecimal Pi { get; }
+    public static BigDecimal Tau { get; }
+
     /// <summary>
-    /// Gets the current culture's number format information.
+    /// Gets the default number format.
     /// </summary>
-    private static NumberFormatInfo CurrentCultureNumberFormat => CultureInfo.CurrentCulture.NumberFormat;
+    private static string DefaultNumberFormatSpecifier => "F";
 
     /// <summary>
     /// Gets the default number styles for parsing decimal values.
     /// </summary>
     private static NumberStyles DefaultNumberStyles => NumberStyles.None;
+
+    /// <summary>
+    /// Gets the current culture's number format information.
+    /// </summary>
+    private static CultureInfo CurrentCulture => CultureInfo.CurrentCulture;
 
     /// <summary>
     /// Gets the additive identity for the <see cref="BigDecimal"/> type, which is zero.

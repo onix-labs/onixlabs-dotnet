@@ -16,19 +16,25 @@ using System;
 
 namespace OnixLabs.Core.Numerics;
 
-internal sealed partial class BigDecimalParser
+public readonly partial struct BigDecimal
 {
-    private BigDecimal ParseHexadecimal(ReadOnlySpan<char> value)
+    public int GetExponentByteCount()
     {
-        try
-        {
-            ReadOnlySpan<char> sanitized = Sanitize(value);
-            byte[] bytes = Convert.FromHexString(sanitized);
-            return new BigDecimal(bytes);
-        }
-        catch (Exception exception)
-        {
-            throw new FormatException("Input value was not in a valid format.", exception);
-        }
+        throw new NotImplementedException();
+    }
+
+    public int GetExponentShortestBitLength()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetSignificandBitLength()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetSignificandByteCount()
+    {
+        throw new NotImplementedException();
     }
 }

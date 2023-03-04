@@ -36,20 +36,6 @@ public readonly partial struct BigDecimal
         }
 
         return new BigDecimal(quotient, left.Scale);
-
-        /*
-         * The following code has been commented out and left here deliberately!
-         * It requires further investigation and performance testing to determine
-         * whether it may prove to be a better division algorithm.
-         */
-
-        // (BigInteger min, BigInteger max) = MinMax(left.Magnitude, right.Magnitude);
-        // BigInteger magnitude = left > right ? min : max;
-        // BigInteger leftUnscaled = left.UnscaledValue * magnitude;
-        // BigInteger rightUnscaled = right.UnscaledValue;
-        // BigInteger unscaledValue = leftUnscaled / rightUnscaled;
-        //
-        // return new BigDecimal(unscaledValue, left.Scale);
     }
 
     /// <summary>

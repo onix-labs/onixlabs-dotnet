@@ -22,8 +22,8 @@ namespace OnixLabs.Core.UnitTests.Numerics;
 public class BigDecimalRoundTests
 {
     [Theory(DisplayName = "BigDecimal.Round should produce the correct result")]
-    [BigDecimalRoundData(-1000, 1000, 1, 4)]
-    [BigDecimalRoundData(-10000000, 10000000, 97531, 5)]
+    [BigDecimalRoundData(-1000, 1000, 1, 5)]
+    [BigDecimalRoundData(-100000, 100000, 7531, 7)]
     public void BigDecimalRound(decimal value, int scale, MidpointRounding rounding, decimal expected)
     {
         // Arrange

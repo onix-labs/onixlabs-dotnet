@@ -23,6 +23,44 @@ namespace OnixLabs.Core.Numerics;
 public static class GenericMath
 {
     /// <summary>
+    /// Calculates the quotient and the remainder of the division of the specified dividend, divided by the specified divisor.
+    /// </summary>
+    /// <param name="dividend">The dividend to divide.</param>
+    /// <param name="divisor">The divisor to divide by.</param>
+    /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
+    /// <returns>Returns the quotient and the remainder of the division of the specified dividend, divided by the specified divisor.</returns>
+    /// <exception cref="DivideByZeroException">if the specified divisor is zero.</exception>
+    public static (T Quotient, T Remainder) DivRem<T>(T dividend, T divisor) where T : INumber<T>
+    {
+        if (divisor == T.Zero)
+        {
+            throw new DivideByZeroException("Divisor cannot be zero.");
+        }
+
+        if (divisor == T.One)
+        {
+            return (dividend, T.Zero);
+        }
+
+        if (divisor == -T.One)
+        {
+            return (-dividend, T.Zero);
+        }
+
+        T dividendSign = T.IsNegative(dividend) ? -T.One : T.One;
+        T divisorSign = T.IsNegative(divisor) ? -T.One : T.One;
+        T sign = dividendSign * divisorSign;
+
+        dividend = T.Abs(dividend);
+        divisor = T.Abs(divisor);
+
+        T remainder = dividend % divisor;
+
+        dividend -= remainder;
+        return (dividend / divisor * sign, remainder);
+    }
+    
+    /// <summary>
     /// Calculates the greatest common denominator of the specified values. 
     /// </summary>
     /// <param name="left">The left-hand value for which to calculate the greatest common denominator.</param>
@@ -39,42 +77,6 @@ public static class GenericMath
         }
 
         return left;
-    }
-
-    /// <summary>
-    /// Calculates the division of the specified dividend by the specified divisor using integer division.
-    /// </summary>
-    /// <param name="dividend">The dividend to divide.</param>
-    /// <param name="divisor">The divisor to divide by.</param>
-    /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
-    /// <returns>Returns the division of the specified dividend by the specified divisor using integer division.</returns>
-    /// <exception cref="DivideByZeroException">if the specified divisor is zero.</exception>
-    public static T IntegerDivide<T>(T dividend, T divisor) where T : INumber<T>
-    {
-        if (divisor == T.Zero)
-        {
-            throw new DivideByZeroException("Divisor cannot be zero.");
-        }
-
-        if (divisor == T.One)
-        {
-            return dividend;
-        }
-
-        if (divisor == -T.One)
-        {
-            return -dividend;
-        }
-
-        T dividendSign = T.IsNegative(dividend) ? -T.One : T.One;
-        T divisorSign = T.IsNegative(divisor) ? -T.One : T.One;
-        T sign = dividendSign * divisorSign;
-
-        dividend = T.Abs(dividend);
-        divisor = T.Abs(divisor);
-
-        dividend -= dividend % divisor;
-        return dividend / divisor * sign;
     }
 
     /// <summary>

@@ -31,7 +31,7 @@ public readonly partial struct DecimalExpansion
     {
         DecimalExpansionType type = DecimalExpansionType.Unknown;
 
-        T integer = GenericMath.IntegerDivide(dividend, divisor);
+        T integer = GenericMath.DivRem(dividend, divisor).Quotient;
         int integerLength = GenericMath.IntegerLength(integer);
 
         int fractionLength = 0;

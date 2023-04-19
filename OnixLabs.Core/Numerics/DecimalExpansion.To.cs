@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core.Collections;
+namespace OnixLabs.Core.Numerics;
 
-namespace OnixLabs.Core.Text;
-
-public readonly partial struct Base64
+public readonly partial struct DecimalExpansion
 {
     /// <summary>
-    /// Gets an empty Base-64 value.
+    /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    public static Base64 Empty => FromByteArray(Collection.EmptyArray<byte>());
+    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    public override string ToString()
+    {
+        return $"{Type} {IntegerLength}.{FractionLength}";
+    }
 }

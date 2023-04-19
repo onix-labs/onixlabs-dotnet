@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core.Collections;
+namespace OnixLabs.Core.Units;
 
-namespace OnixLabs.Core.Text;
-
-public readonly partial struct Base64
+public readonly partial struct Temperature<T>
 {
     /// <summary>
-    /// Gets an empty Base-64 value.
+    /// Represents an absolute zero (0°K) <see cref="Temperature{T}"/> value.
     /// </summary>
-    public static Base64 Empty => FromByteArray(Collection.EmptyArray<byte>());
+    public static Temperature<T> Zero => default;
 }

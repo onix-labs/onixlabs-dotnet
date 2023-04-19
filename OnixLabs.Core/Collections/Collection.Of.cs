@@ -16,9 +16,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace OnixLabs.Core;
+namespace OnixLabs.Core.Collections;
 
-public static partial class Collections
+public static partial class Collection
 {
     /// <summary>
     /// Creates an enumerable of the specified items.

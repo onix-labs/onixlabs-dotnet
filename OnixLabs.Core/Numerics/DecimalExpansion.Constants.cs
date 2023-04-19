@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core.Collections;
+namespace OnixLabs.Core.Numerics;
 
-namespace OnixLabs.Core.Text;
-
-public readonly partial struct Base64
+public readonly partial struct DecimalExpansion
 {
     /// <summary>
-    /// Gets an empty Base-64 value.
+    /// Gets the default expansion limit for calculating decimal expansions.
     /// </summary>
-    public static Base64 Empty => FromByteArray(Collection.EmptyArray<byte>());
+    private const int DefaultExpansionLimit = 1_000_000;
 }

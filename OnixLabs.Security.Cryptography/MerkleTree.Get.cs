@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using OnixLabs.Core;
+using OnixLabs.Core.Collections;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -26,7 +26,7 @@ public abstract partial class MerkleTree
     /// <returns>Returns an <see cref="IEnumerable{T}"/> containing the leaf hashes from the current <see cref="MerkleTree"/>.</returns>
     public ImmutableList<Hash> GetLeafHashes()
     {
-        ICollection<Hash> result = Collections.EmptyList<Hash>();
+        ICollection<Hash> result = Collection.EmptyList<Hash>();
 
         CollectLeafHashes(this, result);
 

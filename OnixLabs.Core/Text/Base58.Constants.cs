@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Core.Collections;
+
 namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base58
@@ -19,5 +21,5 @@ public readonly partial struct Base58
     /// <summary>
     /// Gets an empty Base-58 value.
     /// </summary>
-    public static Base58 Empty => FromByteArray(Collections.EmptyArray<byte>());
+    public static Base58 Empty => FromByteArray(Collection.EmptyArray<byte>());
 }

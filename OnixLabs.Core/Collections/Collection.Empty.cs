@@ -17,12 +17,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace OnixLabs.Core;
+namespace OnixLabs.Core.Collections;
 
 /// <summary>
 /// Provides methods to create empty or populated mutable and immutable collections.
 /// </summary>
-public static partial class Collections
+public static partial class Collection
 {
     /// <summary>
     /// Creates an empty enumerable.

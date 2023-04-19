@@ -12,14 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core.Collections;
+namespace OnixLabs.Core.Numerics;
 
-namespace OnixLabs.Core.Text;
-
-public readonly partial struct Base64
+/// <summary>
+/// Specifies types of decimal expansion.
+/// </summary>
+public enum DecimalExpansionType
 {
     /// <summary>
-    /// Gets an empty Base-64 value.
+    /// The decimal expansion is incalculable at the current limit, and therefore unknown.
     /// </summary>
-    public static Base64 Empty => FromByteArray(Collection.EmptyArray<byte>());
+    Unknown,
+
+    /// <summary>
+    /// The decimal expansion contains a sequence of digits that repeats infinitely.
+    /// </summary>
+    Repeating,
+
+    /// <summary>
+    /// The decimal expansion is terminating.
+    /// </summary>
+    Terminating
 }

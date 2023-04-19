@@ -32,10 +32,18 @@ public static class IComparableExtensions
     /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     /// <exception cref="ArgumentException">If the specified object is not null, or of the specified type.</exception>
-    public static int CompareObject<T>(this IComparable<T> comparable, object? obj) => obj switch
+    public static int CompareObject<T>(this IComparable<T> comparable, object? obj)
     {
-        null => 1,
-        T other => comparable.CompareTo(other),
-        _ => throw new ArgumentException($"Object must be of type {typeof(T)}", nameof(obj))
-    };
+        if (obj is null)
+        {
+            return 1;
+        }
+
+        if (obj is not T other)
+        {
+            throw new ArgumentException($"Object must be of type {typeof(T).Name}", nameof(obj));
+        }
+
+        return comparable.CompareTo(other);
+    }
 }

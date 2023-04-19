@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using OnixLabs.Core;
+using OnixLabs.Core.Collections;
 using OnixLabs.Security.Cryptography.UnitTests.MockData;
 using Xunit;
 
@@ -22,7 +23,7 @@ namespace OnixLabs.Security.Cryptography.UnitTests;
 
 public sealed class MerkleTreeGenericTests
 {
-    private readonly IEnumerable<Person> setA = Collections.EnumerableOf(
+    private readonly IEnumerable<Person> setA = Collection.EnumerableOf(
         new Person("Alice", "Anderson", "1953-05-08".ToDateOnly()),
         new Person("Bob", "Brown", "1971-07-16".ToDateOnly()),
         new Person("Charlie", "Campbell", "2011-03-23".ToDateOnly()),
@@ -30,7 +31,7 @@ public sealed class MerkleTreeGenericTests
         new Person("Eve", "Everton", "2022-03-05".ToDateOnly())
     );
 
-    private readonly IEnumerable<Person> setB = Collections.EnumerableOf(
+    private readonly IEnumerable<Person> setB = Collection.EnumerableOf(
         new Person("Frank", "Foster", "1904-04-04".ToDateOnly()),
         new Person("Greg", "Green", "1996-12-30".ToDateOnly()),
         new Person("Holly", "Hamilton", "1993-02-21".ToDateOnly()),

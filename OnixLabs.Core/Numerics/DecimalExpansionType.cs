@@ -20,7 +20,7 @@ namespace OnixLabs.Core.Numerics;
 public enum DecimalExpansionType
 {
     /// <summary>
-    /// The decimal expansion is incalculable at the current expansion, and therefore unknown.
+    /// The decimal expansion is incalculable at the current limit, and therefore unknown.
     /// </summary>
     Unknown,
 

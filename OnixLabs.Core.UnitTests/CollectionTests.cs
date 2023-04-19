@@ -1,12 +1,27 @@
+// Copyright 2020-2023 ONIXLabs
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//    http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using OnixLabs.Core.Collections;
 using Xunit;
 
 namespace OnixLabs.Core.UnitTests;
 
-public class CollectionTests
+public sealed class CollectionTests
 {
     private static readonly object[] EnumerableInitializers = { true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23 };
 
@@ -31,7 +46,7 @@ public class CollectionTests
     {
         // Arrange
         IEnumerable<object> expected = Enumerable.Empty<object>();
-        IEnumerable<object> actual = Collections.EmptyEnumerable<object>();
+        IEnumerable<object> actual = Collection.EmptyEnumerable<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -42,7 +57,7 @@ public class CollectionTests
     {
         // Arrange
         object[] expected = Array.Empty<object>();
-        object[] actual = Collections.EmptyArray<object>();
+        object[] actual = Collection.EmptyArray<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -53,7 +68,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableArray<object> expected = ImmutableArray.Create<object>();
-        ImmutableArray<object> actual = Collections.EmptyImmutableArray<object>();
+        ImmutableArray<object> actual = Collection.EmptyImmutableArray<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -64,7 +79,7 @@ public class CollectionTests
     {
         // Arrange
         List<object> expected = new();
-        List<object> actual = Collections.EmptyList<object>();
+        List<object> actual = Collection.EmptyList<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -75,7 +90,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableList<object> expected = ImmutableList.Create<object>();
-        ImmutableList<object> actual = Collections.EmptyImmutableList<object>();
+        ImmutableList<object> actual = Collection.EmptyImmutableList<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -86,7 +101,7 @@ public class CollectionTests
     {
         // Arrange
         Dictionary<object, object> expected = new();
-        Dictionary<object, object> actual = Collections.EmptyDictionary<object, object>();
+        Dictionary<object, object> actual = Collection.EmptyDictionary<object, object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -97,7 +112,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableDictionary<object, object> expected = ImmutableDictionary.Create<object, object>();
-        ImmutableDictionary<object, object> actual = Collections.EmptyImmutableDictionary<object, object>();
+        ImmutableDictionary<object, object> actual = Collection.EmptyImmutableDictionary<object, object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -108,7 +123,7 @@ public class CollectionTests
     {
         // Arrange
         SortedDictionary<object, object> expected = new();
-        SortedDictionary<object, object> actual = Collections.EmptySortedDictionary<object, object>();
+        SortedDictionary<object, object> actual = Collection.EmptySortedDictionary<object, object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -119,7 +134,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableSortedDictionary<object, object> expected = ImmutableSortedDictionary.Create<object, object>();
-        ImmutableSortedDictionary<object, object> actual = Collections.EmptyImmutableSortedDictionary<object, object>();
+        ImmutableSortedDictionary<object, object> actual = Collection.EmptyImmutableSortedDictionary<object, object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -130,7 +145,7 @@ public class CollectionTests
     {
         // Arrange
         HashSet<object> expected = new();
-        HashSet<object> actual = Collections.EmptyHashSet<object>();
+        HashSet<object> actual = Collection.EmptyHashSet<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -141,7 +156,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableHashSet<object> expected = ImmutableHashSet.Create<object>();
-        ImmutableHashSet<object> actual = Collections.EmptyImmutableHashSet<object>();
+        ImmutableHashSet<object> actual = Collection.EmptyImmutableHashSet<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -152,7 +167,7 @@ public class CollectionTests
     {
         // Arrange
         SortedSet<object> expected = new();
-        SortedSet<object> actual = Collections.EmptySortedSet<object>();
+        SortedSet<object> actual = Collection.EmptySortedSet<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -163,7 +178,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableSortedSet<object> expected = ImmutableSortedSet.Create<object>();
-        ImmutableSortedSet<object> actual = Collections.EmptyImmutableSortedSet<object>();
+        ImmutableSortedSet<object> actual = Collection.EmptyImmutableSortedSet<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -174,7 +189,7 @@ public class CollectionTests
     {
         // Arrange
         Stack<object> expected = new();
-        Stack<object> actual = Collections.EmptyStack<object>();
+        Stack<object> actual = Collection.EmptyStack<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -185,7 +200,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableStack<object> expected = ImmutableStack.Create<object>();
-        ImmutableStack<object> actual = Collections.EmptyImmutableStack<object>();
+        ImmutableStack<object> actual = Collection.EmptyImmutableStack<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -196,7 +211,7 @@ public class CollectionTests
     {
         // Arrange
         Queue<object> expected = new();
-        Queue<object> actual = Collections.EmptyQueue<object>();
+        Queue<object> actual = Collection.EmptyQueue<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -207,7 +222,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableQueue<object> expected = ImmutableQueue.Create<object>();
-        ImmutableQueue<object> actual = Collections.EmptyImmutableQueue<object>();
+        ImmutableQueue<object> actual = Collection.EmptyImmutableQueue<object>();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -218,7 +233,7 @@ public class CollectionTests
     {
         // Arrange
         IEnumerable<object> expected = EnumerableInitializers;
-        IEnumerable<object> actual = Collections.EnumerableOf(EnumerableInitializers);
+        IEnumerable<object> actual = Collection.EnumerableOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -229,7 +244,7 @@ public class CollectionTests
     {
         // Arrange
         object[] expected = EnumerableInitializers.ToArray();
-        object[] actual = Collections.ArrayOf(EnumerableInitializers);
+        object[] actual = Collection.ArrayOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -240,7 +255,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableArray<object> expected = ImmutableArray.Create(EnumerableInitializers);
-        ImmutableArray<object> actual = Collections.ImmutableArrayOf(EnumerableInitializers);
+        ImmutableArray<object> actual = Collection.ImmutableArrayOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -251,7 +266,7 @@ public class CollectionTests
     {
         // Arrange
         List<object> expected = new(EnumerableInitializers);
-        List<object> actual = Collections.ListOf(EnumerableInitializers);
+        List<object> actual = Collection.ListOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -262,7 +277,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableList<object> expected = ImmutableList.Create(EnumerableInitializers);
-        ImmutableList<object> actual = Collections.ImmutableListOf(EnumerableInitializers);
+        ImmutableList<object> actual = Collection.ImmutableListOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -273,7 +288,7 @@ public class CollectionTests
     {
         // Arrange
         Dictionary<object, object> expected = new(DictionaryInitializers);
-        Dictionary<object, object> actual = Collections.DictionaryOf(DictionaryInitializers);
+        Dictionary<object, object> actual = Collection.DictionaryOf(DictionaryInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -284,7 +299,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableDictionary<object, object> expected = new Dictionary<object, object>(DictionaryInitializers).ToImmutableDictionary();
-        ImmutableDictionary<object, object> actual = Collections.ImmutableDictionaryOf(DictionaryInitializers);
+        ImmutableDictionary<object, object> actual = Collection.ImmutableDictionaryOf(DictionaryInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -294,8 +309,8 @@ public class CollectionTests
     public void CollectionsSortedDictionaryOfShouldReturnTheExpectedResult()
     {
         // Arrange
-        SortedDictionary<string, object> expected = new(Collections.DictionaryOf(SortedDictionaryInitializers));
-        SortedDictionary<string, object> actual = Collections.SortedDictionaryOf(SortedDictionaryInitializers);
+        SortedDictionary<string, object> expected = new(Collection.DictionaryOf(SortedDictionaryInitializers));
+        SortedDictionary<string, object> actual = Collection.SortedDictionaryOf(SortedDictionaryInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -305,9 +320,9 @@ public class CollectionTests
     public void CollectionsImmutableSortedDictionaryOfShouldReturnTheExpectedResult()
     {
         // Arrange
-        SortedDictionary<string, object> sorted = new(Collections.DictionaryOf(SortedDictionaryInitializers));
+        SortedDictionary<string, object> sorted = new(Collection.DictionaryOf(SortedDictionaryInitializers));
         ImmutableSortedDictionary<string, object> expected = sorted.ToImmutableSortedDictionary();
-        ImmutableSortedDictionary<string, object> actual = Collections.ImmutableSortedDictionaryOf(SortedDictionaryInitializers);
+        ImmutableSortedDictionary<string, object> actual = Collection.ImmutableSortedDictionaryOf(SortedDictionaryInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -318,7 +333,7 @@ public class CollectionTests
     {
         // Arrange
         HashSet<object> expected = new(EnumerableInitializers);
-        HashSet<object> actual = Collections.HashSetOf(EnumerableInitializers);
+        HashSet<object> actual = Collection.HashSetOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -329,7 +344,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableHashSet<object> expected = ImmutableHashSet.Create(EnumerableInitializers);
-        ImmutableHashSet<object> actual = Collections.ImmutableHashSetOf(EnumerableInitializers);
+        ImmutableHashSet<object> actual = Collection.ImmutableHashSetOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -340,7 +355,7 @@ public class CollectionTests
     {
         // Arrange
         SortedSet<int> expected = new(NumericInitializers);
-        SortedSet<int> actual = Collections.SortedSetOf(NumericInitializers);
+        SortedSet<int> actual = Collection.SortedSetOf(NumericInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -351,7 +366,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableSortedSet<int> expected = ImmutableSortedSet.Create(NumericInitializers);
-        ImmutableSortedSet<int> actual = Collections.ImmutableSortedSetOf(NumericInitializers);
+        ImmutableSortedSet<int> actual = Collection.ImmutableSortedSetOf(NumericInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -362,7 +377,7 @@ public class CollectionTests
     {
         // Arrange
         Stack<object> expected = new(EnumerableInitializers);
-        Stack<object> actual = Collections.StackOf(EnumerableInitializers);
+        Stack<object> actual = Collection.StackOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -373,7 +388,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableStack<object> expected = ImmutableStack.Create(EnumerableInitializers);
-        ImmutableStack<object> actual = Collections.ImmutableStackOf(EnumerableInitializers);
+        ImmutableStack<object> actual = Collection.ImmutableStackOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -384,7 +399,7 @@ public class CollectionTests
     {
         // Arrange
         Queue<object> expected = new(EnumerableInitializers);
-        Queue<object> actual = Collections.QueueOf(EnumerableInitializers);
+        Queue<object> actual = Collection.QueueOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));
@@ -395,7 +410,7 @@ public class CollectionTests
     {
         // Arrange
         ImmutableQueue<object> expected = ImmutableQueue.Create(EnumerableInitializers);
-        ImmutableQueue<object> actual = Collections.ImmutableQueueOf(EnumerableInitializers);
+        ImmutableQueue<object> actual = Collection.ImmutableQueueOf(EnumerableInitializers);
 
         // Assert
         Assert.True(expected.SequenceEqual(actual));

@@ -24,7 +24,7 @@ public sealed class GenericMathDivRemDataAttribute : DataAttribute
             int divisor = unchecked(int.MaxValue - dividend);
 
             (int quotient, int remainder) = Math.DivRem(dividend, divisor);
-            
+
             yield return new object[] { dividend, divisor, quotient, remainder };
         }
     }

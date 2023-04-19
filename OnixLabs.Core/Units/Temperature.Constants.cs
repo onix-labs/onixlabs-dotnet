@@ -17,7 +17,7 @@ namespace OnixLabs.Core.Units;
 public readonly partial struct Temperature<T>
 {
     /// <summary>
-    /// Represents an absolute zero (0°K) <see cref="Temperature"/> value.
+    /// Represents an absolute zero (0°K) <see cref="Temperature{T}"/> value.
     /// </summary>
-    public static Temperature<T> AbsoluteZero => default;
+    public static Temperature<T> Zero => default;
 }

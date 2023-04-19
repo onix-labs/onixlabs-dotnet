@@ -59,7 +59,7 @@ public static class GenericMath
         dividend -= remainder;
         return (dividend / divisor * sign, remainder);
     }
-    
+
     /// <summary>
     /// Calculates the greatest common denominator of the specified values. 
     /// </summary>

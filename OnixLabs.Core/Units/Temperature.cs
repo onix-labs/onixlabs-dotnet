@@ -23,7 +23,7 @@ namespace OnixLabs.Core.Units;
 public readonly partial struct Temperature<T> where T : IFloatingPoint<T>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Temperature" /> struct.
+    /// Initializes a new instance of the <see cref="Temperature{T}" /> struct.
     /// </summary>
     /// <param name="kelvin">The initial temperature value in Kelvin.</param>
     private Temperature(T kelvin)
@@ -32,37 +32,37 @@ public readonly partial struct Temperature<T> where T : IFloatingPoint<T>
     }
 
     /// <summary>
-    /// Gets the temperature in Kelvin.
+    /// Gets the current <see cref="Temperature{T}"/> in Kelvin.
     /// </summary>
     public T Kelvin { get; }
 
     /// <summary>
-    /// Gets the temperature in Celsius.
+    /// Gets the current <see cref="Temperature{T}"/> in Celsius.
     /// </summary>
     public T Celsius => Kelvin - T.CreateChecked(273.15);
 
     /// <summary>
-    /// Gets the temperature in Delisle.
+    /// Gets the current <see cref="Temperature{T}"/> in Delisle.
     /// </summary>
     public T Delisle => (T.CreateChecked(373.15) - Kelvin) * T.CreateChecked(1.5);
 
     /// <summary>
-    /// Gets the temperature in Fahrenheit.
+    /// Gets the current <see cref="Temperature{T}"/> in Fahrenheit.
     /// </summary>
     public T Fahrenheit => Kelvin * T.CreateChecked(1.8) - T.CreateChecked(459.67);
 
     /// <summary>
-    /// Gets the temperature in Newton.
+    /// Gets the current <see cref="Temperature{T}"/> in Newton.
     /// </summary>
     public T Newton => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(0.33);
 
     /// <summary>
-    /// Gets the temperature in Reaumur.
+    /// Gets the current <see cref="Temperature{T}"/> in Reaumur.
     /// </summary>
     public T Reaumur => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(0.8);
 
     /// <summary>
-    /// Gets the temperature in Rankine.
+    /// Gets the current <see cref="Temperature{T}"/> in Rankine.
     /// </summary>
     public T Rankine => Kelvin * T.CreateChecked(1.8);
 }

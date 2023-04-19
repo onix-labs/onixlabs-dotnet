@@ -1,5 +1,0 @@
-Temperature
-Distance/Length
-Weight/Mass
-Capacity/Volume
-Data Size

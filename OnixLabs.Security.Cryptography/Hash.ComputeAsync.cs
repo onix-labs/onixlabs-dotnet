@@ -80,7 +80,7 @@ public readonly partial struct Hash
         using HashAlgorithm algorithm = type.GetHashAlgorithm();
         await using Stream stream = new MemoryStream(value);
         byte[] hashedValue = await algorithm.ComputeHashAsync(stream);
-        return FromByteArray(hashedValue, type);
+        return Create(hashedValue, type);
     }
 
     /// <summary>
@@ -95,6 +95,6 @@ public readonly partial struct Hash
         using HashAlgorithm algorithm = type.GetHashAlgorithm(length);
         await using Stream stream = new MemoryStream(value);
         byte[] hashedValue = await algorithm.ComputeHashAsync(stream);
-        return FromByteArray(hashedValue, type);
+        return Create(hashedValue, type);
     }
 }

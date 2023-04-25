@@ -32,20 +32,9 @@ public static class GenericMath
     /// <exception cref="DivideByZeroException">if the specified divisor is zero.</exception>
     public static (T Quotient, T Remainder) DivRem<T>(T dividend, T divisor) where T : INumber<T>
     {
-        if (divisor == T.Zero)
-        {
-            throw new DivideByZeroException("Divisor cannot be zero.");
-        }
-
-        if (divisor == T.One)
-        {
-            return (dividend, T.Zero);
-        }
-
-        if (divisor == -T.One)
-        {
-            return (-dividend, T.Zero);
-        }
+        if (divisor == T.Zero) throw new DivideByZeroException("Divisor cannot be zero.");
+        if (divisor == T.One) return (dividend, T.Zero);
+        if (divisor == -T.One) return (-dividend, T.Zero);
 
         T dividendSign = T.IsNegative(dividend) ? -T.One : T.One;
         T divisorSign = T.IsNegative(divisor) ? -T.One : T.One;
@@ -54,10 +43,17 @@ public static class GenericMath
         dividend = T.Abs(dividend);
         divisor = T.Abs(divisor);
 
-        T remainder = dividend % divisor;
+        T quotient = T.Zero;
 
-        dividend -= remainder;
-        return (dividend / divisor * sign, remainder);
+        while (dividend >= divisor)
+        {
+            dividend -= divisor;
+            quotient++;
+        }
+
+        T remainder = dividend;
+
+        return (quotient * sign, remainder);
     }
 
     /// <summary>
@@ -87,6 +83,8 @@ public static class GenericMath
     /// <returns>Returns the length of the integer part of the specified value.</returns>
     public static int IntegerLength<T>(T value) where T : INumber<T>
     {
+        if (value == T.Zero) return 0;
+        
         int length = 1;
         T ten = T.CreateChecked(10);
 
@@ -110,29 +108,14 @@ public static class GenericMath
     /// <returns>Returns the power of the specified value, raised by the specified exponent.</returns>
     public static T Pow<T>(T value, int exponent) where T : INumber<T>
     {
-        if (exponent == 0)
-        {
-            return T.One;
-        }
-
-        if (exponent == 1)
-        {
-            return value;
-        }
+        if (exponent == 0) return T.One;
+        if (exponent == 1) return value;
 
         T result = value;
         int count = int.Abs(exponent);
 
-        while (--count > 0)
-        {
-            result *= value;
-        }
+        while (--count > 0) result *= value;
 
-        if (exponent > 1)
-        {
-            return result;
-        }
-
-        return T.One / result;
+        return exponent > 1 ? result : T.One / result;
     }
 }

@@ -33,7 +33,7 @@ public sealed partial class RsaPrivateKey
         privateKey.ImportPkcs8PrivateKey(data, out int _);
         byte[] bytes = privateKey.ExportRSAPrivateKey();
 
-        return FromByteArray(bytes, type, padding);
+        return Create(bytes, type, padding);
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public sealed partial class RsaPrivateKey
         privateKey.ImportEncryptedPkcs8PrivateKey(password, data, out int _);
         byte[] bytes = privateKey.ExportRSAPrivateKey();
 
-        return FromByteArray(bytes, type, padding);
+        return Create(bytes, type, padding);
     }
 
     /// <summary>

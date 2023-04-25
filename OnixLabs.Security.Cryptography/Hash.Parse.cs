@@ -35,7 +35,7 @@ public readonly partial struct Hash
             CheckMatchingHashAlgorithms(parsedType, type);
         }
 
-        return FromByteArray(parsedValue, parsedType);
+        return Create(parsedValue, parsedType);
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public readonly partial struct Hash
     private static HashAlgorithmType GetParsedHashAlgorithmType(string value)
     {
         string defaultHashAlgorithmType = HashAlgorithmType.Unknown.Name;
-        string parsedType = value.SubstringBefore(':', defaultHashAlgorithmType);
+        string parsedType = value.SubstringBeforeFirst(':', defaultHashAlgorithmType);
         return HashAlgorithmType.FromName(parsedType);
     }
 
@@ -78,7 +78,7 @@ public readonly partial struct Hash
     /// <returns>Returns a <see cref="byte"/> array from the specified <see cref="string"/> value.</returns>
     private static byte[] GetParsedHashValue(string value)
     {
-        string parsedValue = value.SubstringAfter(':');
+        string parsedValue = value.SubstringAfterFirst(':');
         return Convert.FromHexString(parsedValue);
     }
 

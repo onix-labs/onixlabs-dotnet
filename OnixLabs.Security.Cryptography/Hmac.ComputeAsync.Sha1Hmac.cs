@@ -42,7 +42,6 @@ public readonly partial struct Hmac
     {
         byte[] valueBytes = encoding.GetBytes(value);
         byte[] keyBytes = encoding.GetBytes(key);
-
         return await ComputeSha1HmacAsync(valueBytes, keyBytes);
     }
 

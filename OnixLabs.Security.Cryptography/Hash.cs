@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Core;
+
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
@@ -27,9 +29,8 @@ public readonly partial struct Hash
     private Hash(byte[] value, HashAlgorithmType type)
     {
         type.VerifyHashLength(value);
-
         AlgorithmType = type;
-        Value = value;
+        Value = value.Copy();
     }
 
     /// <summary>

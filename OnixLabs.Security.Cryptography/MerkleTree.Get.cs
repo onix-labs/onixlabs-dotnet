@@ -27,9 +27,7 @@ public abstract partial class MerkleTree
     public ImmutableList<Hash> GetLeafHashes()
     {
         ICollection<Hash> result = Collection.EmptyList<Hash>();
-
         CollectLeafHashes(this, result);
-
         return result.ToImmutableList();
     }
 

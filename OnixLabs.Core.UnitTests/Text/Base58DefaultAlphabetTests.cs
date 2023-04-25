@@ -19,50 +19,50 @@ namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base58DefaultAlphabetTests
 {
-    [Fact(DisplayName = "Identical Base58 values produce identical hash codes.")]
-    public void IdenticalBase58ValuesProduceIdenticalHashCodes()
+    [Fact(DisplayName = "Base58 values should be identical")]
+    public void Base58ValuesShouldBeIdentical()
     {
-        // Arrange
-        Base58 a = Base58.FromString("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Default);
-        Base58 b = Base58.FromString("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Default);
+        // Given
+        Base58 a = Base58.Create("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Default);
+        Base58 b = Base58.Create("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Default);
 
-        // Act
+        // When
         int hashCodeA = a.GetHashCode();
         int hashCodeB = b.GetHashCode();
 
-        // Assert
+        // Then
         Assert.Equal(hashCodeA, hashCodeB);
     }
 
-    [Theory(DisplayName = "Base58_FromString should produce the expected Base-58 value.")]
+    [Theory(DisplayName = "Base58.Create should produce the expected Base-58 value")]
     [InlineData("3mJr7AoUCHxNqd", "1234567890")]
     [InlineData("2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f", "abcdefghijklmnopqrstuvwxyz")]
-    public void Base58FromStringShouldProduceTheExpectedBase58Value(string expected, string value)
+    public void CreateShouldProduceExpectedResult(string expected, string value)
     {
-        // Arrange
-        Base58 candidate = Base58.FromString(value, Base58Alphabet.Default);
+        // Given
+        Base58 candidate = Base58.Create(value, Base58Alphabet.Default);
 
-        // Act
+        // When
         string actual = candidate.ToString();
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base58_Parse should produce the expected plain text value.")]
+    [Theory(DisplayName = "Base58.Parse should produce the expected plain text value")]
     [InlineData("1234567890", "3mJr7AoUCHxNqd")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f")]
-    public void Base58ParseShouldProduceTheExpectedPlainTextValue(string expected, string value)
+    public void ParseShouldProduceExpectedResult(string expected, string value)
     {
-        // Arrange
+        // Given
         Base58 candidate = Base58.Parse(value, Base58Alphabet.Default);
 
-        // Act
+        // When
         string actual = candidate.ToPlainTextString();
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 }

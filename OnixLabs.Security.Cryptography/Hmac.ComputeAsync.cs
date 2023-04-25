@@ -45,7 +45,6 @@ public readonly partial struct Hmac
     {
         byte[] valueBytes = encoding.GetBytes(value);
         byte[] keyBytes = encoding.GetBytes(key);
-
         return await ComputeHmacAsync(valueBytes, keyBytes, type);
     }
 
@@ -62,7 +61,7 @@ public readonly partial struct Hmac
         await using Stream stream = new MemoryStream(value);
 
         byte[] data = await algorithm.ComputeHashAsync(stream);
-        Hash hash = Hash.FromByteArray(data, type);
+        Hash hash = Hash.Create(data, type);
 
         return Create(hash, value);
     }

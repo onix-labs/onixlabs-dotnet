@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Core;
+
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
@@ -27,8 +29,7 @@ public abstract partial class PublicKey
     protected PublicKey(byte[] data, HashAlgorithmType type)
     {
         type.GetHashAlgorithmName();
-
-        KeyData = data;
+        KeyData = data.Copy();
         AlgorithmType = type;
     }
 

@@ -21,25 +21,25 @@ namespace OnixLabs.Core.UnitTests;
 public sealed class PreconditionTests
 {
     [Fact(DisplayName = "Check should throw an ArgumentException when the condition is false")]
-    public void CheckShouldThrowAnArgumentExceptionWhenTheConditionIsFalse()
+    public void CheckShouldProduceExpectedResult()
     {
         Assert.Throws<InvalidOperationException>(() => Check(false));
     }
 
     [Fact(DisplayName = "CheckNotNull should throw an ArgumentNullException when the condition is null")]
-    public void CheckNotNullShouldThrowAnArgumentNullExceptionWhenTheConditionIsNull()
+    public void CheckNotNullShouldProduceExpectedResult()
     {
         Assert.Throws<InvalidOperationException>(() => CheckNotNull<object>(null));
     }
 
     [Fact(DisplayName = "Require should throw an ArgumentException when the condition is false")]
-    public void RequireShouldThrowAnArgumentExceptionWhenTheConditionIsFalse()
+    public void RequireShouldProduceExpectedResult()
     {
         Assert.Throws<ArgumentException>(() => Require(false));
     }
 
     [Fact(DisplayName = "RequireNotNull should throw an ArgumentNullException when the condition is null")]
-    public void RequireNotNullShouldThrowAnArgumentNullExceptionWhenTheConditionIsNull()
+    public void RequireNotNullShouldProduceExpectedResult()
     {
         Assert.Throws<ArgumentNullException>(() => RequireNotNull<object>(null));
     }

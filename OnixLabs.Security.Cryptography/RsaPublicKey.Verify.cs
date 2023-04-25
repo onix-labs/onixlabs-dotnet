@@ -27,11 +27,9 @@ public sealed partial class RsaPublicKey
     public override bool IsDataValid(DigitalSignature signature, byte[] unsignedData)
     {
         using RSA publicKey = RSA.Create();
-
         publicKey.ImportRSAPublicKey(KeyData, out int _);
         byte[] signatureData = signature.ToByteArray();
         HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
-
         return publicKey.VerifyData(unsignedData, signatureData, name, Padding);
     }
 
@@ -44,11 +42,9 @@ public sealed partial class RsaPublicKey
     public override bool IsHashValid(DigitalSignature signature, byte[] unsignedHash)
     {
         using RSA publicKey = RSA.Create();
-
         publicKey.ImportRSAPublicKey(KeyData, out int _);
         byte[] signatureData = signature.ToByteArray();
         HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
-
         return publicKey.VerifyHash(unsignedHash, signatureData, name, Padding);
     }
 }

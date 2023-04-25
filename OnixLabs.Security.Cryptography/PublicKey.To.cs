@@ -35,7 +35,7 @@ public abstract partial class PublicKey
     /// <returns>Returns a <see cref="Base16"/> value that represents the underlying public key data.</returns>
     public Base16 ToBase16()
     {
-        return Base16.FromByteArray(KeyData);
+        return Base16.Create(KeyData);
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public abstract partial class PublicKey
     /// <returns>Returns a <see cref="Base32"/> value that represents the underlying public key data.</returns>
     public Base32 ToBase32(Base32Alphabet alphabet)
     {
-        return Base32.FromByteArray(KeyData, alphabet);
+        return Base32.Create(KeyData, alphabet);
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public abstract partial class PublicKey
     /// <returns>Returns a <see cref="Base58"/> value that represents the underlying public key data.</returns>
     public Base58 ToBase58(Base58Alphabet alphabet)
     {
-        return Base58.FromByteArray(KeyData, alphabet);
+        return Base58.Create(KeyData, alphabet);
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public abstract partial class PublicKey
     /// <returns>Returns a <see cref="Base64"/> value that represents the underlying public key data.</returns>
     public Base64 ToBase64()
     {
-        return Base64.FromByteArray(KeyData);
+        return Base64.Create(KeyData);
     }
 
     /// <summary>

@@ -19,7 +19,12 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base32
 {
     /// <summary>
-    /// Gets an empty Base-32 value.
+    /// Gets the default padding option when creating new Base-32 instances.
     /// </summary>
-    public static Base32 Empty => FromByteArray(Collection.EmptyArray<byte>());
+    private const bool DefaultPadding = true;
+    
+    /// <summary>
+    /// Gets an empty <see cref="Base32"/> value.
+    /// </summary>
+    public static Base32 Empty => Create(Collection.EmptyArray<byte>());
 }

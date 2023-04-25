@@ -17,7 +17,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-16 (hexadecimal) value.
 /// </summary>
-public readonly partial struct Base16
+public readonly partial struct Base16 : IBase<Base16>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Base16"/> struct.
@@ -25,7 +25,7 @@ public readonly partial struct Base16
     /// <param name="value">The underlying value.</param>
     private Base16(byte[] value)
     {
-        Value = value;
+        Value = value.Copy();
     }
 
     /// <summary>

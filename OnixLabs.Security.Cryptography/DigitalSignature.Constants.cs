@@ -21,5 +21,5 @@ public readonly partial struct DigitalSignature
     /// <summary>
     /// Gets an empty digital signature value.
     /// </summary>
-    public static DigitalSignature Empty => FromByteArray(Collection.EmptyArray<byte>());
+    public static DigitalSignature Empty => Create(Collection.EmptyArray<byte>());
 }

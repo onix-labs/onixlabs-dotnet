@@ -85,7 +85,7 @@ public readonly partial struct Hash
         await using Stream secondRoundStream = new MemoryStream(firstRoundValue);
         byte[] secondRoundValue = await algorithm.ComputeHashAsync(secondRoundStream);
 
-        return FromByteArray(secondRoundValue, type);
+        return Create(secondRoundValue, type);
     }
 
     /// <summary>
@@ -105,6 +105,6 @@ public readonly partial struct Hash
         await using Stream secondRoundStream = new MemoryStream(firstRoundValue);
         byte[] secondRoundValue = await algorithm.ComputeHashAsync(secondRoundStream);
 
-        return FromByteArray(secondRoundValue, type);
+        return Create(secondRoundValue, type);
     }
 }

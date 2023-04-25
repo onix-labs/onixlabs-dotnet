@@ -27,11 +27,9 @@ public sealed partial class EcdsaPublicKey
     public override bool IsDataValid(DigitalSignature signature, byte[] unsignedData)
     {
         using ECDsa publicKey = ECDsa.Create();
-
         publicKey.ImportSubjectPublicKeyInfo(KeyData, out int _);
         byte[] signatureData = signature.ToByteArray();
         HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
-
         return publicKey.VerifyData(unsignedData, signatureData, name);
     }
 
@@ -44,10 +42,8 @@ public sealed partial class EcdsaPublicKey
     public override bool IsHashValid(DigitalSignature signature, byte[] unsignedHash)
     {
         using ECDsa publicKey = ECDsa.Create();
-
         publicKey.ImportSubjectPublicKeyInfo(KeyData, out int _);
         byte[] signatureData = signature.ToByteArray();
-
         return publicKey.VerifyHash(unsignedHash, signatureData);
     }
 }

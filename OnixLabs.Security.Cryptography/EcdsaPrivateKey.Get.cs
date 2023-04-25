@@ -25,10 +25,8 @@ public sealed partial class EcdsaPrivateKey
     public override PublicKey GetPublicKey()
     {
         using ECDsa privateKey = ECDsa.Create();
-
         privateKey.ImportECPrivateKey(KeyData, out int _);
         byte[] publicKey = privateKey.ExportSubjectPublicKeyInfo();
-
         return new EcdsaPublicKey(publicKey, AlgorithmType);
     }
 }

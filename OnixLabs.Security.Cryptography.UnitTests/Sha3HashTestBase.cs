@@ -39,6 +39,6 @@ public abstract class Sha3HashTestBase
     {
         byte[] plainTextBytes = Encoding.Default.GetBytes(plainText);
         byte[] hashedBytes = algorithm.ComputeHash(plainTextBytes);
-        return Hash.FromByteArray(hashedBytes).ToString();
+        return Hash.Create(hashedBytes).ToString();
     }
 }

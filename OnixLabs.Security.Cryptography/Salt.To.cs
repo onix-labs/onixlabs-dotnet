@@ -55,6 +55,6 @@ public readonly partial struct Salt
     /// <returns>A <see cref="string"/> that represents the current object.</returns>
     public override string ToString()
     {
-        return Base16.FromByteArray(Value).ToString();
+        return Base16.Create(Value).ToString();
     }
 }

@@ -31,10 +31,7 @@ public static class Preconditions
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static void Check(bool condition, string message = "Check failed.")
     {
-        if (!condition)
-        {
-            throw new InvalidOperationException(message);
-        }
+        if (!condition) throw new InvalidOperationException(message);
     }
 
     /// <summary>
@@ -48,12 +45,7 @@ public static class Preconditions
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static T CheckNotNull<T>(T? value, string message = "Null check failed.") where T : notnull
     {
-        if (value is null)
-        {
-            throw new InvalidOperationException(message);
-        }
-
-        return value;
+        return value ?? throw new InvalidOperationException(message);
     }
 
     /// <summary>
@@ -66,10 +58,7 @@ public static class Preconditions
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static void Require(bool condition, string message = "Argument requirement failed.", string? parameterName = null)
     {
-        if (!condition)
-        {
-            throw new ArgumentException(message, parameterName);
-        }
+        if (!condition) throw new ArgumentException(message, parameterName);
     }
 
     /// <summary>
@@ -84,11 +73,6 @@ public static class Preconditions
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static T RequireNotNull<T>(T? value, string message = "Argument must be null.", string? parameterName = null) where T : notnull
     {
-        if (value is null)
-        {
-            throw new ArgumentNullException(message, parameterName);
-        }
-
-        return value;
+        return value ?? throw new ArgumentNullException(message, parameterName);
     }
 }

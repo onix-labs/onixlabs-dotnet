@@ -26,9 +26,7 @@ public sealed partial class EcdsaPrivateKey
     public override byte[] ExportPkcs8Key()
     {
         using ECDsa privateKey = ECDsa.Create();
-
         privateKey.ImportECPrivateKey(KeyData, out int _);
-
         return privateKey.ExportPkcs8PrivateKey();
     }
 
@@ -41,9 +39,7 @@ public sealed partial class EcdsaPrivateKey
     public override byte[] ExportPkcs8Key(ReadOnlySpan<char> password, PbeParameters parameters)
     {
         using ECDsa privateKey = ECDsa.Create();
-
         privateKey.ImportECPrivateKey(KeyData, out int _);
-
         return privateKey.ExportEncryptedPkcs8PrivateKey(password, parameters);
     }
 }

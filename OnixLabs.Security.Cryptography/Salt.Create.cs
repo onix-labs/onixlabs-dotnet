@@ -19,6 +19,16 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Salt
 {
     /// <summary>
+    /// Creates a <see cref="Salt"/> instance from a <see cref="byte"/> array.
+    /// </summary>
+    /// <param name="value">The <see cref="byte"/> array to represent as a salt.</param>
+    /// <returns>A new <see cref="Salt"/> instance.</returns>
+    public static Salt Create(byte[] value)
+    {
+        return new Salt(value);
+    }
+    
+    /// <summary>
     /// Creates a <see cref="Salt"/> of the specified length.
     /// </summary>
     /// <param name="length">The length of the salt to create.</param>
@@ -28,8 +38,7 @@ public readonly partial struct Salt
         using RandomNumberGenerator generator = RandomNumberGenerator.Create();
         byte[] value = new byte[length];
         generator.GetBytes(value);
-
-        return FromByteArray(value);
+        return Create(value);
     }
 
     /// <summary>
@@ -42,7 +51,6 @@ public readonly partial struct Salt
         using RandomNumberGenerator generator = RandomNumberGenerator.Create();
         byte[] value = new byte[length];
         generator.GetNonZeroBytes(value);
-
-        return FromByteArray(value);
+        return Create(value);
     }
 }

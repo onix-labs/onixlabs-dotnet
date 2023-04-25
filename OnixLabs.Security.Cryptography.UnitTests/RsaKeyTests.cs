@@ -32,7 +32,7 @@ public sealed class RsaKeyTests : KeyTestBase
 
         // Act
         Base58 base58PrivateKey = privateKey1.ToBase58();
-        PrivateKey privateKey2 = RsaPrivateKey.FromBase58(base58PrivateKey, type, padding);
+        PrivateKey privateKey2 = RsaPrivateKey.Create(base58PrivateKey, type, padding);
 
         // Assert
         Assert.Equal(privateKey1, privateKey2);
@@ -49,7 +49,7 @@ public sealed class RsaKeyTests : KeyTestBase
 
         // Act
         Base58 base58PublicKey = publicKey1.ToBase58();
-        PublicKey publicKey2 = RsaPublicKey.FromBase58(base58PublicKey, type, padding);
+        PublicKey publicKey2 = RsaPublicKey.Create(base58PublicKey, type, padding);
 
         // Assert
         Assert.Equal(publicKey1, publicKey2);
@@ -64,7 +64,7 @@ public sealed class RsaKeyTests : KeyTestBase
         RSASignaturePadding padding = RSASignaturePadding.Pss;
         KeyPair pair = KeyPair.CreateRsaKeyPair(type, padding);
         PrivateKey privateKey1 = pair.PrivateKey;
-        PrivateKey privateKey2 = RsaPrivateKey.FromBase64(privateKey1.ToBase64(), type, padding);
+        PrivateKey privateKey2 = RsaPrivateKey.Create(privateKey1.ToBase64(), type, padding);
         PublicKey publicKey1 = pair.PublicKey;
         PublicKey publicKey2 = privateKey1.GetPublicKey();
 
@@ -96,7 +96,7 @@ public sealed class RsaKeyTests : KeyTestBase
         RSASignaturePadding padding = RSASignaturePadding.Pss;
         KeyPair pair = KeyPair.CreateRsaKeyPair(type, padding);
         PrivateKey privateKey1 = pair.PrivateKey;
-        PrivateKey privateKey2 = RsaPrivateKey.FromBase64(privateKey1.ToBase64(), type, padding);
+        PrivateKey privateKey2 = RsaPrivateKey.Create(privateKey1.ToBase64(), type, padding);
         PublicKey publicKey1 = pair.PublicKey;
         PublicKey publicKey2 = privateKey1.GetPublicKey();
 

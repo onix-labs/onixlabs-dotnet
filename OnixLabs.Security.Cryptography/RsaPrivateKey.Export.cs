@@ -26,9 +26,7 @@ public sealed partial class RsaPrivateKey
     public override byte[] ExportPkcs8Key()
     {
         using RSA privateKey = RSA.Create();
-
         privateKey.ImportRSAPrivateKey(KeyData, out int _);
-
         return privateKey.ExportPkcs8PrivateKey();
     }
 
@@ -41,9 +39,7 @@ public sealed partial class RsaPrivateKey
     public override byte[] ExportPkcs8Key(ReadOnlySpan<char> password, PbeParameters parameters)
     {
         using RSA privateKey = RSA.Create();
-
         privateKey.ImportRSAPrivateKey(KeyData, out int _);
-
         return privateKey.ExportEncryptedPkcs8PrivateKey(password, parameters);
     }
 }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Core;
+
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
@@ -25,7 +27,7 @@ public readonly partial struct DigitalSignature
     /// <param name="value">The digitally signed data.</param>
     private DigitalSignature(byte[] value)
     {
-        Value = value;
+        Value = value.Copy();
     }
 
     /// <summary>

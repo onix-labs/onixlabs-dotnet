@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using OnixLabs.Core.UnitTests.MockData;
+using OnixLabs.Core.UnitTests.Data.Objects;
 using Xunit;
 
 namespace OnixLabs.Core.UnitTests;
@@ -23,32 +23,32 @@ public sealed class EnumerationTests
     [Fact(DisplayName = "Enumerations should be equal")]
     public void EnumerationsShouldBeEqual()
     {
-        // Arrange
+        // Given
         Color a = Color.Red;
         Color b = Color.Red;
 
-        // Assert
+        // Then
         Assert.Equal(a, b);
     }
 
     [Fact(DisplayName = "Enumerations should not be equal")]
     public void EnumerationsShouldNotBeEqual()
     {
-        // Arrange
+        // Given
         Color a = Color.Red;
         Color b = Color.Blue;
 
-        // Assert
+        // Then
         Assert.NotEqual(a, b);
     }
 
     [Fact(DisplayName = "Enumeration should return all enumeration instances")]
     public void EnumerationsShouldReturnAllEnumerationInstances()
     {
-        // Arrange
+        // Given
         IEnumerable<Color> colors = Color.GetAll();
 
-        // Assert
+        // Then
         Assert.Contains(colors, item => item == Color.Red);
         Assert.Contains(colors, item => item == Color.Green);
         Assert.Contains(colors, item => item == Color.Blue);
@@ -57,30 +57,30 @@ public sealed class EnumerationTests
     [Fact(DisplayName = "Enumeration.FromName should return the expected enumeration entry")]
     public void EnumerationFromNameShouldReturnTheExpectedEnumerationEntry()
     {
-        // Arrange
+        // Given
         Color color = Color.FromName("Green");
 
-        // Assert
+        // Then
         Assert.Equal(Color.Green, color);
     }
 
     [Fact(DisplayName = "Enumeration.FromValue should return the expected enumeration entry")]
     public void EnumerationFromValueShouldReturnTheExpectedEnumerationEntry()
     {
-        // Arrange
+        // Given
         Color color = Color.FromValue(2);
 
-        // Assert
+        // Then
         Assert.Equal(Color.Green, color);
     }
 
     [Fact(DisplayName = "Enumeration.GetAll should return all enumeration entries")]
     public void EnumerationGetAllShouldReturnAllEnumerationEntries()
     {
-        // Arrange
+        // Given
         IEnumerable<Color> entries = Color.GetAll();
 
-        // Assert
+        // Then
         Assert.Contains(Color.Blue, entries);
         Assert.Contains(Color.Green, entries);
         Assert.Contains(Color.Red, entries);
@@ -89,10 +89,10 @@ public sealed class EnumerationTests
     [Fact(DisplayName = "Enumeration.GetEntries should return all enumeration entries")]
     public void EnumerationGetEntriesShouldReturnAllEnumerationEntries()
     {
-        // Arrange
+        // Given
         IEnumerable<(int Value, string Name)> entries = Color.GetEntries();
 
-        // Assert
+        // Then
         Assert.Contains(Color.Blue.ToEntry(), entries);
         Assert.Contains(Color.Green.ToEntry(), entries);
         Assert.Contains(Color.Red.ToEntry(), entries);
@@ -101,10 +101,10 @@ public sealed class EnumerationTests
     [Fact(DisplayName = "Enumeration.GetNames should return all enumeration names")]
     public void EnumerationGetNamesShouldReturnAllEnumerationNames()
     {
-        // Arrange
+        // Given
         IEnumerable<string> entries = Color.GetNames();
 
-        // Assert
+        // Then
         Assert.Contains(Color.Blue.Name, entries);
         Assert.Contains(Color.Green.Name, entries);
         Assert.Contains(Color.Red.Name, entries);
@@ -113,10 +113,10 @@ public sealed class EnumerationTests
     [Fact(DisplayName = "Enumeration.GetValues should return all enumeration values")]
     public void EnumerationGetValuesShouldReturnAllEnumerationValues()
     {
-        // Arrange
+        // Given
         IEnumerable<int> entries = Color.GetValues();
 
-        // Assert
+        // Then
         Assert.Contains(Color.Blue.Value, entries);
         Assert.Contains(Color.Green.Value, entries);
         Assert.Contains(Color.Red.Value, entries);
@@ -125,28 +125,28 @@ public sealed class EnumerationTests
     [Fact(DisplayName = "Enumeration.CompareTo as Enumeration should return the correct value")]
     public void EnumerationCompareToAsEnumerationShouldReturnTheCorrectValue()
     {
-        // Arrange
+        // Given
         Color left = Color.Red;
         Color right = Color.Blue;
 
-        // Act
+        // When
         int actual = left.CompareTo(right);
 
-        // Assert
+        // Then
         Assert.Equal(-1, actual);
     }
 
     [Fact(DisplayName = "Enumeration.CompareTo as Object should return the correct value")]
     public void EnumerationCompareToAsObjectShouldReturnTheCorrectValue()
     {
-        // Arrange
+        // Given
         Color left = Color.Red;
         object right = Color.Blue;
 
-        // Act
+        // When
         int actual = left.CompareTo(right);
 
-        // Assert
+        // Then
         Assert.Equal(-1, actual);
     }
 }

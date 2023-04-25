@@ -8,7 +8,7 @@
         <Title>OnixLabs.Core</Title>
         <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Core API for .NET</Description>
-        <AssemblyVersion>5.0.0</AssemblyVersion>
+        <AssemblyVersion>6.0.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>Copyright © ONIXLabs 2020-2023</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
@@ -24,5 +24,9 @@
       <DocumentationFile>bin\Release\net5.0\OnixLabs.Core.xml</DocumentationFile>
       <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Units" />
+    </ItemGroup>
 
 </Project>

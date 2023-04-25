@@ -15,35 +15,39 @@
 namespace OnixLabs.Core.Numerics;
 
 /// <summary>
-/// Represents the details of a decimal expansion.
+/// Represents decimal expansion information.
 /// </summary>
-public readonly partial struct DecimalExpansion
+public abstract partial class DecimalExpansion
 {
     /// <summary>
-    /// Creates a new instance of the <see cref="DecimalExpansion"/> struct.
+    /// Creates a new instance of the <see cref="DecimalExpansion"/> class.
     /// </summary>
-    /// <param name="type">The type of the decimal expansion.</param>
-    /// <param name="integerLength">The integer length of the decimal expansion.</param>
-    /// <param name="fractionLength">The fraction length of the decimal expansion.</param>
-    private DecimalExpansion(DecimalExpansionType type, int integerLength, int fractionLength)
+    internal DecimalExpansion()
     {
-        Type = type;
-        IntegerLength = integerLength;
-        FractionLength = fractionLength;
     }
 
     /// <summary>
-    /// The type of the current decimal expansion.
+    /// Gets the length of the integer part of the decimal expansion.
     /// </summary>
-    public DecimalExpansionType Type { get; }
+    public abstract int IntegerLength { get; }
 
     /// <summary>
-    /// The integer length of the current decimal expansion.
+    /// Gets the truncating fraction length of the decimal expansion.
+    /// A truncating fraction length depends on the type of decimal expansion:
+    /// <list type="bullet">
+    ///     <item>The truncating fraction length of a <see cref="TerminatingDecimalExpansion"/> is the length of the full, terminating decimal expansion.</item>
+    ///     <item>The truncating fraction length of a <see cref="RepeatingDecimalExpansion"/> is the length of the repetend offset, plus the length of a single repetend repetition.</item>
+    ///     <item>The truncating fraction length of a <see cref="UnknownDecimalExpansion"/> is zero, since the length of the decimal expansion is unknown.</item>
+    /// </list>
     /// </summary>
-    public int IntegerLength { get; }
+    internal abstract int TruncatingFractionLength { get; }
 
     /// <summary>
-    /// The fraction length of the current decimal expansion.
+    /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    public int FractionLength { get; }
+    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    public sealed override string ToString()
+    {
+        return this.ToRecordString();
+    }
 }

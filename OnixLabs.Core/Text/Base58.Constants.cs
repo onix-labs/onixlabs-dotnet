@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base58
 {
     /// <summary>
-    /// Gets an empty Base-58 value.
+    /// Gets an empty <see cref="Base58"/> value.
     /// </summary>
-    public static Base58 Empty => FromByteArray(Collection.EmptyArray<byte>());
+    public static Base58 Empty => Create(Collection.EmptyArray<byte>());
 }

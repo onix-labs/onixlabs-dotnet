@@ -18,7 +18,7 @@ using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text;
 
-public readonly partial struct Base64 : IEquatable<Base64>
+public readonly partial struct Base64
 {
     /// <summary>
     /// Checks for equality between this instance and another object.

@@ -77,7 +77,7 @@ public readonly partial struct Hash
     {
         using HashAlgorithm algorithm = type.GetHashAlgorithm();
         byte[] hashedValue = algorithm.ComputeHash(value);
-        return FromByteArray(hashedValue, type);
+        return Create(hashedValue, type);
     }
 
     /// <summary>
@@ -91,6 +91,6 @@ public readonly partial struct Hash
     {
         using HashAlgorithm algorithm = type.GetHashAlgorithm(length);
         byte[] hashedValue = algorithm.ComputeHash(value);
-        return FromByteArray(hashedValue, type);
+        return Create(hashedValue, type);
     }
 }

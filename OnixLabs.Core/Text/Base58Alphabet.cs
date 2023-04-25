@@ -22,20 +22,17 @@ public sealed class Base58Alphabet : Enumeration<Base32Alphabet>
     /// <summary>
     /// The default Base-58 alphabet, which is the same as Bitcoin's Base-58 alphabet.
     /// </summary>
-    public static readonly Base58Alphabet Default =
-        new(0, nameof(Default), "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
+    public static Base58Alphabet Default => new(0, nameof(Default), "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
 
     /// <summary>
     /// The Ripple Base-58 alphabet.
     /// </summary>
-    public static readonly Base58Alphabet Ripple =
-        new(0, nameof(Ripple), "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz");
+    public static Base58Alphabet Ripple => new(0, nameof(Ripple), "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz");
 
     /// <summary>
     /// The Flickr Base-58 alphabet.
     /// </summary>
-    public static readonly Base58Alphabet Flickr =
-        new(0, nameof(Flickr), "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ");
+    public static Base58Alphabet Flickr => new(0, nameof(Flickr), "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base58Alphabet"/> class.

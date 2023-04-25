@@ -34,7 +34,7 @@ public readonly partial struct Hmac
     private Hmac(Hash hash, byte[] data)
     {
         Hash = hash;
-        this.data = data;
+        this.data = data.Copy();
     }
 
     /// <summary>

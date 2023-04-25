@@ -37,9 +37,7 @@ public abstract partial class MerkleTree<T>
     public ImmutableList<T> GetLeafValues()
     {
         ICollection<T> result = Collection.EmptyList<T>();
-
         CollectLeafValues(this, result);
-
         return result.ToImmutableList();
     }
 

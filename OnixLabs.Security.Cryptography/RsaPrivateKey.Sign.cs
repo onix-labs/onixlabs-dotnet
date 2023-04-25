@@ -31,7 +31,7 @@ public sealed partial class RsaPrivateKey
         HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
         byte[] signedData = privateKey.SignData(unsignedData, name, Padding);
 
-        return DigitalSignature.FromByteArray(signedData);
+        return DigitalSignature.Create(signedData);
     }
 
     /// <summary>
@@ -47,6 +47,6 @@ public sealed partial class RsaPrivateKey
         HashAlgorithmName name = AlgorithmType.GetHashAlgorithmName();
         byte[] signedData = privateKey.SignHash(unsignedHash, name, Padding);
 
-        return DigitalSignature.FromByteArray(signedData);
+        return DigitalSignature.Create(signedData);
     }
 }

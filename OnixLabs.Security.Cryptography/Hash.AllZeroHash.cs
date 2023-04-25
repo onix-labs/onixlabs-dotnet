@@ -50,8 +50,7 @@ public readonly partial struct Hash
     public static Hash CreateAllZeroHash(HashAlgorithmType type, int length)
     {
         Require(type.IsUnknown || type.Length == length, "Unexpected hash algorithm output length.", nameof(length));
-
         byte[] bytes = Enumerable.Repeat(byte.MinValue, length).ToArray();
-        return FromByteArray(bytes, type);
+        return Create(bytes, type);
     }
 }

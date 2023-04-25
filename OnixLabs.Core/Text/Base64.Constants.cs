@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base64
 {
     /// <summary>
-    /// Gets an empty Base-64 value.
+    /// Gets an empty <see cref="Base64"/> value.
     /// </summary>
-    public static Base64 Empty => FromByteArray(Collection.EmptyArray<byte>());
+    public static Base64 Empty => Create(Collection.EmptyArray<byte>());
 }

@@ -21,5 +21,5 @@ public readonly partial struct Hash
     /// <summary>
     /// Gets an empty hash value.
     /// </summary>
-    public static Hash Empty => FromByteArray(Collection.EmptyArray<byte>());
+    public static Hash Empty => Create(Collection.EmptyArray<byte>());
 }

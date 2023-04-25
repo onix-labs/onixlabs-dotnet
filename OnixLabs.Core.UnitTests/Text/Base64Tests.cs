@@ -19,50 +19,50 @@ namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base64Tests
 {
-    [Fact(DisplayName = "Identical Base64 values produce identical hash codes.")]
-    public void IdenticalBase64ValuesProduceIdenticalHashCodes()
+    [Fact(DisplayName = "Base64 values should be identical")]
+    public void Base64ValuesShouldBeIdentical()
     {
-        // Arrange
-        Base64 a = Base64.FromString("abcdefghijklmnopqrstuvwxyz");
-        Base64 b = Base64.FromString("abcdefghijklmnopqrstuvwxyz");
+        // Given
+        Base64 a = Base64.Create("abcdefghijklmnopqrstuvwxyz");
+        Base64 b = Base64.Create("abcdefghijklmnopqrstuvwxyz");
 
-        // Act
+        // When
         int hashCodeA = a.GetHashCode();
         int hashCodeB = b.GetHashCode();
 
-        // Assert
+        // Then
         Assert.Equal(hashCodeA, hashCodeB);
     }
 
-    [Theory(DisplayName = "Base64_FromString should produce the expected Base-64 value.")]
+    [Theory(DisplayName = "Base64.Create should produce the expected Base-64 value")]
     [InlineData("MTIzNDU2Nzg5MA==", "1234567890")]
     [InlineData("QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=", "abcdefghijklmnopqrstuvwxyz")]
-    public void Base64FromStringShouldProduceTheExpectedBase64Value(string expected, string value)
+    public void CreateShouldProduceExpectedResult(string expected, string value)
     {
-        // Arrange
-        Base64 candidate = Base64.FromString(value);
+        // Given
+        Base64 candidate = Base64.Create(value);
 
-        // Act
+        // When
         string actual = candidate.ToString();
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base64_Parse should produce the expected plain text value.")]
+    [Theory(DisplayName = "Base64.Parse should produce the expected plain text value")]
     [InlineData("1234567890", "MTIzNDU2Nzg5MA==")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=")]
-    public void Base64ParseShouldProduceTheExpectedPlainTextValue(string expected, string value)
+    public void ParseShouldProduceExpectedResult(string expected, string value)
     {
-        // Arrange
+        // Given
         Base64 candidate = Base64.Parse(value);
 
-        // Act
+        // When
         string actual = candidate.ToPlainTextString();
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 }

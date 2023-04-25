@@ -18,7 +18,7 @@ using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text;
 
-public readonly partial struct Base16 : IEquatable<Base16>
+public readonly partial struct Base16
 {
     /// <summary>
     /// Checks for equality between this instance and another object.

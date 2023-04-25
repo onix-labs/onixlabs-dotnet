@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Core;
+
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
@@ -25,7 +27,7 @@ public readonly partial struct Salt
     /// <param name="value">The underlying cryptographically secure random value.</param>
     private Salt(byte[] value)
     {
-        Value = value;
+        Value = value.Copy();
     }
 
     /// <summary>

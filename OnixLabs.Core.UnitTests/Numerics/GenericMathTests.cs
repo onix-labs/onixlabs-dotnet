@@ -13,13 +13,45 @@
 // limitations under the License.
 
 using OnixLabs.Core.Numerics;
-using OnixLabs.Core.UnitTests.MockData;
+using OnixLabs.Core.UnitTests.Data.Generators;
 using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Numerics;
 
 public sealed class GenericMathTests
 {
+    [Theory(DisplayName = "GenericMath.DivRem should return the expected result using Int32")]
+    [GenericMathDivRemDataGenerator(100)]
+    public void GenericMathDivRemShouldReturnTheExpectedResultUsingInt32(
+        int dividend,
+        int divisor,
+        int expectedQuotient,
+        int expectedRemainder)
+    {
+        // Arrange / Act
+        (int actualQuotient, int actualRemainder) = GenericMath.DivRem(dividend, divisor);
+
+        // Assert
+        Assert.Equal(expectedQuotient, actualQuotient);
+        Assert.Equal(expectedRemainder, actualRemainder);
+    }
+
+    [Theory(DisplayName = "GenericMath.DivRem should return the expected result using Double")]
+    [GenericMathDivRemDataGenerator(100)]
+    public void GenericMathDivRemShouldReturnTheExpectedResultUsingDouble(
+        double dividend,
+        double divisor,
+        double expectedQuotient,
+        double expectedRemainder)
+    {
+        // Arrange / Act
+        (double actualQuotient, double actualRemainder) = GenericMath.DivRem(dividend, divisor);
+
+        // Assert
+        Assert.Equal(expectedQuotient, actualQuotient);
+        Assert.Equal(expectedRemainder, actualRemainder);
+    }
+
     [Theory(DisplayName = "GenericMath.GreatestCommonDenominator should return the expected result")]
     [InlineData(1, 1, 1)]
     [InlineData(1, 2, 1)]
@@ -98,40 +130,8 @@ public sealed class GenericMathTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "GenericMath.DivRem should return the expected result using Int32")]
-    [GenericMathDivRemData(1000)]
-    public void GenericMathDivRemShouldReturnTheExpectedResultUsingInt32(
-        int dividend,
-        int divisor,
-        int expectedQuotient,
-        int expectedRemainder)
-    {
-        // Arrange / Act
-        (int actualQuotient, int actualRemainder) = GenericMath.DivRem(dividend, divisor);
-
-        // Assert
-        Assert.Equal(expectedQuotient, actualQuotient);
-        Assert.Equal(expectedRemainder, actualRemainder);
-    }
-
-    [Theory(DisplayName = "GenericMath.DivRem should return the expected result using Double")]
-    [GenericMathDivRemData(1000)]
-    public void GenericMathDivRemShouldReturnTheExpectedResultUsingDouble(
-        double dividend,
-        double divisor,
-        double expectedQuotient,
-        double expectedRemainder)
-    {
-        // Arrange / Act
-        (double actualQuotient, double actualRemainder) = GenericMath.DivRem(dividend, divisor);
-
-        // Assert
-        Assert.Equal(expectedQuotient, actualQuotient);
-        Assert.Equal(expectedRemainder, actualRemainder);
-    }
-
     [Theory(DisplayName = "GenericMath.IntegerLength should return the expected result")]
-    [GenericMathIntegerLengthData(1000)]
+    [GenericMathIntegerLengthDataGenerator(100)]
     public void GenericMathIntegerLengthShouldReturnTheExpectedResultUsingDouble(int value, int expected)
     {
         // Arrange / Act
@@ -142,7 +142,7 @@ public sealed class GenericMathTests
     }
 
     [Theory(DisplayName = "GenericMath.Pow should return the expected result for Int32")]
-    [GenericMathPowData(1, 10, 1, 9)]
+    [GenericMathPowDataGenerator(1, 10, 1, 9)]
     public void GenericMathPowShouldReturnTheExpectedResultForInt32(int value, int exponent, int expected)
     {
         // Arrange / Act
@@ -153,7 +153,7 @@ public sealed class GenericMathTests
     }
 
     [Theory(DisplayName = "GenericMath.Pow should return the expected result for Double")]
-    [GenericMathPowData(-10, 10, -10, 10)]
+    [GenericMathPowDataGenerator(-10, 10, -10, 10)]
     // TODO : Investigate precision issues and increase number of tests.
     public void GenericMathPowShouldReturnTheExpectedResultForDouble(double value, int exponent, double expected)
     {

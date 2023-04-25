@@ -18,7 +18,7 @@ using System.ComponentModel;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Provides extension methods for arrays.
+/// Provides extension methods for objects.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ArrayExtensions

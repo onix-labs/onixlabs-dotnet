@@ -20,39 +20,39 @@ namespace OnixLabs.Core.UnitTests.Numerics;
 
 public sealed class GenericMathTests
 {
-    [Theory(DisplayName = "GenericMath.DivRem should return the expected result using Int32")]
+    [Theory(DisplayName = "GenericMath.DivRem should produce the expected result using Int32")]
     [GenericMathDivRemDataGenerator(100)]
-    public void GenericMathDivRemShouldReturnTheExpectedResultUsingInt32(
+    public void GenericMathDivRemShouldProduceExpectedResultUsingInt32(
         int dividend,
         int divisor,
         int expectedQuotient,
         int expectedRemainder)
     {
-        // Arrange / Act
+        // When
         (int actualQuotient, int actualRemainder) = GenericMath.DivRem(dividend, divisor);
 
-        // Assert
+        // Then
         Assert.Equal(expectedQuotient, actualQuotient);
         Assert.Equal(expectedRemainder, actualRemainder);
     }
 
-    [Theory(DisplayName = "GenericMath.DivRem should return the expected result using Double")]
+    [Theory(DisplayName = "GenericMath.DivRem should produce the expected result using Double")]
     [GenericMathDivRemDataGenerator(100)]
-    public void GenericMathDivRemShouldReturnTheExpectedResultUsingDouble(
+    public void GenericMathDivRemShouldProduceExpectedResultUsingDouble(
         double dividend,
         double divisor,
         double expectedQuotient,
         double expectedRemainder)
     {
-        // Arrange / Act
+        // When
         (double actualQuotient, double actualRemainder) = GenericMath.DivRem(dividend, divisor);
 
-        // Assert
+        // Then
         Assert.Equal(expectedQuotient, actualQuotient);
         Assert.Equal(expectedRemainder, actualRemainder);
     }
 
-    [Theory(DisplayName = "GenericMath.GreatestCommonDenominator should return the expected result")]
+    [Theory(DisplayName = "GenericMath.GreatestCommonDenominator should produce the expected result")]
     [InlineData(1, 1, 1)]
     [InlineData(1, 2, 1)]
     [InlineData(2, 2, 2)]
@@ -121,46 +121,129 @@ public sealed class GenericMathTests
     [InlineData(2071779437, 391607594, 133)]
     [InlineData(611989812, 976660160, 196)]
     [InlineData(1567337427, 1516628853, 333)]
-    public void GenericMathGreatestCommonDenominatorShouldReturnTheExpectedResult(int left, int right, int expected)
+    public void GenericMathGreatestCommonDenominatorShouldProduceExpectedResult(int left, int right, int expected)
     {
-        // Arrange / Act
+        // When
         int actual = GenericMath.GreatestCommonDenominator(left, right);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "GenericMath.IntegerLength should return the expected result")]
+    // TODO : REMOVE!
+    // [Theory(DisplayName = "GenericMath.GetScientificExponent should produce the expected result")]
+    // [InlineData(double.NaN, 0)]
+    // [InlineData(double.PositiveInfinity, 0)]
+    // [InlineData(double.NegativeInfinity, 0)]
+    // [InlineData(double.NegativeZero, 0)]
+    // [InlineData(double.MinValue, 308)]
+    // [InlineData(double.MaxValue, 308)]
+    // [InlineData(0, 0)]
+    // [InlineData(1, 0)]
+    // [InlineData(2, 0)]
+    // [InlineData(3, 0)]
+    // [InlineData(4, 0)]
+    // [InlineData(5, 0)]
+    // [InlineData(6, 0)]
+    // [InlineData(7, 0)]
+    // [InlineData(8, 0)]
+    // [InlineData(9, 0)]
+    // [InlineData(10, 1)]
+    // [InlineData(1e+1, 1)]
+    // [InlineData(1e+2, 2)]
+    // [InlineData(1e+10, 10)]
+    // [InlineData(1e+100, 100)]
+    // [InlineData(1e-1, -1)]
+    // [InlineData(1e-2, -2)]
+    // [InlineData(1e-10, -10)]
+    // [InlineData(1e-100, -100)]
+    // public void GenericMathGetScientificExponentShouldProduceExpectedResult(double value, int expected)
+    // {
+    //     // When
+    //     int actual = GenericMath.GetScientificExponent(value);
+    //
+    //     // Then
+    //     Assert.Equal(expected, actual);
+    // }
+
+
+    [Theory(DisplayName = "GenericMath.IntegerLength should produce the expected result")]
+    [InlineData(0, 0)]
+    [InlineData(1, 1)]
+    [InlineData(2, 1)]
+    [InlineData(3, 1)]
+    [InlineData(4, 1)]
+    [InlineData(5, 1)]
+    [InlineData(6, 1)]
+    [InlineData(7, 1)]
+    [InlineData(8, 1)]
+    [InlineData(9, 1)]
+    [InlineData(10, 2)]
+    [InlineData(11, 2)]
+    [InlineData(12, 2)]
+    [InlineData(13, 2)]
+    [InlineData(14, 2)]
+    [InlineData(15, 2)]
+    [InlineData(16, 2)]
+    [InlineData(17, 2)]
+    [InlineData(18, 2)]
+    [InlineData(19, 2)]
+    [InlineData(20, 2)]
+    [InlineData(30, 2)]
+    [InlineData(40, 2)]
+    [InlineData(50, 2)]
+    [InlineData(60, 2)]
+    [InlineData(70, 2)]
+    [InlineData(80, 2)]
+    [InlineData(90, 2)]
+    [InlineData(100, 3)]
+    [InlineData(1000, 4)]
+    [InlineData(10000, 5)]
+    [InlineData(100000, 6)]
+    [InlineData(1000000, 7)]
+    [InlineData(10000000, 8)]
+    [InlineData(100000000, 9)]
+    [InlineData(1000000000, 10)]
+    [InlineData(10000000000, 11)]
+    [InlineData(100000000000, 12)]
+    [InlineData(1000000000000, 13)]
+    [InlineData(10000000000000, 14)]
+    [InlineData(100000000000000, 15)]
+    [InlineData(1000000000000000, 16)]
+    [InlineData(10000000000000000, 17)]
+    [InlineData(100000000000000000, 18)]
+    [InlineData(1000000000000000000, 19)]
+    [InlineData(10000000000000000000, 20)]
     [GenericMathIntegerLengthDataGenerator(100)]
-    public void GenericMathIntegerLengthShouldReturnTheExpectedResultUsingDouble(int value, int expected)
+    public void GenericMathIntegerLengthShouldProduceExpectedResultUsingDouble(ulong value, int expected)
     {
-        // Arrange / Act
+        // When
         int actual = GenericMath.IntegerLength(value);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "GenericMath.Pow should return the expected result for Int32")]
+    [Theory(DisplayName = "GenericMath.Pow should produce the expected result for Int32")]
     [GenericMathPowDataGenerator(1, 10, 1, 9)]
-    public void GenericMathPowShouldReturnTheExpectedResultForInt32(int value, int exponent, int expected)
+    public void GenericMathPowShouldProduceExpectedResultForInt32(int value, int exponent, int expected)
     {
-        // Arrange / Act
+        // When
         int actual = GenericMath.Pow(value, exponent);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "GenericMath.Pow should return the expected result for Double")]
+    [Theory(DisplayName = "GenericMath.Pow should produce the expected result for Double")]
     [GenericMathPowDataGenerator(-10, 10, -10, 10)]
     // TODO : Investigate precision issues and increase number of tests.
-    public void GenericMathPowShouldReturnTheExpectedResultForDouble(double value, int exponent, double expected)
+    public void GenericMathPowShouldProduceExpectedResultForDouble(double value, int exponent, double expected)
     {
-        // Arrange / Act
+        // When
         double actual = GenericMath.Pow(value, exponent);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 }

@@ -27,7 +27,7 @@ public readonly partial struct Salt
     {
         return new Salt(value);
     }
-    
+
     /// <summary>
     /// Creates a <see cref="Salt"/> of the specified length.
     /// </summary>

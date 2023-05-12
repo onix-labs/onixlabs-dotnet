@@ -20,7 +20,7 @@ using System.Text;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Provides extension methods for objects.
+/// Provides extension methods for strings.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class StringExtensions

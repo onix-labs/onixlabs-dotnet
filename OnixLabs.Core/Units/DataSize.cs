@@ -14,7 +14,6 @@
 
 using System.Numerics;
 using OnixLabs.Core.Numerics;
-using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Core.Units;
 

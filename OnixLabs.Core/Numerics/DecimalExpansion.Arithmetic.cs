@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using System.Numerics;
-using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Core.Numerics;
 
@@ -49,7 +48,7 @@ public abstract partial class DecimalExpansion
     public static DecimalExpansion FromDivision<T>(T dividend, T divisor, int limit = DefaultExpansionLimit) where T : INumber<T>
     {
         Require(limit >= 0, "Limit value must be greater than or equal to zero.", nameof(limit));
-        
+
         (T quotient, T remainder) = GenericMath.DivRem(dividend, divisor);
         int integerLength = GenericMath.IntegerLength(quotient);
 

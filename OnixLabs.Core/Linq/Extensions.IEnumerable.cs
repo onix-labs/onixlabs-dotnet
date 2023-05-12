@@ -83,7 +83,7 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> from which to compute a content hash code.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns the  computed content hash code of this <see cref="IEnumerable{T}"/>.</returns>
+    /// <returns>Returns the computed content hash code of the current <see cref="IEnumerable{T}"/>.</returns>
     public static int GetContentHashCode<T>(this IEnumerable<T> enumerable)
     {
         HashCode hashCode = new();
@@ -144,6 +144,29 @@ public static class IEnumerableExtensions
     public static bool IsCountOdd<T>(this IEnumerable<T> enumerable)
     {
         return !enumerable.IsCountEven();
+    }
+
+    /// <summary>
+    /// Joins the elements of the current <see cref="IEnumerable{T}"/> into a <see cref="string"/>.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to join.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns the elements of the current <see cref="IEnumerable{T}"/>, joined into a string.</returns>
+    public static string JoinToString<T>(this IEnumerable<T> enumerable)
+    {
+        return enumerable.JoinToString(", ");
+    }
+
+    /// <summary>
+    /// Joins the elements of the current <see cref="IEnumerable{T}"/> into a <see cref="string"/>.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to join.</param>
+    /// <param name="separator">The separator which will appear between joined elements.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns the elements of the current <see cref="IEnumerable{T}"/>, joined into a string.</returns>
+    public static string JoinToString<T>(this IEnumerable<T> enumerable, string separator)
+    {
+        return string.Join(separator, enumerable);
     }
 
     /// <summary>

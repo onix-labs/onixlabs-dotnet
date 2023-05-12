@@ -291,6 +291,34 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.JoinToString should produce the expected result with the default separator")]
+    public void JoinToStringShouldProduceExpectedResultWithDefaultSeparator()
+    {
+        // Given
+        IEnumerable<object> enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        const string expected = "1, 2, 3, 4.5, True, False";
+
+        // When
+        string actual = enumerable.JoinToString();
+        
+        // Then
+        Assert.Equal(expected, actual);
+    }
+    
+    [Fact(DisplayName = "IEnumerable.JoinToString should produce the expected result with a custom separator")]
+    public void JoinToStringShouldProduceExpectedResultWithCustomSeparator()
+    {
+        // Given
+        IEnumerable<object> enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        const string expected = "1 *$ 2 *$ 3 *$ 4.5 *$ True *$ False";
+
+        // When
+        string actual = enumerable.JoinToString(" *$ ");
+        
+        // Then
+        Assert.Equal(expected, actual);
+    }
+    
     [Fact(DisplayName = "IEnumerable.None should return true when none of the elements satisfy the specified predicate condition")]
     public void NoneShouldProduceExpectedResultTrue()
     {

@@ -16,17 +16,17 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <Optimize>true</Optimize>
-      <DocumentationFile>bin\Debug\net5.0\OnixLabs.Core.xml</DocumentationFile>
+        <Optimize>true</Optimize>
+        <DocumentationFile>bin\Debug\net5.0\OnixLabs.Core.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\net5.0\OnixLabs.Core.xml</DocumentationFile>
-      <DebugSymbols>true</DebugSymbols>
+        <DocumentationFile>bin\Release\net5.0\OnixLabs.Core.xml</DocumentationFile>
+        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Units" />
+        <Using Include="OnixLabs.Core.Preconditions" Static="True" />
     </ItemGroup>
 
 </Project>

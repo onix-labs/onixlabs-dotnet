@@ -13,15 +13,25 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Core.Numerics;
+using System.Globalization;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Core.Numerics;
 
-internal static class Program
+public readonly partial struct BigDecimal
 {
-    private static void Main(string[] args)
+    bool ISpanFormattable.TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
     {
-        BigDecimal value = 1234500000000.ToBigDecimal(5);
-        Console.Write(value.TrimTrailingZeros());
+        CultureInfo info = provider as CultureInfo ?? CurrentCulture;
+        string formatted = ToString(format, info);
+
+        if (formatted.Length > destination.Length)
+        {
+            charsWritten = default;
+            return false;
+        }
+
+        formatted.AsSpan().CopyTo(destination);
+        charsWritten = formatted.Length;
+        return true;
     }
 }

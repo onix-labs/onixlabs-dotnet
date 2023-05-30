@@ -22,7 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Generators" />
       <Folder Include="Objects" />
     </ItemGroup>
 

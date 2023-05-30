@@ -8,8 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
-      <ProjectReference Include="..\OnixLabs.Security.Cryptography\OnixLabs.Security.Cryptography.csproj" />
+        <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
+        <ProjectReference Include="..\OnixLabs.Security.Cryptography\OnixLabs.Security.Cryptography.csproj" />
+        <Using Include="OnixLabs.Core.Preconditions" Static="True" />
     </ItemGroup>
 
 </Project>

@@ -12,4 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-global using static OnixLabs.Core.Preconditions;
+namespace OnixLabs.Core.Numerics;
+
+/// <summary>
+/// Specifies IEEE-754 floating-point number conversion modes.
+/// </summary>
+public enum ConversionMode
+{
+    /// <summary>
+    /// IEEE-754 floating-point numbers should be converted using their binary representation.
+    /// </summary>
+    Binary,
+
+    /// <summary>
+    /// IEEE-754 floating-point numbers should be converted using their decimal representation.
+    /// </summary>
+    Decimal
+}

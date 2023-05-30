@@ -13,15 +13,29 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Core.Numerics;
+using System.Numerics;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Core.Numerics;
 
-internal static class Program
+public readonly partial struct BigDecimal
 {
-    private static void Main(string[] args)
+    int IFloatingPoint<BigDecimal>.GetExponentByteCount()
     {
-        BigDecimal value = 1234500000000.ToBigDecimal(5);
-        Console.Write(value.TrimTrailingZeros());
+        throw new NotImplementedException();
+    }
+
+    int IFloatingPoint<BigDecimal>.GetExponentShortestBitLength()
+    {
+        throw new NotImplementedException();
+    }
+
+    int IFloatingPoint<BigDecimal>.GetSignificandBitLength()
+    {
+        throw new NotImplementedException();
+    }
+
+    int IFloatingPoint<BigDecimal>.GetSignificandByteCount()
+    {
+        throw new NotImplementedException();
     }
 }

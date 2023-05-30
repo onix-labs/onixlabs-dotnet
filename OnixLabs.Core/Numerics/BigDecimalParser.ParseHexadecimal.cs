@@ -12,4 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-global using static OnixLabs.Core.Preconditions;
+using System;
+
+namespace OnixLabs.Core.Numerics;
+
+internal sealed partial class BigDecimalParser
+{
+    private BigDecimal ParseHexadecimal(ReadOnlySpan<char> value)
+    {
+        ReadOnlySpan<char> sanitized = Sanitize(value);
+        byte[] bytes = Convert.FromHexString(sanitized);
+        return new BigDecimal(bytes);
+    }
+}

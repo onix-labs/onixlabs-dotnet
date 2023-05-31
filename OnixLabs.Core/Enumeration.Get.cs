@@ -30,7 +30,7 @@ public abstract partial class Enumeration<T>
         return typeof(T)
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
             .Select(field => field.GetValue(null))
-            .WhereIs<T>()
+            .WhereInstanceOf<T>()
             .ToImmutableHashSet();
     }
 

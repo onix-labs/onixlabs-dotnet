@@ -88,6 +88,23 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.CountNot should produce the expected result.")]
+    public void CountNotShouldProduceExpectedResult()
+    {
+        // Given
+        RecordLike element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
+        RecordLike element2 = new("def", 123, DateTime.Now, Guid.NewGuid());
+        RecordLike element3 = new("xyz", 456, DateTime.Now, Guid.NewGuid());
+        IEnumerable<RecordLike> elements = new[] { element1, element2, element3 };
+        const int expected = 2;
+
+        // When
+        int actual = elements.CountNot(element => element.Number == 456);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.ForEach should iterate over every element in the enumerable")]
     public void ForEachShouldProduceExpectedResult()
     {
@@ -274,16 +291,81 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
-    [Fact(DisplayName = "IEnumerable.WhereIs should return the correct elements matching the specified type")]
-    public void WhereIsShouldProduceExpectedResult()
+    [Fact(DisplayName = "IEnumerable.None should return true when none of the elements satisfy the specified predicate condition")]
+    public void NoneShouldProduceExpectedResultTrue()
+    {
+        // Given
+        RecordLike element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
+        RecordLike element2 = new("def", 456, DateTime.Now, Guid.NewGuid());
+        RecordLike element3 = new("xyz", 789, DateTime.Now, Guid.NewGuid());
+        IEnumerable<RecordLike> elements = new[] { element1, element2, element3 };
+
+        // When
+        bool result = elements.None(element => element.Number == 0);
+
+        // Then
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.None should return false when any of the elements satisfy the specified predicate condition")]
+    public void NoneShouldProduceExpectedResultFalseAny()
+    {
+        // Given
+        RecordLike element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
+        RecordLike element2 = new("def", 456, DateTime.Now, Guid.NewGuid());
+        RecordLike element3 = new("xyz", 0, DateTime.Now, Guid.NewGuid());
+        IEnumerable<RecordLike> elements = new[] { element1, element2, element3 };
+
+        // When
+        bool result = elements.None(element => element.Number == 0);
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.None should return false when all of the elements satisfy the specified predicate condition")]
+    public void NoneShouldProduceExpectedResultFalseAll()
+    {
+        // Given
+        RecordLike element1 = new("abc", 0, DateTime.Now, Guid.NewGuid());
+        RecordLike element2 = new("def", 0, DateTime.Now, Guid.NewGuid());
+        RecordLike element3 = new("xyz", 0, DateTime.Now, Guid.NewGuid());
+        IEnumerable<RecordLike> elements = new[] { element1, element2, element3 };
+
+        // When
+        bool result = elements.None(element => element.Number == 0);
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.WhereInstanceOf should return the correct elements matching the specified type")]
+    public void WhereInstanceOfShouldProduceExpectedResult()
     {
         // Given
         IEnumerable<object> enumerable = new object[] { 1, 2, 3, 4.5, true, false, Guid.NewGuid() };
 
         // When
-        IEnumerable<int> numbers = enumerable.WhereIs<int>();
+        IEnumerable<int> numbers = enumerable.WhereInstanceOf<int>();
 
         // Then
         Assert.True(numbers.Count() == 3);
+    }
+
+    [Fact(DisplayName = "IEnumerable.WhereNot should produce the expected result")]
+    public void WhereNotShouldProduceExpectedResult()
+    {
+        // Given
+        RecordLike element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
+        RecordLike element2 = new("def", 456, DateTime.Now, Guid.NewGuid());
+        RecordLike element3 = new("xyz", 789, DateTime.Now, Guid.NewGuid());
+        IEnumerable<RecordLike> elements = new[] { element1, element2, element3 };
+        IEnumerable<RecordLike> expected = new[] { element2, element3 };
+
+        // When
+        IEnumerable<RecordLike> actual = elements.WhereNot(element => element.Number == 123);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using OnixLabs.Core.Collections;
 
 namespace OnixLabs.Core.Numerics;
 
@@ -41,7 +42,7 @@ public readonly partial struct BigDecimal
         (BigInteger dividend, BigInteger divisor) = NormalizeUnscaledOrderOfMagnitude(left, right);
         (BigInteger quotient, BigInteger remainder) = BigInteger.DivRem(dividend, divisor);
 
-        HashSet<BigInteger> remainders = new();
+        HashSet<BigInteger> remainders = Collection.EmptyHashSet<BigInteger>();
 
         while (remainder > 0 && maxIterations-- > 0)
         {

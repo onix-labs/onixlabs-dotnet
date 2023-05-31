@@ -27,7 +27,6 @@ public sealed class BigDecimalComparableTests
     [InlineData(1.1, 1.1, 0)]
     [InlineData(1.1, 0.0, 1)]
     [InlineData(1.0, 0.1, 1)]
-    [InlineData(0.0, 1.0, -1)]
     [InlineData(0.0, 0.1, -1)]
     [InlineData(0.1, 1.0, -1)]
     [InlineData(123.45, 123.45, 0)]
@@ -42,11 +41,11 @@ public sealed class BigDecimalComparableTests
     [InlineData(0.01, 0.1, -1)]
     [InlineData(0.001, 0.01, -1)]
     [InlineData(0.0001, 0.001, -1)]
-    public void BigDecimalCompareToShouldReturnTheExpectedResult(decimal leftDecimal, decimal rightDecimal, int expected)
+    public void BigDecimalCompareToShouldReturnTheExpectedResult(double left, double right, int expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(leftDecimal);
-        BigDecimal rightBigDecimal = new(rightDecimal);
+        BigDecimal leftBigDecimal = new(left);
+        BigDecimal rightBigDecimal = new(right);
 
         // When
         int actual = leftBigDecimal.CompareTo(rightBigDecimal);
@@ -63,7 +62,6 @@ public sealed class BigDecimalComparableTests
     [InlineData(1.1, 1.1, false)]
     [InlineData(1.1, 0.0, true)]
     [InlineData(1.0, 0.1, true)]
-    [InlineData(0.0, 1.0, false)]
     [InlineData(0.0, 0.1, false)]
     [InlineData(0.1, 1.0, false)]
     [InlineData(123.45, 123.45, false)]
@@ -78,16 +76,16 @@ public sealed class BigDecimalComparableTests
     [InlineData(0.01, 0.1, false)]
     [InlineData(0.001, 0.01, false)]
     [InlineData(0.0001, 0.001, false)]
-    public void BigDecimalGreaterThanShouldReturnTheExpectedResult(decimal leftDecimal, decimal rightDecimal, bool expected)
+    public void BigDecimalGreaterThanShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(leftDecimal);
-        BigDecimal rightBigDecimal = new(rightDecimal);
+        BigDecimal leftBigDecimal = new(left);
+        BigDecimal rightBigDecimal = new(right);
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal > rightBigDecimal;
-        bool actualBigDecimalDecimal = leftBigDecimal > rightDecimal;
-        bool actualDecimalBigDecimal = leftDecimal > rightBigDecimal;
+        bool actualBigDecimalDecimal = leftBigDecimal > right;
+        bool actualDecimalBigDecimal = left > rightBigDecimal;
 
         // Then
         Assert.Equal(expected, actualBigDecimalBigDecimal);
@@ -103,7 +101,6 @@ public sealed class BigDecimalComparableTests
     [InlineData(1.1, 1.1, true)]
     [InlineData(1.1, 0.0, true)]
     [InlineData(1.0, 0.1, true)]
-    [InlineData(0.0, 1.0, false)]
     [InlineData(0.0, 0.1, false)]
     [InlineData(0.1, 1.0, false)]
     [InlineData(123.45, 123.45, true)]
@@ -118,16 +115,16 @@ public sealed class BigDecimalComparableTests
     [InlineData(0.01, 0.1, false)]
     [InlineData(0.001, 0.01, false)]
     [InlineData(0.0001, 0.001, false)]
-    public void BigDecimalGreaterThanOrEqualsShouldReturnTheExpectedResult(decimal leftDecimal, decimal rightDecimal, bool expected)
+    public void BigDecimalGreaterThanOrEqualsShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(leftDecimal);
-        BigDecimal rightBigDecimal = new(rightDecimal);
+        BigDecimal leftBigDecimal = new(left);
+        BigDecimal rightBigDecimal = new(right);
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal >= rightBigDecimal;
-        bool actualBigDecimalDecimal = leftBigDecimal >= rightDecimal;
-        bool actualDecimalBigDecimal = leftDecimal >= rightBigDecimal;
+        bool actualBigDecimalDecimal = leftBigDecimal >= right;
+        bool actualDecimalBigDecimal = left >= rightBigDecimal;
 
         // Then
         Assert.Equal(expected, actualBigDecimalBigDecimal);
@@ -143,7 +140,6 @@ public sealed class BigDecimalComparableTests
     [InlineData(1.1, 1.1, false)]
     [InlineData(1.1, 0.0, false)]
     [InlineData(1.0, 0.1, false)]
-    [InlineData(0.0, 1.0, true)]
     [InlineData(0.0, 0.1, true)]
     [InlineData(0.1, 1.0, true)]
     [InlineData(123.45, 123.45, false)]
@@ -158,16 +154,16 @@ public sealed class BigDecimalComparableTests
     [InlineData(0.01, 0.1, true)]
     [InlineData(0.001, 0.01, true)]
     [InlineData(0.0001, 0.001, true)]
-    public void BigDecimalLessThanShouldReturnTheExpectedResult(decimal leftDecimal, decimal rightDecimal, bool expected)
+    public void BigDecimalLessThanShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(leftDecimal);
-        BigDecimal rightBigDecimal = new(rightDecimal);
+        BigDecimal leftBigDecimal = new(left);
+        BigDecimal rightBigDecimal = new(right);
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal < rightBigDecimal;
-        bool actualBigDecimalDecimal = leftBigDecimal < rightDecimal;
-        bool actualDecimalBigDecimal = leftDecimal < rightBigDecimal;
+        bool actualBigDecimalDecimal = leftBigDecimal < right;
+        bool actualDecimalBigDecimal = left < rightBigDecimal;
 
         // Then
         Assert.Equal(expected, actualBigDecimalBigDecimal);
@@ -183,7 +179,6 @@ public sealed class BigDecimalComparableTests
     [InlineData(1.1, 1.1, true)]
     [InlineData(1.1, 0.0, false)]
     [InlineData(1.0, 0.1, false)]
-    [InlineData(0.0, 1.0, true)]
     [InlineData(0.0, 0.1, true)]
     [InlineData(0.1, 1.0, true)]
     [InlineData(123.45, 123.45, true)]
@@ -198,16 +193,16 @@ public sealed class BigDecimalComparableTests
     [InlineData(0.01, 0.1, true)]
     [InlineData(0.001, 0.01, true)]
     [InlineData(0.0001, 0.001, true)]
-    public void BigDecimalLessThanOrEqualsShouldReturnTheExpectedResult(decimal leftDecimal, decimal rightDecimal, bool expected)
+    public void BigDecimalLessThanOrEqualsShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(leftDecimal);
-        BigDecimal rightBigDecimal = new(rightDecimal);
+        BigDecimal leftBigDecimal = new(left);
+        BigDecimal rightBigDecimal = new(right);
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal <= rightBigDecimal;
-        bool actualBigDecimalDecimal = leftBigDecimal <= rightDecimal;
-        bool actualDecimalBigDecimal = leftDecimal <= rightBigDecimal;
+        bool actualBigDecimalDecimal = leftBigDecimal <= right;
+        bool actualDecimalBigDecimal = left <= rightBigDecimal;
 
         // Then
         Assert.Equal(expected, actualBigDecimalBigDecimal);

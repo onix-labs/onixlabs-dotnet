@@ -32,7 +32,7 @@ public sealed class BigDecimalByteArrayTests
     {
         // Given
         BigDecimal base2Expected = new(value, ConversionMode.Binary);
-        BigDecimal base10Expected = new(value, ConversionMode.Decimal);
+        BigDecimal base10Expected = new(value);
 
         // When
         byte[] base2Bytes = base2Expected.ToByteArray();

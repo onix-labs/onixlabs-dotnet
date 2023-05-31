@@ -82,7 +82,7 @@ public sealed class BigDecimalConstructorTests
         Assert.Equal("Scale must be greater than or equal to zero. (Parameter 'value')", exception.Message);
     }
 
-    [Theory(DisplayName = "BigDecimal should be constructable from unscaled value and scale")]
+    [Theory(DisplayName = "BigDecimal should be constructable from unscaled BigInteger value and scale")]
     [InlineData(0, 0)]
     [InlineData(1, 0)]
     [InlineData(1, 1)]
@@ -110,10 +110,10 @@ public sealed class BigDecimalConstructorTests
     [InlineData(long.MaxValue, 10)]
     [InlineData(long.MinValue, int.MaxValue)]
     [InlineData(long.MaxValue, int.MaxValue)]
-    public void BigDecimalShouldBeConstructableFromUnscaledValueAndScale(BigInteger unscaledValue, int scale)
+    public void BigDecimalShouldBeConstructableFromUnscaledValueAndScale(long unscaledValue, int scale)
     {
         // When
-        BigDecimal value = new(unscaledValue, scale);
+        BigDecimal value = new((BigInteger)unscaledValue, scale);
 
         // Then
         Assert.Equal(unscaledValue, value.UnscaledValue);

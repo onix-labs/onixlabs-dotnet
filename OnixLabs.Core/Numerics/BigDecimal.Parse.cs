@@ -182,7 +182,7 @@ public readonly partial struct BigDecimal
         }
         catch
         {
-            result = default;
+            result = Zero;
             return false;
         }
     }

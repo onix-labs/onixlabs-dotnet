@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using OnixLabs.Core.Collections;
 
 namespace OnixLabs.Core.Numerics;
 
@@ -35,14 +34,14 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Divide(BigDecimal left, BigDecimal right, int maxIterations = DefaultMaxScale)
     {
-        if (left == Zero) return Zero;
         if (right == Zero) throw new DivideByZeroException();
         if (right == One) return left;
+        if (left == Zero) return Zero;
 
         (BigInteger dividend, BigInteger divisor) = NormalizeUnscaledOrderOfMagnitude(left, right);
         (BigInteger quotient, BigInteger remainder) = BigInteger.DivRem(dividend, divisor);
 
-        HashSet<BigInteger> remainders = Collection.EmptyHashSet<BigInteger>();
+        HashSet<BigInteger> remainders = EmptyHashSet<BigInteger>();
 
         while (remainder > 0 && maxIterations-- > 0)
         {

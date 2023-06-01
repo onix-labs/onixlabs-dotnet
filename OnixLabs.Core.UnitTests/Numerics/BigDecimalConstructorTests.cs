@@ -113,7 +113,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledValueAndScale(long unscaledValue, int scale)
     {
         // When
-        BigDecimal value = new((BigInteger)unscaledValue, scale);
+        BigDecimal value = unscaledValue.ToBigInteger().ToBigDecimal(scale);
 
         // Then
         Assert.Equal(unscaledValue, value.UnscaledValue);
@@ -148,7 +148,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledSByteValueAndScale(sbyte value, int scale, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, scale);
+        BigDecimal candidate = value.ToBigDecimal(scale);
 
         // When
         string actual = candidate.ToString();
@@ -185,7 +185,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledByteValueAndScale(byte value, int scale, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, scale);
+        BigDecimal candidate = value.ToBigDecimal(scale);
 
         // When
         string actual = candidate.ToString();
@@ -222,7 +222,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledInt16ValueAndScale(short value, int scale, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, scale);
+        BigDecimal candidate = value.ToBigDecimal(scale);
 
         // When
         string actual = candidate.ToString();
@@ -259,7 +259,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledUInt16ValueAndScale(ushort value, int scale, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, scale);
+        BigDecimal candidate = value.ToBigDecimal(scale);
 
         // When
         string actual = candidate.ToString();
@@ -320,7 +320,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledInt32ValueAndScale(int value, int scale, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, scale);
+        BigDecimal candidate = value.ToBigDecimal(scale);
 
         // When
         string actual = candidate.ToString();
@@ -357,7 +357,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledUInt32ValueAndScale(uint value, int scale, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, scale);
+        BigDecimal candidate = value.ToBigDecimal(scale);
 
         // When
         string actual = candidate.ToString();
@@ -394,7 +394,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledInt64ValueAndScale(long value, int scale, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, scale);
+        BigDecimal candidate = value.ToBigDecimal(scale);
 
         // When
         string actual = candidate.ToString();
@@ -431,7 +431,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromUnscaledUInt64ValueAndScale(ulong value, int scale, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, scale);
+        BigDecimal candidate = value.ToBigDecimal(scale);
 
         // When
         string actual = candidate.ToString();
@@ -445,7 +445,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromDoubleValueUsingBinaryConversion(double value, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, ConversionMode.Binary);
+        BigDecimal candidate = value.ToBigDecimal(ConversionMode.Binary);
 
         // When
         string actual = candidate.ToString();
@@ -1343,7 +1343,7 @@ public sealed class BigDecimalConstructorTests
     public void BigDecimalShouldBeConstructableFromDoubleValueUsingDecimalConversion(double value, string expected)
     {
         // Given
-        BigDecimal candidate = new(value, ConversionMode.Decimal);
+        BigDecimal candidate = value.ToBigDecimal();
 
         // When
         string actual = candidate.ToString();

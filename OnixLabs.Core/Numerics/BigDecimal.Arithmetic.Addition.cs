@@ -31,8 +31,8 @@ public readonly partial struct BigDecimal
 
         int scale = MaxScale(left, right);
 
-        (BigInteger leftNormalized, BigInteger rightNormalized) = NormalizeUnscaledOrderOfMagnitude(left, right);
-        BigInteger sum = leftNormalized + rightNormalized;
+        (BigInteger leftAddend, BigInteger rightAddend) = NormalizeUnscaledOrderOfMagnitude(left, right);
+        BigInteger sum = leftAddend + rightAddend;
 
         return new BigDecimal(sum, scale);
     }

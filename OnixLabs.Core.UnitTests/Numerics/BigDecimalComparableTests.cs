@@ -44,8 +44,8 @@ public sealed class BigDecimalComparableTests
     public void BigDecimalCompareToShouldReturnTheExpectedResult(double left, double right, int expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(left);
-        BigDecimal rightBigDecimal = new(right);
+        BigDecimal leftBigDecimal = left;
+        BigDecimal rightBigDecimal = right;
 
         // When
         int actual = leftBigDecimal.CompareTo(rightBigDecimal);
@@ -79,8 +79,8 @@ public sealed class BigDecimalComparableTests
     public void BigDecimalGreaterThanShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(left);
-        BigDecimal rightBigDecimal = new(right);
+        BigDecimal leftBigDecimal = left;
+        BigDecimal rightBigDecimal = right;
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal > rightBigDecimal;
@@ -118,8 +118,8 @@ public sealed class BigDecimalComparableTests
     public void BigDecimalGreaterThanOrEqualsShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(left);
-        BigDecimal rightBigDecimal = new(right);
+        BigDecimal leftBigDecimal = left;
+        BigDecimal rightBigDecimal = right;
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal >= rightBigDecimal;
@@ -157,8 +157,8 @@ public sealed class BigDecimalComparableTests
     public void BigDecimalLessThanShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(left);
-        BigDecimal rightBigDecimal = new(right);
+        BigDecimal leftBigDecimal = left;
+        BigDecimal rightBigDecimal = right;
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal < rightBigDecimal;
@@ -196,8 +196,8 @@ public sealed class BigDecimalComparableTests
     public void BigDecimalLessThanOrEqualsShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(left);
-        BigDecimal rightBigDecimal = new(right);
+        BigDecimal leftBigDecimal = left;
+        BigDecimal rightBigDecimal = right;
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal <= rightBigDecimal;

@@ -60,7 +60,7 @@ public readonly partial struct BigDecimal
                 result = (float)(object)value;
                 return true;
             default:
-                result = default;
+                result = Zero;
                 return false;
         }
     }

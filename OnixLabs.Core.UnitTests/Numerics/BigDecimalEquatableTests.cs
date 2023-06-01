@@ -44,8 +44,8 @@ public sealed class BigDecimalEquatableTests
     public void BigDecimalEqualsShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(left);
-        BigDecimal rightBigDecimal = new(right);
+        BigDecimal leftBigDecimal = left;
+        BigDecimal rightBigDecimal = right;
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal == rightBigDecimal;
@@ -83,8 +83,8 @@ public sealed class BigDecimalEquatableTests
     public void BigDecimalNotEqualsShouldReturnTheExpectedResult(double left, double right, bool expected)
     {
         // Given
-        BigDecimal leftBigDecimal = new(left);
-        BigDecimal rightBigDecimal = new(right);
+        BigDecimal leftBigDecimal = left;
+        BigDecimal rightBigDecimal = right;
 
         // When
         bool actualBigDecimalBigDecimal = leftBigDecimal != rightBigDecimal;

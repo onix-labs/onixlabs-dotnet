@@ -31,15 +31,15 @@ public readonly partial struct BigDecimal
     /// </returns>
     /// <exception cref="ArgumentException">If the specified scale is non-negative.</exception>
     /// <exception cref="ArgumentException">If the specified rounding mode is invalid.</exception>
-    public static BigDecimal Round(BigDecimal value, int scale = default, MidpointRounding mode = default)
+    public static BigDecimal Round(BigDecimal value, int scale = 0, MidpointRounding mode = MidpointRounding.ToEven)
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
 
         if (value.Scale <= scale) return value;
 
-        BigInteger absoluteValue = BigInteger.Abs(value.UnscaledValue);
+        BigInteger dividend = BigInteger.Abs(value.UnscaledValue);
         BigInteger divisor = value.OrderOfMagnitude / BigInteger.Pow(10, scale);
-        (BigInteger quotient, BigInteger remainder) = BigInteger.DivRem(absoluteValue, divisor);
+        (BigInteger quotient, BigInteger remainder) = BigInteger.DivRem(dividend, divisor);
         BigInteger midpoint = BigInteger.Pow(10, value.Scale - scale - 1) * 5;
         BigInteger sign = value.Sign is 1 ? BigInteger.One : BigInteger.MinusOne;
 
@@ -67,7 +67,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the smallest integral value that is greater than or equal to the specified <see cref="BigDecimal"/> value.</returns>
     public static BigDecimal Ceiling(BigDecimal value)
     {
-        return Round(value, default, MidpointRounding.ToPositiveInfinity);
+        return Round(value, 0, MidpointRounding.ToPositiveInfinity);
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the largest integral value that is less than or equal to the specified <see cref="BigDecimal"/> value.</returns>
     public static BigDecimal Floor(BigDecimal value)
     {
-        return Round(value, default, MidpointRounding.ToNegativeInfinity);
+        return Round(value, 0, MidpointRounding.ToNegativeInfinity);
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public readonly partial struct BigDecimal
     /// </returns>
     /// <exception cref="ArgumentException">If the specified scale is non-negative.</exception>
     /// <exception cref="ArgumentException">If the specified rounding mode is invalid.</exception>
-    public BigDecimal Round(int scale = default, MidpointRounding mode = default)
+    public BigDecimal Round(int scale = 0, MidpointRounding mode = MidpointRounding.ToEven)
     {
         return Round(this, scale, mode);
     }

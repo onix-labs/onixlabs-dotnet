@@ -26,7 +26,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="BigInteger"/> value.</returns>
     public static implicit operator BigDecimal(BigInteger value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="sbyte"/> value.</returns>
     public static implicit operator BigDecimal(sbyte value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="byte"/> value.</returns>
     public static implicit operator BigDecimal(byte value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="short"/> value.</returns>
     public static implicit operator BigDecimal(short value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="ushort"/> value.</returns>
     public static implicit operator BigDecimal(ushort value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="int"/> value.</returns>
     public static implicit operator BigDecimal(int value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="uint"/> value.</returns>
     public static implicit operator BigDecimal(uint value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="long"/> value.</returns>
     public static implicit operator BigDecimal(long value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new, unscaled <see cref="BigDecimal"/> value converted from the specified <see cref="ulong"/> value.</returns>
     public static implicit operator BigDecimal(ulong value)
     {
-        return new BigDecimal(value, default);
+        return new BigDecimal(value, 0);
     }
 
     /// <summary>

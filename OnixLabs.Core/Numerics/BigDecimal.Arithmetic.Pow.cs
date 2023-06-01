@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
@@ -21,9 +23,16 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The <see cref="BigDecimal"/> value to raise.</param>
     /// <param name="exponent">The exponent to raise by.</param>
+    /// <param name="maxIterations">
+    /// The maximum number of iterations when calculating the decimal expansion.
+    /// More iterations result in higher precision, but will use significantly more memory and will perform slower.
+    /// Fewer iterations result in lower precision, but will use less memory and will perform faster.
+    /// The default value for this parameter is 10,000.
+    /// </param>
     /// <returns>Returns the power of the specified <see cref="BigDecimal"/> value, raised to the power of the specified exponent.</returns>
-    public static BigDecimal Pow(BigDecimal value, int exponent)
+    public static BigDecimal Pow(BigDecimal value, int exponent, int maxIterations = DefaultMaxScale)
     {
+        if (value == 0 && exponent == 0) throw new ArithmeticException("Attempted to raise zero to the power of zero.");
         if (exponent == 0) return One;
         if (exponent == 1) return value;
 
@@ -35,6 +44,6 @@ public readonly partial struct BigDecimal
             result *= value;
         }
 
-        return exponent < 0 ? One / result : result;
+        return exponent < 0 ? Divide(One, result, maxIterations) : result;
     }
 }

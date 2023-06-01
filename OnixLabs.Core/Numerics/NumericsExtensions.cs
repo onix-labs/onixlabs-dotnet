@@ -238,7 +238,7 @@ public static class NumericsExtensions
     /// <returns>Returns a new <see cref="BigDecimal"/> representing the current <see cref="double"/> value.</returns>
     public static BigDecimal ToBigDecimal(this double value, ConversionMode mode = ConversionMode.Decimal)
     {
-        return new BigDecimal(value);
+        return new BigDecimal(value, mode);
     }
 
     /// <summary>

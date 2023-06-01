@@ -19,7 +19,7 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Numerics;
 
-public class NumericExtensionTests
+public sealed class NumericExtensionTests
 {
     [Theory(DisplayName = "Decimal.GetUnscaledValue should produce the expected result from zero")]
     [InlineData(0, 0)]

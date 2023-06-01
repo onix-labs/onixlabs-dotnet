@@ -19,7 +19,7 @@ namespace OnixLabs.Core.UnitTests.Numerics;
 
 public sealed class BigDecimalByteArrayTests
 {
-    [Theory(DisplayName = "BigDecimal.ToByteArray should create a byte array in the same format expected by its constructor")]
+    [Theory(DisplayName = "BigDecimal.ToByteArray should create a byte array in the same format expected by its constructor (binary)")]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(100)]
@@ -28,21 +28,38 @@ public sealed class BigDecimalByteArrayTests
     [InlineData(1234567890123456)]
     [InlineData(123456789012345.6)]
     [InlineData(1.234567890123456)]
-    public void BigDecimalToByteArrayShouldCreateAByteArrayInTheSameFormatExpectedByItsConstructor(double value)
+    public void BigDecimalToByteArrayShouldCreateAByteArrayInTheSameFormatExpectedByItsConstructorBinary(double value)
     {
         // Given
-        BigDecimal base2Expected = new(value, ConversionMode.Binary);
-        BigDecimal base10Expected = new(value);
+        BigDecimal expected = new(value, ConversionMode.Binary);
 
         // When
-        byte[] base2Bytes = base2Expected.ToByteArray();
-        byte[] base10Bytes = base10Expected.ToByteArray();
-        
-        BigDecimal base2Actual = new(base2Bytes);
-        BigDecimal base10Actual = new(base10Bytes);
+        byte[] bytes = expected.ToByteArray();
+        BigDecimal actual = new(bytes);
 
         // Then
-        Assert.Equal(base2Expected, base2Actual);
-        Assert.Equal(base10Expected, base10Actual);
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "BigDecimal.ToByteArray should create a byte array in the same format expected by its constructor (decimal)")]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(100)]
+    [InlineData(0.01)]
+    [InlineData(0.0000001)]
+    [InlineData(1234567890123456)]
+    [InlineData(123456789012345.6)]
+    [InlineData(1.234567890123456)]
+    public void BigDecimalToByteArrayShouldCreateAByteArrayInTheSameFormatExpectedByItsConstructorDecimal(double value)
+    {
+        // Given
+        BigDecimal expected = value;
+
+        // When
+        byte[] bytes = expected.ToByteArray();
+        BigDecimal actual = new(bytes);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

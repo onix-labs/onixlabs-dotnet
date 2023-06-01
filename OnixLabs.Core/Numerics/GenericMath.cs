@@ -43,7 +43,7 @@ internal static class GenericMath
     {
         value = T.Abs(value);
 
-        if (value < T.One) return default;
+        if (value < T.One) return 0;
 
         int length = 1;
         T ten = T.CreateChecked(10);

@@ -93,7 +93,7 @@ internal static class Ieee754Converter
         }
 
         BigInteger unscaledValue = bits < 0 ? -mantissa : mantissa;
-        int scale = default;
+        int scale = 0;
 
         if (exponent < 0)
         {
@@ -139,7 +139,7 @@ internal static class Ieee754Converter
         }
 
         BigInteger unscaledValue = bits < 0 ? -mantissa : mantissa;
-        int scale = default;
+        int scale = 0;
 
         if (exponent < 0)
         {
@@ -203,19 +203,19 @@ internal static class Ieee754Converter
 
         if (value == T.Zero || value == T.NegativeZero)
         {
-            result = (BigInteger.Zero, default);
+            result = (BigInteger.Zero, 0);
             return true;
         }
 
         if (value == T.One)
         {
-            result = (BigInteger.One, default);
+            result = (BigInteger.One, 0);
             return true;
         }
 
         if (value == T.NegativeOne)
         {
-            result = (BigInteger.MinusOne, default);
+            result = (BigInteger.MinusOne, 0);
             return true;
         }
 

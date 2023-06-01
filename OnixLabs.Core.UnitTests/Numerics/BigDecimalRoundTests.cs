@@ -12,29 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using OnixLabs.Core.Numerics;
+using OnixLabs.Core.UnitTests.Data.Generators;
 using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Numerics;
 
-public sealed class BigDecimalArithmeticAdditionTests
+public sealed class BigDecimalRoundTests
 {
-    [Theory(DisplayName = "BigDecimal.Add should produce the expected result.")]
-    [InlineData(0, 0, 0)]
-    [InlineData(1, 0, 1)]
-    [InlineData(1, 1, 2)]
-    [InlineData(1.0001, 2.0403, 3.0404)]
-    [InlineData(123.456, 456.789, 580.245)]
-    [InlineData(-1, 0, -1)]
-    [InlineData(-1, -1, -2)]
-    [InlineData(-1.0001, 2.0403, 1.0402)]
-    [InlineData(-123.456, -456.789, -580.245)]
-    public void BigDecimalAbsShouldProduceExpectedResult(double left, double right, double expected)
+    [Theory(DisplayName = "BigDecimal.Round should produce the correct result")]
+    [BigDecimalRoundDataGenerator(-1000, 1000, 7, 5)]
+    [BigDecimalRoundDataGenerator(-100000, 100000, 997531, 7)]
+    public void BigDecimalRoundShouldProduceExpectedResult(decimal value, int scale, MidpointRounding rounding, decimal expected)
     {
-        // When
-        BigDecimal actual = BigDecimal.Add(left, right);
+        // Arrange
+        BigDecimal expectedBigDecimal = new(expected);
 
-        // Then
-        Assert.Equal(expected, actual);
+        // Act
+        BigDecimal actualBigDecimal = BigDecimal.Round(new BigDecimal(value), scale, rounding);
+
+        // Assert
+        Assert.Equal(expectedBigDecimal, actualBigDecimal);
     }
 }

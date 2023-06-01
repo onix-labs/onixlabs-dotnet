@@ -17,22 +17,30 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Numerics;
 
-public sealed class BigDecimalArithmeticDivisionTests
+public sealed class BigDecimalArithmeticMultiplicationTests
 {
-    [Theory(DisplayName = "BigDecimal.Divide should produce the expected result")]
+    [Theory(DisplayName = "BigDecimal.Multiply should produce the expected result")]
+    [InlineData(0, 0, 0)]
+    [InlineData(1, 0, 0)]
     [InlineData(0, 1, 0)]
     [InlineData(1, 1, 1)]
-    [InlineData(2, 1, 2)]
-    [InlineData(1, 3, 0.3)]
-    [InlineData(1, 5, 0.2)]
-    [InlineData(1, 7, 0.142857)]
-    [InlineData(1, 256, 0.00390625)]
-    [InlineData(1, 65536, 0.0000152587890625)]
-    public void BigDecimalDivideShouldProduceExpectedResult(double left, double right, double expected)
+    [InlineData(1, 2, 2)]
+    [InlineData(2, 2, 4)]
+    [InlineData(10, 10, 100)]
+    [InlineData(1.23, 4.56, 5.6088)]
+    [InlineData(123.456, 789.123, 97421.969088)]
+    [InlineData(-1, 0, -0)]
+    [InlineData(-1, 1, -1)]
+    [InlineData(-1, 2, -2)]
+    [InlineData(-2, 2, -4)]
+    [InlineData(-10, 10, -100)]
+    [InlineData(-1.23, 4.56, -5.6088)]
+    [InlineData(-123.456, 789.123, -97421.969088)]
+    public void BigDecimalMultiplyShouldProduceExpectedResult(double left, double right, double expected)
     {
         // When
-        BigDecimal actual = BigDecimal.Divide(left, right);
-
+        BigDecimal actual = BigDecimal.Multiply(left, right);
+        
         // Then
         Assert.Equal(expected, actual);
     }

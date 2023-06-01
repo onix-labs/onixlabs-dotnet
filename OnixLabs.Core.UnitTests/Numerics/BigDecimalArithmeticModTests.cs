@@ -17,22 +17,23 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Numerics;
 
-public sealed class BigDecimalArithmeticAdditionTests
+public sealed class BigDecimalArithmeticModTests
 {
-    [Theory(DisplayName = "BigDecimal.Add should produce the expected result.")]
-    [InlineData(0, 0, 0)]
-    [InlineData(1, 0, 1)]
-    [InlineData(1, 1, 2)]
-    [InlineData(1.0001, 2.0403, 3.0404)]
-    [InlineData(123.456, 456.789, 580.245)]
-    [InlineData(-1, 0, -1)]
-    [InlineData(-1, -1, -2)]
-    [InlineData(-1.0001, 2.0403, 1.0402)]
-    [InlineData(-123.456, -456.789, -580.245)]
-    public void BigDecimalAbsShouldProduceExpectedResult(double left, double right, double expected)
+    [Theory(DisplayName = "BigDecimal.Mod should produce the expected result")]
+    [InlineData(0, 1, 0)]
+    [InlineData(1, 1, 0)]
+    [InlineData(2, 1, 0)]
+    [InlineData(3, 2, 1)]
+    [InlineData(4, 2, 0)]
+    [InlineData(4, 3, 1)]
+    [InlineData(100.01, 0.3, 0.11)]
+    [InlineData(100.01, -0.3, 0.11)]
+    [InlineData(123.456, 12.34, 0.056)]
+    [InlineData(123.456, -12.34, 0.056)]
+    public void BigDecimalModShouldProduceExpectedResult(double left, double right, double expected)
     {
         // When
-        BigDecimal actual = BigDecimal.Add(left, right);
+        BigDecimal actual = BigDecimal.Mod(left, right);
 
         // Then
         Assert.Equal(expected, actual);

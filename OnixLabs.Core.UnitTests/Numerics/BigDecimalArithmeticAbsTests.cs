@@ -32,11 +32,8 @@ public sealed class BigDecimalArithmeticAbsTests
     [InlineData(-123.456, 123.456)]
     public void BigDecimalAbsShouldProduceExpectedResult(double value, double expected)
     {
-        // Given
-        BigDecimal bigDecimalValue = value;
-
         // When
-        BigDecimal actual = bigDecimalValue.Abs();
+        BigDecimal actual = BigDecimal.Abs(value);
 
         // Then
         Assert.Equal(expected, actual);

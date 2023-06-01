@@ -300,11 +300,11 @@ public sealed class IEnumerableExtensionTests
 
         // When
         string actual = enumerable.JoinToString();
-        
+
         // Then
         Assert.Equal(expected, actual);
     }
-    
+
     [Fact(DisplayName = "IEnumerable.JoinToString should produce the expected result with a custom separator")]
     public void JoinToStringShouldProduceExpectedResultWithCustomSeparator()
     {
@@ -314,11 +314,11 @@ public sealed class IEnumerableExtensionTests
 
         // When
         string actual = enumerable.JoinToString(" *$ ");
-        
+
         // Then
         Assert.Equal(expected, actual);
     }
-    
+
     [Fact(DisplayName = "IEnumerable.None should return true when none of the elements satisfy the specified predicate condition")]
     public void NoneShouldProduceExpectedResultTrue()
     {

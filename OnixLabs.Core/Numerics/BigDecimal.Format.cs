@@ -26,7 +26,7 @@ public readonly partial struct BigDecimal
 
         if (formatted.Length > destination.Length)
         {
-            charsWritten = default;
+            charsWritten = 0;
             return false;
         }
 

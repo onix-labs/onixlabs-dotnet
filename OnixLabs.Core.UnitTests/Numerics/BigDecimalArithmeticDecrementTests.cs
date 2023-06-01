@@ -28,16 +28,13 @@ public sealed class BigDecimalArithmeticDecrementTests
     [InlineData(-1000, -1001)]
     public void BigDecimalDecrementShouldProduceExpectedResult(double value, double expected)
     {
-        // Given
-        BigDecimal bigDecimalValue = value;
-
         // When
-        BigDecimal actual = BigDecimal.Decrement(bigDecimalValue);
+        BigDecimal actual = BigDecimal.Decrement(value);
 
         // Then
         Assert.Equal(expected, actual);
     }
-    
+
     [Theory(DisplayName = "BigDecimal.DecrementFraction should produce the expected result.")]
     [InlineData(-1.2, -1.3)]
     [InlineData(0.2, 0.1)]
@@ -47,11 +44,8 @@ public sealed class BigDecimalArithmeticDecrementTests
     [InlineData(-1000.01, -1000.02)]
     public void BigDecimalDecrementFractionShouldProduceExpectedResult(double value, double expected)
     {
-        // Given
-        BigDecimal bigDecimalValue = value;
-
         // When
-        BigDecimal actual = BigDecimal.DecrementFraction(bigDecimalValue);
+        BigDecimal actual = BigDecimal.DecrementFraction(value);
 
         // Then
         Assert.Equal(expected, actual);

@@ -20,42 +20,6 @@ namespace OnixLabs.Core.Numerics;
 public readonly partial struct BigDecimal
 {
     /// <summary>
-    /// Obtains the minimum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.
-    /// </summary>
-    /// <param name="left">The left-hand value from which to obtain the minimum scale value.</param>
-    /// <param name="right">The left-hand value from which to obtain the minimum scale value.</param>
-    /// <returns>Returns the minimum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.</returns>
-    public static int MinScale(BigDecimal left, BigDecimal right)
-    {
-        return int.Min(left.Scale, right.Scale);
-    }
-
-    /// <summary>
-    /// Obtains the maximum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.
-    /// </summary>
-    /// <param name="left">The left-hand value from which to obtain the maximum scale value.</param>
-    /// <param name="right">The left-hand value from which to obtain the maximum scale value.</param>
-    /// <returns>Returns the maximum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.</returns>
-    public static int MaxScale(BigDecimal left, BigDecimal right)
-    {
-        return int.Max(left.Scale, right.Scale);
-    }
-
-    /// <summary>
-    /// Obtains the minimum and maximum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.
-    /// </summary>
-    /// <param name="left">The left-hand value from which to obtain the minimum and maximum values.</param>
-    /// <param name="right">The left-hand value from which to obtain the minimum and maximum values.</param>
-    /// <returns>Returns the minimum and maximum of the specified left-hand and right-hand <see cref="BigDecimal"/> values.</returns>
-    public static (int Min, int Max) MinMaxScale(BigDecimal left, BigDecimal right)
-    {
-        int min = MinScale(left, right);
-        int max = MaxScale(left, right);
-
-        return (min, max);
-    }
-
-    /// <summary>
     /// Applies the specified scale to the specified <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The <see cref="BigDecimal"/> value to scale.</param>

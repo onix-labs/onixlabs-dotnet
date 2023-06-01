@@ -21,7 +21,7 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        BigDecimal value = 1234500000000.ToBigDecimal(5);
-        Console.Write(value.TrimTrailingZeros());
+        BigDecimal value = BigDecimal.Pow(123.456, -2);
+        Console.WriteLine(value);
     }
 }

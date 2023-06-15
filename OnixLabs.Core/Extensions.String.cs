@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace OnixLabs.Core;
@@ -29,6 +31,19 @@ public static class StringExtensions
     /// The value of an index not found.
     /// </summary>
     private const int IndexNotFound = -1;
+
+    /// <summary>
+    /// Repeats the current <see cref="string"/> by the specified number of repetitions.
+    /// </summary>
+    /// <param name="value">The <see cref="string"/> value to repeat.</param>
+    /// <param name="count">The specified number of repetitions to repeat by.</param>
+    /// <returns>Returns a new <see cref="string"/> containing the repeated value.</returns>
+    public static string Repeat(this string value, int count)
+    {
+        if (count <= 0) return string.Empty;
+        IEnumerable<string> repetitions = Enumerable.Repeat(value, count);
+        return string.Join(string.Empty, repetitions);
+    }
 
     /// <summary>
     /// Returns a substring before the first occurrence of the specified delimiter.

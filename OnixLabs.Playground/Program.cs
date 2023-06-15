@@ -12,16 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Core.Numerics;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main(string[] args)
     {
-        BigDecimal value = BigDecimal.Pow(123.456, -2);
-        Console.WriteLine(value);
     }
 }

@@ -15,7 +15,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using OnixLabs.Core.Collections;
 using OnixLabs.Core.Linq;
+using OnixLabs.Core.Numerics;
 using OnixLabs.Core.UnitTests.Data.Objects;
 using Xunit;
 
@@ -367,6 +370,37 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.Sum should produce the expected result")]
+    public void SumShouldProduceExpectedResult()
+    {
+        // Given
+        IEnumerable<BigDecimal> elements = Collection.ListOf<BigDecimal>(12.34, 34.56, 56.78);
+        BigDecimal expected = 103.68;
+
+        // When
+        BigDecimal actual = elements.Sum();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.Sum with selector should produce the expected result")]
+    public void SumWithSelectorShouldProduceExpectedResult()
+    {
+        // Given
+        Numeric<BigDecimal> element1 = new(1234.567);
+        Numeric<BigDecimal> element2 = new(890.1234);
+        Numeric<BigDecimal> element3 = new(56.78901);
+        IEnumerable<Numeric<BigDecimal>> elements = Collection.ListOf(element1, element2, element3);
+        BigDecimal expected = 2181.47941;
+
+        // When
+        BigDecimal actual = elements.SumBy(element => element.Value);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.WhereInstanceOf should return the correct elements matching the specified type")]
     public void WhereInstanceOfShouldProduceExpectedResult()
     {
@@ -392,6 +426,22 @@ public sealed class IEnumerableExtensionTests
 
         // When
         IEnumerable<RecordLike> actual = elements.WhereNot(element => element.Number == 123);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.WhereNotNull should produce the expected result")]
+    public void WhereNotNullShouldProduceExpectedResult()
+    {
+        // Given
+        RecordLike element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
+        RecordLike element2 = new("def", 456, DateTime.Now, Guid.NewGuid());
+        IEnumerable<RecordLike> elements = new[] { element1, element2, null };
+        IEnumerable<RecordLike> expected = new[] { element1, element2 };
+
+        // When
+        IEnumerable<RecordLike> actual = elements.WhereNotNull();
 
         // Then
         Assert.Equal(expected, actual);

@@ -21,29 +21,29 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base16
 {
     /// <summary>
-    /// Checks for equality between this instance and another object.
+    /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
-    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
     public bool Equals(Base16 other)
     {
         return other.Value.SequenceEqual(Value);
     }
 
     /// <summary>
-    /// Checks for equality between this instance and another object.
+    /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
-    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
         return obj is Base16 other && Equals(other);
     }
 
     /// <summary>
-    /// Serves as a hash code function for this instance.
+    /// Serves as a hash code function for the current instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode()
     {
         return HashCode.Combine(Value.GetContentHashCode());
@@ -54,7 +54,7 @@ public readonly partial struct Base16
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    /// <returns>Returns true if the instances are equal; otherwise, false.</returns>
     public static bool operator ==(Base16 left, Base16 right)
     {
         return Equals(left, right);
@@ -65,7 +65,7 @@ public readonly partial struct Base16
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    /// <returns>Returns true if the instances are not equal; otherwise, false.</returns>
     public static bool operator !=(Base16 left, Base16 right)
     {
         return !Equals(left, right);

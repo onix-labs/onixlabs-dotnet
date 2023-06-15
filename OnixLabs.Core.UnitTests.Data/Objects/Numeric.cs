@@ -12,27 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Numerics;
 
-namespace OnixLabs.Core;
+namespace OnixLabs.Core.UnitTests.Data.Objects;
 
-public abstract partial class Enumeration<T>
+public sealed class Numeric<T> : IEquatable<Numeric<T>> where T : INumber<T>
 {
-    /// <summary>
-    /// Returns a <see cref="ValueTuple"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a tuple that represents the current object.</returns>
-    public (int Value, string Name) ToEntry()
+    public Numeric(T value)
     {
-        return (Value, Name);
+        Value = value;
     }
 
-    /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    public T Value { get; }
+
+    public bool Equals(Numeric<T>? other)
+    {
+        return other is not null && other.Value == Value;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Numeric<T> other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Value);
+    }
+
     public override string ToString()
     {
-        return Name;
+        return this.ToRecordString();
     }
 }

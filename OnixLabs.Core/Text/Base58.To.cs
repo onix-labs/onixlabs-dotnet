@@ -30,7 +30,7 @@ public readonly partial struct Base58
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object, with a checksum.
     /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object, with a checksum.</returns>
+    /// <returns>Returns a <see cref="string"/> that represents the current object, with a checksum.</returns>
     public string ToStringWithChecksum()
     {
         byte[] valueWithChecksum = AddChecksum(Value);

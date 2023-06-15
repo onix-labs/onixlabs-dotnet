@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 
 namespace OnixLabs.Core.Linq;
 
@@ -31,10 +32,10 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <param name="selector">The selector function which will be used to select each property from each element.</param>
-    /// <typeparam name="TElement">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
     /// <returns>Returns true if all selected element properties are equal; otherwise false.</returns>
-    public static bool AllEqualBy<TElement, TProperty>(this IEnumerable<TElement> enumerable, Func<TElement, TProperty> selector)
+    public static bool AllEqualBy<T, TProperty>(this IEnumerable<T> enumerable, Func<T, TProperty> selector)
     {
         ISet<TProperty> elements = enumerable.Select(selector).ToHashSet();
         return elements.IsNotEmpty() && elements.IsSingle();
@@ -45,10 +46,10 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <param name="selector">The selector function which will be used to select each property from each element.</param>
-    /// <typeparam name="TElement">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
     /// <returns>Returns true if any selected element properties are equal; otherwise false.</returns>
-    public static bool AnyEqualBy<TElement, TProperty>(this IEnumerable<TElement> enumerable, Func<TElement, TProperty> selector)
+    public static bool AnyEqualBy<T, TProperty>(this IEnumerable<T> enumerable, Func<T, TProperty> selector)
     {
         IList<TProperty> elements = enumerable.Select(selector).ToList();
         ISet<TProperty> distinctElements = elements.ToHashSet();
@@ -182,6 +183,31 @@ public static class IEnumerableExtensions
     }
 
     /// <summary>
+    /// Calculates the sum of the elements of the current <see cref="IEnumerable{T}"/>.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to sum.</param>
+    /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
+    public static T Sum<T>(this IEnumerable<T> enumerable) where T : INumber<T>
+    {
+        IEnumerable<T> elements = enumerable.ToArray();
+        return elements.IsEmpty() ? T.Zero : elements.Aggregate((left, right) => left + right);
+    }
+
+    /// <summary>
+    /// Calculates the sum of the elements of the current <see cref="IEnumerable{T}"/>.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to sum.</param>
+    /// <param name="selector">The selector function which will be used to select each <see cref="INumber{TSelf}"/> property from each element.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <typeparam name="TResult">The underlying <see cref="INumber{TSelf}"/> type of each element to sum.</typeparam>
+    /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
+    public static TResult SumBy<T, TResult>(this IEnumerable<T> enumerable, Func<T, TResult> selector) where TResult : INumber<TResult>
+    {
+        return enumerable.Select(selector).Sum();
+    }
+
+    /// <summary>
     /// Filters the current <see cref="IEnumerable{Object}"/> to only elements of the specified type.
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
@@ -205,5 +231,16 @@ public static class IEnumerableExtensions
     public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
     {
         return enumerable.Where(element => !predicate(element));
+    }
+
+    /// <summary>
+    /// Filters the current <see cref="IEnumerable{T}"/> elements that are not null.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns a new <see cref="IEnumerable{T}"/> that contains elements that are not null.</returns>
+    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable)
+    {
+        return enumerable.Where(element => element is not null)!;
     }
 }

@@ -19,7 +19,7 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Numerics;
 
-public sealed class BigDecimalRoundTests
+public sealed class BigDecimalArithmeticRoundTests
 {
     [Theory(DisplayName = "BigDecimal.Round should produce the correct result")]
     [BigDecimalRoundDataGenerator(-1000, 1000, 7, 5)]

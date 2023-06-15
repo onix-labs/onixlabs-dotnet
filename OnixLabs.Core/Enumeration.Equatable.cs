@@ -21,7 +21,7 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     /// <summary>
     /// Indicates whether the current object is equal to another object of the same type.
     /// </summary>
-    /// <param name="other">An object to compare with this object.</param>
+    /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns true if the current object is equal to the other parameter; otherwise, false.</returns>
     public bool Equals(T? other)
     {
@@ -33,19 +33,19 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     }
 
     /// <summary>
-    /// Checks for equality between this instance and another object.
+    /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
-    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
     public sealed override bool Equals(object? obj)
     {
         return Equals(obj as T);
     }
 
     /// <summary>
-    /// Serves as a hash code function for this instance.
+    /// Serves as a hash code function for the current instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for the current instance.</returns>
     public sealed override int GetHashCode()
     {
         return HashCode.Combine(GetType(), Name, Value);
@@ -56,7 +56,7 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    /// <returns>Returns true if the instances are equal; otherwise, false.</returns>
     public static bool operator ==(Enumeration<T> left, Enumeration<T> right)
     {
         return Equals(left, right);
@@ -67,7 +67,7 @@ public abstract partial class Enumeration<T> : IEquatable<T>
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    /// <returns>Returns true if the instances are not equal; otherwise, false.</returns>
     public static bool operator !=(Enumeration<T> left, Enumeration<T> right)
     {
         return !Equals(left, right);

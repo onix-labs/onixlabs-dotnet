@@ -50,7 +50,7 @@ public readonly partial struct Base64
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
     public override string ToString()
     {
         return Convert.ToBase64String(Value);

@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core.Collections;
-
 namespace OnixLabs.Security.Cryptography;
 
 public readonly partial struct Hash
@@ -21,5 +19,5 @@ public readonly partial struct Hash
     /// <summary>
     /// Gets an empty hash value.
     /// </summary>
-    public static Hash Empty => Create(Collection.EmptyArray<byte>());
+    public static Hash Empty => Create(EmptyArray<byte>());
 }

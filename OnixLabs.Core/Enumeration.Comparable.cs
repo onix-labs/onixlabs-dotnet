@@ -23,7 +23,7 @@ public abstract partial class Enumeration<T> : IComparable, IComparable<T>
     /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
     /// other object.
     /// </summary>
-    /// <param name="obj">An object to compare with this instance.</param>
+    /// <param name="obj">An object to compare with the current instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public int CompareTo(object? obj)
     {
@@ -35,7 +35,7 @@ public abstract partial class Enumeration<T> : IComparable, IComparable<T>
     /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
     /// other object.
     /// </summary>
-    /// <param name="other">An object to compare with this instance.</param>
+    /// <param name="other">An object to compare with the current instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public int CompareTo(T? other)
     {

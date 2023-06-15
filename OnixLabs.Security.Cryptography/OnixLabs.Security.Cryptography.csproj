@@ -16,16 +16,18 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
-      <DebugSymbols>true</DebugSymbols>
+        <DocumentationFile>bin\Release\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
+        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
+        <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
+        <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
+        <Using Include="OnixLabs.Core.Collections.Collection" Static="True"/>
     </ItemGroup>
 
 </Project>

@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using OnixLabs.Core.Collections;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -36,7 +35,7 @@ public abstract partial class MerkleTree<T>
     /// <returns>Returns an <see cref="IEnumerable{T}"/> containing the leaf values from the current <see cref="MerkleTree{T}"/>.</returns>
     public ImmutableList<T> GetLeafValues()
     {
-        ICollection<T> result = Collection.EmptyList<T>();
+        ICollection<T> result = EmptyList<T>();
         CollectLeafValues(this, result);
         return result.ToImmutableList();
     }

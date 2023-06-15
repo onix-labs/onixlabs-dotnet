@@ -30,7 +30,7 @@ public abstract partial class Enumeration<T>
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
     public override string ToString()
     {
         return Name;

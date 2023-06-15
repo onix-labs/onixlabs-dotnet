@@ -12,23 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Core.Numerics;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main(string[] args)
     {
-        double value = double.Round(1.5397, 4);
-        Console.WriteLine(value);
-        //Print(13, 17);
-    }
-
-    private static void Print(int dividend, int divisor)
-    {
-        DecimalExpansion expansion = DecimalExpansion.FromDivision(dividend, divisor);
-        Console.WriteLine(expansion);
     }
 }

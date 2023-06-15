@@ -22,11 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Generators" />
-      <Folder Include="Objects" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
     </ItemGroup>
 

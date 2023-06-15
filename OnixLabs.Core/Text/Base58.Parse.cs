@@ -22,7 +22,7 @@ public readonly partial struct Base58
     /// Parses a Base-58 value into a <see cref="Base58"/> instance.
     /// </summary>
     /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
+    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
     public static Base58 Parse(ReadOnlySpan<char> value)
     {
         return Parse(value, Base58Alphabet.Default);
@@ -33,7 +33,7 @@ public readonly partial struct Base58
     /// </summary>
     /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
     /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
+    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
     public static Base58 Parse(ReadOnlySpan<char> value, Base58Alphabet alphabet)
     {
         byte[] bytes = Decode(value, alphabet.Alphabet);

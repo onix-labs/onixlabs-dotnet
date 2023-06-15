@@ -20,6 +20,18 @@ namespace OnixLabs.Core.UnitTests;
 
 public sealed class StringExtensionTests
 {
+    [Theory(DisplayName = "String.Repeat should return the expected result")]
+    [InlineData("0", 10, "0000000000")]
+    [InlineData("Abc1", 3, "Abc1Abc1Abc1")]
+    public void RepeatShouldProduceExpectedResult(string value, int count, string expected)
+    {
+        // When
+        string actual = value.Repeat(count);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Theory(DisplayName = "String.SubstringBeforeFirst should return the string before the first delimiter")]
     [InlineData("First:Second", "First", ':')]
     [InlineData("12345+678910", "12345", '+')]

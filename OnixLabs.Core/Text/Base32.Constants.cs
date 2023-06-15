@@ -22,7 +22,7 @@ public readonly partial struct Base32
     /// Gets the default padding option when creating new Base-32 instances.
     /// </summary>
     private const bool DefaultPadding = true;
-    
+
     /// <summary>
     /// Gets an empty <see cref="Base32"/> value.
     /// </summary>

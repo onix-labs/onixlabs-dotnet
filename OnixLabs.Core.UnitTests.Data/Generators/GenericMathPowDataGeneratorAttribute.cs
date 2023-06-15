@@ -17,7 +17,7 @@ using Xunit.Sdk;
 
 namespace OnixLabs.Core.UnitTests.Data.Generators;
 
-public class GenericMathPowDataGeneratorAttribute : DataAttribute
+public sealed class GenericMathPowDataGeneratorAttribute : DataAttribute
 {
     private readonly double minValue;
     private readonly double maxValue;

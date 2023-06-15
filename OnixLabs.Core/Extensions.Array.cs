@@ -18,30 +18,30 @@ using System.ComponentModel;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Provides extension methods for objects.
+/// Provides extension methods for arrays.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ArrayExtensions
 {
     /// <summary>
-    /// Copies this array.
+    /// Creates a copy of the current array.
     /// </summary>
     /// <param name="array">The array to copy.</param>
     /// <typeparam name="T">The underlying type of the array.</typeparam>
-    /// <returns>Returns an exact copy of this array.</returns>
+    /// <returns>Returns an exact copy of the current array.</returns>
     public static T[] Copy<T>(this T[] array)
     {
         return Copy(array, 0, array.Length);
     }
 
     /// <summary>
-    /// Copies this array.
+    /// Creates a copy of the current array.
     /// </summary>
     /// <param name="array">The array to copy.</param>
     /// <param name="index">The index of the array to begin copying from.</param>
     /// <param name="count">The number of elements of the array to copy.</param>
     /// <typeparam name="T">The underlying type of the array.</typeparam>
-    /// <returns>Returns an exact copy of this array.</returns>
+    /// <returns>Returns an exact copy of the current array.</returns>
     public static T[] Copy<T>(this T[] array, int index, int count)
     {
         T[] result = new T[count];
@@ -51,12 +51,12 @@ public static class ArrayExtensions
     }
 
     /// <summary>
-    /// Concatenates this array with another array.
+    /// Concatenates the current array with another array.
     /// </summary>
     /// <param name="array">The source array to concatenate with the other array.</param>
     /// <param name="other">The other array to concatenate with the source array.</param>
     /// <typeparam name="T">The underlying type of the array.</typeparam>
-    /// <returns>Returns this array concatenated with the other array.</returns>
+    /// <returns>Returns the current array concatenated with the other array.</returns>
     public static T[] ConcatenateWith<T>(this T[] array, T[] other)
     {
         T[] result = new T[array.Length + other.Length];

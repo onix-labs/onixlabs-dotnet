@@ -13,9 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Numerics;
 using System.Text;
-using OnixLabs.Core.Collections;
 
 namespace OnixLabs.Core.Text;
 
@@ -28,7 +26,7 @@ public interface IBase<TSelf> : IEquatable<TSelf> where TSelf : struct, IBase<TS
     /// <summary>
     /// Gets an empty <see cref="IBase{TSelf}"/> value.
     /// </summary>
-    public static virtual TSelf Empty => TSelf.Create(Collection.EmptyArray<byte>());
+    public static virtual TSelf Empty => TSelf.Create(EmptyArray<byte>());
 
     /// <summary>
     /// Creates a new <see cref="IBase{TSelf}"/> value from the specified <see cref="T:byte[]"/> value.

@@ -13,11 +13,12 @@
 // limitations under the License.
 
 using System.Reflection;
+using OnixLabs.Core.Numerics;
 using Xunit.Sdk;
 
 namespace OnixLabs.Core.UnitTests.Data.Generators;
 
-public class GenericMathIntegerLengthDataGeneratorAttribute : DataAttribute
+public sealed class GenericMathIntegerLengthDataGeneratorAttribute : DataAttribute
 {
     private readonly int count;
 
@@ -32,8 +33,9 @@ public class GenericMathIntegerLengthDataGeneratorAttribute : DataAttribute
 
         for (int index = 0; index <= count; index++)
         {
-            int value = random.Next(int.MinValue, int.MaxValue);
-            int expectedLength = value.ToString().TrimStart('-').Length;
+            ulong value = (ulong)long.Abs(random.NextInt64(0, long.MaxValue));
+            string trimmed = value.ToString().TrimStart('-');
+            ulong expectedLength = ulong.Parse(trimmed) == 0 ? 0 : (ulong)trimmed.Length;
 
             yield return new object[] { value, expectedLength };
         }

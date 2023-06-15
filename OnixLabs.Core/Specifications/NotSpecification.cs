@@ -38,7 +38,7 @@ internal sealed class NotSpecification<T> : Specification<T>
     /// <summary>
     /// Provides an expression for the specification.
     /// </summary>
-    /// <returns>An expression for the specification.</returns>
+    /// <returns>Returns an expression for the specification.</returns>
     public override Expression<Func<T, bool>> ToExpression()
     {
         return Expression.Lambda<Func<T, bool>>(Expression.Not(expression), expression.Parameters.Single());

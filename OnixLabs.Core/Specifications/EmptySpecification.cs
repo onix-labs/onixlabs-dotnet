@@ -26,7 +26,7 @@ internal sealed class EmptySpecification<T> : Specification<T>
     /// <summary>
     /// Provides an expression for the specification.
     /// </summary>
-    /// <returns>An expression for the specification.</returns>
+    /// <returns>Returns an expression for the specification.</returns>
     public override Expression<Func<T, bool>> ToExpression()
     {
         return _ => true;

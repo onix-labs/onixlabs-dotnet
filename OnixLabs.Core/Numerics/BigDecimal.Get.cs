@@ -12,11 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using System;
+using System.Numerics;
 
-internal static class Program
+namespace OnixLabs.Core.Numerics;
+
+public readonly partial struct BigDecimal
 {
-    private static void Main(string[] args)
+    int IFloatingPoint<BigDecimal>.GetExponentByteCount()
     {
+        throw new NotImplementedException();
+    }
+
+    int IFloatingPoint<BigDecimal>.GetExponentShortestBitLength()
+    {
+        throw new NotImplementedException();
+    }
+
+    int IFloatingPoint<BigDecimal>.GetSignificandBitLength()
+    {
+        throw new NotImplementedException();
+    }
+
+    int IFloatingPoint<BigDecimal>.GetSignificandByteCount()
+    {
+        throw new NotImplementedException();
     }
 }

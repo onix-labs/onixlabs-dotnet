@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
@@ -20,59 +19,18 @@ namespace OnixLabs.Core.Numerics;
 /// <summary>
 /// Provides generic mathematical functions.
 /// </summary>
-public static class GenericMath
+internal static class GenericMath
 {
     /// <summary>
-    /// Calculates the quotient and the remainder of the division of the specified dividend, divided by the specified divisor.
+    /// Calculates the delta, or absolute difference between the specified left-hand and right-hand values.
     /// </summary>
-    /// <param name="dividend">The dividend to divide.</param>
-    /// <param name="divisor">The divisor to divide by.</param>
+    /// <param name="left">The left-hand value from which to calculate the delta.</param>
+    /// <param name="right">The left-hand value from which to calculate the delta.</param>
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
-    /// <returns>Returns the quotient and the remainder of the division of the specified dividend, divided by the specified divisor.</returns>
-    /// <exception cref="DivideByZeroException">if the specified divisor is zero.</exception>
-    public static (T Quotient, T Remainder) DivRem<T>(T dividend, T divisor) where T : INumber<T>
+    /// <returns>Returns the delta, or absolute difference between the specified left-hand and right-hand values.</returns>
+    public static T Delta<T>(T left, T right) where T : INumber<T>
     {
-        if (divisor == T.Zero) throw new DivideByZeroException("Divisor cannot be zero.");
-        if (divisor == T.One) return (dividend, T.Zero);
-        if (divisor == -T.One) return (-dividend, T.Zero);
-
-        T dividendSign = T.IsNegative(dividend) ? -T.One : T.One;
-        T divisorSign = T.IsNegative(divisor) ? -T.One : T.One;
-        T sign = dividendSign * divisorSign;
-
-        dividend = T.Abs(dividend);
-        divisor = T.Abs(divisor);
-
-        T quotient = T.Zero;
-
-        while (dividend >= divisor)
-        {
-            dividend -= divisor;
-            quotient++;
-        }
-
-        T remainder = dividend;
-
-        return (quotient * sign, remainder);
-    }
-
-    /// <summary>
-    /// Calculates the greatest common denominator of the specified values. 
-    /// </summary>
-    /// <param name="left">The left-hand value for which to calculate the greatest common denominator.</param>
-    /// <param name="right">The right-hand value for which to calculate the greatest common denominator.</param>
-    /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
-    /// <returns>Returns the greatest common denominator of the specified values. </returns>
-    public static T GreatestCommonDenominator<T>(T left, T right) where T : INumber<T>
-    {
-        while (!T.IsZero(right))
-        {
-            T copy = left;
-            left = right;
-            right = copy % right;
-        }
-
-        return left;
+        return T.Abs(left - right);
     }
 
     /// <summary>
@@ -83,14 +41,14 @@ public static class GenericMath
     /// <returns>Returns the length of the integer part of the specified value.</returns>
     public static int IntegerLength<T>(T value) where T : INumber<T>
     {
-        if (value == T.Zero) return 0;
-        
+        value = T.Abs(value);
+
+        if (value < T.One) return 0;
+
         int length = 1;
         T ten = T.CreateChecked(10);
 
-        value = T.Abs(value);
-
-        while (value >= ten || value <= -ten)
+        while (value >= ten)
         {
             value /= ten;
             length++;

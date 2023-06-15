@@ -12,11 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Core.Numerics;
 
-internal static class Program
+/// <summary>
+/// Specifies IEEE-754 floating-point number conversion modes.
+/// </summary>
+public enum ConversionMode
 {
-    private static void Main(string[] args)
-    {
-    }
+    /// <summary>
+    /// IEEE-754 floating-point numbers should be converted using their binary representation.
+    /// </summary>
+    Binary,
+
+    /// <summary>
+    /// IEEE-754 floating-point numbers should be converted using their decimal representation.
+    /// </summary>
+    Decimal
 }

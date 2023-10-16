@@ -1,28 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <LangVersion>10</LangVersion>
+        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>11</LangVersion>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>OnixLabs.Core</Title>
         <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Core API for .NET</Description>
-        <AssemblyVersion>5.0.0</AssemblyVersion>
+        <AssemblyVersion>6.0.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
-        <Copyright>Copyright © ONIXLabs 2020-2022</Copyright>
+        <Copyright>Copyright © ONIXLabs 2020-2023</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>5.0.0</PackageVersion>
+        <PackageVersion>6.0.0</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <Optimize>true</Optimize>
-      <DocumentationFile>bin\Debug\net5.0\OnixLabs.Core.xml</DocumentationFile>
+        <Optimize>true</Optimize>
+        <DocumentationFile>bin\Debug\net5.0\OnixLabs.Core.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\net5.0\OnixLabs.Core.xml</DocumentationFile>
-      <DebugSymbols>true</DebugSymbols>
+        <DocumentationFile>bin\Release\net5.0\OnixLabs.Core.xml</DocumentationFile>
+        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="OnixLabs.Core.Preconditions" Static="True" />
+        <Using Include="OnixLabs.Core.Collections.Collection" Static="True" />
+    </ItemGroup>
 
 </Project>

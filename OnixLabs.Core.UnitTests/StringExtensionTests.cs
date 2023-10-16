@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,128 +12,191 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Globalization;
 using Xunit;
 
 namespace OnixLabs.Core.UnitTests;
 
 public sealed class StringExtensionTests
 {
-    [Theory(DisplayName = "SubstringBefore should return the expected result (char)")]
+    [Theory(DisplayName = "String.Repeat should return the expected result")]
+    [InlineData("0", 10, "0000000000")]
+    [InlineData("Abc1", 3, "Abc1Abc1Abc1")]
+    public void RepeatShouldProduceExpectedResult(string value, int count, string expected)
+    {
+        // When
+        string actual = value.Repeat(count);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "String.SubstringBeforeFirst should return the string before the first delimiter")]
     [InlineData("First:Second", "First", ':')]
     [InlineData("12345+678910", "12345", '+')]
-    public void SubstringBeforeShouldReturnTheExpectedResultChar(string value, string expected, char delimiter)
+    public void SubstringBeforeFirstShouldProduceExpectedResultChar(string value, string expected, char delimiter)
     {
-        // Arrange / Act
-        string actual = value.SubstringBefore(delimiter);
+        // When
+        string actual = value.SubstringBeforeFirst(delimiter);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "SubstringBefore should return the expected result (string)")]
+    [Theory(DisplayName = "String.SubstringBeforeFirst should return the string before the first delimiter")]
     [InlineData("First:Second", "First", ":")]
     [InlineData("12345+678910", "12345", "+")]
-    public void SubstringBeforeShouldReturnTheExpectedResultString(string value, string expected, string delimiter)
+    public void SubstringBeforeFirstShouldProduceExpectedResultString(string value, string expected, string delimiter)
     {
-        // Arrange / Act
-        string actual = value.SubstringBefore(delimiter);
+        // When
+        string actual = value.SubstringBeforeFirst(delimiter);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "SubstringBeforeLast should return the expected result (char)")]
+    [Theory(DisplayName = "String.SubstringBeforeLast should return the string before the last char delimiter")]
     [InlineData("First:Second:Third", "First:Second", ':')]
     [InlineData("12345+678910+12345", "12345+678910", '+')]
-    public void SubstringBeforeLastShouldReturnTheExpectedResultChar(string value, string expected, char delimiter)
+    public void SubstringBeforeLastShouldProduceExpectedResultChar(string value, string expected, char delimiter)
     {
-        // Arrange / Act
+        // When
         string actual = value.SubstringBeforeLast(delimiter);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "SubstringBeforeLast should return the expected result (string)")]
+    [Theory(DisplayName = "String.SubstringBeforeLast should return the string before the last string delimiter")]
     [InlineData("First:Second:Third", "First:Second", ":")]
     [InlineData("12345+678910+12345", "12345+678910", "+")]
-    public void SubstringBeforeLastShouldReturnTheExpectedResultString(string value, string expected, string delimiter)
+    public void SubstringBeforeLastShouldProduceExpectedResultString(string value, string expected, string delimiter)
     {
-        // Arrange / Act
+        // When
         string actual = value.SubstringBeforeLast(delimiter);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "SubstringAfter should return the expected result (char)")]
+    [Theory(DisplayName = "String.SubstringAfterFirst should return the string after the first char delimiter")]
     [InlineData("First:Second", "Second", ':')]
     [InlineData("12345+678910", "678910", '+')]
-    public void SubstringAfterShouldReturnTheExpectedResultChar(string value, string expected, char delimiter)
+    public void SubstringAfterFirstShouldProduceExpectedResultChar(string value, string expected, char delimiter)
     {
-        // Arrange / Act
-        string actual = value.SubstringAfter(delimiter);
+        // When
+        string actual = value.SubstringAfterFirst(delimiter);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "SubstringAfter should return the expected result (string)")]
+    [Theory(DisplayName = "String.SubstringAfterFirst should return the string after the first string delimiter")]
     [InlineData("First:Second", "Second", ":")]
     [InlineData("12345+678910", "678910", "+")]
-    public void SubstringAfterShouldReturnTheExpectedResultString(string value, string expected, string delimiter)
+    public void SubstringAfterFirstShouldProduceExpectedResultString(string value, string expected, string delimiter)
     {
-        // Arrange / Act
-        string actual = value.SubstringAfter(delimiter);
+        // When
+        string actual = value.SubstringAfterFirst(delimiter);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "SubstringAfterLast should return the expected result (char)")]
+    [Theory(DisplayName = "String.SubstringAfterLast should return the string after the last char delimiter")]
     [InlineData("First:Second:Third", "Third", ':')]
     [InlineData("12345+678910+12345", "12345", '+')]
-    public void SubstringAfterLastShouldReturnTheExpectedResultChar(string value, string expected, char delimiter)
+    public void SubstringAfterLastShouldProduceExpectedResultChar(string value, string expected, char delimiter)
     {
-        // Arrange / Act
+        // When
         string actual = value.SubstringAfterLast(delimiter);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "SubstringAfterLast should return the expected result (string)")]
+    [Theory(DisplayName = "String.SubstringAfterLast should return the the string after the last string delimiter")]
     [InlineData("First:Second:Third", "Third", ":")]
     [InlineData("12345+678910+12345", "12345", "+")]
-    public void SubstringAfterLastShouldReturnTheExpectedResultString(string value, string expected, string delimiter)
+    public void SubstringAfterLastShouldProduceExpectedResultString(string value, string expected, string delimiter)
     {
-        // Arrange / Act
+        // When
         string actual = value.SubstringAfterLast(delimiter);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "ToByteArray should return the expected result")]
-    [InlineData("Hello, World!", new byte[] {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21})]
-    public void ToByteArrayShouldReturnTheExpectedResult(string value, byte[] expected)
+    [Theory(DisplayName = "String.ToByteArray should produce the byte array equivalent of the current string")]
+    [InlineData("Hello, World!", new byte[] { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21 })]
+    public void ToByteArrayShouldProduceExpectedResult(string value, byte[] expected)
     {
-        // Arrange / Act
+        // When
         byte[] actual = value.ToByteArray();
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Wrap should return the expected result")]
+    [Theory(DisplayName = "String.ToDateTime should return the DateTime equivalent of the current string")]
+    [InlineData("0001-01-01T00:00:00Z", 1, 1, 1, 0, 0, 0)]
+    [InlineData("1970-01-01T00:00:00Z", 1970, 1, 1, 0, 0, 0)]
+    [InlineData("9999-12-31T23:59:59Z", 9999, 12, 31, 23, 59, 59)]
+    public void ToDateTimeShouldProduceExpectedResult(string value, int year, int month, int day, int hour, int minute, int second)
+    {
+        // When
+        // AdjustToUniversal is essential, otherwise the tests may pass locally but fail on a build server in another time-zone.
+        DateTime actual = value.ToDateTime(styles: DateTimeStyles.AdjustToUniversal);
+
+        // Then
+        Assert.Equal(year, actual.Year);
+        Assert.Equal(month, actual.Month);
+        Assert.Equal(day, actual.Day);
+        Assert.Equal(hour, actual.Hour);
+        Assert.Equal(minute, actual.Minute);
+        Assert.Equal(second, actual.Second);
+    }
+
+    [Theory(DisplayName = "String.ToDateOnly should return the DateOnly equivalent of the current string")]
+    [InlineData("0001-01-01", 1, 1, 1)]
+    [InlineData("1970-01-01", 1970, 1, 1)]
+    [InlineData("9999-12-31", 9999, 12, 31)]
+    public void ToDateOnlyShouldProduceExpectedResult(string value, int year, int month, int day)
+    {
+        // When
+        DateOnly actual = value.ToDateOnly();
+
+        // Then
+        Assert.Equal(year, actual.Year);
+        Assert.Equal(month, actual.Month);
+        Assert.Equal(day, actual.Day);
+    }
+
+    [Theory(DisplayName = "String.ToTimeOnly should return the TimeOnly equivalent of the current string")]
+    [InlineData("00:00:00", 0, 0, 0)]
+    [InlineData("01:01:01", 1, 1, 1)]
+    [InlineData("23:59:59", 23, 59, 59)]
+    public void ToTimeOnlyShouldProduceExpectedResult(string value, int hour, int minute, int second)
+    {
+        // When
+        TimeOnly actual = value.ToTimeOnly();
+
+        // Then
+        Assert.Equal(hour, actual.Hour);
+        Assert.Equal(minute, actual.Minute);
+        Assert.Equal(second, actual.Second);
+    }
+
+    [Theory(DisplayName = "String.Wrap should wrap the current string value between the before and after string values")]
     [InlineData("<", "value", ">", "<value>")]
     [InlineData("BEFORE:", "value", ":AFTER", "BEFORE:value:AFTER")]
-    public void WrapShouldReturnTheExpectedResult(string before, string value, string after, string expected)
+    public void WrapShouldProduceExpectedResult(string before, string value, string after, string expected)
     {
-        // Arrange / Act
+        // When
         string actual = value.Wrap(before, after);
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 }

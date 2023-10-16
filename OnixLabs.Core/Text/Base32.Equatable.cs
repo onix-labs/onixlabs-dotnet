@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,56 +18,56 @@ using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text;
 
-public readonly partial struct Base32 : IEquatable<Base32>
+public readonly partial struct Base32
 {
     /// <summary>
-    /// Performs an equality check between two object instances.
-    /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
-    public static bool operator ==(Base32 a, Base32 b)
-    {
-        return Equals(a, b);
-    }
-
-    /// <summary>
-    /// Performs an inequality check between two object instances.
-    /// </summary>
-    /// <param name="a">Instance a.</param>
-    /// <param name="b">Instance b.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(Base32 a, Base32 b)
-    {
-        return !Equals(a, b);
-    }
-
-    /// <summary>
-    /// Checks for equality between this instance and another object.
+    /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
-    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
     public bool Equals(Base32 other)
     {
         return other.Value.SequenceEqual(Value) && other.Alphabet == Alphabet && other.Padding == Padding;
     }
 
     /// <summary>
-    /// Checks for equality between this instance and another object.
+    /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
-    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
         return obj is Base32 other && Equals(other);
     }
 
     /// <summary>
-    /// Serves as a hash code function for this instance.
+    /// Serves as a hash code function for the current instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode()
     {
         return HashCode.Combine(Value.GetContentHashCode());
+    }
+
+    /// <summary>
+    /// Performs an equality check between two object instances.
+    /// </summary>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
+    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    public static bool operator ==(Base32 left, Base32 right)
+    {
+        return Equals(left, right);
+    }
+
+    /// <summary>
+    /// Performs an inequality check between two object instances.
+    /// </summary>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
+    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(Base32 left, Base32 right)
+    {
+        return !Equals(left, right);
     }
 }

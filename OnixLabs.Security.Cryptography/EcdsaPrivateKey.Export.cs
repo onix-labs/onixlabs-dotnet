@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,9 +26,7 @@ public sealed partial class EcdsaPrivateKey
     public override byte[] ExportPkcs8Key()
     {
         using ECDsa privateKey = ECDsa.Create();
-
         privateKey.ImportECPrivateKey(KeyData, out int _);
-
         return privateKey.ExportPkcs8PrivateKey();
     }
 
@@ -41,9 +39,7 @@ public sealed partial class EcdsaPrivateKey
     public override byte[] ExportPkcs8Key(ReadOnlySpan<char> password, PbeParameters parameters)
     {
         using ECDsa privateKey = ECDsa.Create();
-
         privateKey.ImportECPrivateKey(KeyData, out int _);
-
         return privateKey.ExportEncryptedPkcs8PrivateKey(password, parameters);
     }
 }

@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -36,6 +35,6 @@ public sealed partial class HashAlgorithmType
     /// <exception cref="ArgumentException">If the length of the byte array is invalid.</exception>
     public void VerifyHashLength(byte[] value)
     {
-        Check(IsValidHashLength(value), "The length of the hash is invalid.", nameof(value));
+        Require(IsValidHashLength(value), "The length of the hash is invalid.", nameof(value));
     }
 }

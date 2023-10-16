@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,51 +22,7 @@ public readonly partial struct Base32
     /// Parses a Base-32 value into a <see cref="Base32"/> instance.
     /// </summary>
     /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <returns>A new <see cref="Base32"/> instance.</returns>
-    public static Base32 Parse(string value)
-    {
-        return Parse(value, Base32Alphabet.Default);
-    }
-
-    /// <summary>
-    /// Parses a Base-32 value into a <see cref="Base32"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base32"/> instance.</returns>
-    public static Base32 Parse(string value, Base32Alphabet alphabet)
-    {
-        ReadOnlySpan<char> characters = value.AsSpan();
-        return Parse(characters, alphabet);
-    }
-
-    /// <summary>
-    /// Parses a Base-32 value into a <see cref="Base32"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <returns>A new <see cref="Base32"/> instance.</returns>
-    public static Base32 Parse(char[] value)
-    {
-        return Parse(value, Base32Alphabet.Default);
-    }
-
-    /// <summary>
-    /// Parses a Base-32 value into a <see cref="Base32"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base32"/> instance.</returns>
-    public static Base32 Parse(char[] value, Base32Alphabet alphabet)
-    {
-        ReadOnlySpan<char> characters = value.AsSpan();
-        return Parse(characters, alphabet);
-    }
-
-    /// <summary>
-    /// Parses a Base-32 value into a <see cref="Base32"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <returns>A new <see cref="Base32"/> instance.</returns>
+    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
     public static Base32 Parse(ReadOnlySpan<char> value)
     {
         return Parse(value, Base32Alphabet.Default);
@@ -77,11 +33,11 @@ public readonly partial struct Base32
     /// </summary>
     /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
     /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base32"/> instance.</returns>
+    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
     public static Base32 Parse(ReadOnlySpan<char> value, Base32Alphabet alphabet)
     {
         bool padding = value.Contains('=');
         byte[] bytes = Decode(value, alphabet.Alphabet, padding);
-        return FromByteArray(bytes, padding);
+        return Create(bytes, padding);
     }
 }

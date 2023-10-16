@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-58 value.
 /// </summary>
-public readonly partial struct Base58
+public readonly partial struct Base58 : IBase<Base58>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Base58"/> struct.
@@ -26,7 +26,7 @@ public readonly partial struct Base58
     /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
     private Base58(byte[] value, Base58Alphabet alphabet)
     {
-        Value = value;
+        Value = value.Copy();
         Alphabet = alphabet;
     }
 

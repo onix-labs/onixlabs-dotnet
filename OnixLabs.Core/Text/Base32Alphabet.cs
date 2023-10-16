@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,32 +22,27 @@ public sealed class Base32Alphabet : Enumeration<Base32Alphabet>
     /// <summary>
     /// The default (RFC-4648) Base-32 alphabet.
     /// </summary>
-    public static readonly Base32Alphabet Default =
-        new(0, nameof(Default), "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567");
+    public static Base32Alphabet Default => new(0, nameof(Default), "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567");
 
     /// <summary>
     /// The Z-Base-32 alphabet.
     /// </summary>
-    public static readonly Base32Alphabet ZBase32 =
-        new(1, nameof(ZBase32), "ybndrfg8ejkmcpqxot1uwisza345h769");
+    public static Base32Alphabet ZBase32 => new(1, nameof(ZBase32), "ybndrfg8ejkmcpqxot1uwisza345h769");
 
     /// <summary>
     /// The Geohash Base-32 alphabet.
     /// </summary>
-    public static readonly Base32Alphabet GeoHash =
-        new(2, nameof(GeoHash), "0123456789bcdefghjkmnpqrstuvwxyz");
+    public static Base32Alphabet GeoHash => new(2, nameof(GeoHash), "0123456789bcdefghjkmnpqrstuvwxyz");
 
     /// <summary>
     /// The Crockford Base-32 alphabet.
     /// </summary>
-    public static readonly Base32Alphabet Crockford =
-        new(3, nameof(Crockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ");
+    public static Base32Alphabet Crockford => new(3, nameof(Crockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ");
 
     /// <summary>
     /// The Base-32 Hex alphabet.
     /// </summary>
-    public static readonly Base32Alphabet Base32Hex =
-        new(4, nameof(Base32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV");
+    public static Base32Alphabet Base32Hex => new(4, nameof(Base32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base32Alphabet"/> class.

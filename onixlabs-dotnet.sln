@@ -16,6 +16,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnixLabs.Security.Cryptogra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnixLabs.Security.Cryptography.UnitTests", "OnixLabs.Security.Cryptography.UnitTests\OnixLabs.Security.Cryptography.UnitTests.csproj", "{C3DE665B-5B02-41DE-8BB0-C53A1326E162}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnixLabs.Core.UnitTests.Data", "OnixLabs.Core.UnitTests.Data\OnixLabs.Core.UnitTests.Data.csproj", "{E3FBC79F-7F5A-4ECF-9653-C0AB203FF5D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnixLabs.Security.Cryptography.UnitTests.Data", "OnixLabs.Security.Cryptography.UnitTests.Data\OnixLabs.Security.Cryptography.UnitTests.Data.csproj", "{513CFC09-42E2-43C3-BB68-90640D78CDF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTestData", "UnitTestData", "{5BA28E51-3E67-4081-BD69-5AE6885C8F2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,9 @@ Global
 		{893547DB-4EAA-4D1F-886F-0D6114F8601E} = {C1D7FFDA-A234-4A01-9371-19C68DD74C91}
 		{78FDB1BA-6545-41DE-99B8-F007C6A6B093} = {6E4FE7B0-5E44-4EB4-B64F-228645C4F79B}
 		{C3DE665B-5B02-41DE-8BB0-C53A1326E162} = {C1D7FFDA-A234-4A01-9371-19C68DD74C91}
+		{5BA28E51-3E67-4081-BD69-5AE6885C8F2A} = {C1D7FFDA-A234-4A01-9371-19C68DD74C91}
+		{E3FBC79F-7F5A-4ECF-9653-C0AB203FF5D5} = {5BA28E51-3E67-4081-BD69-5AE6885C8F2A}
+		{513CFC09-42E2-43C3-BB68-90640D78CDF4} = {5BA28E51-3E67-4081-BD69-5AE6885C8F2A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1EDC1164-0205-433D-A356-00DAD4686264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -49,5 +58,13 @@ Global
 		{C3DE665B-5B02-41DE-8BB0-C53A1326E162}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3DE665B-5B02-41DE-8BB0-C53A1326E162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3DE665B-5B02-41DE-8BB0-C53A1326E162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3FBC79F-7F5A-4ECF-9653-C0AB203FF5D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3FBC79F-7F5A-4ECF-9653-C0AB203FF5D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3FBC79F-7F5A-4ECF-9653-C0AB203FF5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3FBC79F-7F5A-4ECF-9653-C0AB203FF5D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{513CFC09-42E2-43C3-BB68-90640D78CDF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{513CFC09-42E2-43C3-BB68-90640D78CDF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{513CFC09-42E2-43C3-BB68-90640D78CDF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{513CFC09-42E2-43C3-BB68-90640D78CDF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

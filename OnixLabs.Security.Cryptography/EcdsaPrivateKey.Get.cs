@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,10 +25,8 @@ public sealed partial class EcdsaPrivateKey
     public override PublicKey GetPublicKey()
     {
         using ECDsa privateKey = ECDsa.Create();
-
         privateKey.ImportECPrivateKey(KeyData, out int _);
         byte[] publicKey = privateKey.ExportSubjectPublicKeyInfo();
-
         return new EcdsaPublicKey(publicKey, AlgorithmType);
     }
 }

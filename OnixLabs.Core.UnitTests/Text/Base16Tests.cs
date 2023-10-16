@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,50 +19,50 @@ namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base16Tests
 {
-    [Fact(DisplayName = "Identical Base16 values produce identical hash codes.")]
-    public void IdenticalBase16ValuesProduceIdenticalHashCodes()
+    [Fact(DisplayName = "Base16 values should be identical")]
+    public void Base16ValuesShouldBeIdentical()
     {
-        // Arrange
-        Base16 a = Base16.FromString("abcdefghijklmnopqrstuvwxyz");
-        Base16 b = Base16.FromString("abcdefghijklmnopqrstuvwxyz");
+        // Given
+        Base16 a = Base16.Create("abcdefghijklmnopqrstuvwxyz");
+        Base16 b = Base16.Create("abcdefghijklmnopqrstuvwxyz");
 
-        // Act
+        // When
         int hashCodeA = a.GetHashCode();
         int hashCodeB = b.GetHashCode();
 
-        // Assert
+        // Then
         Assert.Equal(hashCodeA, hashCodeB);
     }
 
-    [Theory(DisplayName = "Base16_FromString should produce the expected Base-16 value.")]
+    [Theory(DisplayName = "Base16.Create should produce the expected Base-16 value")]
     [InlineData("31323334353637383930", "1234567890")]
     [InlineData("4142434445464748494a4b4c4d4e4f505152535455565758595a", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("6162636465666768696a6b6c6d6e6f707172737475767778797a", "abcdefghijklmnopqrstuvwxyz")]
-    public void Base16FromStringShouldProduceTheExpectedBase16Value(string expected, string value)
+    public void CreateShouldProduceExpectedResult(string expected, string value)
     {
-        // Arrange
-        Base16 candidate = Base16.FromString(value);
+        // Given
+        Base16 candidate = Base16.Create(value);
 
-        // Act
+        // When
         string actual = candidate.ToString();
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base16_Parse should produce the expected plain text value.")]
+    [Theory(DisplayName = "Base16.Parse should produce the expected plain text value")]
     [InlineData("1234567890", "31323334353637383930")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "4142434445464748494a4b4c4d4e4f505152535455565758595a")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "6162636465666768696a6b6c6d6e6f707172737475767778797a")]
-    public void Base16ParseShouldProduceTheExpectedPlainTextValue(string expected, string value)
+    public void ParseShouldProduceExpectedResult(string expected, string value)
     {
-        // Arrange
+        // Given
         Base16 candidate = Base16.Parse(value);
 
-        // Act
+        // When
         string actual = candidate.ToPlainTextString();
 
-        // Assert
+        // Then
         Assert.Equal(expected, actual);
     }
 }

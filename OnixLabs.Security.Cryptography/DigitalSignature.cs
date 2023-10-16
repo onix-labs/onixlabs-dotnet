@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -25,7 +27,7 @@ public readonly partial struct DigitalSignature
     /// <param name="value">The digitally signed data.</param>
     private DigitalSignature(byte[] value)
     {
-        Value = value;
+        Value = value.Copy();
     }
 
     /// <summary>

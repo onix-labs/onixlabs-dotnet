@@ -1,31 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <Title>OnixLabs.Security.Cryptography</Title>
         <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Cryptography API for .NET</Description>
-        <AssemblyVersion>5.0.0</AssemblyVersion>
+        <AssemblyVersion>6.0.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Copyright>Copyright © ONIXLabs 2020-2022</Copyright>
+        <Copyright>Copyright © ONIXLabs 2020-2023</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>5.0.0</PackageVersion>
-        <LangVersion>10</LangVersion>
+        <PackageVersion>6.0.0</PackageVersion>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
-      <DebugSymbols>true</DebugSymbols>
+        <DocumentationFile>bin\Release\net5.0\OnixLabs.Security.Cryptography.xml</DocumentationFile>
+        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
+        <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
+        <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
+        <Using Include="OnixLabs.Core.Collections.Collection" Static="True"/>
     </ItemGroup>
 
 </Project>

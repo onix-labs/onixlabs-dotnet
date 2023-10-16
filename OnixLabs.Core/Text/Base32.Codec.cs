@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public readonly partial struct Base32
             int availableBits = Math.Min(InputSize - inputSubPosition, OutputSize - outputSubPosition);
 
             outputPosition <<= availableBits;
-            outputPosition |= (byte) (value[inputPosition] >> (InputSize - (inputSubPosition + availableBits)));
+            outputPosition |= (byte)(value[inputPosition] >> (InputSize - (inputSubPosition + availableBits)));
             inputSubPosition += availableBits;
 
             if (inputSubPosition >= InputSize)
@@ -134,7 +134,7 @@ public readonly partial struct Base32
             int availableBits = Math.Min(OutputSize - inputSubPosition, InputSize - outputSubPosition);
 
             outputBytes[outputPosition] <<= availableBits;
-            outputBytes[outputPosition] |= (byte) (index >> (OutputSize - (inputSubPosition + availableBits)));
+            outputBytes[outputPosition] |= (byte)(index >> (OutputSize - (inputSubPosition + availableBits)));
             outputSubPosition += availableBits;
 
             if (outputSubPosition >= InputSize)

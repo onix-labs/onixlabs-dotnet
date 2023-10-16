@@ -15,10 +15,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using OnixLabs.Core.Collections;
 using OnixLabs.Core.Linq;
-using OnixLabs.Core.Numerics;
 using OnixLabs.Core.UnitTests.Data.Objects;
 using Xunit;
 
@@ -374,11 +372,11 @@ public sealed class IEnumerableExtensionTests
     public void SumShouldProduceExpectedResult()
     {
         // Given
-        IEnumerable<BigDecimal> elements = Collection.ListOf<BigDecimal>(12.34, 34.56, 56.78);
-        BigDecimal expected = 103.68;
+        IEnumerable<decimal> elements = Collection.ListOf<decimal>(12.34m, 34.56m, 56.78m);
+        decimal expected = 103.68m;
 
         // When
-        BigDecimal actual = elements.Sum();
+        decimal actual = elements.Sum();
 
         // Then
         Assert.Equal(expected, actual);
@@ -388,14 +386,14 @@ public sealed class IEnumerableExtensionTests
     public void SumWithSelectorShouldProduceExpectedResult()
     {
         // Given
-        Numeric<BigDecimal> element1 = new(1234.567);
-        Numeric<BigDecimal> element2 = new(890.1234);
-        Numeric<BigDecimal> element3 = new(56.78901);
-        IEnumerable<Numeric<BigDecimal>> elements = Collection.ListOf(element1, element2, element3);
-        BigDecimal expected = 2181.47941;
+        Numeric<decimal> element1 = new(1234.567m);
+        Numeric<decimal> element2 = new(890.1234m);
+        Numeric<decimal> element3 = new(56.78901m);
+        IEnumerable<Numeric<decimal>> elements = Collection.ListOf(element1, element2, element3);
+        decimal expected = 2181.47941m;
 
         // When
-        BigDecimal actual = elements.SumBy(element => element.Value);
+        decimal actual = elements.SumBy(element => element.Value);
 
         // Then
         Assert.Equal(expected, actual);

@@ -28,7 +28,6 @@
 
     <ItemGroup>
       <Folder Include="Text" />
-      <Folder Include="Units" />
     </ItemGroup>
 
 </Project>

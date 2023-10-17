@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ public readonly partial struct Hmac
     {
         byte[] valueBytes = encoding.GetBytes(value);
         byte[] keyBytes = encoding.GetBytes(key);
-
         return await ComputeHmacAsync(valueBytes, keyBytes, type);
     }
 
@@ -62,7 +61,7 @@ public readonly partial struct Hmac
         await using Stream stream = new MemoryStream(value);
 
         byte[] data = await algorithm.ComputeHashAsync(stream);
-        Hash hash = Hash.FromByteArray(data, type);
+        Hash hash = Hash.Create(data, type);
 
         return Create(hash, value);
     }

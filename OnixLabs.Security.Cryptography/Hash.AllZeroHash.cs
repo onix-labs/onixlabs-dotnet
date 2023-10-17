@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
 
 using System;
 using System.Linq;
-using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -49,9 +48,8 @@ public readonly partial struct Hash
     /// <exception cref="ArgumentException">If the length of the hash is unexpected.</exception>
     public static Hash CreateAllZeroHash(HashAlgorithmType type, int length)
     {
-        Check(type.IsUnknown || type.Length == length, "Unexpected hash algorithm output length.");
-
+        Require(type.IsUnknown || type.Length == length, "Unexpected hash algorithm output length.", nameof(length));
         byte[] bytes = Enumerable.Repeat(byte.MinValue, length).ToArray();
-        return FromByteArray(bytes, type);
+        return Create(bytes, type);
     }
 }

@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public readonly partial struct Base64
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
     public override string ToString()
     {
         return Convert.ToBase64String(Value);

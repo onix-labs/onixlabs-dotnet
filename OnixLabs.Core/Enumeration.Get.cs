@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public abstract partial class Enumeration<T>
         return typeof(T)
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
             .Select(field => field.GetValue(null))
-            .WhereIs<T>()
+            .WhereInstanceOf<T>()
             .ToImmutableHashSet();
     }
 

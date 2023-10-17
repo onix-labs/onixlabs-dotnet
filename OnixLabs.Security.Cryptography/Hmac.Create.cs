@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Core;
+
 namespace OnixLabs.Security.Cryptography;
 
 public readonly partial struct Hmac
@@ -24,6 +26,6 @@ public readonly partial struct Hmac
     /// <returns>Returns a new <see cref="Hmac"/> instance.</returns>
     public static Hmac Create(Hash hash, byte[] data)
     {
-        return new Hmac(hash, data);
+        return new Hmac(hash, data.Copy());
     }
 }

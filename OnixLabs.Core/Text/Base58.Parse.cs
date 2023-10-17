@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,51 +22,7 @@ public readonly partial struct Base58
     /// Parses a Base-58 value into a <see cref="Base58"/> instance.
     /// </summary>
     /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 Parse(string value)
-    {
-        return Parse(value, Base58Alphabet.Default);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value into a <see cref="Base58"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 Parse(string value, Base58Alphabet alphabet)
-    {
-        ReadOnlySpan<char> characters = value.AsSpan();
-        return Parse(characters, alphabet);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value into a <see cref="Base58"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 Parse(char[] value)
-    {
-        return Parse(value, Base58Alphabet.Default);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value into a <see cref="Base58"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 Parse(char[] value, Base58Alphabet alphabet)
-    {
-        ReadOnlySpan<char> characters = value.AsSpan();
-        return Parse(characters, alphabet);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value into a <see cref="Base58"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
+    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
     public static Base58 Parse(ReadOnlySpan<char> value)
     {
         return Parse(value, Base58Alphabet.Default);
@@ -77,55 +33,11 @@ public readonly partial struct Base58
     /// </summary>
     /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
     /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
+    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
     public static Base58 Parse(ReadOnlySpan<char> value, Base58Alphabet alphabet)
     {
         byte[] bytes = Decode(value, alphabet.Alphabet);
-        return FromByteArray(bytes, alphabet);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to ParseWithChecksum.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(string value)
-    {
-        return ParseWithChecksum(value, Base58Alphabet.Default);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to ParseWithChecksum.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(string value, Base58Alphabet alphabet)
-    {
-        ReadOnlySpan<char> characters = value.AsSpan();
-        return ParseWithChecksum(characters, alphabet);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to ParseWithChecksum.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(char[] value)
-    {
-        return ParseWithChecksum(value, Base58Alphabet.Default);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> instance.
-    /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to ParseWithChecksum.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(char[] value, Base58Alphabet alphabet)
-    {
-        ReadOnlySpan<char> characters = value.AsSpan();
-        return ParseWithChecksum(characters, alphabet);
+        return Create(bytes, alphabet);
     }
 
     /// <summary>
@@ -151,6 +63,6 @@ public readonly partial struct Base58
 
         VerifyChecksum(bytes);
 
-        return FromByteArray(bytesWithoutChecksum, alphabet);
+        return Create(bytesWithoutChecksum, alphabet);
     }
 }

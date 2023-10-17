@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ public readonly partial struct Hmac
     {
         byte[] valueBytes = encoding.GetBytes(value);
         byte[] keyBytes = encoding.GetBytes(key);
-
         return ComputeHmac(valueBytes, keyBytes, type);
     }
 
@@ -57,10 +56,8 @@ public readonly partial struct Hmac
     public static Hmac ComputeHmac(byte[] value, byte[] key, HashAlgorithmType type)
     {
         using KeyedHashAlgorithm algorithm = type.GetKeyedHashAlgorithm(key);
-
         byte[] data = algorithm.ComputeHash(value);
-        Hash hash = Hash.FromByteArray(data, type);
-
+        Hash hash = Hash.Create(data, type);
         return Create(hash, value);
     }
 }

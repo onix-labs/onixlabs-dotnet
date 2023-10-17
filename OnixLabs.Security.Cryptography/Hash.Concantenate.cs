@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Linq;
 using System.Security.Cryptography;
-using static OnixLabs.Core.Preconditions;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -29,13 +27,11 @@ public readonly partial struct Hash
     /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
     public static Hash Concatenate(Hash a, Hash b)
     {
-        Check(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
-
+        Require(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
         using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm();
         byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();
         byte[] hashedValue = algorithm.ComputeHash(concatenatedValue);
-
-        return FromByteArray(hashedValue, a.AlgorithmType);
+        return Create(hashedValue, a.AlgorithmType);
     }
 
     /// <summary>
@@ -47,12 +43,11 @@ public readonly partial struct Hash
     /// <returns>Returns the concatenation of the two <see cref="Hash"/> instances.</returns>
     public static Hash Concatenate(Hash a, Hash b, int length)
     {
-        Check(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
-
+        Require(a.AlgorithmType == b.AlgorithmType, "Cannot concatenate hashes of different algorithm types.");
         using HashAlgorithm algorithm = a.AlgorithmType.GetHashAlgorithm(length);
         byte[] concatenatedValue = a.ToByteArray().Concat(b.ToByteArray()).ToArray();
         byte[] hashedValue = algorithm.ComputeHash(concatenatedValue);
-        return FromByteArray(hashedValue, a.AlgorithmType);
+        return Create(hashedValue, a.AlgorithmType);
     }
 
     /// <summary>

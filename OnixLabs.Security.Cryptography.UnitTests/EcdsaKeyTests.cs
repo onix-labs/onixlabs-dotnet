@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public sealed class EcdsaKeyTests : KeyTestBase
 
         // Act
         Base58 base58PrivateKey = privateKey1.ToBase58();
-        PrivateKey privateKey2 = EcdsaPrivateKey.FromBase58(base58PrivateKey, type);
+        PrivateKey privateKey2 = EcdsaPrivateKey.Create(base58PrivateKey, type);
 
         // Assert
         Assert.Equal(privateKey1, privateKey2);
@@ -46,7 +46,7 @@ public sealed class EcdsaKeyTests : KeyTestBase
 
         // Act
         Base58 base58PublicKey = publicKey1.ToBase58();
-        PublicKey publicKey2 = EcdsaPublicKey.FromBase58(base58PublicKey, type);
+        PublicKey publicKey2 = EcdsaPublicKey.Create(base58PublicKey, type);
 
         // Assert
         Assert.Equal(publicKey1, publicKey2);
@@ -60,7 +60,7 @@ public sealed class EcdsaKeyTests : KeyTestBase
         HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
         KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
         PrivateKey privateKey1 = pair.PrivateKey;
-        PrivateKey privateKey2 = EcdsaPrivateKey.FromBase64(privateKey1.ToBase64(), type);
+        PrivateKey privateKey2 = EcdsaPrivateKey.Create(privateKey1.ToBase64(), type);
         PublicKey publicKey1 = pair.PublicKey;
         PublicKey publicKey2 = privateKey1.GetPublicKey();
 
@@ -91,7 +91,7 @@ public sealed class EcdsaKeyTests : KeyTestBase
         HashAlgorithmType type = HashAlgorithmType.Sha2Hash256;
         KeyPair pair = KeyPair.CreateEcdsaKeyPair(type);
         PrivateKey privateKey1 = pair.PrivateKey;
-        PrivateKey privateKey2 = EcdsaPrivateKey.FromBase64(privateKey1.ToBase64(), type);
+        PrivateKey privateKey2 = EcdsaPrivateKey.Create(privateKey1.ToBase64(), type);
         PublicKey publicKey1 = pair.PublicKey;
         PublicKey publicKey2 = privateKey1.GetPublicKey();
 

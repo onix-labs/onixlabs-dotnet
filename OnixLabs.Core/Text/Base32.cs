@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-32 value.
 /// </summary>
-public readonly partial struct Base32
+public readonly partial struct Base32 : IBase<Base32>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Base32"/> struct.
@@ -27,7 +27,7 @@ public readonly partial struct Base32
     /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
     private Base32(byte[] value, Base32Alphabet alphabet, bool padding)
     {
-        Value = value;
+        Value = value.Copy();
         Alphabet = alphabet;
         Padding = padding;
     }

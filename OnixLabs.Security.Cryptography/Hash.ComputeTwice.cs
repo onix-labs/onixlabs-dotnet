@@ -1,4 +1,4 @@
-// Copyright 2020-2022 ONIXLabs
+// Copyright 2020-2023 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ public readonly partial struct Hash
         using HashAlgorithm algorithm = type.GetHashAlgorithm();
         byte[] firstRoundValue = algorithm.ComputeHash(value);
         byte[] secondRoundValue = algorithm.ComputeHash(firstRoundValue);
-        return FromByteArray(secondRoundValue, type);
+        return Create(secondRoundValue, type);
     }
 
     /// <summary>
@@ -93,6 +93,6 @@ public readonly partial struct Hash
         using HashAlgorithm algorithm = type.GetHashAlgorithm(length);
         byte[] firstRoundValue = algorithm.ComputeHash(value);
         byte[] secondRoundValue = algorithm.ComputeHash(firstRoundValue);
-        return FromByteArray(secondRoundValue, type);
+        return Create(secondRoundValue, type);
     }
 }

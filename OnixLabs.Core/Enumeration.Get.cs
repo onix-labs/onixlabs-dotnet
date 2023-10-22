@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
@@ -19,13 +20,14 @@ using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core;
 
+// ReSharper disable ReturnTypeCanBeEnumerable.Global
 public abstract partial class Enumeration<T>
 {
     /// <summary>
     /// Gets all of the enumeration entries for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration entries for the current type.</returns>
-    public static ImmutableHashSet<T> GetAll()
+    public static IReadOnlySet<T> GetAll()
     {
         return typeof(T)
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
@@ -38,7 +40,7 @@ public abstract partial class Enumeration<T>
     /// Gets all of the enumeration entries for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration entries for the current type.</returns>
-    public static ImmutableHashSet<(int Value, string Name)> GetEntries()
+    public static IReadOnlySet<(int Value, string Name)> GetEntries()
     {
         return GetAll().Select(entry => entry.ToEntry()).ToImmutableHashSet();
     }
@@ -47,7 +49,7 @@ public abstract partial class Enumeration<T>
     /// Gets all of the enumeration names for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration names for the current type.</returns>
-    public static ImmutableHashSet<string> GetNames()
+    public static IReadOnlySet<string> GetNames()
     {
         return GetAll().Select(entry => entry.Name).ToImmutableHashSet();
     }
@@ -56,7 +58,7 @@ public abstract partial class Enumeration<T>
     /// Gets all of the enumeration values for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration values for the current type.</returns>
-    public static ImmutableHashSet<int> GetValues()
+    public static IReadOnlySet<int> GetValues()
     {
         return GetAll().Select(entry => entry.Value).ToImmutableHashSet();
     }

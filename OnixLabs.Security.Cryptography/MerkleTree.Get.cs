@@ -23,7 +23,7 @@ public abstract partial class MerkleTree
     /// Obtains the leaf hashes from the current <see cref="MerkleTree"/>.
     /// </summary>
     /// <returns>Returns an <see cref="IEnumerable{T}"/> containing the leaf hashes from the current <see cref="MerkleTree"/>.</returns>
-    public ImmutableList<Hash> GetLeafHashes()
+    public IReadOnlyList<Hash> GetLeafHashes()
     {
         ICollection<Hash> result = EmptyList<Hash>();
         CollectLeafHashes(this, result);

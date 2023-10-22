@@ -33,7 +33,7 @@ public abstract partial class MerkleTree<T>
     /// Obtains the leaf values from the current <see cref="MerkleTree{T}"/>.
     /// </summary>
     /// <returns>Returns an <see cref="IEnumerable{T}"/> containing the leaf values from the current <see cref="MerkleTree{T}"/>.</returns>
-    public ImmutableList<T> GetLeafValues()
+    public IReadOnlyList<T> GetLeafValues()
     {
         ICollection<T> result = EmptyList<T>();
         CollectLeafValues(this, result);

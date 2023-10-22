@@ -28,7 +28,7 @@ public static partial class Collection
     /// <returns>Returns an enumerable populated with the specified items.</returns>
     public static IEnumerable<T> EnumerableOf<T>(params T[] items)
     {
-        return items.Copy();
+        return items;
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public static partial class Collection
     /// <returns>Returns an array populated with the specified items.</returns>
     public static T[] ArrayOf<T>(params T[] items)
     {
-        return items.Copy();
+        return items;
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public static partial class Collection
     /// <returns>Returns an immutable array populated with the specified items.</returns>
     public static ImmutableArray<T> ImmutableArrayOf<T>(params T[] items)
     {
-        return ArrayOf(items).ToImmutableArray();
+        return ImmutableArray.Create(items);
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ public static partial class Collection
     /// <returns>Returns a list populated with the specified items.</returns>
     public static List<T> ListOf<T>(params T[] items)
     {
-        return new List<T>(items.Copy());
+        return new List<T>(items);
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public static partial class Collection
     /// <returns>Returns an immutable list populated with the specified items.</returns>
     public static ImmutableList<T> ImmutableListOf<T>(params T[] items)
     {
-        return ListOf(items).ToImmutableList();
+        return ImmutableList.Create(items);
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public static partial class Collection
     /// <returns>Returns a dictionary populated with the specified items.</returns>
     public static Dictionary<TKey, TValue> DictionaryOf<TKey, TValue>(params KeyValuePair<TKey, TValue>[] items) where TKey : notnull
     {
-        return new Dictionary<TKey, TValue>(items.Copy());
+        return new Dictionary<TKey, TValue>(items);
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ public static partial class Collection
     public static ImmutableDictionary<TKey, TValue> ImmutableDictionaryOf<TKey, TValue>(
         params KeyValuePair<TKey, TValue>[] items) where TKey : notnull
     {
-        return DictionaryOf(items).ToImmutableDictionary();
+        return ImmutableDictionary.CreateRange(items);
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ public static partial class Collection
     public static ImmutableDictionary<TKey, TValue> ImmutableDictionaryOf<TKey, TValue>(
         params (TKey key, TValue value)[] items) where TKey : notnull
     {
-        return DictionaryOf(items).ToImmutableDictionary();
+        return ImmutableDictionary.CreateRange(items.Select(item => new KeyValuePair<TKey, TValue>(item.key, item.value)));
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ public static partial class Collection
     public static ImmutableSortedDictionary<TKey, TValue> ImmutableSortedDictionaryOf<TKey, TValue>(
         params KeyValuePair<TKey, TValue>[] items) where TKey : notnull
     {
-        return SortedDictionaryOf(items).ToImmutableSortedDictionary();
+        return ImmutableSortedDictionary.CreateRange(items);
     }
 
     /// <summary>
@@ -174,7 +174,7 @@ public static partial class Collection
     public static ImmutableSortedDictionary<TKey, TValue> ImmutableSortedDictionaryOf<TKey, TValue>(
         params (TKey key, TValue value)[] items) where TKey : notnull
     {
-        return SortedDictionaryOf(items).ToImmutableSortedDictionary();
+        return ImmutableSortedDictionary.CreateRange(items.Select(item => new KeyValuePair<TKey, TValue>(item.key, item.value)));
     }
 
     /// <summary>
@@ -185,7 +185,7 @@ public static partial class Collection
     /// <returns>Returns a hash set populated with the specified items.</returns>
     public static HashSet<T> HashSetOf<T>(params T[] items)
     {
-        return new HashSet<T>(items.Copy());
+        return new HashSet<T>(items);
     }
 
     /// <summary>
@@ -196,7 +196,7 @@ public static partial class Collection
     /// <returns>Returns an immutable hash set populated with the specified items.</returns>
     public static ImmutableHashSet<T> ImmutableHashSetOf<T>(params T[] items)
     {
-        return HashSetOf(items).ToImmutableHashSet();
+        return ImmutableHashSet.Create(items);
     }
 
     /// <summary>
@@ -207,7 +207,7 @@ public static partial class Collection
     /// <returns>Returns a sorted set populated with the specified items.</returns>
     public static SortedSet<T> SortedSetOf<T>(params T[] items)
     {
-        return new SortedSet<T>(items.Copy());
+        return new SortedSet<T>(items);
     }
 
     /// <summary>
@@ -218,7 +218,7 @@ public static partial class Collection
     /// <returns>Returns an immutable sorted set populated with the specified items.</returns>
     public static ImmutableSortedSet<T> ImmutableSortedSetOf<T>(params T[] items)
     {
-        return SortedSetOf(items).ToImmutableSortedSet();
+        return ImmutableSortedSet.Create(items);
     }
 
     /// <summary>
@@ -229,7 +229,7 @@ public static partial class Collection
     /// <returns>Returns a stack populated with the specified items.</returns>
     public static Stack<T> StackOf<T>(params T[] items)
     {
-        return new Stack<T>(items.Copy());
+        return new Stack<T>(items);
     }
 
     /// <summary>
@@ -240,7 +240,7 @@ public static partial class Collection
     /// <returns>Returns an immutable stack populated with the specified items.</returns>
     public static ImmutableStack<T> ImmutableStackOf<T>(params T[] items)
     {
-        return ImmutableStack.Create(items.Copy());
+        return ImmutableStack.Create(items);
     }
 
     /// <summary>
@@ -251,7 +251,7 @@ public static partial class Collection
     /// <returns>Returns a queue populated with the specified items.</returns>
     public static Queue<T> QueueOf<T>(params T[] items)
     {
-        return new Queue<T>(items.Copy());
+        return new Queue<T>(items);
     }
 
     /// <summary>
@@ -262,6 +262,6 @@ public static partial class Collection
     /// <returns>Returns an immutable queue populated with the specified items.</returns>
     public static ImmutableQueue<T> ImmutableQueueOf<T>(params T[] items)
     {
-        return ImmutableQueue.Create(items.Copy());
+        return ImmutableQueue.Create(items);
     }
 }

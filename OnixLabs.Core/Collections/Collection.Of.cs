@@ -72,7 +72,7 @@ public static partial class Collection
     /// <returns>Returns an immutable list populated with the specified items.</returns>
     public static ImmutableList<T> ImmutableListOf<T>(params T[] items)
     {
-        return ListOf(items).ToImmutableList();
+        return ImmutableList.Create(items);
     }
 
     /// <summary>
@@ -196,7 +196,7 @@ public static partial class Collection
     /// <returns>Returns an immutable hash set populated with the specified items.</returns>
     public static ImmutableHashSet<T> ImmutableHashSetOf<T>(params T[] items)
     {
-        return HashSetOf(items).ToImmutableHashSet();
+        return ImmutableHashSet.Create(items);
     }
 
     /// <summary>
@@ -218,7 +218,7 @@ public static partial class Collection
     /// <returns>Returns an immutable sorted set populated with the specified items.</returns>
     public static ImmutableSortedSet<T> ImmutableSortedSetOf<T>(params T[] items)
     {
-        return SortedSetOf(items).ToImmutableSortedSet();
+        return ImmutableSortedSet.Create(items);
     }
 
     /// <summary>

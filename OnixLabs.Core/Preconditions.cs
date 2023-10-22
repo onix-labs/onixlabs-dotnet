@@ -29,7 +29,7 @@ public static class Preconditions
     /// <param name="message">The exception message to throw in the event that the condition fails.</param>
     /// <exception cref="InvalidOperationException">If the condition fails.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static void Check(bool condition, string message = "Check failed.")
+    public static void Check(bool condition, string message = "Check requirement failed.")
     {
         if (!condition) throw new InvalidOperationException(message);
     }
@@ -43,7 +43,7 @@ public static class Preconditions
     /// <returns>Returns the specified value as non-nullable in the event that the value is not null.</returns>
     /// <exception cref="InvalidOperationException">If the condition fails because the value is null.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static T CheckNotNull<T>(T? value, string message = "Null check failed.") where T : notnull
+    public static T CheckNotNull<T>(T? value, string message = "Argument must not be null.") where T : notnull
     {
         return value ?? throw new InvalidOperationException(message);
     }
@@ -71,8 +71,9 @@ public static class Preconditions
     /// <returns>Returns the specified value as non-nullable in the event that the value is not null.</returns>
     /// <exception cref="ArgumentNullException">If the condition fails because the value is null.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static T RequireNotNull<T>(T? value, string message = "Argument must be null.", string? parameterName = null) where T : notnull
+    public static T RequireNotNull<T>(T? value, string message = "Argument must not be null.", string? parameterName = null)
+        where T : notnull
     {
-        return value ?? throw new ArgumentNullException(message, parameterName);
+        return value ?? throw new ArgumentNullException(parameterName, message);
     }
 }

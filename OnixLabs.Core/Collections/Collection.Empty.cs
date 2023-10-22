@@ -51,7 +51,7 @@ public static partial class Collection
     /// <returns>Returns an empty immutable array.</returns>
     public static ImmutableArray<T> EmptyImmutableArray<T>()
     {
-        return EmptyArray<T>().ToImmutableArray();
+        return ImmutableArray<T>.Empty;
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public static partial class Collection
     /// <returns>Returns an empty immutable list.</returns>
     public static ImmutableList<T> EmptyImmutableList<T>()
     {
-        return EmptyList<T>().ToImmutableList();
+        return ImmutableList<T>.Empty;
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ public static partial class Collection
     /// <returns>Returns an empty immutable dictionary.</returns>
     public static ImmutableDictionary<TKey, TValue> EmptyImmutableDictionary<TKey, TValue>() where TKey : notnull
     {
-        return EmptyDictionary<TKey, TValue>().ToImmutableDictionary();
+        return ImmutableDictionary<TKey, TValue>.Empty;
     }
 
     /// <summary>
@@ -115,7 +115,7 @@ public static partial class Collection
     /// <returns>Returns an empty immutable sorted dictionary.</returns>
     public static ImmutableSortedDictionary<TKey, TValue> EmptyImmutableSortedDictionary<TKey, TValue>() where TKey : notnull
     {
-        return EmptySortedDictionary<TKey, TValue>().ToImmutableSortedDictionary();
+        return ImmutableSortedDictionary<TKey, TValue>.Empty;
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public static partial class Collection
     /// <returns>Returns an empty immutable hash set.</returns>
     public static ImmutableHashSet<T> EmptyImmutableHashSet<T>()
     {
-        return EmptyHashSet<T>().ToImmutableHashSet();
+        return ImmutableHashSet<T>.Empty;
     }
 
     /// <summary>
@@ -155,7 +155,7 @@ public static partial class Collection
     /// <returns>Returns an empty immutable sorted set.</returns>
     public static ImmutableSortedSet<T> EmptyImmutableSortedSet<T>()
     {
-        return EmptySortedSet<T>().ToImmutableSortedSet();
+        return ImmutableSortedSet<T>.Empty;
     }
 
     /// <summary>
@@ -175,7 +175,7 @@ public static partial class Collection
     /// <returns>Returns an empty immutable stack.</returns>
     public static ImmutableStack<T> EmptyImmutableStack<T>()
     {
-        return ImmutableStack.Create<T>();
+        return ImmutableStack<T>.Empty;
     }
 
     /// <summary>
@@ -195,6 +195,6 @@ public static partial class Collection
     /// <returns>Returns an empty immutable queue.</returns>
     public static ImmutableQueue<T> EmptyImmutableQueue<T>()
     {
-        return ImmutableQueue.Create<T>();
+        return ImmutableQueue<T>.Empty;
     }
 }

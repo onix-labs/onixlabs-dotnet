@@ -21,34 +21,60 @@ public readonly partial struct Temperature<T> : IFormattable
 {
     /// <summary>
     /// Formats the value of the current instance using the specified format.
+    /// Valid formats for <see cref="Temperature{T}"/> include:
+    /// <list type="table">
+    /// <listheader><term>Format</term><description>Description</description></listheader>
+    /// <item><term>K</term><description>Kelvin</description></item>
+    /// <item><term>C</term><description>Celsius</description></item>
+    /// <item><term>D</term><description>Delisle</description></item>
+    /// <item><term>F</term><description>Fahrenheit</description></item>
+    /// <item><term>N</term><description>Newton</description></item>
+    /// <item><term>R</term><description>Reaumur</description></item>
+    /// <item><term>Ra</term><description>Rankine</description></item>
+    /// </list> 
     /// </summary>
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
+    /// <returns>Returns the value of the current instance in the specified format.</returns>
+    /// <exception cref="ArgumentException">If the specified format is invalid.</exception>
     public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
-        (string formatOrDefault, T value) = (format ?? DefaultFormat).ToUpper() switch
+        string formatOrDefault = format ?? DefaultFormat;
+        IFormatProvider formatProviderOrDefault = formatProvider ?? CultureInfo.CurrentCulture;
+
+        T value = formatOrDefault switch
         {
-            "K" => ("K", Kelvin),
-            "C" => ("C", Celsius),
-            "D" => ("D", Delisle),
-            "F" => ("F", Fahrenheit),
-            "N" => ("N", Newton),
-            "R" => ("R", Reaumur),
-            "RA" => ("Ra", Rankine),
-            _ => throw new ArgumentException($"Invalid format specifier: {format}")
+            "K" => Kelvin,
+            "C" => Celsius,
+            "D" => Delisle,
+            "F" => Fahrenheit,
+            "N" => Newton,
+            "R" => Reaumur,
+            "Ra" => Rankine,
+            _ => throw new ArgumentException($"Invalid format specifier: {format}.")
         };
 
-        string number = value.ToString("R", formatProvider as CultureInfo ?? CultureInfo.CurrentCulture);
-        return $"{number}°{formatOrDefault}";
+        return $"{value.ToString("R", formatProviderOrDefault)}°{formatOrDefault}";
     }
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
+    /// Valid formats for <see cref="Temperature{T}"/> include:
+    /// <list type="table">
+    /// <listheader><term>Format</term><description>Description</description></listheader>
+    /// <item><term>K</term><description>Kelvin</description></item>
+    /// <item><term>C</term><description>Celsius</description></item>
+    /// <item><term>D</term><description>Delisle</description></item>
+    /// <item><term>F</term><description>Fahrenheit</description></item>
+    /// <item><term>N</term><description>Newton</description></item>
+    /// <item><term>R</term><description>Reaumur</description></item>
+    /// <item><term>Ra</term><description>Rankine</description></item>
+    /// </list> 
     /// </summary>
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
+    /// <returns>Returns the value of the current instance in the specified format.</returns>
+    /// <exception cref="ArgumentException">If the specified format is invalid.</exception>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         return ToString(format.ToString(), formatProvider);
@@ -57,9 +83,10 @@ public readonly partial struct Temperature<T> : IFormattable
     /// <summary>
     /// Formats the value of the current instance using the default format.
     /// </summary>
-    /// <returns>The value of the current instance in the default format.</returns>
+    /// <returns>Returns the value of the current instance in the specified format.</returns>
+    /// <exception cref="ArgumentException">If the specified format is invalid.</exception>
     public override string ToString()
     {
-        return ToString(DefaultFormat, CultureInfo.CurrentCulture);
+        return ToString(DefaultFormat);
     }
 }

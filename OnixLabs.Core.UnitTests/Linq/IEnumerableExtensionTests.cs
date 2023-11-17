@@ -372,7 +372,7 @@ public sealed class IEnumerableExtensionTests
     public void SumShouldProduceExpectedResult()
     {
         // Given
-        IEnumerable<decimal> elements = Collection.ListOf<decimal>(12.34m, 34.56m, 56.78m);
+        IEnumerable<decimal> elements = ListOf(12.34m, 34.56m, 56.78m);
         decimal expected = 103.68m;
 
         // When
@@ -389,7 +389,7 @@ public sealed class IEnumerableExtensionTests
         Numeric<decimal> element1 = new(1234.567m);
         Numeric<decimal> element2 = new(890.1234m);
         Numeric<decimal> element3 = new(56.78901m);
-        IEnumerable<Numeric<decimal>> elements = Collection.ListOf(element1, element2, element3);
+        IEnumerable<Numeric<decimal>> elements = ListOf(element1, element2, element3);
         decimal expected = 2181.47941m;
 
         // When

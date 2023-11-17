@@ -21,5 +21,5 @@ public readonly partial struct Base16
     /// <summary>
     /// Gets an empty <see cref="Base16"/> value.
     /// </summary>
-    public static Base16 Empty => Create(Collection.EmptyArray<byte>());
+    public static Base16 Empty => Create(EmptyArray<byte>());
 }

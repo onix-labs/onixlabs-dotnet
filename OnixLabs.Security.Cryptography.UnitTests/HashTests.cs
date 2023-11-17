@@ -60,8 +60,8 @@ public sealed class HashTests
     public void HashesShouldProduceANegativeOneSortOrderWhenTheLeftHandHashIsLessThanTheRightHandHash()
     {
         // Arrange
-        Hash a = Hash.Create(Collection.ArrayOf<byte>(1));
-        Hash b = Hash.Create(Collection.ArrayOf<byte>(2));
+        Hash a = Hash.Create(ArrayOf<byte>(1));
+        Hash b = Hash.Create(ArrayOf<byte>(2));
         const int expected = -1;
 
         // Act
@@ -75,8 +75,8 @@ public sealed class HashTests
     public void HashesShouldProduceAPositiveOneSortOrderWhenTheLeftHandHashIsGreaterThanTheRightHandHash()
     {
         // Arrange
-        Hash a = Hash.Create(Collection.ArrayOf<byte>(2));
-        Hash b = Hash.Create(Collection.ArrayOf<byte>(1));
+        Hash a = Hash.Create(ArrayOf<byte>(2));
+        Hash b = Hash.Create(ArrayOf<byte>(1));
         const int expected = 1;
 
         // Act
@@ -90,8 +90,8 @@ public sealed class HashTests
     public void HashesShouldProduceAZeroSortOrderWhenTheLeftHandHashIsEqualToTheRightHandHash()
     {
         // Arrange
-        Hash a = Hash.Create(Collection.ArrayOf<byte>(1));
-        Hash b = Hash.Create(Collection.ArrayOf<byte>(1));
+        Hash a = Hash.Create(ArrayOf<byte>(1));
+        Hash b = Hash.Create(ArrayOf<byte>(1));
         const int expected = 0;
 
         // Act

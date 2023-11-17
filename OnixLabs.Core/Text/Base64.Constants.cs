@@ -21,5 +21,5 @@ public readonly partial struct Base64
     /// <summary>
     /// Gets an empty <see cref="Base64"/> value.
     /// </summary>
-    public static Base64 Empty => Create(Collection.EmptyArray<byte>());
+    public static Base64 Empty => Create(EmptyArray<byte>());
 }

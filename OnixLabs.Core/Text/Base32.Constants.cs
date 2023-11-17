@@ -26,5 +26,5 @@ public readonly partial struct Base32
     /// <summary>
     /// Gets an empty <see cref="Base32"/> value.
     /// </summary>
-    public static Base32 Empty => Create(Collection.EmptyArray<byte>());
+    public static Base32 Empty => Create(EmptyArray<byte>());
 }

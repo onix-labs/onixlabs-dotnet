@@ -24,7 +24,7 @@ namespace OnixLabs.Security.Cryptography.UnitTests;
 
 public sealed class MerkleTreeGenericTests
 {
-    private readonly IEnumerable<MerkleNode> setA = Collection.EnumerableOf(
+    private readonly IEnumerable<MerkleNode> setA = EnumerableOf(
         new MerkleNode("abc", 123, "1953-05-08T01:00:59Z".ToDateTime(), Guid.Parse("18d1e14c-9762-4b2c-8774-3f053e8579e0")),
         new MerkleNode("def", 456, "1953-05-08T06:30:00Z".ToDateTime(), Guid.Parse("a5d0ad36-f9a6-4fb0-9374-aa658eb19a51")),
         new MerkleNode("hij", 789, "1953-05-08T12:00:33Z".ToDateTime(), Guid.Parse("0d324d48-d451-416e-ac4d-fed1a324d446")),
@@ -32,7 +32,7 @@ public sealed class MerkleTreeGenericTests
         new MerkleNode("nop", 112, "1953-05-08T23:00:59Z".ToDateTime(), Guid.Parse("193863c7-3bfa-4a3c-874a-a99d98b38358"))
     );
 
-    private readonly IEnumerable<MerkleNode> setB = Collection.EnumerableOf(
+    private readonly IEnumerable<MerkleNode> setB = EnumerableOf(
         new MerkleNode("qrs", 123, "1900-05-08T01:00:59Z".ToDateTime(), Guid.Parse("893576c9-7cb1-4653-a7c4-21e5ba9e7275")),
         new MerkleNode("tuv", 456, "1901-05-08T06:30:00Z".ToDateTime(), Guid.Parse("e7543a7e-3a52-48f5-842e-9448931f1cde")),
         new MerkleNode("qxy", 789, "1902-05-08T12:00:33Z".ToDateTime(), Guid.Parse("d228ab75-d36a-4392-9c51-888a5b7f9db7")),

@@ -12,16 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Core.Units;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     public static void Main()
     {
-        DataSize<double> ds = DataSize.FromBytes(1026.0);
-        Console.WriteLine(ds.ToString("KiB"));
     }
 }

@@ -13,28 +13,53 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Returns a <see cref="byte"/> array that represents the current object.
+    /// </summary>
+    /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
     public byte[] ToByteArray()
     {
-        throw new NotImplementedException();
+        byte[] unscaledValue = UnscaledValue.ToByteArray();
+        byte[] scale = BitConverter.GetBytes(Scale);
+
+        return unscaledValue.ConcatenateWith(scale);
     }
 
+    /// <summary>
+    /// Formats the value of the current instance using the default format.
+    /// </summary>
+    /// <returns>The value of the current instance in the default format.</returns>
     public override string ToString()
     {
-        return base.ToString();
+        return ToString(DefaultNumberFormat, CultureInfo.CurrentCulture);
     }
 
-    public string ToString(string? format, IFormatProvider? formatProvider)
+    /// <summary>
+    /// Formats the value of the current instance using the specified format.
+    /// </summary>
+    /// <param name="format">The format to use, or null to use the default format.</param>
+    /// <param name="formatProvider">The provider to use to format the value.</param>
+    /// <returns>The value of the current instance in the specified format.</returns>
+    public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
-        throw new NotImplementedException();
+        return ToString((format ?? DefaultNumberFormat).AsSpan(), formatProvider);
     }
 
-    public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider)
+    /// <summary>
+    /// Formats the value of the current instance using the specified format.
+    /// </summary>
+    /// <param name="format">The format to use, or null to use the default format.</param>
+    /// <param name="formatProvider">The provider to use to format the value.</param>
+    /// <returns>The value of the current instance in the specified format.</returns>
+    public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        throw new NotImplementedException();
+        CultureInfo info = formatProvider as CultureInfo ?? CultureInfo.CurrentCulture;
+        return BigDecimalFormatter.Format(this, format, info.NumberFormat);
     }
 }

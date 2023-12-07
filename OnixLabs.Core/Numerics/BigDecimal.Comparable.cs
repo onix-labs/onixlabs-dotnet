@@ -12,24 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Compares two <see cref="BigDecimal"/> values and returns an integer that indicates
+    /// whether the left-hand value is less than, equal to, or greater than the right-hand value.
+    /// </summary>
+    /// <param name="left">The left-hand value to compare.</param>
+    /// <param name="right">The right-hand value to compare.</param>
+    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public static int Compare(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
-    }
-    
-    public int CompareTo(object? obj)
-    {
-        throw new NotImplementedException();
+        (BigDecimal leftNormalized, BigDecimal rightNormalized) = NormalizeScale(left, right);
+        return leftNormalized.UnscaledValue.CompareTo(rightNormalized.UnscaledValue);
     }
 
+    /// <summary>
+    /// Compares the current instance with another object of the same type and returns an integer that indicates
+    /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
+    /// other object.
+    /// </summary>
+    /// <param name="obj">An object to compare with this instance.</param>
+    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    public int CompareTo(object? obj)
+    {
+        return this.CompareObject(obj);
+    }
+
+    /// <summary>
+    /// Compares the current instance with another object of the same type and returns an integer that indicates
+    /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
+    /// other object.
+    /// </summary>
+    /// <param name="other">An object to compare with this instance.</param>
+    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public int CompareTo(BigDecimal other)
     {
-        throw new NotImplementedException();
+        return Compare(this, other);
     }
 }

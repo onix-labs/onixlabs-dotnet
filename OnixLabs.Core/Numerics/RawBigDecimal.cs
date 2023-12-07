@@ -12,20 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Numerics;
+
 namespace OnixLabs.Core.Numerics;
 
 /// <summary>
-/// Specifies IEEE 754 binary floating-point conversion modes.
+/// Represents a raw <see cref="BigDecimal"/> value.
 /// </summary>
-public enum ConversionMode
-{
-    /// <summary>
-    /// Specifies that IEEE 754 binary floating-point values will be converted from their decimal representation.
-    /// </summary>
-    Decimal,
-
-    /// <summary>
-    /// Specifies that IEEE 754 binary floating-point values will be converted from their binary representation.
-    /// </summary>
-    Binary
-}
+/// <param name="UnscaledValue">The unscaled value of the <see cref="BigDecimal"/> value.</param>
+/// <param name="Scale">The scale of the <see cref="BigDecimal"/> value.</param>
+internal readonly record struct RawBigDecimal(BigInteger UnscaledValue, int Scale);

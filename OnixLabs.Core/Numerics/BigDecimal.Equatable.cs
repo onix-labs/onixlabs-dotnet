@@ -18,33 +18,93 @@ namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are equal.
+    /// This method implements strict equality, meaning that both the <see cref="UnscaledValue"/> and <see cref="Scale"/> will be compared.
+    /// </summary>
+    /// <param name="left">The left-hand value to compare.</param>
+    /// <param name="right">The right-hand value to compare.</param>
+    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
     public static bool Equals(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        return left.UnscaledValue == right.UnscaledValue
+               && left.Scale == right.Scale;
     }
 
-    public bool Equals(BigDecimal other)
+    /// <summary>
+    /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are equal.
+    /// This method implements value equality, meaning that <see cref="Scale"/> is effectively ignored.
+    /// </summary>
+    /// <param name="left">The left-hand value to compare.</param>
+    /// <param name="right">The right-hand value to compare.</param>
+    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
+    public static bool ValueEquals(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        return Compare(left, right) is 0;
     }
 
+    /// <summary>
+    /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are equal.
+    /// This method implements value equality, meaning that <see cref="Scale"/> is effectively ignored.
+    /// </summary>
+    /// <param name="left">The left-hand value to compare.</param>
+    /// <param name="right">The right-hand value to compare.</param>
+    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
     public static bool operator ==(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        return ValueEquals(left, right);
     }
 
+    /// <summary>
+    /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are not equal.
+    /// This method implements value equality, meaning that <see cref="Scale"/> is effectively ignored.
+    /// </summary>
+    /// <param name="left">The left-hand value to compare.</param>
+    /// <param name="right">The right-hand value to compare.</param>
+    /// <returns>Returns true if the two specified instances are not equal; otherwise, false.</returns>
     public static bool operator !=(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        return !ValueEquals(left, right);
     }
 
+    /// <summary>
+    /// Compares the current instance of <see cref="BigDecimal"/> with the specified other instance of <see cref="BigDecimal"/>.
+    /// This method implements strict equality, meaning that both the <see cref="UnscaledValue"/> and <see cref="Scale"/> will be compared.
+    /// </summary>
+    /// <param name="other">The other instance of <see cref="BigDecimal"/> to compare with the current instance.</param>
+    /// <returns>Returns true if the current instance is equal to the specified other instance; otherwise, false.</returns>
+    public bool Equals(BigDecimal other)
+    {
+        return Equals(this, other);
+    }
+
+    /// <summary>
+    /// Checks for equality between this instance and another object.
+    /// </summary>
+    /// <param name="obj">The object to check for equality.</param>
+    /// <returns>true if the object is equal to this instance; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
-        return base.Equals(obj);
+        return obj is BigDecimal other && Equals(other);
     }
 
+    /// <summary>
+    /// Compares the current instance of <see cref="BigDecimal"/> with the specified other instance of <see cref="BigDecimal"/>.
+    /// This method implements value equality, meaning that <see cref="Scale"/> is effectively ignored.
+    /// </summary>
+    /// <param name="other">The other instance of <see cref="BigDecimal"/> to compare with the current instance.</param>
+    /// <returns>Returns true if the current instance is equal to the specified other instance; otherwise, false.</returns>
+    public bool ValueEquals(BigDecimal other)
+    {
+        return ValueEquals(this, other);
+    }
+
+    /// <summary>
+    /// Serves as a hash code function for this instance.
+    /// </summary>
+    /// <returns>A hash code for this instance.</returns>
     public override int GetHashCode()
     {
-        return base.GetHashCode();
+        return HashCode.Combine(UnscaledValue, Scale);
     }
 }

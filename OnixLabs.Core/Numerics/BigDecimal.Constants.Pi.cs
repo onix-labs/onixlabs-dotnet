@@ -14,18 +14,7 @@
 
 namespace OnixLabs.Core.Numerics;
 
-/// <summary>
-/// Specifies IEEE 754 binary floating-point conversion modes.
-/// </summary>
-public enum ConversionMode
+public readonly partial struct BigDecimal
 {
-    /// <summary>
-    /// Specifies that IEEE 754 binary floating-point values will be converted from their decimal representation.
-    /// </summary>
-    Decimal,
-
-    /// <summary>
-    /// Specifies that IEEE 754 binary floating-point values will be converted from their binary representation.
-    /// </summary>
-    Binary
+    public static BigDecimal Pi { get; }
 }

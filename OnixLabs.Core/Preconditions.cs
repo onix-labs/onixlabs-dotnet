@@ -14,6 +14,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
+using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core;
 
@@ -75,5 +76,21 @@ public static class Preconditions
         where T : notnull
     {
         return value ?? throw new ArgumentNullException(parameterName, message);
+    }
+
+    /// <summary>
+    /// Performs a pre-condition requirement that the specified enum value is defined in the enum.
+    /// </summary>
+    /// <param name="value">The enum value to check.</param>
+    /// <param name="parameterName">The name of the parameter being checked.</param>
+    /// <typeparam name="T">The underlying type of the enum value.</typeparam>
+    /// <returns>Returns the specified enum value if it is defined in the enum.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If the specified value does not exist in the enum.</exception>
+    public static void RequireIsDefined<T>(T value, string? parameterName = null) where T : struct, Enum
+    {
+        if (Enum.IsDefined(value)) return;
+
+        string message = $"Invalid {typeof(T).Name} enum value: {value}. Valid values include: {Enum.GetNames<T>().JoinToString()}.";
+        throw new ArgumentOutOfRangeException(parameterName, message);
     }
 }

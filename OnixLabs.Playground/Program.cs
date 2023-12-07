@@ -12,11 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using OnixLabs.Core.Numerics;
+
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     public static void Main()
     {
+        BigDecimal value = double.MaxValue;
+        double converted = (double)value;
+        
+        Console.WriteLine(value.ToString("E"));
+        Console.WriteLine(converted.ToString("E"));
     }
 }

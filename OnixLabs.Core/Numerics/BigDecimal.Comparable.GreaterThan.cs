@@ -12,24 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
-    public static bool IsGreaterThan(BigDecimal left, BigDecimal right)
-    {
-        throw new NotImplementedException();
-    }
-
+    /// <summary>
+    /// Determines whether the left-hand value is greater than the right-hand value.
+    /// </summary>
+    /// <param name="left">The left-hand value to compare.</param>
+    /// <param name="right">The right-hand value to compare.</param>
+    /// <returns>Returns True if the left-hand operand is greater than right-hand operand; otherwise, false.</returns>
     public static bool operator >(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
-    }
-
-    public bool IsGreaterThan(BigDecimal right)
-    {
-        throw new NotImplementedException();
+        return Compare(left, right) is 1;
     }
 }

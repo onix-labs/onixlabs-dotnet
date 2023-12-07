@@ -47,6 +47,8 @@ public abstract partial class Sha3
             Iota(round);
         }
 
+        return;
+
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void Theta()
         {

@@ -12,24 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Computes the sum of the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="left">The left-hand value to add to.</param>
+    /// <param name="right">The right-hand value to add.</param>
+    /// <returns>Returns the sum of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Add(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        if (IsZero(left)) return right;
+        if (IsZero(right)) return left;
+
+        int scale = MaxScale(left, right);
+
+        (BigInteger leftAddend, BigInteger rightAddend) = NormalizeScaleMagnitude(left, right);
+        BigInteger sum = leftAddend + rightAddend;
+
+        return new BigDecimal(sum, scale);
     }
 
+    /// <summary>
+    /// Computes the sum of the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="left">The left-hand value to add to.</param>
+    /// <param name="right">The right-hand value to add.</param>
+    /// <returns>Returns the sum of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal operator +(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        return Add(left, right);
     }
 
+    /// <summary>
+    /// Computes the sum of the current <see cref="BigDecimal"/> value and the specified value.
+    /// </summary>
+    /// <param name="right">The right-hand value to add.</param>
+    /// <returns>Returns the sum of the current <see cref="BigDecimal"/> value and the specified value.</returns>
     public BigDecimal Add(BigDecimal right)
     {
-        throw new NotImplementedException();
+        return Add(this, right);
     }
 }

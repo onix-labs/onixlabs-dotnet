@@ -33,7 +33,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(value));
         RequireIsDefined(mode, nameof(mode));
 
-        UnscaledValue = mode == ScaleMode.Integral ? value * BigInteger.Pow(10, scale) : value;
+        UnscaledValue = value.GetUnscaledInteger(scale, mode);
         Scale = scale;
     }
 

@@ -12,22 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
 using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
-    public static BigDecimal NegativeOne { get; }
-    public static BigDecimal Zero { get; }
-    public static BigDecimal One { get; }
-    public static BigDecimal Two { get; }
-    public static BigDecimal Ten { get; }
+    public static BigDecimal NegativeOne => -1;
+    public static BigDecimal Zero => 0;
+    public static BigDecimal One => 1;
+    public static BigDecimal Two => 2;
+    public static BigDecimal Ten => 10;
 
     /// <summary>
     /// Gets the default number format.
     /// </summary>
     private const string DefaultNumberFormat = "G";
+    
+    /// <summary>
+    /// Gets the default number styles for parsing decimal values.
+    /// </summary>
+    private const NumberStyles DefaultNumberStyles = NumberStyles.None;
     
     /// <summary>
     /// Gets the magnitude by which a remainder must be multiplied in order to obtain ten digits of precision when rounding.

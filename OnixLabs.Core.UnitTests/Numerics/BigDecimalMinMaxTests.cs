@@ -17,7 +17,7 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Numerics;
 
-public sealed class BigDecimalArithmeticMinMaxTests
+public sealed class BigDecimalMinMaxTests
 {
     [Theory(DisplayName = "BigDecimal.Min should produce the expected result")]
     [InlineData(0, 0, 0)]

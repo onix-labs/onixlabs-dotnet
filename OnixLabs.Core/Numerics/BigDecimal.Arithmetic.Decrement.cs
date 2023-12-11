@@ -12,34 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Decrements the integral component of the specified <see cref="BigDecimal"/> value by one.
+    /// </summary>
+    /// <param name="value">The value to decrement.</param>
+    /// <returns>Returns a new <see cref="BigDecimal"/> value decremented by one integral unit.</returns>
     public static BigDecimal Decrement(BigDecimal value)
     {
-        throw new NotImplementedException();
+        return new BigDecimal(value.UnscaledValue - value.ScaleMagnitude, value.Scale);
     }
 
+    /// <summary>
+    /// Decrements the fractional component of the specified <see cref="BigDecimal"/> value by one.
+    /// </summary>
+    /// <param name="value">The value to decrement.</param>
+    /// <returns>Returns a new <see cref="BigDecimal"/> value decremented by one fractional unit.</returns>
     public static BigDecimal DecrementFraction(BigDecimal value)
     {
-        throw new NotImplementedException();
+        return new BigDecimal(value.UnscaledValue - BigInteger.One, value.Scale);
     }
 
+    /// <summary>
+    /// Decrements the integral component of the specified <see cref="BigDecimal"/> value by one.
+    /// </summary>
+    /// <param name="value">The value to decrement.</param>
+    /// <returns>Returns a new <see cref="BigDecimal"/> value decremented by one integral unit.</returns>
     public static BigDecimal operator --(BigDecimal value)
     {
-        throw new NotImplementedException();
-    }
-
-    public BigDecimal Decrement()
-    {
-        throw new NotImplementedException();
-    }
-
-    public BigDecimal DecrementFraction()
-    {
-        throw new NotImplementedException();
+        return Decrement(value);
     }
 }

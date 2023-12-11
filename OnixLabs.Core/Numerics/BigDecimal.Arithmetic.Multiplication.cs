@@ -12,24 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Computes the product of the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="left">The left-hand value to multiply by.</param>
+    /// <param name="right">The right-hand value to multiply.</param>
+    /// <returns>Returns the product of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Multiply(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        int scale = left.Scale + right.Scale;
+
+        if (IsZero(left) || IsZero(right)) return new BigDecimal(0, scale);
+        BigInteger product = left.UnscaledValue * right.UnscaledValue;
+
+        return new BigDecimal(product, scale);
     }
 
+    /// <summary>
+    /// Computes the product of the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="left">The left-hand value to multiply by.</param>
+    /// <param name="right">The right-hand value to multiply.</param>
+    /// <returns>Returns the product of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal operator *(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
-    }
-
-    public BigDecimal Multiply(BigDecimal right)
-    {
-        throw new NotImplementedException();
+        return Multiply(left, right);
     }
 }

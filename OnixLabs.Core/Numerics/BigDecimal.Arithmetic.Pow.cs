@@ -18,13 +18,27 @@ namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
-    public static BigDecimal Pow(BigDecimal value, BigDecimal exponent, MidpointRounding roundingMode)
+    /// <summary>
+    /// Computes the power of the specified <see cref="BigDecimal"/> value, raised to the power of the specified exponent.
+    /// </summary>
+    /// <param name="value">The <see cref="BigDecimal"/> value to raise.</param>
+    /// <param name="exponent">The exponent to raise by.</param>
+    /// <param name="roundingMode">Specifies the <see cref="MidpointRounding"/> rounding mode that should be applied for values raised to the power of a negative exponent.</param>
+    /// <returns>Returns the power of the specified <see cref="BigDecimal"/> value, raised to the power of the specified exponent.</returns>
+    public static BigDecimal Pow(BigDecimal value, int exponent, MidpointRounding roundingMode = default)
     {
-        throw new NotImplementedException();
-    }
+        if (value == 0 && exponent == 0) throw new ArithmeticException("Attempted to raise zero to the power of zero.");
+        if (exponent == 0) return One;
+        if (exponent == 1) return value;
 
-    public BigDecimal Pow(BigDecimal exponent, MidpointRounding roundingMode)
-    {
-        throw new NotImplementedException();
+        BigDecimal result = value;
+        int absExponent = int.Abs(exponent);
+
+        while (--absExponent > 0)
+        {
+            result *= value;
+        }
+
+        return exponent > 0 ? result : Divide(One, result, roundingMode);
     }
 }

@@ -3,3 +3,6 @@ root = true
 [*]
 max_line_length = 140
 insert_final_newline = true
+
+# ReSharper properties
+resharper_csharp_wrap_lines = false

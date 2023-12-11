@@ -12,24 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Gets the modulus of the specified <see cref="BigDecimal"/> values by dividing the left-hand value by the right-hand value.
+    /// </summary>
+    /// <param name="left">The left-hand value to divide.</param>
+    /// <param name="right">The right-hand value to divide by.</param>
+    /// <returns>Returns the modulus of the specified <see cref="BigDecimal"/> values by dividing the left-hand value by the right-hand value.</returns>
     public static BigDecimal Mod(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        int scale = MaxScale(left, right);
+
+        (BigInteger dividend, BigInteger divisor) = NormalizeScaleMagnitude(left, right);
+        BigInteger remainder = BigInteger.Remainder(dividend, divisor);
+
+        return new BigDecimal(remainder, scale);
     }
 
+    /// <summary>
+    /// Gets the modulus of the specified <see cref="BigDecimal"/> values by dividing the left-hand value by the right-hand value.
+    /// </summary>
+    /// <param name="left">The left-hand value to divide.</param>
+    /// <param name="right">The right-hand value to divide by.</param>
+    /// <returns>Returns the modulus of the specified <see cref="BigDecimal"/> values by dividing the left-hand value by the right-hand value.</returns>
     public static BigDecimal operator %(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
-    }
-
-    public BigDecimal Mod(BigDecimal right)
-    {
-        throw new NotImplementedException();
+        return Mod(left, right);
     }
 }

@@ -13,18 +13,26 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Core.Numerics;
 
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
-    public static void Main()
+    private static void Main()
     {
-        BigDecimal value = double.MaxValue;
-        double converted = (double)value;
+        Random random = new();
         
-        Console.WriteLine(value.ToString("E"));
-        Console.WriteLine(converted.ToString("E"));
+        for (int index = 0; index < 200; index++)
+        {
+            int lo = random.Next();
+            int mid = random.Next();
+            int hi = random.Next();
+            bool isNegative = random.Next(int.MinValue, int.MaxValue) < 0;
+            byte scale = (byte)random.Next(0, 28);
+            
+            Console.WriteLine($"{new decimal(lo, mid, hi, isNegative, scale)}m, ");
+        }
+        
+        Console.WriteLine(decimal.MinValue);
     }
 }

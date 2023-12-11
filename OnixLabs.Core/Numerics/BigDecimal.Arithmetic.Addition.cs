@@ -47,14 +47,4 @@ public readonly partial struct BigDecimal
     {
         return Add(left, right);
     }
-
-    /// <summary>
-    /// Computes the sum of the current <see cref="BigDecimal"/> value and the specified value.
-    /// </summary>
-    /// <param name="right">The right-hand value to add.</param>
-    /// <returns>Returns the sum of the current <see cref="BigDecimal"/> value and the specified value.</returns>
-    public BigDecimal Add(BigDecimal right)
-    {
-        return Add(this, right);
-    }
 }

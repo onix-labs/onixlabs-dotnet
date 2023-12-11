@@ -21,6 +21,17 @@ namespace OnixLabs.Core.UnitTests.Numerics;
 public sealed class BigDecimalToStringGeneralTests
 {
     [Theory(DisplayName = "BigDecimal.ToString should produce the expected result (general formatting with default scale)")]
+    [InlineData(0, 0, "0")]
+    [InlineData(0, 1, "0.0")]
+    [InlineData(0, 2, "0.00")]
+    [InlineData(0, 3, "0.000")]
+    [InlineData(0, 4, "0.0000")]
+    [InlineData(0, 5, "0.00000")]
+    [InlineData(0, 6, "0.000000")]
+    [InlineData(0, 7, "0.0000000")]
+    [InlineData(0, 8, "0.00000000")]
+    [InlineData(0, 9, "0.000000000")]
+    [InlineData(0, 10, "0.0000000000")]
     [InlineData(100000000001, 1, "10000000000.1")]
     [InlineData(100000000001, 2, "1000000000.01")]
     [InlineData(100000000001, 3, "100000000.001")]

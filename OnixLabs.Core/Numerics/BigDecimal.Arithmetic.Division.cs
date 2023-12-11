@@ -19,19 +19,36 @@ namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
-    public static BigDecimal Divide(BigDecimal left, BigDecimal right, MidpointRounding roundingMode)
+    /// <summary>
+    /// Computes the quotient of the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="left">The left-hand value to divide.</param>
+    /// <param name="right">The right-hand value to divide by.</param>
+    /// <param name="mode">The rounding strategy to use. The default value is <see cref="MidpointRounding.ToEven"/>.</param>
+    /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
+    public static BigDecimal Divide(BigDecimal left, BigDecimal right, MidpointRounding mode = default)
     {
-        throw new NotImplementedException();
-    }
-    
-    public static BigDecimal operator /(BigDecimal left, BigDecimal right)
-    {
-        throw new NotImplementedException();
+        RequireIsDefined(mode, nameof(mode));
+        
+        if (right == Zero) throw new DivideByZeroException();
+        if (right == One) return left;
+        if (left == Zero) return Zero;
+
+        BigInteger dividend = left.UnscaledValue * BigInteger.Pow(10, right.Scale);
+        BigInteger quotient = DivideAndRound(dividend, right.UnscaledValue, mode);
+
+        return new BigDecimal(quotient, left.Scale);
     }
 
-    public BigDecimal Divide(BigDecimal right, MidpointRounding roundingMode)
+    /// <summary>
+    /// Computes the quotient of the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="left">The left-hand value to divide.</param>
+    /// <param name="right">The right-hand value to divide by.</param>
+    /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
+    public static BigDecimal operator /(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        return Divide(left, right);
     }
     
     /// <summary>
@@ -49,7 +66,7 @@ public readonly partial struct BigDecimal
         // 2. Obtain the unit value of the quotient as this is required to accurately round towards an even number. 
         int unit = (int)(quotient % 10);
         
-        // 3. Obtain the remainder with 10 digits of precision.
+        // 3. Obtain the remainder with 10 digits of precision, which is required for accurate rounding.
         remainder = remainder * RoundingMagnitude / divisor;
         
         // 4. Convert the remainder to a double with 10 digits of fractional precision and add the unit.

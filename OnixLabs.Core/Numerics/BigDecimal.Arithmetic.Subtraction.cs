@@ -12,24 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Computes the difference between the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="left">The left-hand value to subtract from.</param>
+    /// <param name="right">The right-hand value to subtract.</param>
+    /// <returns>Returns the difference between the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Subtract(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
-    }
-    
-    public static BigDecimal operator -(BigDecimal left, BigDecimal right)
-    {
-        throw new NotImplementedException();
+        if (IsZero(left)) return -right;
+        if (IsZero(right)) return left;
+
+        int scale = MaxScale(left, right);
+
+        (BigInteger minuend, BigInteger subtrahend) = NormalizeScaleMagnitude(left, right);
+        BigInteger difference = minuend - subtrahend;
+
+        return new BigDecimal(difference, scale);
     }
 
-    public BigDecimal Subtract(BigDecimal right)
+    /// <summary>
+    /// Computes the difference between the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="left">The left-hand value to subtract from.</param>
+    /// <param name="right">The right-hand value to subtract.</param>
+    /// <returns>Returns the difference between the specified <see cref="BigDecimal"/> values.</returns>
+    public static BigDecimal operator -(BigDecimal left, BigDecimal right)
     {
-        throw new NotImplementedException();
+        return Subtract(left, right);
     }
 }

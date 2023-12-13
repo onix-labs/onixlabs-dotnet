@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Trims any trailing zeros from the fractional part of the specified <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The value from which to trim trailing zeros.</param>
+    /// <returns>Returns a new <see cref="BigDecimal"/> excluding any trailing zeros.</returns>
     public static BigDecimal TrimTrailingZeros(BigDecimal value)
     {
-        throw new NotImplementedException();
-    }
-
-    public BigDecimal TrimTrailingZeros()
-    {
-        throw new NotImplementedException();
+        int exponent = 0;
+        while (value.UnscaledValue % BigInteger.Pow(10, exponent) == 0) exponent++;
+        return new BigDecimal(value.UnscaledValue / BigInteger.Pow(10, --exponent), value.Scale - exponent);
     }
 }

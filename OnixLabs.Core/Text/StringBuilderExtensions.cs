@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using OnixLabs.Core.Linq;
 
@@ -23,7 +24,7 @@ namespace OnixLabs.Core.Text;
 /// </summary>
 // ReSharper disable UnusedMethodReturnValue.Global
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal static class StringBuilderExtensions
+public static class StringBuilderExtensions
 {
     /// <summary>
     /// Appends the specified values to the current <see cref="StringBuilder"/>.
@@ -33,7 +34,7 @@ internal static class StringBuilderExtensions
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified items appended.</returns>
     public static StringBuilder Append(this StringBuilder builder, params object[] values)
     {
-        values.ForEach(value => builder.Append(value));
+        builder.Append(values.JoinToString(string.Empty));
         return builder;
     }
 
@@ -45,8 +46,7 @@ internal static class StringBuilderExtensions
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified items prepended.</returns>
     public static StringBuilder Prepend(this StringBuilder builder, params object[] values)
     {
-        int count = 0;
-        values.ForEach(value => builder.Insert(count++, value));
+        builder.Insert(0, values.JoinToString(string.Empty));
         return builder;
     }
 

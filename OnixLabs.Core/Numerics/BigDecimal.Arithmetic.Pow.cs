@@ -28,17 +28,14 @@ public readonly partial struct BigDecimal
     public static BigDecimal Pow(BigDecimal value, int exponent, MidpointRounding roundingMode = default)
     {
         if (value == 0 && exponent == 0) throw new ArithmeticException("Attempted to raise zero to the power of zero.");
+        if (value == One || value == NegativeOne) return value;
         if (exponent == 0) return One;
         if (exponent == 1) return value;
-
-        BigDecimal result = value;
+        
+        BigDecimal result = Abs(value);
         int absExponent = int.Abs(exponent);
+        while (--absExponent > 0) result *= Abs(value);
 
-        while (--absExponent > 0)
-        {
-            result *= value;
-        }
-
-        return exponent > 0 ? result : Divide(One, result, roundingMode);
+        return (exponent < 0 ? Divide(One.SetScale(value.Scale), result, roundingMode) : result) * value.Sign;
     }
 }

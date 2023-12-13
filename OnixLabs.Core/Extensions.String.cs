@@ -71,11 +71,7 @@ public static class StringExtensions
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <param name="comparison">Specifies the string comparison rule for the search.</param>
     /// <returns>Returns a substring before the first occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeFirst(
-        this string value,
-        string delimiter,
-        string? defaultValue = null,
-        StringComparison comparison = StringComparison.Ordinal)
+    public static string SubstringBeforeFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
     {
         int index = value.IndexOf(delimiter, comparison);
 
@@ -112,11 +108,7 @@ public static class StringExtensions
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <param name="comparison">Specifies the string comparison rule for the search.</param>
     /// <returns>Returns a substring before the last occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeLast(
-        this string value,
-        string delimiter,
-        string? defaultValue = null,
-        StringComparison comparison = StringComparison.Ordinal)
+    public static string SubstringBeforeLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
     {
         int index = value.LastIndexOf(delimiter, comparison);
 
@@ -153,11 +145,7 @@ public static class StringExtensions
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <param name="comparison">Specifies the string comparison rule for the search.</param>
     /// <returns>Returns a substring after the first occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterFirst(
-        this string value,
-        string delimiter,
-        string? defaultValue = null,
-        StringComparison comparison = StringComparison.Ordinal)
+    public static string SubstringAfterFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
     {
         int index = value.IndexOf(delimiter, comparison);
 
@@ -194,11 +182,7 @@ public static class StringExtensions
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <param name="comparison">Specifies the string comparison rule for the search.</param>
     /// <returns>Returns a substring after the last occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterLast(
-        this string value,
-        string delimiter,
-        string? defaultValue = null,
-        StringComparison comparison = StringComparison.Ordinal)
+    public static string SubstringAfterLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
     {
         int index = value.LastIndexOf(delimiter, comparison);
 

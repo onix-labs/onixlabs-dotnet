@@ -12,24 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Computes the unary addition of the specified <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The value for which to perform unary addition.</param>
+    /// <returns>Returns the unary addition of the specified <see cref="BigDecimal"/> value.</returns>
     public static BigDecimal UnaryAdd(BigDecimal value)
     {
-        throw new NotImplementedException();
+        return value;
     }
 
+    /// <summary>
+    /// Computes the unary addition of the specified <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The value for which to perform unary addition.</param>
+    /// <returns>Returns the unary addition of the specified <see cref="BigDecimal"/> value.</returns>
     public static BigDecimal operator +(BigDecimal value)
     {
-        throw new NotImplementedException();
-    }
-
-    public BigDecimal UnaryAdd()
-    {
-        throw new NotImplementedException();
+        return UnaryAdd(value);
     }
 }

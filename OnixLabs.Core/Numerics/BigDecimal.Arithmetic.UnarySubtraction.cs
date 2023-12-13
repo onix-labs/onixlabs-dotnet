@@ -12,24 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>
+    /// Computes the unary subtraction of the specified <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The value for which to perform unary subtraction.</param>
+    /// <returns>Returns the unary subtraction of the specified <see cref="BigDecimal"/> value.</returns>
     public static BigDecimal UnarySubtract(BigDecimal value)
     {
-        throw new NotImplementedException();
-    }
-    
-    public static BigDecimal operator -(BigDecimal value)
-    {
-        throw new NotImplementedException();
+        return new BigDecimal(-value.UnscaledValue, value.Scale);
     }
 
-    public BigDecimal UnarySubtract()
+    /// <summary>
+    /// Computes the unary subtraction of the specified <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The value for which to perform unary subtraction.</param>
+    /// <returns>Returns the unary subtraction of the specified <see cref="BigDecimal"/> value.</returns>
+    public static BigDecimal operator -(BigDecimal value)
     {
-        throw new NotImplementedException();
+        return UnarySubtract(value);
     }
 }

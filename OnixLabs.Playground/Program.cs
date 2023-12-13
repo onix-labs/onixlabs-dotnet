@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using OnixLabs.Core.Numerics;
 
 namespace OnixLabs.Playground;
 
@@ -20,19 +21,7 @@ internal static class Program
 {
     private static void Main()
     {
-        Random random = new();
-        
-        for (int index = 0; index < 200; index++)
-        {
-            int lo = random.Next();
-            int mid = random.Next();
-            int hi = random.Next();
-            bool isNegative = random.Next(int.MinValue, int.MaxValue) < 0;
-            byte scale = (byte)random.Next(0, 28);
-            
-            Console.WriteLine($"{new decimal(lo, mid, hi, isNegative, scale)}m, ");
-        }
-        
-        Console.WriteLine(decimal.MinValue);
+        Console.WriteLine(BigDecimal.Zero.Sign);
+        Console.WriteLine(Math.Pow(-10, 9));
     }
 }

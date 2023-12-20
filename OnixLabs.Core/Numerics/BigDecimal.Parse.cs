@@ -59,7 +59,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new <see cref="BigDecimal"/> instance parsed from the specified value.</returns>
     public static BigDecimal Parse(ReadOnlySpan<char> value)
     {
-        return Parse(value, CultureInfo.CurrentCulture);
+        return Parse(value, DefaultCulture);
     }
 
     /// <summary>
@@ -82,10 +82,9 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new <see cref="BigDecimal"/> instance parsed from the specified value.</returns>
     public static BigDecimal Parse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider)
     {
-        NumberFormatInfo info = NumberFormatInfo.GetInstance(provider);
-        BigDecimalParser parser = new(info);
-
-        return parser.Parse(value, style);
+        CultureInfo info = provider as CultureInfo ?? DefaultCulture;
+        if (TryParse(value, style, info.NumberFormat, out BigDecimal result)) return result;
+        throw new FormatException($"The input string '{value}' was not in a correct format.");
     }
 
     /// <summary>
@@ -144,7 +143,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, out BigDecimal result)
     {
-        return TryParse(value, CultureInfo.CurrentCulture, out result);
+        return TryParse(value, DefaultCulture, out result);
     }
 
     /// <summary>
@@ -175,15 +174,8 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider, out BigDecimal result)
     {
-        try
-        {
-            result = Parse(value, style, provider);
-            return true;
-        }
-        catch
-        {
-            result = Zero;
-            return false;
-        }
+        CultureInfo info = provider as CultureInfo ?? DefaultCulture;
+        BigDecimalParser parser = new(style, info.NumberFormat);
+        return parser.TryParse(value, out result);
     }
 }

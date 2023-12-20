@@ -1,4 +1,4 @@
-// Copyright 2020-2023 ONIXLabs
+// Copyright © 2020 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Runtime.CompilerServices;
 
 namespace OnixLabs.Core.Numerics;
 
-internal sealed partial class BigDecimalParser
+internal sealed partial class BigDecimalFormatter
 {
-    private BigDecimal ParseHexadecimal(ReadOnlySpan<char> value)
+    /// <summary>
+    /// Formats the <see cref="BigDecimal"/> value as a decimal value.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    private void FormatDecimal()
     {
-        ReadOnlySpan<char> sanitized = Sanitize(value);
-        byte[] bytes = Convert.FromHexString(sanitized);
-        return new BigDecimal(bytes);
+        FormatIntegerComponent(info.NumberGroupSizes[0], info.NumberGroupSeparator);
+        FormatFractionComponent(info.NumberDecimalSeparator);
+        FormatNumberNegativePattern();
     }
 }

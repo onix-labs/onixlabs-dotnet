@@ -29,4 +29,13 @@ public readonly partial struct BigDecimal
         while (value.UnscaledValue % BigInteger.Pow(10, exponent) == 0) exponent++;
         return new BigDecimal(value.UnscaledValue / BigInteger.Pow(10, --exponent), value.Scale - exponent);
     }
+    
+    /// <summary>
+    /// Trims any trailing zeros from the fractional part of the current <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <returns>Returns a new <see cref="BigDecimal"/> excluding any trailing zeros.</returns>
+    public BigDecimal TrimTrailingZeros()
+    {
+        return TrimTrailingZeros(this);
+    }
 }

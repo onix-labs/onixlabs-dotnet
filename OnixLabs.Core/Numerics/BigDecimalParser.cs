@@ -1,4 +1,4 @@
-// Copyright 2020-2023 ONIXLabs
+// Copyright © 2020 ONIXLabs
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,27 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 
 namespace OnixLabs.Core.Numerics;
 
-/// <summary>
-/// Represents a <see cref="BigDecimal"/> parser.
-/// </summary>
-internal sealed partial class BigDecimalParser
+internal sealed partial class BigDecimalParser(NumberStyles style, NumberFormatInfo info)
 {
-    private readonly string decimalPoint;
-    private readonly string negativeSign;
-    private readonly string positiveSign;
-
-    /// <summary>
-    /// Creates a new instance of the <see cref="BigDecimalParser"/> class.
-    /// </summary>
-    /// <param name="info">The <see cref="NumberFormatInfo"/> containing locale-specific number information.</param>
-    public BigDecimalParser(NumberFormatInfo info)
+    public bool TryParse(ReadOnlySpan<char> value, out BigDecimal result)
     {
-        decimalPoint = info.NumberDecimalSeparator;
-        negativeSign = info.NegativeSign;
-        positiveSign = info.PositiveSign;
+        throw new NotImplementedException();
     }
 }

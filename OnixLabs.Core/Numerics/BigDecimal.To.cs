@@ -37,7 +37,7 @@ public readonly partial struct BigDecimal
     /// <returns>The value of the current instance in the default format.</returns>
     public override string ToString()
     {
-        return ToString(DefaultNumberFormat, CultureInfo.CurrentCulture);
+        return ToString(DefaultNumberFormat, DefaultCulture);
     }
 
     /// <summary>
@@ -59,7 +59,8 @@ public readonly partial struct BigDecimal
     /// <returns>The value of the current instance in the specified format.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        CultureInfo info = formatProvider as CultureInfo ?? CultureInfo.CurrentCulture;
-        return BigDecimalFormatter.Format(this, format, info.NumberFormat);
+        CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
+        BigDecimalFormatter formatter = new(this, info.NumberFormat);
+        return formatter.Format(format);
     }
 }

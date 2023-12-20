@@ -21,8 +21,8 @@ namespace OnixLabs.Core.UnitTests.Numerics;
 
 public sealed class BigDecimalConstructorDoubleBinaryTests
 {
+    [BigDecimalIeee754BinaryData]
     [Theory(DisplayName = "BigDecimal should be constructable from double value using Binary conversion")]
-    [BigDecimalIeeeBinary64DataGenerator]
     public void BigDecimalShouldBeConstructableFromDoubleValueUsingBinaryConversion(double value, string expected)
     {
         // Given

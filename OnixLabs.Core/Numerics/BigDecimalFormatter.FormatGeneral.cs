@@ -12,25 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core.Numerics;
-using OnixLabs.Core.UnitTests.Data.Generators;
-using Xunit;
+using System.Runtime.CompilerServices;
 
-namespace OnixLabs.Core.UnitTests.Numerics;
+namespace OnixLabs.Core.Numerics;
 
-public sealed class BigDecimalArithmeticSubtractionTests
+internal sealed partial class BigDecimalFormatter
 {
-    [BigDecimalSubtractionData]
-    [Theory(DisplayName = "BigDecimal.Subtract should produce the expected result.")]
-    public void BigDecimalSubtractShouldProduceExpectedResult(decimal left, decimal right)
+    /// <summary>
+    /// Formats the <see cref="BigDecimal"/> value as a general value.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    private void FormatGeneral()
     {
-        // Given
-        decimal expected = left - right;
-
-        // When
-        BigDecimal actual = BigDecimal.Subtract(left, right);
-
-        // Then
-        Assert.Equal(expected, actual);
+        FormatIntegerComponent();
+        FormatFractionComponent(info.NumberDecimalSeparator);
+        FormatNumberNegativePattern();
     }
 }

@@ -64,7 +64,12 @@ public readonly partial struct BigDecimal
     /// <summary>
     /// Gets the default number styles for parsing decimal values.
     /// </summary>
-    private const NumberStyles DefaultNumberStyles = NumberStyles.None;
+    private const NumberStyles DefaultNumberStyles = NumberStyles.Any;
+
+    /// <summary>
+    /// Gets the default culture for formatting and parsing operations.
+    /// </summary>
+    private static readonly CultureInfo DefaultCulture = CultureInfo.CurrentCulture;
 
     /// <summary>
     /// Gets the magnitude by which a remainder must be multiplied in order to obtain ten digits of precision when rounding.

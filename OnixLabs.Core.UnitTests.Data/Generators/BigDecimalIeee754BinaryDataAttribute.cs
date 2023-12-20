@@ -17,10 +17,10 @@ using Xunit.Sdk;
 
 namespace OnixLabs.Core.UnitTests.Data.Generators;
 
-public sealed class BigDecimalIeeeBinary64DataGeneratorAttribute : DataAttribute
+public sealed class BigDecimalIeee754BinaryDataAttribute : DataAttribute
 {
-    private readonly double[] values =
-    {
+    private static readonly double[] Data =
+    [
         // General test values
         0.0, double.MinValue, double.MaxValue, double.E, double.Epsilon, double.Pi, double.Tau,
 
@@ -203,11 +203,11 @@ public sealed class BigDecimalIeeeBinary64DataGeneratorAttribute : DataAttribute
         -123.4567890123456,
         -12.34567890123456,
         -1.234567890123456,
-    };
+    ];
 
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        return values.Select(value => new object[] { value, GetNumberFormattedAsInflatedFixedPoint(value) });
+        foreach (double value in Data) yield return [value, GetNumberFormattedAsInflatedFixedPoint(value)];
     }
 
     private static string GetNumberFormattedAsInflatedFixedPoint(double value)

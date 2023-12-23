@@ -29,7 +29,6 @@ namespace OnixLabs.Core.Numerics;
 internal sealed partial class BigDecimalFormatter(BigDecimal value, NumberFormatInfo info)
 {
     private const char DefaultFormat = 'G';
-    private const char DecimalSeparator = '.';
     private const char LeadingParenthesis = '(';
     private const char TrailingParenthesis = ')';
     private const char Whitespace = ' ';
@@ -56,7 +55,7 @@ internal sealed partial class BigDecimalFormatter(BigDecimal value, NumberFormat
                 FormatDecimal();
                 break;
             case 'E':
-                FormatEngineering(specifier);
+                FormatExponential(specifier);
                 break;
             case 'F':
                 FormatFixed();

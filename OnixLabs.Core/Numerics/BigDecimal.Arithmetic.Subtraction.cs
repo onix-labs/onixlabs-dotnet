@@ -31,7 +31,7 @@ public readonly partial struct BigDecimal
 
         int scale = MaxScale(left, right);
 
-        (BigInteger minuend, BigInteger subtrahend) = NormalizeScaleMagnitude(left, right);
+        (BigInteger minuend, BigInteger subtrahend) = NormalizeUnscaledValues(left, right);
         BigInteger difference = minuend - subtrahend;
 
         return new BigDecimal(difference, scale);

@@ -25,8 +25,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public static int Compare(BigDecimal left, BigDecimal right)
     {
-        (BigDecimal leftNormalized, BigDecimal rightNormalized) = NormalizeScale(left, right);
-        return leftNormalized.UnscaledValue.CompareTo(rightNormalized.UnscaledValue);
+        return BigDecimalOrdinalComparer.Default.Compare(left, right);
     }
 
     /// <summary>
@@ -38,7 +37,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public int CompareTo(object? obj)
     {
-        return this.CompareObject(obj);
+        return BigDecimalOrdinalComparer.Default.Compare(this, obj);
     }
 
     /// <summary>

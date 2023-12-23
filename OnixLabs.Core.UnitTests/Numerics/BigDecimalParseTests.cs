@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
 using OnixLabs.Core.Numerics;
 using OnixLabs.Core.UnitTests.Data.Generators;
 using Xunit;
@@ -22,29 +23,29 @@ public sealed class BigDecimalParseTests
 {
     [BigDecimalParseData]
     [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (General)")]
-    public void BigDecimalParseShouldProduceExpectedResultGeneral(decimal expected)
+    public void BigDecimalParseShouldProduceExpectedResultGeneral(decimal expected, CultureInfo culture)
     {
         // Given
-        string value = expected.ToString("G");
+        string value = expected.ToString("G", culture);
 
         // When
-        BigDecimal actual = BigDecimal.Parse(value);
+        BigDecimal actual = BigDecimal.Parse(value, culture);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
     }
-    
+
     [BigDecimalParseData]
-    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Engineering)")]
-    public void BigDecimalParseShouldProduceExpectedResultEngineering(decimal expected)
+    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Exponential)")]
+    public void BigDecimalParseShouldProduceExpectedResultExponential(decimal expected, CultureInfo culture)
     {
         // Given
-        string value = expected.ToString("E");
+        string value = expected.ToString("E29", culture);
 
         // When
-        BigDecimal actual = BigDecimal.Parse(value);
+        BigDecimal actual = BigDecimal.Parse(value, culture);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
     }
 }

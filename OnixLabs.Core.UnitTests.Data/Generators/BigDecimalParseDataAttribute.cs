@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
 using System.Reflection;
 using Xunit.Sdk;
 
@@ -823,8 +824,21 @@ public sealed class BigDecimalParseDataAttribute : DataAttribute
         -9223372036854775808.000000000m,
     ];
 
+    private static readonly CultureInfo[] Cultures =
+    [
+        CultureInfo.GetCultureInfo("en-GB"),
+        CultureInfo.GetCultureInfo("en-US"),
+        CultureInfo.GetCultureInfo("fr-FR"),
+        CultureInfo.GetCultureInfo("es-ES"),
+        // CultureInfo.GetCultureInfo("ar-SA"),
+        CultureInfo.GetCultureInfo("bn-IN")
+    ];
+
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach (decimal value in Data) yield return [value];
+        foreach (CultureInfo culture in Cultures)
+        {
+            foreach (decimal value in Data) yield return [value, culture];
+        }
     }
 }

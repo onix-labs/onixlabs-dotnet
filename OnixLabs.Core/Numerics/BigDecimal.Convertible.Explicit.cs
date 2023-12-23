@@ -176,7 +176,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a <see cref="decimal"/> value the specified <see cref="BigDecimal"/> value.</returns>
     public static explicit operator decimal(BigDecimal value)
     {
-        if (value < double.MinValue || value > double.MaxValue)
+        if (value < decimal.MinValue || value > decimal.MaxValue)
         {
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Decimal)}.");
         }

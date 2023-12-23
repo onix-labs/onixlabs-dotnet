@@ -41,16 +41,16 @@ internal sealed partial class BigDecimalFormatter
 
         switch (info.CurrencyPositivePattern)
         {
-            case 0:
+            case 0: // $n
                 builder.Prepend(info.CurrencySymbol);
                 break;
-            case 1:
+            case 1: // n$
                 builder.Append(info.CurrencySymbol);
                 break;
-            case 2:
+            case 2: // $ n
                 builder.Prepend(info.CurrencySymbol, Whitespace);
                 break;
-            case 3:
+            case 3: // n $
                 builder.Append(Whitespace, info.CurrencySymbol);
                 break;
         }
@@ -66,55 +66,55 @@ internal sealed partial class BigDecimalFormatter
 
         switch (info.CurrencyNegativePattern)
         {
-            case 0:
+            case 0: // ($n)
                 builder.Prepend(info.CurrencySymbol).Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
-            case 1:
+            case 1: // -$n
                 builder.Prepend(info.NegativeSign, info.CurrencySymbol);
                 break;
-            case 2:
+            case 2: // $-n
                 builder.Prepend(info.CurrencySymbol, info.NegativeSign);
                 break;
-            case 3:
+            case 3: // $n-
                 builder.Prepend(info.CurrencySymbol).Append(info.NegativeSign);
                 break;
-            case 4:
+            case 4: // (n$)
                 builder.Append(info.CurrencySymbol).Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
-            case 5:
+            case 5: // -n$
                 builder.Prepend(info.NegativeSign).Append(info.CurrencySymbol);
                 break;
-            case 6:
+            case 6: // n-$
                 builder.Append(info.NegativeSign, info.CurrencySymbol);
                 break;
-            case 7:
+            case 7: // n$-
                 builder.Append(info.CurrencySymbol, info.NegativeSign);
                 break;
-            case 8:
+            case 8: // -n $
                 builder.Prepend(info.NegativeSign).Append(Whitespace, info.CurrencySymbol);
                 break;
-            case 9:
+            case 9: // -$ n
                 builder.Prepend(info.NegativeSign, info.CurrencySymbol, Whitespace);
                 break;
-            case 10:
+            case 10: // n $-
                 builder.Append(Whitespace, info.CurrencySymbol, info.NegativeSign);
                 break;
-            case 11:
+            case 11: // $ n-
                 builder.Prepend(info.CurrencySymbol, Whitespace).Append(info.NegativeSign);
                 break;
-            case 12:
+            case 12: // $ -n
                 builder.Prepend(info.CurrencySymbol, Whitespace, info.NegativeSign);
                 break;
-            case 13:
+            case 13: // n- $
                 builder.Append(info.NegativeSign, Whitespace, info.CurrencySymbol);
                 break;
-            case 14:
+            case 14: // ($ n)
                 builder.Prepend(info.CurrencySymbol, Whitespace).Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
-            case 15:
+            case 15: // (n $)
                 builder.Append(Whitespace, info.CurrencySymbol).Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
-            case 16:
+            case 16: // $- n
                 builder.Prepend(info.CurrencySymbol, info.NegativeSign, Whitespace);
                 break;
         }

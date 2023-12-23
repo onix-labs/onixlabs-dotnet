@@ -27,8 +27,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
     public static bool Equals(BigDecimal left, BigDecimal right)
     {
-        return left.UnscaledValue == right.UnscaledValue
-               && left.Scale == right.Scale;
+        return BigDecimalEqualityComparer.Strict.Equals(left, right);
     }
 
     /// <summary>
@@ -40,7 +39,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
     public static bool ValueEquals(BigDecimal left, BigDecimal right)
     {
-        return Compare(left, right) is 0;
+        return BigDecimalEqualityComparer.Semantic.Equals(left, right);
     }
 
     /// <summary>

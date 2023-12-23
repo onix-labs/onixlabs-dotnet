@@ -19,32 +19,79 @@ namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
-    public static bool TryConvertFromChecked<TOther>(TOther value, out BigDecimal result) where TOther : INumberBase<TOther>
+    static bool INumberBase<BigDecimal>.TryConvertFromChecked<TOther>(TOther value, out BigDecimal result)
+    {
+        switch (value)
+        {
+            case sbyte:
+                result = (sbyte)(object)value;
+                return true;
+            case byte:
+                result = (byte)(object)value;
+                return true;
+            case short:
+                result = (short)(object)value;
+                return true;
+            case ushort:
+                result = (ushort)(object)value;
+                return true;
+            case int:
+                result = (int)(object)value;
+                return true;
+            case uint:
+                result = (uint)(object)value;
+                return true;
+            case long:
+                result = (long)(object)value;
+                return true;
+            case ulong:
+                result = (ulong)(object)value;
+                return true;
+            case Int128:
+                result = (Int128)(object)value;
+                return true;
+            case UInt128:
+                result = (UInt128)(object)value;
+                return true;
+            case BigInteger:
+                result = (BigInteger)(object)value;
+                return true;
+            case decimal:
+                result = (decimal)(object)value;
+                return true;
+            case double:
+                result = (double)(object)value;
+                return true;
+            case float:
+                result = (float)(object)value;
+                return true;
+            default:
+                result = Zero;
+                return false;
+        }
+    }
+
+    static bool INumberBase<BigDecimal>.TryConvertFromSaturating<TOther>(TOther value, out BigDecimal result)
     {
         throw new NotImplementedException();
     }
 
-    public static bool TryConvertFromSaturating<TOther>(TOther value, out BigDecimal result) where TOther : INumberBase<TOther>
+    static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(TOther value, out BigDecimal result)
     {
         throw new NotImplementedException();
     }
 
-    public static bool TryConvertFromTruncating<TOther>(TOther value, out BigDecimal result) where TOther : INumberBase<TOther>
+    static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, out TOther result)
     {
         throw new NotImplementedException();
     }
 
-    public static bool TryConvertToChecked<TOther>(BigDecimal value, out TOther result) where TOther : INumberBase<TOther>
+    static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, out TOther result)
     {
         throw new NotImplementedException();
     }
 
-    public static bool TryConvertToSaturating<TOther>(BigDecimal value, out TOther result) where TOther : INumberBase<TOther>
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool TryConvertToTruncating<TOther>(BigDecimal value, out TOther result) where TOther : INumberBase<TOther>
+    static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value, out TOther result)
     {
         throw new NotImplementedException();
     }

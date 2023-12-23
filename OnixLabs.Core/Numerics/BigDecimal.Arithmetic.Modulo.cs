@@ -28,7 +28,7 @@ public readonly partial struct BigDecimal
     {
         int scale = MaxScale(left, right);
 
-        (BigInteger dividend, BigInteger divisor) = NormalizeScaleMagnitude(left, right);
+        (BigInteger dividend, BigInteger divisor) = NormalizeUnscaledValues(left, right);
         BigInteger remainder = BigInteger.Remainder(dividend, divisor);
 
         return new BigDecimal(remainder, scale);

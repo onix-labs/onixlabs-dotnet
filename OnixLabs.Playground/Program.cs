@@ -21,7 +21,9 @@ internal static class Program
 {
     private static void Main()
     {
-        Console.WriteLine(BigDecimal.Zero.Sign);
-        Console.WriteLine(Math.Pow(-10, 9));
+        BigDecimal value = BigDecimal.E;
+        float f = (float)value;
+
+        Console.WriteLine(f);
     }
 }

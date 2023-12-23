@@ -83,7 +83,7 @@ public readonly partial struct BigDecimal
     public static BigDecimal Parse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider)
     {
         CultureInfo info = provider as CultureInfo ?? DefaultCulture;
-        if (TryParse(value, style, info.NumberFormat, out BigDecimal result)) return result;
+        if (TryParse(value, style, info, out BigDecimal result)) return result;
         throw new FormatException($"The input string '{value}' was not in a correct format.");
     }
 

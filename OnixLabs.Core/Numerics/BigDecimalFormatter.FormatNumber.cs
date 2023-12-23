@@ -40,19 +40,19 @@ internal sealed partial class BigDecimalFormatter
 
         switch (info.NumberNegativePattern)
         {
-            case 0:
+            case 0: // (n)
                 builder.Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
-            case 1:
+            case 1: // -n
                 builder.Prepend(info.NegativeSign);
                 break;
-            case 2:
+            case 2: // - n
                 builder.Prepend(info.NegativeSign, Whitespace);
                 break;
-            case 3:
+            case 3: // n-
                 builder.Append(info.NegativeSign);
                 break;
-            case 4:
+            case 4: // n -
                 builder.Append(Whitespace, info.NegativeSign);
                 break;
         }

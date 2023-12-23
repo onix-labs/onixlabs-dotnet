@@ -21,19 +21,21 @@ namespace OnixLabs.Core.Numerics;
 internal sealed partial class BigDecimalFormatter
 {
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value in engineering, or scientific notation.
+    /// Formats the <see cref="BigDecimal"/> value in exponential, or scientific notation.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    private void FormatEngineering(char specifier)
+    private void FormatExponential(char specifier)
     {
         builder.Append(BigInteger.Abs(value.UnscaledValue));
 
         int exponent = builder.Length - value.Scale - 1;
-        builder.Trim('0').Insert(1, DecimalSeparator).TrimEnd(DecimalSeparator);
+        builder.Trim('0').Insert(1, info.NumberDecimalSeparator).TrimEnd(info.NumberDecimalSeparator);
 
         if (exponent == 0) return;
 
         string sign = exponent > 0 ? info.PositiveSign : info.NegativeSign;
         builder.Append(specifier, sign, int.Abs(exponent));
+
+        if (value < 0) builder.Prepend(info.NegativeSign);
     }
 }

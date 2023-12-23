@@ -19,12 +19,14 @@ using static System.Globalization.NumberStyles;
 
 namespace OnixLabs.Core.Numerics;
 
-internal sealed partial class BigDecimalParser(NumberStyles style, NumberFormatInfo info)
+internal sealed partial class BigDecimalParser(NumberStyles style, CultureInfo cultureInfo)
 {
     private const string LeadingParenthesis = "(";
     private const string TrailingParenthesis = ")";
     private const string ExponentSymbol = "e";
     private const StringComparison Comparison = StringComparison.InvariantCultureIgnoreCase;
+
+    private readonly NumberFormatInfo numberFormatInfo = cultureInfo.NumberFormat;
 
     public bool TryParse(ReadOnlySpan<char> value, out BigDecimal result)
     {
@@ -77,33 +79,33 @@ internal sealed partial class BigDecimalParser(NumberStyles style, NumberFormatI
                 continue;
             }
 
-            if (value.StartsWith(info.NumberGroupSeparator))
+            if (value.StartsWith(numberFormatInfo.NumberGroupSeparator))
             {
                 if (!style.HasFlag(AllowThousands)) return false;
-                value = value.TrimStart(info.NumberGroupSeparator);
+                value = value.TrimStart(numberFormatInfo.NumberGroupSeparator);
                 continue;
             }
 
-            if (value.StartsWith(info.CurrencyGroupSeparator))
+            if (value.StartsWith(numberFormatInfo.CurrencyGroupSeparator))
             {
                 if (!style.HasFlag(AllowThousands)) return false;
-                value = value.TrimStart(info.CurrencyGroupSeparator);
+                value = value.TrimStart(numberFormatInfo.CurrencyGroupSeparator);
                 continue;
             }
 
-            if (value.StartsWith(info.NumberDecimalSeparator))
+            if (value.StartsWith(numberFormatInfo.NumberDecimalSeparator))
             {
                 if (hasDecimalPoint || !style.HasFlag(AllowDecimalPoint)) return false;
                 hasDecimalPoint = true;
-                value = value.TrimStart(info.NumberDecimalSeparator);
+                value = value.TrimStart(numberFormatInfo.NumberDecimalSeparator);
                 continue;
             }
 
-            if (value.StartsWith(info.CurrencyDecimalSeparator))
+            if (value.StartsWith(numberFormatInfo.CurrencyDecimalSeparator))
             {
                 if (hasDecimalPoint || !style.HasFlag(AllowDecimalPoint)) return false;
                 hasDecimalPoint = true;
-                value = value.TrimStart(info.CurrencyDecimalSeparator);
+                value = value.TrimStart(numberFormatInfo.CurrencyDecimalSeparator);
                 continue;
             }
 

@@ -30,7 +30,7 @@ internal sealed partial class BigDecimalParser
         if (!TryTrimLeadingWhitespace(ref value)) return false;
         if (!TryTrimTrailingWhitespace(ref value)) return false;
 
-        switch (info.CurrencyPositivePattern)
+        switch (numberFormatInfo.CurrencyPositivePattern)
         {
             case 0: // $n
                 if (!TryTrimLeadingCurrencySymbol(ref value)) return false;
@@ -48,7 +48,7 @@ internal sealed partial class BigDecimalParser
                 break;
         }
 
-        switch (info.CurrencyNegativePattern)
+        switch (numberFormatInfo.CurrencyNegativePattern)
         {
             case 0: // ($n)
                 if (!TryTrimParentheses(ref value, out hasParentheses)) return false;

@@ -175,7 +175,7 @@ public readonly partial struct BigDecimal
     public static bool TryParse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider, out BigDecimal result)
     {
         CultureInfo info = provider as CultureInfo ?? DefaultCulture;
-        BigDecimalParser parser = new(style, info.NumberFormat);
+        BigDecimalParser parser = new(style, info);
         return parser.TryParse(value, out result);
     }
 }

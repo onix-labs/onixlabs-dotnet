@@ -830,7 +830,7 @@ public sealed class BigDecimalParseDataAttribute : DataAttribute
         CultureInfo.GetCultureInfo("en-US"),
         CultureInfo.GetCultureInfo("fr-FR"),
         CultureInfo.GetCultureInfo("es-ES"),
-        // CultureInfo.GetCultureInfo("ar-SA"),
+        CultureInfo.GetCultureInfo("ar-SA"),
         CultureInfo.GetCultureInfo("bn-IN")
     ];
 

@@ -37,7 +37,7 @@ internal sealed partial class BigDecimalParser
         if (!TryTrimLeadingPositiveSign(ref value, out hasLeadingPositiveSign)) return false;
         if (!TryTrimTrailingPositiveSign(ref value, out hasTrailingPositiveSign)) return false;
         
-        switch (info.NumberNegativePattern)
+        switch (numberFormatInfo.NumberNegativePattern)
         {
             case 0: // (n)
                 if (!TryTrimParentheses(ref value, out hasParentheses)) return false;

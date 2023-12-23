@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 using OnixLabs.Core.Numerics;
 
 namespace OnixLabs.Playground;
@@ -21,9 +22,13 @@ internal static class Program
 {
     private static void Main()
     {
-        BigDecimal value = BigDecimal.E;
-        float f = (float)value;
+        BigDecimal value = -123.456;
+        CultureInfo culture = CultureInfo.GetCultureInfo("ar-SA");
 
-        Console.WriteLine(f);
+        string formatted = value.ToString("e", culture);
+        Console.WriteLine(formatted);
+
+        BigDecimal parsed = BigDecimal.Parse(formatted, culture);
+        Console.WriteLine(parsed);
     }
 }

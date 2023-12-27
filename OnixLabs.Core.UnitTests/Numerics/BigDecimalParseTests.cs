@@ -21,29 +21,75 @@ namespace OnixLabs.Core.UnitTests.Numerics;
 
 public sealed class BigDecimalParseTests
 {
-    [BigDecimalParseData]
-    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (General)")]
-    public void BigDecimalParseShouldProduceExpectedResultGeneral(decimal expected, CultureInfo culture)
+    [BigDecimalFormatterParserData]
+    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Currency)")]
+    public void BigDecimalParseShouldProduceExpectedResultCurrency(decimal value, CultureInfo culture)
     {
         // Given
-        string value = expected.ToString("G", culture);
+        string formatted = value.ToString("C", culture);
+        decimal expected = decimal.Parse(formatted, NumberStyles.Currency, culture);
 
         // When
-        BigDecimal actual = BigDecimal.Parse(value, culture);
+        BigDecimal actual = BigDecimal.Parse(formatted, NumberStyles.Currency, culture);
 
         // Then
         Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
     }
 
-    [BigDecimalParseData]
-    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Exponential)")]
-    public void BigDecimalParseShouldProduceExpectedResultExponential(decimal expected, CultureInfo culture)
+    [BigDecimalFormatterParserData]
+    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Decimal)")]
+    public void BigDecimalParseShouldProduceExpectedResultDecimal(decimal expected, CultureInfo culture)
     {
         // Given
-        string value = expected.ToString("E29", culture);
+        string formatted = expected.ToBigDecimal().ToString("D", culture);
 
         // When
-        BigDecimal actual = BigDecimal.Parse(value, culture);
+        BigDecimal actual = BigDecimal.Parse(formatted, NumberStyles.Number, culture);
+
+        // Then
+        Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
+    }
+
+    [BigDecimalFormatterParserData]
+    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Fixed)")]
+    public void BigDecimalParseShouldProduceExpectedResultFixed(decimal value, CultureInfo culture)
+    {
+        // Given
+        string formatted = value.ToString("F", culture);
+        decimal expected = decimal.Parse(formatted, NumberStyles.Float, culture);
+
+        // When
+        BigDecimal actual = BigDecimal.Parse(formatted, NumberStyles.Float, culture);
+
+        // Then
+        Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
+    }
+
+    [BigDecimalFormatterParserData]
+    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (General)")]
+    public void BigDecimalParseShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture)
+    {
+        // Given
+        string formatted = value.ToString("G", culture);
+        decimal expected = decimal.Parse(formatted, NumberStyles.Any, culture);
+
+        // When
+        BigDecimal actual = BigDecimal.Parse(formatted, NumberStyles.Any, culture);
+
+        // Then
+        Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
+    }
+
+    [BigDecimalFormatterParserData]
+    [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Number)")]
+    public void BigDecimalParseShouldProduceExpectedResultNumber(decimal value, CultureInfo culture)
+    {
+        // Given
+        string formatted = value.ToString("G", culture);
+        decimal expected = decimal.Parse(formatted, NumberStyles.Number, culture);
+
+        // When
+        BigDecimal actual = BigDecimal.Parse(formatted, NumberStyles.Number, culture);
 
         // Then
         Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);

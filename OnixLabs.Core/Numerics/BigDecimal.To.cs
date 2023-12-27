@@ -60,7 +60,7 @@ public readonly partial struct BigDecimal
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
-        BigDecimalFormatter formatter = new(this, info.NumberFormat);
+        BigDecimalFormatter formatter = new(this, info);
         return formatter.Format(format);
     }
 }

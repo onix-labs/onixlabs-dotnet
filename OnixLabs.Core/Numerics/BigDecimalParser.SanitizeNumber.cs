@@ -33,11 +33,11 @@ internal sealed partial class BigDecimalParser
         // Trim overall leading and trailing whitespace
         if (!TryTrimLeadingWhitespace(ref value)) return false;
         if (!TryTrimTrailingWhitespace(ref value)) return false;
-        
+
         if (!TryTrimLeadingPositiveSign(ref value, out hasLeadingPositiveSign)) return false;
         if (!TryTrimTrailingPositiveSign(ref value, out hasTrailingPositiveSign)) return false;
-        
-        switch (numberFormatInfo.NumberNegativePattern)
+
+        switch (numberFormat.NumberNegativePattern)
         {
             case 0: // (n)
                 if (!TryTrimParentheses(ref value, out hasParentheses)) return false;
@@ -57,13 +57,13 @@ internal sealed partial class BigDecimalParser
                 if (!TryTrimTrailingWhitespace(ref value)) return false;
                 break;
         }
-        
+
         // Trim whitespace that appears after a leading positive or negative sign
         if (!TryTrimLeadingWhitespace(ref value)) return false;
         if (!TryTrimTrailingWhitespace(ref value)) return false;
 
         if (!TryTrimExponent(ref value, out exponent)) return false;
-        
+
         // Trim whitespace that appears between the number and an exponent
         if (!TryTrimTrailingWhitespace(ref value)) return false;
 

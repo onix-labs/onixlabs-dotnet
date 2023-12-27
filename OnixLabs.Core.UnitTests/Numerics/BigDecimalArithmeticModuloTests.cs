@@ -18,7 +18,7 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Numerics;
 
-public sealed class BigDecimalArithmeticModTests
+public sealed class BigDecimalArithmeticModuloTests
 {
     [BigDecimalModData]
     [Theory(DisplayName = "BigDecimal.Mod should produce the expected result")]

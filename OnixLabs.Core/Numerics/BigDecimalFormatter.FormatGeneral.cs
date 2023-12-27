@@ -24,8 +24,8 @@ internal sealed partial class BigDecimalFormatter
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatGeneral()
     {
-        FormatIntegerComponent();
-        FormatFractionComponent(info.NumberDecimalSeparator);
+        FormatIntegerComponent([]);
+        FormatFractionComponent(numberFormat.NumberDecimalSeparator);
         FormatNumberNegativePattern();
     }
 }

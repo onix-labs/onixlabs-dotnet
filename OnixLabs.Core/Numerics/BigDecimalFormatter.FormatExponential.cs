@@ -27,15 +27,17 @@ internal sealed partial class BigDecimalFormatter
     private void FormatExponential(char specifier)
     {
         builder.Append(BigInteger.Abs(value.UnscaledValue));
+        
+        if(BigDecimal.IsZero(value)) return;
 
         int exponent = builder.Length - value.Scale - 1;
-        builder.Trim('0').Insert(1, info.NumberDecimalSeparator).TrimEnd(info.NumberDecimalSeparator);
+        builder.Trim('0').Insert(1, numberFormat.NumberDecimalSeparator).TrimEnd(numberFormat.NumberDecimalSeparator);
 
         if (exponent == 0) return;
 
-        string sign = exponent > 0 ? info.PositiveSign : info.NegativeSign;
+        string sign = exponent > 0 ? numberFormat.PositiveSign : numberFormat.NegativeSign;
         builder.Append(specifier, sign, int.Abs(exponent));
 
-        if (value < 0) builder.Prepend(info.NegativeSign);
+        if (value < 0) builder.Prepend(numberFormat.NegativeSign);
     }
 }

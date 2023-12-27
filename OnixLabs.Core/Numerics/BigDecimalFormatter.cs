@@ -26,13 +26,14 @@ namespace OnixLabs.Core.Numerics;
 /// </summary>
 /// <param name="value">The <see cref="BigDecimal"/> value to format.</param>
 /// <param name="info">The <see cref="NumberFormatInfo"/> information used for formatting.</param>
-internal sealed partial class BigDecimalFormatter(BigDecimal value, NumberFormatInfo info)
+internal sealed partial class BigDecimalFormatter(BigDecimal value, CultureInfo culture)
 {
     private const char DefaultFormat = 'G';
     private const char LeadingParenthesis = '(';
     private const char TrailingParenthesis = ')';
     private const char Whitespace = ' ';
 
+    private readonly NumberFormatInfo numberFormat = culture.NumberFormat;
     private readonly StringBuilder builder = new();
 
     /// <summary>
@@ -84,25 +85,23 @@ internal sealed partial class BigDecimalFormatter(BigDecimal value, NumberFormat
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private bool TryScaleValue(ReadOnlySpan<char> format)
     {
-        int scale;
-
         if (format.Length > 1)
         {
-            if (!int.TryParse(format[1..], out scale)) return false;
+            if (!int.TryParse(format[1..], out int scale)) return false;
+            value = value.SetScale(scale);
         }
         else
         {
-            scale = char.ToUpperInvariant(format[0]) switch
+            value = char.ToUpperInvariant(format[0]) switch
             {
-                'C' => info.CurrencyDecimalDigits,
-                'F' => info.NumberDecimalDigits,
-                'N' => info.NumberDecimalDigits,
-                'P' => info.PercentDecimalDigits,
-                _ => value.Scale
+                'C' => value.SetScale(numberFormat.CurrencyDecimalDigits),
+                'F' => value.SetScale(numberFormat.NumberDecimalDigits),
+                'N' => value.SetScale(numberFormat.NumberDecimalDigits),
+                'P' => BigDecimal.Multiply(value, 100).SetScale(numberFormat.PercentDecimalDigits),
+                _ => value
             };
         }
 
-        value = value.SetScale(scale);
         return true;
     }
 
@@ -112,23 +111,26 @@ internal sealed partial class BigDecimalFormatter(BigDecimal value, NumberFormat
     /// <param name="grouping">The size of each number group.</param>
     /// <param name="separator">The separator that separates each number group.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    private void FormatIntegerComponent(int grouping = default, string separator = "")
+    private void FormatIntegerComponent(int[] grouping, string separator = "")
     {
         builder.Append(BigInteger.Abs(value.IntegralValue));
 
-        if (grouping == 0) return;
+        if (grouping.Length == 0) return;
 
         int position = builder.Length - 1;
         int count = 0;
+        int index = 0;
 
         while (position > 0)
         {
             if (char.IsDigit(builder[position])) count++;
 
-            if (count == grouping)
+            if (count == grouping[index])
             {
                 builder.Insert(position, separator);
                 count = 0;
+
+                if (index < grouping.Length - 1) index++;
             }
 
             position--;

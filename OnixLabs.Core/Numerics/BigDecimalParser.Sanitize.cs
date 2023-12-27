@@ -43,7 +43,7 @@ internal sealed partial class BigDecimalParser
 
     private bool TryTrimLeadingCurrencySymbol(ref ReadOnlySpan<char> value)
     {
-        ReadOnlySpan<char> result = value.TrimStart(numberFormatInfo.CurrencySymbol);
+        ReadOnlySpan<char> result = value.TrimStart(numberFormat.CurrencySymbol);
 
         if (result.SequenceEqual(value)) return true;
         if (!style.HasFlag(AllowCurrencySymbol)) return false;
@@ -54,7 +54,7 @@ internal sealed partial class BigDecimalParser
 
     private bool TryTrimTrailingCurrencySymbol(ref ReadOnlySpan<char> value)
     {
-        ReadOnlySpan<char> result = value.TrimEnd(numberFormatInfo.CurrencySymbol);
+        ReadOnlySpan<char> result = value.TrimEnd(numberFormat.CurrencySymbol);
 
         if (result.SequenceEqual(value)) return true;
         if (!style.HasFlag(AllowCurrencySymbol)) return false;
@@ -65,45 +65,45 @@ internal sealed partial class BigDecimalParser
 
     private bool TryTrimLeadingPositiveSign(ref ReadOnlySpan<char> value, out bool hasLeadingPositiveSign)
     {
-        hasLeadingPositiveSign = value.StartsWith(numberFormatInfo.PositiveSign, Comparison);
+        hasLeadingPositiveSign = value.StartsWith(numberFormat.PositiveSign, Comparison);
 
         if (!hasLeadingPositiveSign) return true;
         if (!style.HasFlag(AllowLeadingSign)) return false;
 
-        value = value.TrimStart(numberFormatInfo.PositiveSign);
+        value = value.TrimStart(numberFormat.PositiveSign);
         return true;
     }
 
     private bool TryTrimTrailingPositiveSign(ref ReadOnlySpan<char> value, out bool hasTrailingPositiveSign)
     {
-        hasTrailingPositiveSign = value.EndsWith(numberFormatInfo.PositiveSign, Comparison);
+        hasTrailingPositiveSign = value.EndsWith(numberFormat.PositiveSign, Comparison);
 
         if (!hasTrailingPositiveSign) return true;
         if (!style.HasFlag(AllowTrailingSign)) return false;
 
-        value = value.TrimStart(numberFormatInfo.PositiveSign);
+        value = value.TrimStart(numberFormat.PositiveSign);
         return true;
     }
 
     private bool TryTrimLeadingNegativeSign(ref ReadOnlySpan<char> value, out bool hasLeadingNegativeSign)
     {
-        hasLeadingNegativeSign = value.StartsWith(numberFormatInfo.NegativeSign, Comparison);
+        hasLeadingNegativeSign = value.StartsWith(numberFormat.NegativeSign, Comparison);
 
         if (!hasLeadingNegativeSign) return true;
         if (!style.HasFlag(AllowLeadingSign)) return false;
 
-        value = value.TrimStart(numberFormatInfo.NegativeSign);
+        value = value.TrimStart(numberFormat.NegativeSign);
         return true;
     }
 
     private bool TryTrimTrailingNegativeSign(ref ReadOnlySpan<char> value, out bool hasTrailingNegativeSign)
     {
-        hasTrailingNegativeSign = value.EndsWith(numberFormatInfo.NegativeSign, Comparison);
+        hasTrailingNegativeSign = value.EndsWith(numberFormat.NegativeSign, Comparison);
 
         if (!hasTrailingNegativeSign) return true;
         if (!style.HasFlag(AllowTrailingSign)) return false;
 
-        value = value.TrimStart(numberFormatInfo.NegativeSign);
+        value = value.TrimStart(numberFormat.NegativeSign);
         return true;
     }
 
@@ -137,6 +137,6 @@ internal sealed partial class BigDecimalParser
         ReadOnlySpan<char> chars = value[(index + 1)..];
         value = value[..index];
 
-        return int.TryParse(chars, cultureInfo, out exponent) && style.HasFlag(AllowExponent);
+        return int.TryParse(chars, culture, out exponent) && style.HasFlag(AllowExponent);
     }
 }

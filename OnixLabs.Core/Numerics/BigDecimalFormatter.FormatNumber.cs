@@ -25,8 +25,8 @@ internal sealed partial class BigDecimalFormatter
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatNumber()
     {
-        FormatIntegerComponent(info.NumberGroupSizes[0], info.NumberGroupSeparator);
-        FormatFractionComponent(info.NumberDecimalSeparator);
+        FormatIntegerComponent(numberFormat.NumberGroupSizes, numberFormat.NumberGroupSeparator);
+        FormatFractionComponent(numberFormat.NumberDecimalSeparator);
         FormatNumberNegativePattern();
     }
 
@@ -38,22 +38,22 @@ internal sealed partial class BigDecimalFormatter
     {
         if (BigDecimal.IsPositive(value)) return;
 
-        switch (info.NumberNegativePattern)
+        switch (numberFormat.NumberNegativePattern)
         {
             case 0: // (n)
                 builder.Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
             case 1: // -n
-                builder.Prepend(info.NegativeSign);
+                builder.Prepend(numberFormat.NegativeSign);
                 break;
             case 2: // - n
-                builder.Prepend(info.NegativeSign, Whitespace);
+                builder.Prepend(numberFormat.NegativeSign, Whitespace);
                 break;
             case 3: // n-
-                builder.Append(info.NegativeSign);
+                builder.Append(numberFormat.NegativeSign);
                 break;
             case 4: // n -
-                builder.Append(Whitespace, info.NegativeSign);
+                builder.Append(Whitespace, numberFormat.NegativeSign);
                 break;
         }
     }

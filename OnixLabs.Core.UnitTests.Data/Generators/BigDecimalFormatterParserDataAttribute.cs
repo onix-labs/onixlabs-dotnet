@@ -18,7 +18,7 @@ using Xunit.Sdk;
 
 namespace OnixLabs.Core.UnitTests.Data.Generators;
 
-public sealed class BigDecimalParseDataAttribute : DataAttribute
+public sealed class BigDecimalFormatterParserDataAttribute : DataAttribute
 {
     private static readonly decimal[] Data =
     [
@@ -826,12 +826,50 @@ public sealed class BigDecimalParseDataAttribute : DataAttribute
 
     private static readonly CultureInfo[] Cultures =
     [
-        CultureInfo.GetCultureInfo("en-GB"),
-        CultureInfo.GetCultureInfo("en-US"),
-        CultureInfo.GetCultureInfo("fr-FR"),
-        CultureInfo.GetCultureInfo("es-ES"),
-        CultureInfo.GetCultureInfo("ar-SA"),
-        CultureInfo.GetCultureInfo("bn-IN")
+        CultureInfo.InvariantCulture,
+        CultureInfo.GetCultureInfo("ar-001"), // Arabic (world)
+        CultureInfo.GetCultureInfo("ar-AE"), // Arabic (United Arab Emirates)
+        CultureInfo.GetCultureInfo("en-001"), // English (world)
+        CultureInfo.GetCultureInfo("en-150"), // English (Europe)
+        CultureInfo.GetCultureInfo("en-GB"), // English (United Kingdom)
+        CultureInfo.GetCultureInfo("en-US"), // English (United States)
+        CultureInfo.GetCultureInfo("en-US-POSIX"), // English (United States, Computer)
+        CultureInfo.GetCultureInfo("en-CV"), // English (Cape Verde)
+        CultureInfo.GetCultureInfo("kea-CV"), // Kabuverdianu (Cape Verde)
+        CultureInfo.GetCultureInfo("pt-CV"), // Portuguese (Cape Verde)
+        CultureInfo.GetCultureInfo("eu"), // Basque
+        CultureInfo.GetCultureInfo("eu-ES"), // Basque (Spain)
+        CultureInfo.GetCultureInfo("bg-BG"), // Bulgarian (Bulgaria)
+        CultureInfo.GetCultureInfo("de-DE"), // German (Germany)
+        CultureInfo.GetCultureInfo("es-ES"), // Spanish (Spain)
+        CultureInfo.GetCultureInfo("fi-FI"), // Finnish (Finland)
+        CultureInfo.GetCultureInfo("fo-FO"), // Faroese (Faroe Islands)
+        CultureInfo.GetCultureInfo("fr-FR"), // French (France)
+        CultureInfo.GetCultureInfo("hr-HR"), // Croatian (Croatia)
+        CultureInfo.GetCultureInfo("hu-HU"), // Hungarian (Hungary)
+        CultureInfo.GetCultureInfo("id-ID"), // Indonesian (Indonesia)
+        CultureInfo.GetCultureInfo("is-IS"), // Icelandic (Iceland)
+        CultureInfo.GetCultureInfo("it-IT"), // Italian (Italy)
+        CultureInfo.GetCultureInfo("lt-LT"), // Lithuanian (Lithuania)
+        CultureInfo.GetCultureInfo("lv-LV"), // Latvian (Latvia)
+        CultureInfo.GetCultureInfo("mg-MG"), // Malagasy (Madagascar)
+        CultureInfo.GetCultureInfo("mk-MK"), // Macedonian (North Macedonia)
+        CultureInfo.GetCultureInfo("mn-MN"), // Mongolian (Mongolia)
+        CultureInfo.GetCultureInfo("mt-MT"), // Maltese (Malta)
+        CultureInfo.GetCultureInfo("nl-NL"), // Dutch (Netherlands)
+        CultureInfo.GetCultureInfo("pl-PL"), // Polish (Poland)
+        CultureInfo.GetCultureInfo("pt-PT"), // Portuguese (Portugal)
+        CultureInfo.GetCultureInfo("ro-RO"), // Romanian (Romania)
+        CultureInfo.GetCultureInfo("ru-RU"), // Russian (Russia)
+        CultureInfo.GetCultureInfo("rw-RW"), // Kinyarwanda (Rwanda)
+        CultureInfo.GetCultureInfo("se-SE"), // Northern Sami (Sweden)
+        CultureInfo.GetCultureInfo("sk-SK"), // Slovak (Slovakia)
+        CultureInfo.GetCultureInfo("so-SO"), // Somali (Somalia)
+        CultureInfo.GetCultureInfo("th-TH"), // Thai (Thailand)
+        CultureInfo.GetCultureInfo("to-TO"), // Tongan (Tonga)
+        CultureInfo.GetCultureInfo("tr-TR"), // Turkish (Türkiye)
+        CultureInfo.GetCultureInfo("zh-Hans-CN"), // Chinese, Simplified (China mainland)
+        CultureInfo.GetCultureInfo("zh-Hant-CN"), // Chinese, Traditional (China mainland)
     ];
 
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)

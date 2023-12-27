@@ -12,23 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Globalization;
-using OnixLabs.Core.Numerics;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
-        BigDecimal value = -123.456;
-        CultureInfo culture = CultureInfo.GetCultureInfo("ar-SA");
-
-        string formatted = value.ToString("e", culture);
-        Console.WriteLine(formatted);
-
-        BigDecimal parsed = BigDecimal.Parse(formatted, culture);
-        Console.WriteLine(parsed);
     }
 }

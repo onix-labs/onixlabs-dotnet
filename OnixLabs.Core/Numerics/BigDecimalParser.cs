@@ -26,7 +26,7 @@ internal sealed partial class BigDecimalParser(NumberStyles style, CultureInfo c
     private const string ExponentSymbol = "e";
     private const StringComparison Comparison = StringComparison.InvariantCultureIgnoreCase;
 
-    private readonly NumberFormatInfo numberFormat = culture.NumberFormat;
+    private readonly NumberFormatInfo numberFormat = NumberFormatInfo.GetInstance(culture);
 
     public bool TryParse(ReadOnlySpan<char> value, out BigDecimal result)
     {
@@ -52,7 +52,7 @@ internal sealed partial class BigDecimalParser(NumberStyles style, CultureInfo c
 
         // At this point, only digits, thousand and decimal separators should remain. 
         if (!TryGetRawBigDecimal(ref value, out RawBigDecimal rawResult)) return false;
-
+        
         result = new BigDecimal(rawResult.UnscaledValue * sign, int.Max(rawResult.Scale - exponent, 0));
         return true;
     }

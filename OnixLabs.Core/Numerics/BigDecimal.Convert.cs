@@ -13,86 +13,229 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace OnixLabs.Core.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     static bool INumberBase<BigDecimal>.TryConvertFromChecked<TOther>(TOther value, out BigDecimal result)
     {
-        switch (value)
-        {
-            case sbyte:
-                result = (sbyte)(object)value;
-                return true;
-            case byte:
-                result = (byte)(object)value;
-                return true;
-            case short:
-                result = (short)(object)value;
-                return true;
-            case ushort:
-                result = (ushort)(object)value;
-                return true;
-            case int:
-                result = (int)(object)value;
-                return true;
-            case uint:
-                result = (uint)(object)value;
-                return true;
-            case long:
-                result = (long)(object)value;
-                return true;
-            case ulong:
-                result = (ulong)(object)value;
-                return true;
-            case Int128:
-                result = (Int128)(object)value;
-                return true;
-            case UInt128:
-                result = (UInt128)(object)value;
-                return true;
-            case BigInteger:
-                result = (BigInteger)(object)value;
-                return true;
-            case decimal:
-                result = (decimal)(object)value;
-                return true;
-            case double:
-                result = (double)(object)value;
-                return true;
-            case float:
-                result = (float)(object)value;
-                return true;
-            default:
-                result = Zero;
-                return false;
-        }
+        return TryConvertFrom(value, out result);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     static bool INumberBase<BigDecimal>.TryConvertFromSaturating<TOther>(TOther value, out BigDecimal result)
     {
-        throw new NotImplementedException();
+        return TryConvertFrom(value, out result);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(TOther value, out BigDecimal result)
     {
-        throw new NotImplementedException();
+        return TryConvertFrom(value, out result);
     }
 
-    static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, out TOther result)
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
     {
-        throw new NotImplementedException();
+        return TryConvertTo(value, out result);
     }
 
-    static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, out TOther result)
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
     {
-        throw new NotImplementedException();
+        return TryConvertTo(value, out result);
     }
 
-    static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value, out TOther result)
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
     {
-        throw new NotImplementedException();
+        return TryConvertTo(value, out result);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    private static bool TryConvertFrom<TOther>(TOther value, out BigDecimal result) where TOther : INumberBase<TOther>
+    {
+        if (typeof(TOther) == typeof(sbyte))
+        {
+            result = (sbyte)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(byte))
+        {
+            result = (byte)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(short))
+        {
+            result = (short)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(ushort))
+        {
+            result = (ushort)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(int))
+        {
+            result = (int)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(uint))
+        {
+            result = (uint)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(long))
+        {
+            result = (long)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(ulong))
+        {
+            result = (ulong)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(Int128))
+        {
+            result = (Int128)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(UInt128))
+        {
+            result = (UInt128)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(BigInteger))
+        {
+            result = (BigInteger)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(decimal))
+        {
+            result = (decimal)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(double))
+        {
+            result = (double)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(float))
+        {
+            result = (float)(object)value;
+            return true;
+        }
+
+        result = default;
+        return false;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    private static bool TryConvertTo<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
+    {
+        if (typeof(TOther) == typeof(sbyte))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(byte))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(short))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(ushort))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(int))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(uint))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(long))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(ulong))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(Int128))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(UInt128))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(BigInteger))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(decimal))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(double))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        if (typeof(TOther) == typeof(float))
+        {
+            result = (TOther)(object)value;
+            return true;
+        }
+
+        result = default;
+        return false;
     }
 }

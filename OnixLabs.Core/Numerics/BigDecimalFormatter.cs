@@ -33,7 +33,7 @@ internal sealed partial class BigDecimalFormatter(BigDecimal value, CultureInfo 
     private const char TrailingParenthesis = ')';
     private const char Whitespace = ' ';
 
-    private readonly NumberFormatInfo numberFormat = culture.NumberFormat;
+    private readonly NumberFormatInfo numberFormat = NumberFormatInfo.GetInstance(culture);
     private readonly StringBuilder builder = new();
 
     /// <summary>

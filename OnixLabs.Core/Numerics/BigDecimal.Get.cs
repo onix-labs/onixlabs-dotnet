@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Numerics;
 
 namespace OnixLabs.Core.Numerics;
@@ -21,21 +20,21 @@ public readonly partial struct BigDecimal
 {
     int IFloatingPoint<BigDecimal>.GetExponentByteCount()
     {
-        throw new NotImplementedException();
+        return sizeof(int);
     }
 
     int IFloatingPoint<BigDecimal>.GetExponentShortestBitLength()
     {
-        throw new NotImplementedException();
+        return sizeof(int) - int.LeadingZeroCount(Scale);
     }
 
     int IFloatingPoint<BigDecimal>.GetSignificandBitLength()
     {
-        throw new NotImplementedException();
+        return UnscaledValue.ToByteArray().Length * 8;
     }
 
     int IFloatingPoint<BigDecimal>.GetSignificandByteCount()
     {
-        throw new NotImplementedException();
+        return UnscaledValue.ToByteArray().Length;
     }
 }

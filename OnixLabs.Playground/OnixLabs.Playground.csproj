@@ -7,6 +7,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
+        <ProjectReference Include="..\OnixLabs.Numerics\OnixLabs.Numerics.csproj" />
         <ProjectReference Include="..\OnixLabs.Security.Cryptography\OnixLabs.Security.Cryptography.csproj"/>
     </ItemGroup>
     <ItemGroup>

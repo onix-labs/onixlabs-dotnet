@@ -14,18 +14,20 @@
 
 namespace OnixLabs.Numerics;
 
-/// <summary>
-/// Specifies decimal scale modes.
-/// </summary>
-public enum ScaleMode
+public readonly partial struct NumberInfo
 {
     /// <summary>
-    /// Specifies that unscaled values should be preserved; for example, 123 with a scale of 10 becomes 0.0000000123.
+    /// Gets a <see cref="NumberInfo"/> instance representing zero.
     /// </summary>
-    Fractional,
+    public static NumberInfo Zero => new(0, 0);
 
     /// <summary>
-    /// Specifies that integer values should be preserved; for example, 123 with a scale of 10 becomes 123.0000000000.
+    /// Gets a <see cref="NumberInfo"/> instance representing one.
     /// </summary>
-    Integral
+    public static NumberInfo One => new(1, 0);
+
+    /// <summary>
+    /// Gets a <see cref="NumberInfo"/> instance representing negative one.
+    /// </summary>
+    public static NumberInfo NegativeOne => new(-1, 0);
 }

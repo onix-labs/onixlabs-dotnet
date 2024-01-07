@@ -23,7 +23,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the unary subtraction of the specified <see cref="BigDecimal"/> value.</returns>
     public static BigDecimal UnarySubtract(BigDecimal value)
     {
-        return new BigDecimal(-value.NumberInfo.UnscaledValue, value.NumberInfo.Scale);
+        return new BigDecimal(-value.UnscaledValue, value.Scale);
     }
 
     /// <summary>

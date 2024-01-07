@@ -34,10 +34,10 @@ public readonly partial struct BigDecimal
         if (right == One) return left;
         if (left == Zero) return Zero;
 
-        BigInteger dividend = left.NumberInfo.UnscaledValue * BigInteger.Pow(10, right.NumberInfo.Scale);
-        BigInteger quotient = DivideAndRound(dividend, right.NumberInfo.UnscaledValue, mode);
+        BigInteger dividend = left.UnscaledValue * BigInteger.Pow(10, right.Scale);
+        BigInteger quotient = DivideAndRound(dividend, right.UnscaledValue, mode);
 
-        return new BigDecimal(quotient, left.NumberInfo.Scale);
+        return new BigDecimal(quotient, left.Scale);
     }
 
     /// <summary>

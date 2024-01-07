@@ -26,10 +26,10 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the product of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Multiply(BigDecimal left, BigDecimal right)
     {
-        int scale = left.NumberInfo.Scale + right.NumberInfo.Scale;
+        int scale = left.Scale + right.Scale;
 
         if (IsZero(left) || IsZero(right)) return new BigDecimal(0, scale);
-        BigInteger product = left.NumberInfo.UnscaledValue * right.NumberInfo.UnscaledValue;
+        BigInteger product = left.UnscaledValue * right.UnscaledValue;
 
         return new BigDecimal(product, scale);
     }

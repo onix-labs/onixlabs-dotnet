@@ -23,6 +23,11 @@ namespace OnixLabs.Numerics;
 public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
 {
     /// <summary>
+    /// The underlying <see cref="NumberInfo"/> that represents the current <see cref="BigDecimal"/> value.
+    /// </summary>
+    private readonly NumberInfo number;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
     /// </summary>
     /// <param name="value">The unscaled integer value from which to construct a <see cref="BigDecimal"/> value.</param>
@@ -32,7 +37,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
         RequireIsDefined(mode, nameof(mode));
-        NumberInfo = NumberInfo.Create(value, scale, mode);
+        number = NumberInfo.Create(value, scale, mode);
     }
 
     /// <summary>
@@ -43,7 +48,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
     public BigDecimal(float value, ConversionMode mode = default)
     {
         RequireIsDefined(mode, nameof(mode));
-        NumberInfo = NumberInfo.Create(value, mode);
+        number = NumberInfo.Create(value, mode);
     }
 
     /// <summary>
@@ -54,7 +59,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
     public BigDecimal(double value, ConversionMode mode = default)
     {
         RequireIsDefined(mode, nameof(mode));
-        NumberInfo = NumberInfo.Create(value, mode);
+        number = NumberInfo.Create(value, mode);
     }
 
     /// <summary>
@@ -63,7 +68,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
     /// <param name="value">The decimal value from which to construct a <see cref="BigDecimal"/>value.</param>
     public BigDecimal(decimal value)
     {
-        NumberInfo = NumberInfo.Create(value);
+        number = NumberInfo.Create(value);
     }
 
     /// <summary>
@@ -72,11 +77,16 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
     /// <param name="value">The bytes from which to construct a <see cref="BigDecimal"/>value.</param>
     public BigDecimal(ReadOnlySpan<byte> value)
     {
-        NumberInfo = NumberInfo.Create(value);
+        number = NumberInfo.Create(value);
     }
 
     /// <summary>
-    /// Gets the underlying <see cref="NumberInfo"/> for the current <see cref="BigDecimal"/> value.
+    /// Gets the unscaled value of the current <see cref="BigDecimal"/> value.
     /// </summary>
-    internal NumberInfo NumberInfo { get; }
+    public BigInteger UnscaledValue => number.UnscaledValue;
+
+    /// <summary>
+    /// Gets the scale of the current <see cref="BigDecimal"/> value.
+    /// </summary>
+    public int Scale => number.Scale;
 }

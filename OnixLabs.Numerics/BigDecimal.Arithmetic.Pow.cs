@@ -40,6 +40,6 @@ public readonly partial struct BigDecimal
         int absExponent = int.Abs(exponent);
         while (--absExponent > 0) result *= Abs(value);
 
-        return (exponent < 0 ? Divide(One.SetScale(value.NumberInfo.Scale), result, mode) : result) * value.NumberInfo.Sign;
+        return (exponent < 0 ? Divide(One.SetScale(value.Scale), result, mode) : result) * value.number.Sign;
     }
 }

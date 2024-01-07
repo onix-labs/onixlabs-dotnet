@@ -26,7 +26,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a <see cref="BigInteger"/> value representing the integral value of the specified <see cref="BigDecimal"/> value.</returns>
     public static explicit operator BigInteger(BigDecimal value)
     {
-        return value.NumberInfo.Integer;
+        return value.number.Integer;
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public readonly partial struct BigDecimal
     public static explicit operator sbyte(BigDecimal value)
     {
         CheckIntegerOverflow(value, sbyte.MinValue, sbyte.MaxValue);
-        return (sbyte)value.NumberInfo.Integer;
+        return (sbyte)value.number.Integer;
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ public readonly partial struct BigDecimal
     public static explicit operator byte(BigDecimal value)
     {
         CheckIntegerOverflow(value, byte.MinValue, byte.MaxValue);
-        return (byte)value.NumberInfo.Integer;
+        return (byte)value.number.Integer;
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public readonly partial struct BigDecimal
     public static explicit operator short(BigDecimal value)
     {
         CheckIntegerOverflow(value, short.MinValue, short.MaxValue);
-        return (short)value.NumberInfo.Integer;
+        return (short)value.number.Integer;
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public readonly partial struct BigDecimal
     public static explicit operator ushort(BigDecimal value)
     {
         CheckIntegerOverflow(value, ushort.MinValue, ushort.MaxValue);
-        return (ushort)value.NumberInfo.Integer;
+        return (ushort)value.number.Integer;
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public readonly partial struct BigDecimal
     public static explicit operator int(BigDecimal value)
     {
         CheckIntegerOverflow(value, int.MinValue, int.MaxValue);
-        return (int)value.NumberInfo.Integer;
+        return (int)value.number.Integer;
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public readonly partial struct BigDecimal
     public static explicit operator uint(BigDecimal value)
     {
         CheckIntegerOverflow(value, uint.MinValue, uint.MaxValue);
-        return (uint)value.NumberInfo.Integer;
+        return (uint)value.number.Integer;
     }
 
     /// <summary>
@@ -103,7 +103,7 @@ public readonly partial struct BigDecimal
     public static explicit operator long(BigDecimal value)
     {
         CheckIntegerOverflow(value, long.MinValue, long.MaxValue);
-        return (long)value.NumberInfo.Integer;
+        return (long)value.number.Integer;
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ public readonly partial struct BigDecimal
     public static explicit operator ulong(BigDecimal value)
     {
         CheckIntegerOverflow(value, ulong.MinValue, ulong.MaxValue);
-        return (ulong)value.NumberInfo.Integer;
+        return (ulong)value.number.Integer;
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public readonly partial struct BigDecimal
     public static explicit operator Int128(BigDecimal value)
     {
         CheckIntegerOverflow(value, Int128.MinValue, Int128.MaxValue);
-        return (Int128)value.NumberInfo.Integer;
+        return (Int128)value.number.Integer;
     }
 
     /// <summary>
@@ -136,7 +136,7 @@ public readonly partial struct BigDecimal
     public static explicit operator UInt128(BigDecimal value)
     {
         CheckIntegerOverflow(value, UInt128.MinValue, UInt128.MaxValue);
-        return (UInt128)value.NumberInfo.Integer;
+        return (UInt128)value.number.Integer;
     }
 
     /// <summary>
@@ -199,7 +199,7 @@ public readonly partial struct BigDecimal
         BigInteger checkedMin = BigInteger.CreateChecked(min);
         BigInteger checkedMax = BigInteger.CreateChecked(max);
 
-        if (value.NumberInfo.Integer < checkedMin || value.NumberInfo.Integer > checkedMax)
+        if (value.number.Integer < checkedMin || value.number.Integer > checkedMax)
         {
             throw new OverflowException($"Value was either too large or too small for the specified type: {typeof(T).Name}.");
         }

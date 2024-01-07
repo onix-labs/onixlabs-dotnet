@@ -31,11 +31,11 @@ public readonly partial struct BigDecimal
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
         RequireIsDefined(mode, nameof(mode));
 
-        if (scale == value.NumberInfo.Scale) return value;
-        if (scale < value.NumberInfo.Scale) return Round(value, scale, mode);
+        if (scale == value.Scale) return value;
+        if (scale < value.Scale) return Round(value, scale, mode);
 
-        BigInteger magnitude = BigInteger.Pow(10, scale - value.NumberInfo.Scale);
-        return new BigDecimal(value.NumberInfo.UnscaledValue * magnitude, scale);
+        BigInteger magnitude = BigInteger.Pow(10, scale - value.Scale);
+        return new BigDecimal(value.UnscaledValue * magnitude, scale);
     }
 
     /// <summary>
@@ -57,9 +57,9 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the normalized unscaled values of the specified <see cref="BigDecimal"/> values.</returns>
     internal static (BigInteger Left, BigInteger Right) NormalizeUnscaledValues(BigDecimal left, BigDecimal right)
     {
-        BigInteger minOrderOfMagnitude = BigInteger.Min(left.NumberInfo.ScaleFactor, right.NumberInfo.ScaleFactor);
-        BigInteger leftNormalized = left.NumberInfo.UnscaledValue * right.NumberInfo.ScaleFactor / minOrderOfMagnitude;
-        BigInteger rightNormalized = right.NumberInfo.UnscaledValue * left.NumberInfo.ScaleFactor / minOrderOfMagnitude;
+        BigInteger minOrderOfMagnitude = BigInteger.Min(left.number.ScaleFactor, right.number.ScaleFactor);
+        BigInteger leftNormalized = left.UnscaledValue * right.number.ScaleFactor / minOrderOfMagnitude;
+        BigInteger rightNormalized = right.UnscaledValue * left.number.ScaleFactor / minOrderOfMagnitude;
 
         return (leftNormalized, rightNormalized);
     }

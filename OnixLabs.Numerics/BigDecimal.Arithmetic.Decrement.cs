@@ -25,7 +25,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new <see cref="BigDecimal"/> value decremented by one integral unit.</returns>
     public static BigDecimal Decrement(BigDecimal value)
     {
-        return new BigDecimal(value.NumberInfo.UnscaledValue - value.NumberInfo.ScaleFactor, value.NumberInfo.Scale);
+        return new BigDecimal(value.UnscaledValue - value.number.ScaleFactor, value.Scale);
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new <see cref="BigDecimal"/> value decremented by one fractional unit.</returns>
     public static BigDecimal DecrementFraction(BigDecimal value)
     {
-        return new BigDecimal(value.NumberInfo.UnscaledValue - BigInteger.One, value.NumberInfo.Scale);
+        return new BigDecimal(value.UnscaledValue - BigInteger.One, value.Scale);
     }
 
     /// <summary>

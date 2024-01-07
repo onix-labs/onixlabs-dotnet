@@ -26,8 +26,8 @@ public readonly partial struct BigDecimal
     public static BigDecimal TrimTrailingZeros(BigDecimal value)
     {
         int exponent = 0;
-        while (value.NumberInfo.UnscaledValue % BigInteger.Pow(10, exponent) == 0) exponent++;
-        return new BigDecimal(value.NumberInfo.UnscaledValue / BigInteger.Pow(10, --exponent), value.NumberInfo.Scale - exponent);
+        while (value.UnscaledValue % BigInteger.Pow(10, exponent) == 0) exponent++;
+        return new BigDecimal(value.UnscaledValue / BigInteger.Pow(10, --exponent), value.Scale - exponent);
     }
 
     /// <summary>

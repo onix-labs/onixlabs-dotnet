@@ -14,6 +14,7 @@
 
 using System;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using OnixLabs.Core;
 
 namespace OnixLabs.Numerics;
@@ -24,9 +25,10 @@ public readonly partial struct BigDecimal
     /// Gets a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.
     /// </summary>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public NumberInfo ToNumberInfo()
     {
-        return NumberInfo;
+        return number;
     }
 
     /// <summary>
@@ -35,8 +37,8 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
     public byte[] ToByteArray()
     {
-        byte[] unscaledValue = NumberInfo.UnscaledValue.ToByteArray();
-        byte[] scale = BitConverter.GetBytes(NumberInfo.Scale);
+        byte[] unscaledValue = UnscaledValue.ToByteArray();
+        byte[] scale = BitConverter.GetBytes(Scale);
 
         return unscaledValue.ConcatenateWith(scale);
     }

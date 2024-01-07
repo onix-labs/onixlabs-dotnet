@@ -104,6 +104,6 @@ public readonly partial struct BigDecimal
     /// <returns>A hash code for this instance.</returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(NumberInfo);
+        return HashCode.Combine(number);
     }
 }

@@ -113,7 +113,7 @@ internal sealed partial class BigDecimalFormatter(BigDecimal value, CultureInfo 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatInteger(int[] grouping, string separator = "")
     {
-        builder.Append(BigInteger.Abs(value.NumberInfo.Integer));
+        builder.Append(BigInteger.Abs(value.ToNumberInfo().Integer));
 
         if (grouping.Length == 0) return;
 
@@ -144,7 +144,7 @@ internal sealed partial class BigDecimalFormatter(BigDecimal value, CultureInfo 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatFraction(string separator)
     {
-        if (value.NumberInfo.Scale <= 0) return;
-        builder.Append(separator, value.NumberInfo.Fraction.ToString().PadLeft(value.NumberInfo.Scale, '0'));
+        if (value.Scale <= 0) return;
+        builder.Append(separator, value.ToNumberInfo().Fraction.ToString().PadLeft(value.Scale, '0'));
     }
 }

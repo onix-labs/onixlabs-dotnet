@@ -47,7 +47,7 @@ public sealed class BigDecimalOrdinalComparer : IComparer<BigDecimal>, IComparer
         BigDecimal leftNormalized = new(left, scale);
         BigDecimal rightNormalized = new(right, scale);
 
-        return leftNormalized.NumberInfo.UnscaledValue.CompareTo(rightNormalized.NumberInfo.UnscaledValue);
+        return leftNormalized.UnscaledValue.CompareTo(rightNormalized.UnscaledValue);
     }
 
     /// <summary>Compares two <see cref="BigDecimal"/> values and returns a value indicating whether one is less than, equal to, or greater than the other.</summary>

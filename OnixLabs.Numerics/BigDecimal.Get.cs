@@ -25,16 +25,16 @@ public readonly partial struct BigDecimal
 
     int IFloatingPoint<BigDecimal>.GetExponentShortestBitLength()
     {
-        return sizeof(int) - int.LeadingZeroCount(NumberInfo.Exponent);
+        return sizeof(int) - int.LeadingZeroCount(number.Exponent);
     }
 
     int IFloatingPoint<BigDecimal>.GetSignificandBitLength()
     {
-        return NumberInfo.UnscaledValue.ToByteArray().Length * 8;
+        return UnscaledValue.ToByteArray().Length * 8;
     }
 
     int IFloatingPoint<BigDecimal>.GetSignificandByteCount()
     {
-        return NumberInfo.UnscaledValue.ToByteArray().Length;
+        return UnscaledValue.ToByteArray().Length;
     }
 }

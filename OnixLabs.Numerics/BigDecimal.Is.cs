@@ -25,7 +25,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the value is an integer; otherwise, false.</returns>
     public static bool IsInteger(BigDecimal value)
     {
-        return value.NumberInfo.Fraction == BigInteger.Zero;
+        return value.number.Fraction == BigInteger.Zero;
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the value is an even integer; otherwise, false.</returns>
     public static bool IsEvenInteger(BigDecimal value)
     {
-        return IsInteger(value) && BigInteger.IsEvenInteger(value.NumberInfo.UnscaledValue);
+        return IsInteger(value) && BigInteger.IsEvenInteger(value.UnscaledValue);
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the value is an odd integer; otherwise, false.</returns>
     public static bool IsOddInteger(BigDecimal value)
     {
-        return IsInteger(value) && BigInteger.IsOddInteger(value.NumberInfo.UnscaledValue);
+        return IsInteger(value) && BigInteger.IsOddInteger(value.UnscaledValue);
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the value is negative; otherwise, false.</returns>
     public static bool IsNegative(BigDecimal value)
     {
-        return BigInteger.IsNegative(value.NumberInfo.UnscaledValue);
+        return BigInteger.IsNegative(value.UnscaledValue);
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the value is positive; otherwise, false.</returns>
     public static bool IsPositive(BigDecimal value)
     {
-        return BigInteger.IsPositive(value.NumberInfo.UnscaledValue);
+        return BigInteger.IsPositive(value.UnscaledValue);
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the value is zero; otherwise, false.</returns>
     public static bool IsZero(BigDecimal value)
     {
-        return value.NumberInfo.UnscaledValue == BigInteger.Zero;
+        return value.UnscaledValue == BigInteger.Zero;
     }
 
     /// <summary>

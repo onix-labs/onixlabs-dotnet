@@ -33,10 +33,10 @@ public readonly partial struct BigDecimal
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
         RequireIsDefined(mode, nameof(mode));
 
-        if (scale >= value.NumberInfo.Scale) return value;
+        if (scale >= value.Scale) return value;
 
-        BigInteger divisor = BigInteger.Pow(10, value.NumberInfo.Scale - scale);
-        BigInteger quotient = DivideAndRound(value.NumberInfo.UnscaledValue, divisor, mode);
+        BigInteger divisor = BigInteger.Pow(10, value.Scale - scale);
+        BigInteger quotient = DivideAndRound(value.UnscaledValue, divisor, mode);
 
         return new BigDecimal(quotient, scale);
     }

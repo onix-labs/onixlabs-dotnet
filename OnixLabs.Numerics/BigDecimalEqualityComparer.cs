@@ -51,7 +51,7 @@ public abstract class BigDecimalEqualityComparer : IEqualityComparer<BigDecimal>
     /// <returns>Returns a hash code for the specified <see cref="BigDecimal"/> value.</returns>
     public int GetHashCode(BigDecimal obj)
     {
-        return HashCode.Combine(obj.NumberInfo);
+        return HashCode.Combine(obj.ToNumberInfo());
     }
 
     /// <summary>Determines whether the specified objects are equal.</summary>
@@ -83,7 +83,7 @@ public abstract class BigDecimalEqualityComparer : IEqualityComparer<BigDecimal>
         /// <returns> Returns <see langword="true" /> if the specified <see cref="BigDecimal"/> values are equal; otherwise, <see langword="false" />.</returns>
         public override bool Equals(BigDecimal x, BigDecimal y)
         {
-            return x.NumberInfo == y.NumberInfo;
+            return x.ToNumberInfo() == y.ToNumberInfo();
         }
     }
 

@@ -25,10 +25,10 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new <see cref="BigDecimal"/> value incremented by one integral unit.</returns>
     public static BigDecimal Increment(BigDecimal value)
     {
-        BigInteger power = BigInteger.Pow(10, value.NumberInfo.Scale);
-        (BigInteger quotient, BigInteger remainder) = BigInteger.DivRem(value.NumberInfo.UnscaledValue, power);
+        BigInteger power = BigInteger.Pow(10, value.Scale);
+        (BigInteger quotient, BigInteger remainder) = BigInteger.DivRem(value.UnscaledValue, power);
 
-        return new BigDecimal((quotient + 1) * power + remainder, value.NumberInfo.Scale);
+        return new BigDecimal((quotient + 1) * power + remainder, value.Scale);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new <see cref="BigDecimal"/> value incremented by one fractional unit.</returns>
     public static BigDecimal IncrementFraction(BigDecimal value)
     {
-        return new BigDecimal(value.NumberInfo.UnscaledValue + 1, value.NumberInfo.Scale);
+        return new BigDecimal(value.UnscaledValue + 1, value.Scale);
     }
 
     /// <summary>

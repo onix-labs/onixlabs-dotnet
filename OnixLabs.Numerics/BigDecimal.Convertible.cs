@@ -144,7 +144,7 @@ public readonly partial struct BigDecimal : IConvertible
     /// <returns>Returns a <see cref="DateTime"/> instance equivalent to the value of this instance.</returns>
     DateTime IConvertible.ToDateTime(IFormatProvider? provider)
     {
-        long binary = (long)NumberInfo.UnscaledValue;
+        long binary = (long)UnscaledValue;
         return DateTime.FromBinary(binary);
     }
 

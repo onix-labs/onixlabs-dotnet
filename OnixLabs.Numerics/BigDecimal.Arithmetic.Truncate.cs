@@ -22,6 +22,6 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the fractional part of the specified <see cref="BigDecimal"/> value, leaving only the integral component.</returns>
     public static BigDecimal Truncate(BigDecimal value)
     {
-        return value.NumberInfo.Integer;
+        return value.number.Integer;
     }
 }

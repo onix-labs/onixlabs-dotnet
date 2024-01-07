@@ -62,7 +62,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the minimum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.</returns>
     public static int MinScale(BigDecimal left, BigDecimal right)
     {
-        return int.Min(left.NumberInfo.Scale, right.NumberInfo.Scale);
+        return int.Min(left.Scale, right.Scale);
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the maximum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.</returns>
     public static int MaxScale(BigDecimal left, BigDecimal right)
     {
-        return int.Max(left.NumberInfo.Scale, right.NumberInfo.Scale);
+        return int.Max(left.Scale, right.Scale);
     }
 
     /// <summary>

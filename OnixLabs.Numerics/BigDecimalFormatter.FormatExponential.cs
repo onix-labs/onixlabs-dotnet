@@ -26,11 +26,11 @@ internal sealed partial class BigDecimalFormatter
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatExponential(char specifier)
     {
-        builder.Append(BigInteger.Abs(value.NumberInfo.UnscaledValue));
+        builder.Append(BigInteger.Abs(value.UnscaledValue));
 
         if(BigDecimal.IsZero(value)) return;
 
-        int exponent = builder.Length - value.NumberInfo.Scale - 1;
+        int exponent = builder.Length - value.Scale - 1;
         builder.Trim('0').Insert(1, numberFormat.NumberDecimalSeparator).TrimEnd(numberFormat.NumberDecimalSeparator);
 
         if (exponent == 0) return;

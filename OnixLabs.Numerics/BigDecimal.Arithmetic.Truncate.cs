@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Numerics;
+namespace OnixLabs.Numerics;
 
-namespace OnixLabs.Playground;
-
-internal static class Program
+public readonly partial struct BigDecimal
 {
-    private static void Main()
+    /// <summary>
+    /// Truncates the fractional part of the specified <see cref="BigDecimal"/> value, leaving only the integral component.
+    /// </summary>
+    /// <returns>Returns the fractional part of the specified <see cref="BigDecimal"/> value, leaving only the integral component.</returns>
+    public static BigDecimal Truncate(BigDecimal value)
     {
-        BigDecimal value = float.MaxValue.ToBigDecimal(ConversionMode.Binary);
-        Console.WriteLine(value);
+        return value.NumberInfo.Integer;
     }
 }

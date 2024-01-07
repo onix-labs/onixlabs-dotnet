@@ -46,6 +46,21 @@ public readonly partial struct NumberInfo
     public int Scale { get; }
 
     /// <summary>
+    /// Gets the scale factor of the number.
+    /// </summary>
+    internal BigInteger ScaleFactor => BigInteger.Pow(10, Scale);
+
+    /// <summary>
+    /// Gets the integral component of the number.
+    /// </summary>
+    internal BigInteger Integer => UnscaledValue / ScaleFactor;
+
+    /// <summary>
+    /// Gets the fractional component of the number.
+    /// </summary>
+    internal BigInteger Fraction => BigInteger.Abs(UnscaledValue - Integer * ScaleFactor);
+
+    /// <summary>
     /// Gets the precision of the number, represented as a positive integer.
     /// The precision indicates how many significant digits the number represents.
     /// In the event that the unscaled value or significand contain fewer digits than the precision, then trailing zeros are considered significant.

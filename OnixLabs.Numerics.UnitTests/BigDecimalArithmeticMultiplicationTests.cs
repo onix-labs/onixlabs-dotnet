@@ -12,16 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Numerics;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Numerics.UnitTests;
 
-internal static class Program
+public sealed class BigDecimalArithmeticMultiplicationTests
 {
-    private static void Main()
+    [BigDecimalArithmeticMultiplicationData]
+    [Theory(DisplayName = "BigDecimal.Multiply should produce the expected result")]
+    public void BigDecimalMultiplyShouldProduceExpectedResult(decimal left, decimal right)
     {
-        BigDecimal value = float.MaxValue.ToBigDecimal(ConversionMode.Binary);
-        Console.WriteLine(value);
+        // Given
+        decimal expected = left * right;
+
+        // When
+        BigDecimal actual = BigDecimal.Multiply(left, right).Round(expected.Scale);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

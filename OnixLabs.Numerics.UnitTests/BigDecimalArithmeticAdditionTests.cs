@@ -12,16 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Numerics;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Numerics.UnitTests;
 
-internal static class Program
+public sealed class BigDecimalArithmeticAdditionTests
 {
-    private static void Main()
+    [BigDecimalArithmeticAdditionData]
+    [Theory(DisplayName = "BigDecimal.Add should produce the expected result.")]
+    public void BigDecimalAddShouldProduceExpectedResult(decimal left, decimal right)
     {
-        BigDecimal value = float.MaxValue.ToBigDecimal(ConversionMode.Binary);
-        Console.WriteLine(value);
+        // Given
+        decimal expected = left + right;
+
+        // When
+        BigDecimal actual = BigDecimal.Add(left, right);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

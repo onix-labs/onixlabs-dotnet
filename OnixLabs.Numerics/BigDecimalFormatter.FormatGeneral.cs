@@ -12,16 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Numerics;
+using System.Runtime.CompilerServices;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Numerics;
 
-internal static class Program
+internal sealed partial class BigDecimalFormatter
 {
-    private static void Main()
+    /// <summary>
+    /// Formats the <see cref="BigDecimal"/> value as a general value.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    private void FormatGeneral()
     {
-        BigDecimal value = float.MaxValue.ToBigDecimal(ConversionMode.Binary);
-        Console.WriteLine(value);
+        FormatInteger([]);
+        FormatFraction(numberFormat.NumberDecimalSeparator);
+        FormatNumberNegativePattern();
     }
 }

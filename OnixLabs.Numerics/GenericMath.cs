@@ -82,7 +82,7 @@ public static class GenericMath
 
         T result = T.One;
         T baseValue = exponent > 0 ? value : T.One / value;
-        int absExponent = Math.Abs(exponent);
+        int absExponent = int.Abs(exponent);
 
         while (absExponent > 0)
         {

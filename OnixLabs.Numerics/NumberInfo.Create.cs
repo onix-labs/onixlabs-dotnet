@@ -21,14 +21,9 @@ public readonly partial struct NumberInfo
 {
     public static NumberInfo Create<T>(T value, int scale = default, ScaleMode mode = default) where T : IBinaryInteger<T>
     {
-        Require(scale >= 0, "Scale must be greater than, or equal to zero.", nameof(scale));
+        Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
         RequireIsDefined(mode, nameof(mode));
-
-        BigInteger unscaledValue;
-
-        if (scale == 0 || mode == ScaleMode.Fractional) unscaledValue = value.ToBigInteger();
-        else unscaledValue = value.ToBigInteger() * BigInteger.Pow(10, scale);
-
+        BigInteger unscaledValue = value.GetUnscaledInteger(scale, mode);
         return new NumberInfo(unscaledValue, scale);
     }
 

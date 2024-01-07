@@ -12,16 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Numerics;
+using System.Numerics;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Numerics;
 
-internal static class Program
+public readonly partial struct BigDecimal
 {
-    private static void Main()
+    /// <summary>
+    /// Gets the absolute value of the specified <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="BigDecimal"/> from which to obtain an absolute value.</param>
+    /// <returns>Returns the absolute value of the specified <see cref="BigDecimal"/> value.</returns>
+    public static BigDecimal Abs(BigDecimal value)
     {
-        BigDecimal value = float.MaxValue.ToBigDecimal(ConversionMode.Binary);
-        Console.WriteLine(value);
+        return new BigDecimal(BigInteger.Abs(value.NumberInfo.UnscaledValue), value.NumberInfo.Scale);
     }
 }

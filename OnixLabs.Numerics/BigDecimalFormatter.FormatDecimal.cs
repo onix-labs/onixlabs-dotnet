@@ -12,8 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
+
 namespace OnixLabs.Numerics;
 
-public readonly partial struct NumberInfo
+internal sealed partial class BigDecimalFormatter
 {
+    /// <summary>
+    /// Formats the <see cref="BigDecimal"/> value as a decimal value.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    private void FormatDecimal()
+    {
+        FormatInteger(numberFormat.NumberGroupSizes, numberFormat.NumberGroupSeparator);
+        FormatFraction(numberFormat.NumberDecimalSeparator);
+        FormatNumberNegativePattern();
+    }
 }

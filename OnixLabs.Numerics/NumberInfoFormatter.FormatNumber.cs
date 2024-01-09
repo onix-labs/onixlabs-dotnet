@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.CompilerServices;
+using System.Numerics;
 using OnixLabs.Core.Text;
 
 namespace OnixLabs.Numerics;
 
-internal sealed partial class BigDecimalFormatter
+internal sealed partial class NumberInfoFormatter
 {
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value as a number value.
+    /// Formats the current <see cref="NumberInfo"/> value using the number format.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatNumber()
     {
         FormatInteger(numberFormat.NumberGroupSizes, numberFormat.NumberGroupSeparator);
@@ -31,12 +30,11 @@ internal sealed partial class BigDecimalFormatter
     }
 
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value using a negative number pattern.
+    /// Applies number negative pattern formatting to the current <see cref="NumberInfo"/> being formatted.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatNumberNegativePattern()
     {
-        if (BigDecimal.IsPositive(value)) return;
+        if (BigInteger.IsPositive(value.UnscaledValue)) return;
 
         switch (numberFormat.NumberNegativePattern)
         {

@@ -63,26 +63,56 @@ public sealed class BigDecimalOrdinalComparer : IComparer<BigDecimal>, IComparer
         return Compare(left, right);
     }
 
+    /// <summary>
+    /// Determines whether the left-hand <see cref="BigDecimal"/> value is equal to the right-hand <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="left">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <param name="right">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="BigDecimal"/> value is equal to the right-hand <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsEqual(BigDecimal left, BigDecimal right)
     {
         return Compare(left, right) is 0;
     }
 
+    /// <summary>
+    /// Determines whether the left-hand <see cref="BigDecimal"/> value is greater than the right-hand <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="left">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <param name="right">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="BigDecimal"/> value is greater than the right-hand <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsGreaterThan(BigDecimal left, BigDecimal right)
     {
         return Compare(left, right) is 1;
     }
 
+    /// <summary>
+    /// Determines whether the left-hand <see cref="BigDecimal"/> value is greater than, or equal to the right-hand <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="left">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <param name="right">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="BigDecimal"/> value is greater than, or equal to the right-hand <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsGreaterThanOrEqual(BigDecimal left, BigDecimal right)
     {
         return Compare(left, right) is 0 or 1;
     }
 
+    /// <summary>
+    /// Determines whether the left-hand <see cref="BigDecimal"/> value is less than the right-hand <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="left">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <param name="right">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="BigDecimal"/> value is less than the right-hand <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsLessThan(BigDecimal left, BigDecimal right)
     {
         return Compare(left, right) is -1;
     }
 
+    /// <summary>
+    /// Determines whether the left-hand <see cref="BigDecimal"/> value is less than, or equal to the right-hand <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="left">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <param name="right">The left-hand <see cref="BigDecimal"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="BigDecimal"/> value is less than, or equal to the right-hand <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsLessThanOrEqual(BigDecimal left, BigDecimal right)
     {
         return Compare(left, right) is -1 or 0;

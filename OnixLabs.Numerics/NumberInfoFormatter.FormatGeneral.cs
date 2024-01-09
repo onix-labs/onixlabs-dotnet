@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.CompilerServices;
-
 namespace OnixLabs.Numerics;
 
-internal sealed partial class BigDecimalFormatter
+internal sealed partial class NumberInfoFormatter
 {
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value as a general value.
+    /// Formats the current <see cref="NumberInfo"/> value using the general format.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatGeneral()
     {
         FormatInteger([]);

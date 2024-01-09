@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.CompilerServices;
+using System.Numerics;
 using OnixLabs.Core.Text;
 
 namespace OnixLabs.Numerics;
 
-internal sealed partial class BigDecimalFormatter
+internal sealed partial class NumberInfoFormatter
 {
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value as a percentage.
+    /// Formats the current <see cref="NumberInfo"/> value using the percentage format.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatPercent()
     {
         FormatInteger(numberFormat.PercentGroupSizes, numberFormat.PercentGroupSeparator);
@@ -32,12 +31,11 @@ internal sealed partial class BigDecimalFormatter
     }
 
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value using a positive percentage pattern.
+    /// Applies percent positive pattern formatting to the current <see cref="NumberInfo"/> being formatted.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatPercentPositivePattern()
     {
-        if (BigDecimal.IsNegative(value)) return;
+        if (BigInteger.IsNegative(value.UnscaledValue)) return;
 
         switch (numberFormat.PercentPositivePattern)
         {
@@ -57,12 +55,11 @@ internal sealed partial class BigDecimalFormatter
     }
 
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value using a negative percentage pattern.
+    /// Applies percent negative pattern formatting to the current <see cref="NumberInfo"/> being formatted.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     private void FormatPercentNegativePattern()
     {
-        if (BigDecimal.IsPositive(value)) return;
+        if (BigInteger.IsPositive(value.UnscaledValue)) return;
 
         switch (numberFormat.PercentNegativePattern)
         {

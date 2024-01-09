@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,6 @@ public static class Preconditions
     /// <param name="condition">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the condition fails.</param>
     /// <exception cref="InvalidOperationException">If the condition fails.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static void Check(bool condition, string message = "Check requirement failed.")
     {
         if (!condition) throw new InvalidOperationException(message);
@@ -43,7 +42,6 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns the specified value as non-nullable in the event that the value is not null.</returns>
     /// <exception cref="InvalidOperationException">If the condition fails because the value is null.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static T CheckNotNull<T>(T? value, string message = "Argument must not be null.") where T : notnull
     {
         return value ?? throw new InvalidOperationException(message);
@@ -56,7 +54,6 @@ public static class Preconditions
     /// <param name="message">The exception message to throw in the event that the condition fails.</param>
     /// <param name="parameterName">The name of the parameter which is invalid.</param>
     /// <exception cref="ArgumentException">If the condition fails.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static void Require(bool condition, string message = "Argument requirement failed.", string? parameterName = null)
     {
         if (!condition) throw new ArgumentException(message, parameterName);
@@ -71,7 +68,6 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns the specified value as non-nullable in the event that the value is not null.</returns>
     /// <exception cref="ArgumentNullException">If the condition fails because the value is null.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static T RequireNotNull<T>(T? value, string message = "Argument must not be null.", string? parameterName = null)
         where T : notnull
     {

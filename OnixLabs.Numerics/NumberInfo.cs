@@ -17,8 +17,8 @@ using System.Numerics;
 namespace OnixLabs.Numerics;
 
 /// <summary>
-/// Represents component information about numeric values.
-/// Numeric values may be represented as an unscaled value and scale, or as a significand and exponent.
+/// Represents component information about rational numbers.
+/// Rational numbers may be represented as an unscaled value and scale, or as a significand and exponent.
 /// </summary>
 public readonly partial struct NumberInfo
 {
@@ -44,33 +44,6 @@ public readonly partial struct NumberInfo
     /// The scale indicates how many digits from the right of the unscaled value represent the number's fractional component.
     /// </summary>
     public int Scale { get; }
-
-    /// <summary>
-    /// Gets the scale factor of the number.
-    /// </summary>
-    internal BigInteger ScaleFactor => BigInteger.Pow(10, Scale);
-
-    /// <summary>
-    /// Gets the integral component of the number.
-    /// </summary>
-    internal BigInteger Integer => UnscaledValue / ScaleFactor;
-
-    /// <summary>
-    /// Gets the fractional component of the number.
-    /// </summary>
-    internal BigInteger Fraction => BigInteger.Abs(UnscaledValue - Integer * ScaleFactor);
-
-    /// <summary>
-    /// Gets the precision of the number, represented as a positive integer.
-    /// The precision indicates how many significant digits the number represents.
-    /// In the event that the unscaled value or significand contain fewer digits than the precision, then trailing zeros are considered significant.
-    /// </summary>
-    public int Precision => int.Max(GenericMath.IntegerLength(UnscaledValue), Scale + 1);
-
-    /// <summary>
-    /// Gets the sign of the number, represented as negative one for negative numbers, positive one for positive numbers; otherwise, zero.
-    /// </summary>
-    public int Sign => UnscaledValue.Sign;
 
     /// <summary>
     /// Gets the significand of the number, represented as the number's significant digits, excluding any trailing zeros.
@@ -101,4 +74,31 @@ public readonly partial struct NumberInfo
             return -(Scale - (GenericMath.IntegerLength(UnscaledValue) - GenericMath.IntegerLength(Significand)));
         }
     }
+
+    /// <summary>
+    /// Gets the precision of the number, represented as a positive integer.
+    /// The precision indicates how many significant digits the number represents.
+    /// In the event that the unscaled value or significand contain fewer digits than the precision, then trailing zeros are considered significant.
+    /// </summary>
+    public int Precision => int.Max(GenericMath.IntegerLength(UnscaledValue), Scale + 1);
+
+    /// <summary>
+    /// Gets the sign of the number, represented as negative one for negative numbers, positive one for positive numbers; otherwise, zero.
+    /// </summary>
+    public int Sign => UnscaledValue.Sign;
+
+    /// <summary>
+    /// Gets the scale factor of the number.
+    /// </summary>
+    internal BigInteger ScaleFactor => BigInteger.Pow(10, Scale);
+
+    /// <summary>
+    /// Gets the integral component of the number.
+    /// </summary>
+    internal BigInteger Integer => UnscaledValue / ScaleFactor;
+
+    /// <summary>
+    /// Gets the fractional component of the number.
+    /// </summary>
+    internal BigInteger Fraction => BigInteger.Abs(UnscaledValue - Integer * ScaleFactor);
 }

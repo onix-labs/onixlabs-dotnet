@@ -12,19 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.CompilerServices;
-
 namespace OnixLabs.Numerics;
 
-internal sealed partial class BigDecimalFormatter
+internal sealed partial class NumberInfoFormatter
 {
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value as a fixed value.
+    /// Formats the current <see cref="NumberInfo"/> value using the decimal format.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    private void FormatFixed()
+    private void FormatDecimal()
     {
-        FormatInteger([]);
+        FormatInteger(numberFormat.NumberGroupSizes, numberFormat.NumberGroupSeparator);
         FormatFraction(numberFormat.NumberDecimalSeparator);
         FormatNumberNegativePattern();
     }

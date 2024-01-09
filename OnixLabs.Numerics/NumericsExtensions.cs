@@ -40,7 +40,6 @@ public static class NumericsExtensions
     /// </summary>
     /// <param name="value">The <see cref="decimal"/> from which to obtain an unscaled value.</param>
     /// <returns>Returns the unscaled value of the current <see cref="decimal"/> as a <see cref="BigInteger"/>.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static BigInteger GetUnscaledValue(this decimal value)
     {
         const int significandSize = 13;
@@ -58,7 +57,6 @@ public static class NumericsExtensions
     /// <param name="value">The value to convert.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type of the value to convert.</typeparam>
     /// <returns>Returns a <see cref="BigInteger"/> representing the current value.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static BigInteger ToBigInteger<T>(this T value) where T : IBinaryInteger<T>
     {
         return BigInteger.CreateChecked(value);

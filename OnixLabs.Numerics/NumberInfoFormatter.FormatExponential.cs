@@ -13,22 +13,21 @@
 // limitations under the License.
 
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using OnixLabs.Core.Text;
 
 namespace OnixLabs.Numerics;
 
-internal sealed partial class BigDecimalFormatter
+internal sealed partial class NumberInfoFormatter
 {
     /// <summary>
-    /// Formats the <see cref="BigDecimal"/> value in exponential, or scientific notation.
+    /// Formats the current <see cref="NumberInfo"/> value using the exponential (otherwise known as scientific notation) format.
     /// </summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    /// <param name="specifier">The exponentiation specifier, which is either an uppercase E, or lowercase e.</param>
     private void FormatExponential(char specifier)
     {
         builder.Append(BigInteger.Abs(value.UnscaledValue));
 
-        if(BigDecimal.IsZero(value)) return;
+        if (value == NumberInfo.Zero) return;
 
         int exponent = builder.Length - value.Scale - 1;
         builder.Trim('0').Insert(1, numberFormat.NumberDecimalSeparator).TrimEnd(numberFormat.NumberDecimalSeparator);
@@ -38,6 +37,6 @@ internal sealed partial class BigDecimalFormatter
         string sign = exponent > 0 ? numberFormat.PositiveSign : numberFormat.NegativeSign;
         builder.Append(specifier, sign, int.Abs(exponent));
 
-        if (value < 0) builder.Prepend(numberFormat.NegativeSign);
+        if (value.UnscaledValue < BigInteger.Zero) builder.Prepend(numberFormat.NegativeSign);
     }
 }

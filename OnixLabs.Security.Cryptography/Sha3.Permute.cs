@@ -1,18 +1,18 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -22,8 +22,7 @@ public abstract partial class Sha3
     /// Performs the FIPS 202 SHA-3 permutation.
     /// </summary>
     /// <param name="state">The state upon which to perform the permutation.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void Permute(ulong[] state)
+    private static void Permute(IList<ulong> state)
     {
         const int hashRounds = 24;
 
@@ -49,7 +48,6 @@ public abstract partial class Sha3
 
         return;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void Theta()
         {
             c0 = state[0] ^ state[5] ^ state[10] ^ state[15] ^ state[20];
@@ -91,7 +89,6 @@ public abstract partial class Sha3
             state[24] ^= d4;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void RhoPi()
         {
             ulong final = RotateLeft(state[1], 1);
@@ -122,7 +119,6 @@ public abstract partial class Sha3
             state[10] = final;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void Chi()
         {
             for (int i = 0; i < 25; i += 5)
@@ -141,13 +137,11 @@ public abstract partial class Sha3
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         void Iota(int round)
         {
             state[0] ^= roundConstants[round];
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         ulong RotateLeft(ulong x, byte y)
         {
             return (x << y) | (x >> (64 - y));

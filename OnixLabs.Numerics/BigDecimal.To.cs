@@ -14,7 +14,6 @@
 
 using System;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using OnixLabs.Core;
 
 namespace OnixLabs.Numerics;
@@ -25,7 +24,6 @@ public readonly partial struct BigDecimal
     /// Gets a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.
     /// </summary>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public NumberInfo ToNumberInfo()
     {
         return number;
@@ -72,7 +70,44 @@ public readonly partial struct BigDecimal
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
-        BigDecimalFormatter formatter = new(this, info);
+
+        if (!TryGetScaledNumberInfo(format, info.NumberFormat, out NumberInfo value)) return format.ToString();
+
+        NumberInfoFormatter formatter = new(value, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P']);
         return formatter.Format(format);
+    }
+
+    /// <summary>
+    /// Attempts to obtain a <see cref="NumberInfo"/> value that is scaled by either using a custom
+    /// scale that is specified by the format, or by using the default scale for the specified format.
+    /// </summary>
+    /// <param name="format">The format specifier from which to obtain the desired scale.</param>
+    /// <param name="numberFormat">The number format of the target culture that determines default scales for specific formats.</param>
+    /// <param name="result">The <see cref="NumberInfo"/> value with a correctly applied scale.</param>
+    /// <returns>Returns <see langword="true"/> if the scale is applied correctly; otherwise, false.</returns>
+    private bool TryGetScaledNumberInfo(ReadOnlySpan<char> format, NumberFormatInfo numberFormat, out NumberInfo result)
+    {
+        if (format.Length > 1)
+        {
+            if (!int.TryParse(format[1..], out int scale))
+            {
+                result = default;
+                return false;
+            }
+
+            result = SetScale(scale).number;
+            return true;
+        }
+
+        result = char.ToUpperInvariant(format[0]) switch
+        {
+            'C' => SetScale(numberFormat.CurrencyDecimalDigits).ToNumberInfo(),
+            'F' => SetScale(numberFormat.NumberDecimalDigits).ToNumberInfo(),
+            'N' => SetScale(numberFormat.NumberDecimalDigits).ToNumberInfo(),
+            'P' => Multiply(this, 100).SetScale(numberFormat.PercentDecimalDigits).ToNumberInfo(),
+            _ => ToNumberInfo()
+        };
+
+        return true;
     }
 }

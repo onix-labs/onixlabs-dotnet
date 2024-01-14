@@ -16,7 +16,7 @@ using Xunit;
 
 namespace OnixLabs.Numerics.UnitTests;
 
-public sealed class BigDecimalMinMaxTests
+public sealed class BigDecimalComparableMinMaxTests
 {
     [Theory(DisplayName = "BigDecimal.Min should produce the expected result")]
     [InlineData(0, 0, 0)]
@@ -68,6 +68,58 @@ public sealed class BigDecimalMinMaxTests
         // Then
         Assert.Equal(expectedMin, actualMin);
         Assert.Equal(expectedMax, actualMax);
+    }
+
+    [Theory(DisplayName = "BigDecimal.MinMagnitude should produce expected result")]
+    [InlineData(0, 0, 0)]
+    [InlineData(0, 1, 0)]
+    [InlineData(0, -1, 0)]
+    [InlineData(-1, 1, -1)]
+    [InlineData(1, 2, 1)]
+    [InlineData(1, -2, 1)]
+    [InlineData(-1, 2, -1)]
+    [InlineData(-1, -2, -1)]
+    [InlineData(123.456, 456.789, 123.456)]
+    [InlineData(-123.456, 456.789, -123.456)]
+    [InlineData(123.456, -456.789, 123.456)]
+    [InlineData(-123.456, -456.789, -123.456)]
+    [InlineData(0.1, 0.01, 0.01)]
+    [InlineData(0.1, -0.01, -0.01)]
+    [InlineData(-0.1, 0.01, 0.01)]
+    [InlineData(-0.1, -0.01, -0.01)]
+    public void BigDecimalMinMagnitudeShouldProduceExpectedResult(double left, double right, double expected)
+    {
+        // When
+        BigDecimal actual = BigDecimal.MinMagnitude(left, right);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "BigDecimal.MaxMagnitude should produce expected result")]
+    [InlineData(0, 0, 0)]
+    [InlineData(0, 1, 1)]
+    [InlineData(0, -1, -1)]
+    [InlineData(-1, 1, 1)]
+    [InlineData(1, 2, 2)]
+    [InlineData(1, -2, -2)]
+    [InlineData(-1, 2, 2)]
+    [InlineData(-1, -2, -2)]
+    [InlineData(123.456, 456.789, 456.789)]
+    [InlineData(-123.456, 456.789, 456.789)]
+    [InlineData(123.456, -456.789, -456.789)]
+    [InlineData(-123.456, -456.789, -456.789)]
+    [InlineData(0.1, 0.01, 0.1)]
+    [InlineData(0.1, -0.01, 0.1)]
+    [InlineData(-0.1, 0.01, -0.1)]
+    [InlineData(-0.1, -0.01, -0.1)]
+    public void BigDecimalMaxMagnitudeShouldProduceExpectedResult(double left, double right, double expected)
+    {
+        // When
+        BigDecimal actual = BigDecimal.MaxMagnitude(left, right);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 
     [Theory(DisplayName = "BigDecimal.MinScale should produce the expected result")]

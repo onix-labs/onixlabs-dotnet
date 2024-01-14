@@ -13,29 +13,64 @@
 // limitations under the License.
 
 using System;
+using System.Buffers.Binary;
 using System.Numerics;
 
 namespace OnixLabs.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <summary>Tries to write the current exponent, in big-endian format, to a given span.</summary>
+    /// <param name="destination">The span to which the current exponent should be written.</param>
+    /// <param name="bytesWritten">When this method returns, contains the number of bytes written to <paramref name="destination" />.</param>
+    /// <returns> Returns <see langword="true" /> if the exponent was successfully written to <paramref name="destination" />; otherwise, <see langword="false" />.</returns>
     bool IFloatingPoint<BigDecimal>.TryWriteExponentBigEndian(Span<byte> destination, out int bytesWritten)
     {
-        throw new NotImplementedException();
+        const int size = sizeof(int);
+
+        if (destination.Length >= size && BinaryPrimitives.TryWriteInt32BigEndian(destination, number.Exponent))
+        {
+            bytesWritten = size;
+            return true;
+        }
+
+        bytesWritten = 0;
+        return false;
     }
 
+    /// <summary>Tries to write the current exponent, in little-endian format, to a given span.</summary>
+    /// <param name="destination">The span to which the current exponent should be written.</param>
+    /// <param name="bytesWritten">When this method returns, contains the number of bytes written to <paramref name="destination" />.</param>
+    /// <returns> Returns <see langword="true" /> if the exponent was successfully written to <paramref name="destination" />; otherwise, <see langword="false" />.</returns>
     bool IFloatingPoint<BigDecimal>.TryWriteExponentLittleEndian(Span<byte> destination, out int bytesWritten)
     {
-        throw new NotImplementedException();
+        const int size = sizeof(int);
+
+        if (destination.Length >= size && BinaryPrimitives.TryWriteInt32LittleEndian(destination, number.Exponent))
+        {
+            bytesWritten = size;
+            return true;
+        }
+
+        bytesWritten = 0;
+        return false;
     }
 
+    /// <summary>Tries to write the current significand, in big-endian format, to a given span.</summary>
+    /// <param name="destination">The span to which the current significand should be written.</param>
+    /// <param name="bytesWritten">When this method returns, contains the number of bytes written to <paramref name="destination" />.</param>
+    /// <returns> Returns <see langword="true" /> if the significand was successfully written to <paramref name="destination" />; otherwise, <see langword="false" />.</returns>
     bool IFloatingPoint<BigDecimal>.TryWriteSignificandBigEndian(Span<byte> destination, out int bytesWritten)
     {
-        throw new NotImplementedException();
+        return number.Significand.TryWriteBytes(destination, out bytesWritten, isBigEndian: true);
     }
 
+    /// <summary>Tries to write the current significand, in little-endian format, to a given span.</summary>
+    /// <param name="destination">The span to which the current significand should be written.</param>
+    /// <param name="bytesWritten">When this method returns, contains the number of bytes written to <paramref name="destination" />.</param>
+    /// <returns> Returns <see langword="true" /> if the significand was successfully written to <paramref name="destination" />; otherwise, <see langword="false" />.</returns>
     bool IFloatingPoint<BigDecimal>.TryWriteSignificandLittleEndian(Span<byte> destination, out int bytesWritten)
     {
-        throw new NotImplementedException();
+        return number.Significand.TryWriteBytes(destination, out bytesWritten);
     }
 }

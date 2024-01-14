@@ -55,6 +55,48 @@ public readonly partial struct BigDecimal
     }
 
     /// <summary>
+    /// Gets the lesser of the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="x">The left value to compare.</param>
+    /// <param name="y">The right value to compare.</param>
+    /// <returns>Returns the lesser of the specified <see cref="BigDecimal"/> values.</returns>
+    public static BigDecimal MinMagnitude(BigDecimal x, BigDecimal y)
+    {
+        BigDecimal left = Abs(x);
+        BigDecimal right = Abs(y);
+
+        return left < right || left == right && IsNegative(x) ? x : y;
+    }
+
+    /// <summary>
+    /// Gets the greater of the specified <see cref="BigDecimal"/> values.
+    /// </summary>
+    /// <param name="x">The left value to compare.</param>
+    /// <param name="y">The right value to compare.</param>
+    /// <returns>Returns the greater of the specified <see cref="BigDecimal"/> values.</returns>
+    public static BigDecimal MaxMagnitude(BigDecimal x, BigDecimal y)
+    {
+        BigDecimal left = Abs(x);
+        BigDecimal right = Abs(y);
+
+        return left > right || left == right && !IsNegative(x) ? x : y;
+    }
+
+    /// <summary>
+    /// Gets the lesser and the greater of the specified <see cref="BigDecimal"/> values by magnitude.
+    /// </summary>
+    /// <param name="left">The left value to compare.</param>
+    /// <param name="right">The right value to compare.</param>
+    /// <returns>Returns the lesser and the greater of the specified <see cref="BigDecimal"/> values by magnitude.</returns>
+    public static (BigDecimal MinMagnitude, BigDecimal MaxMagnitude) MinMaxMagnitude(BigDecimal left, BigDecimal right)
+    {
+        BigDecimal minMagnitude = MinMagnitude(left, right);
+        BigDecimal maxMagnitude = MaxMagnitude(left, right);
+
+        return (minMagnitude, maxMagnitude);
+    }
+
+    /// <summary>
     /// Obtains the minimum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.
     /// </summary>
     /// <param name="left">The left-hand value from which to obtain the minimum scale value.</param>
@@ -90,27 +132,7 @@ public readonly partial struct BigDecimal
         return (min, max);
     }
 
-    /// <summary>
-    /// Gets the lesser of the specified <see cref="BigDecimal"/> values.
-    /// </summary>
-    /// <param name="x">The left value to compare.</param>
-    /// <param name="y">The right value to compare.</param>
-    /// <returns>Returns the lesser of the specified <see cref="BigDecimal"/> values.</returns>
-    static BigDecimal INumberBase<BigDecimal>.MinMagnitude(BigDecimal x, BigDecimal y)
-    {
-        return Min(x, y);
-    }
 
-    /// <summary>
-    /// Gets the greater of the specified <see cref="BigDecimal"/> values.
-    /// </summary>
-    /// <param name="x">The left value to compare.</param>
-    /// <param name="y">The right value to compare.</param>
-    /// <returns>Returns the greater of the specified <see cref="BigDecimal"/> values.</returns>
-    static BigDecimal INumberBase<BigDecimal>.MaxMagnitude(BigDecimal x, BigDecimal y)
-    {
-        return Max(x, y);
-    }
 
     /// <summary>
     /// Gets the lesser of the specified <see cref="BigDecimal"/> values.
@@ -120,7 +142,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the lesser of the specified <see cref="BigDecimal"/> values.</returns>
     static BigDecimal INumberBase<BigDecimal>.MinMagnitudeNumber(BigDecimal x, BigDecimal y)
     {
-        return Min(x, y);
+        return MinMagnitude(x, y);
     }
 
     /// <summary>
@@ -131,6 +153,6 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the greater of the specified <see cref="BigDecimal"/> values.</returns>
     static BigDecimal INumberBase<BigDecimal>.MaxMagnitudeNumber(BigDecimal x, BigDecimal y)
     {
-        return Max(x, y);
+        return MaxMagnitude(x, y);
     }
 }

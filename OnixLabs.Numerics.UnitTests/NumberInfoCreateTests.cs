@@ -23,7 +23,7 @@ public sealed class NumberInfoCreateTests
     [NumberInfoCreateIntegerData]
     [Theory(DisplayName = "NumberInfo.Create should produce the expected result (integer values)")]
     public void NumberInfoCreateShouldProduceExpectedResultIntegerValues
-        (Int128 value, BigInteger significand, int exponent, int precision, int sign, BigInteger unscaledValue, int scale)
+        (Int128 value, BigInteger unscaledValue, int scale, BigInteger significand, int exponent, int sign, int precision)
     {
         // When
         NumberInfo candidate = NumberInfo.Create(value);
@@ -40,7 +40,7 @@ public sealed class NumberInfoCreateTests
     [NumberInfoCreateFloatData]
     [Theory(DisplayName = "NumberInfo.Create should produce the expected result (float values)")]
     public void NumberInfoCreateShouldProduceExpectedResultFloatValues
-        (float value, BigInteger significand, int exponent, int precision, int sign, BigInteger unscaledValue, int scale)
+        (float value, BigInteger unscaledValue, int scale, BigInteger significand, int exponent, int sign, int precision)
     {
         // When
         NumberInfo candidate = NumberInfo.Create(value);
@@ -57,7 +57,7 @@ public sealed class NumberInfoCreateTests
     [NumberInfoCreateDoubleData]
     [Theory(DisplayName = "NumberInfo.Create should produce the expected result (double values)")]
     public void NumberInfoCreateShouldProduceExpectedResultDoubleValues
-        (double value, BigInteger significand, int exponent, int precision, int sign, BigInteger unscaledValue, int scale)
+        (double value, BigInteger unscaledValue, int scale, BigInteger significand, int exponent, int sign, int precision)
     {
         // When
         NumberInfo candidate = NumberInfo.Create(value);
@@ -74,7 +74,7 @@ public sealed class NumberInfoCreateTests
     [NumberInfoCreateDecimalData]
     [Theory(DisplayName = "NumberInfo.Create should produce the expected result (decimal values)")]
     public void NumberInfoCreateShouldProduceExpectedResultDecimalValues
-        (decimal value, BigInteger significand, int exponent, int precision, int sign, BigInteger unscaledValue, int scale)
+        (decimal value, BigInteger unscaledValue, int scale, BigInteger significand, int exponent, int sign, int precision)
     {
         // When
         NumberInfo candidate = NumberInfo.Create(value);

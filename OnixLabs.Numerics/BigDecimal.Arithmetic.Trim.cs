@@ -25,6 +25,8 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new <see cref="BigDecimal"/> excluding any trailing zeros.</returns>
     public static BigDecimal TrimTrailingZeros(BigDecimal value)
     {
+        if (IsZero(value)) return Zero;
+
         int exponent = 0;
         while (value.UnscaledValue % BigInteger.Pow(10, exponent) == 0) exponent++;
         return new BigDecimal(value.UnscaledValue / BigInteger.Pow(10, --exponent), value.Scale - exponent);

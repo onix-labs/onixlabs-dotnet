@@ -73,7 +73,7 @@ public sealed class NumberInfoConstantTests
         const int precision = 1;
         const int sign = -1;
         const int scale = 0;
-        BigInteger significand = 1;
+        BigInteger significand = -1;
         BigInteger unscaledValue = -1;
 
         // When

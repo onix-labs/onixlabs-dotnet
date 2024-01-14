@@ -55,7 +55,7 @@ public readonly partial struct NumberInfo
         {
             if (UnscaledValue == BigInteger.Zero) return BigInteger.Zero;
 
-            BigInteger significand = BigInteger.Abs(UnscaledValue);
+            BigInteger significand = UnscaledValue;
             int exponent = 0;
 
             while (significand % BigInteger.Pow(10, exponent) == BigInteger.Zero) exponent++;

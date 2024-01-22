@@ -12,22 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Numerics;
-using OnixLabs.Numerics;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
-        BigDecimal left = 123.4561m;
-        BigDecimal right = 123.456000m;
-
-        (BigDecimal leftUnscaled, BigInteger rightUnscaled) = BigDecimal.NormalizeUnscaledValues(left, right);
-
-        Console.WriteLine(leftUnscaled);
-        Console.WriteLine(rightUnscaled);
     }
 }

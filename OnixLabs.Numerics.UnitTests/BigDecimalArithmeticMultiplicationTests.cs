@@ -21,7 +21,7 @@ public sealed class BigDecimalArithmeticMultiplicationTests
 {
     [BigDecimalArithmeticMultiplicationData]
     [Theory(DisplayName = "BigDecimal.Multiply should produce the expected result")]
-    public void BigDecimalMultiplyShouldProduceExpectedResult(decimal left, decimal right)
+    public void BigDecimalMultiplyShouldProduceExpectedResult(decimal left, decimal right, Guid _)
     {
         // Given
         decimal expected = left * right;

@@ -21,7 +21,7 @@ public sealed class BigDecimalArithmeticRoundTests
 {
     [BigDecimalArithmeticRoundData]
     [Theory(DisplayName = "BigDecimal.Round should produce the correct result")]
-    public void BigDecimalRoundShouldProduceExpectedResult(decimal value, byte scale, MidpointRounding mode)
+    public void BigDecimalRoundShouldProduceExpectedResult(decimal value, byte scale, MidpointRounding mode, Guid _)
     {
         // Given
         decimal expected = decimal.Round(value, scale, mode);

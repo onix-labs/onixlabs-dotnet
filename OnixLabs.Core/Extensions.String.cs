@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -248,6 +248,18 @@ public static class StringExtensions
     public static TimeOnly ToTimeOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
     {
         return TimeOnly.Parse(value, provider, styles);
+    }
+
+    /// <summary>
+    /// Converts the current <see cref="string"/> between the specified before and after <see cref="char"/> values.
+    /// </summary>
+    /// <param name="value">The current value to wrap.</param>
+    /// <param name="before">The <see cref="string"/> that should precede the current value.</param>
+    /// <param name="after">The <see cref="string"/> that should succeed the current value.</param>
+    /// <returns>Returns the current <see cref="string"/> wrapped between the specified before and after <see cref="char"/> values.</returns>
+    public static string Wrap(this string value, char before, char after)
+    {
+        return $"{before}{value}{after}";
     }
 
     /// <summary>

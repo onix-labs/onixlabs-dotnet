@@ -17,16 +17,10 @@ using Xunit.Sdk;
 
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class BigDecimalArithmeticAdditionDataAttribute : DataAttribute
+public sealed class BigDecimalUnaryAdditionDataAttribute : DataAttribute
 {
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach (decimal left in DecimalTestDataGenerator.GenerateScaledValues())
-        foreach (decimal right in DecimalTestDataGenerator.GenerateScaledValues())
-            yield return [left, right, Guid.NewGuid()];
-
-        foreach (decimal left in DecimalTestDataGenerator.GenerateRandomValues(count: 10, seed: int.MinValue))
-        foreach (decimal right in DecimalTestDataGenerator.GenerateRandomValues(count: 10, seed: int.MaxValue))
-            yield return [left, right, Guid.NewGuid()];
+        foreach (decimal value in DecimalTestDataGenerator.GenerateRandomValues()) yield return [value];
     }
 }

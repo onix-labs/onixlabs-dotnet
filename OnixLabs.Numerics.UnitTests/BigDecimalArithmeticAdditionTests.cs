@@ -21,13 +21,13 @@ public sealed class BigDecimalArithmeticAdditionTests
 {
     [BigDecimalArithmeticAdditionData]
     [Theory(DisplayName = "BigDecimal.Add should produce the expected result.")]
-    public void BigDecimalAddShouldProduceExpectedResult(decimal left, decimal right)
+    public void BigDecimalAddShouldProduceExpectedResult(decimal left, decimal right, Guid _)
     {
         // Given
         decimal expected = left + right;
 
         // When
-        BigDecimal actual = BigDecimal.Add(left, right);
+        BigDecimal actual = BigDecimal.Add(left, right).Round(expected.Scale);
 
         // Then
         Assert.Equal(expected, actual);

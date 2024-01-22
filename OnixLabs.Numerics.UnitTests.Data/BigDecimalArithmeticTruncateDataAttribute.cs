@@ -19,26 +19,12 @@ namespace OnixLabs.Numerics.UnitTests.Data;
 
 public sealed class BigDecimalArithmeticTruncateDataAttribute : DataAttribute
 {
-    private static readonly (decimal Value, decimal Expected)[] Data =
-    [
-        (0.0m, 0m),
-        (1.0m, 1m),
-        (1.0000000000000000000000000000m, 1m),
-        (1.10m, 1m),
-        (1.1000000000000000000000000000m, 1m),
-        (123.4560000000000000000000000000m, 123m),
-        (-1.0m, -1m),
-        (-1.0000000000000000000000000000m, -1m),
-        (-1.10m, -1m),
-        (-1.1000000000000000000000000000m, -1m),
-        (-123.4560000000000000000000000000m, -123m)
-    ];
-
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach ((decimal value, decimal expected) in Data)
-        {
-            yield return [value, expected];
-        }
+        foreach (decimal value in DecimalTestDataGenerator.GenerateScaledValues())
+            yield return [value, Guid.NewGuid()];
+
+        foreach (decimal value in DecimalTestDataGenerator.GenerateRandomValues())
+            yield return [value, Guid.NewGuid()];
     }
 }

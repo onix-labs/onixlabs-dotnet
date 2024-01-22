@@ -21,8 +21,11 @@ public sealed class BigDecimalArithmeticTruncateTests
 {
     [BigDecimalArithmeticTruncateData]
     [Theory(DisplayName = "BigDecimal.Truncate should produce the expected result")]
-    public void BigDecimalTruncateShouldProduceExpectedResult(decimal value, decimal expected)
+    public void BigDecimalTruncateShouldProduceExpectedResult(decimal value, Guid _)
     {
+        // Given
+        decimal expected = decimal.Truncate(value);
+
         // When
         BigDecimal actual = BigDecimal.Truncate(value);
 

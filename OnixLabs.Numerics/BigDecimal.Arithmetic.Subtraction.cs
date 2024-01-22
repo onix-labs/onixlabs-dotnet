@@ -26,10 +26,10 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the difference between the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Subtract(BigDecimal left, BigDecimal right)
     {
-        if (IsZero(left)) return -right;
-        if (IsZero(right)) return left;
-
         int scale = MaxScale(left, right);
+
+        if (IsZero(left)) return -right.SetScale(scale);
+        if (IsZero(right)) return left.SetScale(scale);
 
         (BigInteger minuend, BigInteger subtrahend) = NormalizeUnscaledValues(left, right);
         BigInteger difference = minuend - subtrahend;

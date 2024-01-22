@@ -55,7 +55,7 @@ public readonly partial struct BigDecimal
     /// <param name="left">The left-hand value to normalize.</param>
     /// <param name="right">The right-hand value to normalize.</param>
     /// <returns>Returns the normalized unscaled values of the specified <see cref="BigDecimal"/> values.</returns>
-    internal static (BigInteger Left, BigInteger Right) NormalizeUnscaledValues(BigDecimal left, BigDecimal right)
+    public static (BigInteger Left, BigInteger Right) NormalizeUnscaledValues(BigDecimal left, BigDecimal right)
     {
         BigInteger minOrderOfMagnitude = BigInteger.Min(left.number.ScaleFactor, right.number.ScaleFactor);
         BigInteger leftNormalized = left.UnscaledValue * right.number.ScaleFactor / minOrderOfMagnitude;

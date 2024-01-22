@@ -12,27 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Numerics.UnitTests.Data;
 using Xunit;
 
 namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class BigDecimalArithmeticUnarySubtractionTests
 {
+    [BigDecimalUnarySubtractionData]
     [Theory(DisplayName = "BigDecimal.UnarySubtract should produce the expected result")]
-    [InlineData(0, 0)]
-    [InlineData(1, -1)]
-    [InlineData(0.1, -0.1)]
-    [InlineData(123.456, -123.456)]
-    [InlineData(-1, 1)]
-    [InlineData(-0.1, 0.1)]
-    [InlineData(-123.456, 123.456)]
-    public void BigDecimalUnarySubtractShouldProduceExpectedResult(double value, double expected)
+    public void BigDecimalUnarySubtractShouldProduceExpectedResult(decimal value)
     {
         // Given
-        BigDecimal candidate = value;
+        decimal expected = -value;
 
         // When
-        BigDecimal actual = -candidate;
+        BigDecimal actual = BigDecimal.UnarySubtract(value);
 
         // Then
         Assert.Equal(expected, actual);

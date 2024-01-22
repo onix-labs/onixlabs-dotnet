@@ -21,7 +21,7 @@ public sealed class BigDecimalArithmeticModulusTests
 {
     [BigDecimalArithmeticModulusData]
     [Theory(DisplayName = "BigDecimal.Mod should produce the expected result")]
-    public void BigDecimalModShouldProduceExpectedResult(decimal left, decimal right)
+    public void BigDecimalModShouldProduceExpectedResult(decimal left, decimal right, Guid _)
     {
         // Given
         decimal expected = left % right;

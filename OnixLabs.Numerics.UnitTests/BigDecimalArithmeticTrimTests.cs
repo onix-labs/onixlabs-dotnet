@@ -24,7 +24,7 @@ public sealed class BigDecimalArithmeticTrimTests
     public void BigDecimalTrimTrailingZerosShouldProduceExpectedResult(decimal value, decimal expected)
     {
         // When
-        BigDecimal actual = value.ToBigDecimal().TrimTrailingZeros();
+        BigDecimal actual = BigDecimal.TrimTrailingZeros(value);
 
         // Then
         Assert.Equal(expected, actual);

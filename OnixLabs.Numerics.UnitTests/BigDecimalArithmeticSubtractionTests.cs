@@ -21,13 +21,13 @@ public sealed class BigDecimalArithmeticSubtractionTests
 {
     [BigDecimalArithmeticSubtractionData]
     [Theory(DisplayName = "BigDecimal.Subtract should produce the expected result.")]
-    public void BigDecimalSubtractShouldProduceExpectedResult(decimal left, decimal right)
+    public void BigDecimalSubtractShouldProduceExpectedResult(decimal left, decimal right, Guid _)
     {
         // Given
         decimal expected = left - right;
 
         // When
-        BigDecimal actual = BigDecimal.Subtract(left, right);
+        BigDecimal actual = BigDecimal.Subtract(left, right).Round(expected.Scale);
 
         // Then
         Assert.Equal(expected, actual);

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Numerics;
 using OnixLabs.Numerics.UnitTests.Data;
 using Xunit;
 
@@ -19,9 +20,11 @@ namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class BigDecimalArithmeticDivisionTests
 {
+    private static readonly BigDecimalDivisionEqualityComparer Comparer = new();
+
     [BigDecimalArithmeticDivisionData]
     [Theory(DisplayName = "BigDecimal.Divide should produce the expected result")]
-    public void BigDecimalDivideShouldProduceExpectedResult(decimal left, decimal right, MidpointRounding mode)
+    public void BigDecimalDivideShouldProduceExpectedResult(decimal left, decimal right, MidpointRounding mode, Guid _)
     {
         // Given
         decimal expected = decimal.Round(left / right, left.Scale, mode);
@@ -30,6 +33,28 @@ public sealed class BigDecimalArithmeticDivisionTests
         BigDecimal actual = BigDecimal.Divide(left, right, mode);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, actual, Comparer);
+    }
+
+    /// <summary>
+    /// Represents an equality comparer that is used specifically for <see cref="BigDecimal.Divide"/> tests. Notably, this comparer allows
+    /// for deltas of zero, or one for cases where <see cref="BigDecimal"/> provides greater rounding accuracy than <see cref="decimal"/>.
+    /// </summary>
+    private sealed class BigDecimalDivisionEqualityComparer : IEqualityComparer<BigDecimal>
+    {
+        public bool Equals(BigDecimal x, BigDecimal y)
+        {
+            int scale = BigDecimal.MaxScale(x, y);
+            (BigInteger left, BigInteger right) = BigDecimal.NormalizeUnscaledValues(x, y);
+            BigDecimal leftNormalized = new(left, scale);
+            BigDecimal rightNormalized = new(right, scale);
+
+            return (int)GenericMath.Delta(leftNormalized.UnscaledValue, rightNormalized.UnscaledValue) is 1 or 0;
+        }
+
+        public int GetHashCode(BigDecimal obj)
+        {
+            return HashCode.Combine(obj.ToNumberInfo());
+        }
     }
 }

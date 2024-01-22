@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Globalization;
 using System.Numerics;
 
@@ -60,37 +59,5 @@ public static class GenericMath
         T max = T.Max(left, right);
 
         return (min, max);
-    }
-
-    /// <summary>
-    /// Calculates the power of the specified value, raised by the specified exponent.
-    /// </summary>
-    /// <param name="value">The value to raise to the power of the specified exponent.</param>
-    /// <param name="exponent">The specified exponent to raise the value by.</param>
-    /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
-    /// <returns>Returns the power of the specified value, raised by the specified exponent.</returns>
-    public static T Pow<T>(T value, int exponent) where T : INumber<T>, ISignedNumber<T>
-    {
-        if (T.IsZero(value))
-        {
-            if (exponent < 0) throw new DivideByZeroException();
-            return exponent is 0 ? T.One : T.Zero;
-        }
-
-        if (exponent is 0) return T.One;
-        if (exponent is 1) return value;
-
-        T result = T.One;
-        T baseValue = exponent > 0 ? value : T.One / value;
-        int absExponent = int.Abs(exponent);
-
-        while (absExponent > 0)
-        {
-            if ((absExponent & 1) is not 0) result *= baseValue;
-            baseValue *= baseValue;
-            absExponent >>= 1;
-        }
-
-        return result;
     }
 }

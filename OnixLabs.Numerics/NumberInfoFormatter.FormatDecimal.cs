@@ -12,23 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Reflection;
-using OnixLabs.Numerics;
+namespace OnixLabs.Numerics;
 
-namespace OnixLabs.Playground;
-
-internal static class Program
+internal sealed partial class NumberInfoFormatter
 {
-    private static void Main()
+    /// <summary>
+    /// Formats the current <see cref="NumberInfo"/> value using the decimal format.
+    /// </summary>
+    private void FormatDecimal()
     {
-        int[] values = [0, 123456000, -123456000];
-        int[] scales = [0, 1, 2, 3, 10];
-
-        foreach (decimal left in DecimalTestDataGenerator.GenerateScaledValues(values, scales))
-        foreach (decimal right in DecimalTestDataGenerator.GenerateScaledValues(values, scales))
-        {
-            Console.WriteLine($"({left}m, {right}m, {(left == right).ToString().ToLower()}),");
-        }
+        FormatInteger(numberFormat.NumberGroupSizes, numberFormat.NumberGroupSeparator);
+        FormatFraction(numberFormat.NumberDecimalSeparator);
+        FormatNumberNegativePattern();
     }
 }

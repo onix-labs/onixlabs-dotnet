@@ -12,23 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Reflection;
-using OnixLabs.Numerics;
+namespace OnixLabs.Numerics;
 
-namespace OnixLabs.Playground;
-
-internal static class Program
+/// <summary>
+/// Specifies IEEE 754 binary floating-point conversion modes.
+/// </summary>
+public enum ConversionMode
 {
-    private static void Main()
-    {
-        int[] values = [0, 123456000, -123456000];
-        int[] scales = [0, 1, 2, 3, 10];
+    /// <summary>
+    /// Specifies that IEEE 754 binary floating-point values will be converted from their decimal representation.
+    /// </summary>
+    Decimal,
 
-        foreach (decimal left in DecimalTestDataGenerator.GenerateScaledValues(values, scales))
-        foreach (decimal right in DecimalTestDataGenerator.GenerateScaledValues(values, scales))
-        {
-            Console.WriteLine($"({left}m, {right}m, {(left == right).ToString().ToLower()}),");
-        }
-    }
+    /// <summary>
+    /// Specifies that IEEE 754 binary floating-point values will be converted from their binary representation.
+    /// </summary>
+    Binary
 }

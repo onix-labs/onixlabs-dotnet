@@ -12,11 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using System.Reflection;
+using Xunit.Sdk;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests.Data;
+
+public sealed class BigDecimalArithmeticModulusDataAttribute : DataAttribute
 {
-    private static void Main()
+    public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
+        foreach (decimal left in DecimalTestDataGenerator.GenerateRandomValues(count: 10, seed: int.MinValue))
+        foreach (decimal right in DecimalTestDataGenerator.GenerateRandomValues(count: 10, seed: int.MaxValue))
+            yield return [left, right, Guid.NewGuid()];
     }
 }

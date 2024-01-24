@@ -12,11 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalArithmeticTruncateTests
 {
-    private static void Main()
+    [BigDecimalArithmeticTruncateData]
+    [Theory(DisplayName = "BigDecimal.Truncate should produce the expected result")]
+    public void BigDecimalTruncateShouldProduceExpectedResult(decimal value, Guid _)
     {
+        // Given
+        decimal expected = decimal.Truncate(value);
+
+        // When
+        BigDecimal actual = BigDecimal.Truncate(value);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

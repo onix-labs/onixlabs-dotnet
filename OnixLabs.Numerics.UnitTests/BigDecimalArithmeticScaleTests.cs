@@ -12,11 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalArithmeticScaleTests
 {
-    private static void Main()
+    [BigDecimalArithmeticScaleData]
+    [Theory(DisplayName = "BigDecimal.SetScale should produce the expected result")]
+    public void BigDecimalSetScaleShouldProduceExpectedResult(decimal value, int scale, MidpointRounding mode, decimal expected)
     {
+        // When
+        BigDecimal actual = value.ToBigDecimal().SetScale(scale, mode);
+
+        // then
+        Assert.Equal(expected, actual);
     }
 }

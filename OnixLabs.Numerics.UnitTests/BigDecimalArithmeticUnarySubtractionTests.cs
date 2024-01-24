@@ -12,11 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalArithmeticUnarySubtractionTests
 {
-    private static void Main()
+    [BigDecimalArithmeticUnarySubtractionData]
+    [Theory(DisplayName = "BigDecimal.UnarySubtract should produce the expected result")]
+    public void BigDecimalUnarySubtractShouldProduceExpectedResult(decimal value)
     {
+        // Given
+        decimal expected = -value;
+
+        // When
+        BigDecimal actual = BigDecimal.UnarySubtract(value);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

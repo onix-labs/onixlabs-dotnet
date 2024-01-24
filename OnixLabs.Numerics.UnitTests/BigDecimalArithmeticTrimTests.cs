@@ -12,11 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalArithmeticTrimTests
 {
-    private static void Main()
+    [BigDecimalArithmeticTrimData]
+    [Theory(DisplayName = "BigDecimal.TrimTrailingZeros should produce the expected result")]
+    public void BigDecimalTrimTrailingZerosShouldProduceExpectedResult(decimal value, decimal expected)
     {
+        // When
+        BigDecimal actual = BigDecimal.TrimTrailingZeros(value);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

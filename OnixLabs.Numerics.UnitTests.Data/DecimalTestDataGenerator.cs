@@ -16,7 +16,10 @@ namespace OnixLabs.Numerics.UnitTests.Data;
 
 internal static class DecimalTestDataGenerator
 {
-    public static readonly int[] DefaultValues =
+    private const int MinScale = 0;
+    private const int MaxScale = 28;
+
+    private static readonly int[] DefaultValues =
     [
         0,
 
@@ -29,9 +32,9 @@ internal static class DecimalTestDataGenerator
         -12, -123, -1_234, -12_345, -1_234_567_890
     ];
 
-    public static readonly int[] DefaultScales = [0, 1, 2, 3, 4, 5, 10];
+    private static readonly int[] DefaultScales = [0, 1, 2, 3, 4, 5, 10];
 
-    public static readonly ScaleMode[] DefaultModes = Enum.GetValues<ScaleMode>();
+    private static readonly ScaleMode[] DefaultModes = Enum.GetValues<ScaleMode>();
 
     public static IEnumerable<decimal> GenerateScaledValues(
         IEnumerable<int>? values = null,
@@ -50,5 +53,36 @@ internal static class DecimalTestDataGenerator
 
         for (int index = 0; index < count; index++)
             yield return random.Next(int.MinValue, int.MaxValue).ToDecimal(random.Next(0, 10));
+    }
+
+    public static IEnumerable<decimal> GenerateScaledMaxValues()
+    {
+        foreach (int scale in GenerateScaleValues())
+            yield return ((Int128)decimal.MaxValue).ToDecimal(scale);
+    }
+
+    public static IEnumerable<decimal> GenerateScaledMinValues()
+    {
+        foreach (int scale in GenerateScaleValues())
+            yield return ((Int128)decimal.MinValue).ToDecimal(scale);
+    }
+
+    public static IEnumerable<decimal> GenerateConstantValues()
+    {
+        yield return decimal.Zero;
+        yield return decimal.One;
+        yield return decimal.MinusOne;
+        yield return decimal.MaxValue;
+        yield return decimal.MinValue;
+    }
+
+    public static IEnumerable<MidpointRounding> GetMidpointRoundingModes()
+    {
+        return Enum.GetValues<MidpointRounding>();
+    }
+
+    public static IEnumerable<int> GenerateScaleValues(int min = MinScale, int max = MaxScale)
+    {
+        for (int scale = min; scale <= max; scale++) yield return scale;
     }
 }

@@ -37,7 +37,7 @@ public sealed class NumberInfoParseTests
 
     [NumberInfoFormatterData]
     [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Decimal, Integer)")]
-    public void NumberInfoParseShouldProduceExpectedResultDecimal(decimal value, CultureInfo culture)
+    public void NumberInfoParseShouldProduceExpectedResultDecimalInteger(decimal value, CultureInfo culture)
     {
         // Given
         string formatted = Int128.CreateTruncating(value).ToString("D", culture);
@@ -50,20 +50,20 @@ public sealed class NumberInfoParseTests
         Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
     }
 
-    // TODO : Re-add when NumberInfo is implemented.
-    // [NumberInfoFormatterData]
-    // [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Decimal)")]
-    // public void NumberInfoParseShouldProduceExpectedResultDecimal(decimal expected, CultureInfo culture)
-    // {
-    //     // Given
-    //     string formatted = expected.ToNumberInfo().ToString("D", culture);
-    //
-    //     // When
-    //     NumberInfo actual = NumberInfo.Parse(formatted, NumberStyles.Number, culture);
-    //
-    //     // Then
-    //     Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
-    // }
+    [NumberInfoFormatterData]
+    [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Decimal, BigDecimal)")]
+    public void NumberInfoParseShouldProduceExpectedResultDecimalBigDecimal(decimal value, CultureInfo culture)
+    {
+        // Given
+        string formatted = value.ToBigDecimal().ToString("D", culture);
+        NumberInfo expected = value.ToNumberInfo();
+
+        // When
+        NumberInfo actual = NumberInfo.Parse(formatted, NumberStyles.Number, culture);
+
+        // Then
+        Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
+    }
 
     [NumberInfoFormatterData]
     [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Fixed)")]

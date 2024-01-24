@@ -12,11 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalArithmeticPowTests
 {
-    private static void Main()
+    [BigDecimalArithmeticPowData]
+    [Theory(DisplayName = "BigDecimal.Pow should produce the expected result")]
+    public void BigDecimalPowShouldProduceExpectedResult(decimal value, int exponent, decimal expected)
     {
+        // When
+        BigDecimal actual = BigDecimal.Pow(value, exponent);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

@@ -12,11 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalArithmeticRoundTests
 {
-    private static void Main()
+    [BigDecimalArithmeticRoundData]
+    [Theory(DisplayName = "BigDecimal.Round should produce the correct result")]
+    public void BigDecimalRoundShouldProduceExpectedResult(decimal value, byte scale, MidpointRounding mode, Guid _)
     {
+        // Given
+        decimal expected = decimal.Round(value, scale, mode);
+
+        // When
+        BigDecimal actual = BigDecimal.Round(value, scale, mode);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

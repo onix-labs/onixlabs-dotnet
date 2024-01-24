@@ -12,11 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalArithmeticAbsTests
 {
-    private static void Main()
+    [BigDecimalArithmeticAbsData]
+    [Theory(DisplayName = "BigDecimal.Abs should produce the expected result.")]
+    public void BigDecimalAbsShouldProduceExpectedResult(decimal value)
     {
+        // Given
+        decimal expected = decimal.Abs(value);
+
+        // When
+        BigDecimal actual = BigDecimal.Abs(value);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

@@ -12,11 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using OnixLabs.Numerics.UnitTests.Data;
+using Xunit;
 
-internal static class Program
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalArithmeticUnaryAdditionTests
 {
-    private static void Main()
+    [BigDecimalArithmeticUnaryAdditionData]
+    [Theory(DisplayName = "BigDecimal.UnaryAdd should produce the expected result")]
+    public void BigDecimalUnaryAddShouldProduceExpectedResult(decimal value)
     {
+        // Given
+        decimal expected = +value;
+
+        // When
+        BigDecimal actual = BigDecimal.UnaryAdd(value);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

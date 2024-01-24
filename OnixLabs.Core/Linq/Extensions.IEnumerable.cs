@@ -244,8 +244,27 @@ public static class IEnumerableExtensions
         return enumerable.Where(element => element is not null)!;
     }
 
+    /// <summary>
+    /// Formats the current <see cref="IEnumerable{T}"/> as a collection string.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to format.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns a <see cref="string"/> collection representation of the current <see cref="IEnumerable{T}"/>.</returns>
     public static string ToCollectionString<T>(this IEnumerable<T> enumerable)
     {
         return string.Join(", ", enumerable).Wrap('[', ']');
+    }
+
+    /// <summary>
+    /// Formats each <see cref="IFormattable"/> element of the current current <see cref="IEnumerable{T}"/> as a collection string.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to format.</param>
+    /// <param name="format">The format which will be applied to each element.</param>
+    /// <param name="formatProvider">The provider to use to format the value.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns a <see cref="string"/> collection representation of the current <see cref="IEnumerable{T}"/>.</returns>
+    public static string ToCollectionString<T>(this IEnumerable<T> enumerable, string format, IFormatProvider? formatProvider = null) where T : IFormattable
+    {
+        return enumerable.Select(element => element.ToString(format, formatProvider)).ToCollectionString();
     }
 }

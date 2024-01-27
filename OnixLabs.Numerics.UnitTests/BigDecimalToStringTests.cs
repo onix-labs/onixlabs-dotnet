@@ -20,9 +20,9 @@ namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class BigDecimalToStringTests
 {
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.ToString should produce the expected result (Currency)")]
-    public void BigDecimalToStringShouldProduceExpectedResultCurrency(decimal value, CultureInfo culture)
+    public void BigDecimalToStringShouldProduceExpectedResultCurrency(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string expected = value.ToString("C", culture);
@@ -35,9 +35,9 @@ public sealed class BigDecimalToStringTests
         Assert.Equal(expected, actual);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.ToString should produce the expected result (Fixed)")]
-    public void BigDecimalToStringShouldProduceExpectedResultFixed(decimal value, CultureInfo culture)
+    public void BigDecimalToStringShouldProduceExpectedResultFixed(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string expected = value.ToString("F", culture);
@@ -50,9 +50,9 @@ public sealed class BigDecimalToStringTests
         Assert.Equal(expected, actual);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.ToString should produce the expected result (General)")]
-    public void BigDecimalToStringShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture)
+    public void BigDecimalToStringShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string expected = value.ToString("G", culture);
@@ -65,9 +65,9 @@ public sealed class BigDecimalToStringTests
         Assert.Equal(expected, actual);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.ToString should produce the expected result (Number)")]
-    public void BigDecimalToStringShouldProduceExpectedResultNumber(decimal value, CultureInfo culture)
+    public void BigDecimalToStringShouldProduceExpectedResultNumber(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string expected = value.ToString("N", culture);
@@ -80,9 +80,9 @@ public sealed class BigDecimalToStringTests
         Assert.Equal(expected, actual);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.ToString should produce the expected result (Percent)")]
-    public void BigDecimalToStringShouldProduceExpectedResultPercent(decimal value, CultureInfo culture)
+    public void BigDecimalToStringShouldProduceExpectedResultPercent(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string expected = value.ToString("P", culture);

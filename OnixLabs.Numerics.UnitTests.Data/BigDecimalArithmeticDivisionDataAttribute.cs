@@ -21,17 +21,17 @@ public sealed class BigDecimalArithmeticDivisionDataAttribute : DataAttribute
 {
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach (MidpointRounding mode in DecimalTestDataGenerator.GetMidpointRoundingModes())
-        foreach (decimal left in DecimalTestDataGenerator.GenerateScaledValues())
-        foreach (decimal right in DecimalTestDataGenerator.GenerateScaledValues())
+        foreach (MidpointRounding mode in TestDataGenerator.GetMidpointRoundingModes())
+        foreach (decimal left in TestDataGenerator.GenerateScaledValues())
+        foreach (decimal right in TestDataGenerator.GenerateScaledValues())
         {
             if (right is 0) continue;
             yield return [left, right, mode, Guid.NewGuid()];
         }
 
-        foreach (MidpointRounding mode in DecimalTestDataGenerator.GetMidpointRoundingModes())
-        foreach (decimal left in DecimalTestDataGenerator.GenerateRandomValues(count: 10, seed: int.MinValue))
-        foreach (decimal right in DecimalTestDataGenerator.GenerateRandomValues(count: 10, seed: int.MaxValue))
+        foreach (MidpointRounding mode in TestDataGenerator.GetMidpointRoundingModes())
+        foreach (decimal left in TestDataGenerator.GenerateRandomValues(count: 10, seed: int.MinValue))
+        foreach (decimal right in TestDataGenerator.GenerateRandomValues(count: 10, seed: int.MaxValue))
         {
             if (right is 0) continue;
             yield return [left, right, mode, Guid.NewGuid()];

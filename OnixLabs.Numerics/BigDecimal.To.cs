@@ -74,6 +74,9 @@ public readonly partial struct BigDecimal
     /// <returns>Returns <see langword="true"/> if the scale is applied correctly; otherwise, false.</returns>
     private bool TryGetScaledNumberInfo(ReadOnlySpan<char> format, NumberFormatInfo numberFormat, out NumberInfo result)
     {
+        const MidpointRounding mode = MidpointRounding.AwayFromZero;
+        char specifier = format.IsEmpty || format.IsWhiteSpace() ? NumberInfoFormatter.DefaultFormat : format[0];
+
         if (format.Length > 1)
         {
             if (!int.TryParse(format[1..], out int scale))
@@ -86,12 +89,12 @@ public readonly partial struct BigDecimal
             return true;
         }
 
-        result = char.ToUpperInvariant(format[0]) switch
+        result = char.ToUpperInvariant(specifier) switch
         {
-            'C' => SetScale(numberFormat.CurrencyDecimalDigits).ToNumberInfo(),
-            'F' => SetScale(numberFormat.NumberDecimalDigits).ToNumberInfo(),
-            'N' => SetScale(numberFormat.NumberDecimalDigits).ToNumberInfo(),
-            'P' => Multiply(this, 100).SetScale(numberFormat.PercentDecimalDigits).ToNumberInfo(),
+            'C' => SetScale(numberFormat.CurrencyDecimalDigits, mode).ToNumberInfo(),
+            'F' => SetScale(numberFormat.NumberDecimalDigits, mode).ToNumberInfo(),
+            'N' => SetScale(numberFormat.NumberDecimalDigits, mode).ToNumberInfo(),
+            'P' => Multiply(this, 100).SetScale(numberFormat.PercentDecimalDigits, mode).ToNumberInfo(),
             _ => ToNumberInfo()
         };
 

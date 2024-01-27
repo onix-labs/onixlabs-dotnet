@@ -22,14 +22,14 @@ public sealed class BigDecimalArithmeticRoundDataAttribute : DataAttribute
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
         IEnumerable<decimal> values = Enumerable.Empty<decimal>()
-            .Concat(DecimalTestDataGenerator.GenerateConstantValues())
-            .Concat(DecimalTestDataGenerator.GenerateScaledMaxValues())
-            .Concat(DecimalTestDataGenerator.GenerateScaledMinValues())
-            .Concat(DecimalTestDataGenerator.GenerateRandomValues());
+            .Concat(TestDataGenerator.GenerateConstantValues())
+            .Concat(TestDataGenerator.GenerateScaledMaxValues())
+            .Concat(TestDataGenerator.GenerateScaledMinValues())
+            .Concat(TestDataGenerator.GenerateRandomValues());
 
         foreach (decimal value in values)
-        foreach (int scale in DecimalTestDataGenerator.GenerateScaleValues())
-        foreach (MidpointRounding mode in DecimalTestDataGenerator.GetMidpointRoundingModes())
+        foreach (int scale in TestDataGenerator.GenerateScaleValues())
+        foreach (MidpointRounding mode in TestDataGenerator.GetMidpointRoundingModes())
             yield return [value, scale, mode, Guid.NewGuid()];
     }
 }

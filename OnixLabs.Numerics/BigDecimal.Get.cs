@@ -30,11 +30,11 @@ public readonly partial struct BigDecimal
 
     int IFloatingPoint<BigDecimal>.GetSignificandBitLength()
     {
-        return UnscaledValue.ToByteArray().Length * 8;
+        return number.Significand.ToByteArray().Length * 8;
     }
 
     int IFloatingPoint<BigDecimal>.GetSignificandByteCount()
     {
-        return UnscaledValue.ToByteArray().Length;
+        return number.Significand.ToByteArray().Length;
     }
 }

@@ -20,9 +20,9 @@ namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class NumberInfoToStringTests
 {
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "NumberInfo.ToString should produce the expected result (General)")]
-    public void NumberInfoToStringShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture)
+    public void NumberInfoToStringShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string expected = value.ToString("G", culture);

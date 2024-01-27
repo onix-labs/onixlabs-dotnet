@@ -17,11 +17,17 @@ using Xunit.Sdk;
 
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class BigDecimalArithmeticAbsDataAttribute : DataAttribute
+public sealed class BigDecimalIsDataAttribute : DataAttribute
 {
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
+        foreach (decimal value in TestDataGenerator.GenerateConstantValues())
+            yield return [value, Guid.NewGuid()];
+
+        foreach (decimal value in TestDataGenerator.GenerateScaledValues())
+            yield return [value, Guid.NewGuid()];
+
         foreach (decimal value in TestDataGenerator.GenerateRandomValues())
-            yield return [value];
+            yield return [value, Guid.NewGuid()];
     }
 }

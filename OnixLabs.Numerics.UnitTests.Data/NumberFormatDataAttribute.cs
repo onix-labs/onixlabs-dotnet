@@ -12,16 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
 using System.Reflection;
 using Xunit.Sdk;
 
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class BigDecimalArithmeticAbsDataAttribute : DataAttribute
+public sealed class NumberFormatDataAttribute : DataAttribute
 {
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach (decimal value in TestDataGenerator.GenerateRandomValues())
-            yield return [value];
+        foreach (CultureInfo culture in TestDataGenerator.GenerateCultures())
+        {
+            foreach (decimal value in TestDataGenerator.GenerateStaticValues())
+                yield return [value, culture, Guid.NewGuid()];
+
+            foreach (decimal value in TestDataGenerator.GenerateScaledValues())
+                yield return [value, culture, Guid.NewGuid()];
+
+            foreach (decimal value in TestDataGenerator.GenerateRandomValues())
+                yield return [value, culture, Guid.NewGuid()];
+        }
     }
 }

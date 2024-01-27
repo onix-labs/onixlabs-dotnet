@@ -21,7 +21,7 @@ public sealed class BigDecimalArithmeticUnaryAdditionDataAttribute : DataAttribu
 {
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach (decimal value in DecimalTestDataGenerator.GenerateRandomValues())
+        foreach (decimal value in TestDataGenerator.GenerateRandomValues())
             yield return [value];
     }
 }

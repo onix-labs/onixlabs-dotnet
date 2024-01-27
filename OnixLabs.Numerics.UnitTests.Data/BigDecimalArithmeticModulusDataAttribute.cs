@@ -21,8 +21,8 @@ public sealed class BigDecimalArithmeticModulusDataAttribute : DataAttribute
 {
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach (decimal left in DecimalTestDataGenerator.GenerateRandomValues(count: 10, seed: int.MinValue))
-        foreach (decimal right in DecimalTestDataGenerator.GenerateRandomValues(count: 10, seed: int.MaxValue))
+        foreach (decimal left in TestDataGenerator.GenerateRandomValues(count: 10, seed: int.MinValue))
+        foreach (decimal right in TestDataGenerator.GenerateRandomValues(count: 10, seed: int.MaxValue))
             yield return [left, right, Guid.NewGuid()];
     }
 }

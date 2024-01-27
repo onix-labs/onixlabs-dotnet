@@ -35,7 +35,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the value is an even integer; otherwise, false.</returns>
     public static bool IsEvenInteger(BigDecimal value)
     {
-        return IsInteger(value) && BigInteger.IsEvenInteger(value.UnscaledValue);
+        return IsInteger(value) && BigInteger.IsEvenInteger(value.number.Integer);
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns true if the value is an odd integer; otherwise, false.</returns>
     public static bool IsOddInteger(BigDecimal value)
     {
-        return IsInteger(value) && BigInteger.IsOddInteger(value.UnscaledValue);
+        return IsInteger(value) && BigInteger.IsOddInteger(value.number.Integer);
     }
 
     /// <summary>

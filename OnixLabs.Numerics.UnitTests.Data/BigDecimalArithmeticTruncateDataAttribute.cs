@@ -21,10 +21,10 @@ public sealed class BigDecimalArithmeticTruncateDataAttribute : DataAttribute
 {
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach (decimal value in DecimalTestDataGenerator.GenerateScaledValues())
+        foreach (decimal value in TestDataGenerator.GenerateScaledValues())
             yield return [value, Guid.NewGuid()];
 
-        foreach (decimal value in DecimalTestDataGenerator.GenerateRandomValues())
+        foreach (decimal value in TestDataGenerator.GenerateRandomValues())
             yield return [value, Guid.NewGuid()];
     }
 }

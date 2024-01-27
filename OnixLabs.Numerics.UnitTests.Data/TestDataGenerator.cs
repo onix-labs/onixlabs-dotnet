@@ -13,14 +13,32 @@
 // limitations under the License.
 
 using System.Globalization;
-using System.Reflection;
-using Xunit.Sdk;
 
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class NumberInfoFormatterDataAttribute : DataAttribute
+internal static class TestDataGenerator
 {
-    private static readonly decimal[] Data =
+    private const int MinScale = 0;
+    private const int MaxScale = 28;
+
+    private static readonly int[] DefaultValues =
+    [
+        0,
+
+        +1, +2, +3, +4, +5, +6, +7, +8, +9,
+        +10, +100, +1_000, +10_000, +1_000_000_000,
+        +12, +123, +1_234, +12_345, +1_234_567_890,
+
+        -1, -2, -3, -4, -5, -6, -7, -8, -9,
+        -10, -100, -1_000, -10_000, -1_000_000_000,
+        -12, -123, -1_234, -12_345, -1_234_567_890
+    ];
+
+    private static readonly int[] DefaultScales = [0, 1, 2, 3, 4, 5, 10];
+
+    private static readonly ScaleMode[] DefaultModes = Enum.GetValues<ScaleMode>();
+
+    private static readonly decimal[] StaticValues =
     [
         0m,
         0.0m,
@@ -872,10 +890,63 @@ public sealed class NumberInfoFormatterDataAttribute : DataAttribute
         CultureInfo.GetCultureInfo("zh-Hant-CN"), // Chinese, Traditional (China mainland)
     ];
 
-    public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+    public static IEnumerable<decimal> GenerateScaledValues(
+        IEnumerable<int>? values = null,
+        IEnumerable<int>? scales = null,
+        IEnumerable<ScaleMode>? modes = null)
     {
-        foreach (CultureInfo culture in Cultures)
-        foreach (decimal value in Data)
-            yield return [value, culture];
+        foreach (ScaleMode mode in modes ?? DefaultModes)
+        foreach (int value in values ?? DefaultValues)
+        foreach (int scale in scales ?? DefaultScales)
+            yield return value.ToDecimal(scale, mode);
+    }
+
+    public static IEnumerable<decimal> GenerateRandomValues(int count = 100, int seed = default)
+    {
+        Random random = new(seed);
+
+        for (int index = 0; index < count; index++)
+            yield return random.Next(int.MinValue, int.MaxValue).ToDecimal(random.Next(0, 10));
+    }
+
+    public static IEnumerable<decimal> GenerateScaledMaxValues()
+    {
+        foreach (int scale in GenerateScaleValues())
+            yield return ((Int128)decimal.MaxValue).ToDecimal(scale);
+    }
+
+    public static IEnumerable<decimal> GenerateScaledMinValues()
+    {
+        foreach (int scale in GenerateScaleValues())
+            yield return ((Int128)decimal.MinValue).ToDecimal(scale);
+    }
+
+    public static IEnumerable<decimal> GenerateConstantValues()
+    {
+        yield return decimal.Zero;
+        yield return decimal.One;
+        yield return decimal.MinusOne;
+        yield return decimal.MaxValue;
+        yield return decimal.MinValue;
+    }
+
+    public static IEnumerable<decimal> GenerateStaticValues()
+    {
+        return StaticValues;
+    }
+
+    public static IEnumerable<CultureInfo> GenerateCultures()
+    {
+        return Cultures;
+    }
+
+    public static IEnumerable<MidpointRounding> GetMidpointRoundingModes()
+    {
+        return Enum.GetValues<MidpointRounding>();
+    }
+
+    public static IEnumerable<int> GenerateScaleValues(int min = MinScale, int max = MaxScale)
+    {
+        for (int scale = min; scale <= max; scale++) yield return scale;
     }
 }

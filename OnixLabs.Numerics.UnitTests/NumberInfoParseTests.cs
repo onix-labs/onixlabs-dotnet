@@ -20,9 +20,9 @@ namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class NumberInfoParseTests
 {
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Currency)")]
-    public void NumberInfoParseShouldProduceExpectedResultCurrency(decimal value, CultureInfo culture)
+    public void NumberInfoParseShouldProduceExpectedResultCurrency(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToString("C", culture);
@@ -35,9 +35,9 @@ public sealed class NumberInfoParseTests
         Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Decimal, Integer)")]
-    public void NumberInfoParseShouldProduceExpectedResultDecimalInteger(decimal value, CultureInfo culture)
+    public void NumberInfoParseShouldProduceExpectedResultDecimalInteger(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = Int128.CreateTruncating(value).ToString("D", culture);
@@ -50,9 +50,9 @@ public sealed class NumberInfoParseTests
         Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Decimal, BigDecimal)")]
-    public void NumberInfoParseShouldProduceExpectedResultDecimalBigDecimal(decimal value, CultureInfo culture)
+    public void NumberInfoParseShouldProduceExpectedResultDecimalBigDecimal(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToBigDecimal().ToString("D", culture);
@@ -65,9 +65,9 @@ public sealed class NumberInfoParseTests
         Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Fixed)")]
-    public void NumberInfoParseShouldProduceExpectedResultFixed(decimal value, CultureInfo culture)
+    public void NumberInfoParseShouldProduceExpectedResultFixed(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToString("F", culture);
@@ -80,9 +80,9 @@ public sealed class NumberInfoParseTests
         Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (General)")]
-    public void NumberInfoParseShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture)
+    public void NumberInfoParseShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToString("G", culture);
@@ -95,9 +95,9 @@ public sealed class NumberInfoParseTests
         Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "NumberInfo.Parse should produce the expected result (Number)")]
-    public void NumberInfoParseShouldProduceExpectedResultNumber(decimal value, CultureInfo culture)
+    public void NumberInfoParseShouldProduceExpectedResultNumber(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToString("N", culture);

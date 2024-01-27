@@ -20,9 +20,9 @@ namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class BigDecimalParseTests
 {
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Currency)")]
-    public void BigDecimalParseShouldProduceExpectedResultCurrency(decimal value, CultureInfo culture)
+    public void BigDecimalParseShouldProduceExpectedResultCurrency(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToString("C", culture);
@@ -35,9 +35,9 @@ public sealed class BigDecimalParseTests
         Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Decimal)")]
-    public void BigDecimalParseShouldProduceExpectedResultDecimal(decimal expected, CultureInfo culture)
+    public void BigDecimalParseShouldProduceExpectedResultDecimal(decimal expected, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = expected.ToBigDecimal().ToString("D", culture);
@@ -49,9 +49,9 @@ public sealed class BigDecimalParseTests
         Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Fixed)")]
-    public void BigDecimalParseShouldProduceExpectedResultFixed(decimal value, CultureInfo culture)
+    public void BigDecimalParseShouldProduceExpectedResultFixed(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToString("F", culture);
@@ -64,9 +64,9 @@ public sealed class BigDecimalParseTests
         Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (General)")]
-    public void BigDecimalParseShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture)
+    public void BigDecimalParseShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToString("G", culture);
@@ -79,9 +79,9 @@ public sealed class BigDecimalParseTests
         Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
     }
 
-    [NumberInfoFormatterData]
+    [NumberFormatData]
     [Theory(DisplayName = "BigDecimal.Parse should produce the expected result (Number)")]
-    public void BigDecimalParseShouldProduceExpectedResultNumber(decimal value, CultureInfo culture)
+    public void BigDecimalParseShouldProduceExpectedResultNumber(decimal value, CultureInfo culture, Guid _)
     {
         // Given
         string formatted = value.ToString("G", culture);

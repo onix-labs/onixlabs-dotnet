@@ -30,7 +30,8 @@ namespace OnixLabs.Numerics;
 /// <param name="allowedFormats">Specifies which formats are allowed for formatting.</param>
 internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvider formatProvider, IEnumerable<char> allowedFormats)
 {
-    private const char DefaultFormat = 'G';
+    internal const char DefaultFormat = 'G';
+
     private const char LeadingParenthesis = '(';
     private const char TrailingParenthesis = ')';
     private const char Whitespace = ' ';

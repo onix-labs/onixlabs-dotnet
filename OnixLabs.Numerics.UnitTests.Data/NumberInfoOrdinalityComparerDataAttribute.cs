@@ -24,12 +24,12 @@ public sealed class NumberInfoOrdinalityComparerDataAttribute : DataAttribute
 
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        foreach (decimal left in DecimalTestDataGenerator.GenerateScaledValues(Values, Scales))
-        foreach (decimal right in DecimalTestDataGenerator.GenerateScaledValues(Values, Scales))
+        foreach (decimal left in TestDataGenerator.GenerateScaledValues(Values, Scales))
+        foreach (decimal right in TestDataGenerator.GenerateScaledValues(Values, Scales))
             yield return [left, right, Guid.NewGuid()];
 
-        foreach (decimal left in DecimalTestDataGenerator.GenerateRandomValues(count: 10))
-        foreach (decimal right in DecimalTestDataGenerator.GenerateRandomValues(count: 10))
+        foreach (decimal left in TestDataGenerator.GenerateRandomValues(count: 10))
+        foreach (decimal right in TestDataGenerator.GenerateRandomValues(count: 10))
             yield return [left, right, Guid.NewGuid()];
     }
 }

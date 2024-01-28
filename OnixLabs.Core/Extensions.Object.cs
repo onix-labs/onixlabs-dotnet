@@ -32,7 +32,7 @@ public static class ObjectExtensions
     /// <param name="comparable">The current <see cref="IComparable{T}"/> to compare to the specified object.</param>
     /// <param name="obj">The <see cref="object"/> to compare to the current <see cref="IComparable{T}"/>.</param>
     /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
-    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
     /// <exception cref="ArgumentException">If the specified object is not null, or of the specified type.</exception>
     public static int CompareObject<T>(this IComparable<T> comparable, object? obj)
     {

@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,8 +14,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using OnixLabs.Core.Collections;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data.Objects;
 using Xunit;
@@ -440,6 +440,62 @@ public sealed class IEnumerableExtensionTests
 
         // When
         IEnumerable<RecordLike> actual = elements.WhereNotNull();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.ToCollectionString should produce expected result (Object)")]
+    public void ToCollectionStringShouldProduceExpectedResultObject()
+    {
+        // Given
+        object[] values = [123, "abc", true, 123.456];
+        const string expected = "[123, abc, True, 123.456]";
+
+        // When
+        string actual = values.ToCollectionString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.ToCollectionString should produce expected result (String)")]
+    public void ToCollectionStringShouldProduceExpectedResultString()
+    {
+        // Given
+        string[] values = ["abc", "xyz", "123"];
+        const string expected = "[abc, xyz, 123]";
+
+        // When
+        string actual = values.ToCollectionString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.ToCollectionString should produce expected result (Int32)")]
+    public void ToCollectionStringShouldProduceExpectedResultInt32()
+    {
+        // Given
+        int[] values = [0, 1, 12, 123, 1234, -1, -12, -123, -1234];
+        const string expected = "[0, 1, 12, 123, 1234, -1, -12, -123, -1234]";
+
+        // When
+        string actual = values.ToCollectionString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.ToCollectionString should produce expected result (Int32, IFormattable)")]
+    public void ToCollectionStringShouldProduceExpectedResultInt32IFormattable()
+    {
+        // Given
+        int[] values = [0, 1, 12, 123, 1234, -1, -12, -123, -1234];
+        const string expected = "[£0.00, £1.00, £12.00, £123.00, £1,234.00, -£1.00, -£12.00, -£123.00, -£1,234.00]";
+
+        // When
+        string actual = values.ToCollectionString("C", CultureInfo.GetCultureInfo("en-GB"));
 
         // Then
         Assert.Equal(expected, actual);

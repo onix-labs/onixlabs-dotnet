@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,8 +23,8 @@ public sealed class Base58RippleAlphabetTests
     public void Base58ValuesShouldBeIdentical()
     {
         // Given
-        Base58 a = Base58.Create("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Ripple);
-        Base58 b = Base58.Create("abcdefghijklmnopqrstuvwxyz", Base58Alphabet.Ripple);
+        Base58 a = Base58.Create("abcdefghijklmnopqrstuvwxyz");
+        Base58 b = Base58.Create("abcdefghijklmnopqrstuvwxyz");
 
         // When
         int hashCodeA = a.GetHashCode();
@@ -41,10 +41,10 @@ public sealed class Base58RippleAlphabetTests
     public void CreateShouldProduceExpectedResult(string expected, string value)
     {
         // Given
-        Base58 candidate = Base58.Create(value, Base58Alphabet.Ripple);
+        Base58 candidate = Base58.Create(value);
 
         // When
-        string actual = candidate.ToString();
+        string actual = candidate.ToString(null, Base58Alphabet.Ripple);
 
         // Then
         Assert.Equal(expected, actual);

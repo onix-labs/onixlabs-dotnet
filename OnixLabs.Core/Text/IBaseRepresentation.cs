@@ -21,7 +21,7 @@ namespace OnixLabs.Core.Text;
 /// Represents a number base representation.
 /// </summary>
 /// <typeparam name="TSelf">The underlying type of the number base representation.</typeparam>
-public interface IBaseRepresentation<TSelf> : IEquatable<TSelf>, ISpanParsable<TSelf> where TSelf : struct, IBaseRepresentation<TSelf>
+public interface IBaseRepresentation<TSelf> : IEquatable<TSelf>, ISpanParsable<TSelf>, ISpanFormattable where TSelf : struct, IBaseRepresentation<TSelf>
 {
     /// <summary>
     /// Gets an empty <see cref="IBaseRepresentation{TSelf}"/> value.

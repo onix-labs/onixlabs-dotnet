@@ -13,11 +13,10 @@
 // limitations under the License.
 
 using System;
-using System.Globalization;
 
-namespace OnixLabs.Numerics;
+namespace OnixLabs.Core.Text;
 
-public readonly partial struct BigDecimal
+public readonly partial struct Base16
 {
     /// <summary>
     /// Tries to format the value of the current instance into the provided span of characters.

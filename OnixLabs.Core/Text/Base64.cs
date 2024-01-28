@@ -17,7 +17,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-64 value.
 /// </summary>
-public readonly partial struct Base64 : IBase<Base64>
+public readonly partial struct Base64 : IBaseRepresentation<Base64>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Base64"/> struct.

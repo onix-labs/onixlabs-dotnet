@@ -17,7 +17,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-32 value.
 /// </summary>
-public readonly partial struct Base32 : IBase<Base32>
+public readonly partial struct Base32 : IBaseRepresentation<Base32>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Base32"/> struct.

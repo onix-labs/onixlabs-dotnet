@@ -17,7 +17,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-58 value.
 /// </summary>
-public readonly partial struct Base58 : IBase<Base58>
+public readonly partial struct Base58 : IBaseRepresentation<Base58>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Base58"/> struct.

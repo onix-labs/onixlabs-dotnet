@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,50 +19,134 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base58
 {
     /// <summary>
-    /// Parses a Base-58 value into a <see cref="Base58"/> instance.
+    /// Parses a Base-58 value into a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
+    /// <param name="value">The Base-58 value to parse.</param>
+    /// <param name="provider">An object that provides format-specific information about the specified value. </param>
     /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
-    public static Base58 Parse(ReadOnlySpan<char> value)
+    public static Base58 Parse(string value, IFormatProvider? provider = null)
     {
-        return Parse(value, Base58Alphabet.Default);
+        return Parse(value.AsSpan(), provider);
     }
 
     /// <summary>
-    /// Parses a Base-58 value into a <see cref="Base58"/> instance.
+    /// Parses a Base-58 value into a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to parse.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
+    /// <param name="value">The Base-58 value to parse.</param>
+    /// <param name="provider">An object that provides format-specific information about the specified value. </param>
     /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
-    public static Base58 Parse(ReadOnlySpan<char> value, Base58Alphabet alphabet)
+    public static Base58 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
-        byte[] bytes = Decode(value, alphabet.Alphabet);
-        return Create(bytes, alphabet);
+        if (TryParse(value, provider, out Base58 result)) return result;
+        throw new FormatException($"The input string '{value}' was not in a correct format.");
     }
 
     /// <summary>
-    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> instance.
+    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to ParseWithChecksum.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(ReadOnlySpan<char> value)
+    /// <param name="value">The Base-58 value to parse.</param>
+    /// <param name="provider">An object that provides format-specific information about the specified value. </param>
+    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
+    public static Base58 ParseWithChecksum(string value, IFormatProvider? provider = null)
     {
-        return ParseWithChecksum(value, Base58Alphabet.Default);
+        return ParseWithChecksum(value.AsSpan(), provider);
     }
 
     /// <summary>
-    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> instance.
+    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="value">The Base-16 (hexadecimal) value to ParseWithChecksum.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
-    /// <returns>A new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(ReadOnlySpan<char> value, Base58Alphabet alphabet)
+    /// <param name="value">The Base-58 value to parse.</param>
+    /// <param name="provider">An object that provides format-specific information about the specified value. </param>
+    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
+    public static Base58 ParseWithChecksum(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
-        byte[] bytes = Decode(value, alphabet.Alphabet);
-        byte[] bytesWithoutChecksum = RemoveChecksum(bytes);
+        if (TryParseWithChecksum(value, provider, out Base58 result)) return result;
+        throw new FormatException($"The input string '{value}' was not in a correct format.");
+    }
 
-        VerifyChecksum(bytes);
+    /// <summary>
+    /// Tries to parse the specified Base-58 value into a <see cref="Base58"/> value.
+    /// </summary>
+    /// <param name="value">The Base-58 value to parse.</param>
+    /// <param name="provider"> An object that provides format-specific information about the specified value. </param>
+    /// <param name="result">
+    /// On return, contains the result of parsing the specified value,
+    /// or the default value in the event that the specified value could not be parsed.
+    /// </param>
+    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    public static bool TryParse(string? value, IFormatProvider? provider, out Base58 result)
+    {
+        return TryParse(value.AsSpan(), provider, out result);
+    }
 
-        return Create(bytesWithoutChecksum, alphabet);
+    /// <summary>
+    /// Tries to parse the specified Base-58 value into a <see cref="Base58"/> value.
+    /// </summary>
+    /// <param name="value">The Base-58 value to parse.</param>
+    /// <param name="provider"> An object that provides format-specific information about the specified value. </param>
+    /// <param name="result">
+    /// On return, contains the result of parsing the specified value,
+    /// or the default value in the event that the specified value could not be parsed.
+    /// </param>
+    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out Base58 result)
+    {
+        try
+        {
+            Base58Alphabet alphabet = provider as Base58Alphabet ?? Base58Alphabet.Default;
+            byte[] bytes = Decode(value, alphabet.Alphabet);
+            result = Create(bytes, alphabet);
+            return true;
+        }
+        catch
+        {
+            result = Empty;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to parse the specified Base-58 value with a checksum into a <see cref="Base58"/> value.
+    /// </summary>
+    /// <param name="value">The Base-58 value to parse.</param>
+    /// <param name="provider"> An object that provides format-specific information about the specified value. </param>
+    /// <param name="result">
+    /// On return, contains the result of parsing the specified value,
+    /// or the default value in the event that the specified value could not be parsed.
+    /// </param>
+    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    public static bool TryParseWithChecksum(string? value, IFormatProvider? provider, out Base58 result)
+    {
+        return TryParseWithChecksum(value.AsSpan(), provider, out result);
+    }
+
+    /// <summary>
+    /// Tries to parse the specified Base-58 value with a checksum into a <see cref="Base58"/> value.
+    /// </summary>
+    /// <param name="value">The Base-58 value to parse.</param>
+    /// <param name="provider"> An object that provides format-specific information about the specified value. </param>
+    /// <param name="result">
+    /// On return, contains the result of parsing the specified value,
+    /// or the default value in the event that the specified value could not be parsed.
+    /// </param>
+    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    public static bool TryParseWithChecksum(ReadOnlySpan<char> value, IFormatProvider? provider, out Base58 result)
+    {
+        try
+        {
+            Base58Alphabet alphabet = provider as Base58Alphabet ?? Base58Alphabet.Default;
+            byte[] bytes = Decode(value, alphabet.Alphabet);
+            byte[] bytesWithoutChecksum = RemoveChecksum(bytes);
+
+            VerifyChecksum(bytes);
+
+            result = Create(bytesWithoutChecksum, alphabet);
+            return true;
+        }
+        catch
+        {
+            result = Empty;
+            return false;
+        }
     }
 }

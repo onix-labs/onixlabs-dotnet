@@ -25,11 +25,11 @@ public sealed class BigDecimalFormatTests
     public void BigDecimalFormatShouldProduceExpectedResultCurrency(decimal value, CultureInfo culture, Guid _)
     {
         // Given
-        string expected = $"{value:C}";
+        string expected = string.Create(culture, $"{value:C}");
         BigDecimal candidate = value;
 
         // When
-        string actual = $"{candidate:C}";
+        string actual = string.Create(culture, $"{candidate:C}");
 
         // Then
         Assert.Equal(expected, actual);
@@ -40,11 +40,11 @@ public sealed class BigDecimalFormatTests
     public void BigDecimalFormatShouldProduceExpectedResultFixed(decimal value, CultureInfo culture, Guid _)
     {
         // Given
-        string expected = $"{value:F}";
+        string expected = string.Create(culture, $"{value:F}");
         BigDecimal candidate = value;
 
         // When
-        string actual = $"{candidate:F}";
+        string actual = string.Create(culture, $"{candidate:F}");
 
         // Then
         Assert.Equal(expected, actual);
@@ -55,11 +55,11 @@ public sealed class BigDecimalFormatTests
     public void BigDecimalFormatShouldProduceExpectedResultGeneral(decimal value, CultureInfo culture, Guid _)
     {
         // Given
-        string expected = $"{value:G}";
+        string expected = string.Create(culture, $"{value:G}");
         BigDecimal candidate = value;
 
         // When
-        string actual = $"{candidate:G}";
+        string actual = string.Create(culture, $"{candidate:G}");
 
         // Then
         Assert.Equal(expected, actual);
@@ -70,11 +70,11 @@ public sealed class BigDecimalFormatTests
     public void BigDecimalFormatShouldProduceExpectedResultNumber(decimal value, CultureInfo culture, Guid _)
     {
         // Given
-        string expected = $"{value:N}";
+        string expected = string.Create(culture, $"{value:N}");
         BigDecimal candidate = value;
 
         // When
-        string actual = $"{candidate:N}";
+        string actual = string.Create(culture, $"{candidate:N}");
 
         // Then
         Assert.Equal(expected, actual);
@@ -85,11 +85,11 @@ public sealed class BigDecimalFormatTests
     public void BigDecimalFormatShouldProduceExpectedResultPercent(decimal value, CultureInfo culture, Guid _)
     {
         // Given
-        string expected = $"{value:P}";
+        string expected = string.Create(culture, $"{value:P}");
         BigDecimal candidate = value;
 
         // When
-        string actual = $"{candidate:P}";
+        string actual = string.Create(culture, $"{candidate:P}");
 
         // Then
         Assert.Equal(expected, actual);

@@ -44,7 +44,7 @@ public sealed class Base32CrockfordAlphabetTests
         Base32 candidate = Base32.Create(value);
 
         // When
-        string actual = candidate.ToString("P", Base32Alphabet.Crockford);
+        string actual = candidate.ToString("P", Base32FormatInfo.Crockford);
 
         // Then
         Assert.Equal(expected, actual);
@@ -60,7 +60,7 @@ public sealed class Base32CrockfordAlphabetTests
         Base32 candidate = Base32.Create(value);
 
         // When
-        string actual = candidate.ToString(null, Base32Alphabet.Crockford);
+        string actual = candidate.ToString(null, Base32FormatInfo.Crockford);
 
         // Then
         Assert.Equal(expected, actual);
@@ -73,7 +73,7 @@ public sealed class Base32CrockfordAlphabetTests
     public void ParseShouldProduceExpectedResult(string expected, string value)
     {
         // Given
-        Base32 candidate = Base32.Parse(value, Base32Alphabet.Crockford);
+        Base32 candidate = Base32.Parse(value, Base32FormatInfo.Crockford);
 
         // When
         string actual = candidate.ToPlainTextString();

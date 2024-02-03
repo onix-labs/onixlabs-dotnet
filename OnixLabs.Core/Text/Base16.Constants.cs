@@ -19,7 +19,7 @@ public readonly partial struct Base16
     /// <summary>
     /// Gets an empty <see cref="Base16"/> value.
     /// </summary>
-    public static Base16 Empty => Create(EmptyArray<byte>());
+    public static Base16 Empty => new([]);
 
     /// <summary>
     /// Gets the default Base-16 format.

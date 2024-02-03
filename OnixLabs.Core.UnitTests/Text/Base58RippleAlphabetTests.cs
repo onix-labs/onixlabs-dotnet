@@ -44,7 +44,7 @@ public sealed class Base58RippleAlphabetTests
         Base58 candidate = Base58.Create(value);
 
         // When
-        string actual = candidate.ToString(null, Base58Alphabet.Ripple);
+        string actual = candidate.ToString(null, Base58FormatInfo.Ripple);
 
         // Then
         Assert.Equal(expected, actual);
@@ -57,7 +57,7 @@ public sealed class Base58RippleAlphabetTests
     public void ParseShouldProduceExpectedResult(string expected, string value)
     {
         // Given
-        Base58 candidate = Base58.Parse(value, Base58Alphabet.Ripple);
+        Base58 candidate = Base58.Parse(value, Base58FormatInfo.Ripple);
 
         // When
         string actual = candidate.ToPlainTextString();

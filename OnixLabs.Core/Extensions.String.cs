@@ -251,6 +251,20 @@ public static class StringExtensions
     }
 
     /// <summary>
+    /// Copies the contents of the current <see cref="string"/> into the destination <see cref="Span{T}"/>.
+    /// </summary>
+    /// <param name="value">The current <see cref="string"/> value to copy.</param>
+    /// <param name="destination">The <see cref="Span{T}"/> into which to copy the current <see cref="string"/> contents.</param>
+    /// <param name="charsWritten">The number of characters written to the destination <see cref="Span{T}"/>.</param>
+    /// <returns>Returns <see langword="true" /> if the data was copied into the destination span; otherwise, <see langword="false" /> if the destination was too short.</returns>
+    public static bool TryCopyTo(this string value, Span<char> destination, out int charsWritten)
+    {
+        bool result = value.TryCopyTo(destination);
+        charsWritten = result ? value.Length : 0;
+        return result;
+    }
+
+    /// <summary>
     /// Converts the current <see cref="string"/> between the specified before and after <see cref="char"/> values.
     /// </summary>
     /// <param name="value">The current value to wrap.</param>

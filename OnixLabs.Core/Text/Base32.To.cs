@@ -25,32 +25,32 @@ public readonly partial struct Base32
     /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
     public byte[] ToByteArray()
     {
-        return Value.Copy();
+        return value.Copy();
     }
 
     /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object in plain text.
+    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
+    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value, using the default <see cref="Encoding"/>.</returns>
     public string ToPlainTextString()
     {
         return ToPlainTextString(Encoding.Default);
     }
 
     /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object in plain text.
+    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value.
     /// </summary>
-    /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
-    /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="string"/> from the current <see cref="Base32"/> value.</param>
+    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value.</returns>
     public string ToPlainTextString(Encoding encoding)
     {
-        return encoding.GetString(Value);
+        return encoding.GetString(value);
     }
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
     public override string ToString()
     {
         return ToString(null);
@@ -75,8 +75,8 @@ public readonly partial struct Base32
     /// <returns>The value of the current instance in the specified format.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        Base32Alphabet alphabet = formatProvider as Base32Alphabet ?? Base32Alphabet.Default;
+        Base32FormatInfo info = formatProvider as Base32FormatInfo ?? Base32FormatInfo.Default;
         bool padding = char.ToUpperInvariant(format.IsEmpty || format.IsWhiteSpace() ? default : format[0]) == 'P';
-        return Encode(Value, alphabet.Alphabet, padding);
+        return Base32Codec.Encode(value, info.Alphabet, padding);
     }
 }

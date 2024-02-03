@@ -20,34 +20,85 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base58
 {
     /// <summary>
-    /// Creates a <see cref="Base58"/> instance from the specified <see cref="byte"/> array.
+    /// Creates a new <see cref="Base58"/> value from the specified <see cref="T:byte[]"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
+    /// <param name="value">The <see cref="T:byte[]"/> value from which to create a new <see cref="Base58"/> value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> value from the specified <see cref="T:byte[]"/> value.</returns>
     public static Base58 Create(byte[] value)
     {
         return new Base58(value);
     }
 
     /// <summary>
-    /// Creates a <see cref="Base58"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
+    /// Creates a new <see cref="Base58"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
-    public static Base58 Create(ReadOnlySpan<char> value)
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="Base58"/> value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    public static Base58 Create(ReadOnlySpan<byte> value)
+    {
+        return Create(value.ToArray());
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Base58"/> value from the specified <see cref="string"/> value, using the default <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="string"/> value from which to create a new <see cref="Base58"/> value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> value from the specified <see cref="string"/> value.</returns>
+    public static Base58 Create(string value)
+    {
+        return Create(value.ToCharArray(), Encoding.Default);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Base58"/> value from the specified <see cref="string"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="string"/> value from which to create a new <see cref="Base58"/> value.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="string"/> value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> value from the specified <see cref="string"/> value.</returns>
+    public static Base58 Create(string value, Encoding encoding)
+    {
+        return Create(value.ToCharArray(), encoding);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Base58"/> value from the specified <see cref="T:char[]"/> value, using the default <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="T:char[]"/> value from which to create a new <see cref="Base58"/> value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> value from the specified <see cref="T:char[]"/> value.</returns>
+    public static Base58 Create(char[] value)
     {
         return Create(value, Encoding.Default);
     }
 
     /// <summary>
-    /// Creates a <see cref="Base58"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
+    /// Creates a new <see cref="Base58"/> value from the specified <see cref="T:char[]"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
-    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
+    /// <param name="value">The <see cref="T:char[]"/> value from which to create a new <see cref="Base58"/> value.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="T:char[]"/> value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> value from the specified <see cref="T:char[]"/> value.</returns>
+    public static Base58 Create(char[] value, Encoding encoding)
+    {
+        return Create(encoding.GetBytes(value));
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Base58"/> value from the specified <see cref="ReadOnlySpan{T}"/> value, using the default <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="Base58"/> value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    public static Base58 Create(ReadOnlySpan<char> value)
+    {
+        return Create(value.ToArray(), Encoding.Default);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Base58"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="Base58"/> value.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="ReadOnlySpan{T}"/> value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static Base58 Create(ReadOnlySpan<char> value, Encoding encoding)
     {
-        byte[] bytes = encoding.GetBytes(value.ToArray());
-        return new Base58(bytes);
+        return Create(value.ToArray(), encoding);
     }
 }

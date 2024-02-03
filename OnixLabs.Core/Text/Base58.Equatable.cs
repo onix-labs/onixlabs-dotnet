@@ -14,6 +14,7 @@
 
 using System;
 using System.Linq;
+using System.Text;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text;
@@ -27,7 +28,7 @@ public readonly partial struct Base58
     /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
     public bool Equals(Base58 other)
     {
-        return other.Value.SequenceEqual(Value);
+        return value.SequenceEqual(other.value);
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ public readonly partial struct Base58
     /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Value.GetContentHashCode());
+        return HashCode.Combine(value.GetContentHashCode());
     }
 
     /// <summary>

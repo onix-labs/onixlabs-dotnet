@@ -93,8 +93,8 @@ public readonly partial struct Base58
     {
         try
         {
-            Base58Alphabet alphabet = provider as Base58Alphabet ?? Base58Alphabet.Default;
-            byte[] bytes = Decode(value, alphabet.Alphabet);
+            Base58FormatInfo info = provider as Base58FormatInfo ?? Base58FormatInfo.Default;
+            byte[] bytes = Base58Codec.Decode(value, info.Alphabet);
             result = Create(bytes);
             return true;
         }
@@ -134,8 +134,8 @@ public readonly partial struct Base58
     {
         try
         {
-            Base58Alphabet alphabet = provider as Base58Alphabet ?? Base58Alphabet.Default;
-            byte[] bytes = Decode(value, alphabet.Alphabet);
+            Base58FormatInfo info = provider as Base58FormatInfo ?? Base58FormatInfo.Default;
+            byte[] bytes = Base58Codec.Decode(value, info.Alphabet);
             byte[] bytesWithoutChecksum = RemoveChecksum(bytes);
 
             VerifyChecksum(bytes);

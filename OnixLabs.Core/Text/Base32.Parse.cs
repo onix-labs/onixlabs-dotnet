@@ -70,9 +70,9 @@ public readonly partial struct Base32
     {
         try
         {
-            Base32Alphabet alphabet = provider as Base32Alphabet ?? Base32Alphabet.Default;
+            Base32FormatInfo info = provider as Base32FormatInfo ?? Base32FormatInfo.Default;
             bool padding = value.Contains('=');
-            byte[] bytes = Decode(value, alphabet.Alphabet, padding);
+            byte[] bytes = Base32Codec.Decode(value, info.Alphabet, padding);
             result = Create(bytes);
             return true;
         }

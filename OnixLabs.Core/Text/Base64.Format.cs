@@ -28,16 +28,6 @@ public readonly partial struct Base64
     /// <returns>Returns <see langword="true"/> if the formatting was successful; otherwise, <see langword="false"/>.</returns>
     bool ISpanFormattable.TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
     {
-        string formatted = ToString(format, provider);
-
-        if (formatted.Length > destination.Length)
-        {
-            charsWritten = 0;
-            return false;
-        }
-
-        formatted.AsSpan().CopyTo(destination);
-        charsWritten = formatted.Length;
-        return true;
+        return ToString(format, provider).TryCopyTo(destination, out charsWritten);
     }
 }

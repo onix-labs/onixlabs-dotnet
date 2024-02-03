@@ -20,16 +20,16 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base32 : IBaseRepresentation<Base32>
 {
     /// <summary>
+    /// The underlying <see cref="T:byte[]"/> value.
+    /// </summary>
+    private readonly byte[] value;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Base32"/> struct.
     /// </summary>
     /// <param name="value">The underlying value.</param>
     private Base32(byte[] value)
     {
-        Value = value.Copy();
+        this.value = value.Copy();
     }
-
-    /// <summary>
-    /// Gets the underlying value.
-    /// </summary>
-    private byte[] Value { get; }
 }

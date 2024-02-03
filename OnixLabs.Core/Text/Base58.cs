@@ -20,16 +20,16 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base58 : IBaseRepresentation<Base58>
 {
     /// <summary>
+    /// The underlying <see cref="T:byte[]"/> value.
+    /// </summary>
+    private readonly byte[] value;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Base58"/> struct.
     /// </summary>
     /// <param name="value">The underlying value.</param>
     private Base58(byte[] value)
     {
-        Value = value.Copy();
+        this.value = value.Copy();
     }
-
-    /// <summary>
-    /// Gets the underlying value.
-    /// </summary>
-    private byte[] Value { get; }
 }

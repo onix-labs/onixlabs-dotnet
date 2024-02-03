@@ -25,26 +25,26 @@ public readonly partial struct Base64
     /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
     public byte[] ToByteArray()
     {
-        return Value.Copy();
+        return value.Copy();
     }
 
     /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object in plain text.
+    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
+    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value, using the default <see cref="Encoding"/>.</returns>
     public string ToPlainTextString()
     {
         return ToPlainTextString(Encoding.Default);
     }
 
     /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object in plain text.
+    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value.
     /// </summary>
-    /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
-    /// <returns>Returns a <see cref="string"/> that represents the current object in plain text.</returns>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="string"/> from the current <see cref="Base32"/> value.</param>
+    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value.</returns>
     public string ToPlainTextString(Encoding encoding)
     {
-        return encoding.GetString(Value);
+        return encoding.GetString(value);
     }
 
     /// <summary>
@@ -75,6 +75,6 @@ public readonly partial struct Base64
     /// <returns>The value of the current instance in the specified format.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        return Convert.ToBase64String(Value);
+        return Convert.ToBase64String(value);
     }
 }

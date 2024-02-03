@@ -27,7 +27,7 @@ public readonly partial struct Base32
     /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
     public bool Equals(Base32 other)
     {
-        return other.Value.SequenceEqual(Value);
+        return value.SequenceEqual(other.value);
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public readonly partial struct Base32
     /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Value.GetContentHashCode());
+        return HashCode.Combine(value.GetContentHashCode());
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public readonly partial struct Base32
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>True if the instances are equal; otherwise, false.</returns>
+    /// <returns>Returns true if the instances are equal; otherwise, false.</returns>
     public static bool operator ==(Base32 left, Base32 right)
     {
         return Equals(left, right);
@@ -65,7 +65,7 @@ public readonly partial struct Base32
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>True if the instances are not equal; otherwise, false.</returns>
+    /// <returns>Returns true if the instances are not equal; otherwise, false.</returns>
     public static bool operator !=(Base32 left, Base32 right)
     {
         return !Equals(left, right);

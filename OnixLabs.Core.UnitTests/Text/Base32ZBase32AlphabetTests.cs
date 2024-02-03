@@ -44,7 +44,7 @@ public sealed class Base32ZBase32AlphabetTests
         Base32 candidate = Base32.Create(value);
 
         // When
-        string actual = candidate.ToString("P", Base32Alphabet.ZBase32);
+        string actual = candidate.ToString("P", Base32FormatInfo.ZBase32);
 
         // Then
         Assert.Equal(expected, actual);
@@ -60,7 +60,7 @@ public sealed class Base32ZBase32AlphabetTests
         Base32 candidate = Base32.Create(value);
 
         // When
-        string actual = candidate.ToString(null, Base32Alphabet.ZBase32);
+        string actual = candidate.ToString(null, Base32FormatInfo.ZBase32);
 
         // Then
         Assert.Equal(expected, actual);
@@ -73,7 +73,7 @@ public sealed class Base32ZBase32AlphabetTests
     public void ParseShouldProduceExpectedResult(string expected, string value)
     {
         // Given
-        Base32 candidate = Base32.Parse(value, Base32Alphabet.ZBase32);
+        Base32 candidate = Base32.Parse(value, Base32FormatInfo.ZBase32);
 
         // When
         string actual = candidate.ToPlainTextString();

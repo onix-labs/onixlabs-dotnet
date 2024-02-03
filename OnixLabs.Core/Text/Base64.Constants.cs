@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Text;
+
 namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base64
@@ -19,5 +22,5 @@ public readonly partial struct Base64
     /// <summary>
     /// Gets an empty <see cref="Base64"/> value.
     /// </summary>
-    public static Base64 Empty => Create(EmptyArray<byte>());
+    public static Base64 Empty => new([]);
 }

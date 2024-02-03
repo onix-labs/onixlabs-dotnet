@@ -12,19 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core.Collections;
-
 namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base32
 {
-    // /// <summary>
-    // /// Gets the default padding option when creating new Base-32 instances.
-    // /// </summary>
-    // private const bool DefaultPadding = true;
-
     /// <summary>
     /// Gets an empty <see cref="Base32"/> value.
     /// </summary>
-    public static Base32 Empty => Create(EmptyArray<byte>());
+    public static Base32 Empty => new([]);
 }

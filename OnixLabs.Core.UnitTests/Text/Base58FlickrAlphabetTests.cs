@@ -44,7 +44,7 @@ public sealed class Base58FlickrAlphabetTests
         Base58 candidate = Base58.Create(value);
 
         // When
-        string actual = candidate.ToString(null, Base58Alphabet.Flickr);
+        string actual = candidate.ToString(null, Base58FormatInfo.Flickr);
 
         // Then
         Assert.Equal(expected, actual);
@@ -57,7 +57,7 @@ public sealed class Base58FlickrAlphabetTests
     public void ParseShouldProduceExpectedResult(string expected, string value)
     {
         // Given
-        Base58 candidate = Base58.Parse(value, Base58Alphabet.Flickr);
+        Base58 candidate = Base58.Parse(value, Base58FormatInfo.Flickr);
 
         // When
         string actual = candidate.ToPlainTextString();

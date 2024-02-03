@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Numerics;
 
 namespace OnixLabs.Numerics;
@@ -19,7 +20,13 @@ namespace OnixLabs.Numerics;
 /// <summary>
 /// Represents component information about rational numbers.
 /// </summary>
-public readonly partial struct NumberInfo
+public readonly partial struct NumberInfo :
+    IEquatable<NumberInfo>,
+    IComparable<NumberInfo>,
+    IComparable,
+    IComparisonOperators<NumberInfo, NumberInfo, bool>,
+    ISpanParsable<NumberInfo>,
+    IFormattable
 {
     /// <summary>
     /// Prevents a default instance of the <see cref="NumberInfo"/> struct from being created.

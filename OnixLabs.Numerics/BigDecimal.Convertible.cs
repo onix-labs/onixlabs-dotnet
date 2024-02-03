@@ -16,7 +16,7 @@ using System;
 
 namespace OnixLabs.Numerics;
 
-public readonly partial struct BigDecimal : IConvertible
+public readonly partial struct BigDecimal
 {
     /// <summary>
     /// Gets the <see cref="TypeCode"/> for the current instance.

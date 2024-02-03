@@ -17,7 +17,7 @@ using System.Globalization;
 
 namespace OnixLabs.Numerics;
 
-public readonly partial struct NumberInfo : ISpanParsable<NumberInfo>
+public readonly partial struct NumberInfo
 {
     /// <summary>
     /// Parses the specified <see cref="string"/> value into a <see cref="NumberInfo"/> value.
@@ -75,7 +75,7 @@ public readonly partial struct NumberInfo : ISpanParsable<NumberInfo>
     /// On return, contains the result of parsing the specified value,
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
-    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(string? value, out NumberInfo result)
     {
         return TryParse(value.AsSpan(), out result);
@@ -90,7 +90,7 @@ public readonly partial struct NumberInfo : ISpanParsable<NumberInfo>
     /// On return, contains the result of parsing the specified value,
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
-    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(string? value, IFormatProvider? provider, out NumberInfo result)
     {
         return TryParse(value.AsSpan(), provider, out result);
@@ -106,7 +106,7 @@ public readonly partial struct NumberInfo : ISpanParsable<NumberInfo>
     /// On return, contains the result of parsing the specified value,
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
-    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(string? value, NumberStyles style, IFormatProvider? provider, out NumberInfo result)
     {
         return TryParse(value.AsSpan(), style, provider, out result);
@@ -120,7 +120,7 @@ public readonly partial struct NumberInfo : ISpanParsable<NumberInfo>
     /// On return, contains the result of parsing the specified value,
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
-    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, out NumberInfo result)
     {
         return TryParse(value, DefaultCulture, out result);
@@ -135,7 +135,7 @@ public readonly partial struct NumberInfo : ISpanParsable<NumberInfo>
     /// On return, contains the result of parsing the specified value,
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
-    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out NumberInfo result)
     {
         return TryParse(value, DefaultNumberStyles, provider, out result);
@@ -151,7 +151,7 @@ public readonly partial struct NumberInfo : ISpanParsable<NumberInfo>
     /// On return, contains the result of parsing the specified value,
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
-    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider, out NumberInfo result)
     {
         CultureInfo info = provider as CultureInfo ?? DefaultCulture;

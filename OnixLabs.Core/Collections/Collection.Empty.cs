@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace OnixLabs.Core.Collections;
 
@@ -29,50 +27,35 @@ public static partial class Collection
     /// </summary>
     /// <typeparam name="T">The underlying type of the enumerable.</typeparam>
     /// <returns>Returns an empty enumerable.</returns>
-    public static IEnumerable<T> EmptyEnumerable<T>()
-    {
-        return Enumerable.Empty<T>();
-    }
+    public static IEnumerable<T> EmptyEnumerable<T>() => [];
 
     /// <summary>
     /// Creates an empty array.
     /// </summary>
     /// <typeparam name="T">The underlying type of the array.</typeparam>
     /// <returns>Returns an empty array.</returns>
-    public static T[] EmptyArray<T>()
-    {
-        return Array.Empty<T>();
-    }
+    public static T[] EmptyArray<T>() => [];
 
     /// <summary>
     /// Creates an empty immutable array.
     /// </summary>
     /// <typeparam name="T">The underlying type of the immutable array.</typeparam>
     /// <returns>Returns an empty immutable array.</returns>
-    public static ImmutableArray<T> EmptyImmutableArray<T>()
-    {
-        return ImmutableArray<T>.Empty;
-    }
+    public static ImmutableArray<T> EmptyImmutableArray<T>() => [];
 
     /// <summary>
     /// Creates an empty list.
     /// </summary>
     /// <typeparam name="T">The underlying type of the list.</typeparam>
     /// <returns>Returns an empty list.</returns>
-    public static List<T> EmptyList<T>()
-    {
-        return [];
-    }
+    public static List<T> EmptyList<T>() => [];
 
     /// <summary>
     /// Creates an empty immutable list.
     /// </summary>
     /// <typeparam name="T">The underlying type of the immutable list.</typeparam>
     /// <returns>Returns an empty immutable list.</returns>
-    public static ImmutableList<T> EmptyImmutableList<T>()
-    {
-        return ImmutableList<T>.Empty;
-    }
+    public static ImmutableList<T> EmptyImmutableList<T>() => [];
 
     /// <summary>
     /// Creates an empty dictionary.
@@ -80,10 +63,7 @@ public static partial class Collection
     /// <typeparam name="TKey">The underlying type of the dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the dictionary value.</typeparam>
     /// <returns>Returns an empty dictionary.</returns>
-    public static Dictionary<TKey, TValue> EmptyDictionary<TKey, TValue>() where TKey : notnull
-    {
-        return [];
-    }
+    public static Dictionary<TKey, TValue> EmptyDictionary<TKey, TValue>() where TKey : notnull => [];
 
     /// <summary>
     /// Creates an empty immutable dictionary.
@@ -91,10 +71,7 @@ public static partial class Collection
     /// <typeparam name="TKey">The underlying type of the immutable dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the immutable dictionary value.</typeparam>
     /// <returns>Returns an empty immutable dictionary.</returns>
-    public static ImmutableDictionary<TKey, TValue> EmptyImmutableDictionary<TKey, TValue>() where TKey : notnull
-    {
-        return ImmutableDictionary<TKey, TValue>.Empty;
-    }
+    public static ImmutableDictionary<TKey, TValue> EmptyImmutableDictionary<TKey, TValue>() where TKey : notnull => ImmutableDictionary<TKey, TValue>.Empty;
 
     /// <summary>
     /// Creates an empty sorted dictionary.
@@ -102,10 +79,7 @@ public static partial class Collection
     /// <typeparam name="TKey">The underlying type of the sorted dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the sorted dictionary value.</typeparam>
     /// <returns>Returns an empty sorted dictionary.</returns>
-    public static SortedDictionary<TKey, TValue> EmptySortedDictionary<TKey, TValue>() where TKey : notnull
-    {
-        return [];
-    }
+    public static SortedDictionary<TKey, TValue> EmptySortedDictionary<TKey, TValue>() where TKey : notnull => [];
 
     /// <summary>
     /// Creates an empty immutable sorted dictionary.
@@ -113,88 +87,61 @@ public static partial class Collection
     /// <typeparam name="TKey">The underlying type of the immutable sorted dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the immutable sorted dictionary value.</typeparam>
     /// <returns>Returns an empty immutable sorted dictionary.</returns>
-    public static ImmutableSortedDictionary<TKey, TValue> EmptyImmutableSortedDictionary<TKey, TValue>() where TKey : notnull
-    {
-        return ImmutableSortedDictionary<TKey, TValue>.Empty;
-    }
+    public static ImmutableSortedDictionary<TKey, TValue> EmptyImmutableSortedDictionary<TKey, TValue>() where TKey : notnull => ImmutableSortedDictionary<TKey, TValue>.Empty;
 
     /// <summary>
     /// Creates an empty hash set.
     /// </summary>
     /// <typeparam name="T">The underlying type of the hash set.</typeparam>
     /// <returns>Returns an empty hash set.</returns>
-    public static HashSet<T> EmptyHashSet<T>()
-    {
-        return [];
-    }
+    public static HashSet<T> EmptyHashSet<T>() => [];
 
     /// <summary>
     /// Creates an empty immutable hash set.
     /// </summary>
     /// <typeparam name="T">The underlying type of the immutable hash set.</typeparam>
     /// <returns>Returns an empty immutable hash set.</returns>
-    public static ImmutableHashSet<T> EmptyImmutableHashSet<T>()
-    {
-        return ImmutableHashSet<T>.Empty;
-    }
+    public static ImmutableHashSet<T> EmptyImmutableHashSet<T>() => [];
 
     /// <summary>
     /// Creates an empty sorted set.
     /// </summary>
     /// <typeparam name="T">The underlying type of the sorted set.</typeparam>
     /// <returns>Returns an empty sorted set.</returns>
-    public static SortedSet<T> EmptySortedSet<T>()
-    {
-        return [];
-    }
+    public static SortedSet<T> EmptySortedSet<T>() => [];
 
     /// <summary>
     /// Creates an empty immutable sorted set.
     /// </summary>
     /// <typeparam name="T">The underlying type of the immutable sorted set.</typeparam>
     /// <returns>Returns an empty immutable sorted set.</returns>
-    public static ImmutableSortedSet<T> EmptyImmutableSortedSet<T>()
-    {
-        return ImmutableSortedSet<T>.Empty;
-    }
+    public static ImmutableSortedSet<T> EmptyImmutableSortedSet<T>() => [];
 
     /// <summary>
     /// Creates an empty stack.
     /// </summary>
     /// <typeparam name="T">The underlying type of the stack.</typeparam>
     /// <returns>Returns an empty stack.</returns>
-    public static Stack<T> EmptyStack<T>()
-    {
-        return [];
-    }
+    public static Stack<T> EmptyStack<T>() => [];
 
     /// <summary>
     /// Creates an empty immutable stack.
     /// </summary>
     /// <typeparam name="T">The underlying type of the immutable stack.</typeparam>
     /// <returns>Returns an empty immutable stack.</returns>
-    public static ImmutableStack<T> EmptyImmutableStack<T>()
-    {
-        return ImmutableStack<T>.Empty;
-    }
+    public static ImmutableStack<T> EmptyImmutableStack<T>() => [];
 
     /// <summary>
     /// Creates an empty queue.
     /// </summary>
     /// <typeparam name="T">The underlying type of the queue.</typeparam>
     /// <returns>Returns an empty queue.</returns>
-    public static Queue<T> EmptyQueue<T>()
-    {
-        return [];
-    }
+    public static Queue<T> EmptyQueue<T>() => [];
 
     /// <summary>
     /// Creates an empty immutable queue.
     /// </summary>
     /// <typeparam name="T">The underlying type of the immutable queue.</typeparam>
     /// <returns>Returns an empty immutable queue.</returns>
-    public static ImmutableQueue<T> EmptyImmutableQueue<T>()
-    {
-        return ImmutableQueue<T>.Empty;
-    }
+    public static ImmutableQueue<T> EmptyImmutableQueue<T>() => [];
 }

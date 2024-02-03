@@ -71,7 +71,7 @@ public readonly partial struct BigDecimal
     /// <param name="format">The format specifier from which to obtain the desired scale.</param>
     /// <param name="numberFormat">The number format of the target culture that determines default scales for specific formats.</param>
     /// <param name="result">The <see cref="NumberInfo"/> value with a correctly applied scale.</param>
-    /// <returns>Returns <see langword="true"/> if the scale is applied correctly; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the scale is applied correctly; otherwise, <see langword="false"/>.</returns>
     private bool TryGetScaledNumberInfo(ReadOnlySpan<char> format, NumberFormatInfo numberFormat, out NumberInfo result)
     {
         const MidpointRounding mode = MidpointRounding.AwayFromZero;

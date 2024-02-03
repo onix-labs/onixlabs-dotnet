@@ -59,7 +59,7 @@ public readonly partial struct Base64
     /// On return, contains the result of parsing the specified value,
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
-    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(string? value, IFormatProvider? provider, out Base64 result)
     {
         return TryParse(value.AsSpan(), provider, out result);
@@ -77,7 +77,7 @@ public readonly partial struct Base64
     /// On return, contains the result of parsing the specified value,
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
-    /// <returns>Returns true if the specified value was parsed successfully; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out Base64 result)
     {
         try

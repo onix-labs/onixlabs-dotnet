@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,140 +20,85 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base32
 {
     /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="byte"/> array.
+    /// Creates a new <see cref="Base32"/> value from the specified <see cref="T:byte[]"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
+    /// <param name="value">The <see cref="T:byte[]"/> value from which to create a new <see cref="Base32"/> value.</param>
+    /// <returns>Returns a new <see cref="Base32"/> value from the specified <see cref="T:byte[]"/> value.</returns>
     public static Base32 Create(byte[] value)
     {
-        return Create(value, Base32Alphabet.Default);
+        return new Base32(value);
     }
 
     /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="byte"/> array.
+    /// Creates a new <see cref="Base32"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(byte[] value, Base32Alphabet alphabet)
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="Base32"/> value.</param>
+    /// <returns>Returns a new <see cref="Base32"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    public static Base32 Create(ReadOnlySpan<byte> value)
     {
-        return Create(value, alphabet, DefaultPadding);
+        return Create(value.ToArray());
     }
 
     /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="byte"/> array.
+    /// Creates a new <see cref="Base32"/> value from the specified <see cref="string"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(byte[] value, bool padding)
+    /// <param name="value">The <see cref="string"/> value from which to create a new <see cref="Base32"/> value.</param>
+    /// <returns>Returns a new <see cref="Base32"/> value from the specified <see cref="string"/> value.</returns>
+    public static Base32 Create(string value)
     {
-        return Create(value, Base32Alphabet.Default, padding);
+        return Create(value.ToCharArray(), Encoding.Default);
     }
 
     /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="byte"/> array.
+    /// Creates a new <see cref="Base32"/> value from the specified <see cref="string"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(byte[] value, Base32Alphabet alphabet, bool padding)
+    /// <param name="value">The <see cref="string"/> value from which to create a new <see cref="Base32"/> value.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="string"/> value.</param>
+    /// <returns>Returns a new <see cref="Base32"/> value from the specified <see cref="string"/> value.</returns>
+    public static Base32 Create(string value, Encoding encoding)
     {
-        return new Base32(value, alphabet, padding);
+        return Create(value.ToCharArray(), encoding);
     }
 
     /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
+    /// Creates a new <see cref="Base32"/> value from the specified <see cref="T:char[]"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
+    /// <param name="value">The <see cref="T:char[]"/> value from which to create a new <see cref="Base32"/> value.</param>
+    /// <returns>Returns a new <see cref="Base32"/> value from the specified <see cref="T:char[]"/> value.</returns>
+    public static Base32 Create(char[] value)
+    {
+        return Create(value, Encoding.Default);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Base32"/> value from the specified <see cref="T:char[]"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="T:char[]"/> value from which to create a new <see cref="Base32"/> value.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="T:char[]"/> value.</param>
+    /// <returns>Returns a new <see cref="Base32"/> value from the specified <see cref="T:char[]"/> value.</returns>
+    public static Base32 Create(char[] value, Encoding encoding)
+    {
+        return Create(encoding.GetBytes(value));
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Base32"/> value from the specified <see cref="ReadOnlySpan{T}"/> value, using the default <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="Base32"/> value.</param>
+    /// <returns>Returns a new <see cref="Base32"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static Base32 Create(ReadOnlySpan<char> value)
     {
-        return Create(value, Encoding.Default, Base32Alphabet.Default, DefaultPadding);
+        return Create(value.ToArray(), Encoding.Default);
     }
 
     /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
+    /// Creates a new <see cref="Base32"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="Base32"/> value.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="ReadOnlySpan{T}"/> value.</param>
+    /// <returns>Returns a new <see cref="Base32"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static Base32 Create(ReadOnlySpan<char> value, Encoding encoding)
     {
-        return Create(value, encoding, Base32Alphabet.Default, DefaultPadding);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
-    /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(ReadOnlySpan<char> value, bool padding)
-    {
-        return Create(value, Encoding.Default, Base32Alphabet.Default, padding);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
-    /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
-    /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(ReadOnlySpan<char> value, Encoding encoding, bool padding)
-    {
-        return Create(value, encoding, Base32Alphabet.Default, padding);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
-    /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(ReadOnlySpan<char> value, Base32Alphabet alphabet)
-    {
-        return Create(value, Encoding.Default, alphabet);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
-    /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(ReadOnlySpan<char> value, Encoding encoding, Base32Alphabet alphabet)
-    {
-        return Create(value, encoding, alphabet, DefaultPadding);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
-    /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(ReadOnlySpan<char> value, Base32Alphabet alphabet, bool padding)
-    {
-        return Create(value, Encoding.Default, alphabet, padding);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="Base32"/> instance from the specified <see cref="ReadOnlySpan{Char}"/>.
-    /// </summary>
-    /// <param name="value">The underlying value.</param>
-    /// <param name="encoding">The encoding to use to obtain the underlying value.</param>
-    /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Create(ReadOnlySpan<char> value, Encoding encoding, Base32Alphabet alphabet, bool padding)
-    {
-        // TODO : Check if future versions support GetBytes with ReadOnlySpan<char> overload.
-        byte[] bytes = encoding.GetBytes(value.ToArray());
-        return Create(bytes, alphabet, padding);
+        return Create(value.ToArray(), encoding);
     }
 }

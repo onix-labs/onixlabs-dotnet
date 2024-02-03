@@ -16,7 +16,7 @@ using System;
 
 namespace OnixLabs.Numerics;
 
-public readonly partial struct NumberInfo : IEquatable<NumberInfo>
+public readonly partial struct NumberInfo
 {
     /// <summary>
     /// Compares two instances of <see cref="NumberInfo"/> to determine whether their values are equal.
@@ -24,7 +24,7 @@ public readonly partial struct NumberInfo : IEquatable<NumberInfo>
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool Equals(NumberInfo left, NumberInfo right)
     {
         return Equals(left, right, NumberInfoEqualityComparer.Strict);
@@ -36,7 +36,7 @@ public readonly partial struct NumberInfo : IEquatable<NumberInfo>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
-    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool Equals(NumberInfo left, NumberInfo right, NumberInfoEqualityComparer comparer)
     {
         return comparer.Equals(left, right);
@@ -47,7 +47,7 @@ public readonly partial struct NumberInfo : IEquatable<NumberInfo>
     /// This method implements the <see cref="NumberInfoEqualityComparer.Strict"/> comparer.
     /// </summary>
     /// <param name="other">The other instance of <see cref="NumberInfo"/> to compare with the current instance.</param>
-    /// <returns>Returns true if the current instance is equal to the specified other instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(NumberInfo other)
     {
         return Equals(this, other);
@@ -58,7 +58,7 @@ public readonly partial struct NumberInfo : IEquatable<NumberInfo>
     /// </summary>
     /// <param name="other">The other instance of <see cref="NumberInfo"/> to compare with the current instance.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
-    /// <returns>Returns true if the current instance is equal to the specified other instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(NumberInfo other, NumberInfoEqualityComparer comparer)
     {
         return Equals(this, other, comparer);
@@ -69,7 +69,7 @@ public readonly partial struct NumberInfo : IEquatable<NumberInfo>
     /// This method implements the <see cref="NumberInfoEqualityComparer.Strict"/> comparer.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
-    /// <returns>Returns true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object? obj)
     {
         return obj is NumberInfo other && Equals(other);
@@ -80,7 +80,7 @@ public readonly partial struct NumberInfo : IEquatable<NumberInfo>
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
-    /// <returns>Returns true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(object? obj, NumberInfoEqualityComparer comparer)
     {
         return obj is NumberInfo other && Equals(other, comparer);
@@ -102,7 +102,7 @@ public readonly partial struct NumberInfo : IEquatable<NumberInfo>
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(NumberInfo left, NumberInfo right)
     {
         return Equals(left, right, NumberInfoEqualityComparer.Semantic);
@@ -114,7 +114,7 @@ public readonly partial struct NumberInfo : IEquatable<NumberInfo>
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns true if the two specified instances are not equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the two specified instances are not equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(NumberInfo left, NumberInfo right)
     {
         return Equals(left, right, NumberInfoEqualityComparer.Semantic);

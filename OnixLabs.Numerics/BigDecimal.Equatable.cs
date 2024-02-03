@@ -24,7 +24,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool Equals(BigDecimal left, BigDecimal right)
     {
         return Equals(left, right, BigDecimalEqualityComparer.Strict);
@@ -36,7 +36,7 @@ public readonly partial struct BigDecimal
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
-    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool Equals(BigDecimal left, BigDecimal right, BigDecimalEqualityComparer comparer)
     {
         return comparer.Equals(left, right);
@@ -47,7 +47,7 @@ public readonly partial struct BigDecimal
     /// This method implements the <see cref="BigDecimalEqualityComparer.Strict"/> comparer.
     /// </summary>
     /// <param name="other">The other instance of <see cref="BigDecimal"/> to compare with the current instance.</param>
-    /// <returns>Returns true if the current instance is equal to the specified other instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(BigDecimal other)
     {
         return Equals(this, other);
@@ -58,7 +58,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="other">The other instance of <see cref="BigDecimal"/> to compare with the current instance.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
-    /// <returns>Returns true if the current instance is equal to the specified other instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(BigDecimal other, BigDecimalEqualityComparer comparer)
     {
         return Equals(this, other, comparer);
@@ -69,7 +69,7 @@ public readonly partial struct BigDecimal
     /// This method implements the <see cref="BigDecimalEqualityComparer.Strict"/> comparer.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
-    /// <returns>Returns true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object? obj)
     {
         return obj is BigDecimal other && Equals(other);
@@ -80,7 +80,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
-    /// <returns>Returns true if the object is equal to this instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(object? obj, BigDecimalEqualityComparer comparer)
     {
         return obj is BigDecimal other && Equals(other, comparer);
@@ -102,7 +102,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns true if the two specified instances are equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(BigDecimal left, BigDecimal right)
     {
         return Equals(left, right, BigDecimalEqualityComparer.Semantic);
@@ -114,7 +114,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns true if the two specified instances are not equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the two specified instances are not equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(BigDecimal left, BigDecimal right)
     {
         return Equals(left, right, BigDecimalEqualityComparer.Semantic);

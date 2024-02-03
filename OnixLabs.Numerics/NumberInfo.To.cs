@@ -17,7 +17,7 @@ using System.Globalization;
 
 namespace OnixLabs.Numerics;
 
-public readonly partial struct NumberInfo : IFormattable
+public readonly partial struct NumberInfo
 {
     /// <summary>
     /// Formats the value of the current instance using the default format.

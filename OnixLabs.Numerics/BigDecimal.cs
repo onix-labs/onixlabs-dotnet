@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Numerics;
 
 namespace OnixLabs.Numerics;
@@ -19,7 +20,7 @@ namespace OnixLabs.Numerics;
 /// <summary>
 /// Represents an arbitrarily large signed decimal.
 /// </summary>
-public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>
+public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IConvertible
 {
     /// <summary>
     /// The underlying <see cref="NumberInfo"/> that represents the current <see cref="BigDecimal"/> value.

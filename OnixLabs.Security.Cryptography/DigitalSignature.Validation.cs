@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@ public readonly partial struct DigitalSignature
     /// </summary>
     /// <param name="unsignedData">The unsigned data to validate.</param>
     /// <param name="key">The public key to validate.</param>
-    /// <returns>Returns true if this <see cref="DigitalSignature"/> is valid; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if this <see cref="DigitalSignature"/> is valid; otherwise, <see langword="false"/>.</returns>
     public bool IsDataValid(byte[] unsignedData, PublicKey key)
     {
         return key.IsDataValid(this, unsignedData);
@@ -34,7 +34,7 @@ public readonly partial struct DigitalSignature
     /// </summary>
     /// <param name="unsignedHash">The unsigned data to validate.</param>
     /// <param name="key">The public key to validate.</param>
-    /// <returns>Returns true if this <see cref="DigitalSignature"/> is valid; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if this <see cref="DigitalSignature"/> is valid; otherwise, <see langword="false"/>.</returns>
     public bool IsHashValid(byte[] unsignedHash, PublicKey key)
     {
         return key.IsHashValid(this, unsignedHash);
@@ -45,7 +45,7 @@ public readonly partial struct DigitalSignature
     /// </summary>
     /// <param name="unsignedHash">The unsigned data to validate.</param>
     /// <param name="key">The public key to validate.</param>
-    /// <returns>Returns true if this <see cref="DigitalSignature"/> is valid; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if this <see cref="DigitalSignature"/> is valid; otherwise, <see langword="false"/>.</returns>
     public bool IsHashValid(Hash unsignedHash, PublicKey key)
     {
         byte[] unsignedHashBytes = unsignedHash.ToByteArray();

@@ -28,102 +28,102 @@ public interface IBaseRepresentation<TSelf> :
     where TSelf : struct, IBaseRepresentation<TSelf>
 {
     /// <summary>
-    /// Gets an empty <see cref="TSelf"/> value.
+    /// Gets an empty <see cref="T:TSelf"/> value.
     /// </summary>
     public static abstract TSelf Empty { get; }
 
     /// <summary>
-    /// Creates a new <see cref="TSelf"/> value from the specified <see cref="T:byte[]"/> value.
+    /// Creates a new <see cref="T:TSelf"/> value from the specified <see cref="T:byte[]"/> value.
     /// </summary>
-    /// <param name="value">The <see cref="T:byte[]"/> value from which to create a new <see cref="TSelf"/> value.</param>
-    /// <returns>Returns a new <see cref="TSelf"/> value from the specified <see cref="T:byte[]"/> value.</returns>
+    /// <param name="value">The <see cref="T:byte[]"/> value from which to create a new <see cref="T:TSelf"/> value.</param>
+    /// <returns>Returns a new <see cref="T:TSelf"/> value from the specified <see cref="T:byte[]"/> value.</returns>
     public static abstract TSelf Create(byte[] value);
 
     /// <summary>
-    /// Creates a new <see cref="TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.
+    /// Creates a new <see cref="T:TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="TSelf"/> value.</param>
-    /// <returns>Returns a new <see cref="TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="T:TSelf"/> value.</param>
+    /// <returns>Returns a new <see cref="T:TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static abstract TSelf Create(ReadOnlySpan<byte> value);
 
     /// <summary>
-    /// Creates a new <see cref="TSelf"/> value from the specified <see cref="string"/> value, using the default <see cref="Encoding"/>.
+    /// Creates a new <see cref="T:TSelf"/> value from the specified <see cref="string"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <param name="value">The <see cref="string"/> value from which to create a new <see cref="TSelf"/> value.</param>
-    /// <returns>Returns a new <see cref="TSelf"/> value from the specified <see cref="string"/> value.</returns>
+    /// <param name="value">The <see cref="string"/> value from which to create a new <see cref="T:TSelf"/> value.</param>
+    /// <returns>Returns a new <see cref="T:TSelf"/> value from the specified <see cref="string"/> value.</returns>
     public static abstract TSelf Create(string value);
 
     /// <summary>
-    /// Creates a new <see cref="TSelf"/> value from the specified <see cref="string"/> value.
+    /// Creates a new <see cref="T:TSelf"/> value from the specified <see cref="string"/> value.
     /// </summary>
-    /// <param name="value">The <see cref="string"/> value from which to create a new <see cref="TSelf"/> value.</param>
+    /// <param name="value">The <see cref="string"/> value from which to create a new <see cref="T:TSelf"/> value.</param>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="string"/> value.</param>
-    /// <returns>Returns a new <see cref="TSelf"/> value from the specified <see cref="string"/> value.</returns>
+    /// <returns>Returns a new <see cref="T:TSelf"/> value from the specified <see cref="string"/> value.</returns>
     public static abstract TSelf Create(string value, Encoding encoding);
 
     /// <summary>
-    /// Creates a new <see cref="TSelf"/> value from the specified <see cref="T:char[]"/> value, using the default <see cref="Encoding"/>.
+    /// Creates a new <see cref="T:TSelf"/> value from the specified <see cref="T:char[]"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <param name="value">The <see cref="T:char[]"/> value from which to create a new <see cref="TSelf"/> value.</param>
-    /// <returns>Returns a new <see cref="TSelf"/> value from the specified <see cref="T:char[]"/> value.</returns>
+    /// <param name="value">The <see cref="T:char[]"/> value from which to create a new <see cref="T:TSelf"/> value.</param>
+    /// <returns>Returns a new <see cref="T:TSelf"/> value from the specified <see cref="T:char[]"/> value.</returns>
     public static abstract TSelf Create(char[] value);
 
     /// <summary>
-    /// Creates a new <see cref="TSelf"/> value from the specified <see cref="T:char[]"/> value.
+    /// Creates a new <see cref="T:TSelf"/> value from the specified <see cref="T:char[]"/> value.
     /// </summary>
-    /// <param name="value">The <see cref="T:char[]"/> value from which to create a new <see cref="TSelf"/> value.</param>
+    /// <param name="value">The <see cref="T:char[]"/> value from which to create a new <see cref="T:TSelf"/> value.</param>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="T:char[]"/> value.</param>
-    /// <returns>Returns a new <see cref="TSelf"/> value from the specified <see cref="T:char[]"/> value.</returns>
+    /// <returns>Returns a new <see cref="T:TSelf"/> value from the specified <see cref="T:char[]"/> value.</returns>
     public static abstract TSelf Create(char[] value, Encoding encoding);
 
     /// <summary>
-    /// Creates a new <see cref="TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value, using the default <see cref="Encoding"/>.
+    /// Creates a new <see cref="T:TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="TSelf"/> value.</param>
-    /// <returns>Returns a new <see cref="TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="T:TSelf"/> value.</param>
+    /// <returns>Returns a new <see cref="T:TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static abstract TSelf Create(ReadOnlySpan<char> value);
 
     /// <summary>
-    /// Creates a new <see cref="TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.
+    /// Creates a new <see cref="T:TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="TSelf"/> value.</param>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="T:TSelf"/> value.</param>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="ReadOnlySpan{T}"/> value.</param>
-    /// <returns>Returns a new <see cref="TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    /// <returns>Returns a new <see cref="T:TSelf"/> value from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static abstract TSelf Create(ReadOnlySpan<char> value, Encoding encoding);
 
     /// <summary>
-    /// Performs an equality check between two <see cref="TSelf"/> instances.
+    /// Performs an equality check between two <see cref="T:TSelf"/> instances.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="TSelf"/> instance to compare.</param>
-    /// <param name="right">The right-hand <see cref="TSelf"/> instance to compare.</param>
+    /// <param name="left">The left-hand <see cref="T:TSelf"/> instance to compare.</param>
+    /// <param name="right">The right-hand <see cref="T:TSelf"/> instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the instances are equal; otherwise, <see langword="false"/>.</returns>
     public static abstract bool operator ==(TSelf left, TSelf right);
 
     /// <summary>
-    /// Performs an inequality check between two <see cref="TSelf"/> instances.
+    /// Performs an inequality check between two <see cref="T:TSelf"/> instances.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="TSelf"/> instance to compare.</param>
-    /// <param name="right">The right-hand <see cref="TSelf"/> instance to compare.</param>
+    /// <param name="left">The left-hand <see cref="T:TSelf"/> instance to compare.</param>
+    /// <param name="right">The right-hand <see cref="T:TSelf"/> instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the instances are not equal; otherwise, <see langword="false"/>.</returns>
     public static abstract bool operator !=(TSelf left, TSelf right);
 
     /// <summary>
-    /// Gets the underlying <see cref="T:byte[]"/> represented by the current <see cref="TSelf"/> value.
+    /// Gets the underlying <see cref="T:byte[]"/> represented by the current <see cref="T:TSelf"/> value.
     /// </summary>
-    /// <returns>Returns the underlying <see cref="T:byte[]"/> represented by the current <see cref="TSelf"/> value.</returns>
+    /// <returns>Returns the underlying <see cref="T:byte[]"/> represented by the current <see cref="T:TSelf"/> value.</returns>
     public byte[] ToByteArray();
 
     /// <summary>
-    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="TSelf"/> value, using the default <see cref="Encoding"/>.
+    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="T:TSelf"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="TSelf"/> value, using the default <see cref="Encoding"/>.</returns>
+    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="T:TSelf"/> value, using the default <see cref="Encoding"/>.</returns>
     public string ToPlainTextString();
 
     /// <summary>
-    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="TSelf"/> value.
+    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="T:TSelf"/> value.
     /// </summary>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="string"/> from the current <see cref="TSelf"/> value.</param>
-    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="TSelf"/> value.</returns>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="string"/> from the current <see cref="T:TSelf"/> value.</param>
+    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="T:TSelf"/> value.</returns>
     public string ToPlainTextString(Encoding encoding);
 
     /// <summary>

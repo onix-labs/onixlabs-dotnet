@@ -190,7 +190,7 @@ internal static class Ieee754Converter
     /// <param name="value">The value to check.</param>
     /// <param name="result">The <see cref="NumberInfo"/> result if the number is zero or one.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IBinaryFloatingPointIeee754{TSelf}"/> value.</typeparam>
-    /// <returns>Returns true if the specified IEEE 754 binary floating-point number is zero or one; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified IEEE 754 binary floating-point number is zero or one; otherwise, <see langword="false"/>.</returns>
     private static bool IsZeroOrOne<T>(T value, out NumberInfo result) where T : IBinaryFloatingPointIeee754<T>
     {
         if (value == T.Zero || value == T.NegativeZero)

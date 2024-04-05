@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,11 +13,15 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace OnixLabs.Core.Text;
 
-public readonly partial struct Base32
+/// <summary>
+/// Represents a Base-32 encoder/decoder.
+/// </summary>
+internal static class Base32Codec
 {
     /// <summary>
     /// The Base-32 input data size.
@@ -36,21 +40,18 @@ public readonly partial struct Base32
     /// <param name="alphabet">The Base-32 alphabet to use for encoding.</param>
     /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
     /// <returns>Returns a Base-32 encoded string.</returns>
-    private static string Encode(byte[] value, string alphabet, bool padding)
+    public static string Encode(IReadOnlyList<byte> value, string alphabet, bool padding)
     {
-        if (value.Length == 0)
-        {
-            return string.Empty;
-        }
+        if (value.Count == 0) return string.Empty;
 
-        StringBuilder builder = new(value.Length * InputSize / OutputSize);
+        StringBuilder builder = new(value.Count * InputSize / OutputSize);
 
         int inputPosition = 0;
         int inputSubPosition = 0;
         byte outputPosition = 0;
         int outputSubPosition = 0;
 
-        while (inputPosition < value.Length)
+        while (inputPosition < value.Count)
         {
             int availableBits = Math.Min(InputSize - inputSubPosition, OutputSize - outputSubPosition);
 
@@ -79,42 +80,32 @@ public readonly partial struct Base32
         outputPosition &= 0x1F;
         builder.Append(alphabet[outputPosition]);
 
-        while (padding && builder.Length % InputSize != 0)
-        {
-            builder.Append('=');
-        }
+        while (padding && builder.Length % InputSize != 0) builder.Append('=');
 
         return builder.ToString();
     }
 
     /// <summary>
-    /// Decodes a Base-32 <see cref="ReadOnlySpan{T}"/> into a byte array. 
+    /// Decodes a Base-32 <see cref="ReadOnlySpan{T}"/> into a byte array.
     /// </summary>
     /// <param name="value">The value to decode.</param>
     /// <param name="alphabet">The Base-32 alphabet to use for decoding.</param>
     /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
     /// <returns>Returns a byte array.</returns>
     /// <exception cref="FormatException">If the Base-32 string format is invalid.</exception>
-    private static byte[] Decode(ReadOnlySpan<char> value, string alphabet, bool padding)
+    public static byte[] Decode(ReadOnlySpan<char> value, string alphabet, bool padding)
     {
-        if (value == string.Empty)
-        {
-            return Array.Empty<byte>();
-        }
+        if (value == string.Empty) return [];
 
         if (padding && value.Length % InputSize != 0)
-        {
             throw new FormatException("Base32 string is invalid. Insufficient padding has been applied.");
-        }
 
         ReadOnlySpan<char> valueWithoutPadding = padding ? value.TrimEnd('=') : value;
 
         byte[] outputBytes = new byte[valueWithoutPadding.Length * OutputSize / InputSize];
 
         if (outputBytes.Length == 0)
-        {
             throw new FormatException("Base32 string is invalid. Not enough data to construct byte array.");
-        }
 
         int inputPosition = 0;
         int inputSubPosition = 0;
@@ -127,9 +118,7 @@ public readonly partial struct Base32
             int index = alphabet.IndexOf(character);
 
             if (index < 0)
-            {
                 throw new FormatException($"Invalid Base32 character '{character}' at position {inputPosition}");
-            }
 
             int availableBits = Math.Min(OutputSize - inputSubPosition, InputSize - outputSubPosition);
 

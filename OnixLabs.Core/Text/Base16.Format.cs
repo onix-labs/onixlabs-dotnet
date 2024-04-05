@@ -14,9 +14,9 @@
 
 using System;
 
-namespace OnixLabs.Numerics;
+namespace OnixLabs.Core.Text;
 
-public readonly partial struct BigDecimal
+public readonly partial struct Base16
 {
     /// <summary>
     /// Tries to format the value of the current instance into the provided span of characters.
@@ -28,16 +28,6 @@ public readonly partial struct BigDecimal
     /// <returns>Returns <see langword="true"/> if the formatting was successful; otherwise, <see langword="false"/>.</returns>
     bool ISpanFormattable.TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
     {
-        string formatted = ToString(format, provider);
-
-        if (formatted.Length > destination.Length)
-        {
-            charsWritten = 0;
-            return false;
-        }
-
-        formatted.AsSpan().CopyTo(destination);
-        charsWritten = formatted.Length;
-        return true;
+        return ToString(format, provider).TryCopyTo(destination, out charsWritten);
     }
 }

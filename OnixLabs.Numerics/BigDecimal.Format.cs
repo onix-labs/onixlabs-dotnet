@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Globalization;
 
 namespace OnixLabs.Numerics;
 
@@ -29,9 +28,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns <see langword="true"/> if the formatting was successful; otherwise, <see langword="false"/>.</returns>
     bool ISpanFormattable.TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
     {
-        // TODO : Check if info is needed here, or can just pass provider.
-        CultureInfo info = provider as CultureInfo ?? DefaultCulture;
-        string formatted = ToString(format, info);
+        string formatted = ToString(format, provider);
 
         if (formatted.Length > destination.Length)
         {

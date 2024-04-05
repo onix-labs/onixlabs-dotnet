@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -242,5 +242,29 @@ public static class IEnumerableExtensions
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable)
     {
         return enumerable.Where(element => element is not null)!;
+    }
+
+    /// <summary>
+    /// Formats the current <see cref="IEnumerable{T}"/> as a collection string.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to format.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns a <see cref="string"/> collection representation of the current <see cref="IEnumerable{T}"/>.</returns>
+    public static string ToCollectionString<T>(this IEnumerable<T> enumerable)
+    {
+        return string.Join(", ", enumerable).Wrap('[', ']');
+    }
+
+    /// <summary>
+    /// Formats each <see cref="IFormattable"/> element of the current current <see cref="IEnumerable{T}"/> as a collection string.
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to format.</param>
+    /// <param name="format">The format which will be applied to each element.</param>
+    /// <param name="formatProvider">The provider to use to format the value.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns a <see cref="string"/> collection representation of the current <see cref="IEnumerable{T}"/>.</returns>
+    public static string ToCollectionString<T>(this IEnumerable<T> enumerable, string format, IFormatProvider? formatProvider = null) where T : IFormattable
+    {
+        return enumerable.Select(element => element.ToString(format, formatProvider)).ToCollectionString();
     }
 }

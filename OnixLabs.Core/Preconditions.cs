@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Runtime.CompilerServices;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core;
@@ -24,7 +23,7 @@ namespace OnixLabs.Core;
 public static class Preconditions
 {
     /// <summary>
-    /// Performs a general pre-condition check, which fails if the condition returns false.
+    /// Performs a general pre-condition check, which fails if the condition returns <see langword="false"/>.
     /// </summary>
     /// <param name="condition">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the condition fails.</param>
@@ -48,7 +47,7 @@ public static class Preconditions
     }
 
     /// <summary>
-    /// Performs a general pre-condition requirement, which fails if the condition returns false.
+    /// Performs a general pre-condition requirement, which fails if the condition returns <see langword="false"/>.
     /// </summary>
     /// <param name="condition">The condition of the requirement.</param>
     /// <param name="message">The exception message to throw in the event that the condition fails.</param>

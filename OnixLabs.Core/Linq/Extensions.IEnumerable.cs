@@ -34,7 +34,7 @@ public static class IEnumerableExtensions
     /// <param name="selector">The selector function which will be used to select each property from each element.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
-    /// <returns>Returns true if all selected element properties are equal; otherwise false.</returns>
+    /// <returns>Returns <see langword="true"/> if all selected element properties are equal; otherwise <see langword="false"/>.</returns>
     public static bool AllEqualBy<T, TProperty>(this IEnumerable<T> enumerable, Func<T, TProperty> selector)
     {
         ISet<TProperty> elements = enumerable.Select(selector).ToHashSet();
@@ -48,7 +48,7 @@ public static class IEnumerableExtensions
     /// <param name="selector">The selector function which will be used to select each property from each element.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
-    /// <returns>Returns true if any selected element properties are equal; otherwise false.</returns>
+    /// <returns>Returns <see langword="true"/> if any selected element properties are equal; otherwise <see langword="false"/>.</returns>
     public static bool AnyEqualBy<T, TProperty>(this IEnumerable<T> enumerable, Func<T, TProperty> selector)
     {
         IList<TProperty> elements = enumerable.Select(selector).ToList();
@@ -97,7 +97,7 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">he underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns true if the <see cref="IEnumerable{T}"/> is empty; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> is empty; otherwise, <see langword="false"/>.</returns>
     public static bool IsEmpty<T>(this IEnumerable<T> enumerable)
     {
         return !enumerable.Any();
@@ -108,7 +108,7 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns true if the <see cref="IEnumerable{T}"/> is not empty; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> is not empty; otherwise, <see langword="false"/>.</returns>
     public static bool IsNotEmpty<T>(this IEnumerable<T> enumerable)
     {
         return !enumerable.IsEmpty();
@@ -119,7 +119,7 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns true if the <see cref="IEnumerable{T}"/> contains a single element; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains a single element; otherwise, <see langword="false"/>.</returns>
     public static bool IsSingle<T>(this IEnumerable<T> enumerable)
     {
         return enumerable.LongCount() == 1;
@@ -130,7 +130,7 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns true if the <see cref="IEnumerable{T}"/> contains an even number of elements; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an even number of elements; otherwise, <see langword="false"/>.</returns>
     public static bool IsCountEven<T>(this IEnumerable<T> enumerable)
     {
         return enumerable.LongCount() % 2 == 0;
@@ -141,7 +141,7 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns true if the <see cref="IEnumerable{T}"/> contains an odd number of elements; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an odd number of elements; otherwise, <see langword="false"/>.</returns>
     public static bool IsCountOdd<T>(this IEnumerable<T> enumerable)
     {
         return !enumerable.IsCountEven();
@@ -176,7 +176,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <param name="predicate">The function to test each element for a condition.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns true if none of the elements of the current <see cref="IEnumerable{T}"/> satisfy the specified predicate condition; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if none of the elements of the current <see cref="IEnumerable{T}"/> satisfy the specified predicate condition; otherwise, <see langword="false"/>.</returns>
     public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
     {
         return !enumerable.Any(predicate);

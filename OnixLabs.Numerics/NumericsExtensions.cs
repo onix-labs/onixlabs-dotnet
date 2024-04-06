@@ -74,7 +74,7 @@ public static class NumericsExtensions
     /// <param name="minimum">The inclusive minimum value.</param>
     /// <param name="maximum">The inclusive maximum value.</param>
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
-    /// <returns>Returns true if the current value is inclusively between the specified minimum and maximum values; otherwise false.</returns>
+    /// <returns>Returns <see langword="true"/> if the current value is inclusively between the specified minimum and maximum values; otherwise, <see langword="false"/>.</returns>
     public static bool IsBetween<T>(this T value, T minimum, T maximum) where T : INumber<T>
     {
         return value >= minimum && value <= maximum;

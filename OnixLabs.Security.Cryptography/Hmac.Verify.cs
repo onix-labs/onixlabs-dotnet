@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@ public readonly partial struct Hmac
     /// Determines whether the hashed message authentication code (HMAC) was created with the specified key.
     /// </summary>
     /// <param name="key">The key to validate against this <see cref="Hmac"/>.</param>
-    /// <returns>Returns true if this <see cref="Hmac"/> was created with the specified key; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if this <see cref="Hmac"/> was created with the specified key; otherwise, <see langword="false"/>.</returns>
     public bool IsValid(string key)
     {
         return IsValid(key, Encoding.Default);
@@ -34,7 +34,7 @@ public readonly partial struct Hmac
     /// </summary>
     /// <param name="key">The key to validate against this <see cref="Hmac"/>.</param>
     /// <param name="encoding">The encoding which will be used to convert the key into a byte array.</param>
-    /// <returns>Returns true if this <see cref="Hmac"/> was created with the specified key; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if this <see cref="Hmac"/> was created with the specified key; otherwise, <see langword="false"/>.</returns>
     public bool IsValid(string key, Encoding encoding)
     {
         byte[] keyBytes = encoding.GetBytes(key);
@@ -45,7 +45,7 @@ public readonly partial struct Hmac
     /// Determines whether the hashed message authentication code (HMAC) was created with the specified key.
     /// </summary>
     /// <param name="key">The key to validate against this <see cref="Hmac"/>.</param>
-    /// <returns>Returns true if this <see cref="Hmac"/> was created with the specified key; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if this <see cref="Hmac"/> was created with the specified key; otherwise, <see langword="false"/>.</returns>
     public bool IsValid(byte[] key)
     {
         return this == ComputeHmac(Data, key, Hash.AlgorithmType);

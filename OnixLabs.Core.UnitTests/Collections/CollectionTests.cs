@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,187 +45,170 @@ public sealed class CollectionTests
     public void CollectionsEmptyEnumerableShouldProduceTheExpectedResult()
     {
         // Given
-        IEnumerable<object> expected = Enumerable.Empty<object>();
-        IEnumerable<object> actual = EmptyEnumerable<object>();
+        IEnumerable<object> candidate = EmptyEnumerable<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyArray should produce the expected result")]
     public void CollectionsEmptyArrayShouldProduceTheExpectedResult()
     {
         // Given
-        object[] expected = Array.Empty<object>();
-        object[] actual = EmptyArray<object>();
+        object[] candidate = EmptyArray<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyImmutableArray should produce the expected result")]
     public void CollectionsEmptyImmutableArrayShouldProduceTheExpectedResult()
     {
         // Given
-        ImmutableArray<object> expected = ImmutableArray.Create<object>();
-        ImmutableArray<object> actual = EmptyImmutableArray<object>();
+        ImmutableArray<object> candidate = EmptyImmutableArray<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyList should produce the expected result")]
     public void CollectionsEmptyListShouldProduceTheExpectedResult()
     {
         // Given
-        List<object> expected = new();
-        List<object> actual = EmptyList<object>();
+        List<object> candidate = EmptyList<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyImmutableList should produce the expected result")]
     public void CollectionsEmptyImmutableListShouldProduceTheExpectedResult()
     {
         // Given
-        ImmutableList<object> expected = ImmutableList.Create<object>();
-        ImmutableList<object> actual = EmptyImmutableList<object>();
+        ImmutableList<object> candidate = EmptyImmutableList<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyDictionary should produce the expected result")]
     public void CollectionsEmptyDictionaryShouldProduceTheExpectedResult()
     {
         // Given
-        Dictionary<object, object> expected = new();
-        Dictionary<object, object> actual = EmptyDictionary<object, object>();
+        Dictionary<object, object> candidate = EmptyDictionary<object, object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyImmutableDictionary should produce the expected result")]
     public void CollectionsEmptyImmutableDictionaryShouldProduceTheExpectedResult()
     {
         // Given
-        ImmutableDictionary<object, object> expected = ImmutableDictionary.Create<object, object>();
-        ImmutableDictionary<object, object> actual = EmptyImmutableDictionary<object, object>();
+        ImmutableDictionary<object, object> candidate = EmptyImmutableDictionary<object, object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptySortedDictionary should produce the expected result")]
     public void CollectionsEmptySortedDictionaryShouldProduceTheExpectedResult()
     {
         // Given
-        SortedDictionary<object, object> expected = new();
-        SortedDictionary<object, object> actual = EmptySortedDictionary<object, object>();
+        SortedDictionary<object, object> candidate = EmptySortedDictionary<object, object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyImmutableSortedDictionary should produce the expected result")]
     public void CollectionsEmptyImmutableSortedDictionaryShouldProduceTheExpectedResult()
     {
         // Given
-        ImmutableSortedDictionary<object, object> expected = ImmutableSortedDictionary.Create<object, object>();
-        ImmutableSortedDictionary<object, object> actual = EmptyImmutableSortedDictionary<object, object>();
+        ImmutableSortedDictionary<object, object> candidate = EmptyImmutableSortedDictionary<object, object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyHashSet should produce the expected result")]
     public void CollectionsEmptyHashSetShouldProduceTheExpectedResult()
     {
         // Given
-        HashSet<object> expected = new();
-        HashSet<object> actual = EmptyHashSet<object>();
+        HashSet<object> candidate = EmptyHashSet<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyImmutableHashSet should produce the expected result")]
     public void CollectionsEmptyImmutableHashSetShouldProduceTheExpectedResult()
     {
         // Given
-        ImmutableHashSet<object> expected = ImmutableHashSet.Create<object>();
-        ImmutableHashSet<object> actual = EmptyImmutableHashSet<object>();
+        ImmutableHashSet<object> candidate = EmptyImmutableHashSet<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptySortedSet should produce the expected result")]
     public void CollectionsEmptySortedSetShouldProduceTheExpectedResult()
     {
         // Given
-        SortedSet<object> expected = new();
-        SortedSet<object> actual = EmptySortedSet<object>();
+        SortedSet<object> candidate = EmptySortedSet<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyImmutableSortedSet should produce the expected result")]
     public void CollectionsEmptyImmutableSortedSetShouldProduceTheExpectedResult()
     {
         // Given
-        ImmutableSortedSet<object> expected = ImmutableSortedSet.Create<object>();
-        ImmutableSortedSet<object> actual = EmptyImmutableSortedSet<object>();
+        ImmutableSortedSet<object> candidate = EmptyImmutableSortedSet<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyStack should produce the expected result")]
     public void CollectionsEmptyStackShouldProduceTheExpectedResult()
     {
         // Given
-        Stack<object> expected = new();
-        Stack<object> actual = EmptyStack<object>();
+        Stack<object> candidate = EmptyStack<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyImmutableStack should produce the expected result")]
     public void CollectionsEmptyImmutableStackShouldProduceTheExpectedResult()
     {
         // Given
-        ImmutableStack<object> expected = ImmutableStack.Create<object>();
-        ImmutableStack<object> actual = EmptyImmutableStack<object>();
+        ImmutableStack<object> candidate = EmptyImmutableStack<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyQueue should produce the expected result")]
     public void CollectionsEmptyQueueShouldProduceTheExpectedResult()
     {
         // Given
-        Queue<object> expected = new();
-        Queue<object> actual = EmptyQueue<object>();
+        Queue<object> candidate = EmptyQueue<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EmptyImmutableQueue should produce the expected result")]
     public void CollectionsEmptyImmutableQueueShouldProduceTheExpectedResult()
     {
         // Given
-        ImmutableQueue<object> expected = ImmutableQueue.Create<object>();
-        ImmutableQueue<object> actual = EmptyImmutableQueue<object>();
+        ImmutableQueue<object> candidate = EmptyImmutableQueue<object>();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Empty(candidate);
     }
 
     [Fact(DisplayName = "Collections.EnumerableOf should return the expected result")]

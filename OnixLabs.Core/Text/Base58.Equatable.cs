@@ -25,7 +25,7 @@ public readonly partial struct Base58
     /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
-    /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
     public bool Equals(Base58 other)
     {
         return value.SequenceEqual(other.value);
@@ -35,7 +35,7 @@ public readonly partial struct Base58
     /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
-    /// <returns>Returns true if the object is equal to the current instance; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object? obj)
     {
         return obj is Base58 other && Equals(other);
@@ -55,7 +55,7 @@ public readonly partial struct Base58
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns true if the instances are equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(Base58 left, Base58 right)
     {
         return Equals(left, right);
@@ -66,7 +66,7 @@ public readonly partial struct Base58
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns true if the instances are not equal; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the instances are not equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Base58 left, Base58 right)
     {
         return !Equals(left, right);

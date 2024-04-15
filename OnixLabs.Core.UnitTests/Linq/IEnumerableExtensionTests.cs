@@ -372,8 +372,8 @@ public sealed class IEnumerableExtensionTests
     public void SumShouldProduceExpectedResult()
     {
         // Given
-        IEnumerable<decimal> elements = ListOf(12.34m, 34.56m, 56.78m);
-        decimal expected = 103.68m;
+        IEnumerable<decimal> elements = [12.34m, 34.56m, 56.78m];
+        const decimal expected = 103.68m;
 
         // When
         decimal actual = elements.Sum();
@@ -389,8 +389,8 @@ public sealed class IEnumerableExtensionTests
         Numeric<decimal> element1 = new(1234.567m);
         Numeric<decimal> element2 = new(890.1234m);
         Numeric<decimal> element3 = new(56.78901m);
-        IEnumerable<Numeric<decimal>> elements = ListOf(element1, element2, element3);
-        decimal expected = 2181.47941m;
+        IEnumerable<Numeric<decimal>> elements = [element1, element2, element3];
+        const decimal expected = 2181.47941m;
 
         // When
         decimal actual = elements.SumBy(element => element.Value);

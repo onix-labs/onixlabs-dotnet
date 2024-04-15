@@ -16,6 +16,5 @@
     </ItemGroup>
     <ItemGroup>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
-        <Using Include="OnixLabs.Core.Collections.Collection" Static="True"/>
     </ItemGroup>
 </Project>

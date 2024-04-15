@@ -62,11 +62,8 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <param name="predicate">The function to test each element for a condition.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns a number that represents how many elements in the the current <see cref="IEnumerable{T}"/> do not satisfy the specified predicate condition.</returns>
-    public static int CountNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
-    {
-        return enumerable.Count(element => !predicate(element));
-    }
+    /// <returns>Returns a number that represents how many elements in the current <see cref="IEnumerable{T}"/> do not satisfy the specified predicate condition.</returns>
+    public static int CountNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) => enumerable.Count(element => !predicate(element));
 
     /// <summary>
     /// Performs the specified <see cref="Action{T}"/> for each element of the current <see cref="IEnumerable{T}"/>.
@@ -98,10 +95,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">he underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> is empty; otherwise, <see langword="false"/>.</returns>
-    public static bool IsEmpty<T>(this IEnumerable<T> enumerable)
-    {
-        return !enumerable.Any();
-    }
+    public static bool IsEmpty<T>(this IEnumerable<T> enumerable) => !enumerable.Any();
 
     /// <summary>
     /// Determines whether the current <see cref="IEnumerable{T}"/> is not empty.
@@ -109,10 +103,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> is not empty; otherwise, <see langword="false"/>.</returns>
-    public static bool IsNotEmpty<T>(this IEnumerable<T> enumerable)
-    {
-        return !enumerable.IsEmpty();
-    }
+    public static bool IsNotEmpty<T>(this IEnumerable<T> enumerable) => !enumerable.IsEmpty();
 
     /// <summary>
     /// Determines whether the current <see cref="IEnumerable{T}"/> contains a single element.
@@ -120,10 +111,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains a single element; otherwise, <see langword="false"/>.</returns>
-    public static bool IsSingle<T>(this IEnumerable<T> enumerable)
-    {
-        return enumerable.LongCount() == 1;
-    }
+    public static bool IsSingle<T>(this IEnumerable<T> enumerable) => enumerable.LongCount() == 1;
 
     /// <summary>
     /// Determines whether the current <see cref="IEnumerable{T}"/> contains an even number of elements.
@@ -131,10 +119,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an even number of elements; otherwise, <see langword="false"/>.</returns>
-    public static bool IsCountEven<T>(this IEnumerable<T> enumerable)
-    {
-        return enumerable.LongCount() % 2 == 0;
-    }
+    public static bool IsCountEven<T>(this IEnumerable<T> enumerable) => enumerable.LongCount() % 2 == 0;
 
     /// <summary>
     /// Determines whether the current <see cref="IEnumerable{T}"/> contains an odd number of elements.
@@ -142,10 +127,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an odd number of elements; otherwise, <see langword="false"/>.</returns>
-    public static bool IsCountOdd<T>(this IEnumerable<T> enumerable)
-    {
-        return !enumerable.IsCountEven();
-    }
+    public static bool IsCountOdd<T>(this IEnumerable<T> enumerable) => !enumerable.IsCountEven();
 
     /// <summary>
     /// Joins the elements of the current <see cref="IEnumerable{T}"/> into a <see cref="string"/>.
@@ -153,10 +135,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to join.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns the elements of the current <see cref="IEnumerable{T}"/>, joined into a string.</returns>
-    public static string JoinToString<T>(this IEnumerable<T> enumerable)
-    {
-        return enumerable.JoinToString(", ");
-    }
+    public static string JoinToString<T>(this IEnumerable<T> enumerable) => enumerable.JoinToString(", ");
 
     /// <summary>
     /// Joins the elements of the current <see cref="IEnumerable{T}"/> into a <see cref="string"/>.
@@ -165,10 +144,7 @@ public static class IEnumerableExtensions
     /// <param name="separator">The separator which will appear between joined elements.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns the elements of the current <see cref="IEnumerable{T}"/>, joined into a string.</returns>
-    public static string JoinToString<T>(this IEnumerable<T> enumerable, string separator)
-    {
-        return string.Join(separator, enumerable);
-    }
+    public static string JoinToString<T>(this IEnumerable<T> enumerable, string separator) => string.Join(separator, enumerable);
 
     /// <summary>
     /// Determines whether none of the elements of the current <see cref="IEnumerable{T}"/> satisfy the specified predicate condition.
@@ -177,10 +153,7 @@ public static class IEnumerableExtensions
     /// <param name="predicate">The function to test each element for a condition.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns <see langword="true"/> if none of the elements of the current <see cref="IEnumerable{T}"/> satisfy the specified predicate condition; otherwise, <see langword="false"/>.</returns>
-    public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
-    {
-        return !enumerable.Any(predicate);
-    }
+    public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) => !enumerable.Any(predicate);
 
     /// <summary>
     /// Calculates the sum of the elements of the current <see cref="IEnumerable{T}"/>.
@@ -188,11 +161,8 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to sum.</param>
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
-    public static T Sum<T>(this IEnumerable<T> enumerable) where T : INumber<T>
-    {
-        IEnumerable<T> elements = enumerable.ToArray();
-        return elements.IsEmpty() ? T.Zero : elements.Aggregate((left, right) => left + right);
-    }
+    public static T Sum<T>(this IEnumerable<T> enumerable) where T : INumber<T> => enumerable.ToArray()
+        .Let(elements => elements.IsEmpty() ? T.Zero : elements.Aggregate((left, right) => left + right));
 
     /// <summary>
     /// Calculates the sum of the elements of the current <see cref="IEnumerable{T}"/>.
@@ -202,10 +172,10 @@ public static class IEnumerableExtensions
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TResult">The underlying <see cref="INumber{TSelf}"/> type of each element to sum.</typeparam>
     /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
-    public static TResult SumBy<T, TResult>(this IEnumerable<T> enumerable, Func<T, TResult> selector) where TResult : INumber<TResult>
-    {
-        return enumerable.Select(selector).Sum();
-    }
+    public static TResult SumBy<T, TResult>(
+        this IEnumerable<T> enumerable,
+        Func<T, TResult> selector
+    ) where TResult : INumber<TResult> => enumerable.Select(selector).Sum();
 
     /// <summary>
     /// Filters the current <see cref="IEnumerable{Object}"/> to only elements of the specified type.
@@ -228,10 +198,8 @@ public static class IEnumerableExtensions
     /// <param name="predicate">The function to test each element for a condition.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a new <see cref="IEnumerable{T}"/> that contains elements that do not satisfy the condition.</returns>
-    public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
-    {
-        return enumerable.Where(element => !predicate(element));
-    }
+    public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) => enumerable
+        .Where(element => !predicate(element));
 
     /// <summary>
     /// Filters the current <see cref="IEnumerable{T}"/> elements that are not null.
@@ -239,10 +207,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a new <see cref="IEnumerable{T}"/> that contains elements that are not null.</returns>
-    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable)
-    {
-        return enumerable.Where(element => element is not null)!;
-    }
+    public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) => enumerable.Where(element => element is not null)!;
 
     /// <summary>
     /// Formats the current <see cref="IEnumerable{T}"/> as a collection string.
@@ -250,10 +215,7 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to format.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a <see cref="string"/> collection representation of the current <see cref="IEnumerable{T}"/>.</returns>
-    public static string ToCollectionString<T>(this IEnumerable<T> enumerable)
-    {
-        return string.Join(", ", enumerable).Wrap('[', ']');
-    }
+    public static string ToCollectionString<T>(this IEnumerable<T> enumerable) => string.Join(", ", enumerable).Wrap('[', ']');
 
     /// <summary>
     /// Formats each <see cref="IFormattable"/> element of the current current <see cref="IEnumerable{T}"/> as a collection string.
@@ -263,8 +225,9 @@ public static class IEnumerableExtensions
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a <see cref="string"/> collection representation of the current <see cref="IEnumerable{T}"/>.</returns>
-    public static string ToCollectionString<T>(this IEnumerable<T> enumerable, string format, IFormatProvider? formatProvider = null) where T : IFormattable
-    {
-        return enumerable.Select(element => element.ToString(format, formatProvider)).ToCollectionString();
-    }
+    public static string ToCollectionString<T>(
+        this IEnumerable<T> enumerable,
+        string format,
+        IFormatProvider? formatProvider = null
+    ) where T : IFormattable => enumerable.Select(element => element.ToString(format, formatProvider)).ToCollectionString();
 }

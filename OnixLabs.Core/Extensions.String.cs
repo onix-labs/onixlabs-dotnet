@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -30,7 +29,7 @@ public static class StringExtensions
     /// <summary>
     /// The value of an index not found.
     /// </summary>
-    private const int IndexNotFound = -1;
+    private const int NotFound = -1;
 
     /// <summary>
     /// Repeats the current <see cref="string"/> by the specified number of repetitions.
@@ -38,12 +37,9 @@ public static class StringExtensions
     /// <param name="value">The <see cref="string"/> value to repeat.</param>
     /// <param name="count">The specified number of repetitions to repeat by.</param>
     /// <returns>Returns a new <see cref="string"/> containing the repeated value.</returns>
-    public static string Repeat(this string value, int count)
-    {
-        if (count <= 0) return string.Empty;
-        IEnumerable<string> repetitions = Enumerable.Repeat(value, count);
-        return string.Join(string.Empty, repetitions);
-    }
+    public static string Repeat(this string value, int count) => count > 0
+        ? string.Join(string.Empty, Enumerable.Repeat(value, count))
+        : string.Empty;
 
     /// <summary>
     /// Returns a substring before the first occurrence of the specified delimiter.
@@ -52,16 +48,11 @@ public static class StringExtensions
     /// <param name="delimiter">The delimiter to find within the original string.</param>
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <returns>Returns a substring before the first occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeFirst(this string value, char delimiter, string? defaultValue = null)
-    {
-        int index = value.IndexOf(delimiter);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[..index]
-        };
-    }
+    public static string SubstringBeforeFirst(
+        this string value,
+        char delimiter,
+        string? defaultValue = null
+    ) => value.IndexOf(delimiter).Let(index => index is NotFound ? defaultValue ?? value : value[..index]);
 
     /// <summary>
     /// Returns a substring before the first occurrence of the specified delimiter.
@@ -71,16 +62,12 @@ public static class StringExtensions
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <param name="comparison">Specifies the string comparison rule for the search.</param>
     /// <returns>Returns a substring before the first occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
-    {
-        int index = value.IndexOf(delimiter, comparison);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[..index]
-        };
-    }
+    public static string SubstringBeforeFirst(
+        this string value,
+        string delimiter,
+        string? defaultValue = null,
+        StringComparison comparison = StringComparison.Ordinal
+    ) => value.IndexOf(delimiter, comparison).Let(index => index is NotFound ? defaultValue ?? value : value[..index]);
 
     /// <summary>
     /// Returns a substring before the last occurrence of the specified delimiter.
@@ -89,16 +76,11 @@ public static class StringExtensions
     /// <param name="delimiter">The delimiter to find within the original string.</param>
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <returns>Returns a substring before the last occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeLast(this string value, char delimiter, string? defaultValue = null)
-    {
-        int index = value.LastIndexOf(delimiter);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[..index]
-        };
-    }
+    public static string SubstringBeforeLast(
+        this string value,
+        char delimiter,
+        string? defaultValue = null
+    ) => value.LastIndexOf(delimiter).Let(index => index is NotFound ? defaultValue ?? value : value[..index]);
 
     /// <summary>
     /// Returns a substring before the last occurrence of the specified delimiter.
@@ -108,16 +90,12 @@ public static class StringExtensions
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <param name="comparison">Specifies the string comparison rule for the search.</param>
     /// <returns>Returns a substring before the last occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
-    {
-        int index = value.LastIndexOf(delimiter, comparison);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[..index]
-        };
-    }
+    public static string SubstringBeforeLast(
+        this string value,
+        string delimiter,
+        string? defaultValue = null,
+        StringComparison comparison = StringComparison.Ordinal
+    ) => value.LastIndexOf(delimiter, comparison).Let(index => index is NotFound ? defaultValue ?? value : value[..index]);
 
     /// <summary>
     /// Returns a substring after the first occurrence of the specified delimiter.
@@ -126,16 +104,11 @@ public static class StringExtensions
     /// <param name="delimiter">The delimiter to find within the original string.</param>
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <returns>Returns a substring after the first occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterFirst(this string value, char delimiter, string? defaultValue = null)
-    {
-        int index = value.IndexOf(delimiter);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[(index + 1)..value.Length]
-        };
-    }
+    public static string SubstringAfterFirst(
+        this string value,
+        char delimiter,
+        string? defaultValue = null
+    ) => value.IndexOf(delimiter).Let(index => index is NotFound ? defaultValue ?? value : value[(index + 1)..value.Length]);
 
     /// <summary>
     /// Returns a substring after the first occurrence of the specified delimiter.
@@ -145,16 +118,12 @@ public static class StringExtensions
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <param name="comparison">Specifies the string comparison rule for the search.</param>
     /// <returns>Returns a substring after the first occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
-    {
-        int index = value.IndexOf(delimiter, comparison);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[(index + delimiter.Length)..value.Length]
-        };
-    }
+    public static string SubstringAfterFirst(
+        this string value,
+        string delimiter,
+        string? defaultValue = null,
+        StringComparison comparison = StringComparison.Ordinal
+    ) => value.IndexOf(delimiter, comparison).Let(index => index is NotFound ? defaultValue ?? value : value[(index + delimiter.Length)..value.Length]);
 
     /// <summary>
     /// Returns a substring after the last occurrence of the specified delimiter.
@@ -163,16 +132,11 @@ public static class StringExtensions
     /// <param name="delimiter">The delimiter to find within the original string.</param>
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <returns>Returns a substring after the last occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterLast(this string value, char delimiter, string? defaultValue = null)
-    {
-        int index = value.LastIndexOf(delimiter);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[(index + 1)..value.Length]
-        };
-    }
+    public static string SubstringAfterLast(
+        this string value,
+        char delimiter,
+        string? defaultValue = null
+    ) => value.LastIndexOf(delimiter).Let(index => index is NotFound ? defaultValue ?? value : value[(index + 1)..value.Length]);
 
     /// <summary>
     /// Returns a substring after the last occurrence of the specified delimiter.
@@ -182,26 +146,19 @@ public static class StringExtensions
     /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
     /// <param name="comparison">Specifies the string comparison rule for the search.</param>
     /// <returns>Returns a substring after the last occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
-    {
-        int index = value.LastIndexOf(delimiter, comparison);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[(index + delimiter.Length)..value.Length]
-        };
-    }
+    public static string SubstringAfterLast(
+        this string value,
+        string delimiter,
+        string? defaultValue = null,
+        StringComparison comparison = StringComparison.Ordinal
+    ) => value.LastIndexOf(delimiter, comparison).Let(index => index is NotFound ? defaultValue ?? value : value[(index + delimiter.Length)..value.Length]);
 
     /// <summary>
     /// Converts the current <see cref="string"/> to a <see cref="byte"/> array using the default <see cref="Encoding"/>.
     /// </summary>
     /// <param name="value">The original <see cref="string"/> from which to obtain a byte array.</param>
     /// <returns>Returns a <see cref="byte"/> array using the default <see cref="Encoding"/>.</returns>
-    public static byte[] ToByteArray(this string value)
-    {
-        return ToByteArray(value, Encoding.Default);
-    }
+    public static byte[] ToByteArray(this string value) => ToByteArray(value, Encoding.Default);
 
     /// <summary>
     /// Converts the current <see cref="string"/> to a <see cref="byte"/> array using the specified <see cref="Encoding"/>.
@@ -209,10 +166,7 @@ public static class StringExtensions
     /// <param name="value">The original <see cref="string"/> from which to obtain a byte array.</param>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the current <see cref="string"/> to a <see cref="byte"/> array.</param>
     /// <returns>Returns a <see cref="byte"/> array using the specified <see cref="Encoding"/>.</returns>
-    public static byte[] ToByteArray(this string value, Encoding encoding)
-    {
-        return encoding.GetBytes(value);
-    }
+    public static byte[] ToByteArray(this string value, Encoding encoding) => encoding.GetBytes(value);
 
     /// <summary>
     /// Converts the current <see cref="string"/> to a <see cref="DateTime"/>.
@@ -221,10 +175,11 @@ public static class StringExtensions
     /// <param name="provider">An object that supplies culture-specific formatting information.</param>
     /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
     /// <returns>Returns a <see cref="DateTime"/> parsed from the current <see cref="string"/> value.</returns>
-    public static DateTime ToDateTime(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
-    {
-        return DateTime.Parse(value, provider, styles);
-    }
+    public static DateTime ToDateTime(
+        this string value,
+        IFormatProvider? provider = null,
+        DateTimeStyles styles = DateTimeStyles.None
+    ) => DateTime.Parse(value, provider, styles);
 
     /// <summary>
     /// Converts the current <see cref="string"/> to a <see cref="DateOnly"/>.
@@ -233,10 +188,11 @@ public static class StringExtensions
     /// <param name="provider">An object that supplies culture-specific formatting information.</param>
     /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
     /// <returns>Returns a <see cref="DateOnly"/> parsed from the current <see cref="string"/> value.</returns>
-    public static DateOnly ToDateOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
-    {
-        return DateOnly.Parse(value, provider, styles);
-    }
+    public static DateOnly ToDateOnly(
+        this string value,
+        IFormatProvider? provider = null,
+        DateTimeStyles styles = DateTimeStyles.None
+    ) => DateOnly.Parse(value, provider, styles);
 
     /// <summary>
     /// Converts the current <see cref="string"/> to a <see cref="TimeOnly"/>.
@@ -245,10 +201,11 @@ public static class StringExtensions
     /// <param name="provider">An object that supplies culture-specific formatting information.</param>
     /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
     /// <returns>Returns a <see cref="TimeOnly"/> parsed from the current <see cref="string"/> value.</returns>
-    public static TimeOnly ToTimeOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
-    {
-        return TimeOnly.Parse(value, provider, styles);
-    }
+    public static TimeOnly ToTimeOnly(
+        this string value,
+        IFormatProvider? provider = null,
+        DateTimeStyles styles = DateTimeStyles.None
+    ) => TimeOnly.Parse(value, provider, styles);
 
     /// <summary>
     /// Copies the contents of the current <see cref="string"/> into the destination <see cref="Span{T}"/>.
@@ -271,10 +228,7 @@ public static class StringExtensions
     /// <param name="before">The <see cref="string"/> that should precede the current value.</param>
     /// <param name="after">The <see cref="string"/> that should succeed the current value.</param>
     /// <returns>Returns the current <see cref="string"/> wrapped between the specified before and after <see cref="char"/> values.</returns>
-    public static string Wrap(this string value, char before, char after)
-    {
-        return $"{before}{value}{after}";
-    }
+    public static string Wrap(this string value, char before, char after) => $"{before}{value}{after}";
 
     /// <summary>
     /// Converts the current <see cref="string"/> between the specified before and after <see cref="string"/> values.
@@ -283,8 +237,5 @@ public static class StringExtensions
     /// <param name="before">The <see cref="string"/> that should precede the current value.</param>
     /// <param name="after">The <see cref="string"/> that should succeed the current value.</param>
     /// <returns>Returns the current <see cref="string"/> wrapped between the specified before and after <see cref="string"/> values.</returns>
-    public static string Wrap(this string value, string before, string after)
-    {
-        return $"{before}{value}{after}";
-    }
+    public static string Wrap(this string value, string before, string after) => $"{before}{value}{after}";
 }

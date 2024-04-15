@@ -95,7 +95,7 @@ public readonly partial struct Base58
         {
             Base58FormatInfo info = provider as Base58FormatInfo ?? Base58FormatInfo.Default;
             byte[] bytes = Base58Codec.Decode(value, info.Alphabet);
-            result = Create(bytes);
+            result = new Base58(bytes);
             return true;
         }
         catch
@@ -140,7 +140,7 @@ public readonly partial struct Base58
 
             VerifyChecksum(bytes);
 
-            result = Create(bytesWithoutChecksum);
+            result = new Base58(bytesWithoutChecksum);
             return true;
         }
         catch

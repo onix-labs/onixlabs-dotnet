@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,10 +35,7 @@ public static class TypeExtensions
     /// </summary>
     /// <param name="type">The <see cref="Type"/> from which to obtain a simple type name.</param>
     /// <returns>Returns the simple type name from the specified type, excluding any generic type parameters.</returns>
-    public static string GetSimpleName(this Type type)
-    {
-        return type.Name.SubstringBeforeFirst(GenericTypeIdentifierMarker);
-    }
+    public static string GetSimpleName(this Type type) => type.Name.SubstringBeforeFirst(GenericTypeIdentifierMarker);
 
     /// <summary>
     /// Gets the formatted type name from the specified type, including any generic type parameters.

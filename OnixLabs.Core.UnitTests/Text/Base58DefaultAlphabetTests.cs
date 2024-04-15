@@ -23,8 +23,8 @@ public sealed class Base58DefaultAlphabetTests
     public void Base58ValuesShouldBeIdentical()
     {
         // Given
-        Base58 a = Base58.Create("abcdefghijklmnopqrstuvwxyz");
-        Base58 b = Base58.Create("abcdefghijklmnopqrstuvwxyz");
+        Base58 a = new("abcdefghijklmnopqrstuvwxyz");
+        Base58 b = new("abcdefghijklmnopqrstuvwxyz");
 
         // When
         int hashCodeA = a.GetHashCode();
@@ -34,14 +34,14 @@ public sealed class Base58DefaultAlphabetTests
         Assert.Equal(hashCodeA, hashCodeB);
     }
 
-    [Theory(DisplayName = "Base58.Create should produce the expected Base-58 value")]
+    [Theory(DisplayName = "new should produce the expected Base-58 value")]
     [InlineData("3mJr7AoUCHxNqd", "1234567890")]
     [InlineData("2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f", "abcdefghijklmnopqrstuvwxyz")]
     public void CreateShouldProduceExpectedResult(string expected, string value)
     {
         // Given
-        Base58 candidate = Base58.Create(value);
+        Base58 candidate = new(value);
 
         // When
         string actual = candidate.ToString(null, Base58FormatInfo.Default);

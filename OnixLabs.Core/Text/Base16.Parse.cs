@@ -83,7 +83,7 @@ public readonly partial struct Base16
         try
         {
             byte[] bytes = Convert.FromHexString(value);
-            result = Create(bytes);
+            result = new Base16(bytes);
             return true;
         }
         catch

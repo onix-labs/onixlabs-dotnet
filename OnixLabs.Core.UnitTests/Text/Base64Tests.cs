@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,8 +23,8 @@ public sealed class Base64Tests
     public void Base64ValuesShouldBeIdentical()
     {
         // Given
-        Base64 a = Base64.Create("abcdefghijklmnopqrstuvwxyz");
-        Base64 b = Base64.Create("abcdefghijklmnopqrstuvwxyz");
+        Base64 a = new("abcdefghijklmnopqrstuvwxyz");
+        Base64 b = new("abcdefghijklmnopqrstuvwxyz");
 
         // When
         int hashCodeA = a.GetHashCode();
@@ -34,14 +34,14 @@ public sealed class Base64Tests
         Assert.Equal(hashCodeA, hashCodeB);
     }
 
-    [Theory(DisplayName = "Base64.Create should produce the expected Base-64 value")]
+    [Theory(DisplayName = "new should produce the expected Base-64 value")]
     [InlineData("MTIzNDU2Nzg5MA==", "1234567890")]
     [InlineData("QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=", "abcdefghijklmnopqrstuvwxyz")]
     public void CreateShouldProduceExpectedResult(string expected, string value)
     {
         // Given
-        Base64 candidate = Base64.Create(value);
+        Base64 candidate = new(value);
 
         // When
         string actual = candidate.ToString();

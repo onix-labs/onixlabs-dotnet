@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Core;
 
 public abstract partial class Enumeration<T>
@@ -25,10 +23,7 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <param name="obj">An object to compare with the current instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public int CompareTo(object? obj)
-    {
-        return this.CompareObject(obj);
-    }
+    public int CompareTo(object? obj) => this.CompareObject(obj);
 
     /// <summary>
     /// Compares the current instance with another object of the same type and returns an integer that indicates
@@ -37,8 +32,5 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <param name="other">An object to compare with the current instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public int CompareTo(T? other)
-    {
-        return Value.CompareTo(other?.Value);
-    }
+    public int CompareTo(T? other) => Value.CompareTo(other?.Value);
 }

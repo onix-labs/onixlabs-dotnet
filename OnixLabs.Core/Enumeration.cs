@@ -27,11 +27,7 @@ public abstract partial class Enumeration<T> : IEquatable<T>, IComparable<T>, IC
     /// </summary>
     /// <param name="value">The value of the enumeration entry.</param>
     /// <param name="name">The name of the enumeration entry.</param>
-    protected Enumeration(int value, string name)
-    {
-        Value = value;
-        Name = name;
-    }
+    protected Enumeration(int value, string name) => (Name, Value) = (name, value);
 
     /// <summary>
     /// Gets the name of the enumeration entry.

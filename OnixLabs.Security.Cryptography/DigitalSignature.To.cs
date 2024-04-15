@@ -35,7 +35,7 @@ public readonly partial struct DigitalSignature
     /// <returns>Returns a <see cref="Base16"/> value that represents the underlying signature data.</returns>
     public Base16 ToBase16()
     {
-        return Base16.Create(Value);
+        return new Base16(Value);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public readonly partial struct DigitalSignature
     /// <returns>Returns a <see cref="Base32"/> value that represents the underlying signature data.</returns>
     public Base32 ToBase32()
     {
-        return Base32.Create(Value);
+        return new Base32(Value);
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public readonly partial struct DigitalSignature
     /// <returns>Returns a <see cref="Base58"/> value that represents the underlying signature data.</returns>
     public Base58 ToBase58()
     {
-        return Base58.Create(Value);
+        return new Base58(Value);
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public readonly partial struct DigitalSignature
     /// <returns>Returns a <see cref="Base64"/> value that represents the underlying signature data.</returns>
     public Base64 ToBase64()
     {
-        return Base64.Create(Value);
+        return new Base64(Value);
     }
 
     /// <summary>

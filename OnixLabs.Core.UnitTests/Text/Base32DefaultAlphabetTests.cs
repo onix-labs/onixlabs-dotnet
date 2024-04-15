@@ -23,8 +23,8 @@ public sealed class Base32DefaultAlphabetTests
     public void Base32ValuesShouldBeIdentical()
     {
         // Given
-        Base32 a = Base32.Create("abcdefghijklmnopqrstuvwxyz");
-        Base32 b = Base32.Create("abcdefghijklmnopqrstuvwxyz");
+        Base32 a = new("abcdefghijklmnopqrstuvwxyz");
+        Base32 b = new("abcdefghijklmnopqrstuvwxyz");
 
         // When
         int hashCodeA = a.GetHashCode();
@@ -34,14 +34,14 @@ public sealed class Base32DefaultAlphabetTests
         Assert.Equal(hashCodeA, hashCodeB);
     }
 
-    [Theory(DisplayName = "Base32.Create with padding should produce the expected Base-32 value")]
+    [Theory(DisplayName = "new with padding should produce the expected Base-32 value")]
     [InlineData("GEZDGNBVGY3TQOJQ", "1234567890")]
     [InlineData("IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI======", "abcdefghijklmnopqrstuvwxyz")]
     public void CreateShouldProduceExpectedResultWithPadding(string expected, string value)
     {
         // Given
-        Base32 candidate = Base32.Create(value);
+        Base32 candidate = new(value);
 
         // When
         string actual = candidate.ToString("P", Base32FormatInfo.Default);
@@ -50,14 +50,14 @@ public sealed class Base32DefaultAlphabetTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32.Create without padding should produce the expected Base-32 value")]
+    [Theory(DisplayName = "new without padding should produce the expected Base-32 value")]
     [InlineData("GEZDGNBVGY3TQOJQ", "1234567890")]
     [InlineData("IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI", "abcdefghijklmnopqrstuvwxyz")]
     public void CreateShouldProduceExpectedResultWithoutPadding(string expected, string value)
     {
         // Given
-        Base32 candidate = Base32.Create(value);
+        Base32 candidate = new(value);
 
         // When
         string actual = candidate.ToString(null, Base32FormatInfo.Default);

@@ -73,7 +73,7 @@ public readonly partial struct Base32
             Base32FormatInfo info = provider as Base32FormatInfo ?? Base32FormatInfo.Default;
             bool padding = value.Contains('=');
             byte[] bytes = Base32Codec.Decode(value, info.Alphabet, padding);
-            result = Create(bytes);
+            result = new Base32(bytes);
             return true;
         }
         catch

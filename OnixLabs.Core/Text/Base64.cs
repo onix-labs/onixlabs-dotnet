@@ -12,24 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Text;
+
 namespace OnixLabs.Core.Text;
 
 /// <summary>
 /// Represents a Base-64 value.
 /// </summary>
-public readonly partial struct Base64 : IBaseRepresentation<Base64>
+/// <param name="value">The underlying <see cref="T:byte[]"/> value.</param>
+public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseRepresentation<Base64>
 {
-    /// <summary>
-    /// The underlying <see cref="T:byte[]"/> value.
-    /// </summary>
-    private readonly byte[] value;
+    private readonly byte[] value = value.ToArray();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Base64"/> struct.
+    /// Initializes a new <see cref="Base64"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    private Base64(byte[] value)
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value from which to create a new <see cref="Base64"/> value.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="T:byte[]"/> from the specified <see cref="ReadOnlySpan{T}"/> value.</param>
+    public Base64(ReadOnlySpan<char> value, Encoding? encoding = null) : this((encoding ?? Encoding.Default).GetBytes(value.ToArray()))
     {
-        this.value = value.Copy();
     }
 }

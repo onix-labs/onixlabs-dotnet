@@ -23,8 +23,8 @@ public sealed class Base32Base32HexAlphabetTests
     public void Base32ValuesShouldBeIdentical()
     {
         // Given
-        Base32 a = Base32.Create("abcdefghijklmnopqrstuvwxyz");
-        Base32 b = Base32.Create("abcdefghijklmnopqrstuvwxyz");
+        Base32 a = new("abcdefghijklmnopqrstuvwxyz");
+        Base32 b = new("abcdefghijklmnopqrstuvwxyz");
 
         // When
         int hashCodeA = a.GetHashCode();
@@ -34,14 +34,14 @@ public sealed class Base32Base32HexAlphabetTests
         Assert.Equal(hashCodeA, hashCodeB);
     }
 
-    [Theory(DisplayName = "Base32.Create with padding should produce the expected Base-32 value")]
+    [Theory(DisplayName = "new with padding should produce the expected Base-32 value")]
     [InlineData("64P36D1L6ORJGE9G", "1234567890")]
     [InlineData("85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("C5H66P35CPJMGQBADDM6QRJFE1ON4SRKELR7EU3PF8======", "abcdefghijklmnopqrstuvwxyz")]
     public void CreateShouldProduceExpectedResultWithPadding(string expected, string value)
     {
         // Given
-        Base32 candidate = Base32.Create(value);
+        Base32 candidate = new(value);
 
         // When
         string actual = candidate.ToString("P", Base32FormatInfo.Base32Hex);
@@ -50,14 +50,14 @@ public sealed class Base32Base32HexAlphabetTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32.Create without padding should produce the expected Base-32 value")]
+    [Theory(DisplayName = "new without padding should produce the expected Base-32 value")]
     [InlineData("64P36D1L6ORJGE9G", "1234567890")]
     [InlineData("85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("C5H66P35CPJMGQBADDM6QRJFE1ON4SRKELR7EU3PF8", "abcdefghijklmnopqrstuvwxyz")]
     public void CreateShouldProduceExpectedResultWithoutPadding(string expected, string value)
     {
         // Given
-        Base32 candidate = Base32.Create(value);
+        Base32 candidate = new(value);
 
         // When
         string actual = candidate.ToString(null, Base32FormatInfo.Base32Hex);

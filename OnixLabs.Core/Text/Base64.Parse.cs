@@ -83,7 +83,7 @@ public readonly partial struct Base64
         try
         {
             byte[] bytes = Convert.FromBase64String(value.ToString());
-            result = Create(bytes);
+            result = new Base64(bytes);
             return true;
         }
         catch

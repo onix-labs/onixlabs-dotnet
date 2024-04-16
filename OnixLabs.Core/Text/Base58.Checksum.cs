@@ -33,10 +33,8 @@ public readonly partial struct Base58
     /// <returns>Returns the computed Base-58 checksum.</returns>
     private static byte[] ComputeChecksum(byte[] value)
     {
-        using HashAlgorithm algorithm = SHA256.Create();
-
-        byte[] hashedValue = algorithm.ComputeHash(value);
-        byte[] checksum = algorithm.ComputeHash(hashedValue);
+        byte[] hashedValue = SHA256.HashData(value);
+        byte[] checksum = SHA256.HashData(hashedValue);
         byte[] result = new byte[ChecksumSize];
 
         Buffer.BlockCopy(checksum, 0, result, 0, result.Length);
@@ -49,31 +47,22 @@ public readonly partial struct Base58
     /// </summary>
     /// <param name="value">The value for which to add a checksum.</param>
     /// <returns>Returns the original value with a checksum.</returns>
-    private static byte[] AddChecksum(byte[] value)
-    {
-        byte[] checksum = ComputeChecksum(value);
-        return value.ConcatenateWith(checksum);
-    }
+    private static byte[] AddChecksum(byte[] value) => ComputeChecksum(value)
+        .Apply(checksum => value.ConcatenateWith(checksum));
 
     /// <summary>
     /// Removes a checksum from the specified byte array.
     /// </summary>
     /// <param name="value">The value for which to remove a checksum.</param>
     /// <returns>Returns the original value without a checksum.</returns>
-    private static byte[] RemoveChecksum(byte[] value)
-    {
-        return value.Copy(0, value.Length - ChecksumSize);
-    }
+    private static byte[] RemoveChecksum(byte[] value) => value.Copy(0, value.Length - ChecksumSize);
 
     /// <summary>
     /// Gets a checksum from the specified byte array.
     /// </summary>
     /// <param name="value">The value from which to obtain a checksum.</param>
     /// <returns>Returns a checksum from the specified byte array.</returns>
-    private static byte[] GetChecksum(byte[] value)
-    {
-        return value.Copy(value.Length - ChecksumSize - 1, ChecksumSize);
-    }
+    private static byte[] GetChecksum(byte[] value) => value.Copy(value.Length - ChecksumSize - 1, ChecksumSize);
 
     /// <summary>
     /// Verifies a Base-58 checksum.

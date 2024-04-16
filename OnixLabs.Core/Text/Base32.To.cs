@@ -23,38 +23,26 @@ public readonly partial struct Base32
     /// Returns a <see cref="byte"/> array that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
-    public byte[] ToByteArray()
-    {
-        return value.Copy();
-    }
+    public byte[] ToByteArray() => value.Copy();
 
     /// <summary>
     /// Gets the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
     /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value, using the default <see cref="Encoding"/>.</returns>
-    public string ToPlainTextString()
-    {
-        return ToPlainTextString(Encoding.Default);
-    }
+    public string ToPlainTextString() => ToPlainTextString(Encoding.Default);
 
     /// <summary>
     /// Gets the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value.
     /// </summary>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="string"/> from the current <see cref="Base32"/> value.</param>
     /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value.</returns>
-    public string ToPlainTextString(Encoding encoding)
-    {
-        return encoding.GetString(value);
-    }
+    public string ToPlainTextString(Encoding encoding) => encoding.GetString(value);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
-    public override string ToString()
-    {
-        return ToString(null);
-    }
+    public override string ToString() => ToString(null);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
@@ -62,10 +50,7 @@ public readonly partial struct Base32
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(string? format, IFormatProvider? formatProvider = null)
-    {
-        return ToString(format.AsSpan(), formatProvider);
-    }
+    public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString(format.AsSpan(), formatProvider);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.

@@ -30,7 +30,7 @@ public abstract partial class Enumeration<T>
     public static IReadOnlySet<T> GetAll() => typeof(T)
         .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
         .Select(field => field.GetValue(null))
-        .WhereInstanceOf<T>()
+        .OfType<T>()
         .ToFrozenSet();
 
     /// <summary>

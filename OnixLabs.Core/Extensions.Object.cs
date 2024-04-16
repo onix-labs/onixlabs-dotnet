@@ -26,9 +26,24 @@ namespace OnixLabs.Core;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ObjectExtensions
 {
+    /// <summary>
+    /// Calls the specified <see cref="Func{T, TResult}"/> with the current object as the function's argument.
+    /// </summary>
+    /// <param name="obj">The current object upon which to perform the function.</param>
+    /// <param name="func">The <see cref="Func{T, TResult}"/> to execute for the current object.</param>
+    /// <typeparam name="T">The underlying type of the current object.</typeparam>
+    /// <typeparam name="TResult">The underlying type that the function returns.</typeparam>
+    /// <returns>Returns the result of the function call.</returns>
     public static TResult Let<T, TResult>(this T obj, Func<T, TResult> func) => func(obj);
 
-    public static T Apply<T>(this T obj, Action<T> action)
+    /// <summary>
+    /// Calls the specified <see cref="Action{T}"/> with the current object as the action's argument.
+    /// </summary>
+    /// <param name="obj">The current object upon which to perform the action.</param>
+    /// <param name="action">The <see cref="Action{T}"/> to execute for the current object.</param>
+    /// <typeparam name="T">The underlying type of the current object.</typeparam>
+    /// <returns>Returns the current object, having applied the specified action.</returns>
+    public static T Apply<T>(this T obj, Action<T> action) where T : class
     {
         action(obj);
         return obj;

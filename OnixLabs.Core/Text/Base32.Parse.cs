@@ -24,10 +24,7 @@ public readonly partial struct Base32
     /// <param name="value">The Base-32 value to parse.</param>
     /// <param name="provider">An object that provides format-specific information about the specified value. </param>
     /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
-    public static Base32 Parse(string value, IFormatProvider? provider = null)
-    {
-        return Parse(value.AsSpan(), provider);
-    }
+    public static Base32 Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>
     /// Parses a Base-32 value into a <see cref="Base32"/> value.
@@ -51,10 +48,7 @@ public readonly partial struct Base32
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryParse(string? value, IFormatProvider? provider, out Base32 result)
-    {
-        return TryParse(value.AsSpan(), provider, out result);
-    }
+    public static bool TryParse(string? value, IFormatProvider? provider, out Base32 result) => TryParse(value.AsSpan(), provider, out result);
 
     /// <summary>
     /// Tries to parse the specified Base-32 value into a <see cref="Base32"/> value.

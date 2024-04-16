@@ -35,11 +35,10 @@ public static class IEnumerableExtensions
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
     /// <returns>Returns <see langword="true"/> if all selected element properties are equal; otherwise <see langword="false"/>.</returns>
-    public static bool AllEqualBy<T, TProperty>(this IEnumerable<T> enumerable, Func<T, TProperty> selector)
-    {
-        ISet<TProperty> elements = enumerable.Select(selector).ToHashSet();
-        return elements.IsNotEmpty() && elements.IsSingle();
-    }
+    public static bool AllEqualBy<T, TProperty>(
+        this IEnumerable<T> enumerable,
+        Func<T, TProperty> selector
+    ) => enumerable.Select(selector).Distinct().Count() == 1;
 
     /// <summary>
     /// Determines whether any elements of the current <see cref="IEnumerable{T}"/> are equal by a specified property.
@@ -49,12 +48,10 @@ public static class IEnumerableExtensions
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
     /// <returns>Returns <see langword="true"/> if any selected element properties are equal; otherwise <see langword="false"/>.</returns>
-    public static bool AnyEqualBy<T, TProperty>(this IEnumerable<T> enumerable, Func<T, TProperty> selector)
-    {
-        IList<TProperty> elements = enumerable.Select(selector).ToList();
-        ISet<TProperty> distinctElements = elements.ToHashSet();
-        return distinctElements.IsNotEmpty() && distinctElements.Count < elements.Count;
-    }
+    public static bool AnyEqualBy<T, TProperty>(
+        this IEnumerable<T> enumerable,
+        Func<T, TProperty> selector
+    ) => enumerable.GroupBy(selector).Any(group => group.Count() > 1);
 
     /// <summary>
     /// Obtains a number that represents how many elements in the the current <see cref="IEnumerable{T}"/> do not satisfy the specified predicate condition.
@@ -63,7 +60,10 @@ public static class IEnumerableExtensions
     /// <param name="predicate">The function to test each element for a condition.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a number that represents how many elements in the current <see cref="IEnumerable{T}"/> do not satisfy the specified predicate condition.</returns>
-    public static int CountNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) => enumerable.Count(element => !predicate(element));
+    public static int CountNot<T>(
+        this IEnumerable<T> enumerable,
+        Func<T, bool> predicate
+    ) => enumerable.Count(element => !predicate(element));
 
     /// <summary>
     /// Performs the specified <see cref="Action{T}"/> for each element of the current <see cref="IEnumerable{T}"/>.
@@ -161,7 +161,8 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> to sum.</param>
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
-    public static T Sum<T>(this IEnumerable<T> enumerable) where T : INumber<T> => enumerable.ToArray()
+    public static T Sum<T>(this IEnumerable<T> enumerable) where T : INumber<T> => enumerable
+        .ToArray()
         .Let(elements => elements.IsEmpty() ? T.Zero : elements.Aggregate((left, right) => left + right));
 
     /// <summary>
@@ -176,20 +177,6 @@ public static class IEnumerableExtensions
         this IEnumerable<T> enumerable,
         Func<T, TResult> selector
     ) where TResult : INumber<TResult> => enumerable.Select(selector).Sum();
-
-    /// <summary>
-    /// Filters the current <see cref="IEnumerable{Object}"/> to only elements of the specified type.
-    /// </summary>
-    /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
-    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
-    /// <returns>Returns a new <see cref="IEnumerable{T}"/> containing only elements of the specified type.</returns>
-    public static IEnumerable<T> WhereInstanceOf<T>(this IEnumerable<object?> enumerable)
-    {
-        foreach (object? element in enumerable)
-        {
-            if (element is T elementOfType) yield return elementOfType;
-        }
-    }
 
     /// <summary>
     /// Filters the current <see cref="IEnumerable{T}"/> elements that do not satisfy the specified predicate condition.

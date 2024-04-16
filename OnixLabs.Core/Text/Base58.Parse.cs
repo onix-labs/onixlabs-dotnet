@@ -24,10 +24,7 @@ public readonly partial struct Base58
     /// <param name="value">The Base-58 value to parse.</param>
     /// <param name="provider">An object that provides format-specific information about the specified value. </param>
     /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
-    public static Base58 Parse(string value, IFormatProvider? provider = null)
-    {
-        return Parse(value.AsSpan(), provider);
-    }
+    public static Base58 Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>
     /// Parses a Base-58 value into a <see cref="Base58"/> value.
@@ -47,10 +44,7 @@ public readonly partial struct Base58
     /// <param name="value">The Base-58 value to parse.</param>
     /// <param name="provider">An object that provides format-specific information about the specified value. </param>
     /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(string value, IFormatProvider? provider = null)
-    {
-        return ParseWithChecksum(value.AsSpan(), provider);
-    }
+    public static Base58 ParseWithChecksum(string value, IFormatProvider? provider = null) => ParseWithChecksum(value.AsSpan(), provider);
 
     /// <summary>
     /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> value.
@@ -74,10 +68,7 @@ public readonly partial struct Base58
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryParse(string? value, IFormatProvider? provider, out Base58 result)
-    {
-        return TryParse(value.AsSpan(), provider, out result);
-    }
+    public static bool TryParse(string? value, IFormatProvider? provider, out Base58 result) => TryParse(value.AsSpan(), provider, out result);
 
     /// <summary>
     /// Tries to parse the specified Base-58 value into a <see cref="Base58"/> value.
@@ -115,10 +106,7 @@ public readonly partial struct Base58
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryParseWithChecksum(string? value, IFormatProvider? provider, out Base58 result)
-    {
-        return TryParseWithChecksum(value.AsSpan(), provider, out result);
-    }
+    public static bool TryParseWithChecksum(string? value, IFormatProvider? provider, out Base58 result) => TryParseWithChecksum(value.AsSpan(), provider, out result);
 
     /// <summary>
     /// Tries to parse the specified Base-58 value with a checksum into a <see cref="Base58"/> value.

@@ -26,8 +26,10 @@ public readonly partial struct Base32
     /// <param name="format">A span containing the characters that represent a standard or custom format string that defines the acceptable format for <paramref name="destination" />.</param>
     /// <param name="provider">An optional object that supplies culture-specific formatting information for <paramref name="destination" />.</param>
     /// <returns>Returns <see langword="true"/> if the formatting was successful; otherwise, <see langword="false"/>.</returns>
-    bool ISpanFormattable.TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
-    {
-        return ToString(format, provider).TryCopyTo(destination, out charsWritten);
-    }
+    bool ISpanFormattable.TryFormat(
+        Span<char> destination,
+        out int charsWritten,
+        ReadOnlySpan<char> format,
+        IFormatProvider? provider
+    ) => ToString(format, provider).TryCopyTo(destination, out charsWritten);
 }

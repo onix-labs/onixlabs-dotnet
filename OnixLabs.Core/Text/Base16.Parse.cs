@@ -27,10 +27,7 @@ public readonly partial struct Base16
     /// The parameter is ignored by the current implementation of <see cref="Base16"/>.
     /// </param>
     /// <returns>Returns a new <see cref="Base16"/> instance.</returns>
-    public static Base16 Parse(string value, IFormatProvider? provider = null)
-    {
-        return Parse(value.AsSpan(), provider);
-    }
+    public static Base16 Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>
     /// Parses a Base-16 (Hexadecimal) value into a <see cref="Base16"/> value.
@@ -60,10 +57,7 @@ public readonly partial struct Base16
     /// or the default value in the event that the specified value could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryParse(string? value, IFormatProvider? provider, out Base16 result)
-    {
-        return TryParse(value.AsSpan(), provider, out result);
-    }
+    public static bool TryParse(string? value, IFormatProvider? provider, out Base16 result) => TryParse(value.AsSpan(), provider, out result);
 
     /// <summary>
     /// Tries to parse the specified Base-16 (Hexadecimal) value into a <see cref="Base16"/> value.

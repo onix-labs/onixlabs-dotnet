@@ -41,11 +41,7 @@ public sealed class Base58FormatInfo : IFormatProvider
     /// </summary>
     /// <param name="name">The name of the Base-58 alphabet.</param>
     /// <param name="alphabet">The alphabet that will be used for Base-58 encoding and decoding operations.</param>
-    private Base58FormatInfo(string name, string alphabet)
-    {
-        Name = name;
-        Alphabet = alphabet;
-    }
+    private Base58FormatInfo(string name, string alphabet) => (Name, Alphabet) = (name, alphabet);
 
     /// <summary>
     /// Gets the name of the Base-58 alphabet.
@@ -60,8 +56,5 @@ public sealed class Base58FormatInfo : IFormatProvider
     /// <summary>Returns an object that provides formatting services for the specified type.</summary>
     /// <param name="formatType">An object that specifies the type of format object to return.</param>
     /// <returns>An instance of the object specified by <paramref name="formatType" />, if the <see cref="T:System.IFormatProvider" /> implementation can supply that type of object; otherwise, <see langword="null" />.</returns>
-    public object? GetFormat(Type? formatType)
-    {
-        return formatType == typeof(Base58FormatInfo) ? this : null;
-    }
+    public object? GetFormat(Type? formatType) => formatType == typeof(Base58FormatInfo) ? this : null;
 }

@@ -51,11 +51,7 @@ public sealed class Base32FormatInfo : IFormatProvider
     /// </summary>
     /// <param name="name">The name of the Base-32 alphabet.</param>
     /// <param name="alphabet">The alphabet that will be used for Base-32 encoding and decoding operations.</param>
-    private Base32FormatInfo(string name, string alphabet)
-    {
-        Name = name;
-        Alphabet = alphabet;
-    }
+    private Base32FormatInfo(string name, string alphabet) => (Name, Alphabet) = (name, alphabet);
 
     /// <summary>
     /// Gets the name of the Base-32 alphabet.
@@ -73,8 +69,5 @@ public sealed class Base32FormatInfo : IFormatProvider
     /// Returns an instance of the object specified by <paramref name="formatType" />,
     /// if the <see cref="T:System.IFormatProvider" /> implementation can supply that type of object; otherwise, <see langword="null" />.
     /// </returns>
-    public object? GetFormat(Type? formatType)
-    {
-        return formatType == typeof(Base32FormatInfo) ? this : null;
-    }
+    public object? GetFormat(Type? formatType) => formatType == typeof(Base32FormatInfo) ? this : null;
 }

@@ -399,19 +399,6 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "IEnumerable.WhereInstanceOf should return the correct elements matching the specified type")]
-    public void WhereInstanceOfShouldProduceExpectedResult()
-    {
-        // Given
-        IEnumerable<object> enumerable = new object[] { 1, 2, 3, 4.5, true, false, Guid.NewGuid() };
-
-        // When
-        IEnumerable<int> numbers = enumerable.WhereInstanceOf<int>();
-
-        // Then
-        Assert.True(numbers.Count() == 3);
-    }
-
     [Fact(DisplayName = "IEnumerable.WhereNot should produce the expected result")]
     public void WhereNotShouldProduceExpectedResult()
     {

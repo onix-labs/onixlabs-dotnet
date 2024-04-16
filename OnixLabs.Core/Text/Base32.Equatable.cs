@@ -25,29 +25,20 @@ public readonly partial struct Base32
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Base32 other)
-    {
-        return value.SequenceEqual(other.value);
-    }
+    public bool Equals(Base32 other) => value.SequenceEqual(other.value);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj)
-    {
-        return obj is Base32 other && Equals(other);
-    }
+    public override bool Equals(object? obj) => obj is Base32 other && Equals(other);
 
     /// <summary>
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(value.GetContentHashCode());
-    }
+    public override int GetHashCode() => HashCode.Combine(value.GetContentHashCode());
 
     /// <summary>
     /// Performs an equality check between two object instances.
@@ -55,10 +46,7 @@ public readonly partial struct Base32
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Base32 left, Base32 right)
-    {
-        return Equals(left, right);
-    }
+    public static bool operator ==(Base32 left, Base32 right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality check between two object instances.
@@ -66,8 +54,5 @@ public readonly partial struct Base32
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the instances are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Base32 left, Base32 right)
-    {
-        return !Equals(left, right);
-    }
+    public static bool operator !=(Base32 left, Base32 right) => !Equals(left, right);
 }

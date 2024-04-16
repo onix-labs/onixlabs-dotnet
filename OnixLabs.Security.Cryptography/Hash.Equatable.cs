@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020-2024 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,36 +18,27 @@ using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct Hash : IEquatable<Hash>
+public readonly partial struct Hash(ReadOnlySpan<byte> value)
 {
     /// <summary>
     /// Checks for equality between this instance and another object.
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
     /// <returns>true if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Hash other)
-    {
-        return other.AlgorithmType == AlgorithmType && other.Value.SequenceEqual(Value);
-    }
+    public bool Equals(Hash other) => value.SequenceEqual(other.value);
 
     /// <summary>
     /// Checks for equality between this instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>true if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj)
-    {
-        return obj is Hash other && Equals(other);
-    }
+    public override bool Equals(object? obj) => obj is Hash other && Equals(other);
 
     /// <summary>
     /// Serves as a hash code function for this instance.
     /// </summary>
     /// <returns>A hash code for this instance.</returns>
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(AlgorithmType, Value.GetContentHashCode());
-    }
+    public override int GetHashCode() => value.GetContentHashCode();
 
     /// <summary>
     /// Performs an equality check between two object instances.
@@ -55,10 +46,7 @@ public readonly partial struct Hash : IEquatable<Hash>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Hash left, Hash right)
-    {
-        return Equals(left, right);
-    }
+    public static bool operator ==(Hash left, Hash right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality check between two object instances.
@@ -66,8 +54,5 @@ public readonly partial struct Hash : IEquatable<Hash>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Hash left, Hash right)
-    {
-        return !Equals(left, right);
-    }
+    public static bool operator !=(Hash left, Hash right) => !Equals(left, right);
 }

@@ -38,7 +38,7 @@ public readonly partial struct Base32
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
-    public override int GetHashCode() => HashCode.Combine(value.GetContentHashCode());
+    public override int GetHashCode() => value.GetContentHashCode();
 
     /// <summary>
     /// Performs an equality check between two object instances.

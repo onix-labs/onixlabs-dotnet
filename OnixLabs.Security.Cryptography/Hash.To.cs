@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020-2024 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
 
 using System;
 using OnixLabs.Core;
-using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -23,63 +22,12 @@ public readonly partial struct Hash
     /// <summary>
     /// Returns a <see cref="byte"/> array containing the underlying hash data.
     /// </summary>
-    /// <returns>A <see cref="byte"/> array containing the underlying hash data.</returns>
-    public byte[] ToByteArray()
-    {
-        return Value.Copy();
-    }
-
-    /// <summary>
-    /// Returns a <see cref="Base16"/> value that represents the underlying hash data.
-    /// </summary>
-    /// <returns>Returns a <see cref="Base16"/> value that represents the underlying hash data.</returns>
-    public Base16 ToBase16()
-    {
-        return new Base16(Value);
-    }
-
-    /// <summary>
-    /// Returns a <see cref="Base32"/> value that represents the underlying hash data.
-    /// </summary>
-    /// <returns>Returns a <see cref="Base32"/> value that represents the underlying hash data.</returns>
-    public Base32 ToBase32()
-    {
-        return new Base32(Value);
-    }
-
-    /// <summary>
-    /// Returns a <see cref="Base58"/> value that represents the underlying hash data.
-    /// </summary>
-    /// <returns>Returns a <see cref="Base58"/> value that represents the underlying hash data.</returns>
-    public Base58 ToBase58()
-    {
-        return new Base58(Value);
-    }
-
-    /// <summary>
-    /// Returns a <see cref="Base64"/> value that represents the underlying hash data.
-    /// </summary>
-    /// <returns>Returns a <see cref="Base64"/> value that represents the underlying hash data.</returns>
-    public Base64 ToBase64()
-    {
-        return new Base64(Value);
-    }
+    /// <returns>Returns a <see cref="byte"/> array containing the underlying hash data.</returns>
+    public byte[] ToByteArray() => value.Copy();
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object.</returns>
-    public override string ToString()
-    {
-        return Convert.ToHexString(Value).ToLower();
-    }
-
-    /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object, including the hash algorithm type.
-    /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object, including the hash algorithm type.</returns>
-    public string ToStringWithAlgorithmType()
-    {
-        return $"{AlgorithmType.Name}:{ToString()}";
-    }
+    /// <returns>Returns <see cref="string"/> that represents the current object.</returns>
+    public override string ToString() => Convert.ToHexString(value).ToLower();
 }

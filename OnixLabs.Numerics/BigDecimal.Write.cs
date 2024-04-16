@@ -60,17 +60,13 @@ public readonly partial struct BigDecimal
     /// <param name="destination">The span to which the current significand should be written.</param>
     /// <param name="bytesWritten">When this method returns, contains the number of bytes written to <paramref name="destination" />.</param>
     /// <returns> Returns <see langword="true" /> if the significand was successfully written to <paramref name="destination" />; otherwise, <see langword="false" />.</returns>
-    bool IFloatingPoint<BigDecimal>.TryWriteSignificandBigEndian(Span<byte> destination, out int bytesWritten)
-    {
-        return number.Significand.TryWriteBytes(destination, out bytesWritten, isBigEndian: true);
-    }
+    bool IFloatingPoint<BigDecimal>.TryWriteSignificandBigEndian(Span<byte> destination, out int bytesWritten) => number.Significand
+        .TryWriteBytes(destination, out bytesWritten, isBigEndian: true);
 
     /// <summary>Tries to write the current significand, in little-endian format, to a given span.</summary>
     /// <param name="destination">The span to which the current significand should be written.</param>
     /// <param name="bytesWritten">When this method returns, contains the number of bytes written to <paramref name="destination" />.</param>
     /// <returns> Returns <see langword="true" /> if the significand was successfully written to <paramref name="destination" />; otherwise, <see langword="false" />.</returns>
-    bool IFloatingPoint<BigDecimal>.TryWriteSignificandLittleEndian(Span<byte> destination, out int bytesWritten)
-    {
-        return number.Significand.TryWriteBytes(destination, out bytesWritten);
-    }
+    bool IFloatingPoint<BigDecimal>.TryWriteSignificandLittleEndian(Span<byte> destination, out int bytesWritten) => number.Significand
+        .TryWriteBytes(destination, out bytesWritten);
 }

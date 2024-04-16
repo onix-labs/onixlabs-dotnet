@@ -50,7 +50,7 @@ internal sealed partial class NumberInfoParser(NumberStyles style, IFormatProvid
             if (!TrySanitizeNumber(ref value, out sign, out exponent)) return false;
         }
 
-        // At this point, only digits, thousand and decimal separators should remain.
+        // At this point, only digits, thousands and decimal separators should remain.
         if (!TryGetNumberInfo(ref value, out NumberInfo rawResult)) return false;
 
         result = new NumberInfo(rawResult.UnscaledValue * sign, int.Max(rawResult.Scale - exponent, 0));

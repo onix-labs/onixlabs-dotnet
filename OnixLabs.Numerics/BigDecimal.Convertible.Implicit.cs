@@ -24,138 +24,96 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="BigInteger"/> value.</returns>
-    public static implicit operator BigDecimal(BigInteger value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(BigInteger value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="sbyte"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="sbyte"/> value.</returns>
-    public static implicit operator BigDecimal(sbyte value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(sbyte value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="byte"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="byte"/> value.</returns>
-    public static implicit operator BigDecimal(byte value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(byte value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="short"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="short"/> value.</returns>
-    public static implicit operator BigDecimal(short value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(short value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="ushort"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="ushort"/> value.</returns>
-    public static implicit operator BigDecimal(ushort value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(ushort value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="int"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="int"/> value.</returns>
-    public static implicit operator BigDecimal(int value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(int value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="uint"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="uint"/> value.</returns>
-    public static implicit operator BigDecimal(uint value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(uint value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="long"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="long"/> value.</returns>
-    public static implicit operator BigDecimal(long value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(long value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="ulong"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="ulong"/> value.</returns>
-    public static implicit operator BigDecimal(ulong value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(ulong value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="Int128"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="Int128"/> value.</returns>
-    public static implicit operator BigDecimal(Int128 value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(Int128 value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="UInt128"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="UInt128"/> value.</returns>
-    public static implicit operator BigDecimal(UInt128 value)
-    {
-        return new BigDecimal(value, default, ScaleMode.Integral);
-    }
+    public static implicit operator BigDecimal(UInt128 value) => new(value, default, ScaleMode.Integral);
 
     /// <summary>
     /// Converts the specified <see cref="float"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="float"/> value.</returns>
-    public static implicit operator BigDecimal(float value)
-    {
-        return new BigDecimal(value);
-    }
+    public static implicit operator BigDecimal(float value) => new(value);
 
     /// <summary>
     /// Converts the specified <see cref="double"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="double"/> value.</returns>
-    public static implicit operator BigDecimal(double value)
-    {
-        return new BigDecimal(value);
-    }
+    public static implicit operator BigDecimal(double value) => new(value);
 
     /// <summary>
     /// Converts the specified <see cref="decimal"/> value to a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value representing the specified <see cref="decimal"/> value.</returns>
-    public static implicit operator BigDecimal(decimal value)
-    {
-        return new BigDecimal(value);
-    }
+    public static implicit operator BigDecimal(decimal value) => new(value);
 }

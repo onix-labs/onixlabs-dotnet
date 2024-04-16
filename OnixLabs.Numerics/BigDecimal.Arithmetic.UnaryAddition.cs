@@ -21,18 +21,12 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value for which to perform unary addition.</param>
     /// <returns>Returns the unary addition of the specified <see cref="BigDecimal"/> value.</returns>
-    public static BigDecimal UnaryAdd(BigDecimal value)
-    {
-        return value;
-    }
+    public static BigDecimal UnaryAdd(BigDecimal value) => value;
 
     /// <summary>
     /// Computes the unary addition of the specified <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value for which to perform unary addition.</param>
     /// <returns>Returns the unary addition of the specified <see cref="BigDecimal"/> value.</returns>
-    public static BigDecimal operator +(BigDecimal value)
-    {
-        return UnaryAdd(value);
-    }
+    public static BigDecimal operator +(BigDecimal value) => UnaryAdd(value);
 }

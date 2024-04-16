@@ -47,10 +47,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value to be rounded up towards positive infinity.</param>
     /// <returns>Returns the smallest integral value that is greater than or equal to the specified <see cref="BigDecimal"/> value.</returns>
-    public static BigDecimal Ceiling(BigDecimal value)
-    {
-        return Round(value, 0, MidpointRounding.ToPositiveInfinity);
-    }
+    public static BigDecimal Ceiling(BigDecimal value) => Round(value, 0, MidpointRounding.ToPositiveInfinity);
 
     /// <summary>
     /// Rounds the specified <see cref="BigDecimal"/> value down to the largest integral value less than or equal to the specified number.
@@ -58,10 +55,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value to be rounded down towards positive infinity.</param>
     /// <returns>Returns the largest integral value that is less than or equal to the specified <see cref="BigDecimal"/> value.</returns>
-    public static BigDecimal Floor(BigDecimal value)
-    {
-        return Round(value, 0, MidpointRounding.ToNegativeInfinity);
-    }
+    public static BigDecimal Floor(BigDecimal value) => Round(value, 0, MidpointRounding.ToNegativeInfinity);
 
     /// <summary>
     /// Rounds the current <see cref="BigDecimal"/> value.
@@ -71,28 +65,19 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a <see cref="BigDecimal"/> value rounded to the specified number of fractional digits.</returns>
     /// <exception cref="ArgumentException">If the specified scale is non-negative.</exception>
     /// <exception cref="ArgumentException">If the specified rounding mode is invalid.</exception>
-    public BigDecimal Round(int scale = default, MidpointRounding mode = default)
-    {
-        return Round(this, scale, mode);
-    }
+    public BigDecimal Round(int scale = default, MidpointRounding mode = default) => Round(this, scale, mode);
 
     /// <summary>
     /// Rounds the current <see cref="BigDecimal"/> value up to the smallest integral value greater than or equal to the current number.
     /// This kind of rounding is sometimes called rounding towards positive infinity, following IEEE Standard 754, section 4.
     /// </summary>
     /// <returns>Returns the smallest integral value that is greater than or equal to the current <see cref="BigDecimal"/> value.</returns>
-    public BigDecimal Ceiling()
-    {
-        return Ceiling(this);
-    }
+    public BigDecimal Ceiling() => Ceiling(this);
 
     /// <summary>
     /// Rounds the current <see cref="BigDecimal"/> value down to the largest integral value less than or equal to the current number.
     /// This kind of rounding is sometimes called rounding towards negative infinity, following IEEE Standard 754, section 4.
     /// </summary>
     /// <returns>Returns the largest integral value that is less than or equal to the current <see cref="BigDecimal"/> value.</returns>
-    public BigDecimal Floor()
-    {
-        return Floor(this);
-    }
+    public BigDecimal Floor() => Floor(this);
 }

@@ -29,10 +29,7 @@ public static class GenericMath
     /// <param name="right">The right-hand number from which to compute the delta.</param>
     /// <typeparam name="T">The underlying <see cref="INumberBase{TSelf}"/> type.</typeparam>
     /// <returns>Returns the delta, or difference between the specified numbers.</returns>
-    public static T Delta<T>(T left, T right) where T : INumberBase<T>
-    {
-        return T.Abs(left - right);
-    }
+    public static T Delta<T>(T left, T right) where T : INumberBase<T> => T.Abs(left - right);
 
     /// <summary>
     /// Obtains the length of the integral component of the specified <see cref="INumberBase{TSelf}"/> value.

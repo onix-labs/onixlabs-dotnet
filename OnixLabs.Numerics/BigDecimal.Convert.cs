@@ -15,41 +15,40 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace OnixLabs.Numerics;
 
 public readonly partial struct BigDecimal
 {
-    static bool INumberBase<BigDecimal>.TryConvertFromChecked<TOther>(TOther value, out BigDecimal result)
-    {
-        return TryConvertFrom(value, out result);
-    }
+    static bool INumberBase<BigDecimal>.TryConvertFromChecked<TOther>(
+        TOther value,
+        out BigDecimal result
+    ) => TryConvertFrom(value, out result);
 
-    static bool INumberBase<BigDecimal>.TryConvertFromSaturating<TOther>(TOther value, out BigDecimal result)
-    {
-        return TryConvertFrom(value, out result);
-    }
+    static bool INumberBase<BigDecimal>.TryConvertFromSaturating<TOther>(
+        TOther value,
+        out BigDecimal result
+    ) => TryConvertFrom(value, out result);
 
-    static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(TOther value, out BigDecimal result)
-    {
-        return TryConvertFrom(value, out result);
-    }
+    static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(
+        TOther value,
+        out BigDecimal result
+    ) => TryConvertFrom(value, out result);
 
-    static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
-    {
-        return TryConvertTo(value, out result);
-    }
+    static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(
+        BigDecimal value,
+        [MaybeNullWhen(false)] out TOther result
+    ) => TryConvertTo(value, out result);
 
-    static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
-    {
-        return TryConvertTo(value, out result);
-    }
+    static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(
+        BigDecimal value,
+        [MaybeNullWhen(false)] out TOther result
+    ) => TryConvertTo(value, out result);
 
-    static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result)
-    {
-        return TryConvertTo(value, out result);
-    }
+    static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(
+        BigDecimal value,
+        [MaybeNullWhen(false)] out TOther result
+    ) => TryConvertTo(value, out result);
 
     private static bool TryConvertFrom<TOther>(TOther value, out BigDecimal result) where TOther : INumberBase<TOther>
     {

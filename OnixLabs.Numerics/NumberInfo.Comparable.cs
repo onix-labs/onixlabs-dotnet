@@ -23,10 +23,7 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public static int Compare(NumberInfo left, NumberInfo right)
-    {
-        return NumberInfoOrdinalityComparer.Default.Compare(left, right);
-    }
+    public static int Compare(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.Compare(left, right);
 
     /// <summary>
     /// Compares the current instance with another object of the same type and returns an integer that indicates
@@ -35,10 +32,7 @@ public readonly partial struct NumberInfo
     /// </summary>
     /// <param name="other">An object to compare with this instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public int CompareTo(NumberInfo other)
-    {
-        return Compare(this, other);
-    }
+    public int CompareTo(NumberInfo other) => Compare(this, other);
 
     /// <summary>
     /// Compares the current instance with another object of the same type and returns an integer that indicates
@@ -47,10 +41,7 @@ public readonly partial struct NumberInfo
     /// </summary>
     /// <param name="obj">An object to compare with this instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public int CompareTo(object? obj)
-    {
-        return NumberInfoOrdinalityComparer.Default.Compare(this, obj);
-    }
+    public int CompareTo(object? obj) => NumberInfoOrdinalityComparer.Default.Compare(this, obj);
 
     /// <summary>
     /// Determines whether the left-hand value is greater than the right-hand value.
@@ -58,10 +49,7 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand operand is greater than right-hand operand; otherwise, <see langword="false"/>.</returns>
-    public static bool operator >(NumberInfo left, NumberInfo right)
-    {
-        return NumberInfoOrdinalityComparer.Default.IsGreaterThan(left, right);
-    }
+    public static bool operator >(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.IsGreaterThan(left, right);
 
     /// <summary>
     /// Determines whether the left-hand value is greater than or equal to the right-hand value.
@@ -69,10 +57,7 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand operand is greater than or equal to the right-hand operand; otherwise, <see langword="false"/>.</returns>
-    public static bool operator >=(NumberInfo left, NumberInfo right)
-    {
-        return NumberInfoOrdinalityComparer.Default.IsGreaterThanOrEqual(left, right);
-    }
+    public static bool operator >=(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.IsGreaterThanOrEqual(left, right);
 
     /// <summary>
     /// Determines whether the left-hand value is less than right-hand value.
@@ -80,10 +65,7 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand operand is less than the right-hand operand; otherwise, <see langword="false"/>.</returns>
-    public static bool operator <(NumberInfo left, NumberInfo right)
-    {
-        return NumberInfoOrdinalityComparer.Default.IsLessThan(left, right);
-    }
+    public static bool operator <(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.IsLessThan(left, right);
 
     /// <summary>
     /// Determines whether the left-hand value is less than or equal to the right-hand value.
@@ -91,8 +73,5 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand operand is less than or equal to the right-hand operand; otherwise, <see langword="false"/>.</returns>
-    public static bool operator <=(NumberInfo left, NumberInfo right)
-    {
-        return NumberInfoOrdinalityComparer.Default.IsLessThanOrEqual(left, right);
-    }
+    public static bool operator <=(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.IsLessThanOrEqual(left, right);
 }

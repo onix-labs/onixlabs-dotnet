@@ -18,23 +18,11 @@ namespace OnixLabs.Numerics;
 
 public readonly partial struct BigDecimal
 {
-    int IFloatingPoint<BigDecimal>.GetExponentByteCount()
-    {
-        return sizeof(int);
-    }
+    int IFloatingPoint<BigDecimal>.GetExponentByteCount() => sizeof(int);
 
-    int IFloatingPoint<BigDecimal>.GetExponentShortestBitLength()
-    {
-        return sizeof(int) - int.LeadingZeroCount(number.Exponent);
-    }
+    int IFloatingPoint<BigDecimal>.GetExponentShortestBitLength() => sizeof(int) - int.LeadingZeroCount(number.Exponent);
 
-    int IFloatingPoint<BigDecimal>.GetSignificandBitLength()
-    {
-        return number.Significand.ToByteArray().Length * 8;
-    }
+    int IFloatingPoint<BigDecimal>.GetSignificandBitLength() => number.Significand.ToByteArray().Length * 8;
 
-    int IFloatingPoint<BigDecimal>.GetSignificandByteCount()
-    {
-        return number.Significand.ToByteArray().Length;
-    }
+    int IFloatingPoint<BigDecimal>.GetSignificandByteCount() => number.Significand.ToByteArray().Length;
 }

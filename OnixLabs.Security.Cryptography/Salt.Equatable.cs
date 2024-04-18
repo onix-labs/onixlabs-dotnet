@@ -17,21 +17,21 @@ using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct Hash
+public readonly partial struct Salt
 {
     /// <summary>
     /// Checks for equality between this instance and another object.
     /// </summary>
     /// <param name="other">The object to check for equality.</param>
     /// <returns>true if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Hash other) => value.SequenceEqual(other.value);
+    public bool Equals(Salt other) => value.SequenceEqual(other.value);
 
     /// <summary>
     /// Checks for equality between this instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>true if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj) => obj is Hash other && Equals(other);
+    public override bool Equals(object? obj) => obj is Salt other && Equals(other);
 
     /// <summary>
     /// Serves as a hash code function for this instance.
@@ -45,7 +45,7 @@ public readonly partial struct Hash
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Hash left, Hash right) => Equals(left, right);
+    public static bool operator ==(Salt left, Salt right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality check between two object instances.
@@ -53,5 +53,5 @@ public readonly partial struct Hash
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>True if the instances are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Hash left, Hash right) => !Equals(left, right);
+    public static bool operator !=(Salt left, Salt right) => !Equals(left, right);
 }

@@ -13,24 +13,21 @@
 // limitations under the License.
 
 using System;
-using System.Linq;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
-/// <summary>
-/// Represents a cryptographic hash.
-/// </summary>
-/// <param name="value">The underlying value of the cryptographic hash.</param>
-public readonly partial struct Hash(ReadOnlySpan<byte> value) : IEquatable<Hash>, IComparable<Hash>, IComparable
+public readonly partial struct Salt
 {
-    private readonly byte[] value = value.ToArray();
+    /// <summary>
+    /// Returns a <see cref="byte"/> array containing the underlying salt data.
+    /// </summary>
+    /// <returns>Returns a <see cref="byte"/> array containing the underlying salt data.</returns>
+    public byte[] ToByteArray() => value.Copy();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Hash"/> struct.
+    /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    /// <param name="value">The underlying value of the cryptographic hash.</param>
-    /// <param name="length">The length of the cryptographic hash in bytes.</param>
-    public Hash(byte value, int length) : this(Enumerable.Repeat(value, length).ToArray())
-    {
-    }
+    /// <returns>Returns <see cref="string"/> that represents the current object.</returns>
+    public override string ToString() => Convert.ToHexString(value).ToLower();
 }

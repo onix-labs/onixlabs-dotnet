@@ -13,24 +13,14 @@
 // limitations under the License.
 
 using System;
-using System.Linq;
 
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Represents a cryptographic hash.
+/// Represents a cryptographically secure random number, otherwise known as a salt value.
 /// </summary>
-/// <param name="value">The underlying value of the cryptographic hash.</param>
-public readonly partial struct Hash(ReadOnlySpan<byte> value) : IEquatable<Hash>, IComparable<Hash>, IComparable
+/// <param name="value">The underlying value of the salt.</param>
+public readonly partial struct Salt(ReadOnlySpan<byte> value) : IEquatable<Salt>
 {
     private readonly byte[] value = value.ToArray();
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Hash"/> struct.
-    /// </summary>
-    /// <param name="value">The underlying value of the cryptographic hash.</param>
-    /// <param name="length">The length of the cryptographic hash in bytes.</param>
-    public Hash(byte value, int length) : this(Enumerable.Repeat(value, length).ToArray())
-    {
-    }
 }

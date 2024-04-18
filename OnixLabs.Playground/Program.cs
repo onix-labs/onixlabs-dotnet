@@ -12,11 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Security.Cryptography;
+using OnixLabs.Security.Cryptography;
+
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
+        const string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        foreach (char character in characters)
+        {
+            foreach (int length in new[] { 16, 32 })
+            {
+                using HashAlgorithm algorithm = Sha3.CreateSha3Shake256(length);
+                Hash hash = Hash.Compute(algorithm, [character]);
+                Console.WriteLine($"[InlineData('{character}', {length}, \"{hash}\")]");
+            }
+        }
     }
 }

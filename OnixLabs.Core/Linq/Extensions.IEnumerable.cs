@@ -35,10 +35,8 @@ public static class IEnumerableExtensions
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
     /// <returns>Returns <see langword="true"/> if all selected element properties are equal; otherwise <see langword="false"/>.</returns>
-    public static bool AllEqualBy<T, TProperty>(
-        this IEnumerable<T> enumerable,
-        Func<T, TProperty> selector
-    ) => enumerable.Select(selector).Distinct().Count() == 1;
+    public static bool AllEqualBy<T, TProperty>(this IEnumerable<T> enumerable, Func<T, TProperty> selector) => enumerable
+        .Select(selector).Distinct().Count() == 1;
 
     /// <summary>
     /// Determines whether any elements of the current <see cref="IEnumerable{T}"/> are equal by a specified property.
@@ -48,22 +46,18 @@ public static class IEnumerableExtensions
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
     /// <returns>Returns <see langword="true"/> if any selected element properties are equal; otherwise <see langword="false"/>.</returns>
-    public static bool AnyEqualBy<T, TProperty>(
-        this IEnumerable<T> enumerable,
-        Func<T, TProperty> selector
-    ) => enumerable.GroupBy(selector).Any(group => group.Count() > 1);
+    public static bool AnyEqualBy<T, TProperty>(this IEnumerable<T> enumerable, Func<T, TProperty> selector) => enumerable
+        .GroupBy(selector).Any(group => group.Count() > 1);
 
     /// <summary>
-    /// Obtains a number that represents how many elements in the the current <see cref="IEnumerable{T}"/> do not satisfy the specified predicate condition.
+    /// Obtains a number that represents how many elements in the current <see cref="IEnumerable{T}"/> do not satisfy the specified predicate condition.
     /// </summary>
     /// <param name="enumerable">The <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <param name="predicate">The function to test each element for a condition.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a number that represents how many elements in the current <see cref="IEnumerable{T}"/> do not satisfy the specified predicate condition.</returns>
-    public static int CountNot<T>(
-        this IEnumerable<T> enumerable,
-        Func<T, bool> predicate
-    ) => enumerable.Count(element => !predicate(element));
+    public static int CountNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) => enumerable
+        .Count(element => !predicate(element));
 
     /// <summary>
     /// Performs the specified <see cref="Action{T}"/> for each element of the current <see cref="IEnumerable{T}"/>.
@@ -162,8 +156,7 @@ public static class IEnumerableExtensions
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
     public static T Sum<T>(this IEnumerable<T> enumerable) where T : INumber<T> => enumerable
-        .ToArray()
-        .Let(elements => elements.IsEmpty() ? T.Zero : elements.Aggregate((left, right) => left + right));
+        .ToArray().Let(elements => elements.IsEmpty() ? T.Zero : elements.Aggregate((left, right) => left + right));
 
     /// <summary>
     /// Calculates the sum of the elements of the current <see cref="IEnumerable{T}"/>.
@@ -173,10 +166,8 @@ public static class IEnumerableExtensions
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <typeparam name="TResult">The underlying <see cref="INumber{TSelf}"/> type of each element to sum.</typeparam>
     /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
-    public static TResult SumBy<T, TResult>(
-        this IEnumerable<T> enumerable,
-        Func<T, TResult> selector
-    ) where TResult : INumber<TResult> => enumerable.Select(selector).Sum();
+    public static TResult SumBy<T, TResult>(this IEnumerable<T> enumerable, Func<T, TResult> selector) where TResult : INumber<TResult> => enumerable
+        .Select(selector).Sum();
 
     /// <summary>
     /// Filters the current <see cref="IEnumerable{T}"/> elements that do not satisfy the specified predicate condition.
@@ -212,9 +203,6 @@ public static class IEnumerableExtensions
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a <see cref="string"/> collection representation of the current <see cref="IEnumerable{T}"/>.</returns>
-    public static string ToCollectionString<T>(
-        this IEnumerable<T> enumerable,
-        string format,
-        IFormatProvider? formatProvider = null
-    ) where T : IFormattable => enumerable.Select(element => element.ToString(format, formatProvider)).ToCollectionString();
+    public static string ToCollectionString<T>(this IEnumerable<T> enumerable, string format, IFormatProvider? formatProvider = null) where T : IFormattable => enumerable
+        .Select(element => element.ToString(format, formatProvider)).ToCollectionString();
 }

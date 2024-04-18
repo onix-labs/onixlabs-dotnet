@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020-2024 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,51 +20,49 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Defines a number base representation.
 /// </summary>
-/// <typeparam name="TSelf">The underlying type of the number base representation.</typeparam>
-public interface IBaseRepresentation<TSelf> :
-    IEquatable<TSelf>,
-    ISpanParsable<TSelf>,
-    ISpanFormattable
-    where TSelf : struct, IBaseRepresentation<TSelf>
+public interface IBaseRepresentation : ISpanFormattable
 {
     /// <summary>
-    /// Gets an empty <see typeparam="TSelf"/> value.
+    /// Converts the current <see cref="IBaseRepresentation"/> to a <see cref="Base16"/> value.
     /// </summary>
-    public static abstract TSelf Empty { get; }
+    /// <returns>Returns the current <see cref="IBaseRepresentation"/> to a <see cref="Base16"/> value.</returns>
+    public Base16 ToBase16() => new(ToByteArray());
 
     /// <summary>
-    /// Performs an equality check between two <see typeparam="TSelf"/> instances.
+    /// Converts the current <see cref="IBaseRepresentation"/> to a <see cref="Base32"/> value.
     /// </summary>
-    /// <param name="left">The left-hand <see typeparam="TSelf"/> instance to compare.</param>
-    /// <param name="right">The right-hand <see typeparam="TSelf"/> instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator ==(TSelf left, TSelf right);
+    /// <returns>Returns the current <see cref="IBaseRepresentation"/> to a <see cref="Base32"/> value.</returns>
+    public Base32 ToBase32() => new(ToByteArray());
 
     /// <summary>
-    /// Performs an inequality check between two <see typeparam="TSelf"/> instances.
+    /// Converts the current <see cref="IBaseRepresentation"/> to a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="left">The left-hand <see typeparam="TSelf"/> instance to compare.</param>
-    /// <param name="right">The right-hand <see typeparam="TSelf"/> instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the instances are not equal; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator !=(TSelf left, TSelf right);
+    /// <returns>Returns the current <see cref="IBaseRepresentation"/> to a <see cref="Base58"/> value.</returns>
+    public Base58 ToBase58() => new(ToByteArray());
 
     /// <summary>
-    /// Gets the underlying <see cref="T:byte[]"/> represented by the current <see typeparam="TSelf"/> value.
+    /// Converts the current <see cref="IBaseRepresentation"/> to a <see cref="Base64"/> value.
     /// </summary>
-    /// <returns>Returns the underlying <see cref="T:byte[]"/> represented by the current <see typeparam="TSelf"/> value.</returns>
+    /// <returns>Returns the current <see cref="IBaseRepresentation"/> to a <see cref="Base64"/> value.</returns>
+    public Base64 ToBase64() => new(ToByteArray());
+
+    /// <summary>
+    /// Gets the underlying <see cref="byte"/> array represented by the current <see typeparam="IBaseRepresentation"/> value.
+    /// </summary>
+    /// <returns>Returns the underlying <see cref="byte"/> array represented by the current <see typeparam="IBaseRepresentation"/> value.</returns>
     public byte[] ToByteArray();
 
     /// <summary>
-    /// Gets the plain-text <see cref="string"/> representation of the current <see typeparam="TSelf"/> value, using the default <see cref="Encoding"/>.
+    /// Gets the plain-text <see cref="string"/> representation of the current <see typeparam="IBaseRepresentation"/> value, using the default <see cref="Encoding"/>.
     /// </summary>
-    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see typeparam="TSelf"/> value, using the default <see cref="Encoding"/>.</returns>
+    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see typeparam="IBaseRepresentation"/> value, using the default <see cref="Encoding"/>.</returns>
     public string ToPlainTextString();
 
     /// <summary>
-    /// Gets the plain-text <see cref="string"/> representation of the current <see typeparam="TSelf"/> value.
+    /// Gets the plain-text <see cref="string"/> representation of the current <see typeparam="IBaseRepresentation"/> value.
     /// </summary>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="string"/> from the current <see typeparam="TSelf"/> value.</param>
-    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see typeparam="TSelf"/> value.</returns>
+    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see typeparam="IBaseRepresentation"/> value.</returns>
     public string ToPlainTextString(Encoding encoding);
 
     /// <summary>

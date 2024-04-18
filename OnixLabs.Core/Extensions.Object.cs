@@ -50,8 +50,24 @@ public static class ObjectExtensions
     /// <returns>Returns the result of the function call.</returns>
     public static TResult Let<T, TResult>(this T obj, Func<T, TResult> func) => func(obj);
 
+    /// <summary>
+    /// Asynchronously calls the specified <see cref="Func{T, TResult}"/> with the current object as the function's argument.
+    /// </summary>
+    /// <param name="task">The current <see cref="Task{T}"/> upon which to perform the function.</param>
+    /// <param name="func">The <see cref="Func{T, TResult}"/> to execute for the current object.</param>
+    /// <typeparam name="T">The underlying type of the current object.</typeparam>
+    /// <typeparam name="TResult">The underlying type that the function returns.</typeparam>
+    /// <returns>Returns the result of the function call.</returns>
     public static async Task<TResult> LetAsync<T, TResult>(this Task<T> task, Func<T, TResult> func) => func(await task);
 
+    /// <summary>
+    /// Asynchronously calls the specified <see cref="Func{T, Task}"/> with the current object as the function's argument.
+    /// </summary>
+    /// <param name="task">The current <see cref="Task{T}"/> upon which to perform the function.</param>
+    /// <param name="func">The <see cref="Func{T, Task}"/> to execute for the current object.</param>
+    /// <typeparam name="T">The underlying type of the current object.</typeparam>
+    /// <typeparam name="TResult">The underlying type that the function returns.</typeparam>
+    /// <returns>Returns the result of the function call.</returns>
     public static async Task<TResult> LetAsync<T, TResult>(this Task<T> task, Func<T, Task<TResult>> func) => await func(await task);
 
     /// <summary>

@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using OnixLabs.Core;
@@ -82,6 +84,17 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static Hash Compute(HashAlgorithm algorithm, Stream stream, int rounds) => algorithm
         .ComputeHash(stream, rounds).Let(hash => new Hash(hash));
+
+    /// <summary>
+    /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
+    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) => algorithm
+        .ComputeHash(data, encoding, rounds).Let(hash => new Hash(hash));
 
     /// <summary>
     /// Asynchronously computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.

@@ -14,6 +14,7 @@
 
 using System;
 using System.IO;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using OnixLabs.Core;
 using Xunit;
@@ -419,6 +420,23 @@ public sealed class HashTests
         // When
         Hash hash = await Hash.ComputeAsync(algorithm, stream, 2);
         string actual = hash.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Hash.Concatenate should produce the expected result")]
+    public void HashConcatenateShouldProduceExpectedResult()
+    {
+        // Given
+        using HashAlgorithm algorithm = SHA256.Create();
+        Hash left = Hash.Compute(algorithm, "abc");
+        Hash right = Hash.Compute(algorithm, "123");
+        const string expected = "c1702b0f46b4a0d3ef1e19feef861727cc583a157594e264571126818c820592";
+
+        // When
+        Hash concatenated = left.Concatenate(algorithm, right);
+        string actual = concatenated.ToString();
 
         // Then
         Assert.Equal(expected, actual);

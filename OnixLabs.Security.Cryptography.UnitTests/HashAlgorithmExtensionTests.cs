@@ -27,11 +27,10 @@ public sealed class HashAlgorithmExtensionTests
     {
         // Given
         using HashAlgorithm algorithm = SHA256.Create();
-        Stream data = new MemoryStream(Encoding.Default.GetBytes("abc123"));
         const string expected = "efaaeb3b1d1d85e8587ef0527ca43b9575ce8149ba1ee41583d3d19bd130daf8";
 
         // When
-        byte[] bytes = algorithm.ComputeHash(data, 2);
+        byte[] bytes = algorithm.ComputeHash("abc123", rounds: 2);
         string actual = Convert.ToHexString(bytes).ToLower();
 
         // Then

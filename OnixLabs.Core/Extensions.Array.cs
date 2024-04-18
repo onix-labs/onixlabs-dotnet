@@ -49,7 +49,5 @@ public static class ArrayExtensions
     /// <param name="other">The other array to concatenate with the source array.</param>
     /// <typeparam name="T">The underlying type of the array.</typeparam>
     /// <returns>Returns the current array concatenated with the other array.</returns>
-    public static T[] ConcatenateWith<T>(this T[] array, T[] other) => new T[array.Length + other.Length]
-        .Apply(result => Array.Copy(array, 0, result, 0, array.Length))
-        .Apply(result => Array.Copy(other, 0, result, array.Length, other.Length));
+    public static T[] ConcatenateWith<T>(this T[] array, T[] other) => [..array, ..other];
 }

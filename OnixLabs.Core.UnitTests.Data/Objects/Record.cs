@@ -14,10 +14,4 @@
 
 namespace OnixLabs.Core.UnitTests.Data.Objects;
 
-public sealed class Element(int hashCode = 0)
-{
-    public bool Called { get; set; }
-    private int HashCode { get; } = hashCode;
-
-    public override int GetHashCode() => HashCode;
-}
+public sealed record Record(string Text, int Number, DateTime Moment, Guid Identifier);

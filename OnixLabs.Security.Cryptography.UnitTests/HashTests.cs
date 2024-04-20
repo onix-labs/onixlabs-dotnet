@@ -101,7 +101,7 @@ public sealed class HashTests
     }
 
     [Fact(DisplayName = "Identical hash values should be considered equal")]
-    public void IdenticalHashesShouldBeConsideredEqual()
+    public void IdenticalHashValuesShouldBeConsideredEqual()
     {
         // Given
         Hash left = new([1, 2, 3, 4]);

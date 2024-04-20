@@ -57,6 +57,18 @@ public static class Preconditions
     }
 
     /// <summary>
+    /// Performs a general pre-condition requirement, which fails if the condition returns <see langword="false"/>.
+    /// </summary>
+    /// <param name="condition">The condition of the requirement.</param>
+    /// <param name="message">The exception message to throw in the event that the condition fails.</param>
+    /// <param name="parameterName">The name of the parameter which is invalid.</param>
+    /// <exception cref="ArgumentOutOfRangeException">If the condition fails.</exception>
+    public static void RequireWithinRange(bool condition, string message = "Argument is out of range.", string? parameterName = null)
+    {
+        if (!condition) throw new ArgumentOutOfRangeException(parameterName, message);
+    }
+
+    /// <summary>
     /// Performs a general pre-condition requirement that the specified value is not null, which fails if the value is null.
     /// </summary>
     /// <param name="value">The nullable value to check.</param>

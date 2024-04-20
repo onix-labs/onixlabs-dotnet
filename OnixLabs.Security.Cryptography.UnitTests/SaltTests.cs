@@ -19,6 +19,123 @@ namespace OnixLabs.Security.Cryptography.UnitTests;
 
 public sealed class SaltTests
 {
+    [Fact(DisplayName = "Salt should be constructable from bytes")]
+    public void SaltShouldBeConstructableFromBytes()
+    {
+        // Given
+        byte[] value = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        const string expected = "000102030405060708090a0b0c0d0e0f";
+
+        // When
+        Salt salt = new(value);
+        string actual = salt.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Salt.Empty should produce an empty salt value")]
+    public void SaltEmptyShouldProduceAnEmptySaltValue()
+    {
+        // Given
+        const string expected = "";
+
+        // When
+        Salt salt = Salt.Empty;
+        string actual = salt.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Salt value should not be modified when altering the original byte array")]
+    public void SaltValueShouldNotBeModifiedWhenAlteringTheOriginalByteArray()
+    {
+        // Given
+        byte[] value = [1, 2, 3, 4];
+        Salt salt = new(value);
+        const string expected = "01020304";
+
+        // When
+        value[0] = 0;
+        string actual = salt.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Salt value should not be modified when altering the obtained byte array")]
+    public void SaltValueShouldNotBeModifiedWhenAlteringTheObtainedByteArray()
+    {
+        // Given
+        Salt salt = new([1, 2, 3, 4]);
+        const string expected = "01020304";
+
+        // When
+        byte[] value = salt.ToByteArray();
+        value[0] = 0;
+        string actual = salt.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Identical salt values should be considered equal")]
+    public void IdenticalSaltValuesShouldBeConsideredEqual()
+    {
+        // Given
+        Salt left = new([1, 2, 3, 4]);
+        Salt right = new([1, 2, 3, 4]);
+
+        // Then
+        Assert.Equal(left, right);
+        Assert.True(left.Equals(right));
+        Assert.True(left == right);
+    }
+
+    [Fact(DisplayName = "Different salt values should not be considered equal")]
+    public void DifferentSaltValuesShouldNotBeConsideredEqual()
+    {
+        // Given
+        Salt left = new([1, 2, 3, 4]);
+        Salt right = new([5, 6, 7, 8]);
+
+        // Then
+        Assert.NotEqual(left, right);
+        Assert.False(left.Equals(right));
+        Assert.True(left != right);
+    }
+
+    [Fact(DisplayName = "Identical salt values should produce identical hash codes")]
+    public void IdenticalSaltValuesShouldProduceIdenticalSaltCodes()
+    {
+        // Given
+        Salt left = new([1, 2, 3, 4]);
+        Salt right = new([1, 2, 3, 4]);
+
+        // When
+        int leftSaltCode = left.GetHashCode();
+        int rightSaltCode = right.GetHashCode();
+
+        // Then
+        Assert.Equal(leftSaltCode, rightSaltCode);
+    }
+
+    [Fact(DisplayName = "Different salt values should produce different hash codes")]
+    public void DifferentSaltValuesShouldProduceDifferentSaltCodes()
+    {
+        // Given
+        Salt left = new([1, 2, 3, 4]);
+        Salt right = new([5, 6, 7, 8]);
+
+        // When
+        int leftSaltCode = left.GetHashCode();
+        int rightSaltCode = right.GetHashCode();
+
+        // Then
+        Assert.NotEqual(leftSaltCode, rightSaltCode);
+    }
+
     [Fact(DisplayName = "Salt.Create should produce a salt of the specified length")]
     public void SaltCreateShouldProduceASaltOfTheSpecifiedLength()
     {

@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020-2024 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,11 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using System;
 
-internal class Program
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Represents a cryptographic digital signature.
+/// </summary>
+/// <param name="value">The underlying value of the cryptographic digital signature.</param>
+public readonly partial struct DigitalSignature(ReadOnlySpan<byte> value) : IEquatable<DigitalSignature>
 {
-    private static void Main()
-    {
-    }
+    private readonly byte[] value = value.ToArray();
 }

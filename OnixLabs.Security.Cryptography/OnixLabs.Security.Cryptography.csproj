@@ -45,11 +45,4 @@
     <ItemGroup>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
     </ItemGroup>
-    <ItemGroup>
-      <Compile Remove="PrivateKey.cs" />
-      <Compile Remove="PrivateKey.Sign.cs" />
-      <Compile Remove="PrivateKey.Get.cs" />
-      <Compile Remove="PrivateKey.Export.cs" />
-      <Compile Remove="PrivateKey.Equatable.cs" />
-    </ItemGroup>
 </Project>

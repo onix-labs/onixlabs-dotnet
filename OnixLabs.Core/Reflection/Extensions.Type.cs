@@ -13,9 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
 namespace OnixLabs.Core.Reflection;
 
@@ -35,24 +33,5 @@ public static class TypeExtensions
     /// </summary>
     /// <param name="type">The <see cref="Type"/> from which to obtain a simple type name.</param>
     /// <returns>Returns the simple type name from the specified type, excluding any generic type parameters.</returns>
-    public static string GetSimpleName(this Type type) => type.Name.SubstringBeforeFirst(GenericTypeIdentifierMarker);
-
-    /// <summary>
-    /// Gets the formatted type name from the specified type, including any generic type parameters.
-    /// </summary>
-    /// <param name="type">The <see cref="Type"/> from which to obtain a formatted type name.</param>
-    /// <returns>Returns the formatted type name from the specified type, including any generic type parameters.</returns>
-    public static string GetFormattedName(this Type type)
-    {
-        if (!type.Name.Contains(GenericTypeIdentifierMarker))
-        {
-            return type.Name;
-        }
-
-        IEnumerable<string> genericTypeArguments = type.GenericTypeArguments.Select(GetFormattedName);
-        string typeName = type.Name.SubstringBeforeFirst(GenericTypeIdentifierMarker);
-        string generics = string.Join(", ", genericTypeArguments).Wrap("<", ">");
-
-        return typeName + generics;
-    }
+    public static string GetName(this Type type) => type.Name.SubstringBeforeFirst(GenericTypeIdentifierMarker);
 }

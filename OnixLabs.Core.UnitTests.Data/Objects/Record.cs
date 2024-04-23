@@ -14,4 +14,4 @@
 
 namespace OnixLabs.Core.UnitTests.Data.Objects;
 
-public sealed record Record(string Text, int Number, DateTime Moment, Guid Identifier);
+public sealed record Record<T>(string Text, int Number, T Value);

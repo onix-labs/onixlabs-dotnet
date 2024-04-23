@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using OnixLabs.Core.Reflection;
 
 namespace OnixLabs.Core;
 
@@ -98,6 +99,6 @@ public static class ObjectExtensions
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Select(property => $"{property.Name} = {property.GetValue(value)}");
 
-        return $"{type.Name} {{ {string.Join(", ", properties)} }}";
+        return $"{type.GetName()} {{ {string.Join(", ", properties)} }}";
     }
 }

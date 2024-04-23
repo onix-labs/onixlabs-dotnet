@@ -15,7 +15,6 @@
 using System;
 using OnixLabs.Core.UnitTests.Data.Objects;
 using Xunit;
-using Record = OnixLabs.Core.UnitTests.Data.Objects.Record;
 
 namespace OnixLabs.Core.UnitTests;
 
@@ -25,7 +24,7 @@ public sealed class ObjectExtensionTests
     public void ToRecordStringShouldProduceExpectedResult()
     {
         // Given
-        Record record = new("abc", 123, DateTime.Now, Guid.NewGuid());
+        Record<Guid> record = new("abc", 123, Guid.NewGuid());
         string expected = record.ToString();
 
         // When

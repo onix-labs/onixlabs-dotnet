@@ -19,7 +19,6 @@ using System.Linq;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data.Objects;
 using Xunit;
-using Record = OnixLabs.Core.UnitTests.Data.Objects.Record;
 
 namespace OnixLabs.Core.UnitTests.Linq;
 
@@ -30,10 +29,10 @@ public sealed class IEnumerableExtensionTests
     public void AllEqualByShouldProduceExpectedResultTrue()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element3 = new("abc", 123, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -46,10 +45,10 @@ public sealed class IEnumerableExtensionTests
     public void AllEqualByShouldProduceExpectedResultFalse()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("xyz", 123, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -62,10 +61,10 @@ public sealed class IEnumerableExtensionTests
     public void AnyEqualByShouldProduceExpectedResultTrue()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("xyz", 123, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
 
         // When
         bool result = elements.AnyEqualBy(element => element.Text);
@@ -78,10 +77,10 @@ public sealed class IEnumerableExtensionTests
     public void AnyEqualByShouldProduceExpectedResultFalse()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("def", 123, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("xyz", 123, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("def", 123, Guid.NewGuid());
+        Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
 
         // When
         bool result = elements.AnyEqualBy(element => element.Text);
@@ -94,10 +93,10 @@ public sealed class IEnumerableExtensionTests
     public void CountNotShouldProduceExpectedResult()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("def", 123, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("xyz", 456, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("def", 123, Guid.NewGuid());
+        Record<Guid> element3 = new("xyz", 456, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
         const int expected = 2;
 
         // When
@@ -325,10 +324,10 @@ public sealed class IEnumerableExtensionTests
     public void NoneShouldProduceExpectedResultTrue()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("def", 456, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("xyz", 789, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("def", 456, Guid.NewGuid());
+        Record<Guid> element3 = new("xyz", 789, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -341,10 +340,10 @@ public sealed class IEnumerableExtensionTests
     public void NoneShouldProduceExpectedResultFalseAny()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("def", 456, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("xyz", 0, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("def", 456, Guid.NewGuid());
+        Record<Guid> element3 = new("xyz", 0, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -357,10 +356,10 @@ public sealed class IEnumerableExtensionTests
     public void NoneShouldProduceExpectedResultFalseAll()
     {
         // Given
-        Record element1 = new("abc", 0, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("def", 0, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("xyz", 0, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
+        Record<Guid> element1 = new("abc", 0, Guid.NewGuid());
+        Record<Guid> element2 = new("def", 0, Guid.NewGuid());
+        Record<Guid> element3 = new("xyz", 0, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -404,14 +403,14 @@ public sealed class IEnumerableExtensionTests
     public void WhereNotShouldProduceExpectedResult()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("def", 456, DateTime.Now, Guid.NewGuid());
-        Record element3 = new("xyz", 789, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, element3 };
-        IEnumerable<Record> expected = new[] { element2, element3 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("def", 456, Guid.NewGuid());
+        Record<Guid> element3 = new("xyz", 789, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> expected = new[] { element2, element3 };
 
         // When
-        IEnumerable<Record> actual = elements.WhereNot(element => element.Number == 123);
+        IEnumerable<Record<Guid>> actual = elements.WhereNot(element => element.Number == 123);
 
         // Then
         Assert.Equal(expected, actual);
@@ -421,13 +420,13 @@ public sealed class IEnumerableExtensionTests
     public void WhereNotNullShouldProduceExpectedResult()
     {
         // Given
-        Record element1 = new("abc", 123, DateTime.Now, Guid.NewGuid());
-        Record element2 = new("def", 456, DateTime.Now, Guid.NewGuid());
-        IEnumerable<Record> elements = new[] { element1, element2, null };
-        IEnumerable<Record> expected = new[] { element1, element2 };
+        Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
+        Record<Guid> element2 = new("def", 456, Guid.NewGuid());
+        IEnumerable<Record<Guid>> elements = new[] { element1, element2, null };
+        IEnumerable<Record<Guid>> expected = new[] { element1, element2 };
 
         // When
-        IEnumerable<Record> actual = elements.WhereNotNull();
+        IEnumerable<Record<Guid>> actual = elements.WhereNotNull();
 
         // Then
         Assert.Equal(expected, actual);

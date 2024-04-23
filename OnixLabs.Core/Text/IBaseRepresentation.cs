@@ -20,38 +20,8 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Defines a number base representation.
 /// </summary>
-public interface IBaseRepresentation : ISpanFormattable
+public interface IBaseRepresentation : IBinaryConvertible, ISpanFormattable
 {
-    /// <summary>
-    /// Converts the current <see cref="IBaseRepresentation"/> to a <see cref="Base16"/> value.
-    /// </summary>
-    /// <returns>Returns the current <see cref="IBaseRepresentation"/> to a <see cref="Base16"/> value.</returns>
-    public Base16 ToBase16() => new(ToByteArray());
-
-    /// <summary>
-    /// Converts the current <see cref="IBaseRepresentation"/> to a <see cref="Base32"/> value.
-    /// </summary>
-    /// <returns>Returns the current <see cref="IBaseRepresentation"/> to a <see cref="Base32"/> value.</returns>
-    public Base32 ToBase32() => new(ToByteArray());
-
-    /// <summary>
-    /// Converts the current <see cref="IBaseRepresentation"/> to a <see cref="Base58"/> value.
-    /// </summary>
-    /// <returns>Returns the current <see cref="IBaseRepresentation"/> to a <see cref="Base58"/> value.</returns>
-    public Base58 ToBase58() => new(ToByteArray());
-
-    /// <summary>
-    /// Converts the current <see cref="IBaseRepresentation"/> to a <see cref="Base64"/> value.
-    /// </summary>
-    /// <returns>Returns the current <see cref="IBaseRepresentation"/> to a <see cref="Base64"/> value.</returns>
-    public Base64 ToBase64() => new(ToByteArray());
-
-    /// <summary>
-    /// Gets the underlying <see cref="byte"/> array represented by the current <see typeparam="IBaseRepresentation"/> value.
-    /// </summary>
-    /// <returns>Returns the underlying <see cref="byte"/> array represented by the current <see typeparam="IBaseRepresentation"/> value.</returns>
-    public byte[] ToByteArray();
-
     /// <summary>
     /// Gets the plain-text <see cref="string"/> representation of the current <see typeparam="IBaseRepresentation"/> value, using the default <see cref="Encoding"/>.
     /// </summary>

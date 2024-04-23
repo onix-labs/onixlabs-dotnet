@@ -20,7 +20,7 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents a cryptographically secure random number, otherwise known as a salt value.
 /// </summary>
 /// <param name="value">The underlying value of the salt.</param>
-public readonly partial struct Salt(ReadOnlySpan<byte> value) : IEquatable<Salt>
+public readonly partial struct Salt(ReadOnlySpan<byte> value) : ICryptoPrimitive<Salt>
 {
     private readonly byte[] value = value.ToArray();
 }

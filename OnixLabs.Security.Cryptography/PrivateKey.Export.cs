@@ -12,12 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Security.Cryptography;
+
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct Salt
+public abstract partial class PrivateKey
 {
     /// <summary>
-    /// Gets an empty salt value.
+    /// Exports the key in PKCS #8 format.
     /// </summary>
-    public static Salt Empty => new([]);
+    /// <returns>Returns the key in PKCS #8 format.</returns>
+    public abstract byte[] ExportPkcs8Key();
+
+    /// <summary>
+    /// Exports the key in encrypted PKCS #8 format.
+    /// </summary>
+    /// <param name="password">The password to use for encryption.</param>
+    /// <param name="parameters">The parameters required for password based encryption.</param>
+    /// <returns>Returns the key in encrypted PKCS #8 format.</returns>
+    public abstract byte[] ExportPkcs8Key(ReadOnlySpan<char> password, PbeParameters parameters);
 }

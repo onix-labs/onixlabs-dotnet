@@ -12,12 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography;
+namespace OnixLabs.Security.Cryptography.UnitTests.Data;
 
-public readonly partial struct DigitalSignature
-{
-    /// <summary>
-    /// Gets an empty digital signature value.
-    /// </summary>
-    public static DigitalSignature Empty => new([]);
-}
+public sealed class TestPublicKey(ReadOnlySpan<byte> value) : PublicKey(value);

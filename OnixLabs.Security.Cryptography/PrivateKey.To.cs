@@ -12,12 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using OnixLabs.Core;
+
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial struct Hash
+public abstract partial class PrivateKey
 {
     /// <summary>
-    /// Gets an empty cryptographic hash value.
+    /// Returns a <see cref="byte"/> array containing the underlying hash data.
     /// </summary>
-    public static Hash Empty => new([]);
+    /// <returns>Returns a <see cref="byte"/> array containing the underlying hash data.</returns>
+    public byte[] ToByteArray() => Value.Copy();
+
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <returns>Returns <see cref="string"/> that represents the current object.</returns>
+    public override string ToString() => Convert.ToHexString(Value).ToLower();
 }

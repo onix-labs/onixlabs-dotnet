@@ -34,20 +34,6 @@ public sealed class SaltTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Salt.Empty should produce an empty salt value")]
-    public void SaltEmptyShouldProduceAnEmptySaltValue()
-    {
-        // Given
-        const string expected = "";
-
-        // When
-        Salt salt = Salt.Empty;
-        string actual = salt.ToString();
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
     [Fact(DisplayName = "Salt value should not be modified when altering the original byte array")]
     public void SaltValueShouldNotBeModifiedWhenAlteringTheOriginalByteArray()
     {
@@ -114,11 +100,11 @@ public sealed class SaltTests
         Salt right = new([1, 2, 3, 4]);
 
         // When
-        int leftSaltCode = left.GetHashCode();
-        int rightSaltCode = right.GetHashCode();
+        int leftHashCode = left.GetHashCode();
+        int rightHashCode = right.GetHashCode();
 
         // Then
-        Assert.Equal(leftSaltCode, rightSaltCode);
+        Assert.Equal(leftHashCode, rightHashCode);
     }
 
     [Fact(DisplayName = "Different salt values should produce different hash codes")]
@@ -129,11 +115,11 @@ public sealed class SaltTests
         Salt right = new([5, 6, 7, 8]);
 
         // When
-        int leftSaltCode = left.GetHashCode();
-        int rightSaltCode = right.GetHashCode();
+        int leftHashCode = left.GetHashCode();
+        int rightHashCode = right.GetHashCode();
 
         // Then
-        Assert.NotEqual(leftSaltCode, rightSaltCode);
+        Assert.NotEqual(leftHashCode, rightHashCode);
     }
 
     [Fact(DisplayName = "Salt.Create should produce a salt of the specified length")]

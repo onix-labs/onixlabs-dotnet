@@ -54,20 +54,6 @@ public sealed class HashTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Hash.Empty should produce an empty hash value")]
-    public void HashEmptyShouldProduceAnEmptyHashValue()
-    {
-        // Given
-        const string expected = "";
-
-        // When
-        Hash hash = Hash.Empty;
-        string actual = hash.ToString();
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
     [Fact(DisplayName = "Hash value should not be modified when altering the original byte array")]
     public void HashValueShouldNotBeModifiedWhenAlteringTheOriginalByteArray()
     {

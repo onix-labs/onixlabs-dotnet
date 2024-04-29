@@ -39,4 +39,7 @@
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
+    <ItemGroup>
+        <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
+    </ItemGroup>
 </Project>

@@ -20,4 +20,7 @@
         <ProjectReference Include="..\OnixLabs.Core.UnitTests.Data\OnixLabs.Core.UnitTests.Data.csproj"/>
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
     </ItemGroup>
+    <ItemGroup>
+        <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
+    </ItemGroup>
 </Project>

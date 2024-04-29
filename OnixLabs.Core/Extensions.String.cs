@@ -298,7 +298,7 @@ public static class StringExtensions
     }
 
     /// <summary>
-    /// Converts the current <see cref="System.String"/> instance into a <see cref="System.TimeOnly"/> instance.
+    /// Converts the current <see cref="System.String"/> instance into a new <see cref="System.TimeOnly"/> instance.
     /// </summary>
     /// <param name="value">The current <see cref="System.String"/> instance to convert.</param>
     /// <param name="provider">An object that provides culture-specific formatting information.</param>

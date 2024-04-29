@@ -28,6 +28,21 @@ namespace OnixLabs.Core;
 public static class ObjectExtensions
 {
     /// <summary>
+    /// Compares the current <see cref="System.IComparable{T}"/> instance with the specified <see cref="System.Object"/> instance.
+    /// </summary>
+    /// <param name="comparable">The left-hand <see cref="System.IComparable{T}"/> instance to compare.</param>
+    /// <param name="obj">The right-hand <see cref="System.Object"/> instance to compare.</param>
+    /// <typeparam name="T">The underlying type of the current <see cref="System.IComparable{T}"/>.</typeparam>
+    /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
+    /// <exception cref="System.ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
+    public static int CompareToObject<T>(this IComparable<T> comparable, object? obj)
+    {
+        if (obj is null) return 1;
+        if (obj is T other) return comparable.CompareTo(other);
+        throw new ArgumentException($"Object must be of type {typeof(T).Name}", nameof(obj));
+    }
+
+    /// <summary>
     /// Gets a record-like <see cref="System.String"/> representation of the current <see cref="System.Object"/> instance.
     /// </summary>
     /// <param name="value">The current <see cref="System.Object"/> instance.</param>

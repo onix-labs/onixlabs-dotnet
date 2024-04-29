@@ -27,7 +27,7 @@ public static class Preconditions
     /// </summary>
     /// <param name="condition">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
-    /// <exception cref="InvalidOperationException">If the specified condition is <see langword="false"/>.</exception>
+    /// <exception cref="System.InvalidOperationException">If the specified condition is <see langword="false"/>.</exception>
     public static void Check(bool condition, string message = "Check failed.")
     {
         if (!condition) throw new InvalidOperationException(message);
@@ -39,8 +39,8 @@ public static class Preconditions
     /// <param name="value">The nullable value to check.</param>
     /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/>.</param>
     /// <typeparam name="T">The underlying type of the value.</typeparam>
-    /// <returns>Returns a non-null value of type <see cref="T"/>.</returns>
-    /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
+    /// <returns>Returns a non-null value of the specified type.</returns>
+    /// <exception cref="System.InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
     public static T CheckNotNull<T>(T? value, string message = "Argument must not be null.") where T : notnull
     {
         return value ?? throw new InvalidOperationException(message);
@@ -52,7 +52,7 @@ public static class Preconditions
     /// <param name="condition">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
     /// <param name="parameterName">The name of the invalid paramter.</param>
-    /// <exception cref="ArgumentException">If the specified condition is <see langword="false"/>.</exception>
+    /// <exception cref="System.ArgumentException">If the specified condition is <see langword="false"/>.</exception>
     public static void Require(bool condition, string message = "Argument requirement failed.", string? parameterName = null)
     {
         if (!condition) throw new ArgumentException(message, parameterName);
@@ -64,7 +64,7 @@ public static class Preconditions
     /// <param name="condition">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
     /// <param name="parameterName">The name of the invalid paramter.</param>
-    /// <exception cref="ArgumentOutOfRangeException">If the specified condition is <see langword="false"/>.</exception>
+    /// <exception cref="System.ArgumentOutOfRangeException">If the specified condition is <see langword="false"/>.</exception>
     public static void RequireWithinRange(bool condition, string message = "Argument is out of range.", string? parameterName = null)
     {
         if (!condition) throw new ArgumentOutOfRangeException(parameterName, message);
@@ -77,8 +77,8 @@ public static class Preconditions
     /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/>.</param>
     /// <param name="parameterName">The name of the invalid parameter.</param>
     /// <typeparam name="T">The underlying type of the value.</typeparam>
-    /// <returns>Returns a non-null value of type <see cref="T"/>.</returns>
-    /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
+    /// <returns>Returns a non-null value of the specified type.</returns>
+    /// <exception cref="System.InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
     public static T RequireNotNull<T>(T? value, string message = "Argument must not be null.", string? parameterName = null) where T : notnull
     {
         return value ?? throw new ArgumentNullException(parameterName, message);
@@ -89,7 +89,7 @@ public static class Preconditions
     /// </summary>
     /// <param name="value">The enum value to check.</param>
     /// <param name="parameterName">The name of the invalid parameter.</param>
-    /// <typeparam name="T">The underlying type of the <see cref="Enum"/>.</typeparam>
+    /// <typeparam name="T">The underlying type of the <see cref="System.Enum"/>.</typeparam>
     public static void RequireIsDefined<T>(T value, string? parameterName = null) where T : struct, Enum
     {
         if (Enum.IsDefined(value)) return;

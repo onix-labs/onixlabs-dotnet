@@ -42,7 +42,4 @@
     <ItemGroup>
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
     </ItemGroup>
-    <ItemGroup>
-        <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
-    </ItemGroup>
 </Project>

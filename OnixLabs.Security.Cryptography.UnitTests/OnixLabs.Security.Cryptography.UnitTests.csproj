@@ -20,7 +20,4 @@
         <ProjectReference Include="..\OnixLabs.Security.Cryptography.UnitTests.Data\OnixLabs.Security.Cryptography.UnitTests.Data.csproj"/>
         <ProjectReference Include="..\OnixLabs.Security.Cryptography\OnixLabs.Security.Cryptography.csproj"/>
     </ItemGroup>
-    <ItemGroup>
-        <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
-    </ItemGroup>
 </Project>

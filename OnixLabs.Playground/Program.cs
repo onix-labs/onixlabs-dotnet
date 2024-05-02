@@ -12,11 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using OnixLabs.Core;
+using OnixLabs.Core.Text;
+
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
+        byte[] data = "Hello, World!".ToByteArray();
+        string enc = IBaseCodec.Base58.Encode(data);
+        Console.WriteLine(enc);
     }
 }

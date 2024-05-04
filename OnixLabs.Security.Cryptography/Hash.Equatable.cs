@@ -12,24 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Linq;
+using OnixLabs.Core.Linq;
 
-namespace OnixLabs.Core;
+namespace OnixLabs.Security.Cryptography;
 
-public abstract partial class Enumeration<T>
+public readonly partial struct Hash
 {
     /// <summary>
     /// Checks whether the current object is equal to another object of the same type.
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(T? other)
+    public bool Equals(Hash other)
     {
-        return ReferenceEquals(this, other)
-               || other is not null
-               && other.GetType() == GetType()
-               && other.Value == Value
-               && other.Name == Name;
+        return value.SequenceEqual(other.value);
     }
 
     /// <summary>
@@ -39,7 +36,7 @@ public abstract partial class Enumeration<T>
     /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object? obj)
     {
-        return Equals(obj as T);
+        return obj is Hash other && Equals(other);
     }
 
     /// <summary>
@@ -48,7 +45,7 @@ public abstract partial class Enumeration<T>
     /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(GetType(), Name, Value);
+        return value.GetContentHashCode();
     }
 
     /// <summary>
@@ -57,7 +54,7 @@ public abstract partial class Enumeration<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Enumeration<T> left, Enumeration<T> right)
+    public static bool operator ==(Hash left, Hash right)
     {
         return Equals(left, right);
     }
@@ -68,7 +65,7 @@ public abstract partial class Enumeration<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Enumeration<T> left, Enumeration<T> right)
+    public static bool operator !=(Hash left, Hash right)
     {
         return !Equals(left, right);
     }

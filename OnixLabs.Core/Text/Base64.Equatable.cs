@@ -20,7 +20,7 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base64
 {
     /// <summary>
-    /// Indicates whether the current object is equal to another object of the same type.
+    /// Checks whether the current object is equal to another object of the same type.
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>

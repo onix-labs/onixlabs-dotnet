@@ -30,7 +30,7 @@ public sealed class ArrayExtensionTests
 
         // Then
         Assert.Equal(expected, actual);
-        Assert.True(!ReferenceEquals(array, actual));
+        Assert.False(ReferenceEquals(array, actual));
     }
 
     [Fact(DisplayName = "Array.Copy with index and count parameters should produce a copy of an array")]
@@ -45,7 +45,7 @@ public sealed class ArrayExtensionTests
 
         // Then
         Assert.Equal(expected, actual);
-        Assert.True(!ReferenceEquals(array, actual));
+        Assert.False(ReferenceEquals(array, actual));
     }
 
     [Fact(DisplayName = "Array.ConcatenateWith should produce a concatenation of two arrays")]

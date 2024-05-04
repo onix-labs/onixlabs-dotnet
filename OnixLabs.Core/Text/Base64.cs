@@ -12,11 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Playground;
+using System;
 
-internal static class Program
+namespace OnixLabs.Core.Text;
+
+/// <summary>
+/// Represents a Base-64 value.
+/// </summary>
+/// <param name="value">The underlying <see cref="T:System.Byte[]"/> value.</param>
+public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseValue<Base64>
 {
-    private static void Main()
+    private readonly byte[] value = value.ToArray();
+
+    /// <summary>
+    /// Initializes a new default <see cref="OnixLabs.Core.Text.Base64"/> value.
+    /// </summary>
+    public Base64() : this([])
     {
     }
 }

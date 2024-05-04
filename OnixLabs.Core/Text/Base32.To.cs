@@ -16,12 +16,12 @@ using System;
 
 namespace OnixLabs.Core.Text;
 
-public readonly partial struct Base16
+public readonly partial struct Base32
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:System.Byte[]"/> representation of the current <see cref="Base16"/> instance.
+    /// Gets the underlying <see cref="T:System.Byte[]"/> representation of the current <see cref="Base32"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:System.Byte[]"/> representation of the current <see cref="Base16"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="T:System.Byte[]"/> representation of the current <see cref="Base32"/> instance.</returns>
     public byte[] ToByteArray()
     {
         return value.Copy();
@@ -33,7 +33,7 @@ public readonly partial struct Base16
     /// <returns>Returns a <see cref="System.String"/> that represents the current object.</returns>
     public override string ToString()
     {
-        return ToString(Base16FormatProvider.Invariant);
+        return ToString(Base32FormatProvider.Rfc4648);
     }
 
     /// <summary>
@@ -65,6 +65,6 @@ public readonly partial struct Base16
     /// <returns>The value of the current instance in the specified format.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider)
     {
-        return IBaseCodec.Base16.Encode(value, formatProvider);
+        return IBaseCodec.Base32.Encode(value, formatProvider);
     }
 }

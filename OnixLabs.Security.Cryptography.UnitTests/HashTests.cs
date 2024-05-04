@@ -30,8 +30,8 @@ public sealed class HashTests
         const string expected = "000102030405060708090a0b0c0d0e0f";
 
         // When
-        Hash hash = new(value);
-        string actual = hash.ToString();
+        Hash candidate = new(value);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -46,8 +46,8 @@ public sealed class HashTests
         const string expected = "f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0";
 
         // When
-        Hash hash = new(value, length);
-        string actual = hash.ToString();
+        Hash candidate = new(value, length);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -58,12 +58,12 @@ public sealed class HashTests
     {
         // Given
         byte[] value = [1, 2, 3, 4];
-        Hash hash = new(value);
+        Hash candidate = new(value);
         const string expected = "01020304";
 
         // When
         value[0] = 0;
-        string actual = hash.ToString();
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -73,13 +73,13 @@ public sealed class HashTests
     public void HashValueShouldNotBeModifiedWhenAlteringTheObtainedByteArray()
     {
         // Given
-        Hash hash = new([1, 2, 3, 4]);
+        Hash candidate = new([1, 2, 3, 4]);
         const string expected = "01020304";
 
         // When
-        byte[] value = hash.ToByteArray();
+        byte[] value = candidate.ToByteArray();
         value[0] = 0;
-        string actual = hash.ToString();
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -207,8 +207,8 @@ public sealed class HashTests
         };
 
         // When
-        Hash hash = Hash.Compute(algorithm, bytes);
-        string actual = hash.ToString();
+        Hash candidate = Hash.Compute(algorithm, bytes);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -235,8 +235,8 @@ public sealed class HashTests
         };
 
         // When
-        Hash hash = Hash.Compute(algorithm, bytes, 2);
-        string actual = hash.ToString();
+        Hash candidate = Hash.Compute(algorithm, bytes, 2);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -263,8 +263,8 @@ public sealed class HashTests
         };
 
         // When
-        Hash hash = Hash.Compute(algorithm, bytes, offset, count);
-        string actual = hash.ToString();
+        Hash candidate = Hash.Compute(algorithm, bytes, offset, count);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -291,8 +291,8 @@ public sealed class HashTests
         };
 
         // When
-        Hash hash = Hash.Compute(algorithm, bytes, offset, count, 2);
-        string actual = hash.ToString();
+        Hash candidate = Hash.Compute(algorithm, bytes, offset, count, 2);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -319,8 +319,8 @@ public sealed class HashTests
         };
 
         // When
-        Hash hash = Hash.Compute(algorithm, stream);
-        string actual = hash.ToString();
+        Hash candidate = Hash.Compute(algorithm, stream);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -347,8 +347,8 @@ public sealed class HashTests
         };
 
         // When
-        Hash hash = Hash.Compute(algorithm, stream, 2);
-        string actual = hash.ToString();
+        Hash candidate = Hash.Compute(algorithm, stream, 2);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -375,8 +375,8 @@ public sealed class HashTests
         };
 
         // When
-        Hash hash = await Hash.ComputeAsync(algorithm, stream);
-        string actual = hash.ToString();
+        Hash candidate = await Hash.ComputeAsync(algorithm, stream);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -403,8 +403,8 @@ public sealed class HashTests
         };
 
         // When
-        Hash hash = await Hash.ComputeAsync(algorithm, stream, 2);
-        string actual = hash.ToString();
+        Hash candidate = await Hash.ComputeAsync(algorithm, stream, 2);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);

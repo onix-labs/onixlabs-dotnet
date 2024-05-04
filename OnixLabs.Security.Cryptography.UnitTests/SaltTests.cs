@@ -27,8 +27,8 @@ public sealed class SaltTests
         const string expected = "000102030405060708090a0b0c0d0e0f";
 
         // When
-        Salt salt = new(value);
-        string actual = salt.ToString();
+        Salt candidate = new(value);
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -39,12 +39,12 @@ public sealed class SaltTests
     {
         // Given
         byte[] value = [1, 2, 3, 4];
-        Salt salt = new(value);
+        Salt candidate = new(value);
         const string expected = "01020304";
 
         // When
         value[0] = 0;
-        string actual = salt.ToString();
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
@@ -54,13 +54,13 @@ public sealed class SaltTests
     public void SaltValueShouldNotBeModifiedWhenAlteringTheObtainedByteArray()
     {
         // Given
-        Salt salt = new([1, 2, 3, 4]);
+        Salt candidate = new([1, 2, 3, 4]);
         const string expected = "01020304";
 
         // When
-        byte[] value = salt.ToByteArray();
+        byte[] value = candidate.ToByteArray();
         value[0] = 0;
-        string actual = salt.ToString();
+        string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);

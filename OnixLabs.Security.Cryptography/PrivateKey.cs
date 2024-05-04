@@ -12,6 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography.UnitTests.Data;
+using System;
 
-public sealed class TestPublicKey(ReadOnlySpan<byte> value) : PublicKey(value);
+namespace OnixLabs.Security.Cryptography;
+
+/// <summary>
+/// Represents a cryptographic private key.
+/// </summary>
+/// <param name="keyData">The underlying key data of the cryptographic private key.</param>
+public abstract partial class PrivateKey(ReadOnlySpan<byte> keyData) : ICryptoPrimitive<PrivateKey>
+{
+    /// <summary>
+    /// Gets the cryptographic private key data.
+    /// </summary>
+    protected byte[] KeyData { get; } = keyData.ToArray();
+}

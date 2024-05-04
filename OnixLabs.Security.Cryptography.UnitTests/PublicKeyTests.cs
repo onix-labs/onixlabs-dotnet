@@ -12,33 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Security.Cryptography.UnitTests.Data;
 using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 
-public sealed class DigitalSignatureTests
+public sealed class PublicKeyTests
 {
-    [Fact(DisplayName = "DigitalSignature should be constructable from bytes")]
-    public void DigitalSignatureShouldBeConstructableFromBytes()
+    [Fact(DisplayName = "PublicKey should be constructable from bytes")]
+    public void PublicKeyShouldBeConstructableFromBytes()
     {
         // Given
         byte[] value = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
         const string expected = "000102030405060708090a0b0c0d0e0f";
 
         // When
-        DigitalSignature candidate = new(value);
+        PublicKey candidate = new TestPublicKey(value);
         string actual = candidate.ToString();
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "DigitalSignature value should not be modified when altering the original byte array")]
-    public void DigitalSignatureValueShouldNotBeModifiedWhenAlteringTheOriginalByteArray()
+    [Fact(DisplayName = "PublicKey value should not be modified when altering the original byte array")]
+    public void PublicKeyValueShouldNotBeModifiedWhenAlteringTheOriginalByteArray()
     {
         // Given
         byte[] value = [1, 2, 3, 4];
-        DigitalSignature candidate = new(value);
+        PublicKey candidate = new TestPublicKey(value);
         const string expected = "01020304";
 
         // When
@@ -49,11 +50,11 @@ public sealed class DigitalSignatureTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "DigitalSignature value should not be modified when altering the obtained byte array")]
-    public void DigitalSignatureValueShouldNotBeModifiedWhenAlteringTheObtainedByteArray()
+    [Fact(DisplayName = "PublicKey value should not be modified when altering the obtained byte array")]
+    public void PublicKeyValueShouldNotBeModifiedWhenAlteringTheObtainedByteArray()
     {
         // Given
-        DigitalSignature candidate = new([1, 2, 3, 4]);
+        PublicKey candidate = new TestPublicKey([1, 2, 3, 4]);
         const string expected = "01020304";
 
         // When
@@ -65,12 +66,12 @@ public sealed class DigitalSignatureTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Identical signature values should be considered equal")]
-    public void IdenticalDigitalSignatureValuesShouldBeConsideredEqual()
+    [Fact(DisplayName = "Identical public key values should be considered equal")]
+    public void IdenticalPublicKeyValuesShouldBeConsideredEqual()
     {
         // Given
-        DigitalSignature left = new([1, 2, 3, 4]);
-        DigitalSignature right = new([1, 2, 3, 4]);
+        PublicKey left = new TestPublicKey([1, 2, 3, 4]);
+        PublicKey right = new TestPublicKey([1, 2, 3, 4]);
 
         // Then
         Assert.Equal(left, right);
@@ -78,12 +79,12 @@ public sealed class DigitalSignatureTests
         Assert.True(left == right);
     }
 
-    [Fact(DisplayName = "Different signature values should not be considered equal")]
-    public void DifferentDigitalSignatureValuesShouldNotBeConsideredEqual()
+    [Fact(DisplayName = "Different public key values should not be considered equal")]
+    public void DifferentPublicKeyValuesShouldNotBeConsideredEqual()
     {
         // Given
-        DigitalSignature left = new([1, 2, 3, 4]);
-        DigitalSignature right = new([5, 6, 7, 8]);
+        PublicKey left = new TestPublicKey([1, 2, 3, 4]);
+        PublicKey right = new TestPublicKey([5, 6, 7, 8]);
 
         // Then
         Assert.NotEqual(left, right);
@@ -91,12 +92,12 @@ public sealed class DigitalSignatureTests
         Assert.True(left != right);
     }
 
-    [Fact(DisplayName = "Identical signature values should produce identical hash codes")]
-    public void IdenticalDigitalSignatureValuesShouldProduceIdenticalDigitalSignatureCodes()
+    [Fact(DisplayName = "Identical public key values should produce identical hash codes")]
+    public void IdenticalPublicKeyValuesShouldProduceIdenticalPublicKeyCodes()
     {
         // Given
-        DigitalSignature left = new([1, 2, 3, 4]);
-        DigitalSignature right = new([1, 2, 3, 4]);
+        PublicKey left = new TestPublicKey([1, 2, 3, 4]);
+        PublicKey right = new TestPublicKey([1, 2, 3, 4]);
 
         // When
         int leftHashCode = left.GetHashCode();
@@ -106,12 +107,12 @@ public sealed class DigitalSignatureTests
         Assert.Equal(leftHashCode, rightHashCode);
     }
 
-    [Fact(DisplayName = "Different signature values should produce different hash codes")]
-    public void DifferentDigitalSignatureValuesShouldProduceDifferentDigitalSignatureCodes()
+    [Fact(DisplayName = "Different public key values should produce different hash codes")]
+    public void DifferentPublicKeyValuesShouldProduceDifferentPublicKeyCodes()
     {
         // Given
-        DigitalSignature left = new([1, 2, 3, 4]);
-        DigitalSignature right = new([5, 6, 7, 8]);
+        PublicKey left = new TestPublicKey([1, 2, 3, 4]);
+        PublicKey right = new TestPublicKey([5, 6, 7, 8]);
 
         // When
         int leftHashCode = left.GetHashCode();

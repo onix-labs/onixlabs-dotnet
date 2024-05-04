@@ -12,6 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace OnixLabs.Security.Cryptography.UnitTests.Data;
+namespace OnixLabs.Security.Cryptography;
 
-public sealed class TestPublicKey(ReadOnlySpan<byte> value) : PublicKey(value);
+public abstract partial class PrivateKey
+{
+    /// <summary>
+    /// Gets the cryptographic public key component from the current cryptographic private key.
+    /// </summary>
+    /// <returns>Returns the cryptographic public key component from the current cryptographic private key.</returns>
+    public abstract PublicKey GetPublicKey();
+}

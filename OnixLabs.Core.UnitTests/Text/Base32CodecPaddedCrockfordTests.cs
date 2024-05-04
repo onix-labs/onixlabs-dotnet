@@ -22,9 +22,9 @@ public sealed class Base32CodecPaddedCrockfordTests
 {
     [Theory(DisplayName = "Base32Codec.Encode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("0123456789", "60RK4CSM6MV3EE1S")]
-    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8======")]
-    [InlineData("abcdefghijklmnopqrstuvwxyz", "C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8======")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ","85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8======")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz","C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8======")]
+    [InlineData("0123456789","60RK4CSM6MV3EE1S")]
     public void Base32CodecEncodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given
@@ -40,9 +40,9 @@ public sealed class Base32CodecPaddedCrockfordTests
 
     [Theory(DisplayName = "Base32Codec.Decode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("60RK4CSM6MV3EE1S", "0123456789")]
-    [InlineData("85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8======", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8======","ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8======","abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("60RK4CSM6MV3EE1S","0123456789")]
     public void Base32CodecDecodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given

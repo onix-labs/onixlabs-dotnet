@@ -18,13 +18,13 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Text;
 
-public sealed class Base16CodecTests
+public sealed class Base16CodecInvariantTests
 {
     [Theory(DisplayName = "Base16Codec.Encode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("0123456789", "30313233343536373839")]
-    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "4142434445464748494A4B4C4D4E4F505152535455565758595A")]
-    [InlineData("abcdefghijklmnopqrstuvwxyz", "6162636465666768696A6B6C6D6E6F707172737475767778797A")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ","4142434445464748494a4b4c4d4e4f505152535455565758595a")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz","6162636465666768696a6b6c6d6e6f707172737475767778797a")]
+    [InlineData("0123456789","30313233343536373839")]
     public void Base16CodecEncodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given
@@ -32,7 +32,7 @@ public sealed class Base16CodecTests
         byte[] bytes = value.ToByteArray();
 
         // When
-        string actual = codec.Encode(bytes);
+        string actual = codec.Encode(bytes, Base16FormatProvider.Invariant);
 
         // Then
         Assert.Equal(expected, actual);
@@ -40,16 +40,16 @@ public sealed class Base16CodecTests
 
     [Theory(DisplayName = "Base16Codec.Decode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("30313233343536373839", "0123456789")]
-    [InlineData("4142434445464748494A4B4C4D4E4F505152535455565758595A", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("6162636465666768696A6B6C6D6E6F707172737475767778797A", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("4142434445464748494a4b4c4d4e4f505152535455565758595a","ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("6162636465666768696a6b6c6d6e6f707172737475767778797a","abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("30313233343536373839","0123456789")]
     public void Base16CodecDecodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given
         IBaseCodec codec = IBaseCodec.Base16;
 
         // When
-        byte[] bytes = codec.Decode(value);
+        byte[] bytes = codec.Decode(value, Base16FormatProvider.Invariant);
         string actual = Encoding.UTF8.GetString(bytes);
 
         // Then

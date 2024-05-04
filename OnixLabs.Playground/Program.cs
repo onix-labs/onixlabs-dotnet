@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Core;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using OnixLabs.Core.Text;
 
 namespace OnixLabs.Playground;
@@ -22,8 +24,42 @@ internal static class Program
 {
     private static void Main()
     {
-        byte[] data = "Hello, World!".ToByteArray();
-        string enc = IBaseCodec.Base58.Encode(data);
-        Console.WriteLine(enc);
+        Dictionary<IBaseCodec, IEnumerable<IFormatProvider>> dic = [];
+        dic[IBaseCodec.Base32] = Base32FormatProvider.GetAll();
+        dic[IBaseCodec.Base58] = Base58FormatProvider.GetAll();
+        dic[IBaseCodec.Base64] = [Base16FormatProvider.Lowercase];
+
+        string[] values = ["ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "0123456789"];
+
+        foreach ((IBaseCodec codec, IEnumerable<IFormatProvider> providers) in dic)
+        {
+            foreach (IFormatProvider provider in providers)
+            {
+                PropertyInfo prop = provider.GetType().GetProperty("Name", BindingFlags.Public | BindingFlags.Instance)!;
+                string name = prop.GetValue(provider)!.ToString()!;
+
+                Console.WriteLine($"{codec.GetType().Name} : {name}");
+
+                Console.WriteLine("ENCODE");
+                foreach (string value in values)
+                {
+                    byte[] bytes = Encoding.UTF8.GetBytes(value);
+                    string encoded = codec.Encode(bytes, provider);
+
+                    Console.WriteLine($"[InlineData(\"{value}\",\"{encoded}\")]");
+                }
+
+                Console.WriteLine("DECODE");
+                foreach (string value in values)
+                {
+                    byte[] bytes = Encoding.UTF8.GetBytes(value);
+                    string encoded = codec.Encode(bytes, provider);
+
+                    Console.WriteLine($"[InlineData(\"{encoded}\",\"{value}\")]");
+                }
+
+                Console.WriteLine();
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 
 namespace OnixLabs.Core.Text;
 
@@ -21,6 +22,10 @@ namespace OnixLabs.Core.Text;
 /// </summary>
 public sealed class Base16Codec : IBaseCodec
 {
+    private static readonly SearchValues<char> Base16UppercaseValues = SearchValues.Create("ABCDEF");
+
+    private static readonly SearchValues<char> Base16LowercaseValues = SearchValues.Create("abcdef");
+
     /// <summary>
     /// Encodes the specified <see cref="System.ReadOnlySpan{T}"/> value into a Base-16 <see cref="System.String"/> representation.
     /// </summary>
@@ -37,7 +42,7 @@ public sealed class Base16Codec : IBaseCodec
     /// Decodes the specified <see cref="System.ReadOnlySpan{T}"/> Base-16 representation into a <see cref="T:System.Byte[]"/>.
     /// </summary>
     /// <param name="value">The Base-16 value to decode into a <see cref="T:System.Byte[]"/>.</param>
-    /// <param name="provider">The format provider that will be used to encode the specified value.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <returns>Returns a new <see cref="T:System.Byte[]"/> decoded from the specified value.</returns>
     public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
@@ -46,7 +51,7 @@ public sealed class Base16Codec : IBaseCodec
     }
 
     /// <summary>
-    /// Attempts to encode the specified <see cref="System.ReadOnlySpan{T}"/> value into a Base-16 <see cref="System.String"/> representation.
+    /// Tries to encode the specified <see cref="System.ReadOnlySpan{T}"/> value into a Base-16 <see cref="System.String"/> representation.
     /// </summary>
     /// <param name="value">The value to encode into a Base-16 <see cref="System.String"/> representation.</param>
     /// <param name="provider">The format provider that will be used to encode the specified value.</param>
@@ -59,7 +64,24 @@ public sealed class Base16Codec : IBaseCodec
     {
         try
         {
-            result = Convert.ToHexString(value);
+            if (value.IsEmpty)
+            {
+                result = string.Empty;
+                return true;
+            }
+
+            if (provider is not null && provider is not Base16FormatProvider)
+            {
+                result = string.Empty;
+                return false;
+            }
+
+            Base16FormatProvider formatProvider = provider as Base16FormatProvider ?? Base16FormatProvider.Invariant;
+
+            result = formatProvider == Base16FormatProvider.Uppercase
+                ? Convert.ToHexString(value)
+                : Convert.ToHexString(value).ToLower();
+
             return true;
         }
         catch
@@ -70,10 +92,10 @@ public sealed class Base16Codec : IBaseCodec
     }
 
     /// <summary>
-    /// Attempts to decode the specified <see cref="System.ReadOnlySpan{T}"/> Base-16 representation into a <see cref="T:System.Byte[]"/>.
+    /// Tries to decode the specified <see cref="System.ReadOnlySpan{T}"/> Base-16 representation into a <see cref="T:System.Byte[]"/>.
     /// </summary>
     /// <param name="value">The Base-16 value to decode into a <see cref="T:System.Byte[]"/>.</param>
-    /// <param name="provider">The format provider that will be used to encode the specified value.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
     /// A new <see cref="T:System.Byte[]"/> decoded from the specified value,
     /// or an empty <see cref="T:System.Byte[]"/> if the specified value could not be decoded.
@@ -83,6 +105,32 @@ public sealed class Base16Codec : IBaseCodec
     {
         try
         {
+            if (value.IsEmpty)
+            {
+                result = [];
+                return true;
+            }
+
+            if (provider is not null && provider is not Base16FormatProvider)
+            {
+                result = [];
+                return false;
+            }
+
+            Base16FormatProvider formatProvider = provider as Base16FormatProvider ?? Base16FormatProvider.Invariant;
+
+            if (formatProvider == Base16FormatProvider.Uppercase && value.ContainsAny(Base16LowercaseValues))
+            {
+                result = [];
+                return false;
+            }
+
+            if (formatProvider == Base16FormatProvider.Lowercase && value.ContainsAny(Base16UppercaseValues))
+            {
+                result = [];
+                return false;
+            }
+
             result = Convert.FromHexString(value);
             return true;
         }

@@ -22,9 +22,9 @@ public sealed class Base32CodecPaddedZBase32Tests
 {
     [Theory(DisplayName = "Base32Codec.Encode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("0123456789", "gyaurc3wgw5dqqb3")]
-    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me======")]
-    [InlineData("abcdefghijklmnopqrstuvwxyz", "cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe======")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ","efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me======")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz","cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe======")]
+    [InlineData("0123456789","gyaurc3wgw5dqqb3")]
     public void Base32CodecEncodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given
@@ -40,9 +40,9 @@ public sealed class Base32CodecPaddedZBase32Tests
 
     [Theory(DisplayName = "Base32Codec.Decode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("gyaurc3wgw5dqqb3", "0123456789")]
-    [InlineData("efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe======", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me======","ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe======","abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("gyaurc3wgw5dqqb3","0123456789")]
     public void Base32CodecDecodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given

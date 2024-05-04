@@ -17,39 +17,40 @@ using System;
 namespace OnixLabs.Core.Text;
 
 /// <summary>
-/// Represents a Base-58 format provider.
+/// Represents a Base-16 format provider.
 /// </summary>
-public sealed class Base58FormatProvider : Enumeration<Base58FormatProvider>, IFormatProvider
+public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IFormatProvider
 {
     /// <summary>
-    /// Gets the Bitcoin Base-58 format provider.
-    /// This is also the same format used by Monero and IPFS.
+    /// Gets the invariant Base-16 format provider.
+    /// The invariant format provider favours lowercase for Base-16 encoding.
+    /// The alphabet provided by this format provider is not a strict Base-16 alphabet as it contains all uppercase and lowercase values.
     /// </summary>
-    public static readonly Base58FormatProvider Bitcoin = new(0, nameof(Bitcoin), "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
+    public static readonly Base16FormatProvider Invariant = new(0, nameof(Invariant), "0123456789ABCDEFabcdef");
 
     /// <summary>
-    /// Gets the Flickr Base-58 format provider.
+    /// Gets the uppercase Base-16 format provider.
     /// </summary>
-    public static readonly Base58FormatProvider Flickr = new(1, nameof(Flickr), "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ");
+    public static readonly Base16FormatProvider Uppercase = new(1, nameof(Uppercase), "0123456789ABCDEF");
 
     /// <summary>
-    /// Gets the Ripple Base-58 format provider.
+    /// Gets the lowercase Base-16 format provider.
     /// </summary>
-    public static readonly Base58FormatProvider Ripple = new(2, nameof(Ripple), "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz");
+    public static readonly Base16FormatProvider Lowercase = new(2, nameof(Lowercase), "0123456789abcdef");
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Base58FormatProvider"/> class.
+    /// Initializes a new instance of the <see cref="Base16FormatProvider"/> class.
     /// </summary>
     /// <param name="value">The value of the enumeration entry.</param>
     /// <param name="name">The name of the enumeration entry.</param>
     /// <param name="alphabet">The alphabet of the format provider.</param>
-    private Base58FormatProvider(int value, string name, string alphabet) : base(value, name)
+    private Base16FormatProvider(int value, string name, string alphabet) : base(value, name)
     {
         Alphabet = alphabet;
     }
 
     /// <summary>
-    /// Gets the alphabet of the current <see cref="Base58FormatProvider"/> instance.
+    /// Gets the alphabet of the current <see cref="Base16FormatProvider"/> instance.
     /// </summary>
     public string Alphabet { get; }
 
@@ -61,6 +62,6 @@ public sealed class Base58FormatProvider : Enumeration<Base58FormatProvider>, IF
     /// </returns>
     public object? GetFormat(Type? formatType)
     {
-        return formatType == typeof(Base58FormatProvider) ? this : null;
+        throw new NotImplementedException();
     }
 }

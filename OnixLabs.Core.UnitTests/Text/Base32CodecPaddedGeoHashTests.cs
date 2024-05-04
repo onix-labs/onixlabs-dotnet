@@ -22,9 +22,9 @@ public sealed class Base32CodecPaddedGeoHashTests
 {
     [Theory(DisplayName = "Base32Codec.Encode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("0123456789", "60sm4dtn6nv3ff1t")]
-    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "85146j258t3nhkbb9e64umkgb18p4nunbpc5fq2tc8======")]
-    [InlineData("abcdefghijklmnopqrstuvwxyz", "d5j66t35dtmqhucbeeq6uvmgf1sr4wvnfpv7fy3tg8======")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ","85146j258t3nhkbb9e64umkgb18p4nunbpc5fq2tc8======")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz","d5j66t35dtmqhucbeeq6uvmgf1sr4wvnfpv7fy3tg8======")]
+    [InlineData("0123456789","60sm4dtn6nv3ff1t")]
     public void Base32CodecEncodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given
@@ -40,9 +40,9 @@ public sealed class Base32CodecPaddedGeoHashTests
 
     [Theory(DisplayName = "Base32Codec.Decode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("60sm4dtn6nv3ff1t", "0123456789")]
-    [InlineData("85146j258t3nhkbb9e64umkgb18p4nunbpc5fq2tc8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("d5j66t35dtmqhucbeeq6uvmgf1sr4wvnfpv7fy3tg8======", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("85146j258t3nhkbb9e64umkgb18p4nunbpc5fq2tc8======","ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("d5j66t35dtmqhucbeeq6uvmgf1sr4wvnfpv7fy3tg8======","abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("60sm4dtn6nv3ff1t","0123456789")]
     public void Base32CodecDecodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given

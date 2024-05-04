@@ -41,7 +41,7 @@ public sealed class Base58Codec : IBaseCodec
     /// Decodes the specified <see cref="System.ReadOnlySpan{T}"/> Base-58 representation into a <see cref="T:System.Byte[]"/>.
     /// </summary>
     /// <param name="value">The Base-58 value to decode into a <see cref="T:System.Byte[]"/>.</param>
-    /// <param name="provider">The format provider that will be used to encode the specified value.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <returns>Returns a new <see cref="T:System.Byte[]"/> decoded from the specified value.</returns>
     public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
@@ -50,7 +50,7 @@ public sealed class Base58Codec : IBaseCodec
     }
 
     /// <summary>
-    /// Attempts to encode the specified <see cref="System.ReadOnlySpan{T}"/> value into a Base-58 <see cref="System.String"/> representation.
+    /// Tries to encode the specified <see cref="System.ReadOnlySpan{T}"/> value into a Base-58 <see cref="System.String"/> representation.
     /// </summary>
     /// <param name="value">The value to encode into a Base-58 <see cref="System.String"/> representation.</param>
     /// <param name="provider">The format provider that will be used to encode the specified value.</param>
@@ -100,10 +100,10 @@ public sealed class Base58Codec : IBaseCodec
     }
 
     /// <summary>
-    /// Attempts to decode the specified <see cref="System.ReadOnlySpan{T}"/> Base-58 representation into a <see cref="T:System.Byte[]"/>.
+    /// Tries to decode the specified <see cref="System.ReadOnlySpan{T}"/> Base-58 representation into a <see cref="T:System.Byte[]"/>.
     /// </summary>
     /// <param name="value">The Base-58 value to decode into a <see cref="T:System.Byte[]"/>.</param>
-    /// <param name="provider">The format provider that will be used to encode the specified value.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
     /// A new <see cref="T:System.Byte[]"/> decoded from the specified value,
     /// or an empty <see cref="T:System.Byte[]"/> if the specified value could not be decoded.

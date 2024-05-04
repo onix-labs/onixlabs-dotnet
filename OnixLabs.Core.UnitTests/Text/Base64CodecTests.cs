@@ -18,17 +18,17 @@ using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Text;
 
-public sealed class Base32CodecRfc4648Tests
+public sealed class Base64CodecTests
 {
-    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result")]
+    [Theory(DisplayName = "Base64Codec.Encode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ","IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI")]
-    [InlineData("abcdefghijklmnopqrstuvwxyz","MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI")]
-    [InlineData("0123456789","GAYTEMZUGU3DOOBZ")]
-    public void Base32CodecEncodeShouldProduceExpectedResult(string value, string expected)
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=")]
+    [InlineData("0123456789", "MDEyMzQ1Njc4OQ==")]
+    public void Base64CodecEncodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given
-        IBaseCodec codec = IBaseCodec.Base32;
+        IBaseCodec codec = IBaseCodec.Base64;
         byte[] bytes = value.ToByteArray();
 
         // When
@@ -38,15 +38,15 @@ public sealed class Base32CodecRfc4648Tests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result")]
+    [Theory(DisplayName = "Base64Codec.Decode should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI","ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI","abcdefghijklmnopqrstuvwxyz")]
-    [InlineData("GAYTEMZUGU3DOOBZ","0123456789")]
-    public void Base32CodecDecodeShouldProduceExpectedResult(string value, string expected)
+    [InlineData("QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("MDEyMzQ1Njc4OQ==", "0123456789")]
+    public void Base64CodecDecodeShouldProduceExpectedResult(string value, string expected)
     {
         // Given
-        IBaseCodec codec = IBaseCodec.Base32;
+        IBaseCodec codec = IBaseCodec.Base64;
 
         // When
         byte[] bytes = codec.Decode(value);

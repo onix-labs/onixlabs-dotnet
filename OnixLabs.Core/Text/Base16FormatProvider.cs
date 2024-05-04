@@ -62,6 +62,6 @@ public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IF
     /// </returns>
     public object? GetFormat(Type? formatType)
     {
-        throw new NotImplementedException();
+        return formatType == typeof(Base16FormatProvider) ? this : null;
     }
 }

@@ -19,6 +19,6 @@ public abstract partial class PrivateKey
     /// <summary>
     /// Gets the cryptographic public key component from the current cryptographic private key.
     /// </summary>
-    /// <returns>Returns the cryptographic public key component from the current cryptographic private key.</returns>
+    /// <returns>Returns a new <see cref="PublicKey"/> instance containing the cryptographic public key component from the current cryptographic private key.</returns>
     public abstract PublicKey GetPublicKey();
 }

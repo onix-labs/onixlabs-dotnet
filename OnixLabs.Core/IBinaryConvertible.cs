@@ -20,8 +20,8 @@ namespace OnixLabs.Core;
 public interface IBinaryConvertible
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:System.Byte[]"/> representation of the current <see cref="IBinaryConvertible"/> instance.
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="IBinaryConvertible"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:System.Byte[]"/> representation of the current <see cref="IBinaryConvertible"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="IBinaryConvertible"/> instance.</returns>
     byte[] ToByteArray();
 }

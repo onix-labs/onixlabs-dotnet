@@ -19,22 +19,22 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base58
 {
     /// <summary>
-    /// Parses the specified Base-58 encoded <see cref="System.String"/> value into a <see cref="Base58"/> value.
+    /// Parses the specified Base-58 encoded <see cref="String"/> value into a <see cref="Base58"/> value.
     /// </summary>
     /// <param name="value">The Base-58 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
-    /// <returns>Returns a new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="System.String"/> value.</returns>
+    /// <returns>Returns a new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="String"/> value.</returns>
     public static Base58 Parse(string value, IFormatProvider? provider = null)
     {
         return Parse(value.AsSpan(), provider);
     }
 
     /// <summary>
-    /// Parses the specified Base-58 encoded <see cref="System.ReadOnlySpan{T}"/> value into a <see cref="Base58"/> value.
+    /// Parses the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> value into a <see cref="Base58"/> value.
     /// </summary>
     /// <param name="value">The Base-58 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
-    /// <returns>Returns a new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="System.ReadOnlySpan{T}"/> value.</returns>
+    /// <returns>Returns a new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static Base58 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
         byte[] bytes = IBaseCodec.Base58.Decode(value, provider);
@@ -42,13 +42,13 @@ public readonly partial struct Base58
     }
 
     /// <summary>
-    /// Tries to parse the specified Base-58 encoded <see cref="System.String"/> value into a <see cref="Base58"/> value.
+    /// Tries to parse the specified Base-58 encoded <see cref="String"/> value into a <see cref="Base58"/> value.
     /// </summary>
     /// <param name="value">The Base-58 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// A new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="System.String"/> value,
-    /// or the default <see cref="Base58"/> value if the specified Base-58 encoded <see cref="System.String"/> could not be parsed.
+    /// A new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="String"/> value,
+    /// or the default <see cref="Base58"/> value if the specified Base-58 encoded <see cref="String"/> could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified Base-58 value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(string? value, IFormatProvider? provider, out Base58 result)
@@ -57,13 +57,13 @@ public readonly partial struct Base58
     }
 
     /// <summary>
-    /// Tries to parse the specified Base-58 encoded <see cref="System.ReadOnlySpan{T}"/> value into a <see cref="Base58"/> value.
+    /// Tries to parse the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> value into a <see cref="Base58"/> value.
     /// </summary>
     /// <param name="value">The Base-58 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// A new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="System.ReadOnlySpan{T}"/> value,
-    /// or the default <see cref="Base58"/> value if the specified Base-58 encoded <see cref="System.ReadOnlySpan{T}"/> could not be parsed.
+    /// A new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> value,
+    /// or the default <see cref="Base58"/> value if the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified Base-58 value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out Base58 result)

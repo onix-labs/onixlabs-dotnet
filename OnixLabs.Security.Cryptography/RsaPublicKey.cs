@@ -14,20 +14,10 @@
 
 using System;
 
-namespace OnixLabs.Core.Text;
+namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Represents a Base-64 value.
+/// Represents an RSA cryptographic public key.
 /// </summary>
-/// <param name="value">The underlying <see cref="T:Byte[]"/> value.</param>
-public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseValue<Base64>
-{
-    private readonly byte[] value = value.ToArray();
-
-    /// <summary>
-    /// Initializes a new default <see cref="OnixLabs.Core.Text.Base64"/> value.
-    /// </summary>
-    public Base64() : this([])
-    {
-    }
-}
+/// <param name="keyData">The underlying key data of the RSA cryptographic public key.</param>
+public sealed partial class RsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IRsaPublicKey;

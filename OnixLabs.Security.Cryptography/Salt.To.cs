@@ -20,18 +20,18 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Salt
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:System.Byte[]"/> representation of the current <see cref="IBinaryConvertible"/> instance.
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Salt"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:System.Byte[]"/> representation of the current <see cref="IBinaryConvertible"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Salt"/> instance.</returns>
     public byte[] ToByteArray()
     {
         return value.Copy();
     }
 
     /// <summary>
-    /// Returns a <see cref="System.String"/> that represents the current object.
+    /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
-    /// <returns>Returns <see cref="System.String"/> that represents the current object.</returns>
+    /// <returns>Returns <see cref="String"/> that represents the current object.</returns>
     public override string ToString()
     {
         return Convert.ToHexString(value).ToLower();

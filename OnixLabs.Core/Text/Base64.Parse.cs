@@ -19,22 +19,22 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base64
 {
     /// <summary>
-    /// Parses the specified Base-64 encoded <see cref="System.String"/> value into a <see cref="Base64"/> value.
+    /// Parses the specified Base-64 encoded <see cref="String"/> value into a <see cref="Base64"/> value.
     /// </summary>
     /// <param name="value">The Base-64 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
-    /// <returns>Returns a new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="System.String"/> value.</returns>
+    /// <returns>Returns a new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="String"/> value.</returns>
     public static Base64 Parse(string value, IFormatProvider? provider = null)
     {
         return Parse(value.AsSpan(), provider);
     }
 
     /// <summary>
-    /// Parses the specified Base-64 encoded <see cref="System.ReadOnlySpan{T}"/> value into a <see cref="Base64"/> value.
+    /// Parses the specified Base-64 encoded <see cref="ReadOnlySpan{T}"/> value into a <see cref="Base64"/> value.
     /// </summary>
     /// <param name="value">The Base-64 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
-    /// <returns>Returns a new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="System.ReadOnlySpan{T}"/> value.</returns>
+    /// <returns>Returns a new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static Base64 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
         byte[] bytes = IBaseCodec.Base64.Decode(value, provider);
@@ -42,13 +42,13 @@ public readonly partial struct Base64
     }
 
     /// <summary>
-    /// Tries to parse the specified Base-64 encoded <see cref="System.String"/> value into a <see cref="Base64"/> value.
+    /// Tries to parse the specified Base-64 encoded <see cref="String"/> value into a <see cref="Base64"/> value.
     /// </summary>
     /// <param name="value">The Base-64 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// A new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="System.String"/> value,
-    /// or the default <see cref="Base64"/> value if the specified Base-64 encoded <see cref="System.String"/> could not be parsed.
+    /// A new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="String"/> value,
+    /// or the default <see cref="Base64"/> value if the specified Base-64 encoded <see cref="String"/> could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified Base-64 value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(string? value, IFormatProvider? provider, out Base64 result)
@@ -57,13 +57,13 @@ public readonly partial struct Base64
     }
 
     /// <summary>
-    /// Tries to parse the specified Base-64 encoded <see cref="System.ReadOnlySpan{T}"/> value into a <see cref="Base64"/> value.
+    /// Tries to parse the specified Base-64 encoded <see cref="ReadOnlySpan{T}"/> value into a <see cref="Base64"/> value.
     /// </summary>
     /// <param name="value">The Base-64 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// A new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="System.ReadOnlySpan{T}"/> value,
-    /// or the default <see cref="Base64"/> value if the specified Base-64 encoded <see cref="System.ReadOnlySpan{T}"/> could not be parsed.
+    /// A new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="ReadOnlySpan{T}"/> value,
+    /// or the default <see cref="Base64"/> value if the specified Base-64 encoded <see cref="ReadOnlySpan{T}"/> could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified Base-64 value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out Base64 result)

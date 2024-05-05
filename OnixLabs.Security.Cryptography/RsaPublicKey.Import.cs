@@ -12,22 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Security.Cryptography;
 
-namespace OnixLabs.Core.Text;
+namespace OnixLabs.Security.Cryptography;
 
-/// <summary>
-/// Represents a Base-64 value.
-/// </summary>
-/// <param name="value">The underlying <see cref="T:Byte[]"/> value.</param>
-public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseValue<Base64>
+public sealed partial class RsaPublicKey
 {
-    private readonly byte[] value = value.ToArray();
-
     /// <summary>
-    /// Initializes a new default <see cref="OnixLabs.Core.Text.Base64"/> value.
+    /// Imports the key data into a new <see cref="RSA"/> instance.
     /// </summary>
-    public Base64() : this([])
+    /// <returns>Returns a new <see cref="RSA"/> instance containing the imported key data.</returns>
+    private RSA ImportKeyData()
     {
+        RSA algorithm = RSA.Create();
+        algorithm.ImportRSAPublicKey(KeyData, out int _);
+        return algorithm;
     }
 }

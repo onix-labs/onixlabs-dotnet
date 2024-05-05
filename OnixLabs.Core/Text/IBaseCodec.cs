@@ -52,41 +52,41 @@ public interface IBaseCodec
     public static Base64Codec Base64 => new();
 
     /// <summary>
-    /// Encodes the specified <see cref="System.ReadOnlySpan{T}"/> value into a Base-N <see cref="System.String"/> representation.
+    /// Encodes the specified <see cref="ReadOnlySpan{T}"/> value into a Base-N <see cref="String"/> representation.
     /// </summary>
-    /// <param name="value">The value to encode into a Base-N <see cref="System.String"/> representation.</param>
+    /// <param name="value">The value to encode into a Base-N <see cref="String"/> representation.</param>
     /// <param name="provider">The format provider that will be used to encode the specified value.</param>
-    /// <returns>Returns a new Base-N <see cref="System.String"/> representation encoded from the specified value.</returns>
+    /// <returns>Returns a new Base-N <see cref="String"/> representation encoded from the specified value.</returns>
     string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null);
 
     /// <summary>
-    /// Decodes the specified <see cref="System.ReadOnlySpan{T}"/> Base-N representation into a <see cref="T:System.Byte[]"/>.
+    /// Decodes the specified <see cref="ReadOnlySpan{T}"/> Base-N representation into a <see cref="T:Byte[]"/>.
     /// </summary>
-    /// <param name="value">The Base-N value to decode into a <see cref="T:System.Byte[]"/>.</param>
+    /// <param name="value">The Base-N value to decode into a <see cref="T:Byte[]"/>.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
-    /// <returns>Returns a new <see cref="T:System.Byte[]"/> decoded from the specified value.</returns>
+    /// <returns>Returns a new <see cref="T:Byte[]"/> decoded from the specified value.</returns>
     byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null);
 
     /// <summary>
-    /// Tries to encode the specified <see cref="System.ReadOnlySpan{T}"/> value into a Base-N <see cref="System.String"/> representation.
+    /// Tries to encode the specified <see cref="ReadOnlySpan{T}"/> value into a Base-N <see cref="String"/> representation.
     /// </summary>
-    /// <param name="value">The value to encode into a Base-N <see cref="System.String"/> representation.</param>
+    /// <param name="value">The value to encode into a Base-N <see cref="String"/> representation.</param>
     /// <param name="provider">The format provider that will be used to encode the specified value.</param>
     /// <param name="result">
-    /// A new Base-N <see cref="System.String"/> representation encoded from the specified value,
+    /// A new Base-N <see cref="String"/> representation encoded from the specified value,
     /// or an empty string if the specified value could not be encoded.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was encoded successfully; otherwise, <see langword="false"/>.</returns>
     bool TryEncode(ReadOnlySpan<byte> value, IFormatProvider? provider, out string result);
 
     /// <summary>
-    /// Tries to decode the specified <see cref="System.ReadOnlySpan{T}"/> Base-N representation into a <see cref="T:System.Byte[]"/>.
+    /// Tries to decode the specified <see cref="ReadOnlySpan{T}"/> Base-N representation into a <see cref="T:Byte[]"/>.
     /// </summary>
-    /// <param name="value">The Base-N value to decode into a <see cref="T:System.Byte[]"/>.</param>
+    /// <param name="value">The Base-N value to decode into a <see cref="T:Byte[]"/>.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// A new <see cref="T:System.Byte[]"/> decoded from the specified value,
-    /// or an empty <see cref="T:System.Byte[]"/> if the specified value could not be decoded.
+    /// A new <see cref="T:Byte[]"/> decoded from the specified value,
+    /// or an empty <see cref="T:Byte[]"/> if the specified value could not be decoded.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     bool TryDecode(ReadOnlySpan<char> value, IFormatProvider? provider, out byte[] result);

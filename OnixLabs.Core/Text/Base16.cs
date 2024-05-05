@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-16 value.
 /// </summary>
-/// <param name="value">The underlying <see cref="T:System.Byte[]"/> value.</param>
+/// <param name="value">The underlying <see cref="T:Byte[]"/> value.</param>
 public readonly partial struct Base16(ReadOnlySpan<byte> value) : IBaseValue<Base16>
 {
     private readonly byte[] value = value.ToArray();

@@ -19,6 +19,6 @@ namespace OnixLabs.Security.Cryptography.UnitTests.Data;
 public sealed class TestPrivateKey(ReadOnlySpan<byte> value) : PrivateKey(value)
 {
     public override PublicKey GetPublicKey() => new TestPublicKey([]);
-    public override byte[] ExportPkcs8Key() => [];
-    public override byte[] ExportPkcs8Key(ReadOnlySpan<char> password, PbeParameters parameters) => [];
+    public override byte[] ExportPkcs8PrivateKey() => [];
+    public override byte[] ExportPkcs8PrivateKey(ReadOnlySpan<char> password, PbeParameters parameters) => [];
 }

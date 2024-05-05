@@ -26,7 +26,7 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <param name="name">The name of the enumeration entry.</param>
     /// <returns>Returns an enumeration entry for the specified name.</returns>
-    /// <exception cref="System.ArgumentException">If a single enumeration entry for the specified name does not exist.</exception>
+    /// <exception cref="ArgumentException">If a single enumeration entry for the specified name does not exist.</exception>
     public static T FromName(string name)
     {
         IEnumerable<T> results = GetAll().Where(entry => entry.Name == name).ToArray();
@@ -42,7 +42,7 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <param name="value">The value of the enumeration entry.</param>
     /// <returns>Returns an enumeration entry for the specified value.</returns>
-    /// <exception cref="System.ArgumentException">If a single enumeration entry for the specified value does not exist.</exception>
+    /// <exception cref="ArgumentException">If a single enumeration entry for the specified value does not exist.</exception>
     public static T FromValue(int value)
     {
         IEnumerable<T> results = GetAll().Where(entry => entry.Value == value).ToArray();

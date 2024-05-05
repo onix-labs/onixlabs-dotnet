@@ -28,13 +28,13 @@ namespace OnixLabs.Core;
 public static class ObjectExtensions
 {
     /// <summary>
-    /// Compares the current <see cref="System.IComparable{T}"/> instance with the specified <see cref="System.Object"/> instance.
+    /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
     /// </summary>
-    /// <param name="comparable">The left-hand <see cref="System.IComparable{T}"/> instance to compare.</param>
-    /// <param name="obj">The right-hand <see cref="System.Object"/> instance to compare.</param>
-    /// <typeparam name="T">The underlying type of the current <see cref="System.IComparable{T}"/>.</typeparam>
+    /// <param name="comparable">The left-hand <see cref="IComparable{T}"/> instance to compare.</param>
+    /// <param name="obj">The right-hand <see cref="Object"/> instance to compare.</param>
+    /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
     /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
-    /// <exception cref="System.ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
+    /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
     public static int CompareToObject<T>(this IComparable<T> comparable, object? obj)
     {
         if (obj is null) return 1;
@@ -43,10 +43,10 @@ public static class ObjectExtensions
     }
 
     /// <summary>
-    /// Gets a record-like <see cref="System.String"/> representation of the current <see cref="System.Object"/> instance.
+    /// Gets a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.
     /// </summary>
-    /// <param name="value">The current <see cref="System.Object"/> instance.</param>
-    /// <returns>Returns a record-like <see cref="System.String"/> representation of the current <see cref="System.Object"/> instance.</returns>
+    /// <param name="value">The current <see cref="Object"/> instance.</param>
+    /// <returns>Returns a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.</returns>
     public static string ToRecordString(this object value)
     {
         Type type = value.GetType();

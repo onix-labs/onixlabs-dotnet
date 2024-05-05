@@ -29,10 +29,10 @@ public static class TypeExtensions
     private const char GenericTypeIdentifierMarker = '`';
 
     /// <summary>
-    /// Gets the simple type name from the current <see cref="System.Type"/> instance.
+    /// Gets the simple type name from the current <see cref="Type"/> instance.
     /// </summary>
-    /// <param name="type">The current <see cref="System.Type"/> instance from which to obtain the simple name.</param>
-    /// <returns>Returns the simple type name from the current <see cref="System.Type"/> instance.</returns>
+    /// <param name="type">The current <see cref="Type"/> instance from which to obtain the simple name.</param>
+    /// <returns>Returns the simple type name from the current <see cref="Type"/> instance.</returns>
     public static string GetName(this Type type)
     {
         return type.Name.SubstringBeforeFirst(GenericTypeIdentifierMarker);

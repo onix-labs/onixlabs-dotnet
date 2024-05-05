@@ -27,7 +27,7 @@ public readonly partial struct Hash
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
-    /// <param name="data">The <see cref="T:System.Byte[]"/> data from which to compute a hash.</param>
+    /// <param name="data">The <see cref="T:Byte[]"/> data from which to compute a hash.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static Hash Compute(HashAlgorithm algorithm, byte[] data)
     {
@@ -39,7 +39,7 @@ public readonly partial struct Hash
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
-    /// <param name="data">The <see cref="T:System.Byte[]"/> data from which to compute a hash.</param>
+    /// <param name="data">The <see cref="T:Byte[]"/> data from which to compute a hash.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static Hash Compute(HashAlgorithm algorithm, byte[] data, int rounds)
@@ -52,8 +52,8 @@ public readonly partial struct Hash
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
-    /// <param name="data">The <see cref="T:System.Byte[]"/> data from which to compute a hash.</param>
-    /// <param name="offset">The offset into the <see cref="T:System.Byte[]"/> from which to begin using data.</param>
+    /// <param name="data">The <see cref="T:Byte[]"/> data from which to compute a hash.</param>
+    /// <param name="offset">The offset into the <see cref="T:Byte[]"/> from which to begin using data.</param>
     /// <param name="count">The number of bytes in the array to use as data.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static Hash Compute(HashAlgorithm algorithm, byte[] data, int offset, int count)
@@ -66,8 +66,8 @@ public readonly partial struct Hash
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
-    /// <param name="data">The <see cref="T:System.Byte[]"/> data from which to compute a hash.</param>
-    /// <param name="offset">The offset into the <see cref="T:System.Byte[]"/> from which to begin using data.</param>
+    /// <param name="data">The <see cref="T:Byte[]"/> data from which to compute a hash.</param>
+    /// <param name="offset">The offset into the <see cref="T:Byte[]"/> from which to begin using data.</param>
     /// <param name="count">The number of bytes in the array to use as data.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>

@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Core;
 
 public abstract partial class Enumeration<T>
 {
     /// <summary>
-    /// Returns a <see cref="System.ValueTuple"/> that represents the current object.
+    /// Returns a <see cref="ValueTuple{T1,T2}"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a tuple that represents the current object.</returns>
     public (int Value, string Name) ToEntry()
@@ -26,9 +28,9 @@ public abstract partial class Enumeration<T>
     }
 
     /// <summary>
-    /// Returns a <see cref="System.String"/> that represents the current object.
+    /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
-    /// <returns>Returns a <see cref="System.String"/> that represents the current object.</returns>
+    /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
     public override string ToString()
     {
         return Name;

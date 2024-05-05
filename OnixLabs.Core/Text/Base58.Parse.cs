@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,134 +19,62 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base58
 {
     /// <summary>
-    /// Parses a Base-58 value into a <see cref="Base58"/> value.
+    /// Parses the specified Base-58 encoded <see cref="String"/> value into a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="value">The Base-58 value to parse.</param>
-    /// <param name="provider">An object that provides format-specific information about the specified value. </param>
-    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
+    /// <param name="value">The Base-58 encoded value to parse.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="String"/> value.</returns>
     public static Base58 Parse(string value, IFormatProvider? provider = null)
     {
         return Parse(value.AsSpan(), provider);
     }
 
     /// <summary>
-    /// Parses a Base-58 value into a <see cref="Base58"/> value.
+    /// Parses the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> value into a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="value">The Base-58 value to parse.</param>
-    /// <param name="provider">An object that provides format-specific information about the specified value. </param>
-    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
+    /// <param name="value">The Base-58 encoded value to parse.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
+    /// <returns>Returns a new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static Base58 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
-        if (TryParse(value, provider, out Base58 result)) return result;
-        throw new FormatException($"The input string '{value}' was not in a correct format.");
+        byte[] bytes = IBaseCodec.Base58.Decode(value, provider);
+        return new Base58(bytes);
     }
 
     /// <summary>
-    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> value.
+    /// Tries to parse the specified Base-58 encoded <see cref="String"/> value into a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="value">The Base-58 value to parse.</param>
-    /// <param name="provider">An object that provides format-specific information about the specified value. </param>
-    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(string value, IFormatProvider? provider = null)
-    {
-        return ParseWithChecksum(value.AsSpan(), provider);
-    }
-
-    /// <summary>
-    /// Parses a Base-58 value with a checksum into a <see cref="Base58"/> value.
-    /// </summary>
-    /// <param name="value">The Base-58 value to parse.</param>
-    /// <param name="provider">An object that provides format-specific information about the specified value. </param>
-    /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
-    public static Base58 ParseWithChecksum(ReadOnlySpan<char> value, IFormatProvider? provider = null)
-    {
-        if (TryParseWithChecksum(value, provider, out Base58 result)) return result;
-        throw new FormatException($"The input string '{value}' was not in a correct format.");
-    }
-
-    /// <summary>
-    /// Tries to parse the specified Base-58 value into a <see cref="Base58"/> value.
-    /// </summary>
-    /// <param name="value">The Base-58 value to parse.</param>
-    /// <param name="provider"> An object that provides format-specific information about the specified value. </param>
+    /// <param name="value">The Base-58 encoded value to parse.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// On return, contains the result of parsing the specified value,
-    /// or the default value in the event that the specified value could not be parsed.
+    /// A new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="String"/> value,
+    /// or the default <see cref="Base58"/> value if the specified Base-58 encoded <see cref="String"/> could not be parsed.
     /// </param>
-    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified Base-58 value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(string? value, IFormatProvider? provider, out Base58 result)
     {
         return TryParse(value.AsSpan(), provider, out result);
     }
 
     /// <summary>
-    /// Tries to parse the specified Base-58 value into a <see cref="Base58"/> value.
+    /// Tries to parse the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> value into a <see cref="Base58"/> value.
     /// </summary>
-    /// <param name="value">The Base-58 value to parse.</param>
-    /// <param name="provider"> An object that provides format-specific information about the specified value. </param>
+    /// <param name="value">The Base-58 encoded value to parse.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// On return, contains the result of parsing the specified value,
-    /// or the default value in the event that the specified value could not be parsed.
+    /// A new <see cref="Base58"/> instance, parsed from the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> value,
+    /// or the default <see cref="Base58"/> value if the specified Base-58 encoded <see cref="ReadOnlySpan{T}"/> could not be parsed.
     /// </param>
-    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified Base-58 value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out Base58 result)
     {
-        try
+        if (IBaseCodec.Base58.TryDecode(value, provider, out byte[] bytes))
         {
-            Base58FormatInfo info = provider as Base58FormatInfo ?? Base58FormatInfo.Default;
-            byte[] bytes = Base58Codec.Decode(value, info.Alphabet);
-            result = Create(bytes);
+            result = new Base58(bytes);
             return true;
         }
-        catch
-        {
-            result = Empty;
-            return false;
-        }
-    }
 
-    /// <summary>
-    /// Tries to parse the specified Base-58 value with a checksum into a <see cref="Base58"/> value.
-    /// </summary>
-    /// <param name="value">The Base-58 value to parse.</param>
-    /// <param name="provider"> An object that provides format-specific information about the specified value. </param>
-    /// <param name="result">
-    /// On return, contains the result of parsing the specified value,
-    /// or the default value in the event that the specified value could not be parsed.
-    /// </param>
-    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryParseWithChecksum(string? value, IFormatProvider? provider, out Base58 result)
-    {
-        return TryParseWithChecksum(value.AsSpan(), provider, out result);
-    }
-
-    /// <summary>
-    /// Tries to parse the specified Base-58 value with a checksum into a <see cref="Base58"/> value.
-    /// </summary>
-    /// <param name="value">The Base-58 value to parse.</param>
-    /// <param name="provider"> An object that provides format-specific information about the specified value. </param>
-    /// <param name="result">
-    /// On return, contains the result of parsing the specified value,
-    /// or the default value in the event that the specified value could not be parsed.
-    /// </param>
-    /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryParseWithChecksum(ReadOnlySpan<char> value, IFormatProvider? provider, out Base58 result)
-    {
-        try
-        {
-            Base58FormatInfo info = provider as Base58FormatInfo ?? Base58FormatInfo.Default;
-            byte[] bytes = Base58Codec.Decode(value, info.Alphabet);
-            byte[] bytesWithoutChecksum = RemoveChecksum(bytes);
-
-            VerifyChecksum(bytes);
-
-            result = Create(bytesWithoutChecksum);
-            return true;
-        }
-        catch
-        {
-            result = Empty;
-            return false;
-        }
+        result = default;
+        return false;
     }
 }

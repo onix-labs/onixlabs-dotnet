@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Linq;
 using OnixLabs.Core.Linq;
 
@@ -21,13 +20,13 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base32
 {
     /// <summary>
-    /// Checks for equality between the current instance and another object.
+    /// Checks whether the current object is equal to another object of the same type.
     /// </summary>
-    /// <param name="other">The object to check for equality.</param>
-    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="other">An object to compare with the current object.</param>
+    /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
     public bool Equals(Base32 other)
     {
-        return value.SequenceEqual(other.value);
+        return other.value.SequenceEqual(value);
     }
 
     /// <summary>
@@ -46,26 +45,26 @@ public readonly partial struct Base32
     /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(value.GetContentHashCode());
+        return value.GetContentHashCode();
     }
 
     /// <summary>
-    /// Performs an equality check between two object instances.
+    /// Performs an equality comparison between two object instances.
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the instances are equal; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(Base32 left, Base32 right)
     {
         return Equals(left, right);
     }
 
     /// <summary>
-    /// Performs an inequality check between two object instances.
+    /// Performs an inequality comparison between two object instances.
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the instances are not equal; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Base32 left, Base32 right)
     {
         return !Equals(left, right);

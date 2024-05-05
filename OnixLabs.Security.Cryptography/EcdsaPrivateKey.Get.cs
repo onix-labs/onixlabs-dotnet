@@ -1,11 +1,11 @@
-// Copyright © 2020 ONIXLabs
-// 
+// Copyright 2020 ONIXLabs
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,14 +19,13 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EcdsaPrivateKey
 {
     /// <summary>
-    /// Gets the public key component from this private key.
+    /// Gets the ECDSA cryptographic public key component from the current ECDSA cryptographic private key.
     /// </summary>
-    /// <returns>Returns the public key component from this private key.</returns>
-    public override PublicKey GetPublicKey()
+    /// <returns>Returns a new <see cref="EcdsaPublicKey"/> instance containing the ECDSA cryptographic public key component from the current ECDSA cryptographic private key.</returns>
+    public override EcdsaPublicKey GetPublicKey()
     {
-        using ECDsa privateKey = ECDsa.Create();
-        privateKey.ImportECPrivateKey(KeyData, out int _);
-        byte[] publicKey = privateKey.ExportSubjectPublicKeyInfo();
-        return new EcdsaPublicKey(publicKey, AlgorithmType);
+        using ECDsa key = ImportKeyData();
+        byte[] keyData = key.ExportSubjectPublicKeyInfo();
+        return new EcdsaPublicKey(keyData);
     }
 }

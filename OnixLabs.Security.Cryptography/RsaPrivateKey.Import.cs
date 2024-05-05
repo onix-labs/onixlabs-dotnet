@@ -1,11 +1,11 @@
-// Copyright © 2020 ONIXLabs
-// 
+// Copyright 2020 ONIXLabs
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,144 +20,63 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class RsaPrivateKey
 {
     /// <summary>
-    /// Imports a PKCS #8 formatted key.
+    /// Imports the RSA cryptographic private key data in PKCS #8 format.
     /// </summary>
-    /// <param name="data">The key data to import.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(ReadOnlySpan<byte> data, HashAlgorithmType type, RSASignaturePadding padding)
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
+    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data)
     {
-        RSA privateKey = RSA.Create();
-
-        privateKey.ImportPkcs8PrivateKey(data, out int _);
-        byte[] bytes = privateKey.ExportRSAPrivateKey();
-
-        return Create(bytes, type, padding);
+        return ImportPkcs8PrivateKey(data, out int _);
     }
 
     /// <summary>
-    /// Imports a PKCS #8 formatted key.
+    /// Imports the RSA cryptographic private key data in PKCS #8 format.
     /// </summary>
-    /// <param name="data">The key data to import.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(byte[] data, HashAlgorithmType type, RSASignaturePadding padding)
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="bytesRead">The number of bytes read from the input data.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
+    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, out int bytesRead)
     {
-        ReadOnlySpan<byte> bytes = data.AsSpan();
-        return ImportPkcs8Key(bytes, type, padding);
+        using RSA key = RSA.Create();
+        key.ImportPkcs8PrivateKey(data, out bytesRead);
+        byte[] keyData = key.ExportRSAPrivateKey();
+        return new RsaPrivateKey(keyData);
     }
 
     /// <summary>
-    /// Imports an encrypted PKCS #8 formatted key.
+    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
-    /// <param name="data">The key data to import.</param>
-    /// <param name="password">The password to decrypt the key data.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(
-        ReadOnlySpan<byte> data,
-        ReadOnlySpan<char> password,
-        HashAlgorithmType type,
-        RSASignaturePadding padding)
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="password">The password required for password based decryption.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
+    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password)
     {
-        RSA privateKey = RSA.Create();
-
-        privateKey.ImportEncryptedPkcs8PrivateKey(password, data, out int _);
-        byte[] bytes = privateKey.ExportRSAPrivateKey();
-
-        return Create(bytes, type, padding);
+        return ImportPkcs8PrivateKey(data, password, out int _);
     }
 
     /// <summary>
-    /// Imports an encrypted PKCS #8 formatted key.
+    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
-    /// <param name="data">The key data to import.</param>
-    /// <param name="password">The password to decrypt the key data.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(
-        ReadOnlySpan<byte> data,
-        char[] password,
-        HashAlgorithmType type,
-        RSASignaturePadding padding)
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="password">The password required for password based decryption.</param>
+    /// <param name="bytesRead">The number of bytes read from the input data.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
+    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password, out int bytesRead)
     {
-        ReadOnlySpan<char> characters = password.AsSpan();
-        return ImportPkcs8Key(data, characters, type, padding);
+        using RSA key = RSA.Create();
+        key.ImportEncryptedPkcs8PrivateKey(password, data, out bytesRead);
+        byte[] keyData = key.ExportRSAPrivateKey();
+        return new RsaPrivateKey(keyData);
     }
 
     /// <summary>
-    /// Imports an encrypted PKCS #8 formatted key.
+    /// Imports the key data into a new <see cref="RSA"/> instance.
     /// </summary>
-    /// <param name="data">The key data to import.</param>
-    /// <param name="password">The password to decrypt the key data.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(
-        ReadOnlySpan<byte> data,
-        string password,
-        HashAlgorithmType type,
-        RSASignaturePadding padding)
+    /// <returns>Returns a new <see cref="RSA"/> instance containing the imported key data.</returns>
+    private RSA ImportKeyData()
     {
-        ReadOnlySpan<char> characters = password.AsSpan();
-        return ImportPkcs8Key(data, characters, type, padding);
-    }
-
-    /// <summary>
-    /// Imports an encrypted PKCS #8 formatted key.
-    /// </summary>
-    /// <param name="data">The key data to import.</param>
-    /// <param name="password">The password to decrypt the key data.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(
-        byte[] data,
-        ReadOnlySpan<char> password,
-        HashAlgorithmType type,
-        RSASignaturePadding padding)
-    {
-        ReadOnlySpan<byte> bytes = data.AsSpan();
-        return ImportPkcs8Key(bytes, password, type, padding);
-    }
-
-    /// <summary>
-    /// Imports an encrypted PKCS #8 formatted key.
-    /// </summary>
-    /// <param name="data">The key data to import.</param>
-    /// <param name="password">The password to decrypt the key data.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(
-        byte[] data,
-        char[] password,
-        HashAlgorithmType type,
-        RSASignaturePadding padding)
-    {
-        ReadOnlySpan<byte> bytes = data.AsSpan();
-        return ImportPkcs8Key(bytes, password, type, padding);
-    }
-
-    /// <summary>
-    /// Imports an encrypted PKCS #8 formatted key.
-    /// </summary>
-    /// <param name="data">The key data to import.</param>
-    /// <param name="password">The password to decrypt the key data.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified PKCS #8 key data.</returns>
-    public static RsaPrivateKey ImportPkcs8Key(
-        byte[] data,
-        string password,
-        HashAlgorithmType type,
-        RSASignaturePadding padding)
-    {
-        ReadOnlySpan<byte> bytes = data.AsSpan();
-        return ImportPkcs8Key(bytes, password, type, padding);
+        RSA algorithm = RSA.Create();
+        algorithm.ImportRSAPrivateKey(KeyData, out int _);
+        return algorithm;
     }
 }

@@ -147,9 +147,7 @@ public readonly partial struct BigDecimal
     public static explicit operator float(BigDecimal value)
     {
         if (value < float.MinValue || value > float.MaxValue)
-        {
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Single)}.");
-        }
 
         return Convert.ToSingle(value.ToString("E"));
     }
@@ -162,9 +160,7 @@ public readonly partial struct BigDecimal
     public static explicit operator double(BigDecimal value)
     {
         if (value < double.MinValue || value > double.MaxValue)
-        {
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Double)}.");
-        }
 
         return Convert.ToDouble(value.ToString("E"));
     }
@@ -177,9 +173,7 @@ public readonly partial struct BigDecimal
     public static explicit operator decimal(BigDecimal value)
     {
         if (value < decimal.MinValue || value > decimal.MaxValue)
-        {
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Decimal)}.");
-        }
 
         return Convert.ToDecimal(value.ToString("E"));
     }
@@ -200,8 +194,6 @@ public readonly partial struct BigDecimal
         BigInteger checkedMax = BigInteger.CreateChecked(max);
 
         if (value.number.Integer < checkedMin || value.number.Integer > checkedMax)
-        {
             throw new OverflowException($"Value was either too large or too small for the specified type: {typeof(T).Name}.");
-        }
     }
 }

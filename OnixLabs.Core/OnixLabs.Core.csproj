@@ -9,7 +9,7 @@
         <Description>ONIXLabs Core API for .NET</Description>
         <AssemblyVersion>6.0.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
-        <Copyright>Copyright © ONIXLabs 2020-2023</Copyright>
+        <Copyright>Copyright © ONIXLabs 2020</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
         <PackageVersion>6.0.0</PackageVersion>
     </PropertyGroup>
@@ -41,6 +41,5 @@
     </ItemGroup>
     <ItemGroup>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
-        <Using Include="OnixLabs.Core.Collections.Collection" Static="True"/>
     </ItemGroup>
 </Project>

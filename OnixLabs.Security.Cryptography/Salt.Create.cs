@@ -1,11 +1,11 @@
-// Copyright © 2020 ONIXLabs
-// 
+// Copyright 2020 ONIXLabs
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,17 +19,7 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Salt
 {
     /// <summary>
-    /// Creates a <see cref="Salt"/> instance from a <see cref="byte"/> array.
-    /// </summary>
-    /// <param name="value">The <see cref="byte"/> array to represent as a salt.</param>
-    /// <returns>A new <see cref="Salt"/> instance.</returns>
-    public static Salt Create(byte[] value)
-    {
-        return new Salt(value);
-    }
-
-    /// <summary>
-    /// Creates a <see cref="Salt"/> of the specified length.
+    /// Creates a new <see cref="Salt"/> instance of the specified length.
     /// </summary>
     /// <param name="length">The length of the salt to create.</param>
     /// <returns>Returns a new <see cref="Salt"/> instance of the specified length.</returns>
@@ -38,11 +28,11 @@ public readonly partial struct Salt
         using RandomNumberGenerator generator = RandomNumberGenerator.Create();
         byte[] value = new byte[length];
         generator.GetBytes(value);
-        return Create(value);
+        return new Salt(value);
     }
 
     /// <summary>
-    /// Creates a non-zero <see cref="Salt"/> of the specified length.
+    /// Creates a new, non-zero <see cref="Salt"/> instance of the specified length.
     /// </summary>
     /// <param name="length">The length of the salt to create.</param>
     /// <returns>Returns a new non-zero <see cref="Salt"/> instance of the specified length.</returns>
@@ -51,6 +41,6 @@ public readonly partial struct Salt
         using RandomNumberGenerator generator = RandomNumberGenerator.Create();
         byte[] value = new byte[length];
         generator.GetNonZeroBytes(value);
-        return Create(value);
+        return new Salt(value);
     }
 }

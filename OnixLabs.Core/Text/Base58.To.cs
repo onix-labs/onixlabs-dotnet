@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,56 +13,46 @@
 // limitations under the License.
 
 using System;
-using System.Text;
 
 namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base58
 {
     /// <summary>
-    /// Returns a <see cref="byte"/> array that represents the current object.
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base58"/> instance.
     /// </summary>
-    /// <returns>Returns a <see cref="byte"/> array that represents the current object.</returns>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base58"/> instance.</returns>
     public byte[] ToByteArray()
     {
         return value.Copy();
     }
 
     /// <summary>
-    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value, using the default <see cref="Encoding"/>.
+    /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
-    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value, using the default <see cref="Encoding"/>.</returns>
-    public string ToPlainTextString()
-    {
-        return ToPlainTextString(Encoding.Default);
-    }
-
-    /// <summary>
-    /// Gets the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value.
-    /// </summary>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain a <see cref="string"/> from the current <see cref="Base32"/> value.</param>
-    /// <returns>Returns the plain-text <see cref="string"/> representation of the current <see cref="Base32"/> value.</returns>
-    public string ToPlainTextString(Encoding encoding)
-    {
-        return encoding.GetString(value);
-    }
-
-    /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
     public override string ToString()
     {
-        return ToString(null);
+        return ToString(Base58FormatProvider.Bitcoin);
     }
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
     /// </summary>
-    /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(string? format, IFormatProvider? formatProvider = null)
+    public string ToString(IFormatProvider? formatProvider)
+    {
+        return ToString(null, formatProvider);
+    }
+
+    /// <summary>
+    /// Formats the value of the current instance using the specified format.
+    /// </summary>
+    /// <param name="format">The format to use.</param>
+    /// <param name="formatProvider">The provider to use to format the value.</param>
+    /// <returns>The value of the current instance in the specified format.</returns>
+    public string ToString(string? format, IFormatProvider? formatProvider)
     {
         return ToString(format.AsSpan(), formatProvider);
     }
@@ -70,12 +60,11 @@ public readonly partial struct Base58
     /// <summary>
     /// Formats the value of the current instance using the specified format.
     /// </summary>
-    /// <param name="format">The format to use, or null to use the default format.</param>
+    /// <param name="format">The format to use.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
+    public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider)
     {
-        Base58FormatInfo info = formatProvider as Base58FormatInfo ?? Base58FormatInfo.Default;
-        return Base58Codec.Encode(value, info.Alphabet);
+        return IBaseCodec.Base58.Encode(value, formatProvider);
     }
 }

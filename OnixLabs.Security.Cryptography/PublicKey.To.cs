@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,61 +14,24 @@
 
 using System;
 using OnixLabs.Core;
-using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class PublicKey
 {
     /// <summary>
-    /// Returns a <see cref="byte"/> array that represents the underlying public key data.
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance.
     /// </summary>
-    /// <returns>Returns a <see cref="byte"/> array that represents the underlying public key data.</returns>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance.</returns>
     public byte[] ToByteArray()
     {
         return KeyData.Copy();
     }
 
     /// <summary>
-    /// Returns a <see cref="Base16"/> value that represents the underlying public key data.
+    /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
-    /// <returns>Returns a <see cref="Base16"/> value that represents the underlying public key data.</returns>
-    public Base16 ToBase16()
-    {
-        return Base16.Create(KeyData);
-    }
-
-    /// <summary>
-    /// Returns a <see cref="Base32"/> value that represents the underlying public key data.
-    /// </summary>
-    /// <returns>Returns a <see cref="Base32"/> value that represents the underlying public key data.</returns>
-    public Base32 ToBase32()
-    {
-        return Base32.Create(KeyData);
-    }
-
-    /// <summary>
-    /// Returns a <see cref="Base58"/> value that represents the underlying public key data.
-    /// </summary>
-    /// <returns>Returns a <see cref="Base58"/> value that represents the underlying public key data.</returns>
-    public Base58 ToBase58()
-    {
-        return Base58.Create(KeyData);
-    }
-
-    /// <summary>
-    /// Returns a <see cref="Base64"/> value that represents the underlying public key data.
-    /// </summary>
-    /// <returns>Returns a <see cref="Base64"/> value that represents the underlying public key data.</returns>
-    public Base64 ToBase64()
-    {
-        return Base64.Create(KeyData);
-    }
-
-    /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object.
-    /// </summary>
-    /// <returns>A <see cref="string"/> that represents the current object.</returns>
+    /// <returns>Returns <see cref="String"/> that represents the current object.</returns>
     public override string ToString()
     {
         return Convert.ToHexString(KeyData).ToLower();

@@ -1,11 +1,11 @@
-// Copyright © 2020 ONIXLabs
-// 
+// Copyright 2020 ONIXLabs
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,73 +13,31 @@
 // limitations under the License.
 
 using System.Security.Cryptography;
-using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class RsaPrivateKey
 {
     /// <summary>
-    /// Creates an <see cref="RsaPrivateKey"/> from the specified key data and hash algorithm type.
+    /// Creates a new RSA cryptographic private key.
     /// </summary>
-    /// <param name="key">The key data from which to construct a private key.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified key data and hash algorithm type.</returns>
-    public static RsaPrivateKey Create(byte[] key, HashAlgorithmType type, RSASignaturePadding padding)
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance.</returns>
+    public static RsaPrivateKey Create()
     {
-        return new RsaPrivateKey(key, type, padding);
+        using RSA key = RSA.Create();
+        byte[] keyData = key.ExportRSAPrivateKey();
+        return new RsaPrivateKey(keyData);
     }
 
     /// <summary>
-    /// Creates an <see cref="RsaPrivateKey"/> from the specified <see cref="Base16"/> value.
+    /// Creates a new RSA cryptographic private key.
     /// </summary>
-    /// <param name="key">The key data from which to construct a private key.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified key data and hash algorithm type.</returns>
-    public static RsaPrivateKey Create(Base16 key, HashAlgorithmType type, RSASignaturePadding padding)
+    /// <param name="parameters">The RSA parameters from which to create a new RSA cryptographic private key.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance.</returns>
+    public static RsaPrivateKey Create(RSAParameters parameters)
     {
-        byte[] bytes = key.ToByteArray();
-        return Create(bytes, type, padding);
-    }
-
-    /// <summary>
-    /// Creates an <see cref="RsaPrivateKey"/> from the specified <see cref="Base32"/> value.
-    /// </summary>
-    /// <param name="key">The key data from which to construct a private key.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified key data and hash algorithm type.</returns>
-    public static RsaPrivateKey Create(Base32 key, HashAlgorithmType type, RSASignaturePadding padding)
-    {
-        byte[] bytes = key.ToByteArray();
-        return Create(bytes, type, padding);
-    }
-
-    /// <summary>
-    /// Creates an <see cref="RsaPrivateKey"/> from the specified <see cref="Base58"/> value.
-    /// </summary>
-    /// <param name="key">The key data from which to construct a private key.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified key data and hash algorithm type.</returns>
-    public static RsaPrivateKey Create(Base58 key, HashAlgorithmType type, RSASignaturePadding padding)
-    {
-        byte[] bytes = key.ToByteArray();
-        return Create(bytes, type, padding);
-    }
-
-    /// <summary>
-    /// Creates an <see cref="RsaPrivateKey"/> from the specified <see cref="Base58"/> value.
-    /// </summary>
-    /// <param name="key">The key data from which to construct a private key.</param>
-    /// <param name="type">The <see cref="HashAlgorithmType"/> for computing signature data.</param>
-    /// <param name="padding">The <see cref="RSASignaturePadding" /> for computing signature data.</param>
-    /// <returns>Returns an <see cref="RsaPrivateKey"/> from the specified key data and hash algorithm type.</returns>
-    public static RsaPrivateKey Create(Base64 key, HashAlgorithmType type, RSASignaturePadding padding)
-    {
-        byte[] bytes = key.ToByteArray();
-        return Create(bytes, type, padding);
+        using RSA key = RSA.Create(parameters);
+        byte[] keyData = key.ExportRSAPrivateKey();
+        return new RsaPrivateKey(keyData);
     }
 }

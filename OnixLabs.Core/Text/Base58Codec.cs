@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,70 +21,150 @@ using System.Text;
 namespace OnixLabs.Core.Text;
 
 /// <summary>
-/// Represents a Base-58 encoder/decoder.
+/// Represents a codec for encoding and decoding Base-58 values.
 /// </summary>
-internal static class Base58Codec
+public sealed class Base58Codec : IBaseCodec
 {
     /// <summary>
-    /// Encode a byte array into a Base-58 string.
+    /// Encodes the specified <see cref="ReadOnlySpan{T}"/> value into a Base-58 <see cref="String"/> representation.
     /// </summary>
-    /// <param name="value">The value to encode.</param>
-    /// <param name="alphabet">The Base-58 alphabet to use for encoding.</param>
-    /// <returns>Returns a Base-58 encoded string.</returns>
-    public static string Encode(IReadOnlyList<byte> value, string alphabet)
+    /// <param name="value">The value to encode into a Base-58 <see cref="String"/> representation.</param>
+    /// <param name="provider">The format provider that will be used to encode the specified value.</param>
+    /// <returns>Returns a new Base-58 <see cref="String"/> representation encoded from the specified value.</returns>
+    public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null)
     {
-        BigInteger data = value.Aggregate(BigInteger.Zero, (a, b) => a * 256 + b);
-        StringBuilder result = new();
-
-        while (data > 0)
-        {
-            BigInteger remainder = data % 58;
-            data /= 58;
-            result.Insert(0, alphabet[(int)remainder]);
-        }
-
-        for (int index = 0; index < value.Count && value[index] == 0; index++) result.Insert(0, '1');
-
-        return result.ToString();
+        if (TryEncode(value, provider, out string result)) return result;
+        throw new FormatException(IBaseCodec.EncodingFormatException);
     }
 
     /// <summary>
-    /// Decodes a Base-58 <see cref="ReadOnlySpan{T}"/> into a byte array.
+    /// Decodes the specified <see cref="ReadOnlySpan{T}"/> Base-58 representation into a <see cref="T:Byte[]"/>.
     /// </summary>
-    /// <param name="value">The value to decode.</param>
-    /// <param name="alphabet">The Base-58 alphabet to use for decoding.</param>
-    /// <returns>Returns a byte array.</returns>
-    /// <exception cref="FormatException">If the Base-58 string format is invalid.</exception>
-    public static byte[] Decode(ReadOnlySpan<char> value, string alphabet)
+    /// <param name="value">The Base-58 value to decode into a <see cref="T:Byte[]"/>.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
+    /// <returns>Returns a new <see cref="T:Byte[]"/> decoded from the specified value.</returns>
+    public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
-        BigInteger data = BigInteger.Zero;
+        if (TryDecode(value, provider, out byte[] result)) return result;
+        throw new FormatException(IBaseCodec.DecodingFormatException);
+    }
 
-        for (int index = 0; index < value.Length; index++)
+    /// <summary>
+    /// Tries to encode the specified <see cref="ReadOnlySpan{T}"/> value into a Base-58 <see cref="String"/> representation.
+    /// </summary>
+    /// <param name="value">The value to encode into a Base-58 <see cref="String"/> representation.</param>
+    /// <param name="provider">The format provider that will be used to encode the specified value.</param>
+    /// <param name="result">
+    /// A new Base-58 <see cref="String"/> representation encoded from the specified value,
+    /// or an empty string if the specified value could not be encoded.
+    /// </param>
+    /// <returns>Returns <see langword="true"/> if the specified value was encoded successfully; otherwise, <see langword="false"/>.</returns>
+    public bool TryEncode(ReadOnlySpan<byte> value, IFormatProvider? provider, out string result)
+    {
+        try
         {
-            char character = value[index];
-            int characterIndex = alphabet.IndexOf(character);
+            if (value.IsEmpty)
+            {
+                result = string.Empty;
+                return true;
+            }
 
-            if (characterIndex < 0)
-                throw new FormatException($"Invalid Base58 character '{character}' at position {index}");
+            if (provider is not null && provider is not Base58FormatProvider)
+            {
+                result = string.Empty;
+                return false;
+            }
 
-            data = data * 58 + characterIndex;
+            Base58FormatProvider formatProvider = provider as Base58FormatProvider ?? Base58FormatProvider.Bitcoin;
+            StringBuilder builder = new();
+            BigInteger data = BigInteger.Zero;
+            foreach (byte b in value) data = data * 256 + b;
+
+            while (data > 0)
+            {
+                BigInteger remainder = data % 58;
+                data /= 58;
+                builder.Insert(0, formatProvider.Alphabet[(int)remainder]);
+            }
+
+            for (int index = 0; index < value.Length && value[index] == 0; index++) builder.Insert(0, '1');
+
+            result = builder.ToString();
+            return true;
         }
+        catch
+        {
+            result = string.Empty;
+            return false;
+        }
+    }
 
-        int leadingZeroCount = value
-            .ToArray()
-            .TakeWhile(character => character == '1')
-            .Count();
+    /// <summary>
+    /// Tries to decode the specified <see cref="ReadOnlySpan{T}"/> Base-58 representation into a <see cref="T:Byte[]"/>.
+    /// </summary>
+    /// <param name="value">The Base-58 value to decode into a <see cref="T:Byte[]"/>.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
+    /// <param name="result">
+    /// A new <see cref="T:Byte[]"/> decoded from the specified value,
+    /// or an empty <see cref="T:Byte[]"/> if the specified value could not be decoded.
+    /// </param>
+    /// <returns>Returns <see langword="true"/> if the specified value was decoded successfully; otherwise, <see langword="false"/>.</returns>
+    public bool TryDecode(ReadOnlySpan<char> value, IFormatProvider? provider, out byte[] result)
+    {
+        try
+        {
+            if (value.IsEmpty)
+            {
+                result = [];
+                return true;
+            }
 
-        IEnumerable<byte> leadingZeros = Enumerable
-            .Repeat(byte.MinValue, leadingZeroCount);
+            if (provider is not null && provider is not Base58FormatProvider)
+            {
+                result = [];
+                return false;
+            }
 
-        IEnumerable<byte> bytesWithoutLeadingZeros = data
-            .ToByteArray()
-            .Reverse()
-            .SkipWhile(byteValue => byteValue == 0);
+            Base58FormatProvider formatProvider = provider as Base58FormatProvider ?? Base58FormatProvider.Bitcoin;
 
-        return leadingZeros
-            .Concat(bytesWithoutLeadingZeros)
-            .ToArray();
+            BigInteger data = BigInteger.Zero;
+
+            foreach (char character in value)
+            {
+                int characterIndex = formatProvider.Alphabet.IndexOf(character);
+
+                if (characterIndex < 0)
+                {
+                    result = [];
+                    return false;
+                }
+
+                data = data * 58 + characterIndex;
+            }
+
+            int leadingZeroCount = value
+                .ToArray()
+                .TakeWhile(character => character == '1')
+                .Count();
+
+            IEnumerable<byte> leadingZeros = Enumerable
+                .Repeat(byte.MinValue, leadingZeroCount);
+
+            IEnumerable<byte> bytesWithoutLeadingZeros = data
+                .ToByteArray()
+                .Reverse()
+                .SkipWhile(byteValue => byteValue == 0);
+
+            result = leadingZeros
+                .Concat(bytesWithoutLeadingZeros)
+                .ToArray();
+
+            return true;
+        }
+        catch
+        {
+            result = [];
+            return false;
+        }
     }
 }

@@ -1,11 +1,11 @@
 // Copyright © 2020 ONIXLabs
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,10 +42,10 @@ public abstract partial class Sha3 : HashAlgorithm
     /// </summary>
     private readonly int delimiter;
 
-    /// <summary>
-    /// The length of the hash in bits.
-    /// </summary>
-    private readonly int bitLength;
+    // /// <summary>
+    // /// The length of the hash in bits.
+    // /// </summary>
+    // private readonly int bitLength;
 
     /// <summary>
     /// The state block size.
@@ -65,15 +65,15 @@ public abstract partial class Sha3 : HashAlgorithm
     /// <summary>
     /// The permutable sponge state.
     /// </summary>
-    private ulong[] state = Array.Empty<ulong>();
+    private ulong[] state = [];
 
     /// <summary>
     /// The hash result.
     /// </summary>
-    private byte[] result = Array.Empty<byte>();
+    private byte[] result = [];
 
     /// <summary>
-    /// Creates a new instance of the <see cref="Sha3"/> class.
+    /// Initializes a new instance of the <see cref="Sha3"/> class.
     /// </summary>
     /// <param name="rateBytes">The rate in bytes of the sponge state.</param>
     /// <param name="delimiter">The state delimiter.</param>
@@ -82,8 +82,14 @@ public abstract partial class Sha3 : HashAlgorithm
     {
         this.rateBytes = rateBytes;
         this.delimiter = delimiter;
-        this.bitLength = bitLength;
+
+        HashSize = bitLength;
     }
+
+    /// <summary>
+    /// Gets the size, in bits, of the computed hash code.
+    /// </summary>
+    public override int HashSize { get; }
 
     /// <summary>
     /// Initializes an implementation of the <see cref="Sha3"/> class.
@@ -94,7 +100,7 @@ public abstract partial class Sha3 : HashAlgorithm
         inputPointer = default;
         outputPointer = default;
         state = new ulong[25];
-        result = new byte[bitLength / 8];
+        result = new byte[HashSize / 8];
     }
 
     /// <summary>
@@ -144,7 +150,7 @@ public abstract partial class Sha3 : HashAlgorithm
         Buffer.SetByte(state, rateBytes - 1, pad);
         Permute(state);
 
-        int outputBytesLeft = bitLength / 8;
+        int outputBytesLeft = HashSize / 8;
 
         while (outputBytesLeft > 0)
         {

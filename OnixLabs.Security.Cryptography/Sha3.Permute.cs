@@ -29,14 +29,14 @@ public abstract partial class Sha3
         ulong c0, c1, c2, c3, c4, d0, d1, d2, d3, d4;
 
         ulong[] roundConstants =
-        {
+        [
             0x0000000000000001, 0x0000000000008082, 0x800000000000808A, 0x8000000080008000,
             0x000000000000808B, 0x0000000080000001, 0x8000000080008081, 0x8000000000008009,
             0x000000000000008A, 0x0000000000000088, 0x0000000080008009, 0x000000008000000A,
             0x000000008000808B, 0x800000000000008B, 0x8000000000008089, 0x8000000000008003,
             0x8000000000008002, 0x8000000000000080, 0x000000000000800A, 0x800000008000000A,
             0x8000000080008081, 0x8000000000008080, 0x0000000080000001, 0x8000000080008008
-        };
+        ];
 
         for (int round = 0; round < hashRounds; round++)
         {
@@ -123,11 +123,11 @@ public abstract partial class Sha3
         {
             for (int i = 0; i < 25; i += 5)
             {
-                c0 = state[0 + i] ^ ((~state[1 + i]) & state[2 + i]);
-                c1 = state[1 + i] ^ ((~state[2 + i]) & state[3 + i]);
-                c2 = state[2 + i] ^ ((~state[3 + i]) & state[4 + i]);
-                c3 = state[3 + i] ^ ((~state[4 + i]) & state[0 + i]);
-                c4 = state[4 + i] ^ ((~state[0 + i]) & state[1 + i]);
+                c0 = state[0 + i] ^ (~state[1 + i] & state[2 + i]);
+                c1 = state[1 + i] ^ (~state[2 + i] & state[3 + i]);
+                c2 = state[2 + i] ^ (~state[3 + i] & state[4 + i]);
+                c3 = state[3 + i] ^ (~state[4 + i] & state[0 + i]);
+                c4 = state[4 + i] ^ (~state[0 + i] & state[1 + i]);
 
                 state[0 + i] = c0;
                 state[1 + i] = c1;

@@ -14,6 +14,7 @@
 
 using System;
 using System.Numerics;
+using OnixLabs.Core;
 
 namespace OnixLabs.Numerics;
 
@@ -21,10 +22,8 @@ namespace OnixLabs.Numerics;
 /// Represents component information about rational numbers.
 /// </summary>
 public readonly partial struct NumberInfo :
-    IEquatable<NumberInfo>,
-    IComparable<NumberInfo>,
-    IComparable,
-    IComparisonOperators<NumberInfo, NumberInfo, bool>,
+    IValueEquatable<NumberInfo>,
+    IValueComparable<NumberInfo>,
     ISpanParsable<NumberInfo>,
     IFormattable
 {

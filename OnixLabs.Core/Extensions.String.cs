@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -30,233 +29,293 @@ public static class StringExtensions
     /// <summary>
     /// The value of an index not found.
     /// </summary>
-    private const int IndexNotFound = -1;
+    private const int NotFound = -1;
 
     /// <summary>
-    /// Repeats the current <see cref="string"/> by the specified number of repetitions.
+    /// The default string comparison.
     /// </summary>
-    /// <param name="value">The <see cref="string"/> value to repeat.</param>
-    /// <param name="count">The specified number of repetitions to repeat by.</param>
-    /// <returns>Returns a new <see cref="string"/> containing the repeated value.</returns>
+    private const StringComparison DefaultComparison = StringComparison.Ordinal;
+
+    /// <summary>
+    /// The default date/time styles.
+    /// </summary>
+    private const DateTimeStyles DefaultStyles = DateTimeStyles.None;
+
+    /// <summary>
+    /// The default encoding.
+    /// </summary>
+    private static readonly Encoding DefaultEncoding = Encoding.UTF8;
+
+    /// <summary>
+    /// Repeats the current <see cref="String"/> by the specified number of repetitions.
+    /// </summary>
+    /// <param name="value">The <see cref="String"/> instance to repeat.</param>
+    /// <param name="count">The number of repetitions of the current <see cref="String"/> instance.</param>
+    /// <returns>Returns a new <see cref="String"/> instance representing the repetition of the current <see cref="String"/> instance.</returns>
     public static string Repeat(this string value, int count)
     {
-        if (count <= 0) return string.Empty;
-        IEnumerable<string> repetitions = Enumerable.Repeat(value, count);
-        return string.Join(string.Empty, repetitions);
+        return count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
     }
 
     /// <summary>
-    /// Returns a substring before the first occurrence of the specified delimiter.
+    /// Obtains a sub-string before the specified index within the current <see cref="String"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a sub-string.</param>
-    /// <param name="delimiter">The delimiter to find within the original string.</param>
-    /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
-    /// <returns>Returns a substring before the first occurrence of the specified delimiter.</returns>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="index">The index in the current <see cref="String"/> from which to obtain a sub-string.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the index is less than zero.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <returns>
+    /// Returns a sub-string before the specified index. If the index is less than zero, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance will be returned.
+    /// </returns>
+    private static string SubstringBeforeIndex(this string value, int index, string? defaultValue = null)
+    {
+        return index <= NotFound ? defaultValue ?? value : value[..index];
+    }
+
+    /// <summary>
+    /// Obtains a sub-string after the specified index within the current <see cref="String"/> instance.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="index">The index in the current <see cref="String"/> from which to obtain a sub-string.</param>
+    /// <param name="offset">The offset from the index which marks the beginning of the sub-string.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the index is less than zero.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <returns>
+    /// Returns a sub-string after the specified index. If the index is less than zero, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance will be returned.
+    /// </returns>
+    private static string SubstringAfterIndex(this string value, int index, int offset, string? defaultValue = null)
+    {
+        return index <= NotFound ? defaultValue ?? value : value[(index + offset)..value.Length];
+    }
+
+    /// <summary>
+    /// Obtains a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <returns>
+    /// Returns a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// If the delimiter is not found, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+    /// </returns>
     public static string SubstringBeforeFirst(this string value, char delimiter, string? defaultValue = null)
     {
-        int index = value.IndexOf(delimiter);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[..index]
-        };
+        return value.SubstringBeforeIndex(value.IndexOf(delimiter), defaultValue);
     }
 
     /// <summary>
-    /// Returns a substring before the first occurrence of the specified delimiter.
+    /// Obtains a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a sub-string.</param>
-    /// <param name="delimiter">The delimiter to find within the original string.</param>
-    /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
-    /// <param name="comparison">Specifies the string comparison rule for the search.</param>
-    /// <returns>Returns a substring before the first occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <param name="comparison">
+    /// The culture, case and sort rules that will be applied when searching for the specified delimiter.
+    /// The default value is <see cref="StringComparison.Ordinal"/>.
+    /// </param>
+    /// <returns>
+    ///Returns a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// If the delimiter is not found, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+    /// </returns>
+    public static string SubstringBeforeFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison)
     {
-        int index = value.IndexOf(delimiter, comparison);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[..index]
-        };
+        return value.SubstringBeforeIndex(value.IndexOf(delimiter, comparison), defaultValue);
     }
 
     /// <summary>
-    /// Returns a substring before the last occurrence of the specified delimiter.
+    /// Obtains a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a sub-string.</param>
-    /// <param name="delimiter">The delimiter to find within the original string.</param>
-    /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
-    /// <returns>Returns a substring before the last occurrence of the specified delimiter.</returns>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <returns>
+    ///Returns a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// If the delimiter is not found, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+    /// </returns>
     public static string SubstringBeforeLast(this string value, char delimiter, string? defaultValue = null)
     {
-        int index = value.LastIndexOf(delimiter);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[..index]
-        };
+        return value.SubstringBeforeIndex(value.LastIndexOf(delimiter), defaultValue);
     }
 
     /// <summary>
-    /// Returns a substring before the last occurrence of the specified delimiter.
+    /// Obtains a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a sub-string.</param>
-    /// <param name="delimiter">The delimiter to find within the original string.</param>
-    /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
-    /// <param name="comparison">Specifies the string comparison rule for the search.</param>
-    /// <returns>Returns a substring before the last occurrence of the specified delimiter.</returns>
-    public static string SubstringBeforeLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <param name="comparison">
+    /// The culture, case and sort rules that will be applied when searching for the specified delimiter.
+    /// The default value is <see cref="StringComparison.Ordinal"/>.
+    /// </param>
+    /// <returns>
+    ///Returns a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// If the delimiter is not found, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+    /// </returns>
+    public static string SubstringBeforeLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison)
     {
-        int index = value.LastIndexOf(delimiter, comparison);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[..index]
-        };
+        return value.SubstringBeforeIndex(value.LastIndexOf(delimiter, comparison), defaultValue);
     }
 
     /// <summary>
-    /// Returns a substring after the first occurrence of the specified delimiter.
+    /// Obtains a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a sub-string.</param>
-    /// <param name="delimiter">The delimiter to find within the original string.</param>
-    /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
-    /// <returns>Returns a substring after the first occurrence of the specified delimiter.</returns>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <returns>
+    /// Returns a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// If the delimiter is not found, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+    /// </returns>
     public static string SubstringAfterFirst(this string value, char delimiter, string? defaultValue = null)
     {
-        int index = value.IndexOf(delimiter);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[(index + 1)..value.Length]
-        };
+        return value.SubstringAfterIndex(value.IndexOf(delimiter), 1, defaultValue);
     }
 
     /// <summary>
-    /// Returns a substring after the first occurrence of the specified delimiter.
+    /// Obtains a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a sub-string.</param>
-    /// <param name="delimiter">The delimiter to find within the original string.</param>
-    /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
-    /// <param name="comparison">Specifies the string comparison rule for the search.</param>
-    /// <returns>Returns a substring after the first occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <param name="comparison">
+    /// The culture, case and sort rules that will be applied when searching for the specified delimiter.
+    /// The default value is <see cref="StringComparison.Ordinal"/>.
+    /// </param>
+    /// <returns>
+    ///Returns a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// If the delimiter is not found, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+    /// </returns>
+    public static string SubstringAfterFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison)
     {
-        int index = value.IndexOf(delimiter, comparison);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[(index + delimiter.Length)..value.Length]
-        };
+        return value.SubstringAfterIndex(value.IndexOf(delimiter, comparison), delimiter.Length, defaultValue);
     }
 
     /// <summary>
-    /// Returns a substring after the last occurrence of the specified delimiter.
+    /// Obtains a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a sub-string.</param>
-    /// <param name="delimiter">The delimiter to find within the original string.</param>
-    /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
-    /// <returns>Returns a substring after the last occurrence of the specified delimiter.</returns>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <returns>
+    ///Returns a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// If the delimiter is not found, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+    /// </returns>
     public static string SubstringAfterLast(this string value, char delimiter, string? defaultValue = null)
     {
-        int index = value.LastIndexOf(delimiter);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[(index + 1)..value.Length]
-        };
+        return value.SubstringAfterIndex(value.LastIndexOf(delimiter), 1, defaultValue);
     }
 
     /// <summary>
-    /// Returns a substring after the last occurrence of the specified delimiter.
+    /// Obtains a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a sub-string.</param>
-    /// <param name="delimiter">The delimiter to find within the original string.</param>
-    /// <param name="defaultValue">The value to return if the delimiter is not found, which defaults to the original string.</param>
-    /// <param name="comparison">Specifies the string comparison rule for the search.</param>
-    /// <returns>Returns a substring after the last occurrence of the specified delimiter.</returns>
-    public static string SubstringAfterLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = StringComparison.Ordinal)
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+    /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <param name="comparison">
+    /// The culture, case and sort rules that will be applied when searching for the specified delimiter.
+    /// The default value is <see cref="StringComparison.Ordinal"/>.
+    /// </param>
+    /// <returns>
+    ///Returns a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
+    /// If the delimiter is not found, then the default value will be returned.
+    /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+    /// </returns>
+    public static string SubstringAfterLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison)
     {
-        int index = value.LastIndexOf(delimiter, comparison);
-
-        return index switch
-        {
-            IndexNotFound => defaultValue ?? value,
-            _ => value[(index + delimiter.Length)..value.Length]
-        };
+        return value.SubstringAfterIndex(value.LastIndexOf(delimiter, comparison), 1, defaultValue);
     }
 
     /// <summary>
-    /// Converts the current <see cref="string"/> to a <see cref="byte"/> array using the default <see cref="Encoding"/>.
+    /// Converts the current <see cref="String"/> instance into a new <see cref="T:Byte[]"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a byte array.</param>
-    /// <returns>Returns a <see cref="byte"/> array using the default <see cref="Encoding"/>.</returns>
-    public static byte[] ToByteArray(this string value)
+    /// <param name="value">The current <see cref="String"/> from which to obtain a <see cref="T:Byte[]"/>.</param>
+    /// <param name="encoding">The encoding that will be used to convert the current <see cref="String"/> into a <see cref="T:Byte[]"/>.</param>
+    /// <returns>Returns a new <see cref="T:Byte[]"/> representation of the current <see cref="String"/> instance.</returns>
+    public static byte[] ToByteArray(this string value, Encoding? encoding = null)
     {
-        return ToByteArray(value, Encoding.Default);
+        return (encoding ?? DefaultEncoding).GetBytes(value);
     }
 
     /// <summary>
-    /// Converts the current <see cref="string"/> to a <see cref="byte"/> array using the specified <see cref="Encoding"/>.
+    /// Converts the current <see cref="String"/> instance into a new <see cref="DateTime"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a byte array.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the current <see cref="string"/> to a <see cref="byte"/> array.</param>
-    /// <returns>Returns a <see cref="byte"/> array using the specified <see cref="Encoding"/>.</returns>
-    public static byte[] ToByteArray(this string value, Encoding encoding)
-    {
-        return encoding.GetBytes(value);
-    }
-
-    /// <summary>
-    /// Converts the current <see cref="string"/> to a <see cref="DateTime"/>.
-    /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a <see cref="DateTime"/>.</param>
-    /// <param name="provider">An object that supplies culture-specific formatting information.</param>
-    /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
-    /// <returns>Returns a <see cref="DateTime"/> parsed from the current <see cref="string"/> value.</returns>
-    public static DateTime ToDateTime(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
+    /// <param name="value">The current <see cref="String"/> instance to convert.</param>
+    /// <param name="provider">An object that provides culture-specific formatting information.</param>
+    /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
+    /// <returns>Returns a new <see cref="DateTime"/> instance parsed from the current <see cref="String"/> instance.</returns>
+    public static DateTime ToDateTime(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles)
     {
         return DateTime.Parse(value, provider, styles);
     }
 
     /// <summary>
-    /// Converts the current <see cref="string"/> to a <see cref="DateOnly"/>.
+    /// Converts the current <see cref="String"/> instance into a new <see cref="DateOnly"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a <see cref="DateOnly"/>.</param>
-    /// <param name="provider">An object that supplies culture-specific formatting information.</param>
-    /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
-    /// <returns>Returns a <see cref="DateOnly"/> parsed from the current <see cref="string"/> value.</returns>
-    public static DateOnly ToDateOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
+    /// <param name="value">The current <see cref="String"/> instance to convert.</param>
+    /// <param name="provider">An object that provides culture-specific formatting information.</param>
+    /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
+    /// <returns>Returns a new <see cref="DateOnly"/> instance parsed from the current <see cref="String"/> instance.</returns>
+    public static DateOnly ToDateOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles)
     {
         return DateOnly.Parse(value, provider, styles);
     }
 
     /// <summary>
-    /// Converts the current <see cref="string"/> to a <see cref="TimeOnly"/>.
+    /// Converts the current <see cref="String"/> instance into a new <see cref="TimeOnly"/> instance.
     /// </summary>
-    /// <param name="value">The original <see cref="string"/> from which to obtain a <see cref="TimeOnly"/>.</param>
-    /// <param name="provider">An object that supplies culture-specific formatting information.</param>
-    /// <param name="styles">A bitwise combination of the enumeration values that indicates the style elements that can be present.</param>
-    /// <returns>Returns a <see cref="TimeOnly"/> parsed from the current <see cref="string"/> value.</returns>
-    public static TimeOnly ToTimeOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DateTimeStyles.None)
+    /// <param name="value">The current <see cref="String"/> instance to convert.</param>
+    /// <param name="provider">An object that provides culture-specific formatting information.</param>
+    /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
+    /// <returns>Returns a new <see cref="TimeOnly"/> instance parsed from the current <see cref="String"/> instance.</returns>
+    public static TimeOnly ToTimeOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles)
     {
         return TimeOnly.Parse(value, provider, styles);
     }
 
     /// <summary>
-    /// Copies the contents of the current <see cref="string"/> into the destination <see cref="Span{T}"/>.
+    /// Tries to copy the current <see cref="String"/> instance into the destination <see cref="Span{T}"/>.
     /// </summary>
-    /// <param name="value">The current <see cref="string"/> value to copy.</param>
-    /// <param name="destination">The <see cref="Span{T}"/> into which to copy the current <see cref="string"/> contents.</param>
+    /// <param name="value">The current <see cref="String"/> instance to copy.</param>
+    /// <param name="destination">The <see cref="Span{T}"/> into which the current <see cref="String"/> contents will be copied.</param>
     /// <param name="charsWritten">The number of characters written to the destination <see cref="Span{T}"/>.</param>
-    /// <returns>Returns <see langword="true" /> if the data was copied into the destination span; otherwise, <see langword="false" /> if the destination was too short.</returns>
+    /// <returns>Returns <see langword="true"/> if the current <see cref="String"/> instance was copied into the destination <see cref="Span{T}"/>; otherwise, <see langword="false"/> if the destination was too short.</returns>
     public static bool TryCopyTo(this string value, Span<char> destination, out int charsWritten)
     {
         bool result = value.TryCopyTo(destination);
@@ -265,24 +324,24 @@ public static class StringExtensions
     }
 
     /// <summary>
-    /// Converts the current <see cref="string"/> between the specified before and after <see cref="char"/> values.
+    /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="Char"/> instances.
     /// </summary>
-    /// <param name="value">The current value to wrap.</param>
-    /// <param name="before">The <see cref="string"/> that should precede the current value.</param>
-    /// <param name="after">The <see cref="string"/> that should succeed the current value.</param>
-    /// <returns>Returns the current <see cref="string"/> wrapped between the specified before and after <see cref="char"/> values.</returns>
+    /// <param name="value">The current <see cref="String"/> instance to wrap.</param>
+    /// <param name="before">The <see cref="Char"/> that should precede the current <see cref="String"/> instance.</param>
+    /// <param name="after">The <see cref="Char"/> that should succeed the current <see cref="String"/> instance.</param>
+    /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="Char"/> instances.</returns>
     public static string Wrap(this string value, char before, char after)
     {
         return $"{before}{value}{after}";
     }
 
     /// <summary>
-    /// Converts the current <see cref="string"/> between the specified before and after <see cref="string"/> values.
+    /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="String"/> instances.
     /// </summary>
-    /// <param name="value">The current value to wrap.</param>
-    /// <param name="before">The <see cref="string"/> that should precede the current value.</param>
-    /// <param name="after">The <see cref="string"/> that should succeed the current value.</param>
-    /// <returns>Returns the current <see cref="string"/> wrapped between the specified before and after <see cref="string"/> values.</returns>
+    /// <param name="value">The current <see cref="String"/> instance to wrap.</param>
+    /// <param name="before">The <see cref="String"/> that should precede the current <see cref="String"/> instance.</param>
+    /// <param name="after">The <see cref="String"/> that should succeed the current <see cref="String"/> instance.</param>
+    /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="String"/> instances.</returns>
     public static string Wrap(this string value, string before, string after)
     {
         return $"{before}{value}{after}";

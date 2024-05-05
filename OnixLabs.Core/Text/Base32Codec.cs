@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,15 +13,14 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace OnixLabs.Core.Text;
 
 /// <summary>
-/// Represents a Base-32 encoder/decoder.
+/// Represents a codec for encoding and decoding Base-32 values.
 /// </summary>
-internal static class Base32Codec
+public sealed class Base32Codec : IBaseCodec
 {
     /// <summary>
     /// The Base-32 input data size.
@@ -34,112 +33,195 @@ internal static class Base32Codec
     private const int OutputSize = 5;
 
     /// <summary>
-    /// Encode a byte array into a Base-32 string.
+    /// Encodes the specified <see cref="ReadOnlySpan{T}"/> value into a Base-32 <see cref="String"/> representation.
     /// </summary>
-    /// <param name="value">The value to encode.</param>
-    /// <param name="alphabet">The Base-32 alphabet to use for encoding.</param>
-    /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a Base-32 encoded string.</returns>
-    public static string Encode(IReadOnlyList<byte> value, string alphabet, bool padding)
+    /// <param name="value">The value to encode into a Base-32 <see cref="String"/> representation.</param>
+    /// <param name="provider">The format provider that will be used to encode the specified value.</param>
+    /// <returns>Returns a new Base-32 <see cref="String"/> representation encoded from the specified value.</returns>
+    public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null)
     {
-        if (value.Count == 0) return string.Empty;
+        if (TryEncode(value, provider, out string result)) return result;
+        throw new FormatException(IBaseCodec.EncodingFormatException);
+    }
 
-        StringBuilder builder = new(value.Count * InputSize / OutputSize);
+    /// <summary>
+    /// Decodes the specified <see cref="ReadOnlySpan{T}"/> Base-32 representation into a <see cref="T:Byte[]"/>.
+    /// </summary>
+    /// <param name="value">The Base-32 value to decode into a <see cref="T:Byte[]"/>.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
+    /// <returns>Returns a new <see cref="T:Byte[]"/> decoded from the specified value.</returns>
+    public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null)
+    {
+        if (TryDecode(value, provider, out byte[] result)) return result;
+        throw new FormatException(IBaseCodec.DecodingFormatException);
+    }
 
-        int inputPosition = 0;
-        int inputSubPosition = 0;
-        byte outputPosition = 0;
-        int outputSubPosition = 0;
-
-        while (inputPosition < value.Count)
+    /// <summary>
+    /// Tries to encode the specified <see cref="ReadOnlySpan{T}"/> value into a Base-32 <see cref="String"/> representation.
+    /// </summary>
+    /// <param name="value">The value to encode into a Base-32 <see cref="String"/> representation.</param>
+    /// <param name="provider">The format provider that will be used to encode the specified value.</param>
+    /// <param name="result">
+    /// A new Base-32 <see cref="String"/> representation encoded from the specified value,
+    /// or an empty string if the specified value could not be encoded.
+    /// </param>
+    /// <returns>Returns <see langword="true"/> if the specified value was encoded successfully; otherwise, <see langword="false"/>.</returns>
+    public bool TryEncode(ReadOnlySpan<byte> value, IFormatProvider? provider, out string result)
+    {
+        try
         {
-            int availableBits = Math.Min(InputSize - inputSubPosition, OutputSize - outputSubPosition);
-
-            outputPosition <<= availableBits;
-            outputPosition |= (byte)(value[inputPosition] >> (InputSize - (inputSubPosition + availableBits)));
-            inputSubPosition += availableBits;
-
-            if (inputSubPosition >= InputSize)
+            if (value.IsEmpty)
             {
+                result = string.Empty;
+                return true;
+            }
+
+            if (provider is not null && provider is not Base32FormatProvider)
+            {
+                result = string.Empty;
+                return false;
+            }
+
+            Base32FormatProvider formatProvider = provider as Base32FormatProvider ?? Base32FormatProvider.Rfc4648;
+            StringBuilder builder = new(value.Length * InputSize / OutputSize);
+
+            int inputPosition = 0;
+            int inputSubPosition = 0;
+            byte outputPosition = 0;
+            int outputSubPosition = 0;
+
+            while (inputPosition < value.Length)
+            {
+                int availableBits = Math.Min(InputSize - inputSubPosition, OutputSize - outputSubPosition);
+
+                outputPosition <<= availableBits;
+                outputPosition |= (byte)(value[inputPosition] >> (InputSize - (inputSubPosition + availableBits)));
+                inputSubPosition += availableBits;
+
+                if (inputSubPosition >= InputSize)
+                {
+                    inputPosition++;
+                    inputSubPosition = 0;
+                }
+
+                outputSubPosition += availableBits;
+
+                if (outputSubPosition < OutputSize) continue;
+
+                outputPosition &= 0x1F;
+                builder.Append(formatProvider.Alphabet[outputPosition]);
+                outputSubPosition = 0;
+            }
+
+            if (outputSubPosition <= 0)
+            {
+                result = builder.ToString();
+                return true;
+            }
+
+            outputPosition <<= (OutputSize - outputSubPosition);
+            outputPosition &= 0x1F;
+            builder.Append(formatProvider.Alphabet[outputPosition]);
+
+            while (formatProvider.IsPadded && builder.Length % InputSize != 0) builder.Append('=');
+
+            result = builder.ToString();
+            return true;
+        }
+        catch
+        {
+            result = string.Empty;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to decode the specified <see cref="ReadOnlySpan{T}"/> Base-32 representation into a <see cref="T:Byte[]"/>.
+    /// </summary>
+    /// <param name="value">The Base-32 value to decode into a <see cref="T:Byte[]"/>.</param>
+    /// <param name="provider">The format provider that will be used to decode the specified value.</param>
+    /// <param name="result">
+    /// A new <see cref="T:Byte[]"/> decoded from the specified value,
+    /// or an empty <see cref="T:Byte[]"/> if the specified value could not be decoded.
+    /// </param>
+    /// <returns>Returns <see langword="true"/> if the specified value was decoded successfully; otherwise, <see langword="false"/>.</returns>
+    public bool TryDecode(ReadOnlySpan<char> value, IFormatProvider? provider, out byte[] result)
+    {
+        try
+        {
+            if (value.IsEmpty)
+            {
+                result = [];
+                return true;
+            }
+
+            if (provider is not null && provider is not Base32FormatProvider)
+            {
+                result = [];
+                return false;
+            }
+
+            Base32FormatProvider formatProvider = provider as Base32FormatProvider ?? Base32FormatProvider.Rfc4648;
+
+            if (formatProvider.IsPadded && value.Length % InputSize != 0)
+            {
+                result = [];
+                return false;
+            }
+
+            ReadOnlySpan<char> valueWithoutPadding = formatProvider.IsPadded ? value.TrimEnd('=') : value;
+
+            byte[] outputBytes = new byte[valueWithoutPadding.Length * OutputSize / InputSize];
+
+            if (outputBytes.Length == 0)
+            {
+                result = [];
+                return false;
+            }
+
+            int inputPosition = 0;
+            int inputSubPosition = 0;
+            int outputPosition = 0;
+            int outputSubPosition = 0;
+
+            while (outputPosition < outputBytes.Length)
+            {
+                char character = valueWithoutPadding[inputPosition];
+                int index = formatProvider.Alphabet.IndexOf(character);
+
+                if (index < 0)
+                {
+                    result = [];
+                    return false;
+                }
+
+                int availableBits = Math.Min(OutputSize - inputSubPosition, InputSize - outputSubPosition);
+
+                outputBytes[outputPosition] <<= availableBits;
+                outputBytes[outputPosition] |= (byte)(index >> (OutputSize - (inputSubPosition + availableBits)));
+                outputSubPosition += availableBits;
+
+                if (outputSubPosition >= InputSize)
+                {
+                    outputPosition++;
+                    outputSubPosition = 0;
+                }
+
+                inputSubPosition += availableBits;
+
+                if (inputSubPosition < OutputSize) continue;
+
                 inputPosition++;
                 inputSubPosition = 0;
             }
 
-            outputSubPosition += availableBits;
-
-            if (outputSubPosition < OutputSize) continue;
-
-            outputPosition &= 0x1F;
-            builder.Append(alphabet[outputPosition]);
-            outputSubPosition = 0;
+            result = outputBytes;
+            return true;
         }
-
-        if (outputSubPosition <= 0) return builder.ToString();
-
-        outputPosition <<= (OutputSize - outputSubPosition);
-        outputPosition &= 0x1F;
-        builder.Append(alphabet[outputPosition]);
-
-        while (padding && builder.Length % InputSize != 0) builder.Append('=');
-
-        return builder.ToString();
-    }
-
-    /// <summary>
-    /// Decodes a Base-32 <see cref="ReadOnlySpan{T}"/> into a byte array.
-    /// </summary>
-    /// <param name="value">The value to decode.</param>
-    /// <param name="alphabet">The Base-32 alphabet to use for decoding.</param>
-    /// <param name="padding">Determines whether padding should be applied for Base-32 encoding and decoding operations.</param>
-    /// <returns>Returns a byte array.</returns>
-    /// <exception cref="FormatException">If the Base-32 string format is invalid.</exception>
-    public static byte[] Decode(ReadOnlySpan<char> value, string alphabet, bool padding)
-    {
-        if (value == string.Empty) return [];
-
-        if (padding && value.Length % InputSize != 0)
-            throw new FormatException("Base32 string is invalid. Insufficient padding has been applied.");
-
-        ReadOnlySpan<char> valueWithoutPadding = padding ? value.TrimEnd('=') : value;
-
-        byte[] outputBytes = new byte[valueWithoutPadding.Length * OutputSize / InputSize];
-
-        if (outputBytes.Length == 0)
-            throw new FormatException("Base32 string is invalid. Not enough data to construct byte array.");
-
-        int inputPosition = 0;
-        int inputSubPosition = 0;
-        int outputPosition = 0;
-        int outputSubPosition = 0;
-
-        while (outputPosition < outputBytes.Length)
+        catch
         {
-            char character = valueWithoutPadding[inputPosition];
-            int index = alphabet.IndexOf(character);
-
-            if (index < 0)
-                throw new FormatException($"Invalid Base32 character '{character}' at position {inputPosition}");
-
-            int availableBits = Math.Min(OutputSize - inputSubPosition, InputSize - outputSubPosition);
-
-            outputBytes[outputPosition] <<= availableBits;
-            outputBytes[outputPosition] |= (byte)(index >> (OutputSize - (inputSubPosition + availableBits)));
-            outputSubPosition += availableBits;
-
-            if (outputSubPosition >= InputSize)
-            {
-                outputPosition++;
-                outputSubPosition = 0;
-            }
-
-            inputSubPosition += availableBits;
-
-            if (inputSubPosition < OutputSize) continue;
-
-            inputPosition++;
-            inputSubPosition = 0;
+            result = [];
+            return false;
         }
-
-        return outputBytes;
     }
 }

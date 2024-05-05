@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,29 +17,20 @@ using System;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Represents the base class for implementing enumeration classes.
+/// Represents the base class for implementing enumerations.
 /// </summary>
+/// <param name="value">The value of the enumeration entry.</param>
+/// <param name="name">The name of the enumeration entry.</param>
 /// <typeparam name="T">The underlying enumeration type.</typeparam>
-public abstract partial class Enumeration<T> : IEquatable<T>, IComparable<T>, IComparable where T : Enumeration<T>
+public abstract partial class Enumeration<T>(int value, string name) : IEquatable<T>, IComparable<T>, IComparable where T : Enumeration<T>
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Enumeration{T}"/> class.
-    /// </summary>
-    /// <param name="value">The value of the enumeration entry.</param>
-    /// <param name="name">The name of the enumeration entry.</param>
-    protected Enumeration(int value, string name)
-    {
-        Value = value;
-        Name = name;
-    }
-
     /// <summary>
     /// Gets the name of the enumeration entry.
     /// </summary>
-    public string Name { get; }
+    public string Name { get; } = name;
 
     /// <summary>
     /// Gets the value of the enumeration entry.
     /// </summary>
-    public int Value { get; }
+    public int Value { get; } = value;
 }

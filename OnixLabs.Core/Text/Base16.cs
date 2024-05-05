@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,24 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Core.Text;
 
 /// <summary>
-/// Represents a Base-16 (hexadecimal) value.
+/// Represents a Base-16 value.
 /// </summary>
-public readonly partial struct Base16 : IBaseRepresentation<Base16>
+/// <param name="value">The underlying <see cref="T:Byte[]"/> value.</param>
+public readonly partial struct Base16(ReadOnlySpan<byte> value) : IBaseValue<Base16>
 {
-    /// <summary>
-    /// The underlying <see cref="T:byte[]"/> value.
-    /// </summary>
-    private readonly byte[] value;
+    private readonly byte[] value = value.ToArray();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Base16"/> struct.
+    /// Initializes a new default <see cref="OnixLabs.Core.Text.Base16"/> value.
     /// </summary>
-    /// <param name="value">The underlying value.</param>
-    private Base16(byte[] value)
+    public Base16() : this([])
     {
-        this.value = value.Copy();
     }
 }

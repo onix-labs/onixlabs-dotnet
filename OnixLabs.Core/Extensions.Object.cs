@@ -1,11 +1,11 @@
-// Copyright © 2020 ONIXLabs
-// 
+// Copyright 2020 ONIXLabs
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //    http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using OnixLabs.Core.Reflection;
 
 namespace OnixLabs.Core;
 
@@ -27,14 +28,14 @@ namespace OnixLabs.Core;
 public static class ObjectExtensions
 {
     /// <summary>
-    /// Provides a mechanism to compare the current <see cref="IComparable{T}"/> to compare to the specified object.
+    /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
     /// </summary>
-    /// <param name="comparable">The current <see cref="IComparable{T}"/> to compare to the specified object.</param>
-    /// <param name="obj">The <see cref="object"/> to compare to the current <see cref="IComparable{T}"/>.</param>
+    /// <param name="comparable">The left-hand <see cref="IComparable{T}"/> instance to compare.</param>
+    /// <param name="obj">The right-hand <see cref="Object"/> instance to compare.</param>
     /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
     /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
-    /// <exception cref="ArgumentException">If the specified object is not null, or of the specified type.</exception>
-    public static int CompareObject<T>(this IComparable<T> comparable, object? obj)
+    /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
+    public static int CompareToObject<T>(this IComparable<T> comparable, object? obj)
     {
         if (obj is null) return 1;
         if (obj is T other) return comparable.CompareTo(other);
@@ -42,10 +43,10 @@ public static class ObjectExtensions
     }
 
     /// <summary>
-    /// Gets the <see cref="string"/> representation of the current <see cref="object"/> formatted as a record.
+    /// Gets a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.
     /// </summary>
-    /// <param name="value">The <see cref="object"/> to format as a record.</param>
-    /// <returns>Returns the <see cref="string"/> representation of the current <see cref="object"/> formatted as a record.</returns>
+    /// <param name="value">The current <see cref="Object"/> instance.</param>
+    /// <returns>Returns a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.</returns>
     public static string ToRecordString(this object value)
     {
         Type type = value.GetType();
@@ -54,6 +55,6 @@ public static class ObjectExtensions
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Select(property => $"{property.Name} = {property.GetValue(value)}");
 
-        return $"{type.Name} {{ {string.Join(", ", properties)} }}";
+        return $"{type.GetName()} {{ {string.Join(", ", properties)} }}";
     }
 }

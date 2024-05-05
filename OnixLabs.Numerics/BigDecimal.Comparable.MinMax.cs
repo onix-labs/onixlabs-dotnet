@@ -132,8 +132,6 @@ public readonly partial struct BigDecimal
         return (min, max);
     }
 
-
-
     /// <summary>
     /// Gets the lesser of the specified <see cref="BigDecimal"/> values.
     /// </summary>

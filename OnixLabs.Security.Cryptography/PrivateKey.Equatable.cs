@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,58 +18,57 @@ using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
 
-public abstract partial class PrivateKey : IEquatable<PrivateKey>
+public abstract partial class PrivateKey
 {
     /// <summary>
-    /// Checks for equality between this instance and another object.
+    /// Checks whether the current object is equal to another object of the same type.
     /// </summary>
-    /// <param name="other">The object to check for equality.</param>
-    /// <returns>true if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
-    public virtual bool Equals(PrivateKey? other)
+    /// <param name="other">An object to compare with the current object.</param>
+    /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
+    public bool Equals(PrivateKey? other)
     {
         return ReferenceEquals(this, other)
                || other is not null
                && other.GetType() == GetType()
-               && other.KeyData.SequenceEqual(KeyData)
-               && other.AlgorithmType == AlgorithmType;
+               && other.KeyData.SequenceEqual(KeyData);
     }
 
     /// <summary>
-    /// Checks for equality between this instance and another object.
+    /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
-    /// <returns>true if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object? obj)
     {
         return Equals(obj as PrivateKey);
     }
 
     /// <summary>
-    /// Serves as a hash code function for this instance.
+    /// Serves as a hash code function for the current instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(GetType(), AlgorithmType, KeyData.GetContentHashCode());
+        return HashCode.Combine(GetType(), KeyData.GetContentHashCode());
     }
 
     /// <summary>
-    /// Performs an equality check between two object instances.
+    /// Performs an equality comparison between two object instances.
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>True if the instances are equal; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(PrivateKey left, PrivateKey right)
     {
         return Equals(left, right);
     }
 
     /// <summary>
-    /// Performs an inequality check between two object instances.
+    /// Performs an inequality comparison between two object instances.
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>True if the instances are not equal; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(PrivateKey left, PrivateKey right)
     {
         return !Equals(left, right);

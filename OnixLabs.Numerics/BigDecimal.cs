@@ -14,13 +14,14 @@
 
 using System;
 using System.Numerics;
+using OnixLabs.Core;
 
 namespace OnixLabs.Numerics;
 
 /// <summary>
 /// Represents an arbitrarily large signed decimal.
 /// </summary>
-public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IConvertible
+public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEquatable<BigDecimal>, IValueComparable<BigDecimal>, IConvertible
 {
     /// <summary>
     /// The underlying <see cref="NumberInfo"/> that represents the current <see cref="BigDecimal"/> value.

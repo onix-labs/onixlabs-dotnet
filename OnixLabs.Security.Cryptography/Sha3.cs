@@ -42,10 +42,10 @@ public abstract partial class Sha3 : HashAlgorithm
     /// </summary>
     private readonly int delimiter;
 
-    /// <summary>
-    /// The length of the hash in bits.
-    /// </summary>
-    private readonly int bitLength;
+    // /// <summary>
+    // /// The length of the hash in bits.
+    // /// </summary>
+    // private readonly int bitLength;
 
     /// <summary>
     /// The state block size.
@@ -82,8 +82,14 @@ public abstract partial class Sha3 : HashAlgorithm
     {
         this.rateBytes = rateBytes;
         this.delimiter = delimiter;
-        this.bitLength = bitLength;
+
+        HashSize = bitLength;
     }
+
+    /// <summary>
+    /// Gets the size, in bits, of the computed hash code.
+    /// </summary>
+    public override int HashSize { get; }
 
     /// <summary>
     /// Initializes an implementation of the <see cref="Sha3"/> class.
@@ -94,7 +100,7 @@ public abstract partial class Sha3 : HashAlgorithm
         inputPointer = default;
         outputPointer = default;
         state = new ulong[25];
-        result = new byte[bitLength / 8];
+        result = new byte[HashSize / 8];
     }
 
     /// <summary>
@@ -144,7 +150,7 @@ public abstract partial class Sha3 : HashAlgorithm
         Buffer.SetByte(state, rateBytes - 1, pad);
         Permute(state);
 
-        int outputBytesLeft = bitLength / 8;
+        int outputBytesLeft = HashSize / 8;
 
         while (outputBytesLeft > 0)
         {

@@ -25,20 +25,14 @@ namespace OnixLabs.Security.Cryptography;
 public interface IRsaPrivateKey : IBinaryConvertible
 {
     /// <summary>
-    /// Gets the cryptographic public key component from the current cryptographic private key.
-    /// </summary>
-    /// <returns>Returns a new <see cref="RsaPublicKey"/> instance containing the cryptographic public key component from the current cryptographic private key.</returns>
-    RsaPublicKey GetPublicKey();
-
-    /// <summary>
-    /// Imports the cryptographic private key data in PKCS #8 format.
+    /// Imports the RSA cryptographic private key data in PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
     public static abstract RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data);
 
     /// <summary>
-    /// Imports the cryptographic private key data in PKCS #8 format.
+    /// Imports the RSA cryptographic private key data in PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="bytesRead">The number of bytes read from the input data.</param>
@@ -46,7 +40,7 @@ public interface IRsaPrivateKey : IBinaryConvertible
     public static abstract RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, out int bytesRead);
 
     /// <summary>
-    /// Imports the cryptographic private key data in encrypted PKCS #8 format.
+    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
@@ -54,7 +48,7 @@ public interface IRsaPrivateKey : IBinaryConvertible
     public static abstract RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password);
 
     /// <summary>
-    /// Imports the cryptographic private key data in encrypted PKCS #8 format.
+    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
@@ -63,18 +57,24 @@ public interface IRsaPrivateKey : IBinaryConvertible
     public static abstract RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password, out int bytesRead);
 
     /// <summary>
-    /// Exports the cryptographic private key data in PKCS #8 format.
+    /// Exports the RSA cryptographic private key data in PKCS #8 format.
     /// </summary>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic private key data in PKCS #8 format.</returns>
+    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the RSA cryptographic private key data in PKCS #8 format.</returns>
     byte[] ExportPkcs8PrivateKey();
 
     /// <summary>
-    /// Exports the cryptographic private key data in encrypted PKCS #8 format.
+    /// Exports the RSA cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
     /// <param name="password">The password to use for encryption.</param>
     /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic private key data in PKCS #8 format.</returns>
+    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the RSA cryptographic private key data in PKCS #8 format.</returns>
     byte[] ExportPkcs8PrivateKey(ReadOnlySpan<char> password, PbeParameters parameters);
+
+    /// <summary>
+    /// Gets the RSA cryptographic public key component from the current RSA cryptographic private key.
+    /// </summary>
+    /// <returns>Returns a new <see cref="RsaPublicKey"/> instance containing the RSA cryptographic public key component from the current RSA cryptographic private key.</returns>
+    RsaPublicKey GetPublicKey();
 
     /// <summary>
     /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
@@ -99,11 +99,11 @@ public interface IRsaPrivateKey : IBinaryConvertible
     /// <summary>
     /// Hashes the specified <see cref="Stream"/> data and signs the resulting hash.
     /// </summary>
-    /// <param name="stream">The input data to hash and sign.</param>
+    /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
     /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
     /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
-    byte[] SignData(Stream stream, HashAlgorithmName algorithm, RSASignaturePadding padding);
+    byte[] SignData(Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding);
 
     /// <summary>
     /// Hashes the specified <see cref="IBinaryConvertible"/> data and signs the resulting hash.

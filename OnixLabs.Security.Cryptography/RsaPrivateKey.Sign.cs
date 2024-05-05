@@ -52,14 +52,14 @@ public sealed partial class RsaPrivateKey
     /// <summary>
     /// Hashes the specified <see cref="Stream"/> data and signs the resulting hash.
     /// </summary>
-    /// <param name="stream">The input data to hash and sign.</param>
+    /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
     /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
     /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
-    public byte[] SignData(Stream stream, HashAlgorithmName algorithm, RSASignaturePadding padding)
+    public byte[] SignData(Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.SignData(stream, algorithm, padding);
+        return key.SignData(data, algorithm, padding);
     }
 
     /// <summary>

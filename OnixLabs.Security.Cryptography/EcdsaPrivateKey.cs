@@ -12,20 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Security.Cryptography;
+using System;
 
 namespace OnixLabs.Security.Cryptography;
 
-public sealed partial class RsaPrivateKey
-{
-    /// <summary>
-    /// Gets the RSA cryptographic public key component from the current RSA cryptographic private key.
-    /// </summary>
-    /// <returns>Returns a new <see cref="RsaPublicKey"/> instance containing the RSA cryptographic public key component from the current RSA cryptographic private key.</returns>
-    public override RsaPublicKey GetPublicKey()
-    {
-        using RSA key = ImportKeyData();
-        byte[] keyData = key.ExportRSAPublicKey();
-        return new RsaPublicKey(keyData);
-    }
-}
+/// <summary>
+/// Represents an ECDSA cryptographic private key.
+/// </summary>
+/// <param name="keyData">The underlying key data of the ECDSA cryptographic private key.</param>
+public sealed partial class EcdsaPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IEcdsaPrivateKey;

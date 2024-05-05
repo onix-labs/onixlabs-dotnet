@@ -16,16 +16,16 @@ using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
-public sealed partial class RsaPrivateKey
+public sealed partial class EcdsaPrivateKey
 {
     /// <summary>
-    /// Gets the RSA cryptographic public key component from the current RSA cryptographic private key.
+    /// Gets the ECDSA cryptographic public key component from the current ECDSA cryptographic private key.
     /// </summary>
-    /// <returns>Returns a new <see cref="RsaPublicKey"/> instance containing the RSA cryptographic public key component from the current RSA cryptographic private key.</returns>
-    public override RsaPublicKey GetPublicKey()
+    /// <returns>Returns a new <see cref="EcdsaPublicKey"/> instance containing the ECDSA cryptographic public key component from the current ECDSA cryptographic private key.</returns>
+    public override EcdsaPublicKey GetPublicKey()
     {
-        using RSA key = ImportKeyData();
-        byte[] keyData = key.ExportRSAPublicKey();
-        return new RsaPublicKey(keyData);
+        using ECDsa key = ImportKeyData();
+        byte[] keyData = key.ExportSubjectPublicKeyInfo();
+        return new EcdsaPublicKey(keyData);
     }
 }

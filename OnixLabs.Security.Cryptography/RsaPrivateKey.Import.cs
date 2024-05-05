@@ -20,7 +20,7 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class RsaPrivateKey
 {
     /// <summary>
-    /// Imports the cryptographic private key data in PKCS #8 format.
+    /// Imports the RSA cryptographic private key data in PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
@@ -30,7 +30,7 @@ public sealed partial class RsaPrivateKey
     }
 
     /// <summary>
-    /// Imports the cryptographic private key data in PKCS #8 format.
+    /// Imports the RSA cryptographic private key data in PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="bytesRead">The number of bytes read from the input data.</param>
@@ -44,7 +44,7 @@ public sealed partial class RsaPrivateKey
     }
 
     /// <summary>
-    /// Imports the cryptographic private key data in encrypted PKCS #8 format.
+    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
@@ -55,7 +55,7 @@ public sealed partial class RsaPrivateKey
     }
 
     /// <summary>
-    /// Imports the cryptographic private key data in encrypted PKCS #8 format.
+    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="password">The password required for password based decryption.</param>

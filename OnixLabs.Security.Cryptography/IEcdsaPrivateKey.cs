@@ -22,60 +22,8 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Defines an ECDSA cryptographic private key.
 /// </summary>
-public interface IEcdsaPrivateKey : IBinaryConvertible
+public interface IEcdsaPrivateKey : IPublicKeyExportable<EcdsaPublicKey>, IPrivateKeyImportablePkcs8<EcdsaPrivateKey>, IPrivateKeyExportablePkcs8, IBinaryConvertible
 {
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data in PKCS #8 format.
-    /// </summary>
-    /// <param name="data">The cryptographic private key data to import.</param>
-    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static abstract EcdsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data);
-
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data in PKCS #8 format.
-    /// </summary>
-    /// <param name="data">The cryptographic private key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static abstract EcdsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, out int bytesRead);
-
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data in encrypted PKCS #8 format.
-    /// </summary>
-    /// <param name="data">The cryptographic private key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static abstract EcdsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password);
-
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data in encrypted PKCS #8 format.
-    /// </summary>
-    /// <param name="data">The cryptographic private key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static abstract EcdsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password, out int bytesRead);
-
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in PKCS #8 format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the ECDSA cryptographic private key data in PKCS #8 format.</returns>
-    byte[] ExportPkcs8PrivateKey();
-
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in encrypted PKCS #8 format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the ECDSA cryptographic private key data in PKCS #8 format.</returns>
-    byte[] ExportPkcs8PrivateKey(ReadOnlySpan<char> password, PbeParameters parameters);
-
-    /// <summary>
-    /// Gets the ECDSA cryptographic public key component from the current ECDSA cryptographic private key.
-    /// </summary>
-    /// <returns>Returns a new <see cref="EcdsaPublicKey"/> instance containing the ECDSA cryptographic public key component from the current ECDSA cryptographic private key.</returns>
-    EcdsaPublicKey GetPublicKey();
-
     /// <summary>
     /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>

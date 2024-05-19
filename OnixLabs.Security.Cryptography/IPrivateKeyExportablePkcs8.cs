@@ -1,4 +1,4 @@
-// Copyright 2020 ONIXLabs
+// Copyright 2020-2024 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,13 +17,16 @@ using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
-public abstract partial class PrivateKey
+/// <summary>
+/// Defines a cryptographic private key that can be exported in PKCS #8 format.
+/// </summary>
+public interface IPrivateKeyExportablePkcs8
 {
     /// <summary>
     /// Exports the cryptographic private key data in PKCS #8 format.
     /// </summary>
     /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic private key data in PKCS #8 format.</returns>
-    public abstract byte[] ExportPkcs8PrivateKey();
+    byte[] ExportPkcs8PrivateKey();
 
     /// <summary>
     /// Exports the cryptographic private key data in encrypted PKCS #8 format.
@@ -31,5 +34,5 @@ public abstract partial class PrivateKey
     /// <param name="password">The password to use for encryption.</param>
     /// <param name="parameters">The parameters required for password based encryption.</param>
     /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic private key data in PKCS #8 format.</returns>
-    public abstract byte[] ExportPkcs8PrivateKey(ReadOnlySpan<char> password, PbeParameters parameters);
+    byte[] ExportPkcs8PrivateKey(ReadOnlySpan<char> password, PbeParameters parameters);
 }

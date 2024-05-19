@@ -41,7 +41,7 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-    public static T CheckNotNull<T>(T? value, string message = "Argument must not be null.") where T : notnull
+    public static T CheckNotNull<T>(T? value, string message = "Argument must not be null.")
     {
         return value ?? throw new InvalidOperationException(message);
     }
@@ -79,7 +79,7 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-    public static T RequireNotNull<T>(T? value, string message = "Argument must not be null.", string? parameterName = null) where T : notnull
+    public static T RequireNotNull<T>(T? value, string message = "Argument must not be null.", string? parameterName = null)
     {
         return value ?? throw new ArgumentNullException(parameterName, message);
     }

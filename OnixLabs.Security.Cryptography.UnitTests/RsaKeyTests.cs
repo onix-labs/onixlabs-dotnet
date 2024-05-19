@@ -41,4 +41,23 @@ public sealed class RsaKeyTests
         Assert.True(publicKey2.IsDataValid(signature1, data, algorithm, padding));
         Assert.True(publicKey2.IsDataValid(signature2, data, algorithm, padding));
     }
+
+    [Fact(DisplayName = "ECDSA PKCS #8 round-trip sign and verify should succeed")]
+    public void EcdsaPkcs8RoundTripSignAndVerifyShouldSucceed()
+    {
+        // Given
+        byte[] data = Salt.CreateNonZero(2048).ToByteArray();
+        HashAlgorithmName algorithm = HashAlgorithmName.SHA256;
+        RSASignaturePadding padding = RSASignaturePadding.Pkcs1;
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
+        byte[] exportedPrivateKey = RsaPrivateKey.Create().ExportPkcs8PrivateKey("Password", parameters);
+        IRsaPrivateKey privateKey = RsaPrivateKey.ImportPkcs8PrivateKey(exportedPrivateKey, "Password");
+        IRsaPublicKey publicKey = privateKey.GetPublicKey();
+
+        // When
+        DigitalSignature signature = new(privateKey.SignData(data, algorithm, padding));
+
+        // Then
+        Assert.True(publicKey.IsDataValid(signature, data, algorithm, padding));
+    }
 }

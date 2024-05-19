@@ -23,7 +23,7 @@ public sealed partial class EcdsaPrivateKey
     /// Exports the ECDSA cryptographic private key data in PKCS #8 format.
     /// </summary>
     /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the ECDSA cryptographic private key data in PKCS #8 format.</returns>
-    public override byte[] ExportPkcs8PrivateKey()
+    public byte[] ExportPkcs8PrivateKey()
     {
         using ECDsa key = ImportKeyData();
         return key.ExportPkcs8PrivateKey();
@@ -35,7 +35,7 @@ public sealed partial class EcdsaPrivateKey
     /// <param name="password">The password to use for encryption.</param>
     /// <param name="parameters">The parameters required for password based encryption.</param>
     /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the ECDSA cryptographic private key data in PKCS #8 format.</returns>
-    public override byte[] ExportPkcs8PrivateKey(ReadOnlySpan<char> password, PbeParameters parameters)
+    public byte[] ExportPkcs8PrivateKey(ReadOnlySpan<char> password, PbeParameters parameters)
     {
         using ECDsa key = ImportKeyData();
         return key.ExportEncryptedPkcs8PrivateKey(password, parameters);

@@ -14,11 +14,15 @@
 
 namespace OnixLabs.Security.Cryptography;
 
-public abstract partial class PrivateKey
+/// <summary>
+/// Defines a cryptographic private key that can export a cryptographic public key component.
+/// </summary>
+/// <typeparam name="T">The underlying type of <see cref="PublicKey"/> that the cryptographic private key exports.</typeparam>
+public interface IPublicKeyExportable<out T> where T : PublicKey
 {
     /// <summary>
     /// Gets the cryptographic public key component from the current cryptographic private key.
     /// </summary>
-    /// <returns>Returns a new <see cref="PublicKey"/> instance containing the cryptographic public key component from the current cryptographic private key.</returns>
-    public abstract PublicKey GetPublicKey();
+    /// <returns>Returns the cryptographic public key component from the current cryptographic private key.</returns>
+    T GetPublicKey();
 }

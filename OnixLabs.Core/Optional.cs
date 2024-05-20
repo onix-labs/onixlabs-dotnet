@@ -1,4 +1,4 @@
-// Copyright 2020-2024 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 
 namespace OnixLabs.Core;
 
@@ -39,7 +40,10 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     public Optional(T value)
     {
         this.value = value;
-        HasValue = true;
+
+        // If the nullable API contract is disabled, it allows null values to be present.
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        HasValue = value is not null;
     }
 
     /// <summary>
@@ -54,10 +58,28 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     public bool HasValue { get; }
 
     /// <summary>
-    /// Gets a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present.
+    /// Gets a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present if
+    /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
     /// <param name="value">The underlying optional value.</param>
-    /// <returns>Returns a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present.</returns>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present if
+    /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// </returns>
+    public static Optional<T> Of(T? value)
+    {
+        return value is null || EqualityComparer<T>.Default.Equals(value, default) ? None : Some(value);
+    }
+
+    /// <summary>
+    /// Gets a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present if
+    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// </summary>
+    /// <param name="value">The underlying optional value.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present if
+    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// </returns>
     public static Optional<T> Some(T value)
     {
         return new Optional<T>(value);
@@ -75,10 +97,14 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     }
 
     /// <summary>
-    /// Gets a new <see cref="Optional{T}"/> instance representing the specified value.
+    /// Gets a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present if
+    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>Returns a new <see cref="Optional{T}"/> instance representing the specified value.</returns>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present if
+    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// </returns>
     public static implicit operator Optional<T>(T value)
     {
         return Some(value);
@@ -87,7 +113,7 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     /// <summary>
     /// Gets the underlying value of the current <see cref="Optional{T}"/> instance.
     /// </summary>
-    /// <returns>>Returns the underlying value of the current <see cref="Optional{T}"/> instance.</returns>
+    /// <returns>Returns the underlying value of the current <see cref="Optional{T}"/> instance.</returns>
     /// <exception cref="InvalidOperationException">If the underlying value is not present.</exception>
     public T GetValueOrThrow()
     {
@@ -124,6 +150,21 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     public Optional<TResult> Select<TResult>(Func<T, TResult> func) where TResult : notnull
     {
         return HasValue ? Optional<TResult>.Some(func(Value)) : Optional<TResult>.None;
+    }
+
+    /// <summary>
+    /// Matches the value of the current <see cref="Optional{T}"/> and executes one of the specified functions depending on the presence of an underlying value.
+    /// </summary>
+    /// <param name="some">The function to execute if the underlying value of the current <see cref="Optional{T}"/> is present.</param>
+    /// <param name="none">The function to execute if the underlying value of the current <see cref="Optional{T}"/> is absent.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the function.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> function if the underlying value of the current <see cref="Optional{T}"/> value is present;
+    /// otherwise, returns the result of the <paramref name="some"/> function if the underlying value of the current <see cref="Optional{T}"/> value is absent.
+    /// </returns>
+    public TResult Match<TResult>(Func<T, TResult> some, Func<TResult> none)
+    {
+        return HasValue ? some(Value) : none();
     }
 
     /// <summary>

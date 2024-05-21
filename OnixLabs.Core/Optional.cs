@@ -18,7 +18,7 @@ using System.Collections.Generic;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Represents an optional type.
+/// Represents an optional type, which can either hold an underlying value or signify the absence of a value.
 /// </summary>
 /// <typeparam name="T">The underlying optional type.</typeparam>
 public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T : notnull
@@ -34,7 +34,7 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     private readonly T? value = default;
 
     /// <summary>
-    /// Initialises a new instance of the <see cref="Optional{T}"/> struct.
+    /// Initializes a new instance of the <see cref="Optional{T}"/> struct.
     /// </summary>
     /// <param name="value">The underlying optional value.</param>
     public Optional(T value)
@@ -66,9 +66,9 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     /// Returns a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present if
     /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
-    public static Optional<T> Of(T? value)
+    public static Optional<T> FromNullableOrDefaultValue(T? value)
     {
-        return value is null || EqualityComparer<T>.Default.Equals(value, default) ? None : Some(value);
+        return value is null || EqualityComparer<T>.Default.Equals(value, default) ? None : FromValue(value);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     /// Returns a new instance of the <see cref="Optional{T}"/> struct where the underlying value is present if
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
-    public static Optional<T> Some(T value)
+    public static Optional<T> FromValue(T value)
     {
         return new Optional<T>(value);
     }
@@ -107,7 +107,7 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     /// </returns>
     public static implicit operator Optional<T>(T value)
     {
-        return Some(value);
+        return FromValue(value);
     }
 
     /// <summary>
@@ -131,25 +131,14 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     }
 
     /// <summary>
-    /// Applies the provided function to the value of the current <see cref="Optional{T}"/> instance if its value is present.
+    /// Matches the value of the current <see cref="Optional{T}"/> and executes one of the specified functions depending on the presence of an underlying value.
     /// </summary>
-    /// <param name="func">The function to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
-    /// <typeparam name="TResult">The underlying type of the result produced by the function.</typeparam>
-    /// <returns> Returns an <see cref="Optional{TResult}"/> instance containing the result of the function if the current <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.</returns>
-    public Optional<TResult> Bind<TResult>(Func<T, Optional<TResult>> func) where TResult : notnull
+    /// <param name="some">The function to execute if the underlying value of the current <see cref="Optional{T}"/> is present.</param>
+    /// <param name="none">The function to execute if the underlying value of the current <see cref="Optional{T}"/> is absent.</param>
+    public void Match(Action<T> some, Action none)
     {
-        return HasValue ? func(Value) : Optional<TResult>.None;
-    }
-
-    /// <summary>
-    /// Applies the provided function to the value of the current <see cref="Optional{T}"/> instance if its value is present.
-    /// </summary>
-    /// <param name="func">The function to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
-    /// <typeparam name="TResult">The underlying type of the result produced by the function.</typeparam>
-    /// <returns> Returns an <see cref="Optional{TResult}"/> instance containing the result of the function if the current <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.</returns>
-    public Optional<TResult> Select<TResult>(Func<T, TResult> func) where TResult : notnull
-    {
-        return HasValue ? Optional<TResult>.Some(func(Value)) : Optional<TResult>.None;
+        if (HasValue) some(Value);
+        else none();
     }
 
     /// <summary>
@@ -168,11 +157,42 @@ public readonly record struct Optional<T> : IValueEquatable<Optional<T>> where T
     }
 
     /// <summary>
+    /// Applies the provided function to the value of the current <see cref="Optional{T}"/> instance if its value is present.
+    /// </summary>
+    /// <param name="selector">The function to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the function.</typeparam>
+    /// <returns>Returns a new <see cref="Optional{TResult}"/> instance containing the result of the function if the current <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.</returns>
+    public Optional<TResult> Select<TResult>(Func<T, TResult> selector) where TResult : notnull
+    {
+        return HasValue ? Optional<TResult>.FromValue(selector(Value)) : Optional<TResult>.None;
+    }
+
+    /// <summary>
+    /// Applies the provided function to the value of the current <see cref="Optional{T}"/> instance if its value is present.
+    /// </summary>
+    /// <param name="selector">The function to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the function.</typeparam>
+    /// <returns> Returns a new <see cref="Optional{TResult}"/> instance containing the result of the function if the current <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.</returns>
+    public Optional<TResult> SelectMany<TResult>(Func<T, Optional<TResult>> selector) where TResult : notnull
+    {
+        return HasValue ? selector(Value) : Optional<TResult>.None;
+    }
+
+    /// <summary>
+    /// Wraps the current <see cref="Optional{T}"/> into a successful <see cref="Result{T}"/>.
+    /// </summary>
+    /// <returns>Returns a new <see cref="Result{T}"/> instance containing the current <see cref="Optional{T}"/> as its value.</returns>
+    public Result<Optional<T>> ToResult()
+    {
+        return Result<Optional<T>>.FromValue(this);
+    }
+
+    /// <summary>
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
     public override string ToString()
     {
-        return HasValue ? Value.ToString() ?? string.Empty : "None";
+        return HasValue ? Value.ToString() ?? string.Empty : nameof(None);
     }
 }

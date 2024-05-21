@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data;
 using Xunit;
@@ -371,12 +372,15 @@ public sealed class IEnumerableExtensionTests
     [Fact(DisplayName = "IEnumerable.Sum should produce the expected result")]
     public void SumShouldProduceExpectedResult()
     {
+        // Required as Sum() already exists for concrete number types.
+        static T SumProxy<T>(IEnumerable<T> enumerable) where T : INumberBase<T> => enumerable.Sum();
+
         // Given
         IEnumerable<decimal> elements = [12.34m, 34.56m, 56.78m];
         const decimal expected = 103.68m;
 
         // When
-        decimal actual = elements.Sum();
+        decimal actual = SumProxy(elements);
 
         // Then
         Assert.Equal(expected, actual);

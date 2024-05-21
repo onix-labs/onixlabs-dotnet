@@ -35,13 +35,13 @@ public sealed class OptionalTests
         Assert.Equal("abc", text);
     }
 
-    [Fact(DisplayName = "Optional should have a present value via Some")]
-    public void OptionalShouldHavePresentValueViaSome()
+    [Fact(DisplayName = "Optional should have a present value via FromValue")]
+    public void OptionalShouldHavePresentValueViaFromValue()
     {
         // Given / When
-        Optional<int> number = Optional<int>.Some(123);
-        Optional<string> text = Optional<string>.Some("abc");
-        Optional<Func<Guid>> func = Optional<Func<Guid>>.Some(() => Guid.Empty);
+        Optional<int> number = Optional<int>.FromValue(123);
+        Optional<string> text = Optional<string>.FromValue("abc");
+        Optional<Func<Guid>> func = Optional<Func<Guid>>.FromValue(() => Guid.Empty);
 
         // Then
         Assert.True(number.HasValue);
@@ -211,12 +211,12 @@ public sealed class OptionalTests
         Assert.Equal("Optional value of type System.String is not present.", textException.Message);
     }
 
-    [Fact(DisplayName = "Optional.Of should return None for implicit default values")]
-    public void OptionalOfShouldReturnNoneForImplicitDefaultValues()
+    [Fact(DisplayName = "Optional.FromNullableOrDefaultValue should return None for implicit default values")]
+    public void OptionalFromNullableOrDefaultValueShouldReturnNoneForImplicitDefaultValues()
     {
         // Given / When
-        Optional<int> number = Optional<int>.Of(default);
-        Optional<string> text = Optional<string>.Of(default);
+        Optional<int> number = Optional<int>.FromNullableOrDefaultValue(default);
+        Optional<string> text = Optional<string>.FromNullableOrDefaultValue(default);
 
         // Then
         Assert.False(number.HasValue);
@@ -225,12 +225,12 @@ public sealed class OptionalTests
         Assert.Equal(Optional<string>.None, text);
     }
 
-    [Fact(DisplayName = "Optional.Of should return None for explicit default values")]
-    public void OptionalOfShouldReturnNoneForExplicitDefaultValues()
+    [Fact(DisplayName = "Optional.FromNullableOrDefaultValue should return None for explicit default values")]
+    public void OptionalFromNullableOrDefaultValueShouldReturnNoneForExplicitDefaultValues()
     {
         // Given / When
-        Optional<int> number = Optional<int>.Of(0);
-        Optional<string> text = Optional<string>.Of(null);
+        Optional<int> number = Optional<int>.FromNullableOrDefaultValue(0);
+        Optional<string> text = Optional<string>.FromNullableOrDefaultValue(null);
 
         // Then
         Assert.False(number.HasValue);
@@ -239,12 +239,12 @@ public sealed class OptionalTests
         Assert.Equal(Optional<string>.None, text);
     }
 
-    [Fact(DisplayName = "Optional.Of should return the expected result for non-default values")]
-    public void OptionalOfShouldReturnExpectedResultForNonDefaultValues()
+    [Fact(DisplayName = "Optional.FromNullableOrDefaultValue should return the expected result for non-default values")]
+    public void OptionalFromNullableOrDefaultValueShouldReturnExpectedResultForNonDefaultValues()
     {
         // Given / When
-        Optional<int> number = Optional<int>.Of(123);
-        Optional<string> text = Optional<string>.Of("abc");
+        Optional<int> number = Optional<int>.FromNullableOrDefaultValue(123);
+        Optional<string> text = Optional<string>.FromNullableOrDefaultValue("abc");
 
         // Then
         Assert.True(number.HasValue);
@@ -285,60 +285,38 @@ public sealed class OptionalTests
         Assert.Equal("xyz", actualText);
     }
 
-    [Fact(DisplayName = "Optional.Bind should return the result of the bound function when a value is present.")]
-    public void OptionalBindShouldReturnTheResultOfTheBoundFunctionWhenAValueIsPresent()
+    [Fact(DisplayName = "Optional.Match should execute the some action when a value is present.")]
+    public void OptionalMatchShouldExecuteSomeActionWhenValueIsPresent()
     {
         // Given
-        const int expected = 9;
-        Optional<int> value = 3;
+        bool result = false;
+        Optional<int> number = 3;
 
         // When
-        Optional<int> actual = value.Bind<int>(number => number * number);
+        number.Match(
+            some: _ => { result = true; },
+            none: () => { }
+        );
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.True(result);
     }
 
-    [Fact(DisplayName = "Optional.Bind should return None when a value is not present.")]
-    public void OptionalBindShouldReturnNoneWhenAValueIsNotPresent()
+    [Fact(DisplayName = "Optional.Match should execute the none action when a value is absent.")]
+    public void OptionalMatchShouldExecuteNoneActionWhenValueIsAbsent()
     {
         // Given
-        Optional<int> expected = Optional<int>.None;
-        Optional<int> value = Optional<int>.None;
+        bool result = false;
+        Optional<int> number = Optional<int>.None;
 
         // When
-        Optional<int> actual = value.Bind<int>(number => number * number);
+        number.Match(
+            some: _ => { },
+            none: () => { result = true; }
+        );
 
         // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Optional.Select should return the result of the bound function when a value is present.")]
-    public void OptionalSelectShouldReturnTheResultOfTheBoundFunctionWhenAValueIsPresent()
-    {
-        // Given
-        const int expected = 9;
-        Optional<int> value = 3;
-
-        // When
-        Optional<int> actual = value.Select(number => number * number);
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Optional.Select should return None when a value is not present.")]
-    public void OptionalSelectShouldReturnNoneWhenAValueIsNotPresent()
-    {
-        // Given
-        Optional<int> expected = Optional<int>.None;
-        Optional<int> value = Optional<int>.None;
-
-        // When
-        Optional<int> actual = value.Select(number => number * number);
-
-        // Then
-        Assert.Equal(expected, actual);
+        Assert.True(result);
     }
 
     [Fact(DisplayName = "Optional.Match should produce the expected result of the some function when a value is present.")]
@@ -370,6 +348,62 @@ public sealed class OptionalTests
             some: value => value * value,
             none: () => 0
         );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Optional.Select should return the result of the selector function when a value is present.")]
+    public void OptionalSelectShouldReturnTheResultOfSelectorFunctionWhenAValueIsPresent()
+    {
+        // Given
+        const int expected = 9;
+        Optional<int> value = 3;
+
+        // When
+        Optional<int> actual = value.Select(number => number * number);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Optional.Select should return None when a value is not present.")]
+    public void OptionalSelectShouldReturnNoneWhenAValueIsNotPresent()
+    {
+        // Given
+        Optional<int> expected = Optional<int>.None;
+        Optional<int> value = Optional<int>.None;
+
+        // When
+        Optional<int> actual = value.Select(number => number * number);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Optional.SelectMany should return the result of the bound function when a value is present.")]
+    public void OptionalSelectManyShouldReturnTheResultOfTheBoundFunctionWhenAValueIsPresent()
+    {
+        // Given
+        const int expected = 9;
+        Optional<int> value = 3;
+
+        // When
+        Optional<int> actual = value.SelectMany<int>(number => number * number);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Optional.SelectMany should return None when a value is not present.")]
+    public void OptionalSelectManyShouldReturnNoneWhenAValueIsNotPresent()
+    {
+        // Given
+        Optional<int> expected = Optional<int>.None;
+        Optional<int> value = Optional<int>.None;
+
+        // When
+        Optional<int> actual = value.SelectMany<int>(number => number * number);
 
         // Then
         Assert.Equal(expected, actual);

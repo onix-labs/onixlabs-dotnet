@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data;
 using Xunit;
@@ -32,7 +33,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("abc", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -48,7 +49,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -64,7 +65,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.AnyEqualBy(element => element.Text);
@@ -80,7 +81,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.AnyEqualBy(element => element.Text);
@@ -93,11 +94,11 @@ public sealed class IEnumerableExtensionTests
     public void CountNotShouldProduceExpectedResult()
     {
         // Given
+        const int expected = 2;
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 456, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
-        const int expected = 2;
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         int actual = elements.CountNot(element => element.Number == 456);
@@ -123,8 +124,8 @@ public sealed class IEnumerableExtensionTests
     public void GetContentHashCodeShouldProduceExpectedResultEqual()
     {
         // Given
-        IEnumerable<Element> enumerable1 = new[] { new Element(1), new Element(2), new Element(3) };
-        IEnumerable<Element> enumerable2 = new[] { new Element(1), new Element(2), new Element(3) };
+        IEnumerable<Element> enumerable1 = [new Element(1), new Element(2), new Element(3)];
+        IEnumerable<Element> enumerable2 = [new Element(1), new Element(2), new Element(3)];
 
         // When
         int hashCode1 = enumerable1.GetContentHashCode();
@@ -138,8 +139,8 @@ public sealed class IEnumerableExtensionTests
     public void GetContentHashCodeShouldProduceExpectedResultDifferent()
     {
         // Given
-        IEnumerable<Element> enumerable1 = new[] { new Element(1), new Element(2), new Element(3) };
-        IEnumerable<Element> enumerable2 = new[] { new Element(3), new Element(2), new Element(1) };
+        IEnumerable<Element> enumerable1 = [new Element(1), new Element(2), new Element(3)];
+        IEnumerable<Element> enumerable2 = [new Element(3), new Element(2), new Element(1)];
 
         // When
         int hashCode1 = enumerable1.GetContentHashCode();
@@ -153,7 +154,7 @@ public sealed class IEnumerableExtensionTests
     public void IsEmptyShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = Enumerable.Empty<Element>();
+        IEnumerable<Element> enumerable = [];
 
         // When
         bool result = enumerable.IsEmpty();
@@ -166,7 +167,7 @@ public sealed class IEnumerableExtensionTests
     public void IsEmptyShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsEmpty();
@@ -179,7 +180,7 @@ public sealed class IEnumerableExtensionTests
     public void IsNotEmptyShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsNotEmpty();
@@ -192,7 +193,7 @@ public sealed class IEnumerableExtensionTests
     public void IsNotEmptyShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = Enumerable.Empty<Element>();
+        IEnumerable<Element> enumerable = [];
 
         // When
         bool result = enumerable.IsNotEmpty();
@@ -205,7 +206,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsSingle();
@@ -218,7 +219,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultFalseWhenEmpty()
     {
         // Given
-        IEnumerable<Element> enumerable = Enumerable.Empty<Element>();
+        IEnumerable<Element> enumerable = [];
 
         // When
         bool result = enumerable.IsSingle();
@@ -231,7 +232,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultFalseWhenMoreThanOneElement()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element(), new Element() };
+        IEnumerable<Element> enumerable = [new Element(), new Element()];
 
         // When
         bool result = enumerable.IsSingle();
@@ -244,7 +245,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountEvenShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element(), new Element() };
+        IEnumerable<Element> enumerable = [new Element(), new Element()];
 
         // When
         bool result = enumerable.IsCountEven();
@@ -257,7 +258,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountEvenShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsCountEven();
@@ -270,7 +271,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountOddShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsCountOdd();
@@ -283,7 +284,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountOddShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element(), new Element() };
+        IEnumerable<Element> enumerable = [new Element(), new Element()];
 
         // When
         bool result = enumerable.IsCountOdd();
@@ -296,7 +297,7 @@ public sealed class IEnumerableExtensionTests
     public void JoinToStringShouldProduceExpectedResultWithDefaultSeparator()
     {
         // Given
-        IEnumerable<object> enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        IEnumerable<object> enumerable = [1, 2, 3, 4.5, true, false];
         const string expected = "1, 2, 3, 4.5, True, False";
 
         // When
@@ -310,7 +311,7 @@ public sealed class IEnumerableExtensionTests
     public void JoinToStringShouldProduceExpectedResultWithCustomSeparator()
     {
         // Given
-        IEnumerable<object> enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        IEnumerable<object> enumerable = [1, 2, 3, 4.5, true, false];
         const string expected = "1 *$ 2 *$ 3 *$ 4.5 *$ True *$ False";
 
         // When
@@ -327,7 +328,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 789, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -343,7 +344,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 0, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -359,7 +360,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 0, Guid.NewGuid());
         Record<Guid> element2 = new("def", 0, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 0, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -371,12 +372,15 @@ public sealed class IEnumerableExtensionTests
     [Fact(DisplayName = "IEnumerable.Sum should produce the expected result")]
     public void SumShouldProduceExpectedResult()
     {
+        // Required as Sum() already exists for concrete number types.
+        static T SumProxy<T>(IEnumerable<T> enumerable) where T : INumberBase<T> => enumerable.Sum();
+
         // Given
         IEnumerable<decimal> elements = [12.34m, 34.56m, 56.78m];
         const decimal expected = 103.68m;
 
         // When
-        decimal actual = elements.Sum();
+        decimal actual = SumProxy(elements);
 
         // Then
         Assert.Equal(expected, actual);
@@ -406,8 +410,8 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 789, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
-        IEnumerable<Record<Guid>> expected = new[] { element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> expected = [element2, element3];
 
         // When
         IEnumerable<Record<Guid>> actual = elements.WhereNot(element => element.Number == 123);
@@ -422,8 +426,8 @@ public sealed class IEnumerableExtensionTests
         // Given
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, null };
-        IEnumerable<Record<Guid>> expected = new[] { element1, element2 };
+        IEnumerable<Record<Guid>?> elements = [element1, element2, null];
+        IEnumerable<Record<Guid>> expected = [element1, element2];
 
         // When
         IEnumerable<Record<Guid>> actual = elements.WhereNotNull();

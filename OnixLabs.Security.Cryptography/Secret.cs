@@ -13,14 +13,26 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
 /// Represents a cryptographic secret.
 /// </summary>
-/// <param name="value">The underlying value of the cryptographic secret.</param>
-public readonly partial struct Secret(ReadOnlySpan<byte> value) : ICryptoPrimitive<Secret>
+public readonly partial struct Secret : ICryptoPrimitive<Secret>
 {
-    private readonly byte[] value = value.ToArray();
+    private readonly ProtectedData protectedData = new();
+    private readonly byte[] encryptedKeyData;
+    private readonly Hash hash;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Secret"/> struct.
+    /// </summary>
+    /// <param name="value">The underlying value of the cryptographic secret.</param>
+    public Secret(ReadOnlySpan<byte> value)
+    {
+        encryptedKeyData = protectedData.Encrypt(value.ToArray());
+        hash = Hash.Compute(SHA256.Create(), value.ToArray());
+    }
 }

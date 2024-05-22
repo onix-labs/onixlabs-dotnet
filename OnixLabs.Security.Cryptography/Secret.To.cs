@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -23,11 +22,11 @@ public readonly partial struct Secret
     /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance.
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance.</returns>
-    public byte[] ToByteArray() => value.Copy();
+    public byte[] ToByteArray() => protectedData.Decrypt(encryptedKeyData);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
-    public override string ToString() => Convert.ToHexString(value).ToLower();
+    public override string ToString() => Convert.ToHexString(protectedData.Decrypt(encryptedKeyData)).ToLower();
 }

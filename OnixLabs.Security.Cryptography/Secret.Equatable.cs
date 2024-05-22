@@ -24,7 +24,7 @@ public readonly partial struct Secret
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Secret other) => value.SequenceEqual(other.value);
+    public bool Equals(Secret other) => hash == other.hash;
 
     /// <summary>
     /// Checks for equality between the current instance and another object.
@@ -37,7 +37,7 @@ public readonly partial struct Secret
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
-    public override int GetHashCode() => value.GetContentHashCode();
+    public override int GetHashCode() => hash.GetHashCode();
 
     /// <summary>
     /// Performs an equality comparison between two object instances.

@@ -78,12 +78,12 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public static implicit operator Optional<T>(T value) => Some(value);
 
     /// <summary>
-    /// Gets the underlying value of the current <see cref="Optional{T}"/> instance;
+    /// Gets the underlying value of the specified <see cref="Optional{T}"/> instance;
     /// otherwise throws an <see cref="InvalidOperationException"/> if the value is absent.
     /// </summary>
     /// <param name="value">The <see cref="Optional{T}"/> instance from which to obtain the underlying value.</param>
     /// <returns>
-    /// Returns the underlying value of the current <see cref="Optional{T}"/> instance;
+    /// Returns the underlying value of the specified <see cref="Optional{T}"/> instance;
     /// otherwise throws an <see cref="InvalidOperationException"/> if the value is absent.
     /// </returns>
     /// <exception cref="InvalidOperationException">If the underlying value is absent.</exception>

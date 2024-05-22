@@ -134,11 +134,11 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;
-    /// otherwise returns the default <typeparam name="T"/> value.
+    /// otherwise returns the default <typeparamref name="T"/> value.
     /// </summary>
     /// <returns>
     /// Returns the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;
-    /// otherwise returns the default <typeparam name="T"/> value.
+    /// otherwise returns the default <typeparamref name="T"/> value.
     /// </returns>
     public abstract T? GetValueOrDefault();
 

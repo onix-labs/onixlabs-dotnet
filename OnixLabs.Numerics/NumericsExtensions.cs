@@ -75,10 +75,7 @@ public static class NumericsExtensions
     /// <param name="maximum">The inclusive maximum value.</param>
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
     /// <returns>Returns <see langword="true"/> if the current value is inclusively between the specified minimum and maximum values; otherwise, <see langword="false"/>.</returns>
-    public static bool IsBetween<T>(this T value, T minimum, T maximum) where T : INumber<T>
-    {
-        return value >= minimum && value <= maximum;
-    }
+    public static bool IsBetween<T>(this T value, T minimum, T maximum) where T : INumber<T> => value >= minimum && value <= maximum;
 
     /// <summary>
     /// Converts the current <see cref="IBinaryInteger{TSelf}"/> value to a <see cref="BigDecimal"/> value.
@@ -88,10 +85,8 @@ public static class NumericsExtensions
     /// <param name="mode">The scale mode that determines how the current value should be scaled.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type of the value to convert.</typeparam>
     /// <returns>Returns a <see cref="BigDecimal"/> representing the current value.</returns>
-    public static BigDecimal ToBigDecimal<T>(this T value, int scale = default, ScaleMode mode = ScaleMode.Integral) where T : IBinaryInteger<T>
-    {
-        return new BigDecimal(value.ToBigInteger(), scale, mode);
-    }
+    public static BigDecimal ToBigDecimal<T>(this T value, int scale = default, ScaleMode mode = ScaleMode.Integral) where T : IBinaryInteger<T> =>
+        new(value.ToBigInteger(), scale, mode);
 
     /// <summary>
     /// Converts the current <see cref="float"/> value to a <see cref="BigDecimal"/>.
@@ -99,10 +94,7 @@ public static class NumericsExtensions
     /// <param name="value">The <see cref="float"/> value to convert.</param>
     /// <param name="mode">The mode that specifies whether the <see cref="BigDecimal"/> value should be converted using its binary or decimal representation.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> representing the current <see cref="float"/> value.</returns>
-    public static BigDecimal ToBigDecimal(this float value, ConversionMode mode = default)
-    {
-        return new BigDecimal(value, mode);
-    }
+    public static BigDecimal ToBigDecimal(this float value, ConversionMode mode = default) => new(value, mode);
 
     /// <summary>
     /// Converts the current <see cref="double"/> value to a <see cref="BigDecimal"/>.
@@ -110,20 +102,14 @@ public static class NumericsExtensions
     /// <param name="value">The <see cref="double"/> value to convert.</param>
     /// <param name="mode">The mode that specifies whether the <see cref="BigDecimal"/> value should be converted using its binary or decimal representation.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> representing the current <see cref="double"/> value.</returns>
-    public static BigDecimal ToBigDecimal(this double value, ConversionMode mode = default)
-    {
-        return new BigDecimal(value, mode);
-    }
+    public static BigDecimal ToBigDecimal(this double value, ConversionMode mode = default) => new(value, mode);
 
     /// <summary>
     /// Converts the current <see cref="decimal"/> value to a <see cref="BigDecimal"/>.
     /// </summary>
     /// <param name="value">The <see cref="decimal"/> value to convert.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> representing the current <see cref="decimal"/> value.</returns>
-    public static BigDecimal ToBigDecimal(this decimal value)
-    {
-        return new BigDecimal(value);
-    }
+    public static BigDecimal ToBigDecimal(this decimal value) => new(value);
 
     /// <summary>
     /// Converts the current <see cref="IBinaryInteger{TSelf}"/> value to a <see cref="BigInteger"/> value.
@@ -131,10 +117,7 @@ public static class NumericsExtensions
     /// <param name="value">The value to convert.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type of the value to convert.</typeparam>
     /// <returns>Returns a <see cref="BigInteger"/> representing the current value.</returns>
-    public static BigInteger ToBigInteger<T>(this T value) where T : IBinaryInteger<T>
-    {
-        return BigInteger.CreateChecked(value);
-    }
+    public static BigInteger ToBigInteger<T>(this T value) where T : IBinaryInteger<T> => BigInteger.CreateChecked(value);
 
     /// <summary>
     /// Converts the current value to a <see cref="decimal"/>.
@@ -205,8 +188,5 @@ public static class NumericsExtensions
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
-    public static NumberInfo ToNumberInfo(this decimal value)
-    {
-        return new NumberInfo(value.GetUnscaledValue(), value.Scale);
-    }
+    public static NumberInfo ToNumberInfo(this decimal value) => new(value.GetUnscaledValue(), value.Scale);
 }

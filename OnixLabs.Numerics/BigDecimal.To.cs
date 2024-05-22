@@ -23,19 +23,13 @@ public readonly partial struct BigDecimal
     /// Gets a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.
     /// </summary>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.</returns>
-    public NumberInfo ToNumberInfo()
-    {
-        return number;
-    }
+    public NumberInfo ToNumberInfo() => number;
 
     /// <summary>
     /// Formats the value of the current instance using the default format.
     /// </summary>
     /// <returns>The value of the current instance in the default format.</returns>
-    public override string ToString()
-    {
-        return ToString(DefaultNumberFormat, DefaultCulture);
-    }
+    public override string ToString() => ToString(DefaultNumberFormat, DefaultCulture);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
@@ -43,10 +37,7 @@ public readonly partial struct BigDecimal
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(string? format, IFormatProvider? formatProvider = null)
-    {
-        return ToString((format ?? DefaultNumberFormat).AsSpan(), formatProvider);
-    }
+    public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString((format ?? DefaultNumberFormat).AsSpan(), formatProvider);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.

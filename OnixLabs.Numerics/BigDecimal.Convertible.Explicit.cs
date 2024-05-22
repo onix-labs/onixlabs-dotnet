@@ -24,10 +24,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="BigInteger"/> value representing the integral value of the specified <see cref="BigDecimal"/> value.</returns>
-    public static explicit operator BigInteger(BigDecimal value)
-    {
-        return value.number.Integer;
-    }
+    public static explicit operator BigInteger(BigDecimal value) => value.number.Integer;
 
     /// <summary>
     /// Converts the integral value of the specified <see cref="BigDecimal"/> value to a <see cref="sbyte"/> value.

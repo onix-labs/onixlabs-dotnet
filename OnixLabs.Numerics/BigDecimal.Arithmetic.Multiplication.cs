@@ -40,8 +40,5 @@ public readonly partial struct BigDecimal
     /// <param name="left">The left-hand value to multiply by.</param>
     /// <param name="right">The right-hand value to multiply.</param>
     /// <returns>Returns the product of the specified <see cref="BigDecimal"/> values.</returns>
-    public static BigDecimal operator *(BigDecimal left, BigDecimal right)
-    {
-        return Multiply(left, right);
-    }
+    public static BigDecimal operator *(BigDecimal left, BigDecimal right) => Multiply(left, right);
 }

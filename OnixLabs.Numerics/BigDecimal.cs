@@ -67,10 +67,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
     /// </summary>
     /// <param name="value">The decimal value from which to construct a <see cref="BigDecimal"/>value.</param>
-    public BigDecimal(decimal value)
-    {
-        number = value.ToNumberInfo();
-    }
+    public BigDecimal(decimal value) => number = value.ToNumberInfo();
 
     /// <summary>
     /// Gets the unscaled value of the current <see cref="BigDecimal"/> value.

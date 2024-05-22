@@ -36,8 +36,5 @@ public readonly partial struct BigDecimal
     /// Trims any trailing zeros from the fractional part of the current <see cref="BigDecimal"/> value.
     /// </summary>
     /// <returns>Returns a new <see cref="BigDecimal"/> excluding any trailing zeros.</returns>
-    public BigDecimal TrimTrailingZeros()
-    {
-        return TrimTrailingZeros(this);
-    }
+    public BigDecimal TrimTrailingZeros() => TrimTrailingZeros(this);
 }

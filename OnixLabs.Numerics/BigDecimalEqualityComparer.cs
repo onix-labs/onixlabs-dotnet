@@ -54,18 +54,12 @@ public abstract class BigDecimalEqualityComparer : IEqualityComparer<BigDecimal>
     /// <param name="x">The first object to compare.</param>
     /// <param name="y">The second object to compare.</param>
     /// <returns>Returns <see langword="true" /> if the specified objects are both of type <see cref="BigDecimal"/> and are equal; otherwise, <see langword="false" />.</returns>
-    public new bool Equals(object? x, object? y)
-    {
-        return x is BigDecimal left && y is BigDecimal right && Equals(left, right);
-    }
+    public new bool Equals(object? x, object? y) => x is BigDecimal left && y is BigDecimal right && Equals(left, right);
 
     /// <summary>Returns a hash code for the specified object.</summary>
     /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
     /// <returns>A hash code for the specified object.</returns>
-    public int GetHashCode(object obj)
-    {
-        return obj is BigDecimal value ? GetHashCode(value) : obj.GetHashCode();
-    }
+    public int GetHashCode(object obj) => obj is BigDecimal value ? GetHashCode(value) : obj.GetHashCode();
 
     /// <summary>
     /// Represents an equality comparer that compares <see cref="BigDecimal"/> values using strict equality.
@@ -77,18 +71,12 @@ public abstract class BigDecimalEqualityComparer : IEqualityComparer<BigDecimal>
         /// <param name="x">The first object of type <see cref="BigDecimal"/> to compare.</param>
         /// <param name="y">The second object of type <see cref="BigDecimal"/> to compare.</param>
         /// <returns> Returns <see langword="true" /> if the specified <see cref="BigDecimal"/> values are equal; otherwise, <see langword="false" />.</returns>
-        public override bool Equals(BigDecimal x, BigDecimal y)
-        {
-            return NumberInfoEqualityComparer.Strict.Equals(x.ToNumberInfo(), y.ToNumberInfo());
-        }
+        public override bool Equals(BigDecimal x, BigDecimal y) => NumberInfoEqualityComparer.Strict.Equals(x.ToNumberInfo(), y.ToNumberInfo());
 
         /// <summary>Returns a hash code for the specified object.</summary>
         /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
         /// <returns>A hash code for the specified object.</returns>
-        public override int GetHashCode(BigDecimal obj)
-        {
-            return NumberInfoEqualityComparer.Strict.GetHashCode(obj.ToNumberInfo());
-        }
+        public override int GetHashCode(BigDecimal obj) => NumberInfoEqualityComparer.Strict.GetHashCode(obj.ToNumberInfo());
     }
 
     /// <summary>
@@ -101,17 +89,11 @@ public abstract class BigDecimalEqualityComparer : IEqualityComparer<BigDecimal>
         /// <param name="x">The first object of type <see cref="BigDecimal"/> to compare.</param>
         /// <param name="y">The second object of type <see cref="BigDecimal"/> to compare.</param>
         /// <returns> Returns <see langword="true" /> if the specified <see cref="BigDecimal"/> values are equal; otherwise, <see langword="false" />.</returns>
-        public override bool Equals(BigDecimal x, BigDecimal y)
-        {
-            return NumberInfoEqualityComparer.Semantic.Equals(x.ToNumberInfo(), y.ToNumberInfo());
-        }
+        public override bool Equals(BigDecimal x, BigDecimal y) => NumberInfoEqualityComparer.Semantic.Equals(x.ToNumberInfo(), y.ToNumberInfo());
 
         /// <summary>Returns a hash code for the specified object.</summary>
         /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
         /// <returns>A hash code for the specified object.</returns>
-        public override int GetHashCode(BigDecimal obj)
-        {
-            return NumberInfoEqualityComparer.Semantic.GetHashCode(obj.ToNumberInfo());
-        }
+        public override int GetHashCode(BigDecimal obj) => NumberInfoEqualityComparer.Semantic.GetHashCode(obj.ToNumberInfo());
     }
 }

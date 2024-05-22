@@ -64,7 +64,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
-    public static Optional<T> Some(T value) => new Some<T>(value);
+    public static Some<T> Some(T value) => new(value);
 
     /// <summary>
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if

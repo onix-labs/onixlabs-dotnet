@@ -43,8 +43,5 @@ public readonly partial struct BigDecimal
     /// <param name="left">The left-hand value to subtract from.</param>
     /// <param name="right">The right-hand value to subtract.</param>
     /// <returns>Returns the difference between the specified <see cref="BigDecimal"/> values.</returns>
-    public static BigDecimal operator -(BigDecimal left, BigDecimal right)
-    {
-        return Subtract(left, right);
-    }
+    public static BigDecimal operator -(BigDecimal left, BigDecimal right) => Subtract(left, right);
 }

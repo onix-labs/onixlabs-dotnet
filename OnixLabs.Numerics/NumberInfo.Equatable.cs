@@ -25,10 +25,7 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool Equals(NumberInfo left, NumberInfo right)
-    {
-        return Equals(left, right, NumberInfoEqualityComparer.Strict);
-    }
+    public static bool Equals(NumberInfo left, NumberInfo right) => Equals(left, right, NumberInfoEqualityComparer.Strict);
 
     /// <summary>
     /// Compares two instances of <see cref="NumberInfo"/> to determine whether their values are equal.
@@ -37,10 +34,7 @@ public readonly partial struct NumberInfo
     /// <param name="right">The right-hand value to compare.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool Equals(NumberInfo left, NumberInfo right, NumberInfoEqualityComparer comparer)
-    {
-        return comparer.Equals(left, right);
-    }
+    public static bool Equals(NumberInfo left, NumberInfo right, NumberInfoEqualityComparer comparer) => comparer.Equals(left, right);
 
     /// <summary>
     /// Compares the current instance of <see cref="NumberInfo"/> with the specified other instance of <see cref="NumberInfo"/>.
@@ -48,10 +42,7 @@ public readonly partial struct NumberInfo
     /// </summary>
     /// <param name="other">The other instance of <see cref="NumberInfo"/> to compare with the current instance.</param>
     /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(NumberInfo other)
-    {
-        return Equals(this, other);
-    }
+    public bool Equals(NumberInfo other) => Equals(this, other);
 
     /// <summary>
     /// Compares the current instance of <see cref="NumberInfo"/> with the specified other instance of <see cref="NumberInfo"/>.
@@ -59,10 +50,7 @@ public readonly partial struct NumberInfo
     /// <param name="other">The other instance of <see cref="NumberInfo"/> to compare with the current instance.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(NumberInfo other, NumberInfoEqualityComparer comparer)
-    {
-        return Equals(this, other, comparer);
-    }
+    public bool Equals(NumberInfo other, NumberInfoEqualityComparer comparer) => Equals(this, other, comparer);
 
     /// <summary>
     /// Checks for equality between this instance and another object.
@@ -70,10 +58,7 @@ public readonly partial struct NumberInfo
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj)
-    {
-        return obj is NumberInfo other && Equals(other);
-    }
+    public override bool Equals(object? obj) => obj is NumberInfo other && Equals(other);
 
     /// <summary>
     /// Checks for equality between this instance and another object.
@@ -81,20 +66,14 @@ public readonly partial struct NumberInfo
     /// <param name="obj">The object to check for equality.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(object? obj, NumberInfoEqualityComparer comparer)
-    {
-        return obj is NumberInfo other && Equals(other, comparer);
-    }
+    public bool Equals(object? obj, NumberInfoEqualityComparer comparer) => obj is NumberInfo other && Equals(other, comparer);
 
     /// <summary>
     /// Serves as a hash code function for this instance.
     /// This method implements the <see cref="NumberInfoEqualityComparer.Strict"/> comparer.
     /// </summary>
     /// <returns>A hash code for this instance.</returns>
-    public override int GetHashCode()
-    {
-        return NumberInfoEqualityComparer.Strict.GetHashCode(this);
-    }
+    public override int GetHashCode() => NumberInfoEqualityComparer.Strict.GetHashCode(this);
 
     /// <summary>
     /// Compares two instances of <see cref="NumberInfo"/> to determine whether their values are equal.
@@ -103,10 +82,7 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(NumberInfo left, NumberInfo right)
-    {
-        return Equals(left, right, NumberInfoEqualityComparer.Semantic);
-    }
+    public static bool operator ==(NumberInfo left, NumberInfo right) => Equals(left, right, NumberInfoEqualityComparer.Semantic);
 
     /// <summary>
     /// Compares two instances of <see cref="NumberInfo"/> to determine whether their values are not equal.
@@ -115,8 +91,5 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(NumberInfo left, NumberInfo right)
-    {
-        return Equals(left, right, NumberInfoEqualityComparer.Semantic);
-    }
+    public static bool operator !=(NumberInfo left, NumberInfo right) => !Equals(left, right, NumberInfoEqualityComparer.Semantic);
 }

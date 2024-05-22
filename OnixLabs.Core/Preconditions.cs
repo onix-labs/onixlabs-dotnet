@@ -41,10 +41,7 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-    public static T CheckNotNull<T>(T? value, string message = "Argument must not be null.")
-    {
-        return value ?? throw new InvalidOperationException(message);
-    }
+    public static T CheckNotNull<T>(T? value, string message = "Argument must not be null.") => value ?? throw new InvalidOperationException(message);
 
     /// <summary>
     /// Performs a general pre-condition requirement that fails when the specified condition is <see langword="false"/>.
@@ -79,10 +76,8 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-    public static T RequireNotNull<T>(T? value, string message = "Argument must not be null.", string? parameterName = null)
-    {
-        return value ?? throw new ArgumentNullException(parameterName, message);
-    }
+    public static T RequireNotNull<T>(T? value, string message = "Argument must not be null.", string? parameterName = null) =>
+        value ?? throw new ArgumentNullException(parameterName, message);
 
     /// <summary>
     /// Performs a general pre-condition requirement that the specified value is defined by the specified <see cref="Enum"/> type.

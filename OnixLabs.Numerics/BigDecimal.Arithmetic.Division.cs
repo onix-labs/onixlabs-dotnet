@@ -46,10 +46,7 @@ public readonly partial struct BigDecimal
     /// <param name="left">The left-hand value to divide.</param>
     /// <param name="right">The right-hand value to divide by.</param>
     /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
-    public static BigDecimal operator /(BigDecimal left, BigDecimal right)
-    {
-        return Divide(left, right);
-    }
+    public static BigDecimal operator /(BigDecimal left, BigDecimal right) => Divide(left, right);
 
     /// <summary>
     /// Divides the specified dividend by the specified divisor and rounds the remainder using the specified rounding mode.

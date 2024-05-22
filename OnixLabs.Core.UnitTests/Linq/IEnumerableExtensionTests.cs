@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Numerics;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data;
@@ -102,6 +101,62 @@ public sealed class IEnumerableExtensionTests
 
         // When
         int actual = elements.CountNot(element => element.Number == 456);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return none when the enumerable is empty.")]
+    public void FirstOrNoneShouldReturnNoneWhenEnumerableIsEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [];
+        Optional<int> expected = Optional<int>.None;
+
+        // When
+        Optional<int> actual = elements.FirstOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return the first element when the collection is not empty.")]
+    public void FirstOrNoneShouldReturnFirstElementWhenCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = 1;
+
+        // When
+        Optional<int> actual = elements.FirstOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return the first element matching the predicate when the collection is not empty.")]
+    public void FirstOrNoneShouldReturnFirstElementMatchingPredicateWhenCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = 2;
+
+        // When
+        Optional<int> actual = elements.FirstOrNone(number => number > 1);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return none when no element matches the predicate and the collection is not empty.")]
+    public void FirstOrNoneShouldReturnNoneWhenNoElementMatchesPredicateAndCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = Optional<int>.None;
+
+        // When
+        Optional<int> actual = elements.FirstOrNone(number => number > 3);
 
         // Then
         Assert.Equal(expected, actual);
@@ -321,6 +376,62 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return none when the enumerable is empty.")]
+    public void LastOrNoneShouldReturnNoneWhenEnumerableIsEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [];
+        Optional<int> expected = Optional<int>.None;
+
+        // When
+        Optional<int> actual = elements.LastOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return the last element when the collection is not empty.")]
+    public void LastOrNoneShouldReturnLastElementWhenCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = 3;
+
+        // When
+        Optional<int> actual = elements.LastOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return the last element matching the predicate when the collection is not empty.")]
+    public void LastOrNoneShouldReturnFirstElementMatchingPredicateWhenCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = 3;
+
+        // When
+        Optional<int> actual = elements.LastOrNone(number => number > 1);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return none when no element matches the predicate and the collection is not empty.")]
+    public void LastOrNoneShouldReturnNoneWhenNoElementMatchesPredicateAndCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = Optional<int>.None;
+
+        // When
+        Optional<int> actual = elements.LastOrNone(number => number > 3);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.None should return true when none of the elements satisfy the specified predicate condition")]
     public void NoneShouldProduceExpectedResultTrue()
     {
@@ -367,6 +478,96 @@ public sealed class IEnumerableExtensionTests
 
         // Then
         Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success none when the enumerable contains no elements.")]
+    public void SingleOrNoneShouldReturnSuccessNoneWhenEnumerableContainsNoElements()
+    {
+        // Given
+        IEnumerable<int> elements = [];
+        Result<Optional<int>> expected = Optional<int>.None.ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success some when the enumerable contains a single element.")]
+    public void SingleOrNoneShouldReturnSuccessSomeWhenEnumerableContainsSingleElement()
+    {
+        // Given
+        IEnumerable<int> elements = [1];
+        Result<Optional<int>> expected = Optional<int>.Some(1).ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return failure when the enumerable contains more than one element.")]
+    public void SingleOrNoneShouldReturnFailureSomeWhenEnumerableContainsMoreThanOneElement()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Failure<Optional<int>> expected = Result<Optional<int>>.Failure(new InvalidOperationException("Sequence contains more than one matching element"));
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone();
+        Exception actualException = Assert.Throws<InvalidOperationException>(actual.Throw);
+
+        // Then
+        Assert.True(actual is Failure<Optional<int>>);
+        Assert.Equal(expected.Exception.GetType(), actualException.GetType());
+        Assert.Equal(expected.Exception.Message, actualException.Message);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success none when the enumerable contains no elements matching the predicate.")]
+    public void SingleOrNoneShouldReturnSuccessNoneWhenEnumerableContainsNoElementsMatchingPredicate()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Result<Optional<int>> expected = Optional<int>.None.ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone(number => number > 3);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success some when the enumerable contains a single element matching the predicate.")]
+    public void SingleOrNoneShouldReturnSuccessSomeWhenEnumerableContainsSingleElementMatchingPredicate()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Result<Optional<int>> expected = Optional<int>.Some(1).ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone(number => number < 2);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return failure when the enumerable contains more than one element matching the predicate.")]
+    public void SingleOrNoneShouldReturnFailureSomeWhenEnumerableContainsMoreThanOneElementMatchingPredidate()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Failure<Optional<int>> expected = Result<Optional<int>>.Failure(new InvalidOperationException("Sequence contains more than one matching element"));
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone(number => number > 1);
+        Exception actualException = Assert.Throws<InvalidOperationException>(actual.Throw);
+
+        // Then
+        Assert.True(actual is Failure<Optional<int>>);
+        Assert.Equal(expected.Exception.GetType(), actualException.GetType());
+        Assert.Equal(expected.Exception.Message, actualException.Message);
     }
 
     [Fact(DisplayName = "IEnumerable.Sum should produce the expected result")]

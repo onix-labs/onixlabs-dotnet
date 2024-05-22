@@ -24,10 +24,7 @@ public sealed partial class EcdsaPrivateKey
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static EcdsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data)
-    {
-        return ImportPkcs8PrivateKey(data, out int _);
-    }
+    public static EcdsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data) => ImportPkcs8PrivateKey(data, out int _);
 
     /// <summary>
     /// Imports the ECDSA cryptographic private key data in PKCS #8 format.
@@ -49,10 +46,7 @@ public sealed partial class EcdsaPrivateKey
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
     /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static EcdsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password)
-    {
-        return ImportPkcs8PrivateKey(data, password, out int _);
-    }
+    public static EcdsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password) => ImportPkcs8PrivateKey(data, password, out int _);
 
     /// <summary>
     /// Imports the ECDSA cryptographic private key data in encrypted PKCS #8 format.

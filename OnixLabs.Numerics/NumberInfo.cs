@@ -21,22 +21,14 @@ namespace OnixLabs.Numerics;
 /// <summary>
 /// Represents component information about rational numbers.
 /// </summary>
-public readonly partial struct NumberInfo :
-    IValueEquatable<NumberInfo>,
-    IValueComparable<NumberInfo>,
-    ISpanParsable<NumberInfo>,
-    IFormattable
+public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueComparable<NumberInfo>, ISpanParsable<NumberInfo>, IFormattable
 {
     /// <summary>
     /// Prevents a default instance of the <see cref="NumberInfo"/> struct from being created.
     /// </summary>
     /// <param name="unscaledValue">The unscaled value of the represented number.</param>
     /// <param name="scale">The scale of the represented number.</param>
-    internal NumberInfo(BigInteger unscaledValue, int scale)
-    {
-        UnscaledValue = unscaledValue;
-        Scale = scale;
-    }
+    internal NumberInfo(BigInteger unscaledValue, int scale) => (UnscaledValue, Scale) = (unscaledValue, scale);
 
     /// <summary>
     /// Gets the unscaled value of the represented number.

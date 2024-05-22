@@ -31,10 +31,7 @@ public static class StringBuilderExtensions
     /// <param name="builder">The <see cref="StringBuilder"/> to append to.</param>
     /// <param name="values">The values to append.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified items appended.</returns>
-    public static StringBuilder Append(this StringBuilder builder, params object[] values)
-    {
-        return builder.Append(values.JoinToString(string.Empty));
-    }
+    public static StringBuilder Append(this StringBuilder builder, params object[] values) => builder.Append(values.JoinToString(string.Empty));
 
     /// <summary>
     /// Prepends the specified values to the current <see cref="StringBuilder"/>.
@@ -42,10 +39,7 @@ public static class StringBuilderExtensions
     /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
     /// <param name="values">The values to prepend.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified items prepended.</returns>
-    public static StringBuilder Prepend(this StringBuilder builder, params object[] values)
-    {
-        return builder.Insert(0, values.JoinToString(string.Empty));
-    }
+    public static StringBuilder Prepend(this StringBuilder builder, params object[] values) => builder.Insert(0, values.JoinToString(string.Empty));
 
     /// <summary>
     /// Trims the specified <see cref="char"/> value from the start and end of the current <see cref="StringBuilder"/>.
@@ -53,10 +47,7 @@ public static class StringBuilderExtensions
     /// <param name="builder">The <see cref="StringBuilder"/> to trim.</param>
     /// <param name="value">The <see cref="char"/> value to trim.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="char"/> value trimmed from the start and end.</returns>
-    public static StringBuilder Trim(this StringBuilder builder, char value)
-    {
-        return builder.TrimStart(value).TrimEnd(value);
-    }
+    public static StringBuilder Trim(this StringBuilder builder, char value) => builder.TrimStart(value).TrimEnd(value);
 
     /// <summary>
     /// Trims the specified <see cref="char"/> value from the end of the current <see cref="StringBuilder"/>.
@@ -92,10 +83,7 @@ public static class StringBuilderExtensions
     /// <param name="builder">The <see cref="StringBuilder"/> to trim.</param>
     /// <param name="value">The <see cref="string"/> value to trim.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="string"/> value trimmed from the start and end.</returns>
-    public static StringBuilder Trim(this StringBuilder builder, string value)
-    {
-        return builder.TrimStart(value).TrimEnd(value);
-    }
+    public static StringBuilder Trim(this StringBuilder builder, string value) => builder.TrimStart(value).TrimEnd(value);
 
     /// <summary>
     /// Trims the specified <see cref="string"/> value from the end of the current <see cref="StringBuilder"/>.
@@ -132,10 +120,7 @@ public static class StringBuilderExtensions
     /// <param name="start">The <see cref="char"/> value to prepend.</param>
     /// <param name="end">The <see cref="char"/> value to append.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> wrapped between the specified start and end <see cref="char"/> values.</returns>
-    public static StringBuilder Wrap(this StringBuilder builder, char start, char end)
-    {
-        return builder.Prepend(start).Append(end);
-    }
+    public static StringBuilder Wrap(this StringBuilder builder, char start, char end) => builder.Prepend(start).Append(end);
 
     /// <summary>
     /// Wraps the current <see cref="StringBuilder"/> between the specified start and end <see cref="string"/> values.
@@ -144,8 +129,5 @@ public static class StringBuilderExtensions
     /// <param name="start">The <see cref="string"/> value to prepend.</param>
     /// <param name="end">The <see cref="string"/> value to append.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> wrapped between the specified start and end <see cref="string"/> values.</returns>
-    public static StringBuilder Wrap(this StringBuilder builder, string start, string end)
-    {
-        return builder.Prepend(start).Append(end);
-    }
+    public static StringBuilder Wrap(this StringBuilder builder, string start, string end) => builder.Prepend(start).Append(end);
 }

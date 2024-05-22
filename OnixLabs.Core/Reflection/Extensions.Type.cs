@@ -33,8 +33,5 @@ public static class TypeExtensions
     /// </summary>
     /// <param name="type">The current <see cref="Type"/> instance from which to obtain the simple name.</param>
     /// <returns>Returns the simple type name from the current <see cref="Type"/> instance.</returns>
-    public static string GetName(this Type type)
-    {
-        return type.Name.SubstringBeforeFirst(GenericTypeIdentifierMarker);
-    }
+    public static string GetName(this Type type) => type.Name.SubstringBeforeFirst(GenericTypeIdentifierMarker);
 }

@@ -23,11 +23,4 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base58(ReadOnlySpan<byte> value) : IBaseValue<Base58>
 {
     private readonly byte[] value = value.ToArray();
-
-    /// <summary>
-    /// Initializes a new default <see cref="Base58"/> value.
-    /// </summary>
-    public Base58() : this([])
-    {
-    }
 }

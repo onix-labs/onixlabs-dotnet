@@ -24,10 +24,7 @@ public sealed partial class RsaPrivateKey
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data)
-    {
-        return ImportPkcs8PrivateKey(data, out int _);
-    }
+    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data) => ImportPkcs8PrivateKey(data, out int _);
 
     /// <summary>
     /// Imports the RSA cryptographic private key data in PKCS #8 format.
@@ -49,10 +46,7 @@ public sealed partial class RsaPrivateKey
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
     /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password)
-    {
-        return ImportPkcs8PrivateKey(data, password, out int _);
-    }
+    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password) => ImportPkcs8PrivateKey(data, password, out int _);
 
     /// <summary>
     /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.

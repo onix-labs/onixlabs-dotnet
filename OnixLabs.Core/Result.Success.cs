@@ -142,6 +142,13 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     public override Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector) => selector(Value);
 
     /// <summary>
+    /// Throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.
+    /// </summary>
+    public override void Throw()
+    {
+    }
+
+    /// <summary>
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>

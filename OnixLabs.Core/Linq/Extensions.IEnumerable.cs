@@ -66,6 +66,22 @@ public static class IEnumerableExtensions
     }
 
     /// <summary>
+    /// Obtains the first element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;
+    /// otherwise <see cref="Optional{T}.None"/> if no such element is found.
+    /// </summary>
+    /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> from which to return the first satisfactory element.</param>
+    /// <param name="predicate">The function to test each element for a condition.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>
+    /// Returns the first element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;
+    /// otherwise <see cref="Optional{T}.None"/> if no such element is found.
+    /// </returns>
+    public static Optional<T> FirstOrNone<T>(this IEnumerable<T> enumerable, Func<T, bool>? predicate = null) where T : notnull
+    {
+        return Optional<T>.Of(enumerable.FirstOrDefault(predicate ?? (_ => true)));
+    }
+
+    /// <summary>
     /// Performs the specified <see cref="Action{T}"/> for each element of the current <see cref="IEnumerable{T}"/>.
     /// </summary>
     /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> over which to iterate.</param>
@@ -159,6 +175,22 @@ public static class IEnumerableExtensions
     }
 
     /// <summary>
+    /// Obtains the last element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;
+    /// otherwise <see cref="Optional{T}.None"/> if no such element is found.
+    /// </summary>
+    /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> from which to return the last satisfactory element.</param>
+    /// <param name="predicate">The function to test each element for a condition.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>
+    /// Returns the last element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;
+    /// otherwise <see cref="Optional{T}.None"/> if no such element is found.
+    /// </returns>
+    public static Optional<T> LastOrNone<T>(this IEnumerable<T> enumerable, Func<T, bool>? predicate = null) where T : notnull
+    {
+        return Optional<T>.Of(enumerable.LastOrDefault(predicate ?? (_ => true)));
+    }
+
+    /// <summary>
     /// Determines whether none of the elements of the current <see cref="IEnumerable{T}"/> satisfy the specified predicate condition.
     /// </summary>
     /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
@@ -168,6 +200,24 @@ public static class IEnumerableExtensions
     public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
     {
         return !enumerable.Any(predicate);
+    }
+
+    /// <summary>
+    /// Obtains a single element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;
+    /// otherwise <see cref="Optional{T}.None"/> if no such element is found,
+    /// or <see cref="Failure{T}"/> if the current <see cref="IEnumerable{T}"/> contains more than one matching element.
+    /// </summary>
+    /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> from which to return a single satisfactory element.</param>
+    /// <param name="predicate">The function to test each element for a condition.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>
+    /// Returns a single element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;
+    /// otherwise <see cref="Optional{T}.None"/> if no such element is found,
+    /// or <see cref="Failure{T}"/> if the current <see cref="IEnumerable{T}"/> contains more than one matching element.
+    /// </returns>
+    public static Result<Optional<T>> SingleOrNone<T>(this IEnumerable<T> enumerable, Func<T, bool>? predicate = null) where T : notnull
+    {
+        return Result<Optional<T>>.Of(() => Optional<T>.Of(enumerable.SingleOrDefault(predicate ?? (_ => true))));
     }
 
     /// <summary>

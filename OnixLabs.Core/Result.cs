@@ -60,7 +60,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
     /// <returns>
     /// Returns a new instance of the <see cref="Result{T}"/> class, where the underlying value represents a successful result.
     /// </returns>
-    public static Result<T> Success(T value) => new Success<T>(value);
+    public static Success<T> Success(T value) => new(value);
 
     /// <summary>
     /// Creates a new instance of the <see cref="Result{T}"/> class, where the underlying exception represents a failed result.
@@ -69,7 +69,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
     /// <returns>
     /// Returns a new instance of the <see cref="Result{T}"/> class, where the underlying exception represents a failed result.
     /// </returns>
-    public static Result<T> Failure(Exception exception) => new Failure<T>(exception);
+    public static Failure<T> Failure(Exception exception) => new(exception);
 
     /// <summary>
     /// Creates a new instance of the <see cref="Result{T}"/> class, where the underlying value represents a successful result.
@@ -203,6 +203,11 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
     /// <see cref="Result{T}"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result{T}"/> instance.
     /// </returns>
     public abstract Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector) where TResult : notnull;
+
+    /// <summary>
+    /// Throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.
+    /// </summary>
+    public abstract void Throw();
 
     /// <summary>
     /// Returns a <see cref="String"/> that represents the current object.

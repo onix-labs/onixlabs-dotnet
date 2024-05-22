@@ -35,12 +35,12 @@ public static class ObjectExtensions
     /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
     /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
     /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
-    public static int CompareToObject<T>(this IComparable<T> comparable, object? obj)
+    public static int CompareToObject<T>(this IComparable<T> comparable, object? obj) => obj switch
     {
-        if (obj is null) return 1;
-        if (obj is T other) return comparable.CompareTo(other);
-        throw new ArgumentException($"Object must be of type {typeof(T).Name}", nameof(obj));
-    }
+        null => 1,
+        T other => comparable.CompareTo(other),
+        _ => throw new ArgumentException($"Object must be of type {typeof(T).Name}", nameof(obj))
+    };
 
     /// <summary>
     /// Gets a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.

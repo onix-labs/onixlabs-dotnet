@@ -23,11 +23,4 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseValue<Base64>
 {
     private readonly byte[] value = value.ToArray();
-
-    /// <summary>
-    /// Initializes a new default <see cref="OnixLabs.Core.Text.Base64"/> value.
-    /// </summary>
-    public Base64() : this([])
-    {
-    }
 }

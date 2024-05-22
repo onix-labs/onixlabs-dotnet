@@ -22,17 +22,11 @@ public abstract partial class Enumeration<T>
     /// Returns a <see cref="ValueTuple{T1,T2}"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a tuple that represents the current object.</returns>
-    public (int Value, string Name) ToEntry()
-    {
-        return (Value, Name);
-    }
+    public (int Value, string Name) ToEntry() => (Value, Name);
 
     /// <summary>
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
-    public override string ToString()
-    {
-        return Name;
-    }
+    public override string ToString() => Name;
 }

@@ -37,19 +37,13 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj)
-    {
-        return Equals(obj as T);
-    }
+    public override bool Equals(object? obj) => Equals(obj as T);
 
     /// <summary>
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(GetType(), Name, Value);
-    }
+    public override int GetHashCode() => HashCode.Combine(GetType(), Name, Value);
 
     /// <summary>
     /// Performs an equality comparison between two object instances.
@@ -57,10 +51,7 @@ public abstract partial class Enumeration<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Enumeration<T> left, Enumeration<T> right)
-    {
-        return Equals(left, right);
-    }
+    public static bool operator ==(Enumeration<T> left, Enumeration<T> right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -68,8 +59,5 @@ public abstract partial class Enumeration<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Enumeration<T> left, Enumeration<T> right)
-    {
-        return !Equals(left, right);
-    }
+    public static bool operator !=(Enumeration<T> left, Enumeration<T> right) => !Equals(left, right);
 }

@@ -22,29 +22,20 @@ public readonly partial struct Base64
     /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base64"/> instance.
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base64"/> instance.</returns>
-    public byte[] ToByteArray()
-    {
-        return value.Copy();
-    }
+    public byte[] ToByteArray() => value.Copy();
 
     /// <summary>
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
-    public override string ToString()
-    {
-        return ToString(null);
-    }
+    public override string ToString() => ToString(null);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
     /// </summary>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(IFormatProvider? formatProvider)
-    {
-        return ToString(null, formatProvider);
-    }
+    public string ToString(IFormatProvider? formatProvider) => ToString(null, formatProvider);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
@@ -52,10 +43,7 @@ public readonly partial struct Base64
     /// <param name="format">The format to use.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(string? format, IFormatProvider? formatProvider)
-    {
-        return ToString(format.AsSpan(), formatProvider);
-    }
+    public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format.AsSpan(), formatProvider);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
@@ -63,8 +51,5 @@ public readonly partial struct Base64
     /// <param name="format">The format to use.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider)
-    {
-        return IBaseCodec.Base64.Encode(value, formatProvider);
-    }
+    public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider) => IBaseCodec.Base64.Encode(value, formatProvider);
 }

@@ -23,11 +23,4 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base16(ReadOnlySpan<byte> value) : IBaseValue<Base16>
 {
     private readonly byte[] value = value.ToArray();
-
-    /// <summary>
-    /// Initializes a new default <see cref="OnixLabs.Core.Text.Base16"/> value.
-    /// </summary>
-    public Base16() : this([])
-    {
-    }
 }

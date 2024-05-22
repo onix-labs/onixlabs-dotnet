@@ -39,8 +39,5 @@ public readonly partial struct Hash
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
     /// <param name="other">The other hash to concatenate with the current hash.</param>
     /// <returns>Returns a cryptographic hash representing the concatenation of the left-hand and right-hand hash values.</returns>
-    public Hash Concatenate(HashAlgorithm algorithm, Hash other)
-    {
-        return Concatenate(algorithm, this, other);
-    }
+    public Hash Concatenate(HashAlgorithm algorithm, Hash other) => Concatenate(algorithm, this, other);
 }

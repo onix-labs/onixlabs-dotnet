@@ -36,10 +36,8 @@ public static class HashAlgorithmExtensions
     /// <param name="data">The input data to compute the hash for.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
-    public static byte[] ComputeHash(this HashAlgorithm algorithm, byte[] data, int rounds)
-    {
-        return algorithm.ComputeHash(new MemoryStream(data), rounds);
-    }
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, byte[] data, int rounds) =>
+        algorithm.ComputeHash(new MemoryStream(data), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified byte array.
@@ -50,10 +48,8 @@ public static class HashAlgorithmExtensions
     /// <param name="count">The number of bytes in the array to use as data.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
-    public static byte[] ComputeHash(this HashAlgorithm algorithm, byte[] data, int offset, int count, int rounds)
-    {
-        return algorithm.ComputeHash(data.Copy(offset, count), rounds);
-    }
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, byte[] data, int offset, int count, int rounds) =>
+        algorithm.ComputeHash(data.Copy(offset, count), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
@@ -63,10 +59,8 @@ public static class HashAlgorithmExtensions
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
-    public static byte[] ComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1)
-    {
-        return algorithm.ComputeHash((encoding ?? Encoding.Default).GetBytes(data.ToArray()), rounds);
-    }
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
+        algorithm.ComputeHash((encoding ?? Encoding.Default).GetBytes(data.ToArray()), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="Stream"/> object.

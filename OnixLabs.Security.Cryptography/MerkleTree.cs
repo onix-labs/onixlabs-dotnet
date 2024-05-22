@@ -25,10 +25,7 @@ public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>
     /// Initializes a new instance of the <see cref="MerkleTree"/> class.
     /// This constructor is marked internal to prevent external implementation.
     /// </summary>
-    internal MerkleTree(Hash hash)
-    {
-        Hash = hash;
-    }
+    internal MerkleTree(Hash hash) => Hash = hash;
 
     /// <summary>
     /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.

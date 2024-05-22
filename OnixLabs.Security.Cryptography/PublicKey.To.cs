@@ -23,17 +23,11 @@ public abstract partial class PublicKey
     /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance.
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance.</returns>
-    public byte[] ToByteArray()
-    {
-        return KeyData.Copy();
-    }
+    public byte[] ToByteArray() => KeyData.Copy();
 
     /// <summary>
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns <see cref="String"/> that represents the current object.</returns>
-    public override string ToString()
-    {
-        return Convert.ToHexString(KeyData).ToLower();
-    }
+    public override string ToString() => Convert.ToHexString(KeyData).ToLower();
 }

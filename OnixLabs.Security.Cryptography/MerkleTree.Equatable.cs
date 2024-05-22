@@ -23,31 +23,20 @@ public abstract partial class MerkleTree
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(MerkleTree? other)
-    {
-        return ReferenceEquals(this, other)
-               || other is not null
-               && other.Hash == Hash;
-    }
+    public bool Equals(MerkleTree? other) => ReferenceEquals(this, other) || other is not null && other.Hash == Hash;
 
     /// <summary>
     /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj)
-    {
-        return Equals(obj as MerkleTree);
-    }
+    public override bool Equals(object? obj) => Equals(obj as MerkleTree);
 
     /// <summary>
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(GetType(), Hash);
-    }
+    public override int GetHashCode() => HashCode.Combine(GetType(), Hash);
 
     /// <summary>
     /// Performs an equality comparison between two object instances.
@@ -55,10 +44,7 @@ public abstract partial class MerkleTree
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(MerkleTree left, MerkleTree right)
-    {
-        return Equals(left, right);
-    }
+    public static bool operator ==(MerkleTree left, MerkleTree right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -66,8 +52,5 @@ public abstract partial class MerkleTree
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(MerkleTree left, MerkleTree right)
-    {
-        return !Equals(left, right);
-    }
+    public static bool operator !=(MerkleTree left, MerkleTree right) => !Equals(left, right);
 }

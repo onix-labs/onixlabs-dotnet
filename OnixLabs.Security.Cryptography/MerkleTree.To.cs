@@ -20,17 +20,11 @@ public abstract partial class MerkleTree
     /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance.
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance.</returns>
-    public byte[] ToByteArray()
-    {
-        return Hash.ToByteArray();
-    }
+    public byte[] ToByteArray() => Hash.ToByteArray();
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
     /// <returns>Returns <see cref="string"/> that represents the current object.</returns>
-    public override string ToString()
-    {
-        return Hash.ToString();
-    }
+    public override string ToString() => Hash.ToString();
 }

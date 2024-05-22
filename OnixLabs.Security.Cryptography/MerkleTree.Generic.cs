@@ -68,10 +68,7 @@ public abstract partial class MerkleTree<T> : MerkleTree, IValueEquatable<Merkle
         /// </summary>
         /// <param name="value">The underlying value of the current node.</param>
         /// <param name="algorithm">The hash algorithm that will be used to hash the specified value.</param>
-        public MerkleTreeLeafNode(T value, HashAlgorithm algorithm) : base(value.ComputeHash(algorithm))
-        {
-            Value = value;
-        }
+        public MerkleTreeLeafNode(T value, HashAlgorithm algorithm) : base(value.ComputeHash(algorithm)) => Value = value;
 
         /// <summary>
         /// Gets the underlying value of the current node.

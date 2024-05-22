@@ -20,55 +20,37 @@ public abstract partial class Sha3
     /// Creates an instance of the <see cref="Sha3Hash224"/> algorithm.
     /// </summary>
     /// <returns>An instance of the <see cref="Sha3Hash224"/> algorithm.</returns>
-    public static Sha3Hash224 CreateSha3Hash224()
-    {
-        return new Sha3Hash224();
-    }
+    public static Sha3Hash224 CreateSha3Hash224() => new();
 
     /// <summary>
     /// Creates an instance of the <see cref="Sha3Hash256"/> algorithm.
     /// </summary>
     /// <returns>An instance of the <see cref="Sha3Hash256"/> algorithm.</returns>
-    public static Sha3Hash256 CreateSha3Hash256()
-    {
-        return new Sha3Hash256();
-    }
+    public static Sha3Hash256 CreateSha3Hash256() => new();
 
     /// <summary>
     /// Creates an instance of the <see cref="Sha3Hash384"/> algorithm.
     /// </summary>
     /// <returns>An instance of the <see cref="Sha3Hash384"/> algorithm.</returns>
-    public static Sha3Hash384 CreateSha3Hash384()
-    {
-        return new Sha3Hash384();
-    }
+    public static Sha3Hash384 CreateSha3Hash384() => new();
 
     /// <summary>
     /// Creates an instance of the <see cref="Sha3Hash512"/> algorithm.
     /// </summary>
     /// <returns>An instance of the <see cref="Sha3Hash512"/> algorithm.</returns>
-    public static Sha3Hash512 CreateSha3Hash512()
-    {
-        return new Sha3Hash512();
-    }
+    public static Sha3Hash512 CreateSha3Hash512() => new();
 
     /// <summary>
     /// Creates an instance of the <see cref="Sha3Shake128"/> algorithm.
     /// </summary>
     /// <param name="length">The output length of the hash in bytes.</param>
     /// <returns>An instance of the <see cref="Sha3Shake128"/> algorithm.</returns>
-    public static Sha3Shake128 CreateSha3Shake128(int length)
-    {
-        return new Sha3Shake128(length);
-    }
+    public static Sha3Shake128 CreateSha3Shake128(int length) => new(length);
 
     /// <summary>
     /// Creates an instance of the <see cref="Sha3Shake256"/> algorithm.
     /// </summary>
     /// <param name="length">The output length of the hash in bytes.</param>
     /// <returns>An instance of the <see cref="Sha3Shake256"/> algorithm.</returns>
-    public static Sha3Shake256 CreateSha3Shake256(int length)
-    {
-        return new Sha3Shake256(length);
-    }
+    public static Sha3Shake256 CreateSha3Shake256(int length) => new(length);
 }

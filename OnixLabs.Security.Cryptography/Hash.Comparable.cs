@@ -41,10 +41,7 @@ public readonly partial struct Hash
     /// </summary>
     /// <param name="obj">An object to compare with this instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public int CompareTo(object? obj)
-    {
-        return this.CompareToObject(obj);
-    }
+    public int CompareTo(object? obj) => this.CompareToObject(obj);
 
     /// <summary>
     /// Performs a greater than comparison between two object instances.
@@ -52,10 +49,7 @@ public readonly partial struct Hash
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is greater than the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator >(Hash left, Hash right)
-    {
-        return left.CompareTo(right) is 1;
-    }
+    public static bool operator >(Hash left, Hash right) => left.CompareTo(right) is 1;
 
     /// <summary>
     /// Performs a greater than or equal comparison between two object instances.
@@ -63,10 +57,7 @@ public readonly partial struct Hash
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is greater than or equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator >=(Hash left, Hash right)
-    {
-        return left.CompareTo(right) is 0 or 1;
-    }
+    public static bool operator >=(Hash left, Hash right) => left.CompareTo(right) is 0 or 1;
 
     /// <summary>
     /// Performs a less than comparison between two object instances.
@@ -74,10 +65,7 @@ public readonly partial struct Hash
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is less than the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator <(Hash left, Hash right)
-    {
-        return left.CompareTo(right) is -1;
-    }
+    public static bool operator <(Hash left, Hash right) => left.CompareTo(right) is -1;
 
     /// <summary>
     /// Performs a less than or equal comparison between two object instances.
@@ -85,8 +73,5 @@ public readonly partial struct Hash
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is less than or equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator <=(Hash left, Hash right)
-    {
-        return left.CompareTo(right) is 0 or -1;
-    }
+    public static bool operator <=(Hash left, Hash right) => left.CompareTo(right) is 0 or -1;
 }

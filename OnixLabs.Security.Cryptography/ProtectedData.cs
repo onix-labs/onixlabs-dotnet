@@ -18,11 +18,19 @@ using Aes = System.Security.Cryptography.Aes;
 
 namespace OnixLabs.Security.Cryptography;
 
+/// <summary>
+/// Represents an in-memory data protection mechanism for sensitive, long-lived cryptographic data.
+/// </summary>
 internal sealed class ProtectedData
 {
     private readonly byte[] key = Salt.CreateNonZero(32).ToByteArray();
     private readonly byte[] iv = Salt.CreateNonZero(16).ToByteArray();
 
+    /// <summary>
+    /// Encrypted the specified data.
+    /// </summary>
+    /// <param name="data">The data to encrypt.</param>
+    /// <returns>Returns the encrypted data.</returns>
     public byte[] Encrypt(byte[] data)
     {
         Require(data.Length > 0, "Data must not be empty.", nameof(data));
@@ -44,6 +52,11 @@ internal sealed class ProtectedData
         return memoryStream.ToArray();
     }
 
+    /// <summary>
+    /// Decrypts the specified data.
+    /// </summary>
+    /// <param name="data">The data to decrypt.</param>
+    /// <returns>Returns the decrypted data.</returns>
     public byte[] Decrypt(byte[] data)
     {
         Require(data.Length > 0, "Data must not be empty.", nameof(data));

@@ -19,294 +19,372 @@ namespace OnixLabs.Core.UnitTests;
 
 public sealed class ResultTests
 {
-    [Fact(DisplayName = "Result should have a value via constructor")]
-    public void ResultShouldHaveValueViaConstructor()
+    [Fact(DisplayName = "Result.Of should produce expected success result")]
+    public void ResultOfShouldProduceExpectedSuccessResult()
     {
         // Given / When
-        Result<int> number = new(123);
-        Result<string> text = new("abc");
-        Result<Func<Guid>> func = new(() => Guid.Empty);
+        Result<int> number = Result<int>.Of(() => 123);
+        Result<string> text = Result<string>.Of(() => "abc");
 
         // Then
-        Assert.True(number.HasValue);
-        Assert.True(text.HasValue);
-        Assert.True(func.HasValue);
-        Assert.False(number.HasError);
-        Assert.False(text.HasError);
-        Assert.False(func.HasError);
+        Assert.True(number.IsSuccess);
+        Assert.False(number.IsFailure);
+        Assert.IsType<Success<int>>(number);
         Assert.Equal(123, number);
+
+        Assert.True(text.IsSuccess);
+        Assert.False(text.IsFailure);
+        Assert.IsType<Success<string>>(text);
         Assert.Equal("abc", text);
     }
 
-    [Fact(DisplayName = "Result should have a value via FromValue")]
-    public void ResultShouldHaveValueViaFromValue()
+    [Fact(DisplayName = "Result.Of should produce expected failure result")]
+    public void ResultOfShouldProduceExpectedFailureResult()
     {
         // Given / When
-        Result<int> number = Result<int>.FromValue(123);
-        Result<string> text = Result<string>.FromValue("abc");
-        Result<Func<Guid>> func = Result<Func<Guid>>.FromValue(() => Guid.Empty);
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Of(() => throw exception);
+        Result<string> text = Result<string>.Of(() => throw exception);
 
         // Then
-        Assert.True(number.HasValue);
-        Assert.True(text.HasValue);
-        Assert.True(func.HasValue);
-        Assert.False(number.HasError);
-        Assert.False(text.HasError);
-        Assert.False(func.HasError);
+        Assert.False(number.IsSuccess);
+        Assert.True(number.IsFailure);
+        Assert.IsType<Failure<int>>(number);
+        Assert.Equal("failure", (number as Failure<int>)!.Exception.Message);
+
+        Assert.False(text.IsSuccess);
+        Assert.True(text.IsFailure);
+        Assert.IsType<Failure<string>>(text);
+        Assert.Equal("failure", (text as Failure<string>)!.Exception.Message);
+    }
+
+    [Fact(DisplayName = "Result.Success should produce the expected result")]
+    public void ResultSuccessShouldProduceExpectedResult()
+    {
+        // Given / When
+        Result<int> number = Result<int>.Success(123);
+        Result<string> text = Result<string>.Success("abc");
+
+        // Then
+        Assert.True(number.IsSuccess);
+        Assert.False(number.IsFailure);
+        Assert.IsType<Success<int>>(number);
         Assert.Equal(123, number);
+
+        Assert.True(text.IsSuccess);
+        Assert.False(text.IsFailure);
+        Assert.IsType<Success<string>>(text);
         Assert.Equal("abc", text);
     }
 
-    [Fact(DisplayName = "Result should have a value via implicit operator")]
-    public void ResultShouldHaveValueViaImplicitOperator()
+    [Fact(DisplayName = "Result.Failure should produce the expected result")]
+    public void ResultFailureShouldProduceExpectedResult()
+    {
+        // Given / When
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
+        Result<string> text = Result<string>.Failure(exception);
+
+        // Then
+        Assert.False(number.IsSuccess);
+        Assert.True(number.IsFailure);
+        Assert.IsType<Failure<int>>(number);
+        Assert.Equal("failure", (number as Failure<int>)!.Exception.Message);
+
+        Assert.False(text.IsSuccess);
+        Assert.True(text.IsFailure);
+        Assert.IsType<Failure<string>>(text);
+        Assert.Equal("failure", (text as Failure<string>)!.Exception.Message);
+    }
+
+    [Fact(DisplayName = "Result implicit operator should produce the expected result.")]
+    public void ResultImplicitOperatorShouldProduceTheExpectedResult()
     {
         // Given / When
         Result<int> number = 123;
         Result<string> text = "abc";
-        Result<Func<Guid>> func = (Func<Guid>)(() => Guid.Empty);
 
         // Then
-        Assert.True(number.HasValue);
-        Assert.True(text.HasValue);
-        Assert.True(func.HasValue);
-        Assert.False(number.HasError);
-        Assert.False(text.HasError);
-        Assert.False(func.HasError);
+        Assert.True(number.IsSuccess);
+        Assert.False(number.IsFailure);
+        Assert.IsType<Success<int>>(number);
         Assert.Equal(123, number);
+
+        Assert.True(text.IsSuccess);
+        Assert.False(text.IsFailure);
+        Assert.IsType<Success<string>>(text);
         Assert.Equal("abc", text);
     }
 
-    [Fact(DisplayName = "Result should have an error via constructor")]
-    public void ResultShouldHaveErrorViaConstructor()
-    {
-        // Given / When
-        Exception error = new("Result error.");
-        Result<int> number = new(error);
-        Result<string> text = new(error);
-        Result<Func<Guid>> func = new(error);
-
-        // Then
-        Assert.False(number.HasValue);
-        Assert.False(text.HasValue);
-        Assert.False(func.HasValue);
-        Assert.True(number.HasError);
-        Assert.True(text.HasError);
-        Assert.True(func.HasError);
-        Assert.Equal("Result error.", number.Error.Message);
-        Assert.Equal("Result error.", text.Error.Message);
-        Assert.Equal("Result error.", func.Error.Message);
-    }
-
-    [Fact(DisplayName = "Result should have an unknown error via constructor")]
-    public void ResultShouldHaveUnknownErrorViaConstructor()
-    {
-        // Given / When
-        Result<int> number = new();
-        Result<string> text = new();
-        Result<Func<Guid>> func = new();
-
-        // Then
-        Assert.False(number.HasValue);
-        Assert.False(text.HasValue);
-        Assert.False(func.HasValue);
-        Assert.True(number.HasError);
-        Assert.True(text.HasError);
-        Assert.True(func.HasError);
-        Assert.Equal("Unknown error.", number.Error.Message);
-        Assert.Equal("Unknown error.", text.Error.Message);
-        Assert.Equal("Unknown error.", func.Error.Message);
-    }
-
-    [Fact(DisplayName = "Result should have an error via FromError")]
-    public void ResultShouldHaveErrorViaFromError()
-    {
-        // Given / When
-        Exception error = new("Result error");
-        Result<int> number = Result<int>.FromError(error);
-        Result<string> text = Result<string>.FromError(error);
-        Result<Func<Guid>> func = Result<Func<Guid>>.FromError(error);
-
-        // Then
-        Assert.False(number.HasValue);
-        Assert.False(text.HasValue);
-        Assert.False(func.HasValue);
-        Assert.True(number.HasError);
-        Assert.True(text.HasError);
-        Assert.True(func.HasError);
-        Assert.Equal("Result error", number.Error.Message);
-        Assert.Equal("Result error", text.Error.Message);
-        Assert.Equal("Result error", func.Error.Message);
-    }
-
-    [Fact(DisplayName = "Result should return the expected result via Value")]
-    public void ResultShouldReturnExpectedResultViaValue()
+    [Fact(DisplayName = "Result Success explicit operator should produce the expected result.")]
+    public void ResultSuccessExplicitOperatorShouldProduceTheExpectedResult()
     {
         // Given
-        Result<int> number = new(123);
-        Result<string> text = new("abc");
+        Result<int> number = Result<int>.Success(123);
+        Result<string> text = Result<string>.Success("abc");
 
         // When
-        int actualNumber = number.Value;
-        string actualText = text.Value;
+        int underlyingNumber = (int)number;
+        string underlyingText = (string)text;
 
         // Then
-        Assert.Equal(123, actualNumber);
-        Assert.Equal("abc", actualText);
+        Assert.Equal(123, underlyingNumber);
+        Assert.Equal("abc", underlyingText);
     }
 
-    [Fact(DisplayName = "Result should return the expected result via GetValueOrThrow")]
-    public void ResultShouldReturnExpectedResultViaGetValueOrThrow()
+    [Fact(DisplayName = "Result Failure explicit operator should produce the expected result.")]
+    public void ResultFailureExplicitOperatorShouldProduceTheExpectedResult()
     {
         // Given
-        Result<int> number = new(123);
-        Result<string> text = new("abc");
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
+        Result<string> text = Result<string>.Failure(exception);
 
         // When
-        int actualNumber = number.GetValueOrThrow();
-        string actualText = text.GetValueOrThrow();
-
-        // Then
-        Assert.Equal(123, actualNumber);
-        Assert.Equal("abc", actualText);
-    }
-
-    [Fact(DisplayName = "Result should return the expected result via explicit operator")]
-    public void ResultShouldReturnExpectedResultViaExplicitOperator()
-    {
-        // Given
-        Result<int> number = new(123);
-        Result<string> text = new("abc");
-
-        // When
-        int actualNumber = (int)number;
-        string actualText = (string)text;
-
-        // Then
-        Assert.Equal(123, actualNumber);
-        Assert.Equal("abc", actualText);
-    }
-
-    [Fact(DisplayName = "Result should throw exception via Value")]
-    public void ResultShouldThrowInvalidOperationExceptionViaValue()
-    {
-        // Given
-        Exception error = new("Result error.");
-        Result<int> number = Result<int>.FromError(error);
-        Result<string> text = Result<string>.FromError(error);
-
-        // Then
-        Exception numberException = Assert.Throws<Exception>(() => number.Value);
-        Exception textException = Assert.Throws<Exception>(() => text.Value);
-
-        // Then
-        Assert.Equal("Result error.", numberException.Message);
-        Assert.Equal("Result error.", textException.Message);
-    }
-
-    [Fact(DisplayName = "Result should throw exception via GetValueOrThrow")]
-    public void ResultShouldThrowInvalidOperationExceptionViaGetValueOrThrow()
-    {
-        // Given
-        Exception error = new("Result error.");
-        Result<int> number = Result<int>.FromError(error);
-        Result<string> text = Result<string>.FromError(error);
-
-        // Then
-        Exception numberException = Assert.Throws<Exception>(() => number.GetValueOrThrow());
-        Exception textException = Assert.Throws<Exception>(() => text.GetValueOrThrow());
-
-        // Then
-        Assert.Equal("Result error.", numberException.Message);
-        Assert.Equal("Result error.", textException.Message);
-    }
-
-    [Fact(DisplayName = "Result should throw exception via explicit operator")]
-    public void ResultShouldThrowInvalidOperationExceptionViaExplicitOperator()
-    {
-        // Given
-        Exception error = new("Result error.");
-        Result<int> number = Result<int>.FromError(error);
-        Result<string> text = Result<string>.FromError(error);
-
-        // Then
         Exception numberException = Assert.Throws<Exception>(() => (int)number);
         Exception textException = Assert.Throws<Exception>(() => (string)text);
 
         // Then
-        Assert.Equal("Result error.", numberException.Message);
-        Assert.Equal("Result error.", textException.Message);
+        Assert.Equal("failure", numberException.Message);
+        Assert.Equal("failure", textException.Message);
     }
 
-    [Fact(DisplayName = "Result.GetValueOrDefault should return a present value.")]
-    public void ResultGetValueOrDefaultShouldReturnPresentValue()
+    [Fact(DisplayName = "Result Success values should be considered equal.")]
+    public void ResultSuccessValuesShouldBeConsideredEqual()
     {
         // Given
-        Result<int> number = 123;
-        Result<string> text = "abc";
+        Result<int> a = Result<int>.Success(123);
+        Result<int> b = Result<int>.Success(123);
+
+        // When / Then
+        Assert.Equal(a, b);
+        Assert.True(a == b);
+        Assert.True(a.Equals(b));
+    }
+
+    [Fact(DisplayName = "Result Success values should not be considered equal.")]
+    public void ResultSuccessValuesShouldNotBeConsideredEqual()
+    {
+        // Given
+        Result<int> a = Result<int>.Success(123);
+        Result<int> b = Result<int>.Success(456);
+
+        // When / Then
+        Assert.NotEqual(a, b);
+        Assert.True(a != b);
+        Assert.False(a.Equals(b));
+    }
+
+    [Fact(DisplayName = "Result Failure values should be considered equal.")]
+    public void ResultFailureValuesShouldBeConsideredEqual()
+    {
+        // Given
+        Exception exception = new("failure");
+        Result<int> a = Result<int>.Failure(exception);
+        Result<int> b = Result<int>.Failure(exception);
+
+        // When / Then
+        Assert.Equal(a, b);
+        Assert.True(a == b);
+        Assert.True(a.Equals(b));
+
+        // Note that a and b are equal because they share references to the same exception.
+    }
+
+    [Fact(DisplayName = "Result Failure values should not be considered equal.")]
+    public void ResultFailureValuesShouldNotBeConsideredEqual()
+    {
+        // Given
+        Exception exception1 = new("failure a");
+        Exception exception2 = new("failure b");
+        Result<int> a = Result<int>.Failure(exception1);
+        Result<int> b = Result<int>.Failure(exception2);
+
+        // When / Then
+        Assert.NotEqual(a, b);
+        Assert.True(a != b);
+        Assert.False(a.Equals(b));
+    }
+
+    [Fact(DisplayName = "Result Success and Failure values should not be considered equal.")]
+    public void ResultSuccessAndFailureValuesShouldNotBeConsideredEqual()
+    {
+        // Given
+        Exception exception = new("failure");
+        Result<int> a = Result<int>.Success(123);
+        Result<int> b = Result<int>.Failure(exception);
+
+        // When / Then
+        Assert.NotEqual(a, b);
+        Assert.True(a != b);
+        Assert.False(a.Equals(b));
+    }
+
+    [Fact(DisplayName = "Result Success.GetHashCode should produce the expected result.")]
+    public void ResultSuccessGetHashCodeShouldProduceExpectedResult()
+    {
+        // Given
+        int expected = 123.GetHashCode();
+        Result<int> value = Result<int>.Success(123);
 
         // When
-        int actualNumber = number.GetValueOrDefault(456);
-        string actualText = text.GetValueOrDefault("xyz");
+        int actual = value.GetHashCode();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetHashCode should produce the expected result.")]
+    public void ResultFailureGetHashCodeShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        int expected = exception.GetHashCode();
+        Result<int> value = Result<int>.Failure(exception);
+
+        // When
+        int actual = value.GetHashCode();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Success.GetValueOrDefault should produce the expected result.")]
+    public void ResultSuccessGetValueOrDefaultShouldProduceExpectedResult()
+    {
+        // Given
+        Result<int> number = Result<int>.Success(123);
+        Result<string> text = Result<string>.Success("abc");
+
+        // When
+        int actualNumber = number.GetValueOrDefault();
+        string? actualText = text.GetValueOrDefault();
 
         // Then
         Assert.Equal(123, actualNumber);
         Assert.Equal("abc", actualText);
     }
 
-    [Fact(DisplayName = "Result.GetValueOrDefault should return a default value.")]
-    public void ResultGetValueOrDefaultShouldReturnDefaultValue()
+    [Fact(DisplayName = "Result Failure.GetValueOrDefault should produce the expected result.")]
+    public void ResultFailureGetValueOrDefaultShouldProduceExpectedResult()
     {
         // Given
-        Exception error = new("Result error.");
-        Result<int> number = Result<int>.FromError(error);
-        Result<string> text = Result<string>.FromError(error);
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
+        Result<string> text = Result<string>.Failure(exception);
+
+        // When
+        int actualNumber = number.GetValueOrDefault();
+        string? actualText = text.GetValueOrDefault();
+
+        // Then
+        Assert.Equal(default, actualNumber);
+        Assert.Equal(default, actualText);
+    }
+
+    [Fact(DisplayName = "Result Success.GetValueOrDefault with default value should produce the expected result.")]
+    public void ResultSuccessGetValueOrDefaultWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Result<int> number = Result<int>.Success(123);
+        Result<string> text = Result<string>.Success("abc");
 
         // When
         int actualNumber = number.GetValueOrDefault(456);
-        string actualText = text.GetValueOrDefault("xyz");
+        string? actualText = text.GetValueOrDefault("xyz");
+
+        // Then
+        Assert.Equal(123, actualNumber);
+        Assert.Equal("abc", actualText);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetValueOrDefault with default value should produce the expected result.")]
+    public void ResultFailureGetValueOrDefaultWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
+        Result<string> text = Result<string>.Failure(exception);
+
+        // When
+        int actualNumber = number.GetValueOrDefault(456);
+        string? actualText = text.GetValueOrDefault("xyz");
 
         // Then
         Assert.Equal(456, actualNumber);
         Assert.Equal("xyz", actualText);
     }
 
-    [Fact(DisplayName = "Result.Match should execute the value action when a value is present.")]
-    public void OptionalMatchShouldExecuteValueActionWhenValueIsPresent()
+    [Fact(DisplayName = "Result Success.GetValueOrThrow should produce the expected result.")]
+    public void ResultSuccessGetValueOrThrowShouldProduceExpectedResult()
     {
         // Given
-        bool result = false;
-        Result<int> number = 3;
+        Result<int> number = Result<int>.Success(123);
+        Result<string> text = Result<string>.Success("abc");
+
+        // When
+        int underlyingNumber = number.GetValueOrThrow();
+        string underlyingText = text.GetValueOrThrow();
+
+        // Then
+        Assert.Equal(123, underlyingNumber);
+        Assert.Equal("abc", underlyingText);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetValueOrThrow should produce the expected result.")]
+    public void ResultFailureGetValueOrThrowShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
+        Result<string> text = Result<string>.Failure(exception);
+
+        // When
+        Exception numberException = Assert.Throws<Exception>(() => number.GetValueOrThrow());
+        Exception textException = Assert.Throws<Exception>(() => text.GetValueOrThrow());
+
+        // Then
+        Assert.Equal("failure", numberException.Message);
+        Assert.Equal("failure", textException.Message);
+    }
+
+    [Fact(DisplayName = "Result Success.Match should execute the some action.")]
+    public void ResultSuccessMatchShouldExecuteSuccessAction()
+    {
+        // Given
+        bool someCalled = false;
+        Result<int> number = 123;
 
         // When
         number.Match(
-            value: _ => { result = true; },
-            error: _ => { }
+            success: _ => { someCalled = true; },
+            failure: _ => { }
         );
 
         // Then
-        Assert.True(result);
+        Assert.True(someCalled);
     }
 
-    [Fact(DisplayName = "Result.Match should execute the error action when a value is absent.")]
-    public void ResultMatchShouldExecuteErrorActionWhenValueIsAbsent()
+    [Fact(DisplayName = "Result Failure.Match should execute the none action.")]
+    public void ResultFailureMatchShouldExecuteFailureAction()
     {
         // Given
-        bool result = false;
-        Exception error = new("Result error.");
-        Result<int> number = Result<int>.FromError(error);
+        bool noneCalled = false;
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
 
         // When
         number.Match(
-            value: _ => { },
-            error: _ => { result = true; }
+            success: _ => { },
+            failure: _ => { noneCalled = true; }
         );
 
         // Then
-        Assert.True(result);
+        Assert.True(noneCalled);
     }
 
-    [Fact(DisplayName = "Result.Match should produce the expected result of the value function when a value is present.")]
-    public void ResultMatchShouldProduceExpectedResultOfValueFunctionWhenValueIsPresent()
+    [Fact(DisplayName = "Result Success.Match should produce the expected result.")]
+    public void ResultSuccessMatchShouldProduceExpectedResult()
     {
         // Given
         const int expected = 9;
@@ -314,139 +392,118 @@ public sealed class ResultTests
 
         // When
         int actual = number.Match(
-            value: value => value * value,
-            error: _ => 0
+            success: value => value * value,
+            failure: _ => 0
         );
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result.Match should produce the expected result of the error function when a value is present.")]
-    public void ResultMatchShouldProduceExpectedResultOfErrorFunctionWhenValueIsPresent()
+    [Fact(DisplayName = "Result Failure.Match should produce the expected result.")]
+    public void ResultFailureMatchShouldProduceExpectedResult()
     {
         // Given
         const int expected = 0;
-        Exception error = new("Result error.");
-        Result<int> number = Result<int>.FromError(error);
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
 
         // When
         int actual = number.Match(
-            value: value => value * value,
-            error: _ => 0
+            success: value => value * value,
+            failure: _ => 0
         );
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result.Select should return the result of the selector function when a value is present.")]
-    public void ResultSelectShouldReturnTheResultOfSelectorFunctionWhenAValueIsPresent()
+    [Fact(DisplayName = "Result Success.Select should produce the expected result")]
+    public void ResultSuccessSelectShouldProduceExpectedResult()
     {
         // Given
         const int expected = 9;
-        Result<int> value = 3;
+        Result<int> number = 3;
 
         // When
-        Result<int> actual = value.Select(number => number * number);
+        Result<int> actual = number.Select(value => value * value);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result.Select should return an errored result when a value is not present.")]
-    public void ResultSelectShouldReturnErroredResultWhenValueIsNotPresent()
+    [Fact(DisplayName = "Result Failure.Select should produce the expected result")]
+    public void ResultFailureSelectShouldProduceExpectedResult()
     {
         // Given
-        Exception error = new("Result error.");
-        Result<int> expected = Result<int>.FromError(error);
-        Result<int> value = Result<int>.FromError(error);
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
 
         // When
-        Result<int> actual = value.Select(number => number * number);
+        Result<int> actual = number.Select(value => value * value);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(Result<int>.Failure(exception), actual);
     }
 
-    [Fact(DisplayName = "Result.SelectMany should return the result of the selector function when a value is present.")]
-    public void ResultSelectManyShouldReturnTheResultOfSelectorFunctionWhenAValueIsPresent()
+    [Fact(DisplayName = "Result Success.SelectMany should produce the expected result")]
+    public void ResultSuccessSelectManyShouldProduceExpectedResult()
     {
         // Given
         const int expected = 9;
-        Result<int> value = 3;
+        Result<int> number = 3;
 
         // When
-        Result<int> actual = value.SelectMany<int>(number => number * number);
+        Result<int> actual = number.SelectMany<int>(value => value * value);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result.SelectMany should return an errored result when a value is not present.")]
-    public void ResultSelectManyShouldReturnErroredResultWhenValueIsNotPresent()
+    [Fact(DisplayName = "Result Failure.SelectMany should produce the expected result")]
+    public void ResultFailureSelectManyShouldProduceExpectedResult()
     {
         // Given
-        Exception error = new("Result error.");
-        Result<int> expected = Result<int>.FromError(error);
-        Result<int> value = Result<int>.FromError(error);
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
 
         // When
-        Result<int> actual = value.SelectMany<int>(number => number * number);
+        Result<int> actual = number.SelectMany<int>(value => value * value);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(Result<int>.Failure(exception), actual);
     }
 
-    [Fact(DisplayName = "Result.Throw should throw the underlying exception when the result is in an errored state.")]
-    public void ResultThrowShouldThrowUnderlyingExceptionWhenResultIsInErroredState()
+    [Fact(DisplayName = "Result Success.ToString should produce the expected result.")]
+    public void ResultSuccessToStringShouldProduceExpectedResult()
     {
         // Given
-        Exception error = new("Result error.");
-        Result<int> value = Result<int>.FromError(error);
+        Result<int> number = 123;
+        Result<string> text = "abc";
 
         // When
-        Exception exception = Assert.Throws<Exception>(() => value.Throw());
+        string numberString = number.ToString();
+        string textString = text.ToString();
 
         // Then
-        Assert.Equal("Result error.", exception.Message);
+        Assert.Equal("123", numberString);
+        Assert.Equal("abc", textString);
     }
 
-    [Fact(DisplayName = "Result.Throw should continue when a value is present.")]
-    public void ResultThrowShouldContinueWhenValueIsPresent()
+    [Fact(DisplayName = "Result Failure.ToString should produce the expected result.")]
+    public void ResultFailureToStringShouldProduceExpectedResult()
     {
         // Given
-        Result<int> value = 3;
-
-        // When / Then
-        value.Throw();
-    }
-
-    [Fact(DisplayName = "Result.ToString should return a string representation of the value when a value is present.")]
-    public void ResultToStringShouldReturnStringRepresentationOfValueWhenPresent()
-    {
-        // Given
-        const string expected = "1234.56789";
-        Result<decimal> value = 1234.56789m;
+        Exception exception = new("failure");
+        Result<int> number = Result<int>.Failure(exception);
+        Result<string> text = Result<string>.Failure(exception);
 
         // When
-        string actual = value.ToString();
+        string numberString = number.ToString();
+        string textString = text.ToString();
 
         // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result.ToString should return the underlying error message when the result is in an errored state.")]
-    public void ResultToStringShouldReturnUnderlyingErrorMessageWhenResultIsInErroredState()
-    {
-        // Given
-        Exception error = new("Result error.");
-        Result<int> value = Result<int>.FromError(error);
-
-        // When
-        string actual = value.ToString();
-
-        // Then
-        Assert.Equal(error.ToString(), actual);
+        Assert.Equal("System.Exception: failure", numberString);
+        Assert.Equal("System.Exception: failure", textString);
     }
 }

@@ -12,7 +12,7 @@
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
         <PackageVersion>8.0.0</PackageVersion>
         <LangVersion>12</LangVersion>
-        <PackageLicenseUrl>https://github.com/onix-labs/onixlabs-dotnet/blob/main/LICENSE</PackageLicenseUrl>
+        <PackageLicenseUrl></PackageLicenseUrl>
     </PropertyGroup>
     <PropertyGroup>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

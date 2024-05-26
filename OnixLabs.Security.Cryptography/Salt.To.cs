@@ -23,17 +23,11 @@ public readonly partial struct Salt
     /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Salt"/> instance.
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Salt"/> instance.</returns>
-    public byte[] ToByteArray()
-    {
-        return value.Copy();
-    }
+    public byte[] ToByteArray() => value.Copy();
 
     /// <summary>
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns <see cref="String"/> that represents the current object.</returns>
-    public override string ToString()
-    {
-        return Convert.ToHexString(value).ToLower();
-    }
+    public override string ToString() => Convert.ToHexString(value).ToLower();
 }

@@ -78,11 +78,7 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <param name="name">The name of the enumeration entry.</param>
     /// <param name="alphabet">The alphabet of the format provider.</param>
     /// <param name="isPadded">A value indicating whether the format provider uses padding.</param>
-    private Base32FormatProvider(int value, string name, string alphabet, bool isPadded) : base(value, name)
-    {
-        Alphabet = alphabet;
-        IsPadded = isPadded;
-    }
+    private Base32FormatProvider(int value, string name, string alphabet, bool isPadded) : base(value, name) => (Alphabet, IsPadded) = (alphabet, isPadded);
 
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base32FormatProvider"/> instance.
@@ -100,8 +96,5 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// Returns an instance of the object specified by <paramref name="formatType"/>,
     /// if the <see cref="T:IFormatProvider"/> implementation can supply that type of object; otherwise, <see langword="null"/>.
     /// </returns>
-    public object? GetFormat(Type? formatType)
-    {
-        return formatType == typeof(Base32FormatProvider) ? this : null;
-    }
+    public object? GetFormat(Type? formatType) => formatType == typeof(Base32FormatProvider) ? this : null;
 }

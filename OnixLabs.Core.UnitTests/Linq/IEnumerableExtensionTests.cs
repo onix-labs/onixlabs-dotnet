@@ -15,7 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+using System.Numerics;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data;
 using Xunit;
@@ -32,7 +32,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("abc", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -48,7 +48,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -64,7 +64,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.AnyEqualBy(element => element.Text);
@@ -80,7 +80,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.AnyEqualBy(element => element.Text);
@@ -93,14 +93,70 @@ public sealed class IEnumerableExtensionTests
     public void CountNotShouldProduceExpectedResult()
     {
         // Given
+        const int expected = 2;
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 456, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
-        const int expected = 2;
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         int actual = elements.CountNot(element => element.Number == 456);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return none when the enumerable is empty.")]
+    public void FirstOrNoneShouldReturnNoneWhenEnumerableIsEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [];
+        Optional<int> expected = Optional<int>.None;
+
+        // When
+        Optional<int> actual = elements.FirstOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return the first element when the collection is not empty.")]
+    public void FirstOrNoneShouldReturnFirstElementWhenCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = 1;
+
+        // When
+        Optional<int> actual = elements.FirstOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return the first element matching the predicate when the collection is not empty.")]
+    public void FirstOrNoneShouldReturnFirstElementMatchingPredicateWhenCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = 2;
+
+        // When
+        Optional<int> actual = elements.FirstOrNone(number => number > 1);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return none when no element matches the predicate and the collection is not empty.")]
+    public void FirstOrNoneShouldReturnNoneWhenNoElementMatchesPredicateAndCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = Optional<int>.None;
+
+        // When
+        Optional<int> actual = elements.FirstOrNone(number => number > 3);
 
         // Then
         Assert.Equal(expected, actual);
@@ -123,8 +179,8 @@ public sealed class IEnumerableExtensionTests
     public void GetContentHashCodeShouldProduceExpectedResultEqual()
     {
         // Given
-        IEnumerable<Element> enumerable1 = new[] { new Element(1), new Element(2), new Element(3) };
-        IEnumerable<Element> enumerable2 = new[] { new Element(1), new Element(2), new Element(3) };
+        IEnumerable<Element> enumerable1 = [new Element(1), new Element(2), new Element(3)];
+        IEnumerable<Element> enumerable2 = [new Element(1), new Element(2), new Element(3)];
 
         // When
         int hashCode1 = enumerable1.GetContentHashCode();
@@ -138,8 +194,8 @@ public sealed class IEnumerableExtensionTests
     public void GetContentHashCodeShouldProduceExpectedResultDifferent()
     {
         // Given
-        IEnumerable<Element> enumerable1 = new[] { new Element(1), new Element(2), new Element(3) };
-        IEnumerable<Element> enumerable2 = new[] { new Element(3), new Element(2), new Element(1) };
+        IEnumerable<Element> enumerable1 = [new Element(1), new Element(2), new Element(3)];
+        IEnumerable<Element> enumerable2 = [new Element(3), new Element(2), new Element(1)];
 
         // When
         int hashCode1 = enumerable1.GetContentHashCode();
@@ -153,7 +209,7 @@ public sealed class IEnumerableExtensionTests
     public void IsEmptyShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = Enumerable.Empty<Element>();
+        IEnumerable<Element> enumerable = [];
 
         // When
         bool result = enumerable.IsEmpty();
@@ -166,7 +222,7 @@ public sealed class IEnumerableExtensionTests
     public void IsEmptyShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsEmpty();
@@ -179,7 +235,7 @@ public sealed class IEnumerableExtensionTests
     public void IsNotEmptyShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsNotEmpty();
@@ -192,7 +248,7 @@ public sealed class IEnumerableExtensionTests
     public void IsNotEmptyShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = Enumerable.Empty<Element>();
+        IEnumerable<Element> enumerable = [];
 
         // When
         bool result = enumerable.IsNotEmpty();
@@ -205,7 +261,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsSingle();
@@ -218,7 +274,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultFalseWhenEmpty()
     {
         // Given
-        IEnumerable<Element> enumerable = Enumerable.Empty<Element>();
+        IEnumerable<Element> enumerable = [];
 
         // When
         bool result = enumerable.IsSingle();
@@ -231,7 +287,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultFalseWhenMoreThanOneElement()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element(), new Element() };
+        IEnumerable<Element> enumerable = [new Element(), new Element()];
 
         // When
         bool result = enumerable.IsSingle();
@@ -244,7 +300,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountEvenShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element(), new Element() };
+        IEnumerable<Element> enumerable = [new Element(), new Element()];
 
         // When
         bool result = enumerable.IsCountEven();
@@ -257,7 +313,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountEvenShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsCountEven();
@@ -270,7 +326,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountOddShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element() };
+        IEnumerable<Element> enumerable = [new Element()];
 
         // When
         bool result = enumerable.IsCountOdd();
@@ -283,7 +339,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountOddShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element(), new Element() };
+        IEnumerable<Element> enumerable = [new Element(), new Element()];
 
         // When
         bool result = enumerable.IsCountOdd();
@@ -296,7 +352,7 @@ public sealed class IEnumerableExtensionTests
     public void JoinToStringShouldProduceExpectedResultWithDefaultSeparator()
     {
         // Given
-        IEnumerable<object> enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        IEnumerable<object> enumerable = [1, 2, 3, 4.5, true, false];
         const string expected = "1, 2, 3, 4.5, True, False";
 
         // When
@@ -310,11 +366,67 @@ public sealed class IEnumerableExtensionTests
     public void JoinToStringShouldProduceExpectedResultWithCustomSeparator()
     {
         // Given
-        IEnumerable<object> enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        IEnumerable<object> enumerable = [1, 2, 3, 4.5, true, false];
         const string expected = "1 *$ 2 *$ 3 *$ 4.5 *$ True *$ False";
 
         // When
         string actual = enumerable.JoinToString(" *$ ");
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return none when the enumerable is empty.")]
+    public void LastOrNoneShouldReturnNoneWhenEnumerableIsEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [];
+        Optional<int> expected = Optional<int>.None;
+
+        // When
+        Optional<int> actual = elements.LastOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return the last element when the collection is not empty.")]
+    public void LastOrNoneShouldReturnLastElementWhenCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = 3;
+
+        // When
+        Optional<int> actual = elements.LastOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return the last element matching the predicate when the collection is not empty.")]
+    public void LastOrNoneShouldReturnFirstElementMatchingPredicateWhenCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = 3;
+
+        // When
+        Optional<int> actual = elements.LastOrNone(number => number > 1);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return none when no element matches the predicate and the collection is not empty.")]
+    public void LastOrNoneShouldReturnNoneWhenNoElementMatchesPredicateAndCollectionIsNotEmpty()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Optional<int> expected = Optional<int>.None;
+
+        // When
+        Optional<int> actual = elements.LastOrNone(number => number > 3);
 
         // Then
         Assert.Equal(expected, actual);
@@ -327,7 +439,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 789, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -343,7 +455,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 0, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -359,7 +471,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 0, Guid.NewGuid());
         Record<Guid> element2 = new("def", 0, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 0, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -368,15 +480,108 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success none when the enumerable contains no elements.")]
+    public void SingleOrNoneShouldReturnSuccessNoneWhenEnumerableContainsNoElements()
+    {
+        // Given
+        IEnumerable<int> elements = [];
+        Result<Optional<int>> expected = Optional<int>.None.ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success some when the enumerable contains a single element.")]
+    public void SingleOrNoneShouldReturnSuccessSomeWhenEnumerableContainsSingleElement()
+    {
+        // Given
+        IEnumerable<int> elements = [1];
+        Result<Optional<int>> expected = Optional<int>.Some(1).ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return failure when the enumerable contains more than one element.")]
+    public void SingleOrNoneShouldReturnFailureSomeWhenEnumerableContainsMoreThanOneElement()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Failure<Optional<int>> expected = Result<Optional<int>>.Failure(new InvalidOperationException("Sequence contains more than one matching element"));
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone();
+        Exception actualException = Assert.Throws<InvalidOperationException>(actual.Throw);
+
+        // Then
+        Assert.True(actual is Failure<Optional<int>>);
+        Assert.Equal(expected.Exception.GetType(), actualException.GetType());
+        Assert.Equal(expected.Exception.Message, actualException.Message);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success none when the enumerable contains no elements matching the predicate.")]
+    public void SingleOrNoneShouldReturnSuccessNoneWhenEnumerableContainsNoElementsMatchingPredicate()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Result<Optional<int>> expected = Optional<int>.None.ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone(number => number > 3);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success some when the enumerable contains a single element matching the predicate.")]
+    public void SingleOrNoneShouldReturnSuccessSomeWhenEnumerableContainsSingleElementMatchingPredicate()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Result<Optional<int>> expected = Optional<int>.Some(1).ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone(number => number < 2);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return failure when the enumerable contains more than one element matching the predicate.")]
+    public void SingleOrNoneShouldReturnFailureSomeWhenEnumerableContainsMoreThanOneElementMatchingPredidate()
+    {
+        // Given
+        IEnumerable<int> elements = [1, 2, 3];
+        Failure<Optional<int>> expected = Result<Optional<int>>.Failure(new InvalidOperationException("Sequence contains more than one matching element"));
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone(number => number > 1);
+        Exception actualException = Assert.Throws<InvalidOperationException>(actual.Throw);
+
+        // Then
+        Assert.True(actual is Failure<Optional<int>>);
+        Assert.Equal(expected.Exception.GetType(), actualException.GetType());
+        Assert.Equal(expected.Exception.Message, actualException.Message);
+    }
+
     [Fact(DisplayName = "IEnumerable.Sum should produce the expected result")]
     public void SumShouldProduceExpectedResult()
     {
+        // Required as Sum() already exists for concrete number types.
+        static T SumProxy<T>(IEnumerable<T> enumerable) where T : INumberBase<T> => enumerable.Sum();
+
         // Given
         IEnumerable<decimal> elements = [12.34m, 34.56m, 56.78m];
         const decimal expected = 103.68m;
 
         // When
-        decimal actual = elements.Sum();
+        decimal actual = SumProxy(elements);
 
         // Then
         Assert.Equal(expected, actual);
@@ -406,8 +611,8 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 789, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, element3 };
-        IEnumerable<Record<Guid>> expected = new[] { element2, element3 };
+        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> expected = [element2, element3];
 
         // When
         IEnumerable<Record<Guid>> actual = elements.WhereNot(element => element.Number == 123);
@@ -422,8 +627,8 @@ public sealed class IEnumerableExtensionTests
         // Given
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = new[] { element1, element2, null };
-        IEnumerable<Record<Guid>> expected = new[] { element1, element2 };
+        IEnumerable<Record<Guid>?> elements = [element1, element2, null];
+        IEnumerable<Record<Guid>> expected = [element1, element2];
 
         // When
         IEnumerable<Record<Guid>> actual = elements.WhereNotNull();

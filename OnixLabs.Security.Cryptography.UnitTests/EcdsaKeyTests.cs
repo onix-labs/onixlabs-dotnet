@@ -24,7 +24,7 @@ public sealed class EcdsaKeyTests
     {
         // Given
         byte[] data = Salt.CreateNonZero(2048).ToByteArray();
-        HashAlgorithm algorithm = SHA256.Create();
+        using HashAlgorithm algorithm = SHA256.Create();
         IEcdsaPrivateKey privateKey1 = EcdsaPrivateKey.Create();
         IEcdsaPrivateKey privateKey2 = new EcdsaPrivateKey(privateKey1.ToByteArray());
         IEcdsaPublicKey publicKey1 = privateKey1.GetPublicKey();
@@ -39,5 +39,23 @@ public sealed class EcdsaKeyTests
         Assert.True(publicKey1.IsDataValid(signature2, data, algorithm));
         Assert.True(publicKey2.IsDataValid(signature1, data, algorithm));
         Assert.True(publicKey2.IsDataValid(signature2, data, algorithm));
+    }
+
+    [Fact(DisplayName = "ECDSA PKCS #8 round-trip sign and verify should succeed")]
+    public void EcdsaPkcs8RoundTripSignAndVerifyShouldSucceed()
+    {
+        // Given
+        byte[] data = Salt.CreateNonZero(2048).ToByteArray();
+        using HashAlgorithm algorithm = SHA256.Create();
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
+        byte[] exportedPrivateKey = EcdsaPrivateKey.Create().ExportPkcs8PrivateKey("Password", parameters);
+        IEcdsaPrivateKey privateKey = EcdsaPrivateKey.ImportPkcs8PrivateKey(exportedPrivateKey, "Password");
+        IEcdsaPublicKey publicKey = privateKey.GetPublicKey();
+
+        // When
+        DigitalSignature signature = new(privateKey.SignData(data, algorithm));
+
+        // Then
+        Assert.True(publicKey.IsDataValid(signature, data, algorithm));
     }
 }

@@ -21,18 +21,12 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value for which to perform unary subtraction.</param>
     /// <returns>Returns the unary subtraction of the specified <see cref="BigDecimal"/> value.</returns>
-    public static BigDecimal UnarySubtract(BigDecimal value)
-    {
-        return new BigDecimal(-value.UnscaledValue, value.Scale);
-    }
+    public static BigDecimal UnarySubtract(BigDecimal value) => new(-value.UnscaledValue, value.Scale);
 
     /// <summary>
     /// Computes the unary subtraction of the specified <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value for which to perform unary subtraction.</param>
     /// <returns>Returns the unary subtraction of the specified <see cref="BigDecimal"/> value.</returns>
-    public static BigDecimal operator -(BigDecimal value)
-    {
-        return UnarySubtract(value);
-    }
+    public static BigDecimal operator -(BigDecimal value) => UnarySubtract(value);
 }

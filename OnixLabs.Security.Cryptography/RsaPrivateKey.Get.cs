@@ -22,7 +22,7 @@ public sealed partial class RsaPrivateKey
     /// Gets the RSA cryptographic public key component from the current RSA cryptographic private key.
     /// </summary>
     /// <returns>Returns a new <see cref="RsaPublicKey"/> instance containing the RSA cryptographic public key component from the current RSA cryptographic private key.</returns>
-    public override RsaPublicKey GetPublicKey()
+    public RsaPublicKey GetPublicKey()
     {
         using RSA key = ImportKeyData();
         byte[] keyData = key.ExportRSAPublicKey();

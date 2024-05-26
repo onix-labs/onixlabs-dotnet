@@ -44,10 +44,7 @@ public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IF
     /// <param name="value">The value of the enumeration entry.</param>
     /// <param name="name">The name of the enumeration entry.</param>
     /// <param name="alphabet">The alphabet of the format provider.</param>
-    private Base16FormatProvider(int value, string name, string alphabet) : base(value, name)
-    {
-        Alphabet = alphabet;
-    }
+    private Base16FormatProvider(int value, string name, string alphabet) : base(value, name) => Alphabet = alphabet;
 
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base16FormatProvider"/> instance.
@@ -60,8 +57,5 @@ public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IF
     /// Returns an instance of the object specified by <paramref name="formatType"/>,
     /// if the <see cref="T:IFormatProvider"/> implementation can supply that type of object; otherwise, <see langword="null"/>.
     /// </returns>
-    public object? GetFormat(Type? formatType)
-    {
-        return formatType == typeof(Base16FormatProvider) ? this : null;
-    }
+    public object? GetFormat(Type? formatType) => formatType == typeof(Base16FormatProvider) ? this : null;
 }

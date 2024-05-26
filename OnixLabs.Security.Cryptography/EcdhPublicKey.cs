@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Security.Cryptography;
 
-public abstract partial class PrivateKey
-{
-    /// <summary>
-    /// Gets the cryptographic public key component from the current cryptographic private key.
-    /// </summary>
-    /// <returns>Returns a new <see cref="PublicKey"/> instance containing the cryptographic public key component from the current cryptographic private key.</returns>
-    public abstract PublicKey GetPublicKey();
-}
+/// <summary>
+/// Represents an EC Diffie-Hellman cryptographic public key.
+/// </summary>
+/// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
+public sealed class EcdhPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IEcdhPublicKey;

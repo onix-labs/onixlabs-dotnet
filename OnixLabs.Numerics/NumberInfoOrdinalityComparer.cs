@@ -68,10 +68,7 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is equal to the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsEqual(NumberInfo left, NumberInfo right)
-    {
-        return Compare(left, right) is 0;
-    }
+    public bool IsEqual(NumberInfo left, NumberInfo right) => Compare(left, right) is 0;
 
     /// <summary>
     /// Determines whether the left-hand <see cref="NumberInfo"/> value is greater than the right-hand <see cref="NumberInfo"/> value.
@@ -79,10 +76,7 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is greater than the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsGreaterThan(NumberInfo left, NumberInfo right)
-    {
-        return Compare(left, right) is 1;
-    }
+    public bool IsGreaterThan(NumberInfo left, NumberInfo right) => Compare(left, right) is 1;
 
     /// <summary>
     /// Determines whether the left-hand <see cref="NumberInfo"/> value is greater than, or equal to the right-hand <see cref="NumberInfo"/> value.
@@ -90,10 +84,7 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is greater than, or equal to the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsGreaterThanOrEqual(NumberInfo left, NumberInfo right)
-    {
-        return Compare(left, right) is 0 or 1;
-    }
+    public bool IsGreaterThanOrEqual(NumberInfo left, NumberInfo right) => Compare(left, right) is 0 or 1;
 
     /// <summary>
     /// Determines whether the left-hand <see cref="NumberInfo"/> value is less than the right-hand <see cref="NumberInfo"/> value.
@@ -101,10 +92,7 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is less than the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsLessThan(NumberInfo left, NumberInfo right)
-    {
-        return Compare(left, right) is -1;
-    }
+    public bool IsLessThan(NumberInfo left, NumberInfo right) => Compare(left, right) is -1;
 
     /// <summary>
     /// Determines whether the left-hand <see cref="NumberInfo"/> value is less than, or equal to the right-hand <see cref="NumberInfo"/> value.
@@ -112,8 +100,5 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is less than, or equal to the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsLessThanOrEqual(NumberInfo left, NumberInfo right)
-    {
-        return Compare(left, right) is -1 or 0;
-    }
+    public bool IsLessThanOrEqual(NumberInfo left, NumberInfo right) => Compare(left, right) is -1 or 0;
 }

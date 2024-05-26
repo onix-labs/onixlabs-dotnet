@@ -43,8 +43,5 @@ public readonly partial struct BigDecimal
     /// <param name="left">The left-hand value to add to.</param>
     /// <param name="right">The right-hand value to add.</param>
     /// <returns>Returns the sum of the specified <see cref="BigDecimal"/> values.</returns>
-    public static BigDecimal operator +(BigDecimal left, BigDecimal right)
-    {
-        return Add(left, right);
-    }
+    public static BigDecimal operator +(BigDecimal left, BigDecimal right) => Add(left, right);
 }

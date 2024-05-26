@@ -28,10 +28,7 @@ public static class ArrayExtensions
     /// <param name="array">The current <see cref="T:T[]"/> to copy.</param>
     /// <typeparam name="T">The underlying type of the array.</typeparam>
     /// <returns>Returns an exact copy of the current <see cref="T:T[]"/>.</returns>
-    public static T[] Copy<T>(this T[] array)
-    {
-        return [..array];
-    }
+    public static T[] Copy<T>(this T[] array) => [..array];
 
     /// <summary>
     /// Creates a copy of the current <see cref="T:T[]"/>.
@@ -41,10 +38,7 @@ public static class ArrayExtensions
     /// <param name="count">The number of elements of the array to copy.</param>
     /// <typeparam name="T">The underlying type of the array.</typeparam>
     /// <returns>Returns an exact copy of the current <see cref="T:T[]"/>.</returns>
-    public static T[] Copy<T>(this T[] array, int index, int count)
-    {
-        return [..array[index..(index + count)]];
-    }
+    public static T[] Copy<T>(this T[] array, int index, int count) => [..array[index..(index + count)]];
 
     /// <summary>
     /// Concatenates the current <see cref="T:T[]"/> with another <see cref="T:T[]"/>.
@@ -53,8 +47,5 @@ public static class ArrayExtensions
     /// <param name="other">The other <see cref="T:T[]"/> to concatenate with the source <see cref="T:T[]"/>.</param>
     /// <typeparam name="T">The underlying type of the <see cref="T:T[]"/>.</typeparam>
     /// <returns>Returns the current <see cref="T:T[]"/> concatenated with the other <see cref="T:T[]"/>.</returns>
-    public static T[] ConcatenateWith<T>(this T[] array, T[] other)
-    {
-        return [..array, ..other];
-    }
+    public static T[] ConcatenateWith<T>(this T[] array, T[] other) => [..array, ..other];
 }

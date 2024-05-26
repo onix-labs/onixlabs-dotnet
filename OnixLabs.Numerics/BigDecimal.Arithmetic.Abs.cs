@@ -23,8 +23,5 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The <see cref="BigDecimal"/> from which to obtain an absolute value.</param>
     /// <returns>Returns the absolute value of the specified <see cref="BigDecimal"/> value.</returns>
-    public static BigDecimal Abs(BigDecimal value)
-    {
-        return new BigDecimal(BigInteger.Abs(value.UnscaledValue), value.Scale);
-    }
+    public static BigDecimal Abs(BigDecimal value) => new(BigInteger.Abs(value.UnscaledValue), value.Scale);
 }

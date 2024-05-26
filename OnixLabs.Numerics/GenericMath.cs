@@ -29,10 +29,7 @@ public static class GenericMath
     /// <param name="right">The right-hand number from which to compute the delta.</param>
     /// <typeparam name="T">The underlying <see cref="INumberBase{TSelf}"/> type.</typeparam>
     /// <returns>Returns the delta, or difference between the specified numbers.</returns>
-    public static T Delta<T>(T left, T right) where T : INumberBase<T>
-    {
-        return T.Abs(left - right);
-    }
+    public static T Delta<T>(T left, T right) where T : INumberBase<T> => T.Abs(left - right);
 
     /// <summary>
     /// Obtains the length of the integral component of the specified <see cref="INumberBase{TSelf}"/> value.
@@ -53,11 +50,5 @@ public static class GenericMath
     /// <param name="right">The right-hand <see cref="INumber{TSelf}"/> value to compare.</param>
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
     /// <returns>Returns the minimum and maximum values from the specified left-hand and right-hand values.</returns>
-    public static (T Min, T Max) MinMax<T>(T left, T right) where T : INumber<T>
-    {
-        T min = T.Min(left, right);
-        T max = T.Max(left, right);
-
-        return (min, max);
-    }
+    public static (T Min, T Max) MinMax<T>(T left, T right) where T : INumber<T> => (T.Min(left, right), T.Max(left, right));
 }

@@ -19,11 +19,22 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents a cryptographic private key.
 /// </summary>
-/// <param name="keyData">The underlying key data of the cryptographic private key.</param>
-public abstract partial class PrivateKey(ReadOnlySpan<byte> keyData) : ICryptoPrimitive<PrivateKey>
+public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>
 {
+    private readonly ProtectedData protectedData = new();
+    private readonly byte[] encryptedKeyData;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
+    protected PrivateKey(ReadOnlySpan<byte> keyData)
+    {
+        encryptedKeyData = protectedData.Encrypt(keyData.ToArray());
+    }
+
     /// <summary>
     /// Gets the cryptographic private key data.
     /// </summary>
-    protected byte[] KeyData { get; } = keyData.ToArray();
+    protected byte[] KeyData => protectedData.Decrypt(encryptedKeyData);
 }

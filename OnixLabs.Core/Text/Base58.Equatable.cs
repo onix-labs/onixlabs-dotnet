@@ -24,29 +24,20 @@ public readonly partial struct Base58
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Base58 other)
-    {
-        return other.value.SequenceEqual(value);
-    }
+    public bool Equals(Base58 other) => other.value.SequenceEqual(value);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj)
-    {
-        return obj is Base58 other && Equals(other);
-    }
+    public override bool Equals(object? obj) => obj is Base58 other && Equals(other);
 
     /// <summary>
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
-    public override int GetHashCode()
-    {
-        return value.GetContentHashCode();
-    }
+    public override int GetHashCode() => value.GetContentHashCode();
 
     /// <summary>
     /// Performs an equality comparison between two object instances.
@@ -54,10 +45,7 @@ public readonly partial struct Base58
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Base58 left, Base58 right)
-    {
-        return Equals(left, right);
-    }
+    public static bool operator ==(Base58 left, Base58 right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -65,8 +53,5 @@ public readonly partial struct Base58
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Base58 left, Base58 right)
-    {
-        return !Equals(left, right);
-    }
+    public static bool operator !=(Base58 left, Base58 right) => !Equals(left, right);
 }

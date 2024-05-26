@@ -137,14 +137,8 @@ public abstract partial class Sha3
             }
         }
 
-        void Iota(int round)
-        {
-            state[0] ^= roundConstants[round];
-        }
+        void Iota(int round) => state[0] ^= roundConstants[round];
 
-        ulong RotateLeft(ulong x, byte y)
-        {
-            return (x << y) | (x >> (64 - y));
-        }
+        ulong RotateLeft(ulong x, byte y) => (x << y) | (x >> (64 - y));
     }
 }

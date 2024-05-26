@@ -52,10 +52,7 @@ public static class StringExtensions
     /// <param name="value">The <see cref="String"/> instance to repeat.</param>
     /// <param name="count">The number of repetitions of the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the repetition of the current <see cref="String"/> instance.</returns>
-    public static string Repeat(this string value, int count)
-    {
-        return count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
-    }
+    public static string Repeat(this string value, int count) => count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
 
     /// <summary>
     /// Obtains a sub-string before the specified index within the current <see cref="String"/> instance.
@@ -70,10 +67,8 @@ public static class StringExtensions
     /// Returns a sub-string before the specified index. If the index is less than zero, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance will be returned.
     /// </returns>
-    private static string SubstringBeforeIndex(this string value, int index, string? defaultValue = null)
-    {
-        return index <= NotFound ? defaultValue ?? value : value[..index];
-    }
+    private static string SubstringBeforeIndex(this string value, int index, string? defaultValue = null) =>
+        index <= NotFound ? defaultValue ?? value : value[..index];
 
     /// <summary>
     /// Obtains a sub-string after the specified index within the current <see cref="String"/> instance.
@@ -89,10 +84,8 @@ public static class StringExtensions
     /// Returns a sub-string after the specified index. If the index is less than zero, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance will be returned.
     /// </returns>
-    private static string SubstringAfterIndex(this string value, int index, int offset, string? defaultValue = null)
-    {
-        return index <= NotFound ? defaultValue ?? value : value[(index + offset)..value.Length];
-    }
+    private static string SubstringAfterIndex(this string value, int index, int offset, string? defaultValue = null) =>
+        index <= NotFound ? defaultValue ?? value : value[(index + offset)..value.Length];
 
     /// <summary>
     /// Obtains a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -108,10 +101,8 @@ public static class StringExtensions
     /// If the delimiter is not found, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
     /// </returns>
-    public static string SubstringBeforeFirst(this string value, char delimiter, string? defaultValue = null)
-    {
-        return value.SubstringBeforeIndex(value.IndexOf(delimiter), defaultValue);
-    }
+    public static string SubstringBeforeFirst(this string value, char delimiter, string? defaultValue = null) =>
+        value.SubstringBeforeIndex(value.IndexOf(delimiter), defaultValue);
 
     /// <summary>
     /// Obtains a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -131,10 +122,8 @@ public static class StringExtensions
     /// If the delimiter is not found, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
     /// </returns>
-    public static string SubstringBeforeFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison)
-    {
-        return value.SubstringBeforeIndex(value.IndexOf(delimiter, comparison), defaultValue);
-    }
+    public static string SubstringBeforeFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
+        value.SubstringBeforeIndex(value.IndexOf(delimiter, comparison), defaultValue);
 
     /// <summary>
     /// Obtains a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -150,10 +139,8 @@ public static class StringExtensions
     /// If the delimiter is not found, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
     /// </returns>
-    public static string SubstringBeforeLast(this string value, char delimiter, string? defaultValue = null)
-    {
-        return value.SubstringBeforeIndex(value.LastIndexOf(delimiter), defaultValue);
-    }
+    public static string SubstringBeforeLast(this string value, char delimiter, string? defaultValue = null) =>
+        value.SubstringBeforeIndex(value.LastIndexOf(delimiter), defaultValue);
 
     /// <summary>
     /// Obtains a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -173,10 +160,8 @@ public static class StringExtensions
     /// If the delimiter is not found, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
     /// </returns>
-    public static string SubstringBeforeLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison)
-    {
-        return value.SubstringBeforeIndex(value.LastIndexOf(delimiter, comparison), defaultValue);
-    }
+    public static string SubstringBeforeLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
+        value.SubstringBeforeIndex(value.LastIndexOf(delimiter, comparison), defaultValue);
 
     /// <summary>
     /// Obtains a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -192,10 +177,8 @@ public static class StringExtensions
     /// If the delimiter is not found, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
     /// </returns>
-    public static string SubstringAfterFirst(this string value, char delimiter, string? defaultValue = null)
-    {
-        return value.SubstringAfterIndex(value.IndexOf(delimiter), 1, defaultValue);
-    }
+    public static string SubstringAfterFirst(this string value, char delimiter, string? defaultValue = null) =>
+        value.SubstringAfterIndex(value.IndexOf(delimiter), 1, defaultValue);
 
     /// <summary>
     /// Obtains a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -215,10 +198,8 @@ public static class StringExtensions
     /// If the delimiter is not found, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
     /// </returns>
-    public static string SubstringAfterFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison)
-    {
-        return value.SubstringAfterIndex(value.IndexOf(delimiter, comparison), delimiter.Length, defaultValue);
-    }
+    public static string SubstringAfterFirst(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
+        value.SubstringAfterIndex(value.IndexOf(delimiter, comparison), delimiter.Length, defaultValue);
 
     /// <summary>
     /// Obtains a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -234,10 +215,8 @@ public static class StringExtensions
     /// If the delimiter is not found, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
     /// </returns>
-    public static string SubstringAfterLast(this string value, char delimiter, string? defaultValue = null)
-    {
-        return value.SubstringAfterIndex(value.LastIndexOf(delimiter), 1, defaultValue);
-    }
+    public static string SubstringAfterLast(this string value, char delimiter, string? defaultValue = null) =>
+        value.SubstringAfterIndex(value.LastIndexOf(delimiter), 1, defaultValue);
 
     /// <summary>
     /// Obtains a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -257,10 +236,8 @@ public static class StringExtensions
     /// If the delimiter is not found, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
     /// </returns>
-    public static string SubstringAfterLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison)
-    {
-        return value.SubstringAfterIndex(value.LastIndexOf(delimiter, comparison), 1, defaultValue);
-    }
+    public static string SubstringAfterLast(this string value, string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
+        value.SubstringAfterIndex(value.LastIndexOf(delimiter, comparison), 1, defaultValue);
 
     /// <summary>
     /// Converts the current <see cref="String"/> instance into a new <see cref="T:Byte[]"/> instance.
@@ -268,10 +245,7 @@ public static class StringExtensions
     /// <param name="value">The current <see cref="String"/> from which to obtain a <see cref="T:Byte[]"/>.</param>
     /// <param name="encoding">The encoding that will be used to convert the current <see cref="String"/> into a <see cref="T:Byte[]"/>.</param>
     /// <returns>Returns a new <see cref="T:Byte[]"/> representation of the current <see cref="String"/> instance.</returns>
-    public static byte[] ToByteArray(this string value, Encoding? encoding = null)
-    {
-        return (encoding ?? DefaultEncoding).GetBytes(value);
-    }
+    public static byte[] ToByteArray(this string value, Encoding? encoding = null) => (encoding ?? DefaultEncoding).GetBytes(value);
 
     /// <summary>
     /// Converts the current <see cref="String"/> instance into a new <see cref="DateTime"/> instance.
@@ -280,10 +254,8 @@ public static class StringExtensions
     /// <param name="provider">An object that provides culture-specific formatting information.</param>
     /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
     /// <returns>Returns a new <see cref="DateTime"/> instance parsed from the current <see cref="String"/> instance.</returns>
-    public static DateTime ToDateTime(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles)
-    {
-        return DateTime.Parse(value, provider, styles);
-    }
+    public static DateTime ToDateTime(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles) =>
+        DateTime.Parse(value, provider, styles);
 
     /// <summary>
     /// Converts the current <see cref="String"/> instance into a new <see cref="DateOnly"/> instance.
@@ -292,10 +264,8 @@ public static class StringExtensions
     /// <param name="provider">An object that provides culture-specific formatting information.</param>
     /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
     /// <returns>Returns a new <see cref="DateOnly"/> instance parsed from the current <see cref="String"/> instance.</returns>
-    public static DateOnly ToDateOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles)
-    {
-        return DateOnly.Parse(value, provider, styles);
-    }
+    public static DateOnly ToDateOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles) =>
+        DateOnly.Parse(value, provider, styles);
 
     /// <summary>
     /// Converts the current <see cref="String"/> instance into a new <see cref="TimeOnly"/> instance.
@@ -304,10 +274,8 @@ public static class StringExtensions
     /// <param name="provider">An object that provides culture-specific formatting information.</param>
     /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
     /// <returns>Returns a new <see cref="TimeOnly"/> instance parsed from the current <see cref="String"/> instance.</returns>
-    public static TimeOnly ToTimeOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles)
-    {
-        return TimeOnly.Parse(value, provider, styles);
-    }
+    public static TimeOnly ToTimeOnly(this string value, IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles) =>
+        TimeOnly.Parse(value, provider, styles);
 
     /// <summary>
     /// Tries to copy the current <see cref="String"/> instance into the destination <see cref="Span{T}"/>.
@@ -330,10 +298,7 @@ public static class StringExtensions
     /// <param name="before">The <see cref="Char"/> that should precede the current <see cref="String"/> instance.</param>
     /// <param name="after">The <see cref="Char"/> that should succeed the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="Char"/> instances.</returns>
-    public static string Wrap(this string value, char before, char after)
-    {
-        return $"{before}{value}{after}";
-    }
+    public static string Wrap(this string value, char before, char after) => $"{before}{value}{after}";
 
     /// <summary>
     /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="String"/> instances.
@@ -342,8 +307,5 @@ public static class StringExtensions
     /// <param name="before">The <see cref="String"/> that should precede the current <see cref="String"/> instance.</param>
     /// <param name="after">The <see cref="String"/> that should succeed the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="String"/> instances.</returns>
-    public static string Wrap(this string value, string before, string after)
-    {
-        return $"{before}{value}{after}";
-    }
+    public static string Wrap(this string value, string before, string after) => $"{before}{value}{after}";
 }

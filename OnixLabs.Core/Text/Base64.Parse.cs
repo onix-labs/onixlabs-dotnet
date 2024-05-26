@@ -24,10 +24,7 @@ public readonly partial struct Base64
     /// <param name="value">The Base-64 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <returns>Returns a new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="String"/> value.</returns>
-    public static Base64 Parse(string value, IFormatProvider? provider = null)
-    {
-        return Parse(value.AsSpan(), provider);
-    }
+    public static Base64 Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>
     /// Parses the specified Base-64 encoded <see cref="ReadOnlySpan{T}"/> value into a <see cref="Base64"/> value.
@@ -35,11 +32,7 @@ public readonly partial struct Base64
     /// <param name="value">The Base-64 encoded value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <returns>Returns a new <see cref="Base64"/> instance, parsed from the specified Base-64 encoded <see cref="ReadOnlySpan{T}"/> value.</returns>
-    public static Base64 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null)
-    {
-        byte[] bytes = IBaseCodec.Base64.Decode(value, provider);
-        return new Base64(bytes);
-    }
+    public static Base64 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null) => new(IBaseCodec.Base64.Decode(value, provider));
 
     /// <summary>
     /// Tries to parse the specified Base-64 encoded <see cref="String"/> value into a <see cref="Base64"/> value.
@@ -51,10 +44,7 @@ public readonly partial struct Base64
     /// or the default <see cref="Base64"/> value if the specified Base-64 encoded <see cref="String"/> could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified Base-64 value was decoded successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool TryParse(string? value, IFormatProvider? provider, out Base64 result)
-    {
-        return TryParse(value.AsSpan(), provider, out result);
-    }
+    public static bool TryParse(string? value, IFormatProvider? provider, out Base64 result) => TryParse(value.AsSpan(), provider, out result);
 
     /// <summary>
     /// Tries to parse the specified Base-64 encoded <see cref="ReadOnlySpan{T}"/> value into a <see cref="Base64"/> value.

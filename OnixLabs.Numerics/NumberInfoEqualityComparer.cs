@@ -55,18 +55,12 @@ public abstract class NumberInfoEqualityComparer : IEqualityComparer<NumberInfo>
     /// <param name="x">The first object to compare.</param>
     /// <param name="y">The second object to compare.</param>
     /// <returns>Returns <see langword="true" /> if the specified objects are both of type <see cref="NumberInfo"/> and are equal; otherwise, <see langword="false" />.</returns>
-    public new bool Equals(object? x, object? y)
-    {
-        return x is NumberInfo left && y is NumberInfo right && Equals(left, right);
-    }
+    public new bool Equals(object? x, object? y) => x is NumberInfo left && y is NumberInfo right && Equals(left, right);
 
     /// <summary>Returns a hash code for the specified object.</summary>
     /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
     /// <returns>A hash code for the specified object.</returns>
-    public int GetHashCode(object obj)
-    {
-        return obj is NumberInfo value ? GetHashCode(value) : obj.GetHashCode();
-    }
+    public int GetHashCode(object obj) => obj is NumberInfo value ? GetHashCode(value) : obj.GetHashCode();
 
     /// <summary>
     /// Represents an equality comparer that compares <see cref="NumberInfo"/> values using strict equality.
@@ -78,18 +72,12 @@ public abstract class NumberInfoEqualityComparer : IEqualityComparer<NumberInfo>
         /// <param name="x">The first object of type <see cref="NumberInfo"/> to compare.</param>
         /// <param name="y">The second object of type <see cref="NumberInfo"/> to compare.</param>
         /// <returns> Returns <see langword="true" /> if the specified <see cref="NumberInfo"/> values are equal; otherwise, <see langword="false" />.</returns>
-        public override bool Equals(NumberInfo x, NumberInfo y)
-        {
-            return x.UnscaledValue == y.UnscaledValue && x.Scale == y.Scale;
-        }
+        public override bool Equals(NumberInfo x, NumberInfo y) => x.UnscaledValue == y.UnscaledValue && x.Scale == y.Scale;
 
         /// <summary>Returns a hash code for the specified <see cref="NumberInfo"/> value.</summary>
         /// <param name="obj">The <see cref="NumberInfo"/> value for which a hash code is to be returned.</param>
         /// <returns>Returns a hash code for the specified <see cref="NumberInfo"/> value.</returns>
-        public override int GetHashCode(NumberInfo obj)
-        {
-            return HashCode.Combine(obj.UnscaledValue, obj.Scale);
-        }
+        public override int GetHashCode(NumberInfo obj) => HashCode.Combine(obj.UnscaledValue, obj.Scale);
     }
 
     /// <summary>
@@ -102,17 +90,11 @@ public abstract class NumberInfoEqualityComparer : IEqualityComparer<NumberInfo>
         /// <param name="x">The first object of type <see cref="NumberInfo"/> to compare.</param>
         /// <param name="y">The second object of type <see cref="NumberInfo"/> to compare.</param>
         /// <returns> Returns <see langword="true" /> if the specified <see cref="NumberInfo"/> values are equal; otherwise, <see langword="false" />.</returns>
-        public override bool Equals(NumberInfo x, NumberInfo y)
-        {
-            return NumberInfoOrdinalityComparer.Default.IsEqual(x, y);
-        }
+        public override bool Equals(NumberInfo x, NumberInfo y) => NumberInfoOrdinalityComparer.Default.IsEqual(x, y);
 
         /// <summary>Returns a hash code for the specified <see cref="NumberInfo"/> value.</summary>
         /// <param name="obj">The <see cref="NumberInfo"/> value for which a hash code is to be returned.</param>
         /// <returns>Returns a hash code for the specified <see cref="NumberInfo"/> value.</returns>
-        public override int GetHashCode(NumberInfo obj)
-        {
-            return HashCode.Combine(obj.Significand, obj.Exponent);
-        }
+        public override int GetHashCode(NumberInfo obj) => HashCode.Combine(obj.Significand, obj.Exponent);
     }
 }

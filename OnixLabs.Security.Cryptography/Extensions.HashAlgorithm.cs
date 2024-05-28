@@ -60,7 +60,7 @@ public static class HashAlgorithmExtensions
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
-        algorithm.ComputeHash((encoding ?? Encoding.Default).GetBytes(data.ToArray()), rounds);
+        algorithm.ComputeHash((encoding ?? Encoding.UTF8).GetBytes(data.ToArray()), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="Stream"/> object.

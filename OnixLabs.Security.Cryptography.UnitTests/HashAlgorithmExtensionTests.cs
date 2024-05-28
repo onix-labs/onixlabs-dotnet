@@ -42,7 +42,7 @@ public sealed class HashAlgorithmExtensionTests
     {
         // Given
         using HashAlgorithm algorithm = SHA256.Create();
-        Stream data = new MemoryStream(Encoding.Default.GetBytes("abc123"));
+        Stream data = new MemoryStream("abc123"u8.ToArray());
         const string expected = "efaaeb3b1d1d85e8587ef0527ca43b9575ce8149ba1ee41583d3d19bd130daf8";
 
         // When

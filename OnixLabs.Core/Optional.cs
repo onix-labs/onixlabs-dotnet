@@ -64,18 +64,18 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
-    public static Some<T> Some(T value) => new(value);
+    public static Some<T> Some(T value) => new(RequireNotNull(value, "Value must not be null.", nameof(value)));
 
     /// <summary>
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
-    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
     /// <param name="value">The underlying optional value.</param>
     /// <returns>
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
-    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
-    public static implicit operator Optional<T>(T value) => Some(value);
+    public static implicit operator Optional<T>(T? value) => value is not null ? Some(value) : None;
 
     /// <summary>
     /// Gets the underlying value of the specified <see cref="Optional{T}"/> instance;
@@ -166,7 +166,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// </summary>
     /// <param name="some">The action to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
     /// <param name="none">The action to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
-    public abstract void Match(Action<T> some, Action none);
+    public abstract void Match(Action<T>? some = null, Action? none = null);
 
     /// <summary>
     /// Executes the function that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.

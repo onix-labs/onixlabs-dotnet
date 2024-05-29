@@ -101,7 +101,7 @@ public sealed class None<T> : Optional<T>, IValueEquatable<None<T>> where T : no
     /// </summary>
     /// <param name="some">The action to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
     /// <param name="none">The action to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
-    public override void Match(Action<T> some, Action none) => none();
+    public override void Match(Action<T>? some = null, Action? none = null) => none?.Invoke();
 
     /// <summary>
     /// Executes the function that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.

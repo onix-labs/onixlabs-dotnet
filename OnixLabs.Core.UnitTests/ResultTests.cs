@@ -97,8 +97,8 @@ public sealed class ResultTests
         Assert.Equal("failure", (text as Failure<string>)!.Exception.Message);
     }
 
-    [Fact(DisplayName = "Result implicit operator should produce the expected result.")]
-    public void ResultImplicitOperatorShouldProduceTheExpectedResult()
+    [Fact(DisplayName = "Result implicit operator should produce the expected success result.")]
+    public void ResultImplicitOperatorShouldProduceTheExpectedSuccessResult()
     {
         // Given / When
         Result<int> number = 123;
@@ -114,6 +114,20 @@ public sealed class ResultTests
         Assert.False(text.IsFailure);
         Assert.IsType<Success<string>>(text);
         Assert.Equal("abc", text);
+    }
+
+    [Fact(DisplayName = "Result implicit operator should produce the expected failure result.")]
+    public void ResultImplicitOperatorShouldProduceTheExpectedFailureResult()
+    {
+        // Given / When
+        Exception exception = new("failure");
+        Result<object> result = exception;
+
+        // Then
+        Assert.False(result.IsSuccess);
+        Assert.True(result.IsFailure);
+        Assert.IsType<Failure<object>>(result);
+        Assert.Equal("failure", (result as Failure<object>)!.Exception.Message);
     }
 
     [Fact(DisplayName = "Result Success explicit operator should produce the expected result.")]
@@ -225,10 +239,10 @@ public sealed class ResultTests
     {
         // Given
         int expected = 123.GetHashCode();
-        Result<int> value = Result<int>.Success(123);
+        Result<int> result = Result<int>.Success(123);
 
         // When
-        int actual = value.GetHashCode();
+        int actual = result.GetHashCode();
 
         // Then
         Assert.Equal(expected, actual);
@@ -240,10 +254,10 @@ public sealed class ResultTests
         // Given
         Exception exception = new("failure");
         int expected = exception.GetHashCode();
-        Result<int> value = Result<int>.Failure(exception);
+        Result<int> result = Result<int>.Failure(exception);
 
         // When
-        int actual = value.GetHashCode();
+        int actual = result.GetHashCode();
 
         // Then
         Assert.Equal(expected, actual);
@@ -353,13 +367,10 @@ public sealed class ResultTests
     {
         // Given
         bool someCalled = false;
-        Result<int> number = 123;
+        Result<int> result = 123;
 
         // When
-        number.Match(
-            success: _ => { someCalled = true; },
-            failure: _ => { }
-        );
+        result.Match(success: _ => { someCalled = true; });
 
         // Then
         Assert.True(someCalled);
@@ -371,13 +382,10 @@ public sealed class ResultTests
         // Given
         bool noneCalled = false;
         Exception exception = new("failure");
-        Result<int> number = Result<int>.Failure(exception);
+        Result<int> result = Result<int>.Failure(exception);
 
         // When
-        number.Match(
-            success: _ => { },
-            failure: _ => { noneCalled = true; }
-        );
+        result.Match(failure: _ => { noneCalled = true; });
 
         // Then
         Assert.True(noneCalled);
@@ -388,10 +396,10 @@ public sealed class ResultTests
     {
         // Given
         const int expected = 9;
-        Result<int> number = 3;
+        Result<int> result = 3;
 
         // When
-        int actual = number.Match(
+        int actual = result.Match(
             success: value => value * value,
             failure: _ => 0
         );
@@ -406,10 +414,10 @@ public sealed class ResultTests
         // Given
         const int expected = 0;
         Exception exception = new("failure");
-        Result<int> number = Result<int>.Failure(exception);
+        Result<int> result = Result<int>.Failure(exception);
 
         // When
-        int actual = number.Match(
+        int actual = result.Match(
             success: value => value * value,
             failure: _ => 0
         );
@@ -423,10 +431,10 @@ public sealed class ResultTests
     {
         // Given
         const int expected = 9;
-        Result<int> number = 3;
+        Result<int> result = 3;
 
         // When
-        Result<int> actual = number.Select(value => value * value);
+        Result<int> actual = result.Select(value => value * value);
 
         // Then
         Assert.Equal(expected, actual);
@@ -437,10 +445,10 @@ public sealed class ResultTests
     {
         // Given
         Exception exception = new("failure");
-        Result<int> number = Result<int>.Failure(exception);
+        Result<int> result = Result<int>.Failure(exception);
 
         // When
-        Result<int> actual = number.Select(value => value * value);
+        Result<int> actual = result.Select(value => value * value);
 
         // Then
         Assert.Equal(Result<int>.Failure(exception), actual);
@@ -451,10 +459,10 @@ public sealed class ResultTests
     {
         // Given
         const int expected = 9;
-        Result<int> number = 3;
+        Result<int> result = 3;
 
         // When
-        Result<int> actual = number.SelectMany<int>(value => value * value);
+        Result<int> actual = result.SelectMany<int>(value => value * value);
 
         // Then
         Assert.Equal(expected, actual);
@@ -465,10 +473,10 @@ public sealed class ResultTests
     {
         // Given
         Exception exception = new("failure");
-        Result<int> number = Result<int>.Failure(exception);
+        Result<int> result = Result<int>.Failure(exception);
 
         // When
-        Result<int> actual = number.SelectMany<int>(value => value * value);
+        Result<int> actual = result.SelectMany<int>(value => value * value);
 
         // Then
         Assert.Equal(Result<int>.Failure(exception), actual);

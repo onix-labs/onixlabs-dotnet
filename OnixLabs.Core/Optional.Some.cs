@@ -31,6 +31,7 @@ public sealed class Some<T> : Optional<T>, IValueEquatable<Some<T>> where T : no
     /// <summary>
     /// Gets the underlying optional value.
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public T Value { get; }
 
     /// <summary>
@@ -105,7 +106,7 @@ public sealed class Some<T> : Optional<T>, IValueEquatable<Some<T>> where T : no
     /// </summary>
     /// <param name="some">The action to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
     /// <param name="none">The action to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
-    public override void Match(Action<T> some, Action none) => some(Value);
+    public override void Match(Action<T>? some = null, Action? none = null) => some?.Invoke(Value);
 
     /// <summary>
     /// Executes the function that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.

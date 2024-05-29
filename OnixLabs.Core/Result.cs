@@ -19,9 +19,187 @@ namespace OnixLabs.Core;
 /// <summary>
 /// Represents a result value, which signifies the presence of a value or an exception.
 /// </summary>
+public abstract class Result : IValueEquatable<Result>
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result"/> class.
+    /// </summary>
+    internal Result()
+    {
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether the current <see cref="Result"/> is in a successful state.
+    /// </summary>
+    public bool IsSuccess => this is Success;
+
+    /// <summary>
+    /// Gets a value indicating whether the current <see cref="Result"/> is in a failed state.
+    /// </summary>
+    public bool IsFailure => this is Failure;
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </summary>
+    /// <param name="action">The action to invoke to obtain a successful or failed result.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </returns>
+    public static Result Of(Action action)
+    {
+        try
+        {
+            action();
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result"/> class, where the underlying value represents a successful result.
+    /// </summary>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result"/> class, where the underlying value represents a successful result.
+    /// </returns>
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static Success Success() => Core.Success.Instance;
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result"/> class, where the underlying exception represents a failed result.
+    /// </summary>
+    /// <param name="exception">The underlying failed exception value.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result"/> class, where the underlying exception represents a failed result.
+    /// </returns>
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static Failure Failure(Exception exception) => new(exception);
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result"/> class, where the underlying value represents a failed result.
+    /// </summary>
+    /// <param name="exception">The underlying failed result exception.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result"/> class, where the underlying value represents a failed result.
+    /// </returns>
+    public static implicit operator Result(Exception exception) => Failure(exception);
+
+    /// <summary>
+    /// Performs an equality comparison between two object instances.
+    /// </summary>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    public static bool operator ==(Result left, Result right) => Equals(left, right);
+
+    /// <summary>
+    /// Performs an inequality comparison between two object instances.
+    /// </summary>
+    /// <param name="left">The left-hand instance to compare.</param>
+    /// <param name="right">The right-hand instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    public static bool operator !=(Result left, Result right) => !Equals(left, right);
+
+    /// <summary>
+    /// Checks whether the current object is equal to another object of the same type.
+    /// </summary>
+    /// <param name="other">An object to compare with the current object.</param>
+    /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
+    public bool Equals(Result? other) => this switch
+    {
+        Success success => other is Success successOther && success.Equals(successOther),
+        Failure failure => other is Failure failureOther && failure.Equals(failureOther),
+        _ => ReferenceEquals(this, other)
+    };
+
+    /// <summary>
+    /// Checks for equality between the current instance and another object.
+    /// </summary>
+    /// <param name="obj">The object to check for equality.</param>
+    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
+    public override bool Equals(object? obj) => Equals(obj as Result);
+
+    /// <summary>
+    /// Serves as a hash code function for the current instance.
+    /// </summary>
+    /// <returns>Returns a hash code for the current instance.</returns>
+    public override int GetHashCode() => default;
+
+    /// <summary>
+    /// Executes the action that matches the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="success">The action to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The action to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    public abstract void Match(Action? success = null, Action<Exception>? failure = null);
+
+    /// <summary>
+    /// Executes the function that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// </summary>
+    /// <param name="success">The action to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The action to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching function.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> function if the current <see cref="Result"/> instance is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> function if the current <see cref="Result"/> instance is in a failed state.
+    /// </returns>
+    public abstract TResult Match<TResult>(Func<TResult> success, Func<Exception, TResult> failure);
+
+    /// <summary>
+    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The function to apply to the value of the current <see cref="Result"/> instance.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Result{TResult}"/> instance containing the result of the function if the current
+    /// <see cref="Result"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result"/> instance.
+    /// </returns>
+    public abstract Result<TResult> Select<TResult>(Func<TResult> selector);
+
+    /// <summary>
+    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The function to apply to the value of the current <see cref="Result"/> instance.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Result{TResult}"/> instance containing the result of the function if the current
+    /// <see cref="Result"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result"/> instance.
+    /// </returns>
+    public abstract Result<TResult> SelectMany<TResult>(Func<Result<TResult>> selector);
+
+    /// <summary>
+    /// Throws the underlying exception if the current <see cref="Result"/> is in a failure state.
+    /// </summary>
+    public abstract void Throw();
+
+    /// <summary>
+    /// Returns a <see cref="String"/> that represents the current object.
+    /// </summary>
+    /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
+    public override string ToString() => this switch
+    {
+        Success success => success.ToString(),
+        Failure failure => failure.ToString(),
+        _ => base.ToString() ?? GetType().FullName ?? nameof(Result)
+    };
+}
+
+/// <summary>
+/// Represents a result value, which signifies the presence of a value or an exception.
+/// </summary>
 /// <typeparam name="T">The type of the underlying result value.</typeparam>
 public abstract class Result<T> : IValueEquatable<Result<T>>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result{T}"/> class.
+    /// </summary>
+    internal Result()
+    {
+    }
+
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result{T}"/> is in a successful state.
     /// </summary>
@@ -45,11 +223,11 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
     {
         try
         {
-            return Success(func());
+            return func();
         }
         catch (Exception exception)
         {
-            return Failure(exception);
+            return exception;
         }
     }
 
@@ -79,6 +257,15 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
     /// Returns a new instance of the <see cref="Result{T}"/> class, where the underlying value represents a successful result.
     /// </returns>
     public static implicit operator Result<T>(T value) => Success(value);
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result{T}"/> class, where the underlying value represents a failed result.
+    /// </summary>
+    /// <param name="exception">The underlying failed result exception.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result{T}"/> class, where the underlying value represents a failed result.
+    /// </returns>
+    public static implicit operator Result<T>(Exception exception) => Failure(exception);
 
     /// <summary>
     /// Gets the underlying value of the specified <see cref="Result{T}"/> instance;
@@ -168,7 +355,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
     /// </summary>
     /// <param name="success">The action to execute when the current <see cref="Result{T}"/> instance is in a successful state.</param>
     /// <param name="failure">The action to execute when the current <see cref="Result{T}"/> instance is in a failed state.</param>
-    public abstract void Match(Action<T> success, Action<Exception> failure);
+    public abstract void Match(Action<T>? success = null, Action<Exception>? failure = null);
 
     /// <summary>
     /// Executes the function that matches the value of the current <see cref="Result{T}"/> instance and returns its result.
@@ -191,7 +378,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
     /// Returns a new <see cref="Result{TResult}"/> instance containing the result of the function if the current
     /// <see cref="Result{T}"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result{T}"/> instance.
     /// </returns>
-    public abstract Result<TResult> Select<TResult>(Func<T, TResult> selector) where TResult : notnull;
+    public abstract Result<TResult> Select<TResult>(Func<T, TResult> selector);
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result{T}"/> instance.
@@ -202,7 +389,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
     /// Returns a new <see cref="Result{TResult}"/> instance containing the result of the function if the current
     /// <see cref="Result{T}"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result{T}"/> instance.
     /// </returns>
-    public abstract Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector) where TResult : notnull;
+    public abstract Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector);
 
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.

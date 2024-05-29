@@ -104,8 +104,8 @@ public sealed class OptionalTests
         Assert.Equal("abc", text);
     }
 
-    [Fact(DisplayName = "Optional implicit operator should produce the expected result.")]
-    public void OptionalImplicitOperatorShouldProduceExpectedResult()
+    [Fact(DisplayName = "Optional implicit operator should produce the expected some result.")]
+    public void OptionalImplicitOperatorShouldProduceExpectedSomeResult()
     {
         // Given / When
         Optional<int> number = 123;
@@ -119,6 +119,18 @@ public sealed class OptionalTests
         Assert.True(text.HasValue);
         Assert.IsType<Some<string>>(text);
         Assert.Equal("abc", text);
+    }
+
+    [Fact(DisplayName = "Optional implicit operator should produce the expected none result.")]
+    public void OptionalImplicitOperatorShouldProduceExpectedNoneResult()
+    {
+        // Given / When
+        const string? value = default;
+        Optional<string> optional = value;
+
+        // Then
+        Assert.False(optional.HasValue);
+        Assert.IsType<None<string>>(optional);
     }
 
     [Fact(DisplayName = "Optional Some explicit operator should produce the expected result.")]
@@ -210,10 +222,10 @@ public sealed class OptionalTests
     {
         // Given
         const int expected = 123;
-        Optional<int> value = 123;
+        Optional<int> optional = 123;
 
         // When
-        int actual = value.GetHashCode();
+        int actual = optional.GetHashCode();
 
         // Then
         Assert.Equal(expected, actual);
@@ -224,10 +236,10 @@ public sealed class OptionalTests
     {
         // Given
         const int expected = default;
-        Optional<int> value = Optional<int>.None;
+        Optional<int> optional = Optional<int>.None;
 
         // When
-        int actual = value.GetHashCode();
+        int actual = optional.GetHashCode();
 
         // Then
         Assert.Equal(expected, actual);
@@ -334,13 +346,10 @@ public sealed class OptionalTests
     {
         // Given
         bool someCalled = false;
-        Optional<int> number = 123;
+        Optional<int> optional = 123;
 
         // When
-        number.Match(
-            some: _ => { someCalled = true; },
-            none: () => { }
-        );
+        optional.Match(some: _ => { someCalled = true; });
 
         // Then
         Assert.True(someCalled);
@@ -351,13 +360,10 @@ public sealed class OptionalTests
     {
         // Given
         bool noneCalled = false;
-        Optional<int> number = Optional<int>.None;
+        Optional<int> optional = Optional<int>.None;
 
         // When
-        number.Match(
-            some: _ => { },
-            none: () => { noneCalled = true; }
-        );
+        optional.Match(none: () => { noneCalled = true; });
 
         // Then
         Assert.True(noneCalled);
@@ -368,10 +374,10 @@ public sealed class OptionalTests
     {
         // Given
         const int expected = 9;
-        Optional<int> number = 3;
+        Optional<int> optional = 3;
 
         // When
-        int actual = number.Match(
+        int actual = optional.Match(
             some: value => value * value,
             none: () => 0
         );
@@ -385,10 +391,10 @@ public sealed class OptionalTests
     {
         // Given
         const int expected = 0;
-        Optional<int> number = Optional<int>.None;
+        Optional<int> optional = Optional<int>.None;
 
         // When
-        int actual = number.Match(
+        int actual = optional.Match(
             some: value => value * value,
             none: () => 0
         );
@@ -402,10 +408,10 @@ public sealed class OptionalTests
     {
         // Given
         const int expected = 9;
-        Optional<int> number = 3;
+        Optional<int> optional = 3;
 
         // When
-        Optional<int> actual = number.Select(value => value * value);
+        Optional<int> actual = optional.Select(value => value * value);
 
         // Then
         Assert.Equal(expected, actual);
@@ -415,10 +421,10 @@ public sealed class OptionalTests
     public void OptionalNoneSelectShouldProduceExpectedResult()
     {
         // Given
-        Optional<int> number = Optional<int>.None;
+        Optional<int> optional = Optional<int>.None;
 
         // When
-        Optional<int> actual = number.Select(value => value * value);
+        Optional<int> actual = optional.Select(value => value * value);
 
         // Then
         Assert.Equal(Optional<int>.None, actual);
@@ -429,10 +435,10 @@ public sealed class OptionalTests
     {
         // Given
         const int expected = 9;
-        Optional<int> number = 3;
+        Optional<int> optional = 3;
 
         // When
-        Optional<int> actual = number.SelectMany<int>(value => value * value);
+        Optional<int> actual = optional.SelectMany<int>(value => value * value);
 
         // Then
         Assert.Equal(expected, actual);
@@ -442,10 +448,10 @@ public sealed class OptionalTests
     public void OptionalNoneSelectManyShouldProduceExpectedResult()
     {
         // Given
-        Optional<int> number = Optional<int>.None;
+        Optional<int> optional = Optional<int>.None;
 
         // When
-        Optional<int> actual = number.SelectMany<int>(value => value * value);
+        Optional<int> actual = optional.SelectMany<int>(value => value * value);
 
         // Then
         Assert.Equal(Optional<int>.None, actual);

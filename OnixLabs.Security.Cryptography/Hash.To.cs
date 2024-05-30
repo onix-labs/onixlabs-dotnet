@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -26,8 +27,22 @@ public readonly partial struct Hash
     public byte[] ToByteArray() => value.Copy();
 
     /// <summary>
-    /// Returns a <see cref="String"/> that represents the current object.
+    /// Creates a new <see cref="NamedHash"/> from the current <see cref="Hash"/> instance.
     /// </summary>
-    /// <returns>Returns <see cref="String"/> that represents the current object.</returns>
+    /// <param name="algorithmName">The name of the hash algorithm that was used to produce the associated hash.</param>
+    /// <returns>Returns a new <see cref="NamedHash"/> from the current <see cref="Hash"/> instance.</returns>
+    public NamedHash ToNamedHash(string algorithmName) => new(this, algorithmName);
+
+    /// <summary>
+    /// Creates a new <see cref="NamedHash"/> from the current <see cref="Hash"/> instance.
+    /// </summary>
+    /// <param name="algorithmName">The name of the hash algorithm that was used to produce the associated hash.</param>
+    /// <returns>Returns a new <see cref="NamedHash"/> from the current <see cref="Hash"/> instance.</returns>
+    public NamedHash ToNamedHash(HashAlgorithmName algorithmName) => new(this, algorithmName);
+
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <returns>Returns <see cref="string"/> that represents the current object.</returns>
     public override string ToString() => Convert.ToHexString(value).ToLower();
 }

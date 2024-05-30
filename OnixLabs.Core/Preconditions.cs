@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.ComponentModel;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core;
@@ -22,13 +23,19 @@ namespace OnixLabs.Core;
 /// </summary>
 public static class Preconditions
 {
+    private const string ArgumentFailed = "Argument must satisfy the specified condition.";
+    private const string ArgumentNull = "Argument must not be null.";
+    private const string ArgumentNullOrEmpty = "Argument must not be null or empty.";
+    private const string ArgumentNullOrWhiteSpace = "Argument must not be null or whitespace.";
+    private const string ArgumentOutOfRange = "Argument must be within range.";
+
     /// <summary>
     /// Performs a general pre-condition check that fails when the specified condition is <see langword="false"/>.
     /// </summary>
     /// <param name="condition">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
     /// <exception cref="InvalidOperationException">If the specified condition is <see langword="false"/>.</exception>
-    public static void Check(bool condition, string message = "Check failed.")
+    public static void Check(bool condition, string message = ArgumentFailed)
     {
         if (!condition) throw new InvalidOperationException(message);
     }
@@ -41,16 +48,45 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-    public static T CheckNotNull<T>(T? value, string message = "Argument must not be null.") => value ?? throw new InvalidOperationException(message);
+    public static T CheckNotNull<T>(T? value, string message = ArgumentNull)
+    {
+        return value ?? throw new InvalidOperationException(message);
+    }
+
+    /// <summary>
+    /// Performs a general pre-condition check that fails if the specified value is <see langword="null"/> or an empty string.
+    /// </summary>
+    /// <param name="value">The <see cref="String"/> value to check.</param>
+    /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or an empty string.</param>
+    /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
+    /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/> or an empty string.</exception>
+    public static string CheckNotNullOrEmpty(string? value, string message = ArgumentNullOrEmpty)
+    {
+        if (string.IsNullOrEmpty(value)) throw new InvalidOperationException(message);
+        return value;
+    }
+
+    /// <summary>
+    /// Performs a general pre-condition check that fails if the specified value is <see langword="null"/> or a whitespace string.
+    /// </summary>
+    /// <param name="value">The <see cref="String"/> value to check.</param>
+    /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or a whitespace string.</param>
+    /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
+    /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/> or a whitespace string.</exception>
+    public static string CheckNotNullOrWhiteSpace(string? value, string message = ArgumentNullOrWhiteSpace)
+    {
+        if (string.IsNullOrWhiteSpace(value)) throw new InvalidOperationException(message);
+        return value;
+    }
 
     /// <summary>
     /// Performs a general pre-condition requirement that fails when the specified condition is <see langword="false"/>.
     /// </summary>
     /// <param name="condition">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
-    /// <param name="parameterName">The name of the invalid paramter.</param>
+    /// <param name="parameterName">The name of the invalid parameter.</param>
     /// <exception cref="ArgumentException">If the specified condition is <see langword="false"/>.</exception>
-    public static void Require(bool condition, string message = "Argument requirement failed.", string? parameterName = null)
+    public static void Require(bool condition, string message = ArgumentFailed, string? parameterName = null)
     {
         if (!condition) throw new ArgumentException(message, parameterName);
     }
@@ -60,11 +96,42 @@ public static class Preconditions
     /// </summary>
     /// <param name="condition">The condition to check.</param>
     /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
-    /// <param name="parameterName">The name of the invalid paramter.</param>
+    /// <param name="parameterName">The name of the invalid parameter.</param>
     /// <exception cref="ArgumentOutOfRangeException">If the specified condition is <see langword="false"/>.</exception>
-    public static void RequireWithinRange(bool condition, string message = "Argument is out of range.", string? parameterName = null)
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static void RequireWithinRange(bool condition, string message = ArgumentOutOfRange, string? parameterName = null)
     {
         if (!condition) throw new ArgumentOutOfRangeException(parameterName, message);
+    }
+
+    /// <summary>
+    /// Performs a general pre-condition requirement that fails when the specified value falls inclusively outside the specified minimum and maximum values.
+    /// </summary>
+    /// <param name="value">The value to check.</param>
+    /// <param name="min">The inclusive minimum value to test.</param>
+    /// <param name="max">The inclusive maximum value to test.</param>
+    /// <param name="message">The exception message to throw in the event that the specified value falls inclusively outside the specified minimum and maximum values.</param>
+    /// <param name="parameterName">The name of the invalid parameter.</param>
+    /// <typeparam name="T">The underlying type of the value to check.</typeparam>
+    /// <exception cref="ArgumentOutOfRangeException">If the specified value falls inclusively outside the specified minimum and maximum values.</exception>
+    public static void RequireWithinRangeInclusive<T>(T value, T min, T max, string message = ArgumentOutOfRange, string? parameterName = null) where T : IComparable<T>
+    {
+        if (!value.IsWithinRangeInclusive(min, max)) throw new ArgumentOutOfRangeException(parameterName, message);
+    }
+
+    /// <summary>
+    /// Performs a general pre-condition requirement that fails when the specified value falls exclusively outside the specified minimum and maximum values.
+    /// </summary>
+    /// <param name="value">The value to check.</param>
+    /// <param name="min">The exclusive minimum value to test.</param>
+    /// <param name="max">The exclusive maximum value to test.</param>
+    /// <param name="message">The exception message to throw in the event that the specified value falls exclusively outside the specified minimum and maximum values.</param>
+    /// <param name="parameterName">The name of the invalid parameter.</param>
+    /// <typeparam name="T">The underlying type of the value to check.</typeparam>
+    /// <exception cref="ArgumentOutOfRangeException">If the specified value falls exclusively outside the specified minimum and maximum values.</exception>
+    public static void RequireWithinRangeExclusive<T>(T value, T min, T max, string message = ArgumentOutOfRange, string? parameterName = null) where T : IComparable<T>
+    {
+        if (!value.IsWithinRangeExclusive(min, max)) throw new ArgumentOutOfRangeException(parameterName, message);
     }
 
     /// <summary>
@@ -75,9 +142,39 @@ public static class Preconditions
     /// <param name="parameterName">The name of the invalid parameter.</param>
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
-    /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-    public static T RequireNotNull<T>(T? value, string message = "Argument must not be null.", string? parameterName = null) =>
-        value ?? throw new ArgumentNullException(parameterName, message);
+    /// <exception cref="ArgumentNullException">If the specified value is <see langword="null"/>.</exception>
+    public static T RequireNotNull<T>(T? value, string message = ArgumentNull, string? parameterName = null)
+    {
+        return value ?? throw new ArgumentNullException(parameterName, message);
+    }
+
+    /// <summary>
+    /// Performs a general pre-condition requirement that fails if the specified value is <see langword="null"/> or an empty string.
+    /// </summary>
+    /// <param name="value">The <see cref="String"/> value to check.</param>
+    /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or an empty string.</param>
+    /// <param name="parameterName">The name of the invalid parameter.</param>
+    /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
+    /// <exception cref="ArgumentException">If the specified value is <see langword="null"/> or an empty string.</exception>
+    public static string RequireNotNullOrEmpty(string? value, string message = ArgumentNullOrEmpty, string? parameterName = null)
+    {
+        if (string.IsNullOrEmpty(value)) throw new ArgumentException(message, parameterName);
+        return value;
+    }
+
+    /// <summary>
+    /// Performs a general pre-condition requirement that fails if the specified value is <see langword="null"/> or a whitespace string.
+    /// </summary>
+    /// <param name="value">The <see cref="String"/> value to check.</param>
+    /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or a whitespace string.</param>
+    /// <param name="parameterName">The name of the invalid parameter.</param>
+    /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
+    /// <exception cref="ArgumentException">If the specified value is <see langword="null"/> or a whitespace string.</exception>
+    public static string RequireNotNullOrWhiteSpace(string? value, string message = ArgumentNullOrWhiteSpace, string? parameterName = null)
+    {
+        if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException(message, parameterName);
+        return value;
+    }
 
     /// <summary>
     /// Performs a general pre-condition requirement that the specified value is defined by the specified <see cref="Enum"/> type.
@@ -85,6 +182,7 @@ public static class Preconditions
     /// <param name="value">The enum value to check.</param>
     /// <param name="parameterName">The name of the invalid parameter.</param>
     /// <typeparam name="T">The underlying type of the <see cref="Enum"/>.</typeparam>
+    /// <exception cref="ArgumentOutOfRangeException">If the specified value is not defined by the specified <see cref="Enum"/> type.</exception>
     public static void RequireIsDefined<T>(T value, string? parameterName = null) where T : struct, Enum
     {
         if (Enum.IsDefined(value)) return;

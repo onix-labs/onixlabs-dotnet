@@ -28,6 +28,38 @@ namespace OnixLabs.Core;
 public static class ObjectExtensions
 {
     /// <summary>
+    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, inclusive of the specified minimum and maximum values.
+    /// </summary>
+    /// <param name="value">The value to test.</param>
+    /// <param name="min">The inclusive minimum value.</param>
+    /// <param name="max">The inclusive maximum value.</param>
+    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
+    /// <returns>
+    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
+    /// inclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
+    /// </returns>
+    public static bool IsWithinRangeInclusive<T>(this T value, T min, T max) where T : IComparable<T>
+    {
+        return value.CompareTo(min) is 0 or 1 && value.CompareTo(max) is 0 or -1;
+    }
+
+    /// <summary>
+    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, exclusive of the specified minimum and maximum values.
+    /// </summary>
+    /// <param name="value">The value to test.</param>
+    /// <param name="min">The exclusive minimum value.</param>
+    /// <param name="max">The exclusive maximum value.</param>
+    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
+    /// <returns>
+    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
+    /// exclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
+    /// </returns>
+    public static bool IsWithinRangeExclusive<T>(this T value, T min, T max) where T : IComparable<T>
+    {
+        return value.CompareTo(min) is 1 && value.CompareTo(max) is -1;
+    }
+
+    /// <summary>
     /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
     /// </summary>
     /// <param name="comparable">The left-hand <see cref="IComparable{T}"/> instance to compare.</param>

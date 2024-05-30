@@ -410,6 +410,21 @@ public sealed class HashTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Hash.ToNamedHash should produce the expected result")]
+    public void HashToNamedHashShouldProduceExpectedResult()
+    {
+        // Given
+        const string expected = "Sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
+        Hash hash = Hash.Compute(SHA256.Create(), "test");
+        NamedHash namedHash = hash.ToNamedHash("Sha256");
+
+        // When
+        string actual = namedHash.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Hash.Concatenate should produce the expected result")]
     public void HashConcatenateShouldProduceExpectedResult()
     {

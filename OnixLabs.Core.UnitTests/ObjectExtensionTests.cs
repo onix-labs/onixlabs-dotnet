@@ -20,7 +20,37 @@ namespace OnixLabs.Core.UnitTests;
 
 public sealed class ObjectExtensionTests
 {
-    [Fact(DisplayName = "Object.ToRecordString should produce a record formatted string")]
+    [Theory(DisplayName = "IsWithinRangeInclusive should produce the expected result")]
+    [InlineData(2, 1, 3, true)]
+    [InlineData(1, 1, 3, true)]
+    [InlineData(3, 1, 3, true)]
+    [InlineData(0, 1, 3, false)]
+    [InlineData(4, 1, 3, false)]
+    public void IsWithinRangeInclusiveShouldProduceExpectedResult(int value, int min, int max, bool expected)
+    {
+        // When
+        bool actual = value.IsWithinRangeInclusive(min, max);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "IsWithinRangeExclusive should produce the expected result")]
+    [InlineData(2, 1, 3, true)]
+    [InlineData(1, 1, 3, false)]
+    [InlineData(3, 1, 3, false)]
+    [InlineData(0, 1, 3, false)]
+    [InlineData(4, 1, 3, false)]
+    public void IsWithinRangeExclusiveShouldProduceExpectedResult(int value, int min, int max, bool expected)
+    {
+        // When
+        bool actual = value.IsWithinRangeExclusive(min, max);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "ToRecordString should produce a record formatted string")]
     public void ToRecordStringShouldProduceExpectedResult()
     {
         // Given

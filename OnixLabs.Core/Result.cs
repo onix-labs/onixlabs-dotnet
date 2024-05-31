@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Threading.Tasks;
 
 namespace OnixLabs.Core;
 
@@ -52,6 +53,28 @@ public abstract class Result : IValueEquatable<Result>
         try
         {
             action();
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </summary>
+    /// <param name="func">The function to invoke to obtain a successful or failed result.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </returns>
+    public static async Task<Result> OfAsync(Func<Task> func)
+    {
+        try
+        {
+            await func();
             return Success();
         }
         catch (Exception exception)
@@ -224,6 +247,27 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
         try
         {
             return func();
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result{T}"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </summary>
+    /// <param name="func">The function to invoke to obtain a successful or failed result.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result{T}"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </returns>
+    public static async Task<Result<T>> OfAsync(Func<Task<T>> func)
+    {
+        try
+        {
+            return await func();
         }
         catch (Exception exception)
         {

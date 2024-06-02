@@ -15,6 +15,7 @@
 using System;
 using System.Security.Cryptography;
 using OnixLabs.Core;
+using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -43,6 +44,13 @@ public readonly partial struct Hash
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
-    /// <returns>Returns <see cref="string"/> that represents the current object.</returns>
-    public override string ToString() => Convert.ToHexString(value).ToLower();
+    /// <param name="provider">The format provider that will be used to determine the format of the string.</param>
+    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(ToByteArray(), provider);
+
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    public override string ToString() => ToString(Base16FormatProvider.Invariant);
 }

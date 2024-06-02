@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -20,4 +21,12 @@ namespace OnixLabs.Security.Cryptography;
 /// Defines a cryptographic primitive.
 /// </summary>
 /// <typeparam name="T">The underlying type of the cryptographic primitive.</typeparam>
-public interface ICryptoPrimitive<T> : IValueEquatable<T>, IBinaryConvertible where T : ICryptoPrimitive<T>;
+public interface ICryptoPrimitive<T> : IValueEquatable<T>, IBinaryConvertible where T : ICryptoPrimitive<T>
+{
+    /// <summary>
+    /// Returns a <see cref="string"/> that represents the current object.
+    /// </summary>
+    /// <param name="provider">The format provider that will be used to determine the format of the string.</param>
+    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    string ToString(IFormatProvider provider);
+}

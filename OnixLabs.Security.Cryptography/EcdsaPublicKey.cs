@@ -20,4 +20,4 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents an ECDSA cryptographic public key.
 /// </summary>
 /// <param name="keyData">The underlying key data of the ECDSA cryptographic public key.</param>
-public sealed partial class EcdsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IEcdsaPublicKey;
+public sealed partial class EcdsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IEcdsaPublicKey, ISpanParsable<EcdsaPublicKey>;

@@ -20,7 +20,7 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents a cryptographic digital signature.
 /// </summary>
 /// <param name="value">The underlying value of the cryptographic digital signature.</param>
-public readonly partial struct DigitalSignature(ReadOnlySpan<byte> value) : ICryptoPrimitive<DigitalSignature>
+public readonly partial struct DigitalSignature(ReadOnlySpan<byte> value) : ICryptoPrimitive<DigitalSignature>, ISpanParsable<DigitalSignature>
 {
     private readonly byte[] value = value.ToArray();
 }

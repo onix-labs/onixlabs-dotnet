@@ -20,10 +20,10 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents a cryptographic secret.
 /// </summary>
-public readonly partial struct Secret : ICryptoPrimitive<Secret>
+public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<Secret>
 {
     private readonly ProtectedData protectedData = new();
-    private readonly byte[] encryptedKeyData;
+    private readonly byte[] encryptedValue;
     private readonly Hash hash;
 
     /// <summary>
@@ -32,7 +32,7 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>
     /// <param name="value">The underlying value of the cryptographic secret.</param>
     public Secret(ReadOnlySpan<byte> value)
     {
-        encryptedKeyData = protectedData.Encrypt(value.ToArray());
+        encryptedValue = protectedData.Encrypt(value.ToArray());
         hash = Hash.Compute(SHA256.Create(), value.ToArray());
     }
 }

@@ -20,4 +20,4 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents an EC Diffie-Hellman cryptographic private key.
 /// </summary>
 /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic private key.</param>
-public sealed partial class EcdhPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IEcdhPrivateKey;
+public sealed partial class EcdhPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IEcdhPrivateKey, ISpanParsable<EcdhPrivateKey>;

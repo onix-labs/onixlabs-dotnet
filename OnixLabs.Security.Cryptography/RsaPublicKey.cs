@@ -20,4 +20,4 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents an RSA cryptographic public key.
 /// </summary>
 /// <param name="keyData">The underlying key data of the RSA cryptographic public key.</param>
-public sealed partial class RsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IRsaPublicKey;
+public sealed partial class RsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IRsaPublicKey, ISpanParsable<RsaPublicKey>;

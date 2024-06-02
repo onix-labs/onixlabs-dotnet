@@ -25,7 +25,7 @@ namespace OnixLabs.Security.Cryptography;
 public interface IEcdsaPrivateKey : IPublicKeyExportable<EcdsaPublicKey>, IPrivateKeyImportablePkcs8<EcdsaPrivateKey>, IPrivateKeyExportablePkcs8, IBinaryConvertible
 {
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
@@ -34,7 +34,7 @@ public interface IEcdsaPrivateKey : IPublicKeyExportable<EcdsaPublicKey>, IPriva
     byte[] SignData(ReadOnlySpan<byte> data, HashAlgorithm algorithm, DSASignatureFormat format = default);
 
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="offset">The offset into the byte array from which to begin using data.</param>
@@ -63,7 +63,7 @@ public interface IEcdsaPrivateKey : IPublicKeyExportable<EcdsaPublicKey>, IPriva
     byte[] SignData(IBinaryConvertible data, HashAlgorithm algorithm, DSASignatureFormat format = default);
 
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
@@ -72,7 +72,7 @@ public interface IEcdsaPrivateKey : IPublicKeyExportable<EcdsaPublicKey>, IPriva
     byte[] SignData(ReadOnlySpan<byte> data, HashAlgorithmName algorithm, DSASignatureFormat format = default);
 
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="offset">The offset into the byte array from which to begin using data.</param>
@@ -109,7 +109,7 @@ public interface IEcdsaPrivateKey : IPublicKeyExportable<EcdsaPublicKey>, IPriva
     byte[] SignHash(Hash hash, DSASignatureFormat format = default);
 
     /// <summary>
-    /// Signs the specified <see cref="ReadOnlySpan{T}"/>.
+    /// Signs the specified <see cref="ReadOnlySpan{Byte}"/>.
     /// </summary>
     /// <param name="hash">The hash to sign.</param>
     /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>

@@ -181,7 +181,7 @@ public static class IEnumerableExtensions
     /// <param name="comparer">An <see cref="T:IEqualityComparer{T}" /> to use to compare elements.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns> Returns <see langword="true" /> if the two source sequences are <see langword="null"/>, or of equal length and their corresponding elements compare equal according to <paramref name="comparer" />; otherwise, <see langword="false" />.</returns>
-    public static bool NullSafeSequenceEqual<T>(this IEnumerable<T>? first, IEnumerable<T>? second, EqualityComparer<T>? comparer = null)
+    public static bool SequenceEqualOrNull<T>(this IEnumerable<T>? first, IEnumerable<T>? second, EqualityComparer<T>? comparer = null)
     {
         if (first is null && second is null) return true;
         if (first is null || second is null) return false;

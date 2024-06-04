@@ -24,7 +24,7 @@ public readonly partial struct Salt
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Salt other) => value.NullSafeSequenceEqual(other.value);
+    public bool Equals(Salt other) => value.SequenceEqualOrNull(other.value);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.

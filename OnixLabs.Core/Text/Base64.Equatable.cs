@@ -24,7 +24,7 @@ public readonly partial struct Base64
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Base64 other) => other.value.SequenceEqual(value);
+    public bool Equals(Base64 other) => other.value.SequenceEqualOrNull(value);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.

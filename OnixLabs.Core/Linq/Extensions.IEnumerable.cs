@@ -90,8 +90,10 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> from which to compute a content hash code.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns the computed content hash code of the current <see cref="IEnumerable{T}"/>.</returns>
-    public static int GetContentHashCode<T>(this IEnumerable<T> enumerable)
+    public static int GetContentHashCode<T>(this IEnumerable<T>? enumerable)
     {
+        if (enumerable is null) return default;
+
         HashCode result = new();
         enumerable.ForEach(element => result.Add(element));
         return result.ToHashCode();
@@ -172,6 +174,19 @@ public static class IEnumerableExtensions
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns <see langword="true"/> if none of the elements of the current <see cref="IEnumerable{T}"/> satisfy the specified predicate condition; otherwise, <see langword="false"/>.</returns>
     public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) => !enumerable.Any(predicate);
+
+    /// <summary>Determines whether two sequences are <see langword="null"/>, or equal by comparing their elements by using a specified <see cref="T:IEqualityComparer{T}" />.</summary>
+    /// <param name="first">An <see cref="T:IEnumerable{T}" /> to compare to <paramref name="second" />.</param>
+    /// <param name="second">An <see cref="T:IEnumerable{T}" /> to compare to the first sequence.</param>
+    /// <param name="comparer">An <see cref="T:IEqualityComparer{T}" /> to use to compare elements.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns> Returns <see langword="true" /> if the two source sequences are <see langword="null"/>, or of equal length and their corresponding elements compare equal according to <paramref name="comparer" />; otherwise, <see langword="false" />.</returns>
+    public static bool SequenceEqualOrNull<T>(this IEnumerable<T>? first, IEnumerable<T>? second, EqualityComparer<T>? comparer = null)
+    {
+        if (first is null && second is null) return true;
+        if (first is null || second is null) return false;
+        return first.SequenceEqual(second, comparer ?? EqualityComparer<T>.Default);
+    }
 
     /// <summary>
     /// Obtains a single element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;

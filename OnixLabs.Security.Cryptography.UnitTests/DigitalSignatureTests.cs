@@ -65,6 +65,21 @@ public sealed class DigitalSignatureTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Identical default signature values should be considered equal")]
+    public void IdenticalDefaultDigitalSignatureValuesShouldBeConsideredEqual()
+    {
+        // Given
+        DigitalSignature left = new();
+        DigitalSignature right = default;
+
+        // Then
+        Assert.Equal(left, right);
+        Assert.Equal(left.GetHashCode(), right.GetHashCode());
+        Assert.True(left.Equals(right));
+        Assert.True(left == right);
+        Assert.False(left != right);
+    }
+
     [Fact(DisplayName = "Identical signature values should be considered equal")]
     public void IdenticalDigitalSignatureValuesShouldBeConsideredEqual()
     {
@@ -74,8 +89,10 @@ public sealed class DigitalSignatureTests
 
         // Then
         Assert.Equal(left, right);
+        Assert.Equal(left.GetHashCode(), right.GetHashCode());
         Assert.True(left.Equals(right));
         Assert.True(left == right);
+        Assert.False(left != right);
     }
 
     [Fact(DisplayName = "Different signature values should not be considered equal")]
@@ -87,7 +104,9 @@ public sealed class DigitalSignatureTests
 
         // Then
         Assert.NotEqual(left, right);
+        Assert.NotEqual(left.GetHashCode(), right.GetHashCode());
         Assert.False(left.Equals(right));
+        Assert.False(left == right);
         Assert.True(left != right);
     }
 

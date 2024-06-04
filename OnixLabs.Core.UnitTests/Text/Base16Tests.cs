@@ -52,6 +52,21 @@ public sealed class Base16Tests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Base16 default values should be identical")]
+    public void Base16DefaultValuesShouldBeIdentical()
+    {
+        // Given
+        Base16 a = new();
+        Base16 b = default;
+
+        // Then
+        Assert.Equal(a, b);
+        Assert.Equal(a.GetHashCode(), b.GetHashCode());
+        Assert.True(a.Equals(b));
+        Assert.True(a == b);
+        Assert.False(a != b);
+    }
+
     [Fact(DisplayName = "Base16 values should be identical")]
     public void Base16ValuesShouldBeIdentical()
     {

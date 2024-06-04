@@ -24,7 +24,7 @@ public readonly partial struct DigitalSignature
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(DigitalSignature other) => value.SequenceEqual(other.value);
+    public bool Equals(DigitalSignature other) => value.SequenceEqualOrNull(other.value);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.

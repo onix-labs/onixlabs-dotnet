@@ -52,6 +52,21 @@ public sealed class Base64Tests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Base64 default values should be identical")]
+    public void Base64DefaultValuesShouldBeIdentical()
+    {
+        // Given
+        Base64 a = new();
+        Base64 b = default;
+
+        // Then
+        Assert.Equal(a, b);
+        Assert.Equal(a.GetHashCode(), b.GetHashCode());
+        Assert.True(a.Equals(b));
+        Assert.True(a == b);
+        Assert.False(a != b);
+    }
+
     [Fact(DisplayName = "Base64 values should be identical")]
     public void Base64ValuesShouldBeIdentical()
     {

@@ -52,6 +52,21 @@ public sealed class Base58Tests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Base58 default values should be identical")]
+    public void Base58DefaultValuesShouldBeIdentical()
+    {
+        // Given
+        Base58 a = new();
+        Base58 b = default;
+
+        // Then
+        Assert.Equal(a, b);
+        Assert.Equal(a.GetHashCode(), b.GetHashCode());
+        Assert.True(a.Equals(b));
+        Assert.True(a == b);
+        Assert.False(a != b);
+    }
+
     [Fact(DisplayName = "Base58 values should be identical")]
     public void Base58ValuesShouldBeIdentical()
     {

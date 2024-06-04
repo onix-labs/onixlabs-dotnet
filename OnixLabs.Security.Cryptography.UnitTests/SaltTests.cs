@@ -66,6 +66,21 @@ public sealed class SaltTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Identical default salt values should be considered equal")]
+    public void IdenticalDefaultSaltValuesShouldBeConsideredEqual()
+    {
+        // Given
+        Salt left = new();
+        Salt right = default;
+
+        // Then
+        Assert.Equal(left, right);
+        Assert.Equal(left.GetHashCode(), right.GetHashCode());
+        Assert.True(left.Equals(right));
+        Assert.True(left == right);
+        Assert.False(left != right);
+    }
+
     [Fact(DisplayName = "Identical salt values should be considered equal")]
     public void IdenticalSaltValuesShouldBeConsideredEqual()
     {
@@ -75,8 +90,10 @@ public sealed class SaltTests
 
         // Then
         Assert.Equal(left, right);
+        Assert.Equal(left.GetHashCode(), right.GetHashCode());
         Assert.True(left.Equals(right));
         Assert.True(left == right);
+        Assert.False(left != right);
     }
 
     [Fact(DisplayName = "Different salt values should not be considered equal")]
@@ -88,7 +105,9 @@ public sealed class SaltTests
 
         // Then
         Assert.NotEqual(left, right);
+        Assert.NotEqual(left.GetHashCode(), right.GetHashCode());
         Assert.False(left.Equals(right));
+        Assert.False(left == right);
         Assert.True(left != right);
     }
 

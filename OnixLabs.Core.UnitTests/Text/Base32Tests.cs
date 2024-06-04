@@ -52,6 +52,21 @@ public sealed class Base32Tests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Base32 default values should be identical")]
+    public void Base32DefaultValuesShouldBeIdentical()
+    {
+        // Given
+        Base32 a = new();
+        Base32 b = default;
+
+        // Then
+        Assert.Equal(a, b);
+        Assert.Equal(a.GetHashCode(), b.GetHashCode());
+        Assert.True(a.Equals(b));
+        Assert.True(a == b);
+        Assert.False(a != b);
+    }
+
     [Fact(DisplayName = "Base32 values should be identical")]
     public void Base32ValuesShouldBeIdentical()
     {

@@ -85,6 +85,21 @@ public sealed class HashTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Identical default hash values should be considered equal")]
+    public void IdenticalDefaultHashValuesShouldBeConsideredEqual()
+    {
+        // Given
+        Hash left = new();
+        Hash right = default;
+
+        // Then
+        Assert.Equal(left, right);
+        Assert.Equal(left.GetHashCode(), right.GetHashCode());
+        Assert.True(left.Equals(right));
+        Assert.True(left == right);
+        Assert.False(left != right);
+    }
+
     [Fact(DisplayName = "Identical hash values should be considered equal")]
     public void IdenticalHashValuesShouldBeConsideredEqual()
     {
@@ -94,8 +109,10 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(left, right);
+        Assert.Equal(left.GetHashCode(), right.GetHashCode());
         Assert.True(left.Equals(right));
         Assert.True(left == right);
+        Assert.False(left != right);
     }
 
     [Fact(DisplayName = "Different hash values should not be considered equal")]
@@ -107,7 +124,9 @@ public sealed class HashTests
 
         // Then
         Assert.NotEqual(left, right);
+        Assert.NotEqual(left.GetHashCode(), right.GetHashCode());
         Assert.False(left.Equals(right));
+        Assert.False(left == right);
         Assert.True(left != right);
     }
 

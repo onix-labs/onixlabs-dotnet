@@ -11,7 +11,7 @@
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>Copyright © ONIXLabs 2020</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>8.4.0</PackageVersion>
+        <PackageVersion>8.5.0</PackageVersion>
         <PackageLicenseUrl></PackageLicenseUrl>
     </PropertyGroup>
     <PropertyGroup>

@@ -10,7 +10,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Copyright>Copyright © ONIXLabs 2020</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>8.5.0</PackageVersion>
+        <PackageVersion>8.6.0</PackageVersion>
         <LangVersion>12</LangVersion>
         <PackageLicenseUrl></PackageLicenseUrl>
     </PropertyGroup>

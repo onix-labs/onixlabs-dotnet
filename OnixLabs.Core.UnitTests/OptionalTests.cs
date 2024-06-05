@@ -87,6 +87,38 @@ public sealed class OptionalTests
         Assert.Equal("abc", text);
     }
 
+    [Fact(DisplayName = "Optional.Of should produce the expected result for null nullable struct values.")]
+    public void OptionalOfShouldProduceExpectedResultForNullNullableStructValues()
+    {
+        // Given / When
+        Optional<int> number = Optional<int>.Of((int?)null);
+        Optional<Guid> identifier = Optional<Guid>.Of((Guid?)default);
+
+        // Then
+        Assert.False(number.HasValue);
+        Assert.IsType<None<int>>(number);
+
+        Assert.False(identifier.HasValue);
+        Assert.IsType<None<Guid>>(identifier);
+    }
+
+    [Fact(DisplayName = "Optional.Of should produce the expected result for non-null nullable struct values.")]
+    public void OptionalOfShouldProduceExpectedResultForNonNullNullableStructValues()
+    {
+        // Given / When
+        Optional<int> number = Optional<int>.Of((int?)123);
+        Optional<Guid> identifier = Optional<Guid>.Of((Guid?)Guid.Empty);
+
+        // Then
+        Assert.True(number.HasValue);
+        Assert.IsType<Some<int>>(number);
+        Assert.Equal(123, number);
+
+        Assert.True(identifier.HasValue);
+        Assert.IsType<Some<Guid>>(identifier);
+        Assert.Equal(Guid.Empty, identifier);
+    }
+
     [Fact(DisplayName = "Optional.Some should produce the expected result.")]
     public void OptionalSomeShouldProduceExpectedResult()
     {

@@ -53,7 +53,22 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
-    public static Optional<T> Of(T? value) => value is null || EqualityComparer<T>.Default.Equals(value, default) ? None : Some(value);
+    public static Optional<T> Of(T? value) => value is not null && !EqualityComparer<T>.Default.Equals(value, default)
+        ? Some(value)
+        : None;
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
+    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// </summary>
+    /// <param name="value">The underlying optional value.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
+    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// </returns>
+    public static Optional<TStruct> Of<TStruct>(TStruct? value) where TStruct : struct => value.HasValue
+        ? Optional<TStruct>.Some(value.Value)
+        : Optional<TStruct>.None;
 
     /// <summary>
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if

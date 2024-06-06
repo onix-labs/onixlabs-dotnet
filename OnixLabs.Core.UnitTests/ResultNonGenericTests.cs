@@ -238,6 +238,32 @@ public sealed class ResultNonGenericTests
     public void ResultSuccessSelectShouldProduceExpectedResult()
     {
         // Given
+        Result expected = Result.Success();
+
+        // When
+        Result actual = expected.Select(() => { });
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.Select should produce the expected result")]
+    public void ResultFailureSelectShouldProduceExpectedResult()
+    {
+        // Given
+        Result expected = Result.Failure(new Exception("Failure"));
+
+        // When
+        Result actual = expected.Select(() => { });
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Success.Select<TResult> should produce the expected result")]
+    public void ResultSuccessSelectTResultShouldProduceExpectedResult()
+    {
+        // Given
         const int expected = 9;
         Result result = Result.Success();
 
@@ -248,8 +274,8 @@ public sealed class ResultNonGenericTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.Select should produce the expected result")]
-    public void ResultFailureSelectShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result Failure.Select<TResult> should produce the expected result")]
+    public void ResultFailureSelectTResultShouldProduceExpectedResult()
     {
         // Given
         Exception exception = new("failure");
@@ -266,6 +292,32 @@ public sealed class ResultNonGenericTests
     public void ResultSuccessSelectManyShouldProduceExpectedResult()
     {
         // Given
+        Result expected = Result.Success();
+
+        // When
+        Result actual = expected.SelectMany(Result.Success);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.SelectMany should produce the expected result")]
+    public void ResultFailureSelectManyShouldProduceExpectedResult()
+    {
+        // Given
+        Result expected = Result.Failure(new Exception("Failure"));
+
+        // When
+        Result actual = expected.SelectMany(Result.Success);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Success.SelectMany<TResult> should produce the expected result")]
+    public void ResultSuccessSelectTResultManyShouldProduceExpectedResult()
+    {
+        // Given
         const int expected = 9;
         Result result = Result.Success();
 
@@ -276,8 +328,8 @@ public sealed class ResultNonGenericTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.SelectMany should produce the expected result")]
-    public void ResultFailureSelectManyShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result Failure.SelectMany<TResult> should produce the expected result")]
+    public void ResultFailureSelectTResultManyShouldProduceExpectedResult()
     {
         // Given
         Exception exception = new("failure");

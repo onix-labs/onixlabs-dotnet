@@ -89,24 +89,40 @@ public sealed class Success : Result, IValueEquatable<Success>
     public override TResult Match<TResult>(Func<TResult> success, Func<Exception, TResult> failure) => success();
 
     /// <summary>
+    /// Applies the provided selector action to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The action to apply to current <see cref="Result"/> instance.</param>
+    /// <returns>
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// </returns>
+    public override Result Select(Action selector) => Of(selector);
+
+    /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="selector">The function to apply to the value of the current <see cref="Result"/> instance.</param>
+    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns a new <see cref="Result{TResult}"/> instance containing the result of the function if the current
-    /// <see cref="Result"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result"/> instance.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public override Result<TResult> Select<TResult>(Func<TResult> selector) => selector();
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="selector">The function to apply to the value of the current <see cref="Result"/> instance.</param>
+    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
+    /// <returns>
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// </returns>
+    public override Result SelectMany(Func<Result> selector) => selector();
+
+    /// <summary>
+    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns a new <see cref="Result{TResult}"/> instance containing the result of the function if the current
-    /// <see cref="Result"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result"/> instance.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public override Result<TResult> SelectMany<TResult>(Func<Result<TResult>> selector) => selector();
 
@@ -229,24 +245,40 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     public override TResult Match<TResult>(Func<T, TResult> success, Func<Exception, TResult> failure) => success(Value);
 
     /// <summary>
-    /// Applies the provided selector function to the value of the current <see cref="Result{T}"/> instance.
+    /// Applies the provided selector action to the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
+    /// <param name="selector">The action to apply to current <see cref="Result"/> instance.</param>
+    /// <returns>
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// </returns>
+    public override Result Select(Action<T> selector) => Result.Of(() => selector(Value));
+
+    /// <summary>
+    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns a new <see cref="Result{TResult}"/> instance containing the result of the function if the current
-    /// <see cref="Result{T}"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result{T}"/> instance.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public override Result<TResult> Select<TResult>(Func<T, TResult> selector) => selector(Value);
 
     /// <summary>
-    /// Applies the provided selector function to the value of the current <see cref="Result{T}"/> instance.
+    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
+    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
+    /// <returns>
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// </returns>
+    public override Result SelectMany(Func<T, Result> selector) => selector(Value);
+
+    /// <summary>
+    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns a new <see cref="Result{TResult}"/> instance containing the result of the function if the current
-    /// <see cref="Result{T}"/> instance is in a successful state; otherwise, returns the current failed <see cref="Result{T}"/> instance.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public override Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector) => selector(Value);
 

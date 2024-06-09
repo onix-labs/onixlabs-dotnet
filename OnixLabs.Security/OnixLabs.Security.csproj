@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>8.9.0</Version>
+        <Title>OnixLabs.Security</Title>
+        <Authors>ONIXLabs</Authors>
+        <Description>ONIXLabs Security APIs for .NET</Description>
+        <Copyright>Copyright © ONIXLabs 2020</Copyright>
+        <PackageProjectUrl>https://github.com/onix-labs/onixlabs-dotnet</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <AssemblyVersion>8.9.0</AssemblyVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DebugType>embedded</DebugType>
+      <DocumentationFile>bin\Debug\net8.0\OnixLabs.Security.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DebugSymbols>true</DebugSymbols>
+      <DebugType>embedded</DebugType>
+      <DocumentationFile>bin\Release\net8.0\OnixLabs.Security.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
+    </ItemGroup>
+
+</Project>

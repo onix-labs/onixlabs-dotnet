@@ -25,20 +25,30 @@ namespace OnixLabs.Core.Text;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class StringBuilderExtensions
 {
+    private const char EscapeSequence = '\\';
+
     /// <summary>
     /// Appends the specified values to the current <see cref="StringBuilder"/>.
     /// </summary>
     /// <param name="builder">The <see cref="StringBuilder"/> to append to.</param>
     /// <param name="values">The values to append.</param>
-    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified items appended.</returns>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values appended.</returns>
     public static StringBuilder Append(this StringBuilder builder, params object[] values) => builder.Append(values.JoinToString(string.Empty));
+
+    /// <summary>
+    /// Appends the specified value, prefixed with the escape sequence to the current <see cref="StringBuilder"/>.
+    /// </summary>
+    /// <param name="builder">The <see cref="StringBuilder"/> to append to.</param>
+    /// <param name="value">The value to append.</param>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the escape sequence and specified value appended.</returns>
+    internal static StringBuilder AppendEscaped(this StringBuilder builder, char value) => builder.Append(EscapeSequence).Append(value);
 
     /// <summary>
     /// Prepends the specified values to the current <see cref="StringBuilder"/>.
     /// </summary>
     /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
     /// <param name="values">The values to prepend.</param>
-    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified items prepended.</returns>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
     public static StringBuilder Prepend(this StringBuilder builder, params object[] values) => builder.Insert(0, values.JoinToString(string.Empty));
 
     /// <summary>

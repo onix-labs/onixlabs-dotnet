@@ -63,7 +63,7 @@ file sealed class PseudoRandomNumberProvider(Random random) : RandomNumberProvid
     /// <param name="minimum">The minimum random value.</param>
     /// <param name="maximum">The maximum random value.</param>
     /// <returns>Returns the next random <see cref="Int32"/> value.</returns>
-    internal override int GetNextInt(int minimum, int maximum) => random.Next(minimum, maximum + 1);
+    internal override int GetNextInt(int minimum, int maximum) => random.Next(minimum, maximum);
 }
 
 /// <summary>
@@ -77,5 +77,5 @@ file sealed class SecureRandomNumberProvider : RandomNumberProvider
     /// <param name="minimum">The minimum random value.</param>
     /// <param name="maximum">The maximum random value.</param>
     /// <returns>Returns the next random <see cref="Int32"/> value.</returns>
-    internal override int GetNextInt(int minimum, int maximum) => RandomNumberGenerator.GetInt32(minimum, maximum + 1);
+    internal override int GetNextInt(int minimum, int maximum) => RandomNumberGenerator.GetInt32(minimum, maximum);
 }

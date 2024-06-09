@@ -123,7 +123,7 @@ public sealed class SecurityTokenBuilder
         List<char> allowedCharacters = characters.ToList();
 
         for (int index = 0; index < length; index++)
-            result[index] = allowedCharacters[provider.GetNextInt(0, allowedCharacters.Count - 1)];
+            result[index] = allowedCharacters[provider.GetNextInt(0, allowedCharacters.Count)];
 
         return new SecurityToken(result);
     }

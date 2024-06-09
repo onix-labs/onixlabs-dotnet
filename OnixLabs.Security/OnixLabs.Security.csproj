@@ -1,35 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <Version>8.9.0</Version>
         <Title>OnixLabs.Security</Title>
         <Authors>ONIXLabs</Authors>
-        <Description>ONIXLabs Security APIs for .NET</Description>
-        <Copyright>Copyright © ONIXLabs 2020</Copyright>
-        <PackageProjectUrl>https://github.com/onix-labs/onixlabs-dotnet</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <Description>ONIXLabs Security API for .NET</Description>
         <AssemblyVersion>8.9.0</AssemblyVersion>
+        <NeutralLanguage>en</NeutralLanguage>
+        <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Copyright>Copyright © ONIXLabs 2020</Copyright>
+        <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
+        <PackageVersion>8.9.0</PackageVersion>
+        <LangVersion>12</LangVersion>
+        <PackageLicenseUrl>https://github.com/onix-labs/onixlabs-dotnet/blob/main/LICENSE</PackageLicenseUrl>
     </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DebugType>embedded</DebugType>
-      <DocumentationFile>bin\Debug\net8.0\OnixLabs.Security.xml</DocumentationFile>
+    <PropertyGroup>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <DebugType>embedded</DebugType>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/onix-labs/onixlabs-dotnet</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
     </PropertyGroup>
-
+    <PropertyGroup Condition="'$(CI)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DebugSymbols>true</DebugSymbols>
-      <DebugType>embedded</DebugType>
-      <DocumentationFile>bin\Release\net8.0\OnixLabs.Security.xml</DocumentationFile>
+        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
-
     <ItemGroup>
-      <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
-
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
+    </ItemGroup>
 </Project>

@@ -199,4 +199,20 @@ public sealed class StringExtensionTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Theory(DisplayName = "String.ToEscapedString should produce the expected result")]
+    [InlineData("\n", @"\n")]
+    [InlineData("\r", @"\r")]
+    [InlineData("\t", @"\t")]
+    [InlineData("\"", @"\""")]
+    [InlineData("\'", @"\'")]
+    [InlineData("\\", @"\\")]
+    public void ToEscapedStringShouldProduceExpectedResult(string value, string expected)
+    {
+        // When
+        string actual = value.ToEscapedString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
 }

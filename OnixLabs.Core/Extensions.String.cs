@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using OnixLabs.Core.Text;
 
 namespace OnixLabs.Core;
 
@@ -308,4 +309,45 @@ public static class StringExtensions
     /// <param name="after">The <see cref="String"/> that should succeed the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="String"/> instances.</returns>
     public static string Wrap(this string value, string before, string after) => $"{before}{value}{after}";
+
+    /// <summary>
+    /// Returns a <see cref="string"/> with all escape characters formatted as escape character literals.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> value.</param>
+    /// <returns>Returns a <see cref="string"/> with all escape characters formatted as escape character literals.</returns>
+    public static string ToEscapedString(this string value)
+    {
+        StringBuilder result = new();
+
+        foreach (char c in value)
+        {
+            switch (c)
+            {
+                case '\n':
+                    result.AppendEscaped('n');
+                    break;
+                case '\r':
+                    result.AppendEscaped('r');
+                    break;
+                case '\t':
+                    result.AppendEscaped('t');
+                    break;
+                case '\"':
+                    result.AppendEscaped('"');
+                    break;
+                case '\'':
+                    result.AppendEscaped('\'');
+                    break;
+                case '\\':
+                    result.AppendEscaped('\\');
+                    break;
+                default:
+                    if (char.IsControl(c)) result.Append($"\\u{(int)c:X4}");
+                    else result.Append(c);
+                    break;
+            }
+        }
+
+        return result.ToString();
+    }
 }

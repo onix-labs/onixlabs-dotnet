@@ -12,11 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using OnixLabs.Core;
+using OnixLabs.Security;
+
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
+        int[] lengths = [1, 2, 4, 8, 16, 32, 64, 128];
+        int[] seeds = [0, 4, 7, 9, 123, 256, 721, 999];
+
+        foreach (int length in lengths)
+        {
+            foreach (int seed in seeds)
+            {
+                string token = SecurityTokenBuilder
+                    .CreatePseudoRandom(length, seed)
+                    .UseAlphaNumericCharacters()
+                    .UseExtendedSpecialCharacters()
+                    .ToSecurityToken()
+                    .ToString()
+                    .ToEscapedString();
+
+                Console.WriteLine($"[InlineData({length}, {seed}, \"{token}\")]");
+            }
+        }
     }
 }

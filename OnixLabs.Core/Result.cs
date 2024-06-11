@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OnixLabs.Core;
@@ -75,6 +76,29 @@ public abstract class Result : IValueEquatable<Result>
         try
         {
             await func();
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </summary>
+    /// <param name="func">The function to invoke to obtain a successful or failed result.</param>
+    /// <param name="token">The cancellation token to pass to the invoked function.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </returns>
+    public static async Task<Result> OfAsync(Func<CancellationToken, Task> func, CancellationToken token = default)
+    {
+        try
+        {
+            await func(token);
             return Success();
         }
         catch (Exception exception)
@@ -284,6 +308,28 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
         try
         {
             return await func();
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Result{T}"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </summary>
+    /// <param name="func">The function to invoke to obtain a successful or failed result.</param>
+    /// <param name="token">The cancellation token to pass to the invoked function.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result{T}"/> class, where the underlying value is the result of a successful invocation
+    /// of the specified function; otherwise, the underlying value is the exception thrown by a failed invocation of the specified function.
+    /// </returns>
+    public static async Task<Result<T>> OfAsync(Func<CancellationToken, Task<T>> func, CancellationToken token = default)
+    {
+        try
+        {
+            return await func(token);
         }
         catch (Exception exception)
         {

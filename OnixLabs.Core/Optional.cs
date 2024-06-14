@@ -41,6 +41,20 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public bool HasValue => this is Some<T>;
 
     /// <summary>
+    /// Gets a value indicating whether the specified <see cref="Optional{T}"/> instance is <see cref="None{T}"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="Optional{T}"/> value to check.</param>
+    /// <returns>Returns <see langword="true"/> if the specified <see cref="Optional{T}"/> instance is <see cref="None{T}"/>; otherwise, <see langword="false"/>.</returns>
+    public static bool IsNone(Optional<T> value) => value is None<T>;
+
+    /// <summary>
+    /// Gets a value indicating whether the specified <see cref="Optional{T}"/> instance is <see cref="Some{T}"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="Optional{T}"/> value to check.</param>
+    /// <returns>Returns <see langword="true"/> if the specified <see cref="Optional{T}"/> instance is <see cref="Some{T}"/>; otherwise, <see langword="false"/>.</returns>
+    public static bool IsSome(Optional<T> value) => value is Some<T>;
+
+    /// <summary>
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// <remarks>

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Threading.Tasks;
 
 namespace OnixLabs.Core;
 
@@ -294,4 +295,25 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
     public override string ToString() => Value?.ToString() ?? string.Empty;
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    public override void Dispose()
+    {
+        if (Value is IDisposable disposable)
+            disposable.Dispose();
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources asynchronously.
+    /// </summary>
+    /// <returns>
+    /// Returns a task that represents the asynchronous dispose operation.
+    /// </returns>
+    public override async ValueTask DisposeAsync()
+    {
+        if (Value is IAsyncDisposable disposable)
+            await disposable.DisposeAsync();
+    }
 }

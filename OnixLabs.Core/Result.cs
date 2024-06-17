@@ -254,7 +254,7 @@ public abstract class Result : IValueEquatable<Result>
 /// Represents a result value, which signifies the presence of a value or an exception.
 /// </summary>
 /// <typeparam name="T">The type of the underlying result value.</typeparam>
-public abstract class Result<T> : IValueEquatable<Result<T>>
+public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyncDisposable
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{T}"/> class.
@@ -528,4 +528,17 @@ public abstract class Result<T> : IValueEquatable<Result<T>>
         Failure<T> failure => failure.ToString(),
         _ => base.ToString() ?? GetType().FullName ?? nameof(Result<T>)
     };
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    public abstract void Dispose();
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources asynchronously.
+    /// </summary>
+    /// <returns>
+    /// Returns a task that represents the asynchronous dispose operation.
+    /// </returns>
+    public abstract ValueTask DisposeAsync();
 }

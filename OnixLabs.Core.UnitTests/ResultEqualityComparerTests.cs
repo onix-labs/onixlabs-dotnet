@@ -156,6 +156,21 @@ public class ResultEqualityComparerTests
         Assert.False(result2);
     }
 
+    [Fact(DisplayName = "ResultEqualityComparer.GetHashCode should produce the expected result")]
+    public void ResultEqualityComparerEqualsShouldReturnExpectedResult()
+    {
+        // Given
+        int expected = "abc".GetHashCode();
+        Result<string> value = "abc";
+        ResultEqualityComparer<string> comparer = new();
+
+        // When
+        int actual = comparer.GetHashCode(value);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     private sealed class CaseInsensitiveStringComparer : EqualityComparer<string>
     {
         public override bool Equals(string? x, string? y) => string.Equals(x, y, StringComparison.InvariantCultureIgnoreCase);

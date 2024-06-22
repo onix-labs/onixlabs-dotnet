@@ -34,6 +34,15 @@ public sealed class Failure : Result, IValueEquatable<Failure>
     public Exception Exception { get; }
 
     /// <summary>
+    /// Creates a new instance of the <see cref="Result"/> class, where the underlying value represents a failed result.
+    /// </summary>
+    /// <param name="exception">The underlying failed result exception.</param>
+    /// <returns>
+    /// Returns a new instance of the <see cref="Result"/> class, where the underlying value represents a failed result.
+    /// </returns>
+    public static implicit operator Failure(Exception exception) => Failure(exception);
+
+    /// <summary>
     /// Performs an equality comparison between two object instances.
     /// </summary>
     /// <param name="left">The left-hand instance to compare.</param>
@@ -71,6 +80,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
 
     /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result"/> instance.
+    /// <remarks>In the case of a failure, the failure branch is invoked.</remarks>
     /// </summary>
     /// <param name="success">The action to execute when the current <see cref="Result"/> instance is in a successful state.</param>
     /// <param name="failure">The action to execute when the current <see cref="Result"/> instance is in a failed state.</param>
@@ -78,6 +88,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
 
     /// <summary>
     /// Executes the function that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// <remarks>In the case of a failure, the failure branch is invoked.</remarks>
     /// </summary>
     /// <param name="success">The action to execute when the current <see cref="Result"/> instance is in a successful state.</param>
     /// <param name="failure">The action to execute when the current <see cref="Result"/> instance is in a failed state.</param>
@@ -90,6 +101,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
 
     /// <summary>
     /// Applies the provided selector action to the value of the current <see cref="Result"/> instance.
+    /// <remarks>In the case of a failure, the current <see cref="Failure"/> instance is returned.</remarks>
     /// </summary>
     /// <param name="selector">The action to apply to current <see cref="Result"/> instance.</param>
     /// <returns>
@@ -99,6 +111,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// <remarks>In the case of a failure, a new <see cref="Failure{T}"/> instance is returned with the current exception.</remarks>
     /// </summary>
     /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
@@ -109,6 +122,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// <remarks>In the case of a failure, the current <see cref="Failure"/> instance is returned.</remarks>
     /// </summary>
     /// <param name="selector">The action to function to the current <see cref="Result"/> instance.</param>
     /// <returns>
@@ -118,6 +132,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// <remarks>In the case of a failure, a new <see cref="Failure{T}"/> instance is returned with the current exception.</remarks>
     /// </summary>
     /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
@@ -224,6 +239,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
 
     /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result{T}"/> instance.
+    /// <remarks>In the case of a failure, the failure branch is invoked.</remarks>
     /// </summary>
     /// <param name="success">The action to execute when the current <see cref="Result{T}"/> instance is in a successful state.</param>
     /// <param name="failure">The action to execute when the current <see cref="Result{T}"/> instance is in a failed state.</param>
@@ -231,6 +247,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
 
     /// <summary>
     /// Executes the function that matches the value of the current <see cref="Result{T}"/> instance and returns its result.
+    /// <remarks>In the case of a failure, the failure branch is invoked.</remarks>
     /// </summary>
     /// <param name="success">The action to execute when the current <see cref="Result{T}"/> instance is in a successful state.</param>
     /// <param name="failure">The action to execute when the current <see cref="Result{T}"/> instance is in a failed state.</param>
@@ -243,6 +260,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
 
     /// <summary>
     /// Applies the provided selector action to the value of the current <see cref="Result{T}"/> instance.
+    /// <remarks>In the case of a failure, a new <see cref="Failure"/> instance is returned with the current exception.</remarks>
     /// </summary>
     /// <param name="selector">The action to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <returns>
@@ -252,6 +270,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result{T}"/> instance.
+    /// <remarks>In the case of a failure, a new <see cref="Failure{T}"/> instance is returned with the current exception.</remarks>
     /// </summary>
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
@@ -262,6 +281,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result{T}"/> instance.
+    /// <remarks>In the case of a failure, a new <see cref="Failure"/> instance is returned with the current exception.</remarks>
     /// </summary>
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <returns>
@@ -271,6 +291,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result{T}"/> instance.
+    /// <remarks>In the case of a failure, a new <see cref="Failure{T}"/> instance is returned with the current exception.</remarks>
     /// </summary>
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>

@@ -87,13 +87,14 @@ public sealed class ResultNonGenericTests
     public void ResultSuccessValuesShouldBeConsideredEqual()
     {
         // Given
-        Result a = Result.Success();
-        Result b = Success.Instance;
+        Success a = Result.Success();
+        Success b = Success.Instance;
 
         // When / Then
         Assert.Equal(a, b);
-        Assert.True(a == b);
         Assert.True(a.Equals(b));
+        Assert.True(a == b);
+        Assert.False(a != b);
     }
 
     [Fact(DisplayName = "Result Failure values should be considered equal.")]
@@ -101,13 +102,14 @@ public sealed class ResultNonGenericTests
     {
         // Given
         Exception exception = new("failure");
-        Result a = Result.Failure(exception);
-        Result b = exception;
+        Failure a = Result.Failure(exception);
+        Failure b = exception;
 
         // When / Then
         Assert.Equal(a, b);
-        Assert.True(a == b);
         Assert.True(a.Equals(b));
+        Assert.True(a == b);
+        Assert.False(a != b);
 
         // Note that a and b are equal because they share references to the same exception.
     }
@@ -340,6 +342,27 @@ public sealed class ResultNonGenericTests
 
         // Then
         Assert.Equal(Result<int>.Failure(exception), actual);
+    }
+
+    [Fact(DisplayName = "Result Success.Throw should do nothing")]
+    public void ResultSuccessThrowShouldDoNothing()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When / Then
+        result.Throw();
+    }
+
+    [Fact(DisplayName = "Result Failure.Throw should throw Exception")]
+    public void ResultFailureThrowShouldThrowException()
+    {
+        // Given
+        Exception exception = new("failure");
+        Result result = Result.Failure(exception);
+
+        // When / Then
+        Assert.Throws<Exception>(() => result.Throw());
     }
 
     [Fact(DisplayName = "Result Success.ToString should produce the expected result.")]

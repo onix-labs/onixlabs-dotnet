@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using System.Threading.Tasks;
+using OnixLabs.Core.UnitTests.Data;
 using Xunit;
 
 namespace OnixLabs.Core.UnitTests;
@@ -167,26 +169,28 @@ public sealed class ResultTests
     public void ResultSuccessValuesShouldBeConsideredEqual()
     {
         // Given
-        Result<int> a = Result<int>.Success(123);
-        Result<int> b = Result<int>.Success(123);
+        Success<int> a = Result<int>.Success(123);
+        Success<int> b = Result<int>.Success(123);
 
         // When / Then
         Assert.Equal(a, b);
-        Assert.True(a == b);
         Assert.True(a.Equals(b));
+        Assert.True(a == b);
+        Assert.False(a != b);
     }
 
     [Fact(DisplayName = "Result Success values should not be considered equal.")]
     public void ResultSuccessValuesShouldNotBeConsideredEqual()
     {
         // Given
-        Result<int> a = Result<int>.Success(123);
-        Result<int> b = Result<int>.Success(456);
+        Success<int> a = Result<int>.Success(123);
+        Success<int> b = Result<int>.Success(456);
 
         // When / Then
         Assert.NotEqual(a, b);
-        Assert.True(a != b);
         Assert.False(a.Equals(b));
+        Assert.True(a != b);
+        Assert.False(a == b);
     }
 
     [Fact(DisplayName = "Result Failure values should be considered equal.")]
@@ -194,13 +198,14 @@ public sealed class ResultTests
     {
         // Given
         Exception exception = new("failure");
-        Result<int> a = Result<int>.Failure(exception);
-        Result<int> b = Result<int>.Failure(exception);
+        Failure<int> a = Result<int>.Failure(exception);
+        Failure<int> b = Result<int>.Failure(exception);
 
         // When / Then
         Assert.Equal(a, b);
-        Assert.True(a == b);
         Assert.True(a.Equals(b));
+        Assert.True(a == b);
+        Assert.False(a != b);
 
         // Note that a and b are equal because they share references to the same exception.
     }
@@ -211,13 +216,14 @@ public sealed class ResultTests
         // Given
         Exception exception1 = new("failure a");
         Exception exception2 = new("failure b");
-        Result<int> a = Result<int>.Failure(exception1);
-        Result<int> b = Result<int>.Failure(exception2);
+        Failure<int> a = Result<int>.Failure(exception1);
+        Failure<int> b = Result<int>.Failure(exception2);
 
         // When / Then
         Assert.NotEqual(a, b);
-        Assert.True(a != b);
         Assert.False(a.Equals(b));
+        Assert.True(a != b);
+        Assert.False(a == b);
     }
 
     [Fact(DisplayName = "Result Success and Failure values should not be considered equal.")]
@@ -230,8 +236,9 @@ public sealed class ResultTests
 
         // When / Then
         Assert.NotEqual(a, b);
-        Assert.True(a != b);
         Assert.False(a.Equals(b));
+        Assert.True(a != b);
+        Assert.False(a == b);
     }
 
     [Fact(DisplayName = "Result Success.GetHashCode should produce the expected result.")]
@@ -540,6 +547,28 @@ public sealed class ResultTests
         Assert.Equal(Result<int>.Failure(exception), actual);
     }
 
+    [Fact(DisplayName = "Result Success.Throw should do nothing")]
+    public void ResultSuccessThrowShouldDoNothing()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(123);
+
+        // When / Then
+        result.Throw();
+    }
+
+    [Fact(DisplayName = "Result Failure.Throw should throw Exception")]
+    public void ResultFailureThrowShouldThrowException()
+    {
+        // Given
+        Exception exception = new("failure");
+        Result<int> result = Result<int>.Failure(exception);
+
+        // When / Then
+        Assert.Throws<Exception>(() => result.Throw());
+    }
+
+
     [Fact(DisplayName = "Result Success.ToString should produce the expected result.")]
     public void ResultSuccessToStringShouldProduceExpectedResult()
     {
@@ -571,5 +600,63 @@ public sealed class ResultTests
         // Then
         Assert.Equal("System.Exception: failure", numberString);
         Assert.Equal("System.Exception: failure", textString);
+    }
+
+    [Fact(DisplayName = "Result Success.Dispose should dispose of the underlying value.")]
+    public void ResultSuccessDisposeShouldDisposeUnderlyingValue()
+    {
+        // Given
+        Disposable disposable = new();
+        Success<Disposable> result = Result<Disposable>.Success(disposable);
+
+        // When
+        result.Dispose();
+
+        // Then
+        Assert.True(disposable.IsDisposed);
+    }
+
+    [Fact(DisplayName = "Result Failure.Dispose should do nothing.")]
+    public void ResultFailureDisposeShouldDoNothing()
+    {
+        // Given
+        Disposable disposable = new();
+        Exception exception = new("failure");
+        Failure<Disposable> result = Result<Disposable>.Failure(exception);
+
+        // When
+        result.Dispose();
+
+        // Then
+        Assert.False(disposable.IsDisposed);
+    }
+
+    [Fact(DisplayName = "Result Success.DisposeAsync should dispose of the underlying value.")]
+    public async Task ResultSuccessDisposeAsyncShouldDisposeUnderlyingValue()
+    {
+        // Given
+        Disposable disposable = new();
+        Success<Disposable> result = Result<Disposable>.Success(disposable);
+
+        // When
+        await result.DisposeAsync();
+
+        // Then
+        Assert.True(disposable.IsDisposed);
+    }
+
+    [Fact(DisplayName = "Result Failure.DisposeAsync should do nothing.")]
+    public async Task ResultFailureDisposeAsyncShouldDoNothing()
+    {
+        // Given
+        Disposable disposable = new();
+        Exception exception = new("failure");
+        Failure<Disposable> result = Result<Disposable>.Failure(exception);
+
+        // When
+        await result.DisposeAsync();
+
+        // Then
+        Assert.False(disposable.IsDisposed);
     }
 }

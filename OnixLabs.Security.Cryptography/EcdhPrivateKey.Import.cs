@@ -14,6 +14,7 @@
 
 using System;
 using System.Security.Cryptography;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -24,7 +25,8 @@ public sealed partial class EcdhPrivateKey
     /// </summary>
     /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
     /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
-    public static EcdhPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data) => ImportPkcs8PrivateKey(data, out int _);
+    public static EcdhPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data) =>
+        ImportPkcs8PrivateKey(data, out int _);
 
     /// <summary>
     /// Imports the EC Diffie-Hellman cryptographic private key data in PKCS #8 format.
@@ -41,12 +43,30 @@ public sealed partial class EcdhPrivateKey
     }
 
     /// <summary>
+    /// Imports the EC Diffie-Hellman cryptographic private key data in PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
+    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    public static EcdhPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data) =>
+        ImportPkcs8PrivateKey(data, out int _);
+
+    /// <summary>
+    /// Imports the EC Diffie-Hellman cryptographic private key data in PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
+    /// <param name="bytesRead">The number of bytes read from the input data.</param>
+    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    public static EcdhPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data, out int bytesRead) =>
+        ImportPkcs8PrivateKey(data.ToByteArray(), out bytesRead);
+
+    /// <summary>
     /// Imports the EC Diffie-Hellman cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
     /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
     /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
-    public static EcdhPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password) => ImportPkcs8PrivateKey(data, password, out int _);
+    public static EcdhPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password) =>
+        ImportPkcs8PrivateKey(data, password, out int _);
 
     /// <summary>
     /// Imports the EC Diffie-Hellman cryptographic private key data in encrypted PKCS #8 format.
@@ -62,6 +82,25 @@ public sealed partial class EcdhPrivateKey
         byte[] keyData = key.ExportECPrivateKey();
         return new EcdhPrivateKey(keyData);
     }
+
+    /// <summary>
+    /// Imports the EC Diffie-Hellman cryptographic private key data in encrypted PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
+    /// <param name="password">The password required for password based decryption.</param>
+    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    public static EcdhPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data, ReadOnlySpan<char> password) =>
+        ImportPkcs8PrivateKey(data, password, out int _);
+
+    /// <summary>
+    /// Imports the EC Diffie-Hellman cryptographic private key data in encrypted PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
+    /// <param name="password">The password required for password based decryption.</param>
+    /// <param name="bytesRead">The number of bytes read from the input data.</param>
+    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    public static EcdhPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data, ReadOnlySpan<char> password, out int bytesRead) =>
+        ImportPkcs8PrivateKey(data.ToByteArray(), password, out bytesRead);
 
     /// <summary>
     /// Imports the key data into a new <see cref="ECDiffieHellman"/> instance.

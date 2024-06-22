@@ -27,6 +27,13 @@ public abstract partial class PrivateKey
     public byte[] ToByteArray() => KeyData.Copy();
 
     /// <summary>
+    /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="PrivateKey"/> instance.
+    /// </summary>
+    /// <param name="algorithmName">The name of the algorithm that was used to produce the associated private key.</param>
+    /// <returns>Returns a new <see cref="NamedPrivateKey"/> from the current <see cref="PrivateKey"/> instance.</returns>
+    public NamedPrivateKey ToNamedPrivateKey(string algorithmName) => new(this, algorithmName);
+
+    /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
     /// <param name="provider">The format provider that will be used to determine the format of the string.</param>

@@ -176,16 +176,15 @@ public static class IEnumerableExtensions
     public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) => !enumerable.Any(predicate);
 
     /// <summary>Determines whether two sequences are <see langword="null"/>, or equal by comparing their elements by using a specified <see cref="T:IEqualityComparer{T}" />.</summary>
-    /// <param name="first">An <see cref="T:IEnumerable{T}" /> to compare to <paramref name="second" />.</param>
-    /// <param name="second">An <see cref="T:IEnumerable{T}" /> to compare to the first sequence.</param>
+    /// <param name="enumerable">An <see cref="T:IEnumerable{T}" /> to compare to <paramref name="other" />.</param>
+    /// <param name="other">An <see cref="T:IEnumerable{T}" /> to compare to the first sequence.</param>
     /// <param name="comparer">An <see cref="T:IEqualityComparer{T}" /> to use to compare elements.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns> Returns <see langword="true" /> if the two source sequences are <see langword="null"/>, or of equal length and their corresponding elements compare equal according to <paramref name="comparer" />; otherwise, <see langword="false" />.</returns>
-    public static bool SequenceEqualOrNull<T>(this IEnumerable<T>? first, IEnumerable<T>? second, EqualityComparer<T>? comparer = null)
+    public static bool SequenceEqualOrNull<T>(this IEnumerable<T>? enumerable, IEnumerable<T>? other, EqualityComparer<T>? comparer = null)
     {
-        if (first is null && second is null) return true;
-        if (first is null || second is null) return false;
-        return first.SequenceEqual(second, comparer ?? EqualityComparer<T>.Default);
+        if (enumerable is null || other is null) return enumerable is null && other is null;
+        return enumerable.SequenceEqual(other, comparer ?? EqualityComparer<T>.Default);
     }
 
     /// <summary>

@@ -71,7 +71,7 @@ public static class ObjectExtensions
     {
         null => 1,
         T other => comparable.CompareTo(other),
-        _ => throw new ArgumentException($"Object must be of type {typeof(T).Name}", nameof(obj))
+        _ => throw new ArgumentException($"Object must be of type {typeof(T).FullName}", nameof(obj))
     };
 
     /// <summary>

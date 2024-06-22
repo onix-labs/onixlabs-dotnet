@@ -26,7 +26,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <summary>
     /// Gets a value indicating that the optional value is absent.
     /// </summary>
-    public static readonly Optional<T> None = new None<T>();
+    public static readonly None<T> None = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Optional{T}"/> class.

@@ -104,4 +104,21 @@ public sealed class SecurityTokenTests
         // Then
         Assert.NotEqual(leftHashCode, rightHashCode);
     }
+
+    [Theory(DisplayName = "SecurityToken.Length should produce the expected result")]
+    [InlineData("a", 1)]
+    [InlineData("ab", 2)]
+    [InlineData("abcd", 4)]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", 26)]
+    public void SecurityTokenLengthShouldProduceExpectedResult(string value, int expected)
+    {
+        // Given
+        SecurityToken token = new(value);
+
+        // When
+        int actual = token.Length;
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
 }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Core.Text;
 
@@ -24,12 +25,12 @@ public interface IBaseCodec
     /// <summary>
     /// The exception message to throw for encoding operations.
     /// </summary>
-    protected const string EncodingFormatException = "The specified value was not in the correct format and could not be encoded.";
+    protected const string EncodingFormatException = "Encoding operation failed due to an invalid value or format provider.";
 
     /// <summary>
     /// The exception message to throw for decoding operations.
     /// </summary>
-    protected const string DecodingFormatException = "The specified value was not in the correct format and could not be decoded.";
+    protected const string DecodingFormatException = "Decoding operation failed due to an invalid value or format provider.";
 
     /// <summary>
     /// Gets a new <see cref="Base16Codec"/> instance.
@@ -129,6 +130,31 @@ public interface IBaseCodec
             Base64FormatProvider => Base64.TryDecode(value, provider, out result),
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Tries to get the correct format provider, or the default provider is no format provider is present, or if the format provider is a culture info format provider.
+    /// </summary>
+    /// <param name="provider">The format provider to check.</param>
+    /// <param name="defaultProvider">The default format provider to use if no format provider is present.</param>
+    /// <param name="result">The correct format provider, or the default provider is no format provider is present.</param>
+    /// <typeparam name="T">The underlying type of the expected format provider.</typeparam>
+    /// <returns>Returns <see langword="true"/> if the format provider is correct or not present; otherwise, <see langword="false"/> if the format provider is not of the correct type.</returns>
+    protected static bool TryGetFormatProvider<T>(IFormatProvider? provider, T defaultProvider, out T result) where T : IFormatProvider
+    {
+        switch (provider)
+        {
+            case null:
+            case CultureInfo:
+                result = defaultProvider;
+                return true;
+            case T typedFormatProvider:
+                result = typedFormatProvider;
+                return true;
+        }
+
+        result = defaultProvider;
+        return false;
     }
 
     /// <summary>

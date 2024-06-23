@@ -27,6 +27,13 @@ public abstract partial class PublicKey
     public byte[] ToByteArray() => KeyData.Copy();
 
     /// <summary>
+    /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.
+    /// </summary>
+    /// <param name="algorithmName">The name of the algorithm that was used to produce the associated public key.</param>
+    /// <returns>Returns a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.</returns>
+    public NamedPublicKey ToNamedPublicKey(string algorithmName) => new(this, algorithmName);
+
+    /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
     /// <param name="provider">The format provider that will be used to determine the format of the string.</param>

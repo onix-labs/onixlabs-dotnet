@@ -12,14 +12,58 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Text;
 using OnixLabs.Core.Text;
+using OnixLabs.Core.UnitTests.Data;
 using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base64CodecTests
 {
+    [Fact(DisplayName = "Base64Codec.Encode should throw FormatException when the format provider is invalid")]
+    public void Base64CodecEncodeShouldThrowFormatExceptionWhenFormatProviderIsInvalid()
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base64;
+        byte[] bytes = "Hello, World!".ToByteArray();
+
+        // When
+        Exception exception = Assert.Throws<FormatException>(() => codec.Encode(bytes, InvalidFormatProvider.Instance));
+
+        // Then
+        Assert.Equal("Encoding operation failed due to an invalid value or format provider.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Base64Codec.Decode should throw FormatException when the format provider is invalid")]
+    public void Base64CodecDecodeShouldThrowFormatExceptionWhenTheFormatProviderIsInvalid()
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base64;
+        const string value = "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=";
+
+        // When
+        Exception exception = Assert.Throws<FormatException>(() => codec.Decode(value, InvalidFormatProvider.Instance));
+
+        // Then
+        Assert.Equal("Decoding operation failed due to an invalid value or format provider.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Base64Codec.Decode should throw FormatException when the value is invalid")]
+    public void Base64CodecDecodeShouldThrowFormatExceptionWhenTheValueIsInvalid()
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base64;
+        const string value = "*INVALID_VALUE*";
+
+        // When
+        Exception exception = Assert.Throws<FormatException>(() => codec.Decode(value));
+
+        // Then
+        Assert.Equal("Decoding operation failed due to an invalid value or format provider.", exception.Message);
+    }
+
     [Theory(DisplayName = "Base64Codec.Encode should produce the expected result")]
     [InlineData("", "")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=")]

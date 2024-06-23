@@ -480,6 +480,76 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.SequenceEqualOrNull should return true when the current and other enumerables are null.")]
+    public void SequenceEqualOrNullShouldReturnTrueWhenCurrentAndOtherEnumerablesAreNull()
+    {
+        // Given
+        IEnumerable<int>? enumerable = null;
+        IEnumerable<int>? other = null;
+
+        // When
+        bool result = enumerable.SequenceEqualOrNull(other);
+
+        // Then
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SequenceEqualOrNull should return false when the current enumerable is not null and other enumerable is null.")]
+    public void SequenceEqualOrNullShouldReturnTrueWhenCurrentEnumerableIsNotNullAndOtherEnumerableIsNull()
+    {
+        // Given
+        IEnumerable<int> enumerable = [1, 2, 3];
+        IEnumerable<int>? other = null;
+
+        // When
+        bool result = enumerable.SequenceEqualOrNull(other);
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SequenceEqualOrNull should return false when the current enumerable is null and other enumerable is not null.")]
+    public void SequenceEqualOrNullShouldReturnTrueWhenCurrentEnumerableIsNullAndOtherEnumerableIsNotNull()
+    {
+        // Given
+        IEnumerable<int>? enumerable = null;
+        IEnumerable<int> other = [1, 2, 3];
+
+        // When
+        bool result = enumerable.SequenceEqualOrNull(other);
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SequenceEqualOrNull should return true when the current enumerable is equal to the other enumerable.")]
+    public void SequenceEqualOrNullShouldReturnTrueWhenCurrentEnumerableIsEqualToTheOtherEnumerable()
+    {
+        // Given
+        IEnumerable<int>? enumerable = [1, 2, 3];
+        IEnumerable<int> other = [1, 2, 3];
+
+        // When
+        bool result = enumerable.SequenceEqualOrNull(other);
+
+        // Then
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SequenceEqualOrNull should return false when the current enumerable is not equal to the other enumerable.")]
+    public void SequenceEqualOrNullShouldReturnTrueWhenCurrentEnumerableIsNotEqualToTheOtherEnumerable()
+    {
+        // Given
+        IEnumerable<int>? enumerable = [1, 2, 3];
+        IEnumerable<int> other = [3, 2, 1];
+
+        // When
+        bool result = enumerable.SequenceEqualOrNull(other);
+
+        // Then
+        Assert.False(result);
+    }
+
     [Fact(DisplayName = "IEnumerable.SingleOrNone should return success none when the enumerable contains no elements.")]
     public void SingleOrNoneShouldReturnSuccessNoneWhenEnumerableContainsNoElements()
     {

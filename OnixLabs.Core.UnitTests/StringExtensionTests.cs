@@ -188,18 +188,6 @@ public sealed class StringExtensionTests
         Assert.Equal(second, actual.Second);
     }
 
-    [Theory(DisplayName = "String.Wrap should wrap the current string value between the before and after string values")]
-    [InlineData("<", "value", ">", "<value>")]
-    [InlineData("BEFORE:", "value", ":AFTER", "BEFORE:value:AFTER")]
-    public void WrapShouldProduceExpectedResult(string before, string value, string after, string expected)
-    {
-        // When
-        string actual = value.Wrap(before, after);
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
     [Theory(DisplayName = "String.ToEscapedString should produce the expected result")]
     [InlineData("\n", @"\n")]
     [InlineData("\r", @"\r")]
@@ -207,10 +195,91 @@ public sealed class StringExtensionTests
     [InlineData("\"", @"\""")]
     [InlineData("\'", @"\'")]
     [InlineData("\\", @"\\")]
+    [InlineData("\u0000", @"\u0000")]
+    [InlineData("\u0001", @"\u0001")]
+    [InlineData("\u0002", @"\u0002")]
+    [InlineData("\u0003", @"\u0003")]
+    [InlineData("\u0004", @"\u0004")]
+    [InlineData("\u0005", @"\u0005")]
+    [InlineData("\u0006", @"\u0006")]
+    [InlineData("\u0007", @"\u0007")]
+    [InlineData("\u0008", @"\u0008")]
+    [InlineData("\u000B", @"\u000B")]
+    [InlineData("\u000C", @"\u000C")]
+    [InlineData("\u000E", @"\u000E")]
+    [InlineData("\u000F", @"\u000F")]
+    [InlineData("\u0010", @"\u0010")]
+    [InlineData("\u0011", @"\u0011")]
+    [InlineData("\u0012", @"\u0012")]
+    [InlineData("\u0013", @"\u0013")]
+    [InlineData("\u0014", @"\u0014")]
+    [InlineData("\u0015", @"\u0015")]
+    [InlineData("\u0016", @"\u0016")]
+    [InlineData("\u0017", @"\u0017")]
+    [InlineData("\u0018", @"\u0018")]
+    [InlineData("\u0019", @"\u0019")]
+    [InlineData("\u001A", @"\u001A")]
+    [InlineData("\u001B", @"\u001B")]
+    [InlineData("\u001C", @"\u001C")]
+    [InlineData("\u001D", @"\u001D")]
+    [InlineData("\u001E", @"\u001E")]
+    [InlineData("\u001F", @"\u001F")]
+    [InlineData("\u007F", @"\u007F")]
+    [InlineData("\u0085", @"\u0085")]
+    [InlineData("\u0098", @"\u0098")]
+    [InlineData("\u009C", @"\u009C")]
+    [InlineData("\u009D", @"\u009D")]
+    [InlineData("\u009E", @"\u009E")]
+    [InlineData("\u009F", @"\u009F")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")]
     public void ToEscapedStringShouldProduceExpectedResult(string value, string expected)
     {
         // When
         string actual = value.ToEscapedString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "String.TryCopyTo should return true if the string is successfully copied to the target span")]
+    public void StringTryCopyToShouldReturnTrueIfStringIsSuccessfullyCopiedToTargetSpan()
+    {
+        // Given
+        const string expected = "Hello, World!";
+        int expectedCharsWritten = 13;
+        Span<char> destination = stackalloc char[expectedCharsWritten];
+
+        // When
+        bool result = expected.TryCopyTo(destination, out expectedCharsWritten);
+        string actual = destination.ToString();
+
+        // Then
+        Assert.True(result);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "String.TryCopyTo should return false if the string not is successfully copied to the target span")]
+    public void StringTryCopyToShouldReturnFalseIfStringIsNotSuccessfullyCopiedToTargetSpan()
+    {
+        // Given
+        const string expected = "Hello, World!";
+        int expectedCharsWritten = 0;
+        Span<char> destination = stackalloc char[expectedCharsWritten];
+
+        // When
+        bool result = expected.TryCopyTo(destination, out expectedCharsWritten);
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Theory(DisplayName = "String.Wrap should wrap the current string value between the before and after string values")]
+    [InlineData("<", "value", ">", "<value>")]
+    [InlineData("BEFORE:", "value", ":AFTER", "BEFORE:value:AFTER")]
+    public void WrapShouldProduceExpectedResult(string before, string value, string after, string expected)
+    {
+        // When
+        string actual = value.Wrap(before, after);
 
         // Then
         Assert.Equal(expected, actual);

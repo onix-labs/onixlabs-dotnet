@@ -16,6 +16,48 @@ namespace OnixLabs.Security.UnitTests;
 
 public sealed class SecurityTokenBuilderTests
 {
+    [Fact(DisplayName = "SecurityTokenBuilder should be constructable from pseudo-random number generator with length")]
+    public void SecurityTokenBuilderShouldBeConstructableFromPseudoRandomNumberGeneratorWithLength()
+    {
+        // Given / When
+        // ReSharper disable once JoinDeclarationAndInitializer
+        SecurityTokenBuilder? builder;
+
+        // When
+        builder = SecurityTokenBuilder.CreatePseudoRandom(32);
+
+        // Then
+        Assert.NotNull(builder);
+    }
+
+    [Fact(DisplayName = "SecurityTokenBuilder should be constructable from pseudo-random number generator with length and random instance")]
+    public void SecurityTokenBuilderShouldBeConstructableFromPseudoRandomNumberGeneratorWithLengthAndRandomInstance()
+    {
+        // Given / When
+        // ReSharper disable once JoinDeclarationAndInitializer
+        SecurityTokenBuilder? builder;
+
+        // When
+        builder = SecurityTokenBuilder.CreatePseudoRandom(32, Random.Shared);
+
+        // Then
+        Assert.NotNull(builder);
+    }
+
+    [Fact(DisplayName = "SecurityTokenBuilder should be constructable from secure-random number generator with length")]
+    public void SecurityTokenBuilderShouldBeConstructableFromSecureRandomNumberGeneratorWithLength()
+    {
+        // Given / When
+        // ReSharper disable once JoinDeclarationAndInitializer
+        SecurityTokenBuilder? builder;
+
+        // When
+        builder = SecurityTokenBuilder.CreateSecureRandom(32);
+
+        // Then
+        Assert.NotNull(builder);
+    }
+
     [Theory(DisplayName = "SecurityTokenBuilder.UseCharacters should produce the expected result")]
     [InlineData(1, 0, "3")]
     [InlineData(1, 4, "!")]

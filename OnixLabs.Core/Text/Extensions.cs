@@ -18,7 +18,7 @@ using System.ComponentModel;
 namespace OnixLabs.Core.Text;
 
 /// <summary>
-/// Provides extension methods for read-only spans.
+/// Provides extension methods for byte arrays and read-only spans.
 /// </summary>
 // ReSharper disable UnusedMethodReturnValue.Global
 [EditorBrowsable(EditorBrowsableState.Never)]

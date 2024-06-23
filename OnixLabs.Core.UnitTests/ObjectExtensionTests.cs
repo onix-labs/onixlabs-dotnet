@@ -50,6 +50,68 @@ public sealed class ObjectExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "CompareToObject should produce zero if the current IComparable<T> is equal to the specified object.")]
+    public void CompareToObjectShouldProduceZeroIfTheCurrentIComparableIsEqualToTheSpecifiedObject()
+    {
+        // Given
+        const int expected = 0;
+
+        // When
+        int actual = 123.CompareToObject(123);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "CompareToObject should produce positive one if the specified object is null.")]
+    public void CompareToObjectShouldProducePositiveOneIfTheSpecifiedObjectIsNull()
+    {
+        // Given
+        const int expected = 1;
+
+        // When
+        int actual = 124.CompareToObject(null);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "CompareToObject should produce positive one if the current IComparable<T> greater than the specified object.")]
+    public void CompareToObjectShouldProducePositiveOneIfTheCurrentIComparableIsGreaterThanTheSpecifiedObject()
+    {
+        // Given
+        const int expected = 1;
+
+        // When
+        int actual = 124.CompareToObject(123);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "CompareToObject should produce negative one if the current IComparable<T> greater than the specified object.")]
+    public void CompareToObjectShouldProduceNegativeOneIfTheCurrentIComparableIsGreaterThanTheSpecifiedObject()
+    {
+        // Given
+        const int expected = -1;
+
+        // When
+        int actual = 122.CompareToObject(123);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "CompareToObject should throw ArgumentException if the specified object is of the incorrect type.")]
+    public void CompareToObjectShouldThrowArgumentExceptionIfSpecifiedObjectIsOfIncorrectType()
+    {
+        // When
+        Exception exception = Assert.Throws<ArgumentException>(() => 122.CompareToObject(123.456));
+
+        // Then
+        Assert.Equal("Object must be of type System.Int32 (Parameter 'obj')", exception.Message);
+    }
+
     [Fact(DisplayName = "ToRecordString should produce a record formatted string")]
     public void ToRecordStringShouldProduceExpectedResult()
     {

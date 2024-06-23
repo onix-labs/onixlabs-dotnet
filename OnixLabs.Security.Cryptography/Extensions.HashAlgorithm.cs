@@ -36,6 +36,16 @@ public static class HashAlgorithmExtensions
     /// <param name="data">The input data to compute the hash for.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1) =>
+        algorithm.ComputeHash(new MemoryStream(data.ToByteArray()), rounds);
+
+    /// <summary>
+    /// Computes the hash value for the specified byte array.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
+    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns the computed hash value.</returns>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, byte[] data, int rounds) =>
         algorithm.ComputeHash(new MemoryStream(data), rounds);
 
@@ -77,6 +87,17 @@ public static class HashAlgorithmExtensions
         while (--rounds > 0) data = algorithm.ComputeHash(data);
         return data;
     }
+
+    /// <summary>
+    /// Asynchronously computes the hash value for the specified <see cref="Stream"/> object.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
+    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <param name="token">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a task that represents the asynchronous compute hash operation and wraps the computed hash value.</returns>
+    public static async Task<byte[]> ComputeHashAsync(this HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1, CancellationToken token = default) =>
+        await algorithm.ComputeHashAsync(new MemoryStream(data.ToByteArray()), rounds, token);
 
     /// <summary>
     /// Asynchronously computes the hash value for the specified <see cref="Stream"/> object.

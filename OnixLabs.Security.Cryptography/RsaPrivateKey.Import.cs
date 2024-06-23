@@ -14,6 +14,7 @@
 
 using System;
 using System.Security.Cryptography;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -24,7 +25,8 @@ public sealed partial class RsaPrivateKey
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data) => ImportPkcs8PrivateKey(data, out int _);
+    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data) =>
+        ImportPkcs8PrivateKey(data, out int _);
 
     /// <summary>
     /// Imports the RSA cryptographic private key data in PKCS #8 format.
@@ -41,12 +43,30 @@ public sealed partial class RsaPrivateKey
     }
 
     /// <summary>
+    /// Imports the RSA cryptographic private key data in PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
+    public static RsaPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data) =>
+        ImportPkcs8PrivateKey(data, out int _);
+
+    /// <summary>
+    /// Imports the RSA cryptographic private key data in PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="bytesRead">The number of bytes read from the input data.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
+    public static RsaPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data, out int bytesRead) =>
+        ImportPkcs8PrivateKey(data.ToByteArray(), out bytesRead);
+
+    /// <summary>
     /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
     /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
-    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password) => ImportPkcs8PrivateKey(data, password, out int _);
+    public static RsaPrivateKey ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password) =>
+        ImportPkcs8PrivateKey(data, password, out int _);
 
     /// <summary>
     /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
@@ -62,6 +82,25 @@ public sealed partial class RsaPrivateKey
         byte[] keyData = key.ExportRSAPrivateKey();
         return new RsaPrivateKey(keyData);
     }
+
+    /// <summary>
+    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="password">The password required for password based decryption.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
+    public static RsaPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data, ReadOnlySpan<char> password) =>
+        ImportPkcs8PrivateKey(data, password, out int _);
+
+    /// <summary>
+    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="password">The password required for password based decryption.</param>
+    /// <param name="bytesRead">The number of bytes read from the input data.</param>
+    /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance from the imported cryptographic private key data.</returns>
+    public static RsaPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data, ReadOnlySpan<char> password, out int bytesRead) =>
+        ImportPkcs8PrivateKey(data.ToByteArray(), password, out bytesRead);
 
     /// <summary>
     /// Imports the key data into a new <see cref="RSA"/> instance.

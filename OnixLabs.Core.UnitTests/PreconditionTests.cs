@@ -30,6 +30,13 @@ public sealed class PreconditionTests
         Assert.Equal("Argument must satisfy the specified condition.", exception.Message);
     }
 
+    [Fact(DisplayName = "Check should not throw an InvalidOperationException when the condition is true")]
+    public void CheckShouldNotThrowInvalidOperationExceptionWhenConditionIsTrue()
+    {
+        // Given / When / Then
+        Check(true);
+    }
+
     [Fact(DisplayName = "CheckNotNull should throw an InvalidOperationException when the condition is null")]
     public void CheckNotNullShouldThrowInvalidOperationExceptionWhenConditionIsNull()
     {
@@ -38,6 +45,13 @@ public sealed class PreconditionTests
 
         // Then
         Assert.Equal("Argument must not be null.", exception.Message);
+    }
+
+    [Fact(DisplayName = "CheckNotNull should not throw an InvalidOperationException when the condition is not null")]
+    public void CheckNotNullShouldNotThrowInvalidOperationExceptionWhenConditionIsNotNull()
+    {
+        // Given / When / Then
+        CheckNotNull(new object());
     }
 
     [Fact(DisplayName = "CheckNotNullOrEmpty should throw an InvalidOperationException when the value is null")]
@@ -60,6 +74,19 @@ public sealed class PreconditionTests
         Assert.Equal("Argument must not be null or empty.", exception.Message);
     }
 
+    [Fact(DisplayName = "CheckNotNullOrEmpty should return the argument value when the value is not null and not empty")]
+    public void CheckNotNullShouldReturnArgumentValueWhenValueIsNotNullAndNotEmpty()
+    {
+        // Given
+        const string expected = "Hello, World!";
+
+        // When
+        string actual = CheckNotNullOrEmpty(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "CheckNotNullOrWhiteSpace should throw an InvalidOperationException when the value is null")]
     public void CheckNotNullOrWhiteSpaceShouldThrowInvalidOperationExceptionWhenValueIsNull()
     {
@@ -80,6 +107,19 @@ public sealed class PreconditionTests
         Assert.Equal("Argument must not be null or whitespace.", exception.Message);
     }
 
+    [Fact(DisplayName = "CheckNotNullOrWhiteSpace should return the argument value when the value is not null and not whitespace")]
+    public void CheckNotNullShouldReturnArgumentValueWhenValueIsNotNullAndNotWhiteSpace()
+    {
+        // Given
+        const string expected = "Hello, World!";
+
+        // When
+        string actual = CheckNotNullOrWhiteSpace(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Require should throw an ArgumentException when the condition is false")]
     public void RequireShouldThrowArgumentExceptionWhenConditionIsFalse()
     {
@@ -90,6 +130,13 @@ public sealed class PreconditionTests
         Assert.Equal("Argument must satisfy the specified condition.", exception.Message);
     }
 
+    [Fact(DisplayName = "Require should not throw an InvalidOperationException when the condition is true")]
+    public void RequireShouldNotThrowInvalidOperationExceptionWhenConditionIsTrue()
+    {
+        // Given / When / Then
+        Require(true);
+    }
+
     [Fact(DisplayName = "RequireWithinRange should throw an ArgumentOutOfRangeException when the condition is false")]
     public void RequireWithinRangeShouldThrowArgumentOutOfRangeExceptionWhenConditionIsFalse()
     {
@@ -98,6 +145,14 @@ public sealed class PreconditionTests
 
         // Then
         Assert.Equal("Argument must be within range.", exception.Message);
+    }
+
+    [Theory(DisplayName = "RequireWithinRange should not throw an ArgumentOutOfRangeException when the condition is true")]
+    [InlineData(100, 0, 123)]
+    public void RequireWithinRangeShouldNotThrowArgumentOutOfRangeExceptionWhenConditionIsTrue(int value, int min, int max)
+    {
+        // Given / When / Then
+        RequireWithinRange(value >= min && value <= max);
     }
 
     [Fact(DisplayName = "RequireWithinRangeInclusive should throw an ArgumentOutOfRangeException when the value falls below the specified range")]
@@ -120,6 +175,27 @@ public sealed class PreconditionTests
         Assert.Equal("Argument must be within range.", exception.Message);
     }
 
+    [Fact(DisplayName = "RequireWithinRangeInclusive should not throw an ArgumentOutOfRangeException when the value is exactly the minimum value")]
+    public void RequireWithinRangeInclusiveShouldNotThrowArgumentOutOfRangeExceptionWhenValueIsExactlyTheMinimumValue()
+    {
+        // Given / When / Then
+        RequireWithinRangeInclusive(1, 1, 3);
+    }
+
+    [Fact(DisplayName = "RequireWithinRangeInclusive should not throw an ArgumentOutOfRangeException when the value is exactly the maximum value")]
+    public void RequireWithinRangeInclusiveShouldNotThrowArgumentOutOfRangeExceptionWhenValueIsExactlyTheMaximumValue()
+    {
+        // Given / When / Then
+        RequireWithinRangeInclusive(3, 1, 3);
+    }
+
+    [Fact(DisplayName = "RequireWithinRangeInclusive should not throw an ArgumentOutOfRangeException when the value is between the specified range")]
+    public void RequireWithinRangeInclusiveShouldNotThrowArgumentOutOfRangeExceptionWhenValueIsBetweenSpecifiedRange()
+    {
+        // Given / When / Then
+        RequireWithinRangeInclusive(2, 1, 3);
+    }
+
     [Fact(DisplayName = "RequireWithinRangeExclusive should throw an ArgumentOutOfRangeException when the value falls below the specified range")]
     public void RequireWithinRangeExclusiveShouldThrowArgumentOutOfRangeExceptionWhenValueFallsBelowSpecifiedRange()
     {
@@ -140,6 +216,13 @@ public sealed class PreconditionTests
         Assert.Equal("Argument must be within range.", exception.Message);
     }
 
+    [Fact(DisplayName = "RequireWithinRangeExclusive should not throw an ArgumentOutOfRangeException when the value falls between the specified range")]
+    public void RequireWithinRangeExclusiveShouldThrowArgumentOutOfRangeExceptionWhenValueFallsBetweenSpecifiedRange()
+    {
+        // Given / When / Then
+        RequireWithinRangeExclusive(3, 2, 4);
+    }
+
     [Fact(DisplayName = "RequireNotNull should throw an ArgumentNullException when the condition is null")]
     public void RequireNotNullShouldThrowArgumentNullExceptionWhenConditionIsNull()
     {
@@ -148,6 +231,13 @@ public sealed class PreconditionTests
 
         // Then
         Assert.Equal("Argument must not be null.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireNotNull should not throw an InvalidOperationException when the condition is not null")]
+    public void RequireNotNullShouldNotThrowInvalidOperationExceptionWhenConditionIsNotNull()
+    {
+        // Given / When / Then
+        RequireNotNull(new object());
     }
 
     [Fact(DisplayName = "RequireNotNullOrEmpty should throw an ArgumentException when the value is null")]
@@ -170,6 +260,19 @@ public sealed class PreconditionTests
         Assert.Equal("Argument must not be null or empty.", exception.Message);
     }
 
+    [Fact(DisplayName = "RequireNotNullOrEmpty should return the argument value when the value is not null and not empty")]
+    public void RequireNotNullShouldReturnArgumentValueWhenValueIsNotNullAndNotEmpty()
+    {
+        // Given
+        const string expected = "Hello, World!";
+
+        // When
+        string actual = RequireNotNullOrEmpty(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "RequireNotNullOrWhiteSpace should throw an ArgumentException when the value is null")]
     public void RequireNotNullOrWhiteSpaceShouldThrowArgumentExceptionWhenValueIsNull()
     {
@@ -190,6 +293,19 @@ public sealed class PreconditionTests
         Assert.Equal("Argument must not be null or whitespace.", exception.Message);
     }
 
+    [Fact(DisplayName = "RequireNotNullOrWhiteSpace should return the argument value when the value is not null and not whitespace")]
+    public void RequireNotNullShouldReturnArgumentValueWhenValueIsNotNullAndNotWhiteSpace()
+    {
+        // Given
+        const string expected = "Hello, World!";
+
+        // When
+        string actual = RequireNotNullOrWhiteSpace(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "RequireIsDefined should throw an ArgumentOutOfRangeException when the specified enum value is not defined")]
     public void RequireIsDefinedShouldThrowArgumentOutOfRangeExceptionWhenSpecifiedEnumValueIsNotDefined()
     {
@@ -198,5 +314,12 @@ public sealed class PreconditionTests
 
         // Then
         Assert.Equal("Invalid Shape enum value: 2. Valid values include: Square, Circle.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireIsDefined should not throw an ArgumentOutOfRangeException when the specified enum value is defined")]
+    public void RequireIsDefinedShouldNotThrowArgumentOutOfRangeExceptionWhenSpecifiedEnumValueIsDefined()
+    {
+        // Given / When / Then
+        RequireIsDefined((Shape)1);
     }
 }

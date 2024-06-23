@@ -90,8 +90,8 @@ public sealed class Failure : Result, IValueEquatable<Failure>
     /// Executes the function that matches the value of the current <see cref="Result"/> instance and returns its result.
     /// <remarks>In the case of a failure, the failure branch is invoked.</remarks>
     /// </summary>
-    /// <param name="success">The action to execute when the current <see cref="Result"/> instance is in a successful state.</param>
-    /// <param name="failure">The action to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="success">The function to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The function to execute when the current <see cref="Result"/> instance is in a failed state.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the matching function.</typeparam>
     /// <returns>
     /// Returns the result of the <paramref name="success"/> function if the current <see cref="Result"/> instance is in a successful state;
@@ -116,7 +116,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
     /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public override Result<TResult> Select<TResult>(Func<TResult> selector) => Result<TResult>.Failure(Exception);
 
@@ -126,7 +126,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
     /// </summary>
     /// <param name="selector">The action to function to the current <see cref="Result"/> instance.</param>
     /// <returns>
-    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
     public override Result SelectMany(Func<Result> selector) => this;
 
@@ -137,7 +137,7 @@ public sealed class Failure : Result, IValueEquatable<Failure>
     /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public override Result<TResult> SelectMany<TResult>(Func<Result<TResult>> selector) => Result<TResult>.Failure(Exception);
 
@@ -249,8 +249,8 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
     /// Executes the function that matches the value of the current <see cref="Result{T}"/> instance and returns its result.
     /// <remarks>In the case of a failure, the failure branch is invoked.</remarks>
     /// </summary>
-    /// <param name="success">The action to execute when the current <see cref="Result{T}"/> instance is in a successful state.</param>
-    /// <param name="failure">The action to execute when the current <see cref="Result{T}"/> instance is in a failed state.</param>
+    /// <param name="success">The function to execute when the current <see cref="Result{T}"/> instance is in a successful state.</param>
+    /// <param name="failure">The function to execute when the current <see cref="Result{T}"/> instance is in a failed state.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the matching function.</typeparam>
     /// <returns>
     /// Returns the result of the <paramref name="success"/> function if the current <see cref="Result{T}"/> instance is in a successful state;
@@ -275,7 +275,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result{T}"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result{T}"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public override Result<TResult> Select<TResult>(Func<T, TResult> selector) => Result<TResult>.Failure(Exception);
 
@@ -285,7 +285,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
     /// </summary>
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <returns>
-    /// Returns <see cref="Success"/> if the current <see cref="Result{T}"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// Returns <see cref="Success"/> if the current <see cref="Result{T}"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
     public override Result SelectMany(Func<T, Result> selector) => Result.Failure(Exception);
 
@@ -296,7 +296,7 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result{T}"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result{T}"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public override Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector) => Result<TResult>.Failure(Exception);
 

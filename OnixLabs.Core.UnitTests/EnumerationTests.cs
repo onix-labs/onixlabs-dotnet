@@ -29,6 +29,8 @@ public sealed class EnumerationTests
 
         // Then
         Assert.Equal(a, b);
+        Assert.True(a == b);
+        Assert.False(a != b);
     }
 
     [Fact(DisplayName = "Enumerations should not be equal")]
@@ -40,6 +42,8 @@ public sealed class EnumerationTests
 
         // Then
         Assert.NotEqual(a, b);
+        Assert.True(a != b);
+        Assert.False(a == b);
     }
 
     [Fact(DisplayName = "Enumeration should return all enumeration instances")]
@@ -148,5 +152,19 @@ public sealed class EnumerationTests
 
         // Then
         Assert.Equal(-1, actual);
+    }
+
+    [Fact(DisplayName = "Enumeration.ToString should produce the expected result")]
+    public void EnumerationToStringShouldProduceExpectedResult()
+    {
+        // Given
+        const string expected = "Red";
+        Color red = Color.Red;
+
+        // When
+        string actual = red.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

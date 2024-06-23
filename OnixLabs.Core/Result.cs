@@ -210,7 +210,7 @@ public abstract class Result : IValueEquatable<Result>
     /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public abstract Result<TResult> Select<TResult>(Func<TResult> selector);
 
@@ -219,7 +219,7 @@ public abstract class Result : IValueEquatable<Result>
     /// </summary>
     /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <returns>
-    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
     public abstract Result SelectMany(Func<Result> selector);
 
@@ -229,7 +229,7 @@ public abstract class Result : IValueEquatable<Result>
     /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public abstract Result<TResult> SelectMany<TResult>(Func<Result<TResult>> selector);
 
@@ -466,8 +466,8 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <summary>
     /// Executes the function that matches the value of the current <see cref="Result{T}"/> instance and returns its result.
     /// </summary>
-    /// <param name="success">The action to execute when the current <see cref="Result{T}"/> instance is in a successful state.</param>
-    /// <param name="failure">The action to execute when the current <see cref="Result{T}"/> instance is in a failed state.</param>
+    /// <param name="success">The function to execute when the current <see cref="Result{T}"/> instance is in a successful state.</param>
+    /// <param name="failure">The function to execute when the current <see cref="Result{T}"/> instance is in a failed state.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the matching function.</typeparam>
     /// <returns>
     /// Returns the result of the <paramref name="success"/> function if the current <see cref="Result{T}"/> instance is in a successful state;
@@ -490,7 +490,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result{T}"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result{T}"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public abstract Result<TResult> Select<TResult>(Func<T, TResult> selector);
 
@@ -499,7 +499,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// </summary>
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <returns>
-    /// Returns <see cref="Success"/> if the current <see cref="Result{T}"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// Returns <see cref="Success"/> if the current <see cref="Result{T}"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
     public abstract Result SelectMany(Func<T, Result> selector);
 
@@ -509,7 +509,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <param name="selector">The function to apply to the value of the current <see cref="Result{T}"/> instance.</param>
     /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result{T}"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result{T}"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public abstract Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector);
 

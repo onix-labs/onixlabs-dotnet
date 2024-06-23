@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -38,6 +39,21 @@ public interface IPrivateKeyImportablePkcs8<out T> where T : PrivateKey
     public static abstract T ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, out int bytesRead);
 
     /// <summary>
+    /// Imports the cryptographic private key data in PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <returns>Returns a new cryptographic private key from the imported data.</returns>
+    public static abstract T ImportPkcs8PrivateKey(IBinaryConvertible data);
+
+    /// <summary>
+    /// Imports the cryptographic private key data in PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="bytesRead">The number of bytes read from the input data.</param>
+    /// <returns>Returns a new cryptographic private key from the imported data.</returns>
+    public static abstract T ImportPkcs8PrivateKey(IBinaryConvertible data, out int bytesRead);
+
+    /// <summary>
     /// Imports the cryptographic private key data in encrypted PKCS #8 format.
     /// </summary>
     /// <param name="data">The cryptographic private key data to import.</param>
@@ -53,4 +69,21 @@ public interface IPrivateKeyImportablePkcs8<out T> where T : PrivateKey
     /// <param name="bytesRead">The number of bytes read from the input data.</param>
     /// <returns>Returns a new cryptographic private key from the imported data.</returns>
     public static abstract T ImportPkcs8PrivateKey(ReadOnlySpan<byte> data, ReadOnlySpan<char> password, out int bytesRead);
+
+    /// <summary>
+    /// Imports the cryptographic private key data in encrypted PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="password">The password required for password based decryption.</param>
+    /// <returns>Returns a new cryptographic private key from the imported data.</returns>
+    public static abstract T ImportPkcs8PrivateKey(IBinaryConvertible data, ReadOnlySpan<char> password);
+
+    /// <summary>
+    /// Imports the cryptographic private key data in encrypted PKCS #8 format.
+    /// </summary>
+    /// <param name="data">The cryptographic private key data to import.</param>
+    /// <param name="password">The password required for password based decryption.</param>
+    /// <param name="bytesRead">The number of bytes read from the input data.</param>
+    /// <returns>Returns a new cryptographic private key from the imported data.</returns>
+    public static abstract T ImportPkcs8PrivateKey(IBinaryConvertible data, ReadOnlySpan<char> password, out int bytesRead);
 }

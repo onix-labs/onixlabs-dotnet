@@ -70,13 +70,11 @@ public sealed class Base16Codec : IBaseCodec
                 return true;
             }
 
-            if (provider is not null && provider is not Base16FormatProvider)
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base16FormatProvider.Invariant, out Base16FormatProvider formatProvider))
             {
                 result = string.Empty;
                 return false;
             }
-
-            Base16FormatProvider formatProvider = provider as Base16FormatProvider ?? Base16FormatProvider.Invariant;
 
             result = formatProvider == Base16FormatProvider.Uppercase
                 ? Convert.ToHexString(value)
@@ -111,13 +109,11 @@ public sealed class Base16Codec : IBaseCodec
                 return true;
             }
 
-            if (provider is not null && provider is not Base16FormatProvider)
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base16FormatProvider.Invariant, out Base16FormatProvider formatProvider))
             {
                 result = [];
                 return false;
             }
-
-            Base16FormatProvider formatProvider = provider as Base16FormatProvider ?? Base16FormatProvider.Invariant;
 
             if (formatProvider == Base16FormatProvider.Uppercase && value.ContainsAny(Base16LowercaseValues))
             {

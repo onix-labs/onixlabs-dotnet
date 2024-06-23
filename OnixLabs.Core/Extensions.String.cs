@@ -279,38 +279,6 @@ public static class StringExtensions
         TimeOnly.Parse(value, provider, styles);
 
     /// <summary>
-    /// Tries to copy the current <see cref="String"/> instance into the destination <see cref="Span{T}"/>.
-    /// </summary>
-    /// <param name="value">The current <see cref="String"/> instance to copy.</param>
-    /// <param name="destination">The <see cref="Span{T}"/> into which the current <see cref="String"/> contents will be copied.</param>
-    /// <param name="charsWritten">The number of characters written to the destination <see cref="Span{T}"/>.</param>
-    /// <returns>Returns <see langword="true"/> if the current <see cref="String"/> instance was copied into the destination <see cref="Span{T}"/>; otherwise, <see langword="false"/> if the destination was too short.</returns>
-    public static bool TryCopyTo(this string value, Span<char> destination, out int charsWritten)
-    {
-        bool result = value.TryCopyTo(destination);
-        charsWritten = result ? value.Length : 0;
-        return result;
-    }
-
-    /// <summary>
-    /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="Char"/> instances.
-    /// </summary>
-    /// <param name="value">The current <see cref="String"/> instance to wrap.</param>
-    /// <param name="before">The <see cref="Char"/> that should precede the current <see cref="String"/> instance.</param>
-    /// <param name="after">The <see cref="Char"/> that should succeed the current <see cref="String"/> instance.</param>
-    /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="Char"/> instances.</returns>
-    public static string Wrap(this string value, char before, char after) => $"{before}{value}{after}";
-
-    /// <summary>
-    /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="String"/> instances.
-    /// </summary>
-    /// <param name="value">The current <see cref="String"/> instance to wrap.</param>
-    /// <param name="before">The <see cref="String"/> that should precede the current <see cref="String"/> instance.</param>
-    /// <param name="after">The <see cref="String"/> that should succeed the current <see cref="String"/> instance.</param>
-    /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="String"/> instances.</returns>
-    public static string Wrap(this string value, string before, string after) => $"{before}{value}{after}";
-
-    /// <summary>
     /// Returns a <see cref="string"/> with all escape characters formatted as escape character literals.
     /// </summary>
     /// <param name="value">The current <see cref="String"/> value.</param>
@@ -350,4 +318,36 @@ public static class StringExtensions
 
         return result.ToString();
     }
+
+    /// <summary>
+    /// Tries to copy the current <see cref="String"/> instance into the destination <see cref="Span{T}"/>.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance to copy.</param>
+    /// <param name="destination">The <see cref="Span{T}"/> into which the current <see cref="String"/> contents will be copied.</param>
+    /// <param name="charsWritten">The number of characters written to the destination <see cref="Span{T}"/>.</param>
+    /// <returns>Returns <see langword="true"/> if the current <see cref="String"/> instance was copied into the destination <see cref="Span{T}"/>; otherwise, <see langword="false"/> if the destination was too short.</returns>
+    public static bool TryCopyTo(this string value, Span<char> destination, out int charsWritten)
+    {
+        bool result = value.TryCopyTo(destination);
+        charsWritten = result ? value.Length : 0;
+        return result;
+    }
+
+    /// <summary>
+    /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="Char"/> instances.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance to wrap.</param>
+    /// <param name="before">The <see cref="Char"/> that should precede the current <see cref="String"/> instance.</param>
+    /// <param name="after">The <see cref="Char"/> that should succeed the current <see cref="String"/> instance.</param>
+    /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="Char"/> instances.</returns>
+    public static string Wrap(this string value, char before, char after) => $"{before}{value}{after}";
+
+    /// <summary>
+    /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="String"/> instances.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance to wrap.</param>
+    /// <param name="before">The <see cref="String"/> that should precede the current <see cref="String"/> instance.</param>
+    /// <param name="after">The <see cref="String"/> that should succeed the current <see cref="String"/> instance.</param>
+    /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="String"/> instances.</returns>
+    public static string Wrap(this string value, string before, string after) => $"{before}{value}{after}";
 }

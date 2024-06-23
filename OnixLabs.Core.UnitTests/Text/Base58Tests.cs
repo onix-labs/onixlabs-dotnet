@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Buffers;
 using System.Text;
 using OnixLabs.Core.Text;
 using Xunit;
@@ -20,6 +22,81 @@ namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base58Tests
 {
+    [Fact(DisplayName = "Base58 should be implicitly constructable from byte[]")]
+    public void Base58ShouldBeImplicitlyConstructableFromByteArray()
+    {
+        // Given
+        const string expected = "qBLgTCSW82Hg";
+        byte[] value = "ABCabc123".ToByteArray();
+
+        // When
+        Base58 candidate = value;
+        string actual = candidate.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Base58 should be implicitly constructable from ReadOnlySpan<byte>")]
+    public void Base58ShouldBeImplicitlyConstructableFromReadOnlySpanOfByte()
+    {
+        // Given
+        const string expected = "qBLgTCSW82Hg";
+        ReadOnlySpan<byte> value = "ABCabc123".ToByteArray().AsSpan();
+
+        // When
+        Base58 candidate = value;
+        string actual = candidate.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Base58 should be implicitly constructable from string")]
+    public void Base58ShouldBeImplicitlyConstructableFromString()
+    {
+        // Given
+        const string expected = "qBLgTCSW82Hg";
+        const string value = "ABCabc123";
+
+        // When
+        Base58 candidate = value;
+        string actual = candidate.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Base58 should be implicitly constructable from char[]")]
+    public void Base58ShouldBeImplicitlyConstructableFromCharArray()
+    {
+        // Given
+        const string expected = "qBLgTCSW82Hg";
+        char[] value = "ABCabc123".ToCharArray();
+
+        // When
+        Base58 candidate = value;
+        string actual = candidate.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Base58 should be implicitly constructable from ReadOnlySequence<char>")]
+    public void Base58ShouldBeImplicitlyConstructableFromReadOnlySequenceOfChar()
+    {
+        // Given
+        const string expected = "qBLgTCSW82Hg";
+        ReadOnlySequence<char> value = new("ABCabc123".ToCharArray());
+
+        // When
+        Base58 candidate = value;
+        string actual = candidate.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Base58 should not change when modifying the original byte array")]
     public void Base58ShouldNotChangeWhenModifyingOriginalByteArray()
     {
@@ -99,9 +176,9 @@ public sealed class Base58Tests
 
     [Theory(DisplayName = "Base58.Parse should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD","ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    [InlineData("3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f","abcdefghijklmnopqrstuvwxyz")]
-    [InlineData("3i37NcgooY8f1S","0123456789")]
+    [InlineData("2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f", "abcdefghijklmnopqrstuvwxyz")]
+    [InlineData("3i37NcgooY8f1S", "0123456789")]
     public void Base58ParseShouldProduceExpectedResult(string value, string expected)
     {
         // Given
@@ -116,9 +193,9 @@ public sealed class Base58Tests
 
     [Theory(DisplayName = "Base58.ToString should produce the expected result")]
     [InlineData("", "")]
-    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ","2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD")]
-    [InlineData("abcdefghijklmnopqrstuvwxyz","3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f")]
-    [InlineData("0123456789","3i37NcgooY8f1S")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f")]
+    [InlineData("0123456789", "3i37NcgooY8f1S")]
     public void Base58ToStringShouldProduceExpectedResult(string value, string expected)
     {
         // Given
@@ -130,5 +207,106 @@ public sealed class Base58Tests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Base58.TryFormat should produce the expected result when the value was formatted correctly")]
+    [InlineData("", "")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f")]
+    [InlineData("0123456789", "3i37NcgooY8f1S")]
+    public void Base58TryFormatShouldProduceExpectedResultWhenValueWasFormattedCorrectly(string value, string expected)
+    {
+        // Given
+        ISpanFormattable candidate = new Base58(Encoding.UTF8.GetBytes(value));
+        Span<char> destination = stackalloc char[expected.Length];
+
+        // When
+        bool result = candidate.TryFormat(destination, out int charsWritten, [], null);
+        string actual = destination.ToString();
+
+        // Then
+        Assert.True(result);
+        Assert.Equal(expected, actual);
+        Assert.Equal(expected.Length, charsWritten);
+    }
+
+    [Theory(DisplayName = "Base58.TryFormat should produce the expected result when the value was not formatted correctly")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f")]
+    [InlineData("0123456789", "3i37NcgooY8f1S")]
+    public void Base58TryFormatShouldProduceExpectedResultWhenValueWasNotFormattedCorrectly(string value, string expected)
+    {
+        // Given
+        ISpanFormattable candidate = new Base58(Encoding.UTF8.GetBytes(value));
+        Span<char> destination = stackalloc char[0];
+
+        // When
+        bool result = candidate.TryFormat(destination, out int charsWritten, [], null);
+        string actual = destination.ToString();
+
+        // Then
+        Assert.False(result);
+        Assert.NotEqual(expected, actual);
+        Assert.Equal(0, charsWritten);
+    }
+
+    [Theory(DisplayName = "Base58.TryParse should produce the expected result when the string is parsed successfully")]
+    [InlineData("", "")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f")]
+    [InlineData("0123456789", "3i37NcgooY8f1S")]
+    public void Base58TryParseShouldProduceTheExpectedResultWhenStringIsParsedSuccessfully(string expected, string value)
+    {
+        // When
+        bool result = Base58.TryParse(value, null, out Base58 candidate);
+        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+
+        // Then
+        Assert.True(result);
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Base58.TryParse should produce the expected result when the string is not parsed successfully")]
+    [InlineData("", "*INVALID_VALUE*")]
+    public void Base58TryParseShouldProduceTheExpectedResultWhenStringIsNotParsedSuccessfully(string expected, string value)
+    {
+        // When
+        bool result = Base58.TryParse(value, null, out Base58 candidate);
+        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+
+        // Then
+        Assert.False(result);
+        Assert.Equal(expected, actual);
+        Assert.Equal(default, candidate);
+    }
+
+    [Theory(DisplayName = "Base58.TryParse should produce the expected result when the ReadOnlySpan<char> is parsed successfully")]
+    [InlineData("", "")]
+    [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "2zuFXTJSTRK6ESktqhM2QDBkCnH1U46CnxaD")]
+    [InlineData("abcdefghijklmnopqrstuvwxyz", "3yxU3u1igY8WkgtjK92fbJQCd4BZiiT1v25f")]
+    [InlineData("0123456789", "3i37NcgooY8f1S")]
+    public void Base58TryParseShouldProduceTheExpectedResultWhenReadOnlySpanOfCharIsParsedSuccessfully(string expected, string value)
+    {
+        // When
+        bool result = Base58.TryParse(value.AsSpan(), null, out Base58 candidate);
+        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+
+        // Then
+        Assert.True(result);
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Base58.TryParse should produce the expected result when the ReadOnlySpan<char> is not parsed successfully")]
+    [InlineData("", "*INVALID_VALUE*")]
+    public void Base58TryParseShouldProduceTheExpectedResultWhenReadOnlySpanOfCharIsNotParsedSuccessfully(string expected, string value)
+    {
+        // When
+        bool result = Base58.TryParse(value.AsSpan(), null, out Base58 candidate);
+        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+
+        // Then
+        Assert.False(result);
+        Assert.Equal(expected, actual);
+        Assert.Equal(default, candidate);
     }
 }

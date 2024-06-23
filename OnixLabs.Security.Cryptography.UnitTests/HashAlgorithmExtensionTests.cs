@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
@@ -38,7 +39,7 @@ public sealed class HashAlgorithmExtensionTests
     }
 
     [Fact(DisplayName = "HashAlgorithm.ComputeHashAsync should produce the expected result with two rounds")]
-    public async void HashAlgorithmComputeHashAsyncShouldProduceExpectedResultWithTwoRounds()
+    public async Task HashAlgorithmComputeHashAsyncShouldProduceExpectedResultWithTwoRounds()
     {
         // Given
         using HashAlgorithm algorithm = SHA256.Create();

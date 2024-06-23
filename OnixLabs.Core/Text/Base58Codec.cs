@@ -69,16 +69,17 @@ public sealed class Base58Codec : IBaseCodec
                 return true;
             }
 
-            if (provider is not null && provider is not Base58FormatProvider)
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base58FormatProvider.Bitcoin, out Base58FormatProvider formatProvider))
             {
                 result = string.Empty;
                 return false;
             }
 
-            Base58FormatProvider formatProvider = provider as Base58FormatProvider ?? Base58FormatProvider.Bitcoin;
             StringBuilder builder = new();
             BigInteger data = BigInteger.Zero;
-            foreach (byte b in value) data = data * 256 + b;
+
+            foreach (byte b in value)
+                data = data * 256 + b;
 
             while (data > 0)
             {
@@ -87,7 +88,8 @@ public sealed class Base58Codec : IBaseCodec
                 builder.Insert(0, formatProvider.Alphabet[(int)remainder]);
             }
 
-            for (int index = 0; index < value.Length && value[index] == 0; index++) builder.Insert(0, '1');
+            for (int index = 0; index < value.Length && value[index] == 0; index++)
+                builder.Insert(0, '1');
 
             result = builder.ToString();
             return true;
@@ -119,13 +121,11 @@ public sealed class Base58Codec : IBaseCodec
                 return true;
             }
 
-            if (provider is not null && provider is not Base58FormatProvider)
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base58FormatProvider.Bitcoin, out Base58FormatProvider formatProvider))
             {
                 result = [];
                 return false;
             }
-
-            Base58FormatProvider formatProvider = provider as Base58FormatProvider ?? Base58FormatProvider.Bitcoin;
 
             BigInteger data = BigInteger.Zero;
 

@@ -201,39 +201,51 @@ public sealed class OptionalTests
     public void OptionalSomeValuesShouldBeConsideredEqual()
     {
         // Given
-        Optional<int> a = Optional<int>.Some(123);
-        Optional<int> b = Optional<int>.Some(123);
+        Some<int> a = Optional<int>.Some(123);
+        Some<int> b = Optional<int>.Some(123);
+        object bObject = b;
 
         // When / Then
         Assert.Equal(a, b);
-        Assert.True(a == b);
+        Assert.Equal(a, bObject);
         Assert.True(a.Equals(b));
+        Assert.True(a.Equals(bObject));
+        Assert.True(a == b);
+        Assert.False(a != b);
     }
 
     [Fact(DisplayName = "Optional Some values should not be considered equal.")]
     public void OptionalSomeValuesShouldNotBeConsideredEqual()
     {
         // Given
-        Optional<int> a = Optional<int>.Some(123);
-        Optional<int> b = Optional<int>.Some(456);
+        Some<int> a = Optional<int>.Some(123);
+        Some<int> b = Optional<int>.Some(456);
+        object bObject = b;
 
         // When / Then
         Assert.NotEqual(a, b);
-        Assert.True(a != b);
+        Assert.NotEqual(a, bObject);
         Assert.False(a.Equals(b));
+        Assert.False(a.Equals(bObject));
+        Assert.False(a == b);
+        Assert.True(a != b);
     }
 
     [Fact(DisplayName = "Optional None values should be considered equal.")]
     public void OptionalNoneValuesShouldBeConsideredEqual()
     {
         // Given
-        Optional<int> a = Optional<int>.None;
-        Optional<int> b = Optional<int>.None;
+        None<int> a = Optional<int>.None;
+        None<int> b = Optional<int>.None;
+        object bObject = b;
 
         // When / Then
         Assert.Equal(a, b);
-        Assert.True(a == b);
+        Assert.Equal(a, bObject);
         Assert.True(a.Equals(b));
+        Assert.True(a.Equals(bObject));
+        Assert.True(a == b);
+        Assert.False(a != b);
     }
 
     [Fact(DisplayName = "Optional Some and None values should not be considered equal.")]
@@ -242,11 +254,15 @@ public sealed class OptionalTests
         // Given
         Optional<int> a = Optional<int>.Some(123);
         Optional<int> b = Optional<int>.None;
+        object bObject = b;
 
         // When / Then
         Assert.NotEqual(a, b);
-        Assert.True(a != b);
+        Assert.NotEqual(a, bObject);
         Assert.False(a.Equals(b));
+        Assert.False(a.Equals(bObject));
+        Assert.False(a == b);
+        Assert.True(a != b);
     }
 
     [Fact(DisplayName = "Optional Some.GetHashCode should produce the expected result.")]
@@ -317,7 +333,8 @@ public sealed class OptionalTests
         Optional<string> text = "abc";
 
         // When
-        int actualNumber = number.GetValueOrDefault(456);
+        int? actualNumber = number.GetValueOrDefault(456);
+        // ReSharper disable once VariableCanBeNotNullable
         string? actualText = text.GetValueOrDefault("xyz");
 
         // Then

@@ -59,6 +59,18 @@ public sealed class Base64Codec : IBaseCodec
     {
         try
         {
+            if (value.IsEmpty)
+            {
+                result = string.Empty;
+                return true;
+            }
+
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base64FormatProvider.Rfc4648, out Base64FormatProvider _))
+            {
+                result = string.Empty;
+                return false;
+            }
+
             result = Convert.ToBase64String(value);
             return true;
         }
@@ -83,6 +95,18 @@ public sealed class Base64Codec : IBaseCodec
     {
         try
         {
+            if (value.IsEmpty)
+            {
+                result = [];
+                return true;
+            }
+
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base64FormatProvider.Rfc4648, out Base64FormatProvider _))
+            {
+                result = [];
+                return false;
+            }
+
             result = Convert.FromBase64String(value.ToString());
             return true;
         }

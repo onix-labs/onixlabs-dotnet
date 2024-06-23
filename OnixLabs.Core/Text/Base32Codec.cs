@@ -76,13 +76,12 @@ public sealed class Base32Codec : IBaseCodec
                 return true;
             }
 
-            if (provider is not null && provider is not Base32FormatProvider)
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.Rfc4648, out Base32FormatProvider formatProvider))
             {
                 result = string.Empty;
                 return false;
             }
 
-            Base32FormatProvider formatProvider = provider as Base32FormatProvider ?? Base32FormatProvider.Rfc4648;
             StringBuilder builder = new(value.Length * InputSize / OutputSize);
 
             int inputPosition = 0;
@@ -119,7 +118,7 @@ public sealed class Base32Codec : IBaseCodec
                 return true;
             }
 
-            outputPosition <<= (OutputSize - outputSubPosition);
+            outputPosition <<= OutputSize - outputSubPosition;
             outputPosition &= 0x1F;
             builder.Append(formatProvider.Alphabet[outputPosition]);
 
@@ -155,13 +154,11 @@ public sealed class Base32Codec : IBaseCodec
                 return true;
             }
 
-            if (provider is not null && provider is not Base32FormatProvider)
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.Rfc4648, out Base32FormatProvider formatProvider))
             {
                 result = [];
                 return false;
             }
-
-            Base32FormatProvider formatProvider = provider as Base32FormatProvider ?? Base32FormatProvider.Rfc4648;
 
             if (formatProvider.IsPadded && value.Length % InputSize != 0)
             {

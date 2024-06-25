@@ -177,6 +177,38 @@ public abstract class Result : IValueEquatable<Result>
     public override int GetHashCode() => default;
 
     /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    public abstract Exception? GetExceptionOrDefault();
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    public abstract Exception GetExceptionOrDefault(Exception defaultException);
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">If the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
+    public abstract Exception GetExceptionOrThrow();
+
+    /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result"/> instance.
     /// </summary>
     /// <param name="success">The action to execute when the current <see cref="Result"/> instance is in a successful state.</param>
@@ -424,6 +456,38 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode() => default;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    public abstract Exception? GetExceptionOrDefault();
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</param>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    public abstract Exception GetExceptionOrDefault(Exception defaultException);
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">If the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
+    public abstract Exception GetExceptionOrThrow();
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;

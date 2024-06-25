@@ -4,13 +4,13 @@
         <Title>OnixLabs.Security.Cryptography</Title>
         <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Cryptography API for .NET</Description>
-        <AssemblyVersion>8.14.0</AssemblyVersion>
+        <AssemblyVersion>8.15.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Copyright>Copyright © ONIXLabs 2020</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>8.14.0</PackageVersion>
+        <PackageVersion>8.15.0</PackageVersion>
         <LangVersion>12</LangVersion>
     </PropertyGroup>
     <PropertyGroup>

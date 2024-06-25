@@ -351,6 +351,88 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result Success.GetExceptionOrDefault should produce the expected result.")]
+    public void ResultSuccessGetExceptionOrDefaultShouldProduceExpectedResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(123);
+
+        // When
+        Exception? actual = result.GetExceptionOrDefault();
+
+        // Then
+        Assert.Null(actual);
+    }
+
+    [Fact(DisplayName = "Result Success.GetExceptionOrDefault with default value should produce the expected result.")]
+    public void ResultSuccessGetExceptionOrDefaultWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result<int> result = Result<int>.Success(123);
+
+        // When
+        Exception actual = result.GetExceptionOrDefault(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Success.GetExceptionOrThrow should produce the expected result.")]
+    public void ResultSuccessGetExceptionOrThrowShouldProduceExpectedResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(123);
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => result.GetExceptionOrThrow());
+
+        // Then
+        Assert.Equal("The current result is not in a Failure<T> state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrDefault should produce the expected result.")]
+    public void ResultFailureGetExceptionOrDefaultShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result<int> result = Result<int>.Failure(expected);
+
+        // When
+        Exception? actual = result.GetExceptionOrDefault();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrDefault with default value should produce the expected result.")]
+    public void ResultFailureGetExceptionOrDefaultWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result<int> result = Result<int>.Failure(expected);
+
+        // When
+        Exception actual = result.GetExceptionOrDefault(new Exception("unexpected exception"));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrThrow should produce the expected result.")]
+    public void ResultFailureGetExceptionOrThrowShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result<int> result = Result<int>.Failure(expected);
+
+        // When
+        Exception actual = result.GetExceptionOrThrow();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result Success.GetValueOrDefault should produce the expected result.")]
     public void ResultSuccessGetValueOrDefaultShouldProduceExpectedResult()
     {
@@ -681,6 +763,36 @@ public sealed class ResultGenericTests
         // Then
         Assert.Equal("System.Exception: failure", numberString);
         Assert.Equal("System.Exception: failure", textString);
+    }
+
+    [Fact(DisplayName = "Result Failure.ToTypedResult should produce the expected result.")]
+    public void ResultFailureToTypedResultShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        Failure<string> result = Result<string>.Failure(exception);
+
+        // When
+        Result<int> actual = result.ToTypedResult<int>();
+
+        // Then
+        Assert.IsType<Failure<int>>(actual);
+        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
+    }
+
+    [Fact(DisplayName = "Result Failure.ToUntypedResult should produce the expected result.")]
+    public void ResultFailureToUntypedResultShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        Failure<string> result = Result<string>.Failure(exception);
+
+        // When
+        Result actual = result.ToUntypedResult();
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
     }
 
     [Fact(DisplayName = "Result Success.Dispose should dispose of the underlying value.")]

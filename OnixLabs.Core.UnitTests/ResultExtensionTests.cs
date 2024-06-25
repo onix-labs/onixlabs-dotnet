@@ -20,6 +20,170 @@ namespace OnixLabs.Core.UnitTests;
 
 public sealed class ResultExtensionTests
 {
+    [Fact(DisplayName = "Result Success.GetExceptionOrDefaultAsync should produce the expected result.")]
+    public async Task ResultSuccessGetExceptionOrDefaultAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
+
+        // Then
+        Assert.Null(actual);
+    }
+
+    [Fact(DisplayName = "Result Success.GetExceptionOrDefaultAsync with default value should produce the expected result.")]
+    public async Task ResultSuccessGetExceptionOrDefaultAsyncWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result result = Result.Success();
+
+        // When
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Success.GetExceptionOrThrowAsync should produce the expected result.")]
+    public async Task ResultSuccessGetExceptionOrThrowAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.FromResult(result).GetExceptionOrThrowAsync());
+
+        // Then
+        Assert.Equal("The current result is not in a Failure state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrDefaultAsync should produce the expected result.")]
+    public async Task ResultFailureGetExceptionOrDefaultAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result result = Result.Failure(expected);
+
+        // When
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrDefaultAsync with default value should produce the expected result.")]
+    public async Task ResultFailureGetExceptionOrDefaultAsyncWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result result = Result.Failure(expected);
+
+        // When
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrThrowAsync should produce the expected result.")]
+    public async Task ResultFailureGetExceptionOrThrowAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result result = Result.Failure(expected);
+
+        // When
+        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result<T> Success.GetExceptionOrDefaultAsync should produce the expected result.")]
+    public async Task ResultOfTSuccessGetExceptionOrDefaultAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(123);
+
+        // When
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
+
+        // Then
+        Assert.Null(actual);
+    }
+
+    [Fact(DisplayName = "Result<T> Success.GetExceptionOrDefaultAsync with default value should produce the expected result.")]
+    public async Task ResultOfTSuccessGetExceptionOrDefaultAsyncWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result<int> result = Result<int>.Success(123);
+
+        // When
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result<T> Success.GetExceptionOrThrowAsync should produce the expected result.")]
+    public async Task ResultOfTSuccessGetExceptionOrThrowAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(123);
+
+        // When
+        Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.FromResult(result).GetExceptionOrThrowAsync());
+
+        // Then
+        Assert.Equal("The current result is not in a Failure<T> state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Result<T> Failure.GetExceptionOrDefaultAsync should produce the expected result.")]
+    public async Task ResultOfTFailureGetExceptionOrDefaultAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result<int> result = Result<int>.Failure(expected);
+
+        // When
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result<T> Failure.GetExceptionOrDefaultAsync with default value should produce the expected result.")]
+    public async Task ResultOfTFailureGetExceptionOrDefaultAsyncWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result<int> result = Result<int>.Failure(expected);
+
+        // When
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result<T> Failure.GetExceptionOrThrowAsync should produce the expected result.")]
+    public async Task ResultOfTFailureGetExceptionOrThrowAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result<int> result = Result<int>.Failure(expected);
+
+        // When
+        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.GetValueOrDefaultAsync should return the result value when the result is Success")]
     public async Task ResultGetValueOrDefaultAsyncShouldReturnResultValueWhenResultIsSuccess()
     {
@@ -68,6 +232,7 @@ public sealed class ResultExtensionTests
 
         // When
         int actualNumber = await numberTask.GetValueOrDefaultAsync(456);
+        // ReSharper disable once VariableCanBeNotNullable
         string? actualText = await textTask.GetValueOrDefaultAsync("xyz");
 
         // Then
@@ -842,5 +1007,50 @@ public sealed class ResultExtensionTests
 
         // When / Then
         await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync());
+    }
+
+    [Fact(DisplayName = "Result Failure.ToTypedResultAsync should produce the expected result.")]
+    public async Task ResultFailureToTypedResultAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        Failure result = Result.Failure(exception);
+
+        // When
+        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<int>();
+
+        // Then
+        Assert.IsType<Failure<int>>(actual);
+        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
+    }
+
+    [Fact(DisplayName = "Result<T> Failure.ToTypedResultAsync should produce the expected result.")]
+    public async Task ResultOfTFailureToTypedResultAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        Failure<string> result = Result<string>.Failure(exception);
+
+        // When
+        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<string, int>();
+
+        // Then
+        Assert.IsType<Failure<int>>(actual);
+        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
+    }
+
+    [Fact(DisplayName = "Result<T> Failure.ToUntypedResultAsync should produce the expected result.")]
+    public async Task ResultOfTFailureToUntypedResultAsyncShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        Failure<string> result = Result<string>.Failure(exception);
+
+        // When
+        Result actual = await Task.FromResult(result).ToUntypedResultAsync();
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
     }
 }

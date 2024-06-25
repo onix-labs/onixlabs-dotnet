@@ -71,6 +71,38 @@ public sealed class Success : Result, IValueEquatable<Success>
     public override int GetHashCode() => default;
 
     /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    public override Exception? GetExceptionOrDefault() => null;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    public override Exception GetExceptionOrDefault(Exception defaultException) => defaultException;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">If the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
+    public override Exception GetExceptionOrThrow() => throw new InvalidOperationException("The current result is not in a Failure state.");
+
+    /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result"/> instance.
     /// <remarks>In the case of a success, the success branch is invoked.</remarks>
     /// </summary>
@@ -200,6 +232,38 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode() => Value?.GetHashCode() ?? default;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    public override Exception? GetExceptionOrDefault() => null;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</param>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    public override Exception GetExceptionOrDefault(Exception defaultException) => defaultException;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">If the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
+    public override Exception GetExceptionOrThrow() => throw new InvalidOperationException("The current result is not in a Failure<T> state.");
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;

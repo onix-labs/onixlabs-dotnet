@@ -79,6 +79,38 @@ public sealed class Failure : Result, IValueEquatable<Failure>
     public override int GetHashCode() => Exception.GetHashCode();
 
     /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    public override Exception GetExceptionOrDefault() => Exception;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    public override Exception GetExceptionOrDefault(Exception defaultException) => Exception;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">If the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
+    public override Exception GetExceptionOrThrow() => Exception;
+
+    /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result"/> instance.
     /// <remarks>In the case of a failure, the failure branch is invoked.</remarks>
     /// </summary>
@@ -151,6 +183,13 @@ public sealed class Failure : Result, IValueEquatable<Failure>
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
     public override string ToString() => Exception.ToString();
+
+    /// <summary>
+    /// Obtains a new <see cref="Failure{T}"/> instance containing the current exception.
+    /// </summary>
+    /// <typeparam name="TResult">The underlying type of the <see cref="Failure{T}"/> to return.</typeparam>
+    /// <returns>Returns a new <see cref="Failure{T}"/> instance containing the current exception.</returns>
+    public Failure<TResult> ToTypedResult<TResult>() => Result<TResult>.Failure(Exception);
 }
 
 /// <summary>
@@ -205,6 +244,38 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
     public override int GetHashCode() => Exception.GetHashCode();
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or <see langword="null"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    public override Exception GetExceptionOrDefault() => Exception;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</param>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure"/> state,
+    /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    public override Exception GetExceptionOrDefault(Exception defaultException) => Exception;
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
+    /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">If the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
+    public override Exception GetExceptionOrThrow() => Exception;
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;
@@ -310,6 +381,19 @@ public sealed class Failure<T> : Result<T>, IValueEquatable<Failure<T>>
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
     public override string ToString() => Exception.ToString();
+
+    /// <summary>
+    /// Obtains a new <see cref="Failure{T}"/> instance containing the current exception.
+    /// </summary>
+    /// <typeparam name="TResult">The underlying type of the <see cref="Failure{T}"/> to return.</typeparam>
+    /// <returns>Returns a new <see cref="Failure{T}"/> instance containing the current exception.</returns>
+    public Failure<TResult> ToTypedResult<TResult>() => Result<TResult>.Failure(Exception);
+
+    /// <summary>
+    /// Obtains a new <see cref="Failure"/> instance containing the current exception.
+    /// </summary>
+    /// <returns>Returns a new <see cref="Failure"/> instance containing the current exception.</returns>
+    public Failure ToUntypedResult() => Result.Failure(Exception);
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

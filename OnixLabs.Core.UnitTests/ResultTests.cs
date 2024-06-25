@@ -230,6 +230,88 @@ public sealed class ResultTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result Success.GetExceptionOrDefault should produce the expected result.")]
+    public void ResultSuccessGetExceptionOrDefaultShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Exception? actual = result.GetExceptionOrDefault();
+
+        // Then
+        Assert.Null(actual);
+    }
+
+    [Fact(DisplayName = "Result Success.GetExceptionOrDefault with default value should produce the expected result.")]
+    public void ResultSuccessGetExceptionOrDefaultWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result result = Result.Success();
+
+        // When
+        Exception actual = result.GetExceptionOrDefault(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Success.GetExceptionOrThrow with default value should produce the expected result.")]
+    public void ResultSuccessGetExceptionOrThrowShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => result.GetExceptionOrThrow());
+
+        // Then
+        Assert.Equal("The current result is not in a Failure state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrDefault should produce the expected result.")]
+    public void ResultFailureGetExceptionOrDefaultShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result result = Result.Failure(expected);
+
+        // When
+        Exception? actual = result.GetExceptionOrDefault();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrDefault with default value should produce the expected result.")]
+    public void ResultFailureGetExceptionOrDefaultWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result result = Result.Failure(expected);
+
+        // When
+        Exception actual = result.GetExceptionOrDefault(new Exception("unexpected exception"));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Failure.GetExceptionOrThrow with default value should produce the expected result.")]
+    public void ResultFailureGetExceptionOrThrowShouldProduceExpectedResult()
+    {
+        // Given
+        Exception expected = new("failure");
+        Result result = Result.Failure(expected);
+
+        // When
+        Exception actual = result.GetExceptionOrThrow();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result Success.Match should execute the some action.")]
     public void ResultSuccessMatchShouldExecuteSuccessAction()
     {
@@ -448,5 +530,20 @@ public sealed class ResultTests
 
         // Then
         Assert.Equal("System.Exception: failure", resultString);
+    }
+
+    [Fact(DisplayName = "Result Failure.ToTypedResult should produce the expected result.")]
+    public void ResultFailureToTypedResultShouldProduceExpectedResult()
+    {
+        // Given
+        Exception exception = new("failure");
+        Failure result = Result.Failure(exception);
+
+        // When
+        Result<int> actual = result.ToTypedResult<int>();
+
+        // Then
+        Assert.IsType<Failure<int>>(actual);
+        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
     }
 }

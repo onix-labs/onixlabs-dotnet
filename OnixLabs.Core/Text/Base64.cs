@@ -21,7 +21,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-64 value.
 /// </summary>
-/// <param name="value">The underlying <see cref="T:Byte[]"/> value.</param>
+/// <param name="value">The <see cref="ReadOnlySpan{T}"/> with which to initialize the <see cref="Base64"/> instance.</param>
 public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseValue<Base64>
 {
     /// <summary>

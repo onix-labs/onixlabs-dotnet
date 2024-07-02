@@ -7,11 +7,11 @@
         <Title>OnixLabs.Core</Title>
         <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Core API for .NET</Description>
-        <AssemblyVersion>8.15.0</AssemblyVersion>
+        <AssemblyVersion>8.16.0</AssemblyVersion>
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>Copyright © ONIXLabs 2020</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <PackageVersion>8.15.0</PackageVersion>
+        <PackageVersion>8.16.0</PackageVersion>
     </PropertyGroup>
     <PropertyGroup>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
@@ -44,5 +44,10 @@
     </ItemGroup>
     <ItemGroup>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
+    </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="OnixLabs.Numerics"/>
+        <InternalsVisibleTo Include="OnixLabs.Security"/>
+        <InternalsVisibleTo Include="OnixLabs.Security.Cryptography"/>
     </ItemGroup>
 </Project>

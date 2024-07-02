@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -20,4 +21,13 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents an ECDSA cryptographic private key.
 /// </summary>
 /// <param name="keyData">The underlying key data of the ECDSA cryptographic private key.</param>
-public sealed partial class EcdsaPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IEcdsaPrivateKey, ISpanParsable<EcdsaPrivateKey>;
+public sealed partial class EcdsaPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IEcdsaPrivateKey, ISpanParsable<EcdsaPrivateKey>
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdsaPrivateKey"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="EcdsaPrivateKey"/> instance.</param>
+    public EcdsaPrivateKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
+}

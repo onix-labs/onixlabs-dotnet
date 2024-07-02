@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 using System.Linq;
 using OnixLabs.Core;
 
@@ -24,7 +25,11 @@ namespace OnixLabs.Security.Cryptography;
 /// <param name="value">The underlying value of the cryptographic hash.</param>
 public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive<Hash>, IValueComparable<Hash>, ISpanParsable<Hash>
 {
-    private readonly byte[] value = value.ToArray();
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Hash"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Hash"/> instance.</param>
+    public Hash(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Hash"/> struct.
@@ -34,4 +39,6 @@ public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive
     public Hash(byte value, int length) : this(Enumerable.Repeat(value, length).ToArray())
     {
     }
+
+    private readonly byte[] value = value.ToArray();
 }

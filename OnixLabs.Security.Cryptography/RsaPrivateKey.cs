@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -20,4 +21,13 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents an RSA cryptographic private key.
 /// </summary>
 /// <param name="keyData">The underlying key data of the RSA cryptographic private key.</param>
-public sealed partial class RsaPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IRsaPrivateKey, ISpanParsable<RsaPrivateKey>;
+public sealed partial class RsaPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IRsaPrivateKey, ISpanParsable<RsaPrivateKey>
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RsaPrivateKey"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="RsaPrivateKey"/> instance.</param>
+    public RsaPrivateKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
+}

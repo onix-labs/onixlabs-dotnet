@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -20,4 +21,13 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents an EC Diffie-Hellman cryptographic public key.
 /// </summary>
 /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
-public sealed partial class EcdhPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IEcdhPublicKey, ISpanParsable<EcdhPublicKey>;
+public sealed partial class EcdhPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IEcdhPublicKey, ISpanParsable<EcdhPublicKey>
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdhPublicKey"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="EcdhPublicKey"/> instance.</param>
+    public EcdhPublicKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
+}

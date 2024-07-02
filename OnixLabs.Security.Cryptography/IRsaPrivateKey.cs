@@ -25,7 +25,7 @@ namespace OnixLabs.Security.Cryptography;
 public interface IRsaPrivateKey : IPublicKeyExportable<RsaPublicKey>, IPrivateKeyImportablePkcs8<RsaPrivateKey>, IPrivateKeyExportablePkcs8, IBinaryConvertible
 {
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
@@ -34,7 +34,7 @@ public interface IRsaPrivateKey : IPublicKeyExportable<RsaPublicKey>, IPrivateKe
     byte[] SignData(ReadOnlySpan<byte> data, HashAlgorithmName algorithm, RSASignaturePadding padding);
 
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="offset">The offset into the byte array from which to begin using data.</param>
@@ -72,7 +72,7 @@ public interface IRsaPrivateKey : IPublicKeyExportable<RsaPublicKey>, IPrivateKe
     byte[] SignHash(Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding);
 
     /// <summary>
-    /// Signs the specified <see cref="ReadOnlySpan{Byte}"/>.
+    /// Signs the specified <see cref="ReadOnlySpan{T}"/>.
     /// </summary>
     /// <param name="hash">The hash to sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input hash.</param>

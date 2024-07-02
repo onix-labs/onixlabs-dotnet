@@ -98,7 +98,7 @@ public static class HashAlgorithmExtensions
     /// <param name="token">The token to monitor for cancellation requests.</param>
     /// <returns>Returns a task that represents the asynchronous compute hash operation and wraps the computed hash value.</returns>
     public static async Task<byte[]> ComputeHashAsync(this HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1, CancellationToken token = default) =>
-        await algorithm.ComputeHashAsync(new MemoryStream(data.ToByteArray()), rounds, token);
+        await algorithm.ComputeHashAsync(new MemoryStream(data.ToByteArray()), rounds, token).ConfigureAwait(false);
 
     /// <summary>
     /// Asynchronously computes the hash value for the specified <see cref="Stream"/> object.
@@ -112,8 +112,8 @@ public static class HashAlgorithmExtensions
     {
         Require(rounds > 0, "Rounds must be greater than zero", nameof(rounds));
 
-        MemoryStream memoryStream = new(await algorithm.ComputeHashAsync(stream, token));
-        while (--rounds > 0) memoryStream = new MemoryStream(await algorithm.ComputeHashAsync(memoryStream, token));
+        MemoryStream memoryStream = new(await algorithm.ComputeHashAsync(stream, token).ConfigureAwait(false));
+        while (--rounds > 0) memoryStream = new MemoryStream(await algorithm.ComputeHashAsync(memoryStream, token).ConfigureAwait(false));
         return memoryStream.ToArray();
     }
 }

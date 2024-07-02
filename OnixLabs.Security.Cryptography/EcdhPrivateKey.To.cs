@@ -12,22 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Buffers;
-
 namespace OnixLabs.Security.Cryptography;
 
-/// <summary>
-/// Represents an RSA cryptographic public key.
-/// </summary>
-/// <param name="keyData">The underlying key data of the RSA cryptographic public key.</param>
-public sealed partial class RsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IRsaPublicKey, ISpanParsable<RsaPublicKey>
+public sealed partial class EcdhPrivateKey
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RsaPublicKey"/> struct.
+    /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="EcdhPrivateKey"/> instance.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="RsaPublicKey"/> instance.</param>
-    public RsaPublicKey(ReadOnlySequence<byte> value) : this(value.ToArray())
-    {
-    }
+    /// <returns>Returns a new <see cref="NamedPrivateKey"/> from the current <see cref="EcdhPrivateKey"/> instance.</returns>
+    public override NamedPrivateKey ToNamedPrivateKey() => new(this, "ECDH");
 }

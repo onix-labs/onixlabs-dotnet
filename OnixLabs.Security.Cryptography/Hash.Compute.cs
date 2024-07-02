@@ -96,11 +96,11 @@ public readonly partial struct Hash
         algorithm.ComputeHash(data, rounds);
 
     /// <summary>
-    /// Computes the hash value for the specified <see cref="ReadOnlySpan{Char}"/>.
+    /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
     /// <param name="data">The input data to compute the hash for.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{Char}"/>.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
@@ -114,7 +114,7 @@ public readonly partial struct Hash
     /// <param name="token">The token to monitor for cancellation requests.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static async Task<Hash> ComputeAsync(HashAlgorithm algorithm, Stream stream, CancellationToken token = default) =>
-        await algorithm.ComputeHashAsync(stream, token);
+        await algorithm.ComputeHashAsync(stream, token).ConfigureAwait(false);
 
     /// <summary>
     /// Asynchronously computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
@@ -125,7 +125,7 @@ public readonly partial struct Hash
     /// <param name="token">The token to monitor for cancellation requests.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static async Task<Hash> ComputeAsync(HashAlgorithm algorithm, Stream stream, int rounds, CancellationToken token = default) =>
-        await algorithm.ComputeHashAsync(stream, rounds, token);
+        await algorithm.ComputeHashAsync(stream, rounds, token).ConfigureAwait(false);
 
     /// <summary>
     /// Asynchronously computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
@@ -136,5 +136,5 @@ public readonly partial struct Hash
     /// <param name="token">The token to monitor for cancellation requests.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static async Task<Hash> ComputeAsync(HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1, CancellationToken token = default) =>
-        await algorithm.ComputeHashAsync(data, rounds, token);
+        await algorithm.ComputeHashAsync(data, rounds, token).ConfigureAwait(false);
 }

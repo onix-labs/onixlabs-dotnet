@@ -53,15 +53,15 @@ public interface IBaseCodec
     public static Base64Codec Base64 => new();
 
     /// <summary>
-    /// Obtains a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{Byte}"/> value.
+    /// Obtains a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <param name="provider">
     /// The <see cref="IFormatProvider"/> which will be used to obtain the base representation.
     /// <remarks> Allowed values for this parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
     /// </param>
-    /// <returns>Returns a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{Byte}"/> value.</returns>
-    /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{Byte}"/> value cannot be converted.</exception>
+    /// <returns>Returns a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
     public static string GetString(ReadOnlySpan<byte> value, IFormatProvider provider)
     {
         if (TryGetString(value, provider, out string result)) return result;
@@ -69,15 +69,15 @@ public interface IBaseCodec
     }
 
     /// <summary>
-    /// Obtains a new <see cref="T:byte[]"/> array by converting the specified <see cref="ReadOnlySpan{Char}"/> value.
+    /// Obtains a new <see cref="T:byte[]"/> array by converting the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <param name="provider">
-    /// The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{Char}"/> value.
+    /// The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/> value.
     /// <remarks> Allowed values for this parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
     /// </param>
-    /// <returns>Returns a new <see cref="T:byte[]"/> array by converting the specified <see cref="ReadOnlySpan{Char}"/> value.</returns>
-    /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{Char}"/> value cannot be converted.</exception>
+    /// <returns>Returns a new <see cref="T:byte[]"/> array by converting the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
     public static byte[] GetBytes(ReadOnlySpan<char> value, IFormatProvider provider)
     {
         if (TryGetBytes(value, provider, out byte[] result)) return result;
@@ -85,14 +85,14 @@ public interface IBaseCodec
     }
 
     /// <summary>
-    /// Tries to obtain a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{Byte}"/> value.
+    /// Tries to obtain a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <param name="provider">
     /// The <see cref="IFormatProvider"/> which will be used to obtain the base representation.
     /// <remarks> Allowed values for this parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
     /// </param>
-    /// <param name="result"> A base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{Byte}"/> value, or an empty string if the value cannot be converted.</param>
+    /// <param name="result"> A base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value, or an empty string if the value cannot be converted.</param>
     /// <returns>Returns <see langword="true"/> if the conversion was successful; otherwise, <see langword="false"/>.</returns>
     public static bool TryGetString(ReadOnlySpan<byte> value, IFormatProvider provider, out string result)
     {
@@ -109,14 +109,14 @@ public interface IBaseCodec
     }
 
     /// <summary>
-    /// Tries to obtain a new <see cref="T:byte[]"/> array by converting the specified <see cref="ReadOnlySpan{Char}"/> value.
+    /// Tries to obtain a new <see cref="T:byte[]"/> array by converting the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <param name="provider">
-    /// The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{Char}"/> value.
+    /// The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/> value.
     /// <remarks> Allowed values for this parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
     /// </param>
-    /// <param name="result">A new <see cref="T:byte[]"/> array by converting the specified <see cref="ReadOnlySpan{Char}"/> value, or an empty <see cref="T:byte[]"/> array if the value cannot be converted.</param>
+    /// <param name="result">A new <see cref="T:byte[]"/> array by converting the specified <see cref="ReadOnlySpan{T}"/> value, or an empty <see cref="T:byte[]"/> array if the value cannot be converted.</param>
     /// <returns>Returns <see langword="true"/> if the conversion was successful; otherwise, <see langword="false"/>.</returns>
     public static bool TryGetBytes(ReadOnlySpan<char> value, IFormatProvider provider, out byte[] result)
     {

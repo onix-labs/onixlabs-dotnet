@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using OnixLabs.Core;
+using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -62,15 +63,15 @@ public static class HashAlgorithmExtensions
         algorithm.ComputeHash(data.Copy(offset, count), rounds);
 
     /// <summary>
-    /// Computes the hash value for the specified <see cref="ReadOnlySpan{Char}"/>.
+    /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
     /// <param name="data">The input data to compute the hash for.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{Char}"/>.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
-        algorithm.ComputeHash((encoding ?? Encoding.UTF8).GetBytes(data.ToArray()), rounds);
+        algorithm.ComputeHash(encoding.GetOrDefault().GetBytes(data.ToArray()), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="Stream"/> object.
@@ -97,7 +98,7 @@ public static class HashAlgorithmExtensions
     /// <param name="token">The token to monitor for cancellation requests.</param>
     /// <returns>Returns a task that represents the asynchronous compute hash operation and wraps the computed hash value.</returns>
     public static async Task<byte[]> ComputeHashAsync(this HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1, CancellationToken token = default) =>
-        await algorithm.ComputeHashAsync(new MemoryStream(data.ToByteArray()), rounds, token);
+        await algorithm.ComputeHashAsync(new MemoryStream(data.ToByteArray()), rounds, token).ConfigureAwait(false);
 
     /// <summary>
     /// Asynchronously computes the hash value for the specified <see cref="Stream"/> object.
@@ -111,8 +112,8 @@ public static class HashAlgorithmExtensions
     {
         Require(rounds > 0, "Rounds must be greater than zero", nameof(rounds));
 
-        MemoryStream memoryStream = new(await algorithm.ComputeHashAsync(stream, token));
-        while (--rounds > 0) memoryStream = new MemoryStream(await algorithm.ComputeHashAsync(memoryStream, token));
+        MemoryStream memoryStream = new(await algorithm.ComputeHashAsync(stream, token).ConfigureAwait(false));
+        while (--rounds > 0) memoryStream = new MemoryStream(await algorithm.ComputeHashAsync(memoryStream, token).ConfigureAwait(false));
         return memoryStream.ToArray();
     }
 }

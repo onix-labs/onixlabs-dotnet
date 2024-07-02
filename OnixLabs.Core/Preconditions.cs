@@ -54,6 +54,19 @@ public static class Preconditions
     }
 
     /// <summary>
+    /// Performs a general pre-condition check that fails if the specified value is <see langword="null"/>.
+    /// </summary>
+    /// <param name="value">The nullable value to check.</param>
+    /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/>.</param>
+    /// <typeparam name="T">The underlying type of the value.</typeparam>
+    /// <returns>Returns a non-null value of the specified type.</returns>
+    /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
+    public static T CheckNotNull<T>(T? value, string message = ArgumentNull) where T : struct
+    {
+        return value ?? throw new InvalidOperationException(message);
+    }
+
+    /// <summary>
     /// Performs a general pre-condition check that fails if the specified value is <see langword="null"/> or an empty string.
     /// </summary>
     /// <param name="value">The <see cref="String"/> value to check.</param>
@@ -99,6 +112,7 @@ public static class Preconditions
     /// <param name="parameterName">The name of the invalid parameter.</param>
     /// <exception cref="ArgumentOutOfRangeException">If the specified condition is <see langword="false"/>.</exception>
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("This method is obsolete and will be removed in a future version. Use RequireWithinRangeInclusive or RequireWithinRangeExclusive methods instead.")]
     public static void RequireWithinRange(bool condition, string message = ArgumentOutOfRange, string? parameterName = null)
     {
         if (!condition) throw new ArgumentOutOfRangeException(parameterName, message);
@@ -144,6 +158,20 @@ public static class Preconditions
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="ArgumentNullException">If the specified value is <see langword="null"/>.</exception>
     public static T RequireNotNull<T>(T? value, string message = ArgumentNull, string? parameterName = null)
+    {
+        return value ?? throw new ArgumentNullException(parameterName, message);
+    }
+
+    /// <summary>
+    /// Performs a general pre-condition requirement that fails if the specified value is <see langword="null"/>.
+    /// </summary>
+    /// <param name="value">The nullable value to check.</param>
+    /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/>.</param>
+    /// <param name="parameterName">The name of the invalid parameter.</param>
+    /// <typeparam name="T">The underlying type of the value.</typeparam>
+    /// <returns>Returns a non-null value of the specified type.</returns>
+    /// <exception cref="ArgumentNullException">If the specified value is <see langword="null"/>.</exception>
+    public static T RequireNotNull<T>(T? value, string message = ArgumentNull, string? parameterName = null) where T : struct
     {
         return value ?? throw new ArgumentNullException(parameterName, message);
     }

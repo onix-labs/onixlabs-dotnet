@@ -53,30 +53,30 @@ public static class Extensions
     public static Base64 ToBase64(this byte[] value) => new(value);
 
     /// <summary>
-    /// Converts the current <see cref="ReadOnlySpan{Byte}"/> into a new <see cref="Base16"/> instance.
+    /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Base16"/> instance.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{Byte}"/> value to convert.</param>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value to convert.</param>
     /// <returns>Returns a new <see cref="Base16"/> instance.</returns>
     public static Base16 ToBase16(this ReadOnlySpan<byte> value) => new(value);
 
     /// <summary>
-    /// Converts the current <see cref="ReadOnlySpan{Byte}"/> into a new <see cref="Base32"/> instance.
+    /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Base32"/> instance.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{Byte}"/> value to convert.</param>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value to convert.</param>
     /// <returns>Returns a new <see cref="Base32"/> instance.</returns>
     public static Base32 ToBase32(this ReadOnlySpan<byte> value) => new(value);
 
     /// <summary>
-    /// Converts the current <see cref="ReadOnlySpan{Byte}"/> into a new <see cref="Base58"/> instance.
+    /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Base58"/> instance.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{Byte}"/> value to convert.</param>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value to convert.</param>
     /// <returns>Returns a new <see cref="Base58"/> instance.</returns>
     public static Base58 ToBase58(this ReadOnlySpan<byte> value) => new(value);
 
     /// <summary>
-    /// Converts the current <see cref="ReadOnlySpan{Byte}"/> into a new <see cref="Base64"/> instance.
+    /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Base64"/> instance.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{Byte}"/> value to convert.</param>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value to convert.</param>
     /// <returns>Returns a new <see cref="Base64"/> instance.</returns>
     public static Base64 ToBase64(this ReadOnlySpan<byte> value) => new(value);
 }

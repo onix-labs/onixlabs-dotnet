@@ -43,11 +43,6 @@ public static class StringExtensions
     private const DateTimeStyles DefaultStyles = DateTimeStyles.None;
 
     /// <summary>
-    /// The default encoding.
-    /// </summary>
-    private static readonly Encoding DefaultEncoding = Encoding.UTF8;
-
-    /// <summary>
     /// Repeats the current <see cref="String"/> by the specified number of repetitions.
     /// </summary>
     /// <param name="value">The <see cref="String"/> instance to repeat.</param>
@@ -246,7 +241,7 @@ public static class StringExtensions
     /// <param name="value">The current <see cref="String"/> from which to obtain a <see cref="T:Byte[]"/>.</param>
     /// <param name="encoding">The encoding that will be used to convert the current <see cref="String"/> into a <see cref="T:Byte[]"/>.</param>
     /// <returns>Returns a new <see cref="T:Byte[]"/> representation of the current <see cref="String"/> instance.</returns>
-    public static byte[] ToByteArray(this string value, Encoding? encoding = null) => (encoding ?? DefaultEncoding).GetBytes(value);
+    public static byte[] ToByteArray(this string value, Encoding? encoding = null) => encoding.GetOrDefault().GetBytes(value);
 
     /// <summary>
     /// Converts the current <see cref="String"/> instance into a new <see cref="DateTime"/> instance.

@@ -28,11 +28,11 @@ public sealed partial class EcdhPublicKey
     public static EcdhPublicKey Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>
-    /// Parses the specified <see cref="ReadOnlySpan{Char}"/> value into a <see cref="EcdhPublicKey"/> value.
+    /// Parses the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="EcdhPublicKey"/> value.
     /// </summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
-    /// <returns>Returns a new <see cref="EcdhPublicKey"/> instance, parsed from the specified <see cref="ReadOnlySpan{Char}"/> value.</returns>
+    /// <returns>Returns a new <see cref="EcdhPublicKey"/> instance, parsed from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static EcdhPublicKey Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
         if (TryParse(value, provider, out EcdhPublicKey result)) return result;
@@ -52,13 +52,13 @@ public sealed partial class EcdhPublicKey
     public static bool TryParse(string? value, IFormatProvider? provider, out EcdhPublicKey result) => TryParse(value.AsSpan(), provider, out result);
 
     /// <summary>
-    /// Tries to parse the specified <see cref="ReadOnlySpan{Char}"/> value into a <see cref="EcdhPublicKey"/> value.
+    /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="EcdhPublicKey"/> value.
     /// </summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// A new <see cref="EcdhPublicKey"/> instance, parsed from the specified <see cref="ReadOnlySpan{Char}"/> value, or the default
-    /// <see cref="EcdhPublicKey"/> value if the specified <see cref="ReadOnlySpan{Char}"/> could not be parsed.
+    /// A new <see cref="EcdhPublicKey"/> instance, parsed from the specified <see cref="ReadOnlySpan{T}"/> value, or the default
+    /// <see cref="EcdhPublicKey"/> value if the specified <see cref="ReadOnlySpan{T}"/> could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out EcdhPublicKey result)

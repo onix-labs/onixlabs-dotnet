@@ -32,9 +32,9 @@ public static class Extensions
     public static Hash ToHash(this byte[] value) => value;
 
     /// <summary>
-    /// Converts the current <see cref="ReadOnlySpan{Byte}"/> into a new <see cref="Hash"/> instance.
+    /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Hash"/> instance.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{Byte}"/> value to convert.</param>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value to convert.</param>
     /// <returns>Returns a new <see cref="Hash"/> instance.</returns>
     public static Hash ToHash(this ReadOnlySpan<byte> value) => value;
 
@@ -46,9 +46,9 @@ public static class Extensions
     public static Secret ToSecret(this byte[] value) => value;
 
     /// <summary>
-    /// Converts the current <see cref="ReadOnlySpan{Byte}"/> into a new <see cref="Secret"/> instance.
+    /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Secret"/> instance.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{Byte}"/> value to convert.</param>
+    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value to convert.</param>
     /// <returns>Returns a new <see cref="Secret"/> instance.</returns>
     public static Secret ToSecret(this ReadOnlySpan<byte> value) => value;
 }

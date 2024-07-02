@@ -52,6 +52,21 @@ public sealed class Base58Tests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Base58 should be implicitly constructable from ReadOnlySequence<byte>")]
+    public void Base58ShouldBeImplicitlyConstructableFromReadOnlySequenceOfByte()
+    {
+        // Given
+        byte[] expected = [1, 2, 3, 4];
+        ReadOnlySequence<byte> value = new(expected);
+
+        // When
+        Base58 candidate = value;
+        byte[] actual = candidate.ToByteArray();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Base58 should be implicitly constructable from string")]
     public void Base58ShouldBeImplicitlyConstructableFromString()
     {

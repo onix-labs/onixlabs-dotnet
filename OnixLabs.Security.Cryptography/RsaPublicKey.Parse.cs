@@ -28,11 +28,11 @@ public sealed partial class RsaPublicKey
     public static RsaPublicKey Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>
-    /// Parses the specified <see cref="ReadOnlySpan{Char}"/> value into a <see cref="RsaPublicKey"/> value.
+    /// Parses the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="RsaPublicKey"/> value.
     /// </summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
-    /// <returns>Returns a new <see cref="RsaPublicKey"/> instance, parsed from the specified <see cref="ReadOnlySpan{Char}"/> value.</returns>
+    /// <returns>Returns a new <see cref="RsaPublicKey"/> instance, parsed from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static RsaPublicKey Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
         if (TryParse(value, provider, out RsaPublicKey result)) return result;
@@ -52,13 +52,13 @@ public sealed partial class RsaPublicKey
     public static bool TryParse(string? value, IFormatProvider? provider, out RsaPublicKey result) => TryParse(value.AsSpan(), provider, out result);
 
     /// <summary>
-    /// Tries to parse the specified <see cref="ReadOnlySpan{Char}"/> value into a <see cref="RsaPublicKey"/> value.
+    /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="RsaPublicKey"/> value.
     /// </summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// A new <see cref="RsaPublicKey"/> instance, parsed from the specified <see cref="ReadOnlySpan{Char}"/> value, or the default
-    /// <see cref="RsaPublicKey"/> value if the specified <see cref="ReadOnlySpan{Char}"/> could not be parsed.
+    /// A new <see cref="RsaPublicKey"/> instance, parsed from the specified <see cref="ReadOnlySpan{T}"/> value, or the default
+    /// <see cref="RsaPublicKey"/> value if the specified <see cref="ReadOnlySpan{T}"/> could not be parsed.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out RsaPublicKey result)

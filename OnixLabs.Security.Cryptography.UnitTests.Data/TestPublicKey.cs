@@ -14,4 +14,7 @@
 
 namespace OnixLabs.Security.Cryptography.UnitTests.Data;
 
-public sealed class TestPublicKey(ReadOnlySpan<byte> value) : PublicKey(value);
+public sealed class TestPublicKey(ReadOnlySpan<byte> value) : PublicKey(value)
+{
+    public override NamedPublicKey ToNamedPublicKey() => new(this, "TEST");
+}

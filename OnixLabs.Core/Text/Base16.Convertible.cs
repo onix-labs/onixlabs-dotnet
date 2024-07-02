@@ -31,8 +31,15 @@ public readonly partial struct Base16
     /// Create a new <see cref="Base16"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="Base16"/> instance.</param>
-    /// <returns>Returns a new <see cref="Base16"/> instance from the specified <see cref="ReadOnlySpan{Char}"/> value.</returns>
+    /// <returns>Returns a new <see cref="Base16"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static implicit operator Base16(ReadOnlySpan<byte> value) => new(value);
+
+    /// <summary>
+    /// Create a new <see cref="Base16"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.
+    /// </summary>
+    /// <param name="value">The value from which to create a new <see cref="Base16"/> instance.</param>
+    /// <returns>Returns a new <see cref="Base16"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.</returns>
+    public static implicit operator Base16(ReadOnlySequence<byte> value) => new(value);
 
     /// <summary>
     /// Create a new <see cref="Base16"/> instance from the specified <see cref="string"/> value.
@@ -40,7 +47,7 @@ public readonly partial struct Base16
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="Base16"/> instance.</param>
     /// <returns>Returns a new <see cref="Base16"/> instance from the specified <see cref="string"/> value.</returns>
-    public static implicit operator Base16(string value) => new(Encoding.UTF8.GetBytes(value));
+    public static implicit operator Base16(string value) => new(value);
 
     /// <summary>
     /// Create a new <see cref="Base16"/> instance from the specified <see cref="T:char[]"/> value.
@@ -48,13 +55,13 @@ public readonly partial struct Base16
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="Base16"/> instance.</param>
     /// <returns>Returns a new <see cref="Base16"/> instance from the specified <see cref="T:char[]"/> value.</returns>
-    public static implicit operator Base16(char[] value) => new(Encoding.UTF8.GetBytes(value));
+    public static implicit operator Base16(char[] value) => new(value);
 
     /// <summary>
     /// Create a new <see cref="Base16"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.
-    /// <remarks>The <see cref="ReadOnlySequence{Char}"/> value will be encoded using the <see cref="Encoding.UTF8"/> encoding.</remarks>
+    /// <remarks>The <see cref="ReadOnlySequence{T}"/> value will be encoded using the <see cref="Encoding.UTF8"/> encoding.</remarks>
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="Base16"/> instance.</param>
-    /// <returns>Returns a new <see cref="Base16"/> instance from the specified <see cref="ReadOnlySequence{Char}"/> value.</returns>
-    public static implicit operator Base16(ReadOnlySequence<char> value) => new(Encoding.UTF8.GetBytes(value));
+    /// <returns>Returns a new <see cref="Base16"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.</returns>
+    public static implicit operator Base16(ReadOnlySequence<char> value) => new(value);
 }

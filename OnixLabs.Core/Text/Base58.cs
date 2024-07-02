@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
+using System.Text;
 
 namespace OnixLabs.Core.Text;
 
@@ -22,5 +24,38 @@ namespace OnixLabs.Core.Text;
 /// <param name="value">The underlying <see cref="T:Byte[]"/> value.</param>
 public readonly partial struct Base58(ReadOnlySpan<byte> value) : IBaseValue<Base58>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base58"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Base58"/> instance.</param>
+    public Base58(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base58"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="string"/> with which to initialize the <see cref="Base58"/> instance.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
+    public Base58(string value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base58"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="T:char[]"/> with which to initialize the <see cref="Base58"/> instance.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
+    public Base58(char[] value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base58"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Base58"/> instance.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
+    public Base58(ReadOnlySequence<char> value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
+    {
+    }
+
     private readonly byte[] value = value.ToArray();
 }

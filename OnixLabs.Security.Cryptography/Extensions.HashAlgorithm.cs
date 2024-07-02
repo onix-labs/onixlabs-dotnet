@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using OnixLabs.Core;
+using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -62,15 +63,15 @@ public static class HashAlgorithmExtensions
         algorithm.ComputeHash(data.Copy(offset, count), rounds);
 
     /// <summary>
-    /// Computes the hash value for the specified <see cref="ReadOnlySpan{Char}"/>.
+    /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
     /// <param name="data">The input data to compute the hash for.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{Char}"/>.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
-        algorithm.ComputeHash((encoding ?? Encoding.UTF8).GetBytes(data.ToArray()), rounds);
+        algorithm.ComputeHash(encoding.GetOrDefault().GetBytes(data.ToArray()), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="Stream"/> object.

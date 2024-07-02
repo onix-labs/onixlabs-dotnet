@@ -45,4 +45,9 @@
     <ItemGroup>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
     </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="OnixLabs.Numerics"/>
+        <InternalsVisibleTo Include="OnixLabs.Security"/>
+        <InternalsVisibleTo Include="OnixLabs.Security.Cryptography"/>
+    </ItemGroup>
 </Project>

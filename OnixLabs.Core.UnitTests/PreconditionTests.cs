@@ -54,6 +54,34 @@ public sealed class PreconditionTests
         CheckNotNull(new object());
     }
 
+    [Fact(DisplayName = "CheckNotNull of ValueType should throw an InvalidOperationException when the condition is null")]
+    public void CheckNotNullOfValueTypeShouldThrowInvalidOperationExceptionWhenConditionIsNull()
+    {
+        // Given
+        int? expected = null;
+        int actual = default;
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => actual = CheckNotNull(expected));
+
+        // Then
+        Assert.Equal(default, actual);
+        Assert.Equal("Argument must not be null.", exception.Message);
+    }
+
+    [Fact(DisplayName = "CheckNotNull of ValueType should not throw an InvalidOperationException when the condition is not null")]
+    public void CheckNotNullOfValueTypeShouldNotThrowInvalidOperationExceptionWhenConditionIsNotNull()
+    {
+        // Given
+        int? expected = 123;
+
+        // When
+        int actual = CheckNotNull(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "CheckNotNullOrEmpty should throw an InvalidOperationException when the value is null")]
     public void CheckNotNullOrEmptyShouldThrowInvalidOperationExceptionWhenValueIsNull()
     {
@@ -238,6 +266,34 @@ public sealed class PreconditionTests
     {
         // Given / When / Then
         RequireNotNull(new object());
+    }
+
+    [Fact(DisplayName = "RequireNotNull of ValueType should throw an InvalidOperationException when the condition is null")]
+    public void RequireNotNullOfValueTypeShouldThrowInvalidOperationExceptionWhenConditionIsNull()
+    {
+        // Given
+        int? expected = null;
+        int actual = default;
+
+        // When
+        Exception exception = Assert.Throws<ArgumentNullException>(() => actual = RequireNotNull(expected));
+
+        // Then
+        Assert.Equal(default, actual);
+        Assert.Equal("Argument must not be null.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireNotNull of ValueType should not throw an InvalidOperationException when the condition is not null")]
+    public void RequireNotNullOfValueTypeShouldNotThrowInvalidOperationExceptionWhenConditionIsNotNull()
+    {
+        // Given
+        int? expected = 123;
+
+        // When
+        int actual = RequireNotNull(expected);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 
     [Fact(DisplayName = "RequireNotNullOrEmpty should throw an ArgumentException when the value is null")]

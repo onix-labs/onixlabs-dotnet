@@ -22,7 +22,7 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EcdsaPrivateKey
 {
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
@@ -35,7 +35,7 @@ public sealed partial class EcdsaPrivateKey
     }
 
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="offset">The offset into the byte array from which to begin using data.</param>
@@ -76,7 +76,7 @@ public sealed partial class EcdsaPrivateKey
     }
 
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
@@ -89,7 +89,7 @@ public sealed partial class EcdsaPrivateKey
     }
 
     /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{Byte}"/> data and signs the resulting hash.
+    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="offset">The offset into the byte array from which to begin using data.</param>
@@ -142,7 +142,7 @@ public sealed partial class EcdsaPrivateKey
     }
 
     /// <summary>
-    /// Signs the specified <see cref="ReadOnlySpan{Byte}"/>.
+    /// Signs the specified <see cref="ReadOnlySpan{T}"/>.
     /// </summary>
     /// <param name="hash">The hash to sign.</param>
     /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>

@@ -97,6 +97,21 @@ public sealed class Base16Tests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Base16 should be implicitly constructable from ReadOnlySequence<byte>")]
+    public void Base16ShouldBeImplicitlyConstructableFromReadOnlySequenceOfByte()
+    {
+        // Given
+        byte[] expected = [1, 2, 3, 4];
+        ReadOnlySequence<byte> value = new(expected);
+
+        // When
+        Base16 candidate = value;
+        byte[] actual = candidate.ToByteArray();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Base16 should not change when modifying the original byte array")]
     public void Base16ShouldNotChangeWhenModifyingOriginalByteArray()
     {

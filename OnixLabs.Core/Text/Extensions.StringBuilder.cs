@@ -14,7 +14,6 @@
 
 using System.ComponentModel;
 using System.Text;
-using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text;
 
@@ -33,7 +32,7 @@ public static class StringBuilderExtensions
     /// <param name="builder">The <see cref="StringBuilder"/> to append to.</param>
     /// <param name="values">The values to append.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values appended.</returns>
-    public static StringBuilder Append(this StringBuilder builder, params object[] values) => builder.Append(values.JoinToString(string.Empty));
+    public static StringBuilder Append(this StringBuilder builder, params object[] values) => builder.AppendJoin(string.Empty, values);
 
     /// <summary>
     /// Appends the specified value, prefixed with the escape sequence to the current <see cref="StringBuilder"/>.
@@ -44,12 +43,30 @@ public static class StringBuilderExtensions
     internal static StringBuilder AppendEscaped(this StringBuilder builder, char value) => builder.Append(EscapeSequence).Append(value);
 
     /// <summary>
+    /// Prepends the specified value to the current <see cref="StringBuilder"/>
+    /// </summary>
+    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
+    /// <param name="value">The value to prepend.</param>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
+    public static StringBuilder Prepend(this StringBuilder builder, object value) => builder.Insert(0, value);
+
+    /// <summary>
     /// Prepends the specified values to the current <see cref="StringBuilder"/>.
     /// </summary>
     /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
     /// <param name="values">The values to prepend.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
-    public static StringBuilder Prepend(this StringBuilder builder, params object[] values) => builder.Insert(0, values.JoinToString(string.Empty));
+    public static StringBuilder Prepend(this StringBuilder builder, params object[] values) => builder.PrependJoin(string.Empty, values);
+
+    /// <summary>
+    /// Concatenates the string representations of the elements in the provided array of objects, using the specified separator between each member, then prepends the result to the current instance of the string builder.
+    /// </summary>
+    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
+    /// <param name="separator">The string to use as a separator. <paramref name="separator" /> is included in the joined strings only if <paramref name="values" /> has more than one element.</param>
+    /// <param name="values">An array that contains the strings to concatenate and append to the current instance of the string builder.</param>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values joined and prepended.</returns>
+    public static StringBuilder PrependJoin(this StringBuilder builder, string separator, params object?[] values) =>
+        builder.Prepend(string.Join(separator, values));
 
     /// <summary>
     /// Trims the specified <see cref="char"/> value from the start and end of the current <see cref="StringBuilder"/>.
@@ -103,6 +120,8 @@ public static class StringBuilderExtensions
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="string"/> value trimmed from the end.</returns>
     public static StringBuilder TrimEnd(this StringBuilder builder, string value)
     {
+        if (string.IsNullOrEmpty(value)) return builder;
+
         while (builder.Length >= value.Length && builder.ToString(builder.Length - value.Length, value.Length) == value)
             builder.Remove(builder.Length - value.Length, value.Length);
 
@@ -117,6 +136,8 @@ public static class StringBuilderExtensions
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="string"/> value trimmed from the start.</returns>
     public static StringBuilder TrimStart(this StringBuilder builder, string value)
     {
+        if (string.IsNullOrEmpty(value)) return builder;
+
         while (builder.Length >= value.Length && builder.ToString(0, value.Length) == value)
             builder.Remove(0, value.Length);
 

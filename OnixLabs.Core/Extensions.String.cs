@@ -48,7 +48,8 @@ public static class StringExtensions
     /// <param name="value">The <see cref="String"/> instance to repeat.</param>
     /// <param name="count">The number of repetitions of the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the repetition of the current <see cref="String"/> instance.</returns>
-    public static string Repeat(this string value, int count) => count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
+    public static string Repeat(this string value, int count) =>
+        count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
 
     /// <summary>
     /// Obtains a sub-string before the specified index within the current <see cref="String"/> instance.

@@ -27,6 +27,7 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <summary>
     /// Gets the default ordinal comparer for comparing <see cref="NumberInfo"/> values.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly NumberInfoOrdinalityComparer Default = new();
 
     /// <summary>

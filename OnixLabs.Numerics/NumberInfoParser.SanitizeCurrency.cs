@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Linq;
 
 namespace OnixLabs.Numerics;
 
@@ -129,8 +128,11 @@ internal sealed partial class NumberInfoParser
                 break;
         }
 
-        bool[] values = [hasParentheses, hasLeadingNegativeSign, hasTrailingNegativeSign];
-        if (values.Count(value => value) > 1) return false;
+        int count = 0;
+        if (hasParentheses) count++;
+        if (hasLeadingNegativeSign) count++;
+        if (hasTrailingNegativeSign) count++;
+        if (count > 1) return false;
 
         if (hasParentheses || hasLeadingNegativeSign || hasTrailingNegativeSign) sign = -1;
         return true;

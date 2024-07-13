@@ -96,6 +96,7 @@ public abstract partial class Sha3 : HashAlgorithm
     /// </summary>
     public override void Initialize()
     {
+        // ReSharper disable HeapView.ObjectAllocation.Evident
         blockSize = default;
         inputPointer = default;
         outputPointer = default;

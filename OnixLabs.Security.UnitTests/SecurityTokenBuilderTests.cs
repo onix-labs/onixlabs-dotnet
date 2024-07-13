@@ -652,7 +652,7 @@ public sealed class SecurityTokenBuilderTests
     [InlineData(16, 256, "R.%s+A5\"9@<F69q>")]
     [InlineData(16, 721, "LI*Q&8/oqnSIA1!D")]
     [InlineData(16, 999, "7?f-w2W619ALLtx.")]
-    [InlineData(32, 0, "&{_0t0>P`zBR7S|c;\\@D{]\\d$X.#ZhrQ")]
+    [InlineData(32, 0, @"&{_0t0>P`zBR7S|c;\@D{]\d$X.#ZhrQ")]
     [InlineData(32, 4, "{\\1Mbf$QS(w3JZ+XZS+;G}!OijJp9C!V")]
     [InlineData(32, 7, "K;!eI@d/]:Q.Pk\"L=F;c(1qSKc/cT^_B")]
     [InlineData(32, 9, "ORfTzN?/i3,U}oA982,=bfWq2D@ydEV}")]

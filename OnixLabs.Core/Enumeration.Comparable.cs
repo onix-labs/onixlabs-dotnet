@@ -23,7 +23,7 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <param name="other">An object to compare with the current instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
-    public int CompareTo(T? other) => Value.CompareTo(other?.Value);
+    public int CompareTo(T? other) => Value.CompareToNullable(other?.Value);
 
     /// <summary>
     /// Compares the current instance with another object of the same type and returns an integer that indicates

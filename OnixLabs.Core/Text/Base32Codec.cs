@@ -82,6 +82,7 @@ public sealed class Base32Codec : IBaseCodec
                 return false;
             }
 
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             StringBuilder builder = new(value.Length * InputSize / OutputSize);
 
             int inputPosition = 0;
@@ -168,6 +169,7 @@ public sealed class Base32Codec : IBaseCodec
 
             ReadOnlySpan<char> valueWithoutPadding = formatProvider.IsPadded ? value.TrimEnd('=') : value;
 
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             byte[] outputBytes = new byte[valueWithoutPadding.Length * OutputSize / InputSize];
 
             if (outputBytes.Length == 0)

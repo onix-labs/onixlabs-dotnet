@@ -44,7 +44,7 @@ public readonly partial struct SecurityToken
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(SecurityToken left, SecurityToken right) => Equals(left, right);
+    public static bool operator ==(SecurityToken left, SecurityToken right) => left.Equals(right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -52,5 +52,5 @@ public readonly partial struct SecurityToken
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(SecurityToken left, SecurityToken right) => !Equals(left, right);
+    public static bool operator !=(SecurityToken left, SecurityToken right) => !left.Equals(right);
 }

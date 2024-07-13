@@ -33,8 +33,11 @@ public readonly partial struct BigDecimal
             return exponent is 0 ? One : Zero;
         }
 
-        if (exponent is 0) return One;
-        if (exponent is 1) return value;
+        switch (exponent)
+        {
+            case 0: return One;
+            case 1: return value;
+        }
 
         BigDecimal result = Abs(value);
         int absExponent = int.Abs(exponent);

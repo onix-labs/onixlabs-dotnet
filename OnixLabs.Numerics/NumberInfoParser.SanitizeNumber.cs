@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Linq;
 
 namespace OnixLabs.Numerics;
 
@@ -67,8 +66,13 @@ internal sealed partial class NumberInfoParser
         // Trim whitespace that appears between the number and an exponent
         if (!TryTrimTrailingWhitespace(ref value)) return false;
 
-        bool[] values = [hasParentheses, hasLeadingPositiveSign, hasLeadingNegativeSign, hasTrailingPositiveSign, hasTrailingNegativeSign];
-        if (values.Count(value => value) > 1) return false;
+        int count = 0;
+        if (hasParentheses) count++;
+        if (hasLeadingPositiveSign) count++;
+        if (hasLeadingNegativeSign) count++;
+        if (hasTrailingPositiveSign) count++;
+        if (hasTrailingNegativeSign) count++;
+        if (count > 1) return false;
 
         if (hasParentheses || hasLeadingNegativeSign || hasTrailingNegativeSign) sign = -1;
         return true;

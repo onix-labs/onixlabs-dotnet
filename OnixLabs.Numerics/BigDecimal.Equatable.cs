@@ -32,6 +32,7 @@ public readonly partial struct BigDecimal
     /// <param name="right">The right-hand value to compare.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public static bool Equals(BigDecimal left, BigDecimal right, BigDecimalEqualityComparer comparer) => comparer.Equals(left, right);
 
     /// <summary>
@@ -48,6 +49,7 @@ public readonly partial struct BigDecimal
     /// <param name="other">The other instance of <see cref="BigDecimal"/> to compare with the current instance.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public bool Equals(BigDecimal other, BigDecimalEqualityComparer comparer) => Equals(this, other, comparer);
 
     /// <summary>

@@ -51,6 +51,22 @@ public static class StringBuilderExtensions
     public static StringBuilder Prepend(this StringBuilder builder, object value) => builder.Insert(0, value);
 
     /// <summary>
+    /// Prepends the specified value to the current <see cref="StringBuilder"/>
+    /// </summary>
+    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
+    /// <param name="value">The value to prepend.</param>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
+    public static StringBuilder Prepend(this StringBuilder builder, char value) => builder.Insert(0, value);
+
+    /// <summary>
+    /// Prepends the specified value to the current <see cref="StringBuilder"/>
+    /// </summary>
+    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
+    /// <param name="value">The value to prepend.</param>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
+    public static StringBuilder Prepend(this StringBuilder builder, string value) => builder.Insert(0, value);
+
+    /// <summary>
     /// Prepends the specified values to the current <see cref="StringBuilder"/>.
     /// </summary>
     /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>

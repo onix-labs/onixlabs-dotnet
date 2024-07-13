@@ -57,8 +57,7 @@ public static class IEnumerableExtensions
         using IEnumerator<T> enumerator = enumerable.GetEnumerator();
 
         // AllEqualBy of empty IEnumerable is considered true.
-        if (!enumerator.MoveNext())
-            return true;
+        if (!enumerator.MoveNext()) return true;
 
         TProperty firstValue = selector(enumerator.Current);
 
@@ -84,15 +83,15 @@ public static class IEnumerableExtensions
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
         RequireNotNull(selector, SelectorNullExceptionMessage, nameof(selector));
 
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         HashSet<TProperty> seenValues = new(comparer);
 
-        // ReSharper disable once LoopCanBeConvertedToQuery
+        // ReSharper disable once LoopCanBeConvertedToQuery, HeapView.ObjectAllocation.Possible
         foreach (T item in enumerable)
         {
             TProperty value = selector(item);
 
-            if (seenValues.Add(value))
-                continue;
+            if (seenValues.Add(value)) continue;
 
             return true;
         }
@@ -112,6 +111,7 @@ public static class IEnumerableExtensions
 
         int count = 0;
 
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
         foreach (object? _ in enumerable)
             checked
             {
@@ -136,6 +136,7 @@ public static class IEnumerableExtensions
 
         int result = 0;
 
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
         foreach (T element in enumerable)
             if (!predicate(element))
                 checked
@@ -176,8 +177,8 @@ public static class IEnumerableExtensions
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
         RequireNotNull(action, ActionNullExceptionMessage, nameof(action));
 
-        foreach (object? element in enumerable)
-            action(element);
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
+        foreach (object? element in enumerable) action(element);
     }
 
     /// <summary>
@@ -192,8 +193,8 @@ public static class IEnumerableExtensions
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
         RequireNotNull(action, ActionNullExceptionMessage, nameof(action));
 
-        foreach (T element in enumerable)
-            action(element);
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
+        foreach (T element in enumerable) action(element);
     }
 
     /// <summary>
@@ -207,8 +208,8 @@ public static class IEnumerableExtensions
 
         HashCode result = new();
 
-        foreach (object? element in enumerable)
-            result.Add(element);
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
+        foreach (object? element in enumerable) result.Add(element);
 
         return result.ToHashCode();
     }
@@ -225,8 +226,8 @@ public static class IEnumerableExtensions
 
         HashCode result = new();
 
-        foreach (T element in enumerable)
-            result.Add(element);
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
+        foreach (T element in enumerable) result.Add(element);
 
         return result.ToHashCode();
     }
@@ -241,9 +242,8 @@ public static class IEnumerableExtensions
         // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
 
-        // ReSharper disable once LoopCanBeConvertedToQuery
-        foreach (object? _ in enumerable)
-            return false;
+        // ReSharper disable once LoopCanBeConvertedToQuery, HeapView.ObjectAllocation.Possible
+        foreach (object? _ in enumerable) return false;
 
         return true;
     }
@@ -259,9 +259,8 @@ public static class IEnumerableExtensions
         // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
 
-        // ReSharper disable once LoopCanBeConvertedToQuery
-        foreach (T _ in enumerable)
-            return false;
+        // ReSharper disable once LoopCanBeConvertedToQuery, HeapView.ObjectAllocation.Possible
+        foreach (T _ in enumerable) return false;
 
         return true;
     }
@@ -293,6 +292,7 @@ public static class IEnumerableExtensions
 
         long count = 0;
 
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
         foreach (object? _ in enumerable)
         {
             checked
@@ -319,6 +319,7 @@ public static class IEnumerableExtensions
 
         long count = 0;
 
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
         foreach (T _ in enumerable)
         {
             checked
@@ -387,10 +388,11 @@ public static class IEnumerableExtensions
         // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
 
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         StringBuilder builder = new();
 
-        foreach (object? element in enumerable)
-            builder.Append(element.ToStringOrNull()).Append(separator);
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
+        foreach (object? element in enumerable) builder.Append(element.ToStringOrNull()).Append(separator);
 
         builder.TrimEnd(separator);
 
@@ -409,10 +411,11 @@ public static class IEnumerableExtensions
         // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
 
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         StringBuilder builder = new();
 
-        foreach (T element in enumerable)
-            builder.Append(element.ToStringOrNull()).Append(separator);
+        // ReSharper disable once HeapView.ObjectAllocation.Possible, HeapView.PossibleBoxingAllocation
+        foreach (T element in enumerable) builder.Append(element.ToStringOrNull()).Append(separator);
 
         builder.TrimEnd(separator);
 
@@ -443,6 +446,7 @@ public static class IEnumerableExtensions
     /// </summary>
     /// <param name="enumerable">The current <see cref="IEnumerable"/> on which to perform the operation.</param>
     /// <returns>Returns a number that represents how many elements are in the current <see cref="IEnumerable"/>.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public static long LongCount(this IEnumerable enumerable)
     {
         // ReSharper disable PossibleMultipleEnumeration
@@ -450,6 +454,7 @@ public static class IEnumerableExtensions
 
         long count = 0;
 
+        // ReSharper disable once HeapView.ObjectAllocation.Possible
         foreach (object? _ in enumerable)
             checked
             {
@@ -504,7 +509,14 @@ public static class IEnumerableExtensions
         // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
 
-        return Result<Optional<T>>.Of(() => Optional<T>.Of(enumerable.SingleOrDefault(predicate ?? (_ => true))));
+        try
+        {
+            return Optional<T>.Of(enumerable.SingleOrDefault(predicate ?? (_ => true)));
+        }
+        catch (Exception exception)
+        {
+            return Result<Optional<T>>.Failure(exception);
+        }
     }
 
     /// <summary>
@@ -518,8 +530,7 @@ public static class IEnumerableExtensions
         // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
 
-        IEnumerable<T> numbers = enumerable as T[] ?? enumerable.ToArray();
-        return numbers.IsEmpty() ? T.Zero : numbers.Aggregate((left, right) => left + right);
+        return enumerable.IsEmpty() ? T.Zero : enumerable.Aggregate((left, right) => left + right);
     }
 
     /// <summary>
@@ -552,7 +563,7 @@ public static class IEnumerableExtensions
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
         RequireNotNull(predicate, PredicateNullExceptionMessage, nameof(predicate));
 
-        // ReSharper disable once LoopCanBeConvertedToQuery
+        // ReSharper disable once LoopCanBeConvertedToQuery, HeapView.ObjectAllocation.Possible
         foreach (T element in enumerable)
             if (!predicate(element))
                 yield return element;
@@ -621,11 +632,13 @@ public static class IEnumerableExtensions
     /// <param name="provider">An object that provides culture-specific formatting information.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="IEnumerable{T}"/>.</returns>
+    // ReSharper disable once HeapView.ClosureAllocation
     public static string ToCollectionString<T>(this IEnumerable<T> enumerable, string format, IFormatProvider? provider = null) where T : IFormattable
     {
         // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
 
+        // ReSharper disable once HeapView.DelegateAllocation
         return enumerable.Select(element => element.ToString(format, provider)).ToCollectionString();
     }
 }

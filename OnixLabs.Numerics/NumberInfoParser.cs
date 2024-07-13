@@ -37,8 +37,8 @@ internal sealed partial class NumberInfoParser(NumberStyles style, IFormatProvid
 
         // Disallow the following number styles as they are unsupported.
         if (style == None) return false;
-        if (style.HasFlag(AllowHexSpecifier)) return false;
-        if (style.HasFlag(AllowBinarySpecifier)) return false;
+        if ((style & AllowHexSpecifier) is not 0) return false;
+        if ((style & AllowBinarySpecifier) is not 0) return false;
 
         // Special handling for sanitization of currency values.
         if (style == Currency)
@@ -81,35 +81,36 @@ internal sealed partial class NumberInfoParser(NumberStyles style, IFormatProvid
 
             if (value.StartsWith(numberFormat.NumberGroupSeparator))
             {
-                if (!style.HasFlag(AllowThousands)) return false;
+                if ((style & AllowThousands) is 0) return false;
                 value = value.TrimStart(numberFormat.NumberGroupSeparator);
                 continue;
             }
 
             if (value.StartsWith(numberFormat.CurrencyGroupSeparator))
             {
-                if (!style.HasFlag(AllowThousands)) return false;
+                if ((style & AllowThousands) is 0) return false;
                 value = value.TrimStart(numberFormat.CurrencyGroupSeparator);
                 continue;
             }
 
             if (value.StartsWith(numberFormat.NumberDecimalSeparator))
             {
-                if (hasDecimalPoint || !style.HasFlag(AllowDecimalPoint)) return false;
+                if (hasDecimalPoint || (style & AllowDecimalPoint) is 0) return false;
                 hasDecimalPoint = true;
                 value = value.TrimStart(numberFormat.NumberDecimalSeparator);
                 continue;
             }
 
+            // ReSharper disable once InvertIf
             if (value.StartsWith(numberFormat.CurrencyDecimalSeparator))
             {
-                if (hasDecimalPoint || !style.HasFlag(AllowDecimalPoint)) return false;
+                if (hasDecimalPoint || (style & AllowDecimalPoint) is 0) return false;
                 hasDecimalPoint = true;
                 value = value.TrimStart(numberFormat.CurrencyDecimalSeparator);
                 continue;
             }
 
-            // If we reach this point, the start of the string isn't an ascii digit, thousand or decimal separator, therefore false.
+            // If we reach this point, the start of the string isn't an ascii digit, thousands or decimal separator, therefore false.
             return false;
         }
 

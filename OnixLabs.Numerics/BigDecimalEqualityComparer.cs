@@ -25,11 +25,13 @@ public abstract class BigDecimalEqualityComparer : IEqualityComparer<BigDecimal>
     /// <summary>
     /// Gets an equality comparer that strictly compares <see cref="BigDecimal"/> values.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly BigDecimalEqualityComparer Strict = new BigDecimalStrictEqualityComparer();
 
     /// <summary>
     /// Gets an equality comparer that semantically compares <see cref="BigDecimal"/> values.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly BigDecimalEqualityComparer Semantic = new BigDecimalSemanticEqualityComparer();
 
     /// <summary>

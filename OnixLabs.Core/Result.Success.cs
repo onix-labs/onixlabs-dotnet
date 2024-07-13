@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnixLabs.Core;
@@ -25,6 +26,7 @@ public sealed class Success : Result, IValueEquatable<Success>
     /// <summary>
     /// Gets the singleton <see cref="Success"/> instance.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly Success Instance = new();
 
     /// <summary>
@@ -131,7 +133,18 @@ public sealed class Success : Result, IValueEquatable<Success>
     /// <returns>
     /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
-    public override Result Select(Action selector) => Of(selector);
+    public override Result Select(Action selector)
+    {
+        try
+        {
+            selector();
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
@@ -142,7 +155,17 @@ public sealed class Success : Result, IValueEquatable<Success>
     /// <returns>
     /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
-    public override Result<TResult> Select<TResult>(Func<TResult> selector) => Result<TResult>.Of(selector);
+    public override Result<TResult> Select<TResult>(Func<TResult> selector)
+    {
+        try
+        {
+            return Result<TResult>.Success(selector());
+        }
+        catch (Exception exception)
+        {
+            return Result<TResult>.Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
@@ -152,7 +175,17 @@ public sealed class Success : Result, IValueEquatable<Success>
     /// <returns>
     /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
-    public override Result SelectMany(Func<Result> selector) => selector();
+    public override Result SelectMany(Func<Result> selector)
+    {
+        try
+        {
+            return selector();
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
@@ -163,7 +196,17 @@ public sealed class Success : Result, IValueEquatable<Success>
     /// <returns>
     /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
-    public override Result<TResult> SelectMany<TResult>(Func<Result<TResult>> selector) => selector();
+    public override Result<TResult> SelectMany<TResult>(Func<Result<TResult>> selector)
+    {
+        try
+        {
+            return selector();
+        }
+        catch (Exception exception)
+        {
+            return Result<TResult>.Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result"/> is in a failure state.
@@ -218,7 +261,7 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Success<T>? other) => ReferenceEquals(this, other) || other is not null && Equals(other.Value, Value);
+    public bool Equals(Success<T>? other) => ReferenceEquals(this, other) || other is not null && EqualityComparer<T>.Default.Equals(other.Value, Value);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.
@@ -231,6 +274,7 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
     public override int GetHashCode() => Value?.GetHashCode() ?? default;
 
     /// <summary>
@@ -325,7 +369,18 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// <returns>
     /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
-    public override Result Select(Action<T> selector) => Result.Of(() => selector(Value));
+    public override Result Select(Action<T> selector)
+    {
+        try
+        {
+            selector(Value);
+            return Result.Success();
+        }
+        catch (Exception exception)
+        {
+            return Result.Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
@@ -336,7 +391,17 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// <returns>
     /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
-    public override Result<TResult> Select<TResult>(Func<T, TResult> selector) => Result<TResult>.Of(() => selector(Value));
+    public override Result<TResult> Select<TResult>(Func<T, TResult> selector)
+    {
+        try
+        {
+            return selector(Value);
+        }
+        catch (Exception exception)
+        {
+            return Result<TResult>.Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
@@ -346,7 +411,17 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// <returns>
     /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
-    public override Result SelectMany(Func<T, Result> selector) => selector(Value);
+    public override Result SelectMany(Func<T, Result> selector)
+    {
+        try
+        {
+            return selector(Value);
+        }
+        catch (Exception exception)
+        {
+            return Result.Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
@@ -357,7 +432,17 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// <returns>
     /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
-    public override Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector) => selector(Value);
+    public override Result<TResult> SelectMany<TResult>(Func<T, Result<TResult>> selector)
+    {
+        try
+        {
+            return selector(Value);
+        }
+        catch (Exception exception)
+        {
+            return Result<TResult>.Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.
@@ -370,6 +455,7 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
     public override string ToString() => Value?.ToString() ?? string.Empty;
 
     /// <summary>
@@ -377,6 +463,7 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// </summary>
     public override void Dispose()
     {
+        // ReSharper disable once HeapView.PossibleBoxingAllocation
         if (Value is IDisposable disposable)
             disposable.Dispose();
     }
@@ -389,6 +476,7 @@ public sealed class Success<T> : Result<T>, IValueEquatable<Success<T>>
     /// </returns>
     public override async ValueTask DisposeAsync()
     {
+        // ReSharper disable once HeapView.PossibleBoxingAllocation
         if (Value is IAsyncDisposable disposable)
             await disposable.DisposeAsync();
     }

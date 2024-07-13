@@ -46,10 +46,10 @@ internal sealed partial class NumberInfoFormatter
                 builder.Append(numberFormat.CurrencySymbol);
                 break;
             case 2: // $ n
-                builder.Prepend(numberFormat.CurrencySymbol, Whitespace);
+                builder.Prepend(Whitespace).Prepend(numberFormat.CurrencySymbol);
                 break;
             case 3: // n $
-                builder.Append(Whitespace, numberFormat.CurrencySymbol);
+                builder.Append(Whitespace).Append(numberFormat.CurrencySymbol);
                 break;
         }
     }
@@ -67,10 +67,10 @@ internal sealed partial class NumberInfoFormatter
                 builder.Prepend(numberFormat.CurrencySymbol).Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
             case 1: // -$n
-                builder.Prepend(numberFormat.NegativeSign, numberFormat.CurrencySymbol);
+                builder.Prepend(numberFormat.CurrencySymbol).Prepend(numberFormat.NegativeSign);
                 break;
             case 2: // $-n
-                builder.Prepend(numberFormat.CurrencySymbol, numberFormat.NegativeSign);
+                builder.Prepend(numberFormat.NegativeSign).Prepend(numberFormat.CurrencySymbol);
                 break;
             case 3: // $n-
                 builder.Prepend(numberFormat.CurrencySymbol).Append(numberFormat.NegativeSign);
@@ -82,37 +82,37 @@ internal sealed partial class NumberInfoFormatter
                 builder.Prepend(numberFormat.NegativeSign).Append(numberFormat.CurrencySymbol);
                 break;
             case 6: // n-$
-                builder.Append(numberFormat.NegativeSign, numberFormat.CurrencySymbol);
+                builder.Append(numberFormat.NegativeSign).Append(numberFormat.CurrencySymbol);
                 break;
             case 7: // n$-
-                builder.Append(numberFormat.CurrencySymbol, numberFormat.NegativeSign);
+                builder.Append(numberFormat.CurrencySymbol).Append(numberFormat.NegativeSign);
                 break;
             case 8: // -n $
-                builder.Prepend(numberFormat.NegativeSign).Append(Whitespace, numberFormat.CurrencySymbol);
+                builder.Prepend(numberFormat.NegativeSign).Append(Whitespace).Append(numberFormat.CurrencySymbol);
                 break;
             case 9: // -$ n
-                builder.Prepend(numberFormat.NegativeSign, numberFormat.CurrencySymbol, Whitespace);
+                builder.Prepend(Whitespace).Prepend(numberFormat.CurrencySymbol).Prepend(numberFormat.NegativeSign);
                 break;
             case 10: // n $-
-                builder.Append(Whitespace, numberFormat.CurrencySymbol, numberFormat.NegativeSign);
+                builder.Append(Whitespace).Append(numberFormat.CurrencySymbol).Append(numberFormat.NegativeSign);
                 break;
             case 11: // $ n-
-                builder.Prepend(numberFormat.CurrencySymbol, Whitespace).Append(numberFormat.NegativeSign);
+                builder.Prepend(Whitespace).Prepend(numberFormat.CurrencySymbol).Append(numberFormat.NegativeSign);
                 break;
             case 12: // $ -n
-                builder.Prepend(numberFormat.CurrencySymbol, Whitespace, numberFormat.NegativeSign);
+                builder.Prepend(numberFormat.NegativeSign).Prepend(Whitespace).Prepend(numberFormat.CurrencySymbol);
                 break;
             case 13: // n- $
-                builder.Append(numberFormat.NegativeSign, Whitespace, numberFormat.CurrencySymbol);
+                builder.Append(numberFormat.NegativeSign).Append(Whitespace).Append(numberFormat.CurrencySymbol);
                 break;
             case 14: // ($ n)
-                builder.Prepend(numberFormat.CurrencySymbol, Whitespace).Wrap(LeadingParenthesis, TrailingParenthesis);
+                builder.Prepend(Whitespace).Prepend(numberFormat.CurrencySymbol).Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
             case 15: // (n $)
-                builder.Append(Whitespace, numberFormat.CurrencySymbol).Wrap(LeadingParenthesis, TrailingParenthesis);
+                builder.Append(Whitespace).Append(numberFormat.CurrencySymbol).Wrap(LeadingParenthesis, TrailingParenthesis);
                 break;
             case 16: // $- n
-                builder.Prepend(numberFormat.CurrencySymbol, numberFormat.NegativeSign, Whitespace);
+                builder.Prepend(Whitespace).Prepend(numberFormat.NegativeSign).Prepend(numberFormat.CurrencySymbol);
                 break;
         }
     }

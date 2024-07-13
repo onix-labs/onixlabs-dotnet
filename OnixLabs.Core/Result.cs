@@ -123,7 +123,7 @@ public abstract class Result : IValueEquatable<Result>
     /// <returns>
     /// Returns a new instance of the <see cref="Result"/> class, where the underlying exception represents a failed result.
     /// </returns>
-    // ReSharper disable once MemberCanBePrivate.Global
+    // ReSharper disable once MemberCanBePrivate.Global, HeapView.ObjectAllocation.Evident
     public static Failure Failure(Exception exception) => new(exception);
 
     /// <summary>
@@ -376,6 +376,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <returns>
     /// Returns a new instance of the <see cref="Result{T}"/> class, where the underlying value represents a successful result.
     /// </returns>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Success<T> Success(T value) => new(value);
 
     /// <summary>
@@ -385,6 +386,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <returns>
     /// Returns a new instance of the <see cref="Result{T}"/> class, where the underlying exception represents a failed result.
     /// </returns>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Failure<T> Failure(Exception exception) => new(exception);
 
     /// <summary>

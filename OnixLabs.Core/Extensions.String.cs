@@ -48,8 +48,7 @@ public static class StringExtensions
     /// <param name="value">The <see cref="String"/> instance to repeat.</param>
     /// <param name="count">The number of repetitions of the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the repetition of the current <see cref="String"/> instance.</returns>
-    public static string Repeat(this string value, int count) =>
-        count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
+    public static string Repeat(this string value, int count) => count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
 
     /// <summary>
     /// Obtains a sub-string before the specified index within the current <see cref="String"/> instance.
@@ -64,8 +63,8 @@ public static class StringExtensions
     /// Returns a sub-string before the specified index. If the index is less than zero, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance will be returned.
     /// </returns>
-    private static string SubstringBeforeIndex(this string value, int index, string? defaultValue = null) =>
-        index <= NotFound ? defaultValue ?? value : value[..index];
+    // ReSharper disable once HeapView.ObjectAllocation
+    private static string SubstringBeforeIndex(this string value, int index, string? defaultValue = null) => index <= NotFound ? defaultValue ?? value : value[..index];
 
     /// <summary>
     /// Obtains a sub-string after the specified index within the current <see cref="String"/> instance.
@@ -81,8 +80,8 @@ public static class StringExtensions
     /// Returns a sub-string after the specified index. If the index is less than zero, then the default value will be returned.
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance will be returned.
     /// </returns>
-    private static string SubstringAfterIndex(this string value, int index, int offset, string? defaultValue = null) =>
-        index <= NotFound ? defaultValue ?? value : value[(index + offset)..value.Length];
+    // ReSharper disable once HeapView.ObjectAllocation
+    private static string SubstringAfterIndex(this string value, int index, int offset, string? defaultValue = null) => index <= NotFound ? defaultValue ?? value : value[(index + offset)..value.Length];
 
     /// <summary>
     /// Obtains a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -281,6 +280,7 @@ public static class StringExtensions
     /// <returns>Returns a <see cref="string"/> with all escape characters formatted as escape character literals.</returns>
     public static string ToEscapedString(this string value)
     {
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         StringBuilder result = new();
 
         foreach (char c in value)
@@ -336,7 +336,7 @@ public static class StringExtensions
     /// <param name="before">The <see cref="Char"/> that should precede the current <see cref="String"/> instance.</param>
     /// <param name="after">The <see cref="Char"/> that should succeed the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="Char"/> instances.</returns>
-    public static string Wrap(this string value, char before, char after) => $"{before}{value}{after}";
+    public static string Wrap(this string value, char before, char after) => string.Concat(before.ToString(), value, after.ToString());
 
     /// <summary>
     /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="String"/> instances.
@@ -345,5 +345,5 @@ public static class StringExtensions
     /// <param name="before">The <see cref="String"/> that should precede the current <see cref="String"/> instance.</param>
     /// <param name="after">The <see cref="String"/> that should succeed the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="String"/> instances.</returns>
-    public static string Wrap(this string value, string before, string after) => $"{before}{value}{after}";
+    public static string Wrap(this string value, string before, string after) => string.Concat(before, value, after);
 }

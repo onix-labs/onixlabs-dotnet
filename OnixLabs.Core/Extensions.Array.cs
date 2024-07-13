@@ -19,6 +19,7 @@ namespace OnixLabs.Core;
 /// <summary>
 /// Provides extension methods for arrays.
 /// </summary>
+// ReSharper disable HeapView.ObjectAllocation
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ArrayExtensions
 {

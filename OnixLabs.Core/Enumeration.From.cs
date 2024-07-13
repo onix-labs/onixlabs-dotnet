@@ -19,6 +19,7 @@ using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core;
 
+// ReSharper disable HeapView.ObjectAllocation, HeapView.DelegateAllocation, HeapView.ClosureAllocation
 public abstract partial class Enumeration<T>
 {
     /// <summary>

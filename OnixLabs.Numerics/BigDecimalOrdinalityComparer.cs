@@ -26,6 +26,7 @@ public sealed class BigDecimalOrdinalityComparer : IComparer<BigDecimal>, ICompa
     /// <summary>
     /// Gets the default ordinal comparer for comparing <see cref="BigDecimal"/> values.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly BigDecimalOrdinalityComparer Default = new();
 
     /// <summary>

@@ -28,6 +28,7 @@ public abstract partial class Sha3
 
         ulong c0, c1, c2, c3, c4, d0, d1, d2, d3, d4;
 
+        // ReSharper disable once HeapView.ObjectAllocation
         ulong[] roundConstants =
         [
             0x0000000000000001, 0x0000000000008082, 0x800000000000808A, 0x8000000080008000,

@@ -70,7 +70,7 @@ public sealed class ObjectExtensionTests
         const int expected = 1;
 
         // When
-        int actual = 124.CompareToObject(null);
+        int actual = 123.CompareToObject(null);
 
         // Then
         Assert.Equal(expected, actual);
@@ -109,7 +109,7 @@ public sealed class ObjectExtensionTests
         Exception exception = Assert.Throws<ArgumentException>(() => 122.CompareToObject(123.456));
 
         // Then
-        Assert.Equal("Object must be of type System.Int32 (Parameter 'obj')", exception.Message);
+        Assert.Equal("Object must be of type System.Int32 (Parameter 'right')", exception.Message);
     }
 
     [Fact(DisplayName = "ToRecordString should produce null when the object is null")]

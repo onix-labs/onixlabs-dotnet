@@ -40,7 +40,7 @@ internal sealed partial class NumberInfoFormatter
         switch (numberFormat.PercentPositivePattern)
         {
             case 0: // n %
-                builder.Append(Whitespace, numberFormat.PercentSymbol);
+                builder.Append(Whitespace).Append(numberFormat.PercentSymbol);
                 break;
             case 1: //  n%
                 builder.Append(numberFormat.PercentSymbol);
@@ -49,7 +49,7 @@ internal sealed partial class NumberInfoFormatter
                 builder.Prepend(numberFormat.PercentSymbol);
                 break;
             case 3: // % n
-                builder.Prepend(numberFormat.PercentSymbol, Whitespace);
+                builder.Prepend(Whitespace).Prepend(numberFormat.PercentSymbol);
                 break;
         }
     }
@@ -64,40 +64,40 @@ internal sealed partial class NumberInfoFormatter
         switch (numberFormat.PercentNegativePattern)
         {
             case 0: // -n %
-                builder.Prepend(numberFormat.NegativeSign).Append(Whitespace, numberFormat.PercentSymbol);
+                builder.Prepend(numberFormat.NegativeSign).Append(Whitespace).Append(numberFormat.PercentSymbol);
                 break;
             case 1: // -n%
                 builder.Prepend(numberFormat.NegativeSign).Append(numberFormat.PercentSymbol);
                 break;
             case 2: // -%n
-                builder.Prepend(numberFormat.NegativeSign, numberFormat.PercentSymbol);
+                builder.Prepend(numberFormat.PercentSymbol).Prepend(numberFormat.NegativeSign);
                 break;
             case 3: // %-n
-                builder.Prepend(numberFormat.PercentSymbol, numberFormat.NegativeSign);
+                builder.Prepend(numberFormat.NegativeSign).Prepend(numberFormat.PercentSymbol);
                 break;
             case 4: // %n-
                 builder.Prepend(numberFormat.PercentSymbol).Append(numberFormat.NegativeSign);
                 break;
             case 5: // n-%
-                builder.Append(numberFormat.NegativeSign, numberFormat.PercentSymbol);
+                builder.Append(numberFormat.NegativeSign).Append(numberFormat.PercentSymbol);
                 break;
             case 6: // n%-
-                builder.Append(numberFormat.PercentSymbol, numberFormat.NegativeSign);
+                builder.Append(numberFormat.PercentSymbol).Append(numberFormat.NegativeSign);
                 break;
             case 7: // -% n
-                builder.Prepend(numberFormat.NegativeSign, numberFormat.PercentSymbol, Whitespace);
+                builder.Prepend(Whitespace).Prepend(numberFormat.PercentSymbol).Prepend(numberFormat.NegativeSign);
                 break;
             case 8: // n %-
-                builder.Append(Whitespace, numberFormat.PercentSymbol, numberFormat.NegativeSign);
+                builder.Append(Whitespace).Append(numberFormat.PercentSymbol).Append(numberFormat.NegativeSign);
                 break;
             case 9: // % n-
-                builder.Prepend(numberFormat.PercentSymbol, Whitespace).Append(numberFormat.NegativeSign);
+                builder.Prepend(Whitespace).Prepend(numberFormat.PercentSymbol).Append(numberFormat.NegativeSign);
                 break;
             case 10: // % -n
-                builder.Prepend(numberFormat.PercentSymbol, Whitespace, numberFormat.NegativeSign);
+                builder.Prepend(numberFormat.NegativeSign).Prepend(Whitespace).Prepend(numberFormat.PercentSymbol);
                 break;
             case 11: // n- %
-                builder.Append(numberFormat.NegativeSign, Whitespace, numberFormat.PercentSymbol);
+                builder.Append(numberFormat.NegativeSign).Append(Whitespace).Append(numberFormat.PercentSymbol);
                 break;
         }
     }

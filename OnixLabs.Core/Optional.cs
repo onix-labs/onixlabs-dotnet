@@ -26,6 +26,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <summary>
     /// Gets a value indicating that the optional value is absent.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly None<T> None = new();
 
     /// <summary>
@@ -67,6 +68,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
     public static Optional<T> Of(T? value) => value is not null && !EqualityComparer<T>.Default.Equals(value, default)
         ? Some(value)
         : None;
@@ -93,17 +95,19 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Some<T> Some(T value) => new(RequireNotNull(value, "Value must not be null.", nameof(value)));
 
     /// <summary>
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
-    /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
     /// <param name="value">The underlying optional value.</param>
     /// <returns>
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
-    /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
+    /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
     public static implicit operator Optional<T>(T? value) => value is not null ? Some(value) : None;
 
     /// <summary>

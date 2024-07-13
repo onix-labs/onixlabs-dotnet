@@ -37,6 +37,7 @@ public static class ReadOnlySequenceExtensions
         }
         else
         {
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             array = new T[sequence.Length];
             sequence.CopyTo(array);
         }

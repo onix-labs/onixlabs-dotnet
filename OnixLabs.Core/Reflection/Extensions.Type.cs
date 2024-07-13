@@ -42,11 +42,12 @@ public static class TypeExtensions
         RequireNotNull(type, TypeNullExceptionMessage, nameof(type));
         RequireIsDefined(flags, nameof(flags));
 
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         StringBuilder builder = new();
 
-        builder.Append(type.GetName((flags & TypeNameFlags.UseFullNames) == TypeNameFlags.UseFullNames));
+        builder.Append(type.GetName((flags & TypeNameFlags.UseFullNames) is not 0));
 
-        if (!type.IsGenericType || (flags & TypeNameFlags.UseGenericTypeArguments) != TypeNameFlags.UseGenericTypeArguments)
+        if (!type.IsGenericType || (flags & TypeNameFlags.UseGenericTypeArguments) is 0)
             return builder.ToString();
 
         builder.Append(GenericTypeOpenBracket);

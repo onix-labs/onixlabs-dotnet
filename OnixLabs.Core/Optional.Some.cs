@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 
 namespace OnixLabs.Core;
 
@@ -55,7 +56,7 @@ public sealed class Some<T> : Optional<T>, IValueEquatable<Some<T>> where T : no
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Some<T>? other) => ReferenceEquals(this, other) || other is not null && Equals(other.Value, Value);
+    public bool Equals(Some<T>? other) => ReferenceEquals(this, other) || other is not null && EqualityComparer<T>.Default.Equals(other.Value, Value);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.
@@ -68,6 +69,7 @@ public sealed class Some<T> : Optional<T>, IValueEquatable<Some<T>> where T : no
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
     public override int GetHashCode() => Value.GetHashCode();
 
     /// <summary>
@@ -146,5 +148,6 @@ public sealed class Some<T> : Optional<T>, IValueEquatable<Some<T>> where T : no
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
     public override string ToString() => Value.ToString() ?? string.Empty;
 }

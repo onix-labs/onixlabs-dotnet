@@ -31,5 +31,5 @@ internal interface INumericDataProvider
     public static INumericDataProvider GetProvider() => (Environment.GetEnvironmentVariable("USE_FULL_NUMERIC_PROVIDER") ?? bool.FalseString)
         .Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase)
             ? new FullNumericDataProvider()
-            : new SlimNumericDataProvider();
+            : new FullNumericDataProvider();
 }

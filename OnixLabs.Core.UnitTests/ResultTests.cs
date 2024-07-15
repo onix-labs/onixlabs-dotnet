@@ -376,14 +376,28 @@ public sealed class ResultTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Success.Select should produce the expected result")]
-    public void ResultSuccessSelectShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result Success.Select should produce the expected Success result")]
+    public void ResultSuccessSelectShouldProduceExpectedSuccessResult()
     {
         // Given
         Result expected = Result.Success();
 
         // When
         Result actual = expected.Select(() => { });
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Success.Select should produce the expected Failure result")]
+    public void ResultSuccessSelectShouldProduceExpectedFailureResult()
+    {
+        // Given
+        Exception exception = new("Failure");
+        Result expected = Result.Failure(exception);
+
+        // When
+        Result actual = Result.Success().Select(() => throw exception);
 
         // Then
         Assert.Equal(expected, actual);
@@ -402,8 +416,8 @@ public sealed class ResultTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Success.Select<TResult> should produce the expected result")]
-    public void ResultSuccessSelectTResultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result Success.Select<TResult> should produce the expected Success result")]
+    public void ResultSuccessSelectTResultShouldProduceExpectedSuccessResult()
     {
         // Given
         const int expected = 9;
@@ -411,6 +425,20 @@ public sealed class ResultTests
 
         // When
         Result<int> actual = result.Select(() => 9);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result Success.Select<TResult> should produce the expected Failure result")]
+    public void ResultSuccessSelectTResultShouldProduceExpectedFailureResult()
+    {
+        // Given
+        Exception exception = new("Failure");
+        Result<int> expected = Result<int>.Failure(exception);
+
+        // When
+        Result<int> actual = Result.Success().Select<int>(() => throw exception);
 
         // Then
         Assert.Equal(expected, actual);
@@ -430,8 +458,8 @@ public sealed class ResultTests
         Assert.Equal(Result<int>.Failure(exception), actual);
     }
 
-    [Fact(DisplayName = "Result Success.SelectMany should produce the expected result")]
-    public void ResultSuccessSelectManyShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result Success.SelectMany should produce the expected Success result")]
+    public void ResultSuccessSelectManyShouldProduceExpectedSuccessResult()
     {
         // Given
         Result expected = Result.Success();

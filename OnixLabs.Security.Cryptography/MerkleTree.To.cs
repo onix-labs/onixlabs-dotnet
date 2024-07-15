@@ -26,6 +26,12 @@ public abstract partial class MerkleTree
     public byte[] ToByteArray() => Hash.ToByteArray();
 
     /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    public ReadOnlySpan<byte> ToReadOnlySpan() => Hash.ToReadOnlySpan();
+
+    /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
     /// <param name="provider">The format provider that will be used to determine the format of the string.</param>

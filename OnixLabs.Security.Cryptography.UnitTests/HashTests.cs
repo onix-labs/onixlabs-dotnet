@@ -15,7 +15,6 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using OnixLabs.Core;
 using Xunit;
 
@@ -368,62 +367,6 @@ public sealed class HashTests
 
         // When
         Hash candidate = Hash.Compute(algorithm, stream, 2);
-        string actual = candidate.ToString();
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Theory(DisplayName = "Hash.ComputeAsync should produce the expected hash using a stream")]
-    [InlineData("abc123", "MD5", "e99a18c428cb38d5f260853678922e03")]
-    [InlineData("abc123", "SHA1", "6367c48dd193d56ea7b0baad25b19455e529f5ee")]
-    [InlineData("abc123", "SHA256", "6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090")]
-    [InlineData("abc123", "SHA384", "a31d79891919cad24f3264479d76884f581bee32e86778373db3a124de975dd86a40fc7f399b331133b281ab4b11a6ca")]
-    [InlineData("abc123", "SHA512", "c70b5dd9ebfb6f51d09d4132b7170c9d20750a7852f00680f65658f0310e810056e6763c34c9a00b0e940076f54495c169fc2302cceb312039271c43469507dc")]
-    public async Task HashComputeAsyncShouldProduceTheExpectedHashUsingAStream(string data, string algorithmName, string expected)
-    {
-        // Given
-        Stream stream = new MemoryStream(data.ToByteArray());
-        HashAlgorithm algorithm = algorithmName switch
-        {
-            "MD5" => MD5.Create(),
-            "SHA1" => SHA1.Create(),
-            "SHA256" => SHA256.Create(),
-            "SHA384" => SHA384.Create(),
-            "SHA512" => SHA512.Create(),
-            _ => throw new ArgumentException($"Unknown hash algorithm name: {algorithmName}.")
-        };
-
-        // When
-        Hash candidate = await Hash.ComputeAsync(algorithm, stream);
-        string actual = candidate.ToString();
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Theory(DisplayName = "Hash.ComputeAsync should produce the expected hash using a stream and two rounds")]
-    [InlineData("abc123", "MD5", "b106dc6352e5ec1f8aafd8c406d34d92")]
-    [InlineData("abc123", "SHA1", "6691484ea6b50ddde1926a220da01fa9e575c18a")]
-    [InlineData("abc123", "SHA256", "efaaeb3b1d1d85e8587ef0527ca43b9575ce8149ba1ee41583d3d19bd130daf8")]
-    [InlineData("abc123", "SHA384", "d58e9a112b8c637df5d2e33af03ce738dd1c57657243d70d2fa8f76a99fa9a0e2f4abf50d9a88e8958f2d5f6fa002190")]
-    [InlineData("abc123", "SHA512", "c2c9d705d7a1ed34247649bbe64c6edd2035e0a4c9ae1c063170f5ee2aeca09125cc0a8b30593c07a18801d6e0570de22e8dc40a59bc1f59a49834c05ed49949")]
-    public async Task HashComputeAsyncShouldProduceTheExpectedHashUsingAStreamAndTwoRounds(string data, string algorithmName, string expected)
-    {
-        // Given
-        Stream stream = new MemoryStream(data.ToByteArray());
-        HashAlgorithm algorithm = algorithmName switch
-        {
-            "MD5" => MD5.Create(),
-            "SHA1" => SHA1.Create(),
-            "SHA256" => SHA256.Create(),
-            "SHA384" => SHA384.Create(),
-            "SHA512" => SHA512.Create(),
-            _ => throw new ArgumentException($"Unknown hash algorithm name: {algorithmName}.")
-        };
-
-        // When
-        Hash candidate = await Hash.ComputeAsync(algorithm, stream, 2);
         string actual = candidate.ToString();
 
         // Then

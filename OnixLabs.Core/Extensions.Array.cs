@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.ComponentModel;
+using System.Text;
 
 namespace OnixLabs.Core;
 
@@ -49,4 +50,12 @@ public static class ArrayExtensions
     /// <typeparam name="T">The underlying type of the <see cref="T:T[]"/>.</typeparam>
     /// <returns>Returns the current <see cref="T:T[]"/> concatenated with the other <see cref="T:T[]"/>.</returns>
     public static T[] ConcatenateWith<T>(this T[] array, T[] other) => [..array, ..other];
+
+    /// <summary>
+    /// Obtains the <see cref="string"/> representation of the current <see cref="T:Byte[]"/>.
+    /// </summary>
+    /// <param name="array">The <see cref="T:Byte[]"/> instance from which to obtain a <see cref="string"/> representation.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the current <see cref="T:Byte[]"/> into a <see cref="string"/> representation.</param>
+    /// <returns>Returns the <see cref="string"/> representation of the current <see cref="T:Byte[]"/>.</returns>
+    public static string ToString(this byte[] array, Encoding encoding) => encoding.GetString(array);
 }

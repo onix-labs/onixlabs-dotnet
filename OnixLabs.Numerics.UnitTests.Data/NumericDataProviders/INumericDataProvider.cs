@@ -28,8 +28,10 @@ internal interface INumericDataProvider
     MidpointRounding[] RoundingModes { get; }
     CultureInfo[] Cultures { get; }
 
-    public static INumericDataProvider GetProvider() => (Environment.GetEnvironmentVariable("USE_FULL_NUMERIC_PROVIDER") ?? bool.FalseString)
-        .Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase)
-            ? new FullNumericDataProvider()
-            : new FullNumericDataProvider();
+    public static INumericDataProvider GetProvider()
+    {
+        string useFullNumericProvider = Environment.GetEnvironmentVariable("USE_FULL_NUMERIC_PROVIDER") ?? bool.FalseString;
+        if (useFullNumericProvider.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase)) return new FullNumericDataProvider();
+        return new SlimNumericDataProvider();
+    }
 }

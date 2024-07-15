@@ -13,18 +13,17 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Core;
 
-namespace OnixLabs.Security.Cryptography;
+namespace OnixLabs.Core;
 
 /// <summary>
-/// Represents a cryptographic public key.
+/// Defines a type that is convertible to an instance of <see cref="ReadOnlySpan{T}"/>.
 /// </summary>
-/// <param name="keyData">The underlying key data of the cryptographic public key.</param>
-public abstract partial class PublicKey(ReadOnlySpan<byte> keyData) : ICryptoPrimitive<PublicKey>, ISpanBinaryConvertible
+public interface ISpanBinaryConvertible : IBinaryConvertible
 {
     /// <summary>
-    /// Gets the cryptographic public key data.
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// </summary>
-    protected byte[] KeyData { get; } = keyData.ToArray();
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    ReadOnlySpan<byte> ToReadOnlySpan();
 }

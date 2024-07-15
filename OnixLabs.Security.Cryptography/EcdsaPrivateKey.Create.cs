@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
+// ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class EcdsaPrivateKey
 {
     /// <summary>

@@ -21,6 +21,7 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents an in-memory data protection mechanism for sensitive, long-lived cryptographic data.
 /// </summary>
+// ReSharper disable HeapView.ObjectAllocation.Evident
 internal sealed class ProtectedData
 {
     private readonly byte[] key = Salt.CreateNonZero(32).ToByteArray();

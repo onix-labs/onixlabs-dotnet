@@ -27,6 +27,7 @@ public sealed partial class EcdhPublicKey(ReadOnlySpan<byte> keyData) : PublicKe
     /// Initializes a new instance of the <see cref="EcdhPublicKey"/> struct.
     /// </summary>
     /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="EcdhPublicKey"/> instance.</param>
+    // ReSharper disable once MemberCanBePrivate.Global
     public EcdhPublicKey(ReadOnlySequence<byte> value) : this(value.ToArray())
     {
     }

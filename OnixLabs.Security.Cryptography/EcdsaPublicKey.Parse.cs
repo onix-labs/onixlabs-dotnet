@@ -64,6 +64,7 @@ public sealed partial class EcdsaPublicKey
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out EcdsaPublicKey result)
     {
         bool isDecoded = IBaseCodec.TryGetBytes(value, provider ?? Base16FormatProvider.Invariant, out byte[] bytes);
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         result = new EcdsaPublicKey(bytes);
         return isDecoded;
     }

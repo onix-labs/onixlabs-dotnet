@@ -12,13 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Core;
+
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
 /// Represents a named cryptographic public key.
 /// </summary>
-public readonly partial record struct NamedPublicKey : ICryptoPrimitive<NamedPublicKey>
+public readonly partial record struct NamedPublicKey : ICryptoPrimitive<NamedPublicKey>, ISpanBinaryConvertible
 {
+    private const string Separator = ":";
     private const string KeyAlgorithmNameNullOrWhiteSpace = "Key algorithm name must not be null or whitespace.";
 
     /// <summary>
@@ -35,10 +38,12 @@ public readonly partial record struct NamedPublicKey : ICryptoPrimitive<NamedPub
     /// <summary>
     /// Gets the underlying public key value.
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public PublicKey PublicKey { get; }
 
     /// <summary>
     /// Gets the name of the key algorithm that was used to produce the associated public key.
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public string AlgorithmName { get; }
 }

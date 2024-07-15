@@ -82,14 +82,8 @@ public abstract partial class Sha3 : HashAlgorithm
     {
         this.rateBytes = rateBytes;
         this.delimiter = delimiter;
-
-        HashSize = bitLength;
+        HashSizeValue = bitLength;
     }
-
-    /// <summary>
-    /// Gets the size, in bits, of the computed hash code.
-    /// </summary>
-    public override int HashSize { get; }
 
     /// <summary>
     /// Initializes an implementation of the <see cref="Sha3"/> class.

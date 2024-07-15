@@ -14,7 +14,7 @@
 
 namespace OnixLabs.Security.Cryptography;
 
-// ReSharper disable once HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.ObjectAllocation.Evident
 public abstract partial class Sha3
 {
     /// <summary>

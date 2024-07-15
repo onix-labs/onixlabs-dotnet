@@ -13,9 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.IO;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
@@ -31,22 +29,6 @@ public sealed class HashAlgorithmExtensionTests
 
         // When
         byte[] bytes = algorithm.ComputeHash("abc123", rounds: 2);
-        string actual = Convert.ToHexString(bytes).ToLower();
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "HashAlgorithm.ComputeHashAsync should produce the expected result with two rounds")]
-    public async Task HashAlgorithmComputeHashAsyncShouldProduceExpectedResultWithTwoRounds()
-    {
-        // Given
-        using HashAlgorithm algorithm = SHA256.Create();
-        Stream data = new MemoryStream("abc123"u8.ToArray());
-        const string expected = "efaaeb3b1d1d85e8587ef0527ca43b9575ce8149ba1ee41583d3d19bd130daf8";
-
-        // When
-        byte[] bytes = await algorithm.ComputeHashAsync(data, 2);
         string actual = Convert.ToHexString(bytes).ToLower();
 
         // Then

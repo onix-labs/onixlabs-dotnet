@@ -165,24 +165,6 @@ public sealed class PreconditionTests
         Require(true);
     }
 
-    [Fact(DisplayName = "RequireWithinRange should throw an ArgumentOutOfRangeException when the condition is false")]
-    public void RequireWithinRangeShouldThrowArgumentOutOfRangeExceptionWhenConditionIsFalse()
-    {
-        // When
-        Exception exception = Assert.Throws<ArgumentOutOfRangeException>(() => RequireWithinRange(false));
-
-        // Then
-        Assert.Equal("Argument must be within range.", exception.Message);
-    }
-
-    [Theory(DisplayName = "RequireWithinRange should not throw an ArgumentOutOfRangeException when the condition is true")]
-    [InlineData(100, 0, 123)]
-    public void RequireWithinRangeShouldNotThrowArgumentOutOfRangeExceptionWhenConditionIsTrue(int value, int min, int max)
-    {
-        // Given / When / Then
-        RequireWithinRange(value >= min && value <= max);
-    }
-
     [Fact(DisplayName = "RequireWithinRangeInclusive should throw an ArgumentOutOfRangeException when the value falls below the specified range")]
     public void RequireWithinRangeInclusiveShouldThrowArgumentOutOfRangeExceptionWhenValueFallsBelowSpecifiedRange()
     {

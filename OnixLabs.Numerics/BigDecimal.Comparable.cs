@@ -32,6 +32,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="obj">An object to compare with this instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    // ReSharper disable once HeapView.BoxingAllocation
     public int CompareTo(object? obj) => BigDecimalOrdinalityComparer.Default.Compare(this, obj);
 
     /// <summary>

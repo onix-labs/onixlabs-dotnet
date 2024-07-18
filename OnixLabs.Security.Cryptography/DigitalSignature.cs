@@ -22,12 +22,13 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents a cryptographic digital signature.
 /// </summary>
 /// <param name="value">The underlying value of the cryptographic digital signature.</param>
-public readonly partial struct DigitalSignature(ReadOnlySpan<byte> value) : ICryptoPrimitive<DigitalSignature>, ISpanParsable<DigitalSignature>
+public readonly partial struct DigitalSignature(ReadOnlySpan<byte> value) : ICryptoPrimitive<DigitalSignature>, ISpanParsable<DigitalSignature>, ISpanBinaryConvertible
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="DigitalSignature"/> struct.
     /// </summary>
     /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="DigitalSignature"/> instance.</param>
+    // ReSharper disable once MemberCanBePrivate.Global
     public DigitalSignature(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
 
     private readonly byte[] value = value.ToArray();

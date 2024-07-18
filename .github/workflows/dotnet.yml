@@ -9,6 +9,9 @@ on:
     branches:
       - '**'
 
+env:
+  USE_FULL_NUMERIC_PROVIDER: "true"
+
 jobs:
   build:
 

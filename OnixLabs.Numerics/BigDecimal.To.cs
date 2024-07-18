@@ -45,12 +45,14 @@ public readonly partial struct BigDecimal
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
 
         if (!TryGetScaledNumberInfo(format, info.NumberFormat, out NumberInfo value)) return format.ToString();
 
+        // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
         NumberInfoFormatter formatter = new(value, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P']);
         return formatter.Format(format);
     }

@@ -19,29 +19,30 @@ namespace OnixLabs.Core;
 /// <summary>
 /// Represents an equality comparer for comparing <see cref="Optional{T}"/> instances.
 /// </summary>
-/// <param name="valueComparer">The <see cref="EqualityComparer{T}"/> that will be used to compare the underlying values of each <see cref="Optional{T}"/> instance.</param>
+/// <param name="valueEqualityComparer">The <see cref="EqualityComparer{T}"/> that will be used to compare the underlying values of each <see cref="Optional{T}"/> instance.</param>
 /// <typeparam name="T">The underlying type of the <see cref="Optional{T}"/> instance.</typeparam>
-public sealed class OptionalEqualityComparer<T>(EqualityComparer<T>? valueComparer = null) : EqualityComparer<Optional<T>> where T : notnull
+public sealed class OptionalEqualityComparer<T>(EqualityComparer<T>? valueEqualityComparer = null) : IEqualityComparer<Optional<T>> where T : notnull
 {
+    /// <summary>
+    /// Gets the default <see cref="OptionalEqualityComparer{T}"/> instance.
+    /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
+    public static readonly OptionalEqualityComparer<T> Default = new();
+
     /// <summary>Determines whether the specified <see cref="Optional{T}"/> values are equal.</summary>
     /// <param name="x">The first object of type <see cref="Optional{T}"/> to compare.</param>
     /// <param name="y">The second object of type <see cref="Optional{T}"/> to compare.</param>
     /// <returns> Returns <see langword="true" /> if the specified <see cref="Optional{T}"/> values are equal; otherwise, <see langword="false" />.</returns>
-    public override bool Equals(Optional<T>? x, Optional<T>? y)
+    public bool Equals(Optional<T>? x, Optional<T>? y)
     {
+        if (ReferenceEquals(x, y)) return true;
         if (x is null || y is null) return x is null && y is null;
         if (Optional<T>.IsNone(x) && Optional<T>.IsNone(y)) return true;
-
-        T? xValue = x.GetValueOrDefault();
-        T? yValue = y.GetValueOrDefault();
-
-        return (valueComparer ?? EqualityComparer<T>.Default).Equals(xValue, yValue);
+        return (valueEqualityComparer ?? EqualityComparer<T>.Default).Equals(x.GetValueOrDefault(), y.GetValueOrDefault());
     }
 
     /// <summary>Returns a hash code for the specified object.</summary>
     /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
     /// <returns>A hash code for the specified object.</returns>
-    public override int GetHashCode(Optional<T> obj) => Optional<T>.IsSome(obj)
-        ? (valueComparer ?? EqualityComparer<T>.Default).GetHashCode()
-        : Optional<T>.None.GetHashCode();
+    public int GetHashCode(Optional<T> obj) => obj.GetHashCode();
 }

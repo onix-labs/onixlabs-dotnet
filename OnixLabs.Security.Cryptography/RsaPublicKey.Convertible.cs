@@ -17,6 +17,7 @@ using System.Buffers;
 
 namespace OnixLabs.Security.Cryptography;
 
+// ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class RsaPublicKey
 {
     /// <summary>

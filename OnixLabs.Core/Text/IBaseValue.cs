@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Defines a Base-N value.
 /// </summary>
-public interface IBaseValue : IBinaryConvertible, ISpanFormattable
+public interface IBaseValue : ISpanBinaryConvertible, ISpanFormattable
 {
     /// <summary>
     /// Formats the value of the current instance using the specified format.

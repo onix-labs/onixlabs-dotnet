@@ -63,8 +63,13 @@ public readonly partial struct Secret
     /// <returns>Returns <see langword="true"/> if the specified value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out Secret result)
     {
-        bool isDecoded = IBaseCodec.TryGetBytes(value, provider ?? Base16FormatProvider.Invariant, out byte[] bytes);
-        result = new Secret(bytes);
-        return isDecoded;
+        if (IBaseCodec.TryGetBytes(value, provider ?? Base16FormatProvider.Invariant, out byte[] bytes))
+        {
+            result = new Secret(bytes);
+            return true;
+        }
+
+        result = default;
+        return false;
     }
 }

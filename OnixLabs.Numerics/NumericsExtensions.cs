@@ -43,6 +43,7 @@ public static class NumericsExtensions
     {
         const int significandSize = 13;
         int[] significandBits = decimal.GetBits(value);
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         byte[] significandBytes = new byte[significandSize];
         Buffer.BlockCopy(significandBits, 0, significandBytes, 0, significandSize);
         BigInteger result = new(significandBytes);

@@ -39,9 +39,11 @@ public readonly partial struct NumberInfo
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
+        // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
         NumberInfoFormatter formatter = new(this, info, ['E', 'G']);
         return formatter.Format(format);
     }

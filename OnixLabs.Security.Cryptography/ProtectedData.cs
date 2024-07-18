@@ -14,6 +14,7 @@
 
 using System.IO;
 using System.Security.Cryptography;
+using OnixLabs.Core.Linq;
 using Aes = System.Security.Cryptography.Aes;
 
 namespace OnixLabs.Security.Cryptography;
@@ -21,6 +22,7 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents an in-memory data protection mechanism for sensitive, long-lived cryptographic data.
 /// </summary>
+// ReSharper disable HeapView.ObjectAllocation.Evident
 internal sealed class ProtectedData
 {
     private readonly byte[] key = Salt.CreateNonZero(32).ToByteArray();
@@ -33,7 +35,7 @@ internal sealed class ProtectedData
     /// <returns>Returns the encrypted data.</returns>
     public byte[] Encrypt(byte[] data)
     {
-        Require(data.Length > 0, "Data must not be empty.", nameof(data));
+        if (data.IsEmpty()) return data;
 
         using Aes algorithm = Aes.Create();
 
@@ -59,7 +61,7 @@ internal sealed class ProtectedData
     /// <returns>Returns the decrypted data.</returns>
     public byte[] Decrypt(byte[] data)
     {
-        Require(data.Length > 0, "Data must not be empty.", nameof(data));
+        if (data.IsEmpty()) return data;
 
         using Aes algorithm = Aes.Create();
 

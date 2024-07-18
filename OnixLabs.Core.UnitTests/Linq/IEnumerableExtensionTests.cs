@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data;
@@ -25,6 +27,19 @@ namespace OnixLabs.Core.UnitTests.Linq;
 // ReSharper disable InconsistentNaming
 public sealed class IEnumerableExtensionTests
 {
+    [Fact(DisplayName = "IEnumerable.AllEqualBy should return true when the enumerable is empty")]
+    public void AllEqualByShouldProduceExpectedResultTrueWhenEnumerableIsEmpty()
+    {
+        // Given
+        IEnumerable<Record<Guid>> elements = [];
+
+        // When
+        bool result = elements.AllEqualBy(element => element.Text);
+
+        // Then
+        Assert.True(result);
+    }
+
     [Fact(DisplayName = "IEnumerable.AllEqualBy should return true when all items are equal by the same property")]
     public void AllEqualByShouldProduceExpectedResultTrue()
     {
@@ -87,6 +102,20 @@ public sealed class IEnumerableExtensionTests
 
         // Then
         Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.Count should return the count of all elements (non-generic)")]
+    public void CountShouldReturnCountOfAllElementsNonGeneric()
+    {
+        // Given
+        const int expected = 3;
+        IEnumerable elements = new[] { 1, 2, 3 };
+
+        // When
+        int actual = elements.Count();
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 
     [Fact(DisplayName = "IEnumerable.CountNot should produce the expected result.")]
@@ -162,6 +191,19 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.ForEach should iterate over every element in the enumerable (non-generic)")]
+    public void ForEachShouldProduceExpectedResultNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new[] { new Element(), new Element(), new Element() };
+
+        // When
+        enumerable.ForEach(element => (element as Element)!.Called = true);
+
+        // Then
+        Assert.All(enumerable.Cast<Element>(), element => Assert.True(element!.Called));
+    }
+
     [Fact(DisplayName = "IEnumerable.ForEach should iterate over every element in the enumerable")]
     public void ForEachShouldProduceExpectedResult()
     {
@@ -173,6 +215,21 @@ public sealed class IEnumerableExtensionTests
 
         // Then
         Assert.All(enumerable, element => Assert.True(element.Called));
+    }
+
+    [Fact(DisplayName = "IEnumerable.GetContentHashCode should produce equal hash codes (non-generic)")]
+    public void GetContentHashCodeShouldProduceExpectedResultEqualNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable1 = new[] { new Element(1), new Element(2), new Element(3) };
+        IEnumerable enumerable2 = new[] { new Element(1), new Element(2), new Element(3) };
+
+        // When
+        int hashCode1 = enumerable1.GetContentHashCode();
+        int hashCode2 = enumerable2.GetContentHashCode();
+
+        // Then
+        Assert.Equal(hashCode1, hashCode2);
     }
 
     [Fact(DisplayName = "IEnumerable.GetContentHashCode should produce equal hash codes")]
@@ -205,6 +262,32 @@ public sealed class IEnumerableExtensionTests
         Assert.NotEqual(hashCode1, hashCode2);
     }
 
+    [Fact(DisplayName = "IEnumerable.IsEmpty should return true when the enumerable is empty (non-generic)")]
+    public void IsEmptyShouldProduceExpectedResultTrueNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = Array.Empty<object>();
+
+        // When
+        bool result = enumerable.IsEmpty();
+
+        // Then
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsEmpty should return false when the enumerable is not empty (non-generic)")]
+    public void IsEmptyShouldProduceExpectedResultFalseNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new[] { new Element() };
+
+        // When
+        bool result = enumerable.IsEmpty();
+
+        // Then
+        Assert.False(result);
+    }
+
     [Fact(DisplayName = "IEnumerable.IsEmpty should return true when the enumerable is empty")]
     public void IsEmptyShouldProduceExpectedResultTrue()
     {
@@ -231,6 +314,32 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.IsNotEmpty should return true when the enumerable is not empty (non-generic)")]
+    public void IsNotEmptyShouldProduceExpectedResultTrueNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new[] { new Element() };
+
+        // When
+        bool result = enumerable.IsNotEmpty();
+
+        // Then
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsNotEmpty should return false when the enumerable is empty (non-generic)")]
+    public void IsNotEmptyShouldProduceExpectedResultFalseNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = Array.Empty<object>();
+
+        // When
+        bool result = enumerable.IsNotEmpty();
+
+        // Then
+        Assert.False(result);
+    }
+
     [Fact(DisplayName = "IEnumerable.IsNotEmpty should return true when the enumerable is not empty")]
     public void IsNotEmptyShouldProduceExpectedResultTrue()
     {
@@ -252,6 +361,45 @@ public sealed class IEnumerableExtensionTests
 
         // When
         bool result = enumerable.IsNotEmpty();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsSingle should return true when the enumerable contains a single element (non-generic)")]
+    public void IsSingleShouldProduceExpectedResultTrueNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new[] { new Element() };
+
+        // When
+        bool result = enumerable.IsSingle();
+
+        // Then
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsSingle should return false when the enumerable is empty (non-generic)")]
+    public void IsSingleShouldProduceExpectedResultFalseWhenEmptyNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = Array.Empty<object>();
+
+        // When
+        bool result = enumerable.IsSingle();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsSingle should return false when the enumerable contains more than one element (non-generic)")]
+    public void IsSingleShouldProduceExpectedResultFalseWhenMoreThanOneElementNonGeneric()
+    {
+        // Given
+        IEnumerable<Element> enumerable = new[] { new Element(), new Element() };
+
+        // When
+        bool result = enumerable.IsSingle();
 
         // Then
         Assert.False(result);
@@ -296,6 +444,32 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.IsCountEven should return true when the enumerable contains an even number of elements (non-generic)")]
+    public void IsCountEvenShouldProduceExpectedResultTrueNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new[] { new Element(), new Element() };
+
+        // When
+        bool result = enumerable.IsCountEven();
+
+        // Then
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsCountEven should return false when the enumerable contains an odd number of elements (non-generic)")]
+    public void IsCountEvenShouldProduceExpectedResultFalseNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new[] { new Element() };
+
+        // When
+        bool result = enumerable.IsCountEven();
+
+        // Then
+        Assert.False(result);
+    }
+
     [Fact(DisplayName = "IEnumerable.IsCountEven should return true when the enumerable contains an even number of elements")]
     public void IsCountEvenShouldProduceExpectedResultTrue()
     {
@@ -317,6 +491,32 @@ public sealed class IEnumerableExtensionTests
 
         // When
         bool result = enumerable.IsCountEven();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsCountOdd should return true when the enumerable contains an odd number of elements (non-generic)")]
+    public void IsCountOddShouldProduceExpectedResultTrueNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new[] { new Element() };
+
+        // When
+        bool result = enumerable.IsCountOdd();
+
+        // Then
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsCountOdd should return false when the enumerable contains an even number of elements (non-generic)")]
+    public void IsCountOddShouldProduceExpectedResultFalseNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new[] { new Element(), new Element() };
+
+        // When
+        bool result = enumerable.IsCountOdd();
 
         // Then
         Assert.False(result);
@@ -346,6 +546,34 @@ public sealed class IEnumerableExtensionTests
 
         // Then
         Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.JoinToString should produce the expected result with the default separator (non-generic)")]
+    public void JoinToStringShouldProduceExpectedResultWithDefaultSeparatorNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        const string expected = "1, 2, 3, 4.5, True, False";
+
+        // When
+        string actual = enumerable.JoinToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.JoinToString should produce the expected result with a custom separator (non-generic)")]
+    public void JoinToStringShouldProduceExpectedResultWithCustomSeparatorNonGeneric()
+    {
+        // Given
+        IEnumerable enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        const string expected = "1 *$ 2 *$ 3 *$ 4.5 *$ True *$ False";
+
+        // When
+        string actual = enumerable.JoinToString(" *$ ");
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 
     [Fact(DisplayName = "IEnumerable.JoinToString should produce the expected result with the default separator")]
@@ -691,8 +919,8 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "IEnumerable.WhereNotNull should produce the expected result")]
-    public void WhereNotNullShouldProduceExpectedResult()
+    [Fact(DisplayName = "IEnumerable.WhereNotNull should produce the expected result (class)")]
+    public void WhereNotNullShouldProduceExpectedResultClass()
     {
         // Given
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
@@ -702,6 +930,62 @@ public sealed class IEnumerableExtensionTests
 
         // When
         IEnumerable<Record<Guid>> actual = elements.WhereNotNull();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.WhereNotNull should produce the expected result (struct)")]
+    public void WhereNotNullShouldProduceExpectedResultStruct()
+    {
+        // Given
+        IEnumerable<int?> elements = [1, 2, null, 3, null, 4, 5];
+        IEnumerable<int> expected = [1, 2, 3, 4, 5];
+
+        // When
+        IEnumerable<int> actual = elements.WhereNotNull();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.ToCollectionString should produce expected result (Object, non-generic)")]
+    public void ToCollectionStringShouldProduceExpectedResultObjectNonGeneric()
+    {
+        // Given
+        IEnumerable values = new object[] { 123, "abc", true, 123.456 };
+        const string expected = "[123, abc, True, 123.456]";
+
+        // When
+        string actual = values.ToCollectionString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.ToCollectionString should produce expected result (String, non-generic)")]
+    public void ToCollectionStringShouldProduceExpectedResultStringNonGeneric()
+    {
+        // Given
+        IEnumerable values = new[] { "abc", "xyz", "123" };
+        const string expected = "[abc, xyz, 123]";
+
+        // When
+        string actual = values.ToCollectionString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.ToCollectionString should produce expected result (Int32, non-generic)")]
+    public void ToCollectionStringShouldProduceExpectedResultInt32NonGeneric()
+    {
+        // Given
+        IEnumerable values = new[] { 0, 1, 12, 123, 1234, -1, -12, -123, -1234 };
+        const string expected = "[0, 1, 12, 123, 1234, -1, -12, -123, -1234]";
+
+        // When
+        string actual = values.ToCollectionString();
 
         // Then
         Assert.Equal(expected, actual);

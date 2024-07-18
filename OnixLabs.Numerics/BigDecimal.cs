@@ -21,6 +21,7 @@ namespace OnixLabs.Numerics;
 /// <summary>
 /// Represents an arbitrarily large signed decimal.
 /// </summary>
+// ReSharper disable once HeapView.PossibleBoxingAllocation
 public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEquatable<BigDecimal>, IValueComparable<BigDecimal>, IConvertible
 {
     /// <summary>

@@ -22,6 +22,7 @@ namespace OnixLabs.Security.Cryptography;
 /// </summary>
 public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<Secret>
 {
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     private readonly ProtectedData protectedData = new();
     private readonly byte[] encryptedValue;
     private readonly Hash hash;

@@ -25,7 +25,7 @@ internal sealed partial class NumberInfoFormatter
     /// <param name="specifier">The exponentiation specifier, which is either an uppercase E, or lowercase e.</param>
     private void FormatExponential(char specifier)
     {
-        builder.Append(BigInteger.Abs(value.UnscaledValue));
+        builder.Append(BigInteger.Abs(value.UnscaledValue).ToString());
 
         if (value == NumberInfo.Zero) return;
 
@@ -35,7 +35,7 @@ internal sealed partial class NumberInfoFormatter
         if (exponent == 0) return;
 
         string sign = exponent > 0 ? numberFormat.PositiveSign : numberFormat.NegativeSign;
-        builder.Append(specifier, sign, int.Abs(exponent));
+        builder.Append(specifier).Append(sign).Append(int.Abs(exponent));
 
         if (value.UnscaledValue < BigInteger.Zero) builder.Prepend(numberFormat.NegativeSign);
     }

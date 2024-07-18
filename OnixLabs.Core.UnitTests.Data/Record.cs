@@ -14,4 +14,4 @@
 
 namespace OnixLabs.Core.UnitTests.Data;
 
-public sealed record Record<T>(string Text, int Number, T Value);
+public sealed record Record<T>(string Text, int Number, T Value, IEnumerable<T>? Values = null);

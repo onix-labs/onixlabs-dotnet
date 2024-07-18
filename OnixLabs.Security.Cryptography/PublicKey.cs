@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -20,7 +21,7 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents a cryptographic public key.
 /// </summary>
 /// <param name="keyData">The underlying key data of the cryptographic public key.</param>
-public abstract partial class PublicKey(ReadOnlySpan<byte> keyData) : ICryptoPrimitive<PublicKey>
+public abstract partial class PublicKey(ReadOnlySpan<byte> keyData) : ICryptoPrimitive<PublicKey>, ISpanBinaryConvertible
 {
     /// <summary>
     /// Gets the cryptographic public key data.

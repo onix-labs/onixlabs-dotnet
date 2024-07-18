@@ -26,6 +26,7 @@ public sealed partial class RsaPrivateKey
     {
         using RSA key = ImportKeyData();
         byte[] keyData = key.ExportRSAPublicKey();
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new RsaPublicKey(keyData);
     }
 }

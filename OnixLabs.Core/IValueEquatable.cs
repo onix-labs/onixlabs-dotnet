@@ -28,7 +28,7 @@ public interface IValueEquatable<T> : IEquatable<T> where T : IValueEquatable<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator ==(T left, T right);
+    public static abstract bool operator ==(T? left, T? right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -36,5 +36,5 @@ public interface IValueEquatable<T> : IEquatable<T> where T : IValueEquatable<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator !=(T left, T right);
+    public static abstract bool operator !=(T? left, T? right);
 }

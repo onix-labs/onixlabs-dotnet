@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Numerics;
 
 public readonly partial struct NumberInfo
@@ -34,6 +32,7 @@ public readonly partial struct NumberInfo
     /// <param name="right">The right-hand value to compare.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public static bool Equals(NumberInfo left, NumberInfo right, NumberInfoEqualityComparer comparer) => comparer.Equals(left, right);
 
     /// <summary>
@@ -50,6 +49,7 @@ public readonly partial struct NumberInfo
     /// <param name="other">The other instance of <see cref="NumberInfo"/> to compare with the current instance.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public bool Equals(NumberInfo other, NumberInfoEqualityComparer comparer) => Equals(this, other, comparer);
 
     /// <summary>

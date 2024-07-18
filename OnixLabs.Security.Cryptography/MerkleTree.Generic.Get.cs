@@ -36,7 +36,8 @@ public abstract partial class MerkleTree<T>
     /// <returns>Returns a new <see cref="IReadOnlyList{T}"/> containing the leaf values from the current <see cref="MerkleTree{T}"/> instance.</returns>
     public IReadOnlyList<T> GetLeafValues()
     {
-        ICollection<T> result = [];
+        // ReSharper disable once HeapView.ObjectAllocation
+        List<T> result = [];
         CollectLeafValues(this, result);
         return result.ToImmutableList();
     }
@@ -46,6 +47,7 @@ public abstract partial class MerkleTree<T>
     /// </summary>
     /// <param name="current">The current <see cref="MerkleTree"/> from which to begin iterating through.</param>
     /// <param name="hashes">The collection that will contain the leaf hashes from the current <see cref="MerkleTree"/>.</param>
+    // ReSharper disable TailRecursiveCall
     protected override void CollectLeafHashes(MerkleTree current, ICollection<Hash> hashes)
     {
         switch (current)
@@ -65,6 +67,7 @@ public abstract partial class MerkleTree<T>
     /// </summary>
     /// <param name="current">The current <see cref="MerkleTree{T}"/> from which to begin iterating through.</param>
     /// <param name="values">The list that will contain the leaf values from the current <see cref="MerkleTree{T}"/>.</param>
+    // ReSharper disable TailRecursiveCall
     private static void CollectLeafValues(MerkleTree<T> current, ICollection<T> values)
     {
         switch (current)

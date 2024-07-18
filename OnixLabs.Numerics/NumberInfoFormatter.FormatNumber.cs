@@ -45,13 +45,13 @@ internal sealed partial class NumberInfoFormatter
                 builder.Prepend(numberFormat.NegativeSign);
                 break;
             case 2: // - n
-                builder.Prepend(numberFormat.NegativeSign, Whitespace);
+                builder.Prepend(Whitespace).Prepend(numberFormat.NegativeSign);
                 break;
             case 3: // n-
                 builder.Append(numberFormat.NegativeSign);
                 break;
             case 4: // n -
-                builder.Append(Whitespace, numberFormat.NegativeSign);
+                builder.Append(Whitespace).Append(numberFormat.NegativeSign);
                 break;
         }
     }

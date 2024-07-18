@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text;
@@ -44,7 +45,7 @@ public readonly partial struct Base16
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Base16 left, Base16 right) => Equals(left, right);
+    public static bool operator ==(Base16 left, Base16 right) => EqualityComparer<Base16>.Default.Equals(left, right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -52,5 +53,5 @@ public readonly partial struct Base16
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Base16 left, Base16 right) => !Equals(left, right);
+    public static bool operator !=(Base16 left, Base16 right) => !EqualityComparer<Base16>.Default.Equals(left, right);
 }

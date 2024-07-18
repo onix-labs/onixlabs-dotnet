@@ -24,7 +24,7 @@ internal sealed partial class NumberInfoParser
         ReadOnlySpan<char> result = value.TrimStart();
 
         if (result.SequenceEqual(value)) return true;
-        if (!style.HasFlag(AllowLeadingWhite)) return false;
+        if ((style & AllowLeadingWhite) is 0) return false;
 
         value = result;
         return true;
@@ -35,7 +35,7 @@ internal sealed partial class NumberInfoParser
         ReadOnlySpan<char> result = value.TrimEnd();
 
         if (result.SequenceEqual(value)) return true;
-        if (!style.HasFlag(AllowTrailingWhite)) return false;
+        if ((style & AllowTrailingWhite) is 0) return false;
 
         value = result;
         return true;
@@ -46,7 +46,7 @@ internal sealed partial class NumberInfoParser
         ReadOnlySpan<char> result = value.TrimStart(numberFormat.CurrencySymbol);
 
         if (result.SequenceEqual(value)) return true;
-        if (!style.HasFlag(AllowCurrencySymbol)) return false;
+        if ((style & AllowCurrencySymbol) is 0) return false;
 
         value = result;
         return true;
@@ -57,7 +57,7 @@ internal sealed partial class NumberInfoParser
         ReadOnlySpan<char> result = value.TrimEnd(numberFormat.CurrencySymbol);
 
         if (result.SequenceEqual(value)) return true;
-        if (!style.HasFlag(AllowCurrencySymbol)) return false;
+        if ((style & AllowCurrencySymbol) is 0) return false;
 
         value = result;
         return true;
@@ -68,7 +68,7 @@ internal sealed partial class NumberInfoParser
         hasLeadingPositiveSign = value.StartsWith(numberFormat.PositiveSign, Comparison);
 
         if (!hasLeadingPositiveSign) return true;
-        if (!style.HasFlag(AllowLeadingSign)) return false;
+        if ((style & AllowLeadingSign) is 0) return false;
 
         value = value.TrimStart(numberFormat.PositiveSign);
         return true;
@@ -79,7 +79,7 @@ internal sealed partial class NumberInfoParser
         hasTrailingPositiveSign = value.EndsWith(numberFormat.PositiveSign, Comparison);
 
         if (!hasTrailingPositiveSign) return true;
-        if (!style.HasFlag(AllowTrailingSign)) return false;
+        if ((style & AllowTrailingSign) is 0) return false;
 
         value = value.TrimStart(numberFormat.PositiveSign);
         return true;
@@ -90,7 +90,7 @@ internal sealed partial class NumberInfoParser
         hasLeadingNegativeSign = value.StartsWith(numberFormat.NegativeSign, Comparison);
 
         if (!hasLeadingNegativeSign) return true;
-        if (!style.HasFlag(AllowLeadingSign)) return false;
+        if ((style & AllowLeadingSign) is 0) return false;
 
         value = value.TrimStart(numberFormat.NegativeSign);
         return true;
@@ -101,7 +101,7 @@ internal sealed partial class NumberInfoParser
         hasTrailingNegativeSign = value.EndsWith(numberFormat.NegativeSign, Comparison);
 
         if (!hasTrailingNegativeSign) return true;
-        if (!style.HasFlag(AllowTrailingSign)) return false;
+        if ((style & AllowTrailingSign) is 0) return false;
 
         value = value.TrimStart(numberFormat.NegativeSign);
         return true;
@@ -112,8 +112,9 @@ internal sealed partial class NumberInfoParser
         hasParentheses = false;
         bool hasLeadingParenthesis = value.StartsWith(LeadingParenthesis, Comparison);
         bool hasTrailingParenthesis = value.EndsWith(TrailingParenthesis, Comparison);
-        bool areParenthesesAllowed = style.HasFlag(AllowParentheses);
+        bool areParenthesesAllowed = (style & AllowParentheses) is not 0;
 
+        // ReSharper disable once InvertIf
         if (hasLeadingParenthesis && hasTrailingParenthesis && areParenthesesAllowed)
         {
             hasParentheses = true;
@@ -137,6 +138,6 @@ internal sealed partial class NumberInfoParser
         ReadOnlySpan<char> chars = value[(index + 1)..];
         value = value[..index];
 
-        return int.TryParse(chars, culture, out exponent) && style.HasFlag(AllowExponent);
+        return int.TryParse(chars, culture, out exponent) && (style & AllowExponent) is not 0;
     }
 }

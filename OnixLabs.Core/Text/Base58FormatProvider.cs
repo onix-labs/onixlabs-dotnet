@@ -19,6 +19,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-58 format provider.
 /// </summary>
+// ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed class Base58FormatProvider : Enumeration<Base58FormatProvider>, IFormatProvider
 {
     /// <summary>

@@ -21,336 +21,303 @@ namespace OnixLabs.Core.UnitTests;
 
 public sealed class ResultTests
 {
-    [Fact(DisplayName = "Result.Of should produce expected success result")]
+    private static readonly Exception FailureException = new("Failure");
+
+    [Fact(DisplayName = "Result.IsSuccess should produce the expected result")]
+    public void ResultIsSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When / Then
+        Assert.True(result.IsSuccess);
+        Assert.False(result.IsFailure);
+    }
+
+    [Fact(DisplayName = "Result.IsFailure should produce the expected result")]
+    public void ResultIsFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+
+        // When / Then
+        Assert.True(result.IsFailure);
+        Assert.False(result.IsSuccess);
+    }
+
+    [Fact(DisplayName = "Result.Of should produce the expected success result.")]
     public void ResultOfShouldProduceExpectedSuccessResult()
     {
         // Given / When
         Result result = Result.Of(() => { });
 
         // Then
-        Assert.True(result.IsSuccess);
-        Assert.False(result.IsFailure);
         Assert.IsType<Success>(result);
     }
 
-    [Fact(DisplayName = "Result.Of should produce expected failure result")]
+    [Fact(DisplayName = "Result.Of should produce the expected failure result.")]
     public void ResultOfShouldProduceExpectedFailureResult()
     {
         // Given / When
-        Exception exception = new("failure");
-        Result result = Result.Of(() => throw exception);
+        Result result = Result.Of(() => throw FailureException);
 
         // Then
-        Assert.False(result.IsSuccess);
-        Assert.True(result.IsFailure);
         Assert.IsType<Failure>(result);
+        Assert.Equal(FailureException, result.GetExceptionOrThrow());
     }
 
-    [Fact(DisplayName = "Result.OfAsync should produce expected success result")]
+    [Fact(DisplayName = "Result.OfAsync should produce the expected success result.")]
     public async Task ResultOfAsyncShouldProduceExpectedSuccessResult()
     {
         // Given / When
         Result result = await Result.OfAsync(async () => await Task.CompletedTask);
 
         // Then
-        Assert.True(result.IsSuccess);
-        Assert.False(result.IsFailure);
         Assert.IsType<Success>(result);
     }
 
-    [Fact(DisplayName = "Result.OfAsync should produce expected failure result")]
+    [Fact(DisplayName = "Result.OfAsync should produce the expected failure result.")]
     public async Task ResultOfAsyncShouldProduceExpectedFailureResult()
     {
         // Given / When
-        Exception exception = new("failure");
-        Result result = await Result.OfAsync(() => throw exception);
+        Result result = await Result.OfAsync(async () => await Task.FromException(FailureException));
 
         // Then
-        Assert.False(result.IsSuccess);
-        Assert.True(result.IsFailure);
         Assert.IsType<Failure>(result);
+        Assert.Equal(FailureException, result.GetExceptionOrThrow());
     }
 
-    [Fact(DisplayName = "Result.OfAsync with cancellation token should produce expected success result")]
+    [Fact(DisplayName = "Result.OfAsync with cancellation token should produce the expected success result.")]
     public async Task ResultOfAsyncWithCancellationTokenShouldProduceExpectedSuccessResult()
     {
         // Given / When
-        CancellationToken token = CancellationToken.None;
-        Result result = await Result.OfAsync(async _ => await Task.CompletedTask, token);
+        Result result = await Result.OfAsync(async () => await Task.CompletedTask, CancellationToken.None);
 
         // Then
-        Assert.True(result.IsSuccess);
-        Assert.False(result.IsFailure);
         Assert.IsType<Success>(result);
     }
 
-    [Fact(DisplayName = "Result.OfAsync with cancellation token should produce expected failure result")]
+    [Fact(DisplayName = "Result.OfAsync with cancellation token should produce the expected failure result.")]
     public async Task ResultOfAsyncWithCancellationTokenShouldProduceExpectedFailureResult()
     {
         // Given / When
-        Exception exception = new("failure");
-        CancellationToken token = CancellationToken.None;
-        Result result = await Result.OfAsync(_ => throw exception, token);
+        Result result = await Result.OfAsync(async () => await Task.FromException(FailureException), CancellationToken.None);
 
         // Then
-        Assert.False(result.IsSuccess);
-        Assert.True(result.IsFailure);
         Assert.IsType<Failure>(result);
+        Assert.Equal(FailureException, result.GetExceptionOrThrow());
     }
 
-    [Fact(DisplayName = "Result.Success should produce the expected result")]
-    public void ResultSuccessShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.OfAsync with cancellable function should produce the expected success result.")]
+    public async Task ResultOfAsyncWithCancellableFunctionShouldProduceExpectedSuccessResult()
     {
         // Given / When
-        Result result = Result.Success();
+        Result result = await Result.OfAsync(async _ => await Task.CompletedTask, CancellationToken.None);
 
         // Then
-        Assert.True(result.IsSuccess);
-        Assert.False(result.IsFailure);
         Assert.IsType<Success>(result);
     }
 
-    [Fact(DisplayName = "Result.Failure should produce the expected result")]
-    public void ResultFailureShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.OfAsync with cancellable function should produce the expected failure result.")]
+    public async Task ResultOfAsyncWithCancellableFunctionShouldProduceExpectedFailureResult()
     {
         // Given / When
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = await Result.OfAsync(async _ => await Task.FromException(FailureException), CancellationToken.None);
 
         // Then
-        Assert.False(result.IsSuccess);
-        Assert.True(result.IsFailure);
         Assert.IsType<Failure>(result);
+        Assert.Equal(FailureException, result.GetExceptionOrThrow());
     }
 
-    [Fact(DisplayName = "Result implicit operator should produce the expected failure result.")]
-    public void ResultImplicitOperatorShouldProduceTheExpectedFailureResult()
+    [Fact(DisplayName = "Result.Success should produce the expected success result.")]
+    public void ResultSuccessShouldProduceExpectedSuccessResult()
     {
         // Given / When
-        Exception exception = new("failure");
-        Result result = exception;
+        Result result = Result.Success();
 
         // Then
-        Assert.False(result.IsSuccess);
-        Assert.True(result.IsFailure);
+        Assert.IsType<Success>(result);
+    }
+
+    [Fact(DisplayName = "Result.Failure should produce the expected failure result.")]
+    public void ResultFailureShouldProduceExpectedFailureResult()
+    {
+        // Given / When
+        Result result = Result.Failure(FailureException);
+
+        // Then
         Assert.IsType<Failure>(result);
-        Assert.Equal("failure", (result as Failure)!.Exception.Message);
+        Assert.Equal(FailureException, result.GetExceptionOrThrow());
     }
 
-    [Fact(DisplayName = "Result Success values should be considered equal.")]
-    public void ResultSuccessValuesShouldBeConsideredEqual()
+    [Fact(DisplayName = "Result from implicit exception should produce the expected failure result.")]
+    public void ResultFromImplicitExceptionShouldProduceExpectedFailureResult()
     {
-        // Given
-        Success a = Result.Success();
-        Success b = Success.Instance;
-
-        // When / Then
-        Assert.Equal(a, b);
-        Assert.True(a.Equals(b));
-        Assert.True(a == b);
-        Assert.False(a != b);
-        Assert.True((Result)a == (Result)b);
-        Assert.False((Result)a != (Result)b);
-    }
-
-    [Fact(DisplayName = "Result Failure values should be considered equal.")]
-    public void ResultFailureValuesShouldBeConsideredEqual()
-    {
-        // Given
-        Exception exception = new("failure");
-        Failure a = Result.Failure(exception);
-        Failure b = exception;
-
-        // When / Then
-        Assert.Equal(a, b);
-        Assert.True(a.Equals(b));
-        Assert.True(a == b);
-        Assert.False(a != b);
-        Assert.True((Result)a == (Result)b);
-        Assert.False((Result)a != (Result)b);
-
-        // Note that a and b are equal because they share references to the same exception.
-    }
-
-    [Fact(DisplayName = "Result Failure values should not be considered equal.")]
-    public void ResultFailureValuesShouldNotBeConsideredEqual()
-    {
-        // Given
-        Exception exception1 = new("failure a");
-        Exception exception2 = new("failure b");
-        Result a = Result.Failure(exception1);
-        Result b = Result.Failure(exception2);
-
-        // When / Then
-        Assert.NotEqual(a, b);
-        Assert.True(a != b);
-        Assert.False(a.Equals(b));
-    }
-
-    [Fact(DisplayName = "Result Success and Failure values should not be considered equal.")]
-    public void ResultSuccessAndFailureValuesShouldNotBeConsideredEqual()
-    {
-        // Given
-        Exception exception = new("failure");
-        Result a = Result.Success();
-        Result b = Result.Failure(exception);
-
-        // When / Then
-        Assert.NotEqual(a, b);
-        Assert.True(a != b);
-        Assert.False(a.Equals(b));
-    }
-
-    [Fact(DisplayName = "Result Success.GetHashCode should produce the expected result.")]
-    public void ResultSuccessGetHashCodeShouldProduceExpectedResult()
-    {
-        // Given
-        const int expected = 0;
-        Result result = Result.Success();
-
-        // When
-        int actual = result.GetHashCode();
+        // Given / When
+        Result result = FailureException;
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.IsType<Failure>(result);
+        Assert.Equal(FailureException, result.GetExceptionOrThrow());
     }
 
-    [Fact(DisplayName = "Result Failure.GetHashCode should produce the expected result.")]
-    public void ResultFailureGetHashCodeShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result equality should produce the expected result.")]
+    public void ResultEqualityShouldProduceExpectedResult()
     {
-        // Given
-        Exception exception = new("failure");
-        int expected = exception.GetHashCode();
-        Result result = Result.Failure(exception);
+        // ReSharper disable EqualExpressionComparison
 
-        // When
-        int actual = result.GetHashCode();
+        // Equals Method
+        Assert.True(Result.Success().Equals(Result.Success()));
+        Assert.True(Result.Failure(FailureException).Equals(Result.Failure(FailureException)));
+        Assert.False(Result.Success().Equals(null));
+        Assert.False(Result.Failure(FailureException).Equals(null));
 
-        // Then
-        Assert.Equal(expected, actual);
+        // Equality Operator
+        Assert.True(Result.Success() == Result.Success());
+        Assert.True(Result.Failure(FailureException) == Result.Failure(FailureException));
+        Assert.False(Result.Success() == Result.Failure(FailureException));
+        Assert.False(Result.Success() == null);
+        Assert.False(null == Result.Success());
+
+        // Inequality Operator
+        Assert.True(Result.Success() != Result.Failure(FailureException));
+        Assert.True(Result.Failure(FailureException) != Result.Failure(new Exception()));
+        Assert.True(Result.Success() != null);
+        Assert.True(null != Result.Success());
+
+        // Hash Code Generation
+        Assert.True(Result.Success().GetHashCode() == Result.Success().GetHashCode());
+        Assert.True(Result.Failure(FailureException).GetHashCode() == Result.Failure(FailureException).GetHashCode());
     }
 
-    [Fact(DisplayName = "Result Success.GetExceptionOrDefault should produce the expected result.")]
-    public void ResultSuccessGetExceptionOrDefaultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.GetExceptionOrDefault from success should produce the expected result.")]
+    public void ResultGetExceptionOrDefaultFromSuccessShouldProduceExpectedResult()
     {
         // Given
         Result result = Result.Success();
 
-        // When
-        Exception? actual = result.GetExceptionOrDefault();
+        // Then
+        Exception? exception = result.GetExceptionOrDefault();
 
         // Then
-        Assert.Null(actual);
+        Assert.Null(exception);
     }
 
-    [Fact(DisplayName = "Result Success.GetExceptionOrDefault with default value should produce the expected result.")]
-    public void ResultSuccessGetExceptionOrDefaultWithDefaultValueShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.GetExceptionOrDefault from failure should produce the expected result.")]
+    public void ResultGetExceptionOrDefaultFromFailureShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result result = Result.Success();
-
-        // When
-        Exception actual = result.GetExceptionOrDefault(expected);
+        Result result = Result.Failure(FailureException);
 
         // Then
-        Assert.Equal(expected, actual);
+        Exception? exception = result.GetExceptionOrDefault();
+
+        // Then
+        Assert.Equal(FailureException, exception);
     }
 
-    [Fact(DisplayName = "Result Success.GetExceptionOrThrow with default value should produce the expected result.")]
-    public void ResultSuccessGetExceptionOrThrowShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.GetExceptionOrDefault from success with default value should produce the expected result.")]
+    public void ResultGetExceptionOrDefaultFromSuccessWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Exception defaultValue = new("Default");
+
+        // Then
+        Exception exception = result.GetExceptionOrDefault(defaultValue);
+
+        // Then
+        Assert.Equal(defaultValue, exception);
+    }
+
+    [Fact(DisplayName = "Result.GetExceptionOrDefault from failure with default value should produce the expected result.")]
+    public void ResultGetExceptionOrDefaultFromFailureWithDefaultValueShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Exception defaultValue = new("Default");
+
+        // Then
+        Exception exception = result.GetExceptionOrDefault(defaultValue);
+
+        // Then
+        Assert.Equal(FailureException, exception);
+    }
+
+    [Fact(DisplayName = "Result.GetExceptionOrThrow from success should produce the expected result.")]
+    public void ResultGetExceptionOrThrowFromSuccessShouldProduceExpectedResult()
     {
         // Given
         Result result = Result.Success();
 
-        // When
+        // Then
         Exception exception = Assert.Throws<InvalidOperationException>(() => result.GetExceptionOrThrow());
 
         // Then
-        Assert.Equal("The current result is not in a Failure state.", exception.Message);
+        Assert.Equal("The current result is not in a failure state.", exception.Message);
     }
 
-    [Fact(DisplayName = "Result Failure.GetExceptionOrDefault should produce the expected result.")]
-    public void ResultFailureGetExceptionOrDefaultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.GetExceptionOrThrow from failure should produce the expected result.")]
+    public void ResultGetExceptionOrThrowFromFailureShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result result = Result.Failure(expected);
-
-        // When
-        Exception? actual = result.GetExceptionOrDefault();
+        Result result = Result.Failure(FailureException);
 
         // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Failure.GetExceptionOrDefault with default value should produce the expected result.")]
-    public void ResultFailureGetExceptionOrDefaultWithDefaultValueShouldProduceExpectedResult()
-    {
-        // Given
-        Exception expected = new("failure");
-        Result result = Result.Failure(expected);
-
-        // When
-        Exception actual = result.GetExceptionOrDefault(new Exception("unexpected exception"));
+        Exception exception = result.GetExceptionOrThrow();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, exception);
     }
 
-    [Fact(DisplayName = "Result Failure.GetExceptionOrThrow with default value should produce the expected result.")]
-    public void ResultFailureGetExceptionOrThrowShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.Match action from success should produce the expected result.")]
+    public void ResultMatchActionFromSuccessShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result result = Result.Failure(expected);
-
-        // When
-        Exception actual = result.GetExceptionOrThrow();
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Success.Match should execute the some action.")]
-    public void ResultSuccessMatchShouldExecuteSuccessAction()
-    {
-        // Given
-        bool successCalled = false;
         Result result = Result.Success();
+        bool isSuccess = false;
+        bool isFailure = false;
 
         // When
-        result.Match(success: () => { successCalled = true; });
+        result.Match(
+            success: () => isSuccess = true,
+            failure: _ => isFailure = true
+        );
 
         // Then
-        Assert.True(successCalled);
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
     }
 
-    [Fact(DisplayName = "Result Failure.Match should execute the none action.")]
-    public void ResultFailureMatchShouldExecuteFailureAction()
+    [Fact(DisplayName = "Result.Match action from failure should produce the expected result.")]
+    public void ResultMatchActionFromFailureShouldProduceExpectedResult()
     {
         // Given
-        bool failureCalled = false;
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
 
         // When
-        result.Match(failure: _ => { failureCalled = true; });
+        result.Match(
+            success: () => isSuccess = true,
+            failure: _ => isFailure = true
+        );
 
         // Then
-        Assert.True(failureCalled);
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
     }
 
-    [Fact(DisplayName = "Result Success.Match should produce the expected result.")]
-    public void ResultSuccessMatchShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.Match function from success should produce the expected result.")]
+    public void ResultMatchFunctionFromSuccessShouldProduceExpectedResult()
     {
         // Given
-        const int expected = 9;
         Result result = Result.Success();
+        const int expected = 1;
 
         // When
         int actual = result.Match(
-            success: () => 9,
+            success: () => 1,
             failure: _ => 0
         );
 
@@ -358,134 +325,193 @@ public sealed class ResultTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.Match should produce the expected result.")]
-    public void ResultFailureMatchShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.Match function from failure should produce the expected result.")]
+    public void ResultMatchFunctionFromFailureShouldProduceExpectedResult()
     {
         // Given
-        const int expected = 0;
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Failure(FailureException);
+        const int expected = 1;
 
         // When
         int actual = result.Match(
-            success: () => 9,
-            failure: _ => 0
+            success: () => 0,
+            failure: _ => 1
         );
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Success.Select should produce the expected result")]
-    public void ResultSuccessSelectShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.Select action from failure should produce the expected result.")]
+    public void ResultSelectActionFromFailureShouldProduceExpectedResult()
     {
         // Given
+        Result result = Result.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+
+        // Then
+        Result actual = result.Select(() => { });
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.Select action from success should produce the expected result.")]
+    public void ResultSelectActionFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Success();
+
+        // Then
+        Result actual = result.Select(() => { });
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.Select action from success with exception should produce the expected result.")]
+    public void ResultSelectActionFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Failure(FailureException);
+
+        // Then
+        Result actual = result.Select(() => throw FailureException);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.Select function of TResult from failure should produce the expected result.")]
+    public void ResultSelectFunctionOfTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // Then
+        Result<int> actual = result.Select(() => 1);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.Select function of TResult from success should produce the expected result.")]
+    public void ResultSelectFunctionOfTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = 1;
+
+        // Then
+        Result<int> actual = result.Select(() => 1);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.Select function of TResult from success with exception should produce the expected result.")]
+    public void ResultSelectFunctionOfTResultFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // Then
+        Result<int> actual = result.Select<int>(() => throw FailureException);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectMany function from failure should produce the expected result.")]
+    public void ResultSelectManyFunctionFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = result.SelectMany(Result.Success);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectMany function from success should produce the expected result.")]
+    public void ResultSelectManyFunctionFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
         Result expected = Result.Success();
 
         // When
-        Result actual = expected.Select(() => { });
+        Result actual = result.SelectMany(Result.Success);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.Select should produce the expected result")]
-    public void ResultFailureSelectShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.SelectMany function from success with exception should produce the expected result.")]
+    public void ResultSelectManyFunctionFromSuccessWithExceptionShouldProduceExpectedResult()
     {
         // Given
-        Result expected = Result.Failure(new Exception("Failure"));
-
-        // When
-        Result actual = expected.Select(() => { });
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Success.Select<TResult> should produce the expected result")]
-    public void ResultSuccessSelectTResultShouldProduceExpectedResult()
-    {
-        // Given
-        const int expected = 9;
         Result result = Result.Success();
+        Result expected = Result.Failure(FailureException);
 
         // When
-        Result<int> actual = result.Select(() => 9);
+        Result actual = result.SelectMany(() => throw FailureException);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.Select<TResult> should produce the expected result")]
-    public void ResultFailureSelectTResultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.SelectMany function of TResult from failure should produce the expected result.")]
+    public void ResultSelectManyFunctionOfTResultFromFailureShouldProduceExpectedResult()
     {
         // Given
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = result.Select(() => 9);
-
-        // Then
-        Assert.Equal(Result<int>.Failure(exception), actual);
-    }
-
-    [Fact(DisplayName = "Result Success.SelectMany should produce the expected result")]
-    public void ResultSuccessSelectManyShouldProduceExpectedResult()
-    {
-        // Given
-        Result expected = Result.Success();
-
-        // When
-        Result actual = expected.SelectMany(Result.Success);
+        Result<int> actual = result.SelectMany<int>(() => 1);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.SelectMany should produce the expected result")]
-    public void ResultFailureSelectManyShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.SelectMany function of TResult from success should produce the expected result.")]
+    public void ResultSelectManyFunctionOfTResultFromSuccessShouldProduceExpectedResult()
     {
         // Given
-        Result expected = Result.Failure(new Exception("Failure"));
-
-        // When
-        Result actual = expected.SelectMany(Result.Success);
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Success.SelectMany<TResult> should produce the expected result")]
-    public void ResultSuccessSelectManyTResultShouldProduceExpectedResult()
-    {
-        // Given
-        const int expected = 9;
         Result result = Result.Success();
+        Result<int> expected = 1;
 
         // When
-        Result<int> actual = result.SelectMany<int>(() => 9);
+        Result<int> actual = result.SelectMany<int>(() => 1);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.SelectMany<TResult> should produce the expected result")]
-    public void ResultFailureSelectManyTResultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.SelectMany function of TResult from success with exception should produce the expected result.")]
+    public void ResultSelectManyFunctionOfTResultFromSuccessWithExceptionShouldProduceExpectedResult()
     {
         // Given
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Success();
+        Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = result.SelectMany<int>(() => 9);
+        Result<int> actual = result.SelectMany<int>(() => throw FailureException);
 
         // Then
-        Assert.Equal(Result<int>.Failure(exception), actual);
+        Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Success.Throw should do nothing")]
-    public void ResultSuccessThrowShouldDoNothing()
+    [Fact(DisplayName = "Result.Throw from success should produce expected result.")]
+    public void ResultThrowFromSuccessShouldProduceExpectedResult()
     {
         // Given
         Result result = Result.Success();
@@ -494,56 +520,72 @@ public sealed class ResultTests
         result.Throw();
     }
 
-    [Fact(DisplayName = "Result Failure.Throw should throw Exception")]
-    public void ResultFailureThrowShouldThrowException()
+    [Fact(DisplayName = "Result.Throw from failure should produce expected result.")]
+    public void ResultThrowFromFailureShouldProduceExpectedResult()
     {
         // Given
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Failure(FailureException);
 
-        // When / Then
-        Assert.Throws<Exception>(() => result.Throw());
+        // When
+        Exception exception = Assert.Throws<Exception>(() => result.Throw());
+
+        // Then
+        Assert.Equal(FailureException, exception);
     }
 
-    [Fact(DisplayName = "Result Success.ToString should produce the expected result.")]
-    public void ResultSuccessToStringShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.ToString from success should produce expected result.")]
+    public void ResultToStringFromSuccessShouldProduceExpectedResult()
     {
         // Given
         Result result = Result.Success();
+        string expected = string.Empty;
 
         // When
-        string resultString = result.ToString();
+        string actual = result.ToString();
 
         // Then
-        Assert.Equal(string.Empty, resultString);
+        Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.ToString should produce the expected result.")]
-    public void ResultFailureToStringShouldProduceExpectedResult()
+    [Fact(DisplayName = "Result.ToString from failure should produce expected result.")]
+    public void ResultToStringFromFailureShouldProduceExpectedResult()
     {
         // Given
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Failure(FailureException);
+        string expected = FailureException.Message;
 
         // When
-        string resultString = result.ToString();
+        string actual = result.ToString();
 
         // Then
-        Assert.Equal("System.Exception: failure", resultString);
+        Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "Result Failure.ToTypedResult should produce the expected result.")]
-    public void ResultFailureToTypedResultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Success.ToTypedResult should produce the expected result.")]
+    public void SuccessToTypedResultShouldProduceExpectedResult()
     {
         // Given
-        Exception exception = new("failure");
-        Failure result = Result.Failure(exception);
+        Success result = Result.Success();
+        Result<int> expected = 1;
+
+        // When
+        Result<int> actual = result.ToTypedResult(1);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Failure.ToTypedResult should produce the expected result.")]
+    public void FailureToTypedResultShouldProduceExpectedResult()
+    {
+        // Given
+        Failure result = Result.Failure(FailureException);
+        Result<int> expected = FailureException;
 
         // When
         Result<int> actual = result.ToTypedResult<int>();
 
         // Then
-        Assert.IsType<Failure<int>>(actual);
-        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
+        Assert.Equal(expected, actual);
     }
 }

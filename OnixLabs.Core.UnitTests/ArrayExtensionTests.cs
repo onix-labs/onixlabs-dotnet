@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
 using Xunit;
 
 namespace OnixLabs.Core.UnitTests;
@@ -58,6 +59,20 @@ public sealed class ArrayExtensionTests
 
         // When
         int[] actual = left.ConcatenateWith(right);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Array.ToString should produce the expected result")]
+    public void ToStringShouldProduceExpectedResult()
+    {
+        // Given
+        const string expected = "ABCxyz123";
+        byte[] bytes = expected.ToByteArray();
+
+        // When
+        string actual = bytes.ToString(Encoding.UTF8);
 
         // Then
         Assert.Equal(expected, actual);

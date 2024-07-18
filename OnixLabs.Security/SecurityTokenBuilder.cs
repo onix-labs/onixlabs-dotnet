@@ -21,6 +21,8 @@ namespace OnixLabs.Security;
 /// <summary>
 /// Represents a <see cref="SecurityToken"/> builder.
 /// </summary>
+// ReSharper disable HeapView.ObjectAllocation
+// ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed class SecurityTokenBuilder
 {
     private const string LowerCaseCharacters = "abcdefghijklmnopqrstuvwxyz";

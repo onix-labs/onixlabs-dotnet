@@ -29,7 +29,12 @@ public abstract partial class MerkleTree
     /// <returns>Returns a new <see cref="MerkleTree"/> node that represents the Merkle root.</returns>
     public static MerkleTree Create(IEnumerable<Hash> leaves, HashAlgorithm algorithm)
     {
-        IReadOnlyList<MerkleTree> nodes = leaves.Select(leaf => new MerkleTreeLeafNode(leaf)).ToList();
+        // ReSharper disable once HeapView.ObjectAllocation
+        List<MerkleTree> nodes = [];
+
+        // ReSharper disable once LoopCanBeConvertedToQuery, HeapView.ObjectAllocation.Possible, HeapView.ObjectAllocation.Evident
+        foreach (Hash leaf in leaves) nodes.Add(new MerkleTreeLeafNode(leaf));
+
         Require(nodes.IsNotEmpty(), "Cannot construct a Merkle tree from an empty list.", nameof(leaves));
         return BuildMerkleTree(nodes, algorithm);
     }
@@ -53,14 +58,17 @@ public abstract partial class MerkleTree
         while (true)
         {
             if (nodes.IsSingle()) return nodes.Single();
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             if (nodes.IsCountOdd()) nodes = nodes.Append(new MerkleTreeEmptyNode(algorithm)).ToArray();
 
+            // ReSharper disable once HeapView.ObjectAllocation
             List<MerkleTree> mergedNodes = [];
 
             for (int index = 0; index < nodes.Count; index += 2)
             {
                 MerkleTree left = nodes[index];
                 MerkleTree right = nodes[index + 1];
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 mergedNodes.Add(new MerkleTreeBranchNode(left, right, algorithm));
             }
 

@@ -28,6 +28,12 @@ public readonly partial struct Hash
     public byte[] ToByteArray() => value.Copy();
 
     /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    public ReadOnlySpan<byte> ToReadOnlySpan() => value;
+
+    /// <summary>
     /// Creates a new <see cref="NamedHash"/> from the current <see cref="Hash"/> instance.
     /// </summary>
     /// <param name="algorithmName">The name of the hash algorithm that was used to produce the associated hash.</param>

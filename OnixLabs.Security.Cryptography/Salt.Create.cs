@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
@@ -26,7 +27,7 @@ public readonly partial struct Salt
     public static Salt Create(int length)
     {
         using RandomNumberGenerator generator = RandomNumberGenerator.Create();
-        byte[] value = new byte[length];
+        Span<byte> value = stackalloc byte[length];
         generator.GetBytes(value);
         return new Salt(value);
     }
@@ -39,7 +40,7 @@ public readonly partial struct Salt
     public static Salt CreateNonZero(int length)
     {
         using RandomNumberGenerator generator = RandomNumberGenerator.Create();
-        byte[] value = new byte[length];
+        Span<byte> value = stackalloc byte[length];
         generator.GetNonZeroBytes(value);
         return new Salt(value);
     }

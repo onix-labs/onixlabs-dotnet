@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Buffers;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -22,6 +21,7 @@ namespace OnixLabs.Security.Cryptography;
 /// </summary>
 public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>
 {
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     private readonly ProtectedData protectedData = new();
     private readonly byte[] encryptedKeyData;
 

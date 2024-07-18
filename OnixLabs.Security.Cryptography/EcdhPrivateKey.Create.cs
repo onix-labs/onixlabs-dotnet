@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
+// ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class EcdhPrivateKey
 {
     /// <summary>

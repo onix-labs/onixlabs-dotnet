@@ -56,6 +56,7 @@ public sealed class MerkleTreeGenericTests
         Assert.True(a.Equals(b));
         Assert.True(a == b);
         Assert.False(a != b);
+        Assert.True(a.GetHashCode() == b.GetHashCode());
     }
 
     [Fact(DisplayName = "Different Merkle trees should not be considered equal")]
@@ -71,6 +72,7 @@ public sealed class MerkleTreeGenericTests
         Assert.False(a.Equals(b));
         Assert.False(a == b);
         Assert.True(a != b);
+        Assert.True(a.GetHashCode() != b.GetHashCode());
     }
 
     [Fact(DisplayName = "MerkleTree.GetLeafHashes should produce the same leaf hashes that the tree was constructed with")]

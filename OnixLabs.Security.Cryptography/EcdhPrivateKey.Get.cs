@@ -26,6 +26,7 @@ public sealed partial class EcdhPrivateKey
     {
         using ECDiffieHellman key = ImportKeyData();
         byte[] keyData = key.ExportSubjectPublicKeyInfo();
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new EcdhPublicKey(keyData);
     }
 }

@@ -19,6 +19,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-64 format provider.
 /// </summary>
+// ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed class Base64FormatProvider : Enumeration<Base64FormatProvider>, IFormatProvider
 {
     /// <summary>

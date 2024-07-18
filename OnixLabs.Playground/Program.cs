@@ -12,34 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
-        try
-        {
-            InvalidOperationException ex = new("Hello");
-
-            foreach (PropertyInfo property in ex.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                Console.WriteLine($"{property.Name} = {property.GetValue(ex)}");
-            }
-
-            throw ex;
-        }
-        catch (Exception ex)
-        {
-            foreach (PropertyInfo property in ex.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                Console.WriteLine($"{property.Name} = {property.GetValue(ex)}");
-            }
-        }
-
     }
 }

@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Buffers;
+using System.Text;
+using OnixLabs.Core;
+using OnixLabs.Core.Text;
 using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
@@ -53,7 +58,7 @@ public sealed class SecretTests
     public void SecretValueShouldNotBeModifiedWhenAlteringTheObtainedByteArray()
     {
         // Given
-        Secret candidate = new([1, 2, 3, 4]);
+        Secret candidate = new byte[] { 1, 2, 3, 4 };
         const string expected = "01020304";
 
         // When
@@ -69,8 +74,8 @@ public sealed class SecretTests
     public void IdenticalSecretValuesShouldBeConsideredEqual()
     {
         // Given
-        Secret left = new([1, 2, 3, 4]);
-        Secret right = new([1, 2, 3, 4]);
+        Secret left = new byte[] { 1, 2, 3, 4 };
+        Secret right = new byte[] { 1, 2, 3, 4 };
 
         // Then
         Assert.Equal(left, right);
@@ -82,8 +87,8 @@ public sealed class SecretTests
     public void DifferentSecretValuesShouldNotBeConsideredEqual()
     {
         // Given
-        Secret left = new([1, 2, 3, 4]);
-        Secret right = new([5, 6, 7, 8]);
+        Secret left = new byte[] { 1, 2, 3, 4 };
+        Secret right = new byte[] { 5, 6, 7, 8 };
 
         // Then
         Assert.NotEqual(left, right);
@@ -95,8 +100,8 @@ public sealed class SecretTests
     public void IdenticalSecretValuesShouldProduceIdenticalSecretCodes()
     {
         // Given
-        Secret left = new([1, 2, 3, 4]);
-        Secret right = new([1, 2, 3, 4]);
+        Secret left = new byte[] { 1, 2, 3, 4 };
+        Secret right = new byte[] { 1, 2, 3, 4 };
 
         // When
         int leftHashCode = left.GetHashCode();
@@ -110,8 +115,8 @@ public sealed class SecretTests
     public void DifferentSecretValuesShouldProduceDifferentSecretCodes()
     {
         // Given
-        Secret left = new([1, 2, 3, 4]);
-        Secret right = new([5, 6, 7, 8]);
+        Secret left = new byte[] { 1, 2, 3, 4 };
+        Secret right = new byte[] { 5, 6, 7, 8 };
 
         // When
         int leftHashCode = left.GetHashCode();
@@ -119,5 +124,133 @@ public sealed class SecretTests
 
         // Then
         Assert.NotEqual(leftHashCode, rightHashCode);
+    }
+
+    [Fact(DisplayName = "Secret should be constructable from a string")]
+    public void SecretShouldBeConstructableFromString()
+    {
+        // Given
+        const string value = "test";
+        Secret candidate = value;
+        byte[] expected = Encoding.UTF8.GetBytes(value);
+
+        // When
+        byte[] actual = candidate.ToByteArray();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Secret should be constructable from a char array")]
+    public void SecretShouldBeConstructableFromCharArray()
+    {
+        // Given
+        char[] value = ['t', 'e', 's', 't'];
+        Secret candidate = value;
+        byte[] expected = Encoding.UTF8.GetBytes(value);
+
+        // When
+        byte[] actual = candidate.ToByteArray();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Secret should be constructable from a ReadOnlySequence<char>")]
+    public void SecretShouldBeConstructableFromReadOnlySequence()
+    {
+        // Given
+        ReadOnlySequence<char> value = new ReadOnlySequence<char>(new char[] { 't', 'e', 's', 't' });
+        Secret candidate = value;
+        byte[] expected = Encoding.UTF8.GetBytes(value.ToArray());
+
+        // When
+        byte[] actual = candidate.ToByteArray();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Secret should parse a valid string correctly")]
+    public void SecretShouldParseValidString()
+    {
+        // Given
+        string value = "01020304";
+        Secret expected = new byte[] { 1, 2, 3, 4 };
+
+        // When
+        Secret actual = Secret.Parse(value);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Secret should throw on invalid string parse")]
+    public void SecretShouldThrowOnInvalidStringParse()
+    {
+        // Given
+        string value = "invalid";
+
+        // Then
+        Assert.Throws<FormatException>(() => Secret.Parse(value));
+    }
+
+    [Fact(DisplayName = "TryParse should return true for valid string and output correct Secret")]
+    public void TryParseShouldReturnTrueForValidString()
+    {
+        // Given
+        string value = "01020304";
+        Secret expected = new byte[] { 1, 2, 3, 4 };
+
+        // When
+        bool success = Secret.TryParse(value, null, out Secret actual);
+
+        // Then
+        Assert.True(success);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "TryParse should return false for invalid string and output default Secret")]
+    public void TryParseShouldReturnFalseForInvalidString()
+    {
+        // Given
+        string value = "invalid";
+
+        // When
+        bool success = Secret.TryParse(value, null, out Secret actual);
+
+        // Then
+        Assert.False(success);
+        Assert.Equal(default, actual);
+    }
+
+    [Fact(DisplayName = "ToString should return correct string representation with provided encoding")]
+    public void ToStringShouldReturnCorrectStringWithEncoding()
+    {
+        // Given
+        byte[] value = "ABCxyz123".ToByteArray();
+        Secret candidate = new(value);
+        const string expected = "ABCxyz123";
+
+        // When
+        string actual = candidate.ToString(Encoding.UTF8);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "ToString should return correct string representation with provided format provider")]
+    public void ToStringShouldReturnCorrectStringWithFormatProvider()
+    {
+        // Given
+        byte[] value = [1, 2, 3, 4];
+        Secret candidate = new(value);
+        string expected = "01020304";
+
+        // When
+        string actual = candidate.ToString(Base16FormatProvider.Invariant);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

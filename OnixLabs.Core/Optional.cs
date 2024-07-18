@@ -27,7 +27,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Gets a value indicating that the optional value is absent.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
-    public static readonly None<T> None = new();
+    public static readonly None<T> None = None<T>.Instance;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Optional{T}"/> class.
@@ -39,7 +39,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <summary>
     /// Gets a value indicating whether the underlying value of the current <see cref="Optional{T}"/> instance is present.
     /// </summary>
-    public bool HasValue => this is Some<T>;
+    public bool HasValue => IsSome(this);
 
     /// <summary>
     /// Gets a value indicating whether the specified <see cref="Optional{T}"/> instance is <see cref="None{T}"/>.
@@ -69,9 +69,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
     // ReSharper disable once HeapView.PossibleBoxingAllocation
-    public static Optional<T> Of(T? value) => value is not null && !EqualityComparer<T>.Default.Equals(value, default)
-        ? Some(value)
-        : None;
+    public static Optional<T> Of(T? value) => value is null || EqualityComparer<T>.Default.Equals(value, default) ? None : Some(value);
 
     /// <summary>
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
@@ -108,7 +106,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
     // ReSharper disable once HeapView.PossibleBoxingAllocation
-    public static implicit operator Optional<T>(T? value) => value is not null ? Some(value) : None;
+    public static implicit operator Optional<T>(T? value) => value is null ? None : Some(value);
 
     /// <summary>
     /// Gets the underlying value of the specified <see cref="Optional{T}"/> instance;
@@ -128,7 +126,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Optional<T> left, Optional<T> right) => Equals(left, right);
+    public static bool operator ==(Optional<T>? left, Optional<T>? right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -136,32 +134,28 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Optional<T> left, Optional<T> right) => !Equals(left, right);
+    public static bool operator !=(Optional<T>? left, Optional<T>? right) => !Equals(left, right);
 
     /// <summary>
     /// Checks whether the current object is equal to another object of the same type.
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Optional<T>? other) => this switch
-    {
-        Some<T> some => other is Some<T> someOther && some.Equals(someOther),
-        None<T> none => other is None<T> noneOther && none.Equals(noneOther),
-        _ => ReferenceEquals(this, other)
-    };
+    public bool Equals(Optional<T>? other) => OptionalEqualityComparer<T>.Default.Equals(this, other);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj) => Equals(obj as Optional<T>);
+    public sealed override bool Equals(object? obj) => Equals(obj as Optional<T>);
 
     /// <summary>
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
-    public override int GetHashCode() => default;
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
+    public sealed override int GetHashCode() => this is Some<T> some ? some.Value.GetHashCode() : default;
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;
@@ -171,7 +165,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;
     /// otherwise, returns the default <typeparamref name="T"/> value.
     /// </returns>
-    public abstract T? GetValueOrDefault();
+    public T? GetValueOrDefault() => this is Some<T> some ? some.Value : default;
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;
@@ -182,7 +176,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;
     /// otherwise, returns the specified default value.
     /// </returns>
-    public abstract T GetValueOrDefault(T defaultValue);
+    public T GetValueOrDefault(T defaultValue) => this is Some<T> some ? some.Value : defaultValue;
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;
@@ -192,14 +186,25 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;
     /// otherwise, throws an <see cref="InvalidOperationException"/> exception.
     /// </returns>
-    public abstract T GetValueOrThrow();
+    public T GetValueOrThrow() => this is Some<T> some ? some.Value : throw new InvalidOperationException($"Optional value of type {typeof(T).FullName} is not present.");
 
     /// <summary>
     /// Executes the action that matches the value of the current <see cref="Optional{T}"/> instance.
     /// </summary>
     /// <param name="some">The action to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
     /// <param name="none">The action to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
-    public abstract void Match(Action<T>? some = null, Action? none = null);
+    public void Match(Action<T>? some = null, Action? none = null)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                some?.Invoke(someOptional.Value);
+                break;
+            default:
+                none?.Invoke();
+                break;
+        }
+    }
 
     /// <summary>
     /// Executes the function that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
@@ -211,7 +216,11 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns the result of the <paramref name="some"/> function if the underlying value of the current <see cref="Optional{T}"/> value is present;
     /// otherwise, returns the result of the <paramref name="some"/> function if the underlying value of the current <see cref="Optional{T}"/> value is absent.
     /// </returns>
-    public abstract TResult Match<TResult>(Func<T, TResult> some, Func<TResult> none);
+    public TResult Match<TResult>(Func<T, TResult> some, Func<TResult> none) => this switch
+    {
+        Some<T> someOptional => some.Invoke(someOptional.Value),
+        _ => none.Invoke()
+    };
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Optional{T}"/> instance.
@@ -222,7 +231,11 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the function if the current
     /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
     /// </returns>
-    public abstract Optional<TResult> Select<TResult>(Func<T, TResult> selector) where TResult : notnull;
+    public Optional<TResult> Select<TResult>(Func<T, TResult> selector) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => selector(someOptional.Value),
+        _ => Optional<TResult>.None
+    };
 
     /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Optional{T}"/> instance.
@@ -233,7 +246,11 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the function if the current
     /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
     /// </returns>
-    public abstract Optional<TResult> SelectMany<TResult>(Func<T, Optional<TResult>> selector) where TResult : notnull;
+    public Optional<TResult> SelectMany<TResult>(Func<T, Optional<TResult>> selector) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => selector(someOptional.Value),
+        _ => Optional<TResult>.None
+    };
 
     /// <summary>
     /// Wraps the current <see cref="Optional{T}"/> instance into new, successful <see cref="Result{T}"/> instance.
@@ -245,10 +262,41 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a <see cref="String"/> that represents the current object.
     /// </summary>
     /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
-    public override string ToString() => this switch
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
+    public sealed override string ToString() => this is Some<T> some ? some.Value.ToString() ?? string.Empty : nameof(None);
+}
+
+/// <summary>
+/// Represents a present optional value.
+/// </summary>
+/// <typeparam name="T">The type of the underlying optional value.</typeparam>
+public sealed class Some<T> : Optional<T> where T : notnull
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Some{T}"/> class.
+    /// </summary>
+    /// <param name="value">The underlying optional value.</param>
+    internal Some(T value) => Value = value;
+
+    /// <summary>
+    /// Gets the underlying optional value.
+    /// </summary>
+    public T Value { get; }
+}
+
+/// <summary>
+/// Represents an absent optional value.
+/// </summary>
+/// <typeparam name="T">The type of the underlying optional value.</typeparam>
+public sealed class None<T> : Optional<T> where T : notnull
+{
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
+    internal static readonly None<T> Instance = new();
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="None{T}"/> class.
+    /// </summary>
+    private None()
     {
-        Some<T> some => some.ToString(),
-        None<T> none => none.ToString(),
-        _ => base.ToString() ?? GetType().FullName ?? nameof(Optional<T>)
-    };
+    }
 }

@@ -14,6 +14,7 @@
 
 using System.IO;
 using System.Security.Cryptography;
+using OnixLabs.Core.Linq;
 using Aes = System.Security.Cryptography.Aes;
 
 namespace OnixLabs.Security.Cryptography;
@@ -34,7 +35,7 @@ internal sealed class ProtectedData
     /// <returns>Returns the encrypted data.</returns>
     public byte[] Encrypt(byte[] data)
     {
-        Require(data.Length > 0, "Data must not be empty.", nameof(data));
+        if (data.IsEmpty()) return data;
 
         using Aes algorithm = Aes.Create();
 
@@ -60,7 +61,7 @@ internal sealed class ProtectedData
     /// <returns>Returns the decrypted data.</returns>
     public byte[] Decrypt(byte[] data)
     {
-        Require(data.Length > 0, "Data must not be empty.", nameof(data));
+        if (data.IsEmpty()) return data;
 
         using Aes algorithm = Aes.Create();
 

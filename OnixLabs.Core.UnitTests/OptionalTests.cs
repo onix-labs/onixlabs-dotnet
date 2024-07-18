@@ -27,10 +27,12 @@ public sealed class OptionalTests
         Optional<string> text = Optional<string>.None;
 
         // Then
+        Assert.True(Optional<int>.IsNone(number));
         Assert.False(number.HasValue);
         Assert.IsType<None<int>>(number);
         Assert.Equal(Optional<int>.None, number);
 
+        Assert.True(Optional<string>.IsNone(text));
         Assert.False(text.HasValue);
         Assert.IsType<None<string>>(text);
         Assert.Equal(Optional<string>.None, text);
@@ -44,10 +46,12 @@ public sealed class OptionalTests
         Optional<string> text = Optional<string>.Of(default);
 
         // Then
+        Assert.True(Optional<int>.IsNone(number));
         Assert.False(number.HasValue);
         Assert.IsType<None<int>>(number);
         Assert.Equal(Optional<int>.None, number);
 
+        Assert.True(Optional<string>.IsNone(text));
         Assert.False(text.HasValue);
         Assert.IsType<None<string>>(text);
         Assert.Equal(Optional<string>.None, text);
@@ -61,10 +65,12 @@ public sealed class OptionalTests
         Optional<string> text = Optional<string>.Of(null);
 
         // Then
+        Assert.True(Optional<int>.IsNone(number));
         Assert.False(number.HasValue);
         Assert.IsType<None<int>>(number);
         Assert.Equal(Optional<int>.None, number);
 
+        Assert.True(Optional<string>.IsNone(text));
         Assert.False(text.HasValue);
         Assert.IsType<None<string>>(text);
         Assert.Equal(Optional<string>.None, text);
@@ -78,10 +84,12 @@ public sealed class OptionalTests
         Optional<string> text = Optional<string>.Of("abc");
 
         // Then
+        Assert.True(Optional<int>.IsSome(number));
         Assert.True(number.HasValue);
         Assert.IsType<Some<int>>(number);
         Assert.Equal(123, number);
 
+        Assert.True(Optional<string>.IsSome(text));
         Assert.True(text.HasValue);
         Assert.IsType<Some<string>>(text);
         Assert.Equal("abc", text);
@@ -110,10 +118,12 @@ public sealed class OptionalTests
         Optional<Guid> identifier = Optional<Guid>.Of((Guid?)Guid.Empty);
 
         // Then
+        Assert.True(Optional<int>.IsSome(number));
         Assert.True(number.HasValue);
         Assert.IsType<Some<int>>(number);
         Assert.Equal(123, number);
 
+        Assert.True(Optional<Guid>.IsSome(identifier));
         Assert.True(identifier.HasValue);
         Assert.IsType<Some<Guid>>(identifier);
         Assert.Equal(Guid.Empty, identifier);
@@ -127,10 +137,12 @@ public sealed class OptionalTests
         Optional<string> text = Optional<string>.Some("abc");
 
         // Then
+        Assert.True(Optional<int>.IsSome(number));
         Assert.True(number.HasValue);
         Assert.IsType<Some<int>>(number);
         Assert.Equal(123, number);
 
+        Assert.True(Optional<string>.IsSome(text));
         Assert.True(text.HasValue);
         Assert.IsType<Some<string>>(text);
         Assert.Equal("abc", text);
@@ -144,10 +156,12 @@ public sealed class OptionalTests
         Optional<string> text = "abc";
 
         // Then
+        Assert.True(Optional<int>.IsSome(number));
         Assert.True(number.HasValue);
         Assert.IsType<Some<int>>(number);
         Assert.Equal(123, number);
 
+        Assert.True(Optional<string>.IsSome(text));
         Assert.True(text.HasValue);
         Assert.IsType<Some<string>>(text);
         Assert.Equal("abc", text);

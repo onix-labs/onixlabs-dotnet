@@ -19,6 +19,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using OnixLabs.Core.Collections.Generic;
 using OnixLabs.Core.Text;
 
 namespace OnixLabs.Core.Linq;
@@ -62,7 +63,7 @@ public static class IEnumerableExtensions
         TProperty firstValue = selector(enumerator.Current);
 
         while (enumerator.MoveNext())
-            if (!(comparer ?? EqualityComparer<TProperty>.Default).Equals(firstValue, selector(enumerator.Current)))
+            if (!comparer.GetOrDefault().Equals(firstValue, selector(enumerator.Current)))
                 return false;
 
         return true;
@@ -488,7 +489,7 @@ public static class IEnumerableExtensions
     public static bool SequenceEqualOrNull<T>(this IEnumerable<T>? enumerable, IEnumerable<T>? other, IEqualityComparer<T>? comparer = null)
     {
         if (enumerable is null || other is null) return enumerable is null && other is null;
-        return enumerable.SequenceEqual(other, comparer ?? EqualityComparer<T>.Default);
+        return enumerable.SequenceEqual(other, comparer.GetOrDefault());
     }
 
     /// <summary>
@@ -515,7 +516,7 @@ public static class IEnumerableExtensions
         }
         catch (Exception exception)
         {
-            return Result<Optional<T>>.Failure(exception);
+            return exception;
         }
     }
 

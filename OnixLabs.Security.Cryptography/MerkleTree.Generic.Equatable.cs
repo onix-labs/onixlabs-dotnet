@@ -44,7 +44,7 @@ public abstract partial class MerkleTree<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(MerkleTree<T> left, MerkleTree<T> right) => Equals(left, right);
+    public static bool operator ==(MerkleTree<T>? left, MerkleTree<T>? right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -52,5 +52,5 @@ public abstract partial class MerkleTree<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(MerkleTree<T> left, MerkleTree<T> right) => !Equals(left, right);
+    public static bool operator !=(MerkleTree<T>? left, MerkleTree<T>? right) => !Equals(left, right);
 }

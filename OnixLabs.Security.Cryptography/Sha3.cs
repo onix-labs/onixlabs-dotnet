@@ -122,6 +122,7 @@ public abstract partial class Sha3 : HashAlgorithm
             cbSize -= blockSize;
 
             if (blockSize != rateBytes) continue;
+
             Permute(state);
             blockSize = 0;
         }
@@ -136,10 +137,7 @@ public abstract partial class Sha3 : HashAlgorithm
         byte pad = Convert.ToByte(Buffer.GetByte(state, blockSize) ^ delimiter);
         Buffer.SetByte(state, blockSize, pad);
 
-        if ((delimiter & 0x80) != 0 && blockSize == rateBytes - 1)
-        {
-            Permute(state);
-        }
+        if ((delimiter & 0x80) != 0 && blockSize == rateBytes - 1) Permute(state);
 
         pad = Convert.ToByte(Buffer.GetByte(state, rateBytes - 1) ^ 0x80);
         Buffer.SetByte(state, rateBytes - 1, pad);
@@ -154,10 +152,7 @@ public abstract partial class Sha3 : HashAlgorithm
             outputPointer += blockSize;
             outputBytesLeft -= blockSize;
 
-            if (outputBytesLeft > 0)
-            {
-                Permute(state);
-            }
+            if (outputBytesLeft > 0) Permute(state);
         }
 
         return result;

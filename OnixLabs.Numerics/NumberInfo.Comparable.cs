@@ -41,6 +41,7 @@ public readonly partial struct NumberInfo
     /// </summary>
     /// <param name="obj">An object to compare with this instance.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    // ReSharper disable once HeapView.BoxingAllocation
     public int CompareTo(object? obj) => NumberInfoOrdinalityComparer.Default.Compare(this, obj);
 
     /// <summary>

@@ -23,12 +23,13 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents a cryptographic hash.
 /// </summary>
 /// <param name="value">The underlying value of the cryptographic hash.</param>
-public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive<Hash>, IValueComparable<Hash>, ISpanParsable<Hash>
+public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive<Hash>, IValueComparable<Hash>, ISpanParsable<Hash>, ISpanBinaryConvertible
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Hash"/> struct.
     /// </summary>
     /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Hash"/> instance.</param>
+    // ReSharper disable once MemberCanBePrivate.Global
     public Hash(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
 
     /// <summary>

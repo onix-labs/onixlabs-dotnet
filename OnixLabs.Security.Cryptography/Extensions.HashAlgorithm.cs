@@ -17,8 +17,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using OnixLabs.Core;
 using OnixLabs.Core.Text;
 
@@ -30,37 +28,46 @@ namespace OnixLabs.Security.Cryptography;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class HashAlgorithmExtensions
 {
-    /// <summary>
-    /// Computes the hash value for the specified byte array.
-    /// </summary>
-    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
-    /// <param name="data">The input data to compute the hash for.</param>
-    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
-    /// <returns>Returns the computed hash value.</returns>
-    public static byte[] ComputeHash(this HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1) =>
-        algorithm.ComputeHash(new MemoryStream(data.ToByteArray()), rounds);
+    private const string ComputeHashFailed = "Failed to compute a hash for the specified input data.";
 
     /// <summary>
-    /// Computes the hash value for the specified byte array.
+    /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
     /// <param name="data">The input data to compute the hash for.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
-    public static byte[] ComputeHash(this HashAlgorithm algorithm, byte[] data, int rounds) =>
-        algorithm.ComputeHash(new MemoryStream(data), rounds);
+    /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<byte> data, int rounds = 1)
+    {
+        Span<byte> destination = stackalloc byte[algorithm.HashSize / 8];
+
+        if (!algorithm.TryComputeHash(data, destination, 0, data.Length, rounds, out int _))
+            throw new CryptographicException(ComputeHashFailed);
+
+        return destination.ToArray();
+    }
 
     /// <summary>
-    /// Computes the hash value for the specified byte array.
+    /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
     /// <param name="data">The input data to compute the hash for.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the input from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the input to use as data.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
-    public static byte[] ComputeHash(this HashAlgorithm algorithm, byte[] data, int offset, int count, int rounds) =>
-        algorithm.ComputeHash(data.Copy(offset, count), rounds);
+    /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<byte> data, int offset, int count, int rounds = 1)
+    {
+        ReadOnlySpan<byte> source = data.Slice(offset, count);
+        Span<byte> destination = stackalloc byte[algorithm.HashSize / 8];
+
+        if (!algorithm.TryComputeHash(source, destination, 0, source.Length, rounds, out int _))
+            throw new CryptographicException(ComputeHashFailed);
+
+        return destination.ToArray();
+    }
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
@@ -70,50 +77,113 @@ public static class HashAlgorithmExtensions
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
+    /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
         algorithm.ComputeHash(encoding.GetOrDefault().GetBytes(data.ToArray()), rounds);
 
     /// <summary>
-    /// Computes the hash value for the specified <see cref="Stream"/> object.
+    /// Computes the hash value for the specified <see cref="IBinaryConvertible"/> value.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
+    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns the computed hash value.</returns>
+    /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1) =>
+        algorithm.ComputeHash(data.ToByteArray(), rounds);
+
+    /// <summary>
+    /// Computes the hash value for the specified <see cref="IBinaryConvertible"/> value.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
+    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="offset">The offset into the input from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the input to use as data.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns the computed hash value.</returns>
+    /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, IBinaryConvertible data, int offset, int count, int rounds = 1) =>
+        algorithm.ComputeHash(data.ToByteArray(), offset, count, rounds);
+
+    /// <summary>
+    /// Computes the hash value for the specified <see cref="ISpanBinaryConvertible"/> value.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
+    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns the computed hash value.</returns>
+    /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, ISpanBinaryConvertible data, int rounds = 1) =>
+        algorithm.ComputeHash(data.ToReadOnlySpan(), rounds);
+
+    /// <summary>
+    /// Computes the hash value for the specified <see cref="ISpanBinaryConvertible"/> value.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
+    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="offset">The offset into the input from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the input to use as data.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns the computed hash value.</returns>
+    /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, ISpanBinaryConvertible data, int offset, int count, int rounds = 1) =>
+        algorithm.ComputeHash(data.ToReadOnlySpan(), offset, count, rounds);
+
+    /// <summary>
+    /// Computes the hash value for the specified <see cref="Stream"/> value.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
     /// <param name="stream">The input data to compute the hash for.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns the computed hash value.</returns>
-    public static byte[] ComputeHash(this HashAlgorithm algorithm, Stream stream, int rounds)
-    {
-        Require(rounds > 0, "Rounds must be greater than zero", nameof(rounds));
-
-        byte[] data = algorithm.ComputeHash(stream);
-        while (--rounds > 0) data = algorithm.ComputeHash(data);
-        return data;
-    }
+    /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+    public static byte[] ComputeHash(this HashAlgorithm algorithm, Stream stream, int rounds) => rounds is 1
+        ? algorithm.ComputeHash(stream)
+        : algorithm.ComputeHash(algorithm.ComputeHash(stream), rounds - 1);
 
     /// <summary>
-    /// Asynchronously computes the hash value for the specified <see cref="Stream"/> object.
+    /// Attempts to compute the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
-    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="source">The input to compute the hash code for.</param>
+    /// <param name="destination">The buffer to receive the hash value.</param>
+    /// <param name="offset">The offset into the input from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the input to use as data.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
-    /// <param name="token">The token to monitor for cancellation requests.</param>
-    /// <returns>Returns a task that represents the asynchronous compute hash operation and wraps the computed hash value.</returns>
-    public static async Task<byte[]> ComputeHashAsync(this HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1, CancellationToken token = default) =>
-        await algorithm.ComputeHashAsync(new MemoryStream(data.ToByteArray()), rounds, token).ConfigureAwait(false);
-
-    /// <summary>
-    /// Asynchronously computes the hash value for the specified <see cref="Stream"/> object.
-    /// </summary>
-    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
-    /// <param name="stream">The input data to compute the hash for.</param>
-    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
-    /// <param name="token">The token to monitor for cancellation requests.</param>
-    /// <returns>Returns a task that represents the asynchronous compute hash operation and wraps the computed hash value.</returns>
-    public static async Task<byte[]> ComputeHashAsync(this HashAlgorithm algorithm, Stream stream, int rounds, CancellationToken token = default)
+    /// <param name="bytesWritten">When this method returns, the total number of bytes written into <paramref name="destination" />. This parameter is treated as uninitialized.</param>
+    /// <returns>Returns <see langword="true" /> if <paramref name="destination" /> is long enough to receive the hash value; otherwise, <see langword="false" />.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static bool TryComputeHash(this HashAlgorithm algorithm, ReadOnlySpan<byte> source, Span<byte> destination, int offset, int count, int rounds, out int bytesWritten)
     {
-        Require(rounds > 0, "Rounds must be greater than zero", nameof(rounds));
+        try
+        {
+            if (rounds < 1 || destination.Length < algorithm.HashSize / 8)
+            {
+                bytesWritten = default;
+                return false;
+            }
 
-        MemoryStream memoryStream = new(await algorithm.ComputeHashAsync(stream, token).ConfigureAwait(false));
-        while (--rounds > 0) memoryStream = new MemoryStream(await algorithm.ComputeHashAsync(memoryStream, token).ConfigureAwait(false));
-        return memoryStream.ToArray();
+            source = source.Slice(offset, count);
+            int result = default;
+
+            while (rounds-- > 0)
+            {
+                if (!algorithm.TryComputeHash(source, destination, out result))
+                {
+                    bytesWritten = default;
+                    return false;
+                }
+
+                source = destination;
+            }
+
+            bytesWritten = result;
+            return true;
+        }
+        catch
+        {
+            bytesWritten = default;
+            return false;
+        }
     }
 }

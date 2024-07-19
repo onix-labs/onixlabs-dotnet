@@ -27,6 +27,7 @@ public sealed partial class RsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey
     /// Initializes a new instance of the <see cref="RsaPublicKey"/> struct.
     /// </summary>
     /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="RsaPublicKey"/> instance.</param>
+    // ReSharper disable once MemberCanBePrivate.Global
     public RsaPublicKey(ReadOnlySequence<byte> value) : this(value.ToArray())
     {
     }

@@ -23,6 +23,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value from which to trim trailing zeros.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> excluding any trailing zeros.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public static BigDecimal TrimTrailingZeros(BigDecimal value)
     {
         if (IsZero(value)) return Zero;

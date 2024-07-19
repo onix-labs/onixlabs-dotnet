@@ -20,6 +20,7 @@ namespace OnixLabs.Security;
 /// <summary>
 /// Represents a random number provider.
 /// </summary>
+// ReSharper disable HeapView.ObjectAllocation.Evident
 internal abstract class RandomNumberProvider
 {
     /// <summary>

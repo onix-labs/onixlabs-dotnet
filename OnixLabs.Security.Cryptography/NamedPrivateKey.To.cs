@@ -20,9 +20,9 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial record struct NamedPrivateKey
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the underlying <see cref="NamedPrivateKey"/> instance.
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the underlying <see cref="PrivateKey"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the underlying <see cref="NamedPrivateKey"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the underlying <see cref="PrivateKey"/> instance.</returns>
     public byte[] ToByteArray() => PrivateKey.ToByteArray();
 
     /// <summary>
@@ -30,7 +30,7 @@ public readonly partial record struct NamedPrivateKey
     /// </summary>
     /// <param name="provider">The format provider that will be used to determine the format of the string.</param>
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
-    public string ToString(IFormatProvider provider) => $"{AlgorithmName}:{IBaseCodec.GetString(ToByteArray(), provider)}";
+    public string ToString(IFormatProvider provider) => string.Concat(AlgorithmName, Separator, IBaseCodec.GetString(ToByteArray(), provider));
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.

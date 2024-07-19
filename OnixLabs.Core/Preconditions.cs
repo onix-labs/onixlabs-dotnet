@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.ComponentModel;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core;
@@ -48,10 +47,8 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-    public static T CheckNotNull<T>(T? value, string message = ArgumentNull)
-    {
-        return value ?? throw new InvalidOperationException(message);
-    }
+    public static T CheckNotNull<T>(T? value, string message = ArgumentNull) =>
+        value ?? throw new InvalidOperationException(message);
 
     /// <summary>
     /// Performs a general pre-condition check that fails if the specified value is <see langword="null"/>.
@@ -61,10 +58,8 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-    public static T CheckNotNull<T>(T? value, string message = ArgumentNull) where T : struct
-    {
-        return value ?? throw new InvalidOperationException(message);
-    }
+    public static T CheckNotNull<T>(T? value, string message = ArgumentNull) where T : struct =>
+        value ?? throw new InvalidOperationException(message);
 
     /// <summary>
     /// Performs a general pre-condition check that fails if the specified value is <see langword="null"/> or an empty string.
@@ -102,20 +97,6 @@ public static class Preconditions
     public static void Require(bool condition, string message = ArgumentFailed, string? parameterName = null)
     {
         if (!condition) throw new ArgumentException(message, parameterName);
-    }
-
-    /// <summary>
-    /// Performs a general pre-condition requirement that fails when the specified condition is <see langword="false"/>.
-    /// </summary>
-    /// <param name="condition">The condition to check.</param>
-    /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
-    /// <param name="parameterName">The name of the invalid parameter.</param>
-    /// <exception cref="ArgumentOutOfRangeException">If the specified condition is <see langword="false"/>.</exception>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [Obsolete("This method is obsolete and will be removed in a future version. Use RequireWithinRangeInclusive or RequireWithinRangeExclusive methods instead.")]
-    public static void RequireWithinRange(bool condition, string message = ArgumentOutOfRange, string? parameterName = null)
-    {
-        if (!condition) throw new ArgumentOutOfRangeException(parameterName, message);
     }
 
     /// <summary>
@@ -157,10 +138,8 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="ArgumentNullException">If the specified value is <see langword="null"/>.</exception>
-    public static T RequireNotNull<T>(T? value, string message = ArgumentNull, string? parameterName = null)
-    {
-        return value ?? throw new ArgumentNullException(parameterName, message);
-    }
+    public static T RequireNotNull<T>(T? value, string message = ArgumentNull, string? parameterName = null) =>
+        value ?? throw new ArgumentNullException(parameterName, message);
 
     /// <summary>
     /// Performs a general pre-condition requirement that fails if the specified value is <see langword="null"/>.
@@ -171,10 +150,8 @@ public static class Preconditions
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a non-null value of the specified type.</returns>
     /// <exception cref="ArgumentNullException">If the specified value is <see langword="null"/>.</exception>
-    public static T RequireNotNull<T>(T? value, string message = ArgumentNull, string? parameterName = null) where T : struct
-    {
-        return value ?? throw new ArgumentNullException(parameterName, message);
-    }
+    public static T RequireNotNull<T>(T? value, string message = ArgumentNull, string? parameterName = null) where T : struct =>
+        value ?? throw new ArgumentNullException(parameterName, message);
 
     /// <summary>
     /// Performs a general pre-condition requirement that fails if the specified value is <see langword="null"/> or an empty string.

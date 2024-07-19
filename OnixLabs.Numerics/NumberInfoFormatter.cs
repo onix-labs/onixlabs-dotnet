@@ -18,7 +18,6 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Text;
-using OnixLabs.Core.Text;
 
 namespace OnixLabs.Numerics;
 
@@ -31,11 +30,11 @@ namespace OnixLabs.Numerics;
 internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvider formatProvider, IEnumerable<char> allowedFormats)
 {
     internal const char DefaultFormat = 'G';
-
     private const char LeadingParenthesis = '(';
     private const char TrailingParenthesis = ')';
     private const char Whitespace = ' ';
 
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     private readonly StringBuilder builder = new();
     private readonly NumberFormatInfo numberFormat = NumberFormatInfo.GetInstance(formatProvider);
     private readonly IEnumerable<char> allowedFormats = allowedFormats.Select(char.ToUpperInvariant);
@@ -89,7 +88,7 @@ internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvi
     /// <param name="separator">The separator that separates each number group.</param>
     private void FormatInteger(IReadOnlyList<int> grouping, string separator = "")
     {
-        builder.Append(BigInteger.Abs(value.Integer));
+        builder.Append(BigInteger.Abs(value.Integer).ToString());
 
         if (grouping.Count == 0) return;
 
@@ -119,6 +118,6 @@ internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvi
     /// <param name="separator">The separator that separates the integral and fractional components.</param>
     private void FormatFraction(string separator)
     {
-        if (value.Scale > 0) builder.Append(separator, value.Fraction.ToString().PadLeft(value.Scale, '0'));
+        if (value.Scale > 0) builder.Append(separator).Append(value.Fraction.ToString().PadLeft(value.Scale, '0'));
     }
 }

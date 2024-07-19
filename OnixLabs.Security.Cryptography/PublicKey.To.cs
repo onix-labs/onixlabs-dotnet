@@ -28,6 +28,12 @@ public abstract partial class PublicKey
     public byte[] ToByteArray() => KeyData.Copy();
 
     /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    public ReadOnlySpan<byte> ToReadOnlySpan() => KeyData;
+
+    /// <summary>
     /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.
     /// </summary>
     /// <param name="algorithmName">The name of the algorithm that was used to produce the associated public key.</param>

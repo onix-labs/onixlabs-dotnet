@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.ComponentModel;
 using OnixLabs.Core;
 using OnixLabs.Core.Text;
 
@@ -26,15 +25,6 @@ public abstract partial class PrivateKey
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PrivateKey"/> instance.</returns>
     public byte[] ToByteArray() => KeyData.Copy();
-
-    /// <summary>
-    /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="PrivateKey"/> instance.
-    /// </summary>
-    /// <param name="algorithmName">The name of the algorithm that was used to produce the associated private key.</param>
-    /// <returns>Returns a new <see cref="NamedPrivateKey"/> from the current <see cref="PrivateKey"/> instance.</returns>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [Obsolete("Passing custom algorithm names can lead to named keys. Use the parameterless ToNamedPrivateKey method instead.")]
-    public NamedPrivateKey ToNamedPrivateKey(string algorithmName) => new(this, algorithmName);
 
     /// <summary>
     /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="PrivateKey"/> instance.

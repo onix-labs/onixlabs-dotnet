@@ -26,6 +26,7 @@ public readonly partial struct BigDecimal
     /// <param name="scale">The scale to apply to the value.</param>
     /// <param name="mode">The <see cref="MidpointRounding"/> mode to be used when the specified scale is less than the current scale.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value with the specified scale.</returns>
+    // ReSharper disable once MemberCanBePrivate.Global
     public static BigDecimal SetScale(BigDecimal value, int scale, MidpointRounding mode = default)
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));

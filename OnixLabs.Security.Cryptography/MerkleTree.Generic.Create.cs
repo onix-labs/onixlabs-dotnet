@@ -29,7 +29,12 @@ public abstract partial class MerkleTree<T>
     /// <returns>Returns a new <see cref="MerkleTree"/> node that represents the Merkle root.</returns>
     public static MerkleTree<T> Create(IEnumerable<T> leaves, HashAlgorithm algorithm)
     {
-        IReadOnlyList<MerkleTree<T>> nodes = leaves.Select(leaf => new MerkleTreeLeafNode(leaf, algorithm)).ToList();
+        // ReSharper disable once HeapView.ObjectAllocation
+        List<MerkleTree<T>> nodes = [];
+
+        // ReSharper disable once LoopCanBeConvertedToQuery, HeapView.ObjectAllocation.Possible, HeapView.ObjectAllocation.Evident
+        foreach (T leaf in leaves) nodes.Add(new MerkleTreeLeafNode(leaf, algorithm));
+
         Require(nodes.IsNotEmpty(), "Cannot construct a Merkle tree from an empty list.", nameof(leaves));
         return BuildMerkleTree(nodes, algorithm);
     }
@@ -45,14 +50,17 @@ public abstract partial class MerkleTree<T>
         while (true)
         {
             if (nodes.IsSingle()) return nodes.Single();
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             if (nodes.IsCountOdd()) nodes = nodes.Append(new MerkleTreeEmptyNode(algorithm)).ToList();
 
+            // ReSharper disable once HeapView.ObjectAllocation
             List<MerkleTree<T>> mergedNodes = [];
 
             for (int index = 0; index < nodes.Count; index += 2)
             {
                 MerkleTree<T> left = nodes[index];
                 MerkleTree<T> right = nodes[index + 1];
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
                 mergedNodes.Add(new MerkleTreeBranchNode(left, right, algorithm));
             }
 

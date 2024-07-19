@@ -75,6 +75,7 @@ public sealed class Base58Codec : IBaseCodec
                 return false;
             }
 
+            // ReSharper disable once HeapView.ObjectAllocation.Evident
             StringBuilder builder = new();
             BigInteger data = BigInteger.Zero;
 

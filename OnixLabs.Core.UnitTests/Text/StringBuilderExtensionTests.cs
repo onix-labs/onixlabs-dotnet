@@ -33,6 +33,19 @@ public sealed class StringBuilderExtensionTests
         Assert.Equal("ABCXYZ123False", builder.ToString());
     }
 
+    [Fact(DisplayName = "StringBuilder.Prepend of a single item should produce the expected result")]
+    public void StringBuilderPrependOfSingleItemShouldProduceTheExpectedResult()
+    {
+        // Given
+        StringBuilder builder = new("ABC");
+
+        // When
+        builder.Prepend("XYZ");
+
+        // Then
+        Assert.Equal("XYZABC", builder.ToString());
+    }
+
     [Fact(DisplayName = "StringBuilder.Prepend should produce the expected result")]
     public void StringBuilderPrependShouldProduceTheExpectedResult()
     {
@@ -44,6 +57,19 @@ public sealed class StringBuilderExtensionTests
 
         // Then
         Assert.Equal("XYZ123FalseABC", builder.ToString());
+    }
+
+    [Fact(DisplayName = "StringBuilder.PrependJoin should produce the expected result")]
+    public void StringBuilderPrependJoinShouldProduceTheExpectedResult()
+    {
+        // Given
+        StringBuilder builder = new("ABC");
+
+        // When
+        builder.PrependJoin(", ", "XYZ", 123, false);
+
+        // Then
+        Assert.Equal("XYZ, 123, FalseABC", builder.ToString());
     }
 
     [Fact(DisplayName = "StringBuilder.Trim should produce the expected result (char)")]

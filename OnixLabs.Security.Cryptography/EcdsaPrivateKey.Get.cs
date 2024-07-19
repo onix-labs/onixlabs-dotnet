@@ -26,6 +26,7 @@ public sealed partial class EcdsaPrivateKey
     {
         using ECDsa key = ImportKeyData();
         byte[] keyData = key.ExportSubjectPublicKeyInfo();
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new EcdsaPublicKey(keyData);
     }
 }

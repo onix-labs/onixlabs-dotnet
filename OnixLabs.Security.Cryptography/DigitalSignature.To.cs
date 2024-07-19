@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Text;
 using OnixLabs.Core;
 using OnixLabs.Core.Text;
 
@@ -26,6 +25,12 @@ public readonly partial struct DigitalSignature
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance.</returns>
     public byte[] ToByteArray() => value.Copy();
+
+    /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    public ReadOnlySpan<byte> ToReadOnlySpan() => value;
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.

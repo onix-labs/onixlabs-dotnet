@@ -19,6 +19,7 @@ namespace OnixLabs.Security.Cryptography;
 /// </summary>
 public readonly partial record struct NamedPrivateKey : ICryptoPrimitive<NamedPrivateKey>
 {
+    private const string Separator = ":";
     private const string KeyAlgorithmNameNullOrWhiteSpace = "Key algorithm name must not be null or whitespace.";
 
     /// <summary>
@@ -35,10 +36,12 @@ public readonly partial record struct NamedPrivateKey : ICryptoPrimitive<NamedPr
     /// <summary>
     /// Gets the underlying private key value.
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public PrivateKey PrivateKey { get; }
 
     /// <summary>
     /// Gets the name of the key algorithm that was used to produce the associated private key.
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public string AlgorithmName { get; }
 }

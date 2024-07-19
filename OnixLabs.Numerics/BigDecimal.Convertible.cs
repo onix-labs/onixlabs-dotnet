@@ -135,5 +135,6 @@ public readonly partial struct BigDecimal
     /// <param name="conversionType">The <see cref="Type"/> to which the value of this instance is converted</param>
     /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that supplies culture-specific formatting information.</param>
     /// <returns>Returns an <see cref="object"/> instance of type conversionType whose value is equivalent to the value of this instance.</returns>
+    // ReSharper disable once HeapView.BoxingAllocation
     object IConvertible.ToType(Type conversionType, IFormatProvider? provider) => Convert.ChangeType(this, conversionType, provider);
 }

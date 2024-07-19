@@ -35,21 +35,25 @@ public interface IBaseCodec
     /// <summary>
     /// Gets a new <see cref="Base16Codec"/> instance.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Base16Codec Base16 => new();
 
     /// <summary>
     /// Gets a new <see cref="Base32Codec"/> instance.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Base32Codec Base32 => new();
 
     /// <summary>
     /// Gets a new <see cref="Base58Codec"/> instance.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Base58Codec Base58 => new();
 
     /// <summary>
     /// Gets a new <see cref="Base64Codec"/> instance.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Base64Codec Base64 => new();
 
     /// <summary>

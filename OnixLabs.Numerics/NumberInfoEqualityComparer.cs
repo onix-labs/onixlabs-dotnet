@@ -26,11 +26,13 @@ public abstract class NumberInfoEqualityComparer : IEqualityComparer<NumberInfo>
     /// <summary>
     /// Gets a <see cref="NumberInfoEqualityComparer"/> that strictly compares <see cref="NumberInfo"/> values.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly NumberInfoEqualityComparer Strict = new NumberInfoStrictEqualityComparer();
 
     /// <summary>
     /// Gets a <see cref="NumberInfoEqualityComparer"/> that semantically compares <see cref="NumberInfo"/> values.
     /// </summary>
+    // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly NumberInfoEqualityComparer Semantic = new NumberInfoSemanticEqualityComparer();
 
     /// <summary>

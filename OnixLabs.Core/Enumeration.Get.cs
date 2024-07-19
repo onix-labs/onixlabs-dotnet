@@ -25,14 +25,11 @@ public abstract partial class Enumeration<T>
     /// Gets all of the enumeration entries for the current type.
     /// </summary>
     /// <returns>Returns all of the enumeration entries for the current type.</returns>
-    public static IReadOnlySet<T> GetAll()
-    {
-        return typeof(T)
-            .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
-            .Select(field => field.GetValue(null))
-            .OfType<T>()
-            .ToFrozenSet();
-    }
+    public static IReadOnlySet<T> GetAll() => typeof(T)
+        .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
+        .Select(field => field.GetValue(null))
+        .OfType<T>()
+        .ToFrozenSet();
 
     /// <summary>
     /// Gets all of the enumeration entries for the current type.

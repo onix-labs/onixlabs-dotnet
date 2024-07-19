@@ -13,14 +13,16 @@
 // limitations under the License.
 
 using System.Security.Cryptography;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
 /// Represents a named cryptographic hash.
 /// </summary>
-public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>
+public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, ISpanBinaryConvertible
 {
+    private const string Separator = ":";
     private const string HashAlgorithmNameNullOrWhiteSpace = "Hash algorithm name must not be null or whitespace.";
 
     /// <summary>
@@ -48,10 +50,12 @@ public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>
     /// <summary>
     /// Gets the underlying hash value.
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public Hash Hash { get; }
 
     /// <summary>
     /// Gets name of the hash algorithm that was used to produce the associated hash.
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public string AlgorithmName { get; }
 }

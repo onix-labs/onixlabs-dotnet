@@ -64,6 +64,7 @@ public sealed partial class RsaPublicKey
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out RsaPublicKey result)
     {
         bool isDecoded = IBaseCodec.TryGetBytes(value, provider ?? Base16FormatProvider.Invariant, out byte[] bytes);
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         result = new RsaPublicKey(bytes);
         return isDecoded;
     }

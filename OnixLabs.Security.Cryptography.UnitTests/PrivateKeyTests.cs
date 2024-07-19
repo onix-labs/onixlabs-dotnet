@@ -121,4 +121,18 @@ public sealed class PrivateKeyTests
         // Then
         Assert.NotEqual(leftHashCode, rightHashCode);
     }
+
+    [Fact(DisplayName = "PrivateKey.ToNamedPrivateKey should produce the expected result")]
+    public void PrivateKeyToNamedPrivateKeyShouldProduceExpectedResult()
+    {
+        // Given
+        PrivateKey privateKey = new TestPrivateKey([1, 2, 3, 4]);
+
+        // When
+        NamedPrivateKey namedPrivateKey = privateKey.ToNamedPrivateKey();
+
+        // Then
+        Assert.Equal("TEST", namedPrivateKey.AlgorithmName);
+        Assert.Equal(privateKey, namedPrivateKey.PrivateKey);
+    }
 }

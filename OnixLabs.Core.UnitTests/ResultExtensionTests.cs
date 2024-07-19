@@ -57,7 +57,7 @@ public sealed class ResultExtensionTests
         Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.FromResult(result).GetExceptionOrThrowAsync());
 
         // Then
-        Assert.Equal("The current result is not in a Failure state.", exception.Message);
+        Assert.Equal("The current result is not in a failure state.", exception.Message);
     }
 
     [Fact(DisplayName = "Result Failure.GetExceptionOrDefaultAsync should produce the expected result.")]
@@ -139,7 +139,7 @@ public sealed class ResultExtensionTests
         Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.FromResult(result).GetExceptionOrThrowAsync());
 
         // Then
-        Assert.Equal("The current result is not in a Failure<T> state.", exception.Message);
+        Assert.Equal("The current result is not in a failure state.", exception.Message);
     }
 
     [Fact(DisplayName = "Result<T> Failure.GetExceptionOrDefaultAsync should produce the expected result.")]

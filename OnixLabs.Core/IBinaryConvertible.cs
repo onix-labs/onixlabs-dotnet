@@ -15,7 +15,7 @@
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Defines a type that is convertible to a binary representation.
+/// Defines a type that is convertible to an instance of <see cref="T:Byte[]"/>.
 /// </summary>
 public interface IBinaryConvertible
 {

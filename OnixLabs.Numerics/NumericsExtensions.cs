@@ -25,12 +25,12 @@ namespace OnixLabs.Numerics;
 public static class NumericsExtensions
 {
     /// <summary>
-    /// Gets the minimum value of a <see cref="decimal"/> as a <see cref="BigInteger"/>.
+    /// Gets the minimum value of a <see cref="decimal"/> value as a <see cref="BigInteger"/>.
     /// </summary>
     private static readonly BigInteger MinDecimal = new(decimal.MinValue);
 
     /// <summary>
-    /// Gets the maximum value of a <see cref="decimal"/> as a <see cref="BigInteger"/>.
+    /// Gets the maximum value of a <see cref="decimal"/> value as a <see cref="BigInteger"/>.
     /// </summary>
     private static readonly BigInteger MaxDecimal = new(decimal.MaxValue);
 

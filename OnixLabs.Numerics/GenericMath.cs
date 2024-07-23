@@ -32,6 +32,26 @@ public static class GenericMath
     public static T Delta<T>(T left, T right) where T : INumberBase<T> => T.Abs(left - right);
 
     /// <summary>
+    /// Gets the factorial of the specified <see cref="IBinaryInteger{TSelf}"/> value.
+    /// </summary>
+    /// <param name="value">The value for which the factorial will be computed.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IBinaryInteger{TSelf}"/> value.</typeparam>
+    /// <returns>Returns the factorial of the specified <see cref="IBinaryInteger{TSelf}"/> value.</returns>
+    public static BigInteger Factorial<T>(T value) where T : IBinaryInteger<T>
+    {
+        Require(value >= T.Zero, "Value must be greater than or equal to zero.");
+
+        if(value <= T.One) return BigInteger.One;
+
+        BigInteger result = BigInteger.One;
+
+        for (T factor = T.One; factor <= value; factor++)
+            result *= factor.ToBigInteger();
+
+        return result;
+    }
+
+    /// <summary>
     /// Obtains the length of the integral component of the specified <see cref="INumberBase{TSelf}"/> value.
     /// </summary>
     /// <param name="value">The <see cref="INumberBase{TSelf}"/> value from which to obtain the length of the integral component.</param>

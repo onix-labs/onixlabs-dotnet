@@ -16,7 +16,13 @@ using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography.UnitTests.Data;
 
-public class BinaryConvertible(byte[] data) : ISpanBinaryConvertible
+public class BinaryConvertible(byte[] data) : IBinaryConvertible
+{
+    public byte[] ToByteArray() => data;
+    public ReadOnlySpan<byte> ToReadOnlySpan() => data;
+}
+
+public class SpanBinaryConvertible(byte[] data) : ISpanBinaryConvertible
 {
     public byte[] ToByteArray() => data;
     public ReadOnlySpan<byte> ToReadOnlySpan() => data;

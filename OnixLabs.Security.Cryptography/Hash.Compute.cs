@@ -45,6 +45,28 @@ public readonly partial struct Hash
         algorithm.ComputeHash(data, offset, count, rounds);
 
     /// <summary>
+    /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
+    /// <param name="data">The <see cref="ReadOnlySpan{T}"/> data from which to compute a hash.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<byte> data, int rounds = 1) =>
+        algorithm.ComputeHash(data, rounds);
+
+    /// <summary>
+    /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
+    /// <param name="data">The <see cref="ReadOnlySpan{T}"/> data from which to compute a hash.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<byte> data, int offset, int count, int rounds = 1) =>
+        algorithm.ComputeHash(data, offset, count, rounds);
+
+    /// <summary>
     /// Computes the hash of the specified <see cref="Stream"/>, using the specified <see cref="HashAlgorithm"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
@@ -58,17 +80,27 @@ public readonly partial struct Hash
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
-    /// <param name="data">The <see cref="T:Byte[]"/> data from which to compute a hash.</param>
+    /// <param name="data">The <see cref="IBinaryConvertible"/> data from which to compute a hash.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static Hash Compute(HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1) =>
         algorithm.ComputeHash(data, rounds);
 
     /// <summary>
+    /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
+    /// <param name="data">The <see cref="ISpanBinaryConvertible"/> data from which to compute a hash.</param>
+    /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
+    /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    public static Hash Compute(HashAlgorithm algorithm, ISpanBinaryConvertible data, int rounds = 1) =>
+        algorithm.ComputeHash(data.ToReadOnlySpan(), rounds);
+
+    /// <summary>
     /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute a hash value.</param>
-    /// <param name="data">The input data to compute the hash for.</param>
+    /// <param name="data">The <see cref="ReadOnlySpan{T}"/> data from which to compute a hash.</param>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>

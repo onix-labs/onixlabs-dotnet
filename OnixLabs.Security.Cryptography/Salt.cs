@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -23,5 +24,12 @@ namespace OnixLabs.Security.Cryptography;
 /// <param name="value">The underlying value of the salt.</param>
 public readonly partial struct Salt(ReadOnlySpan<byte> value) : ICryptoPrimitive<Salt>, ISpanBinaryConvertible
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Salt"/> struct.
+    /// </summary>
+    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Salt"/> instance.</param>
+    // ReSharper disable once MemberCanBePrivate.Global
+    public Salt(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
+
     private readonly byte[] value = value.ToArray();
 }

@@ -20,6 +20,8 @@ namespace OnixLabs.Core.UnitTests;
 
 public sealed class PreconditionTests
 {
+    private static readonly Exception Exception = new("Failure");
+
     [Fact(DisplayName = "Check should throw an InvalidOperationException when the condition is false")]
     public void CheckShouldThrowInvalidOperationExceptionWhenConditionIsFalse()
     {
@@ -35,6 +37,162 @@ public sealed class PreconditionTests
     {
         // Given / When / Then
         Check(true);
+    }
+
+    [Fact(DisplayName = "CheckIsFailure should throw an InvalidOperationException when the result is not a failure state")]
+    public void CheckIsFailureShouldThrowAnInvalidOperationExceptionWhenTheResultIsNotAFailureState()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => CheckIsFailure(result));
+
+        // Then
+        Assert.Equal("Argument must be a Failure state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "CheckIsFailure should return a Failure when the result is a failure state")]
+    public void CheckIsFailureShouldReturnFailureWhenTheResultIsAFailureState()
+    {
+        // Given
+        Result result = Exception;
+
+        // When
+        Result actual = CheckIsFailure(result);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+    }
+
+    [Fact(DisplayName = "CheckIsSuccess should throw an InvalidOperationException when the result is not a success state")]
+    public void CheckIsSuccessShouldThrowAnInvalidOperationExceptionWhenTheResultIsNotASuccessState()
+    {
+        // Given
+        Result result = Exception;
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => CheckIsSuccess(result));
+
+        // Then
+        Assert.Equal("Argument must be a Success state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "CheckIsSuccess should return a Success when the result is a success state")]
+    public void CheckIsSuccessShouldReturnFailureWhenTheResultIsASuccessState()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Result actual = CheckIsSuccess(result);
+
+        // Then
+        Assert.IsType<Success>(actual);
+    }
+
+    [Fact(DisplayName = "CheckIsFailure<T> should throw an InvalidOperationException when the result is not a failure state")]
+    public void CheckIsFailureTShouldThrowAnInvalidOperationExceptionWhenTheResultIsNotAFailureState()
+    {
+        // Given
+        Result<int> result = 1;
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => CheckIsFailure(result));
+
+        // Then
+        Assert.Equal("Argument must be a Failure state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "CheckIsFailure<T> should return a Failure when the result is a failure state")]
+    public void CheckIsFailureTShouldReturnFailureWhenTheResultIsAFailureState()
+    {
+        // Given
+        Result<int> result = Exception;
+
+        // When
+        Result<int> actual = CheckIsFailure(result);
+
+        // Then
+        Assert.IsType<Failure<int>>(actual);
+    }
+
+    [Fact(DisplayName = "CheckIsSuccess<T> should throw an InvalidOperationException when the result is not a success state")]
+    public void CheckIsSuccessTShouldThrowAnInvalidOperationExceptionWhenTheResultIsNotASuccessState()
+    {
+        // Given
+        Result<int> result = Exception;
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => CheckIsSuccess(result));
+
+        // Then
+        Assert.Equal("Argument must be a Success state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "CheckIsSuccess<T> should return a Success when the result is a success state")]
+    public void CheckIsSuccessTShouldReturnFailureWhenTheResultIsASuccessState()
+    {
+        // Given
+        Result<int> result = 1;
+
+        // When
+        Result<int> actual = CheckIsSuccess(result);
+
+        // Then
+        Assert.IsType<Success<int>>(actual);
+    }
+
+    [Fact(DisplayName = "CheckIsNone<T> should throw an InvalidOperationException when the optional is not a None<T> value")]
+    public void CheckIsNoneShouldThrowAnInvalidOperationExceptionWhenTheOptionalIsNotNoneValue()
+    {
+        // Given
+        Optional<int> optional = 1;
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => CheckIsNone(optional));
+
+        // Then
+        Assert.Equal("Argument must be a None<T> value.", exception.Message);
+    }
+
+    [Fact(DisplayName = "CheckIsNone<T> should return a None<T> when the optional is a None<T> value")]
+    public void CheckIsNoneShouldReturnNoneWhenOptionalIsNoneValue()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        Optional<int> actual = CheckIsNone(optional);
+
+        // Then
+        Assert.IsType<None<int>>(actual);
+    }
+
+    [Fact(DisplayName = "CheckIsSome<T> should throw an InvalidOperationException when the optional is not a Some<T> value")]
+    public void CheckIsSomeShouldThrowAnInvalidOperationExceptionWhenTheOptionalIsNotSomeValue()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        Exception exception = Assert.Throws<InvalidOperationException>(() => CheckIsSome(optional));
+
+        // Then
+        Assert.Equal("Argument must be a Some<T> value.", exception.Message);
+    }
+
+    [Fact(DisplayName = "CheckIsSome<T> should return a Some<T> when the optional is a Some<T> value")]
+    public void CheckIsSomeShouldReturnSomeWhenOptionalIsSomeValue()
+    {
+        // Given
+        Optional<int> optional = 1;
+
+        // When
+        Optional<int> actual = CheckIsSome(optional);
+
+        // Then
+        Assert.IsType<Some<int>>(actual);
     }
 
     [Fact(DisplayName = "CheckNotNull should throw an InvalidOperationException when the condition is null")]
@@ -163,6 +321,162 @@ public sealed class PreconditionTests
     {
         // Given / When / Then
         Require(true);
+    }
+
+    [Fact(DisplayName = "RequireIsFailure should throw an InvalidOperationException when the result is not a failure state")]
+    public void RequireIsFailureShouldThrowAnInvalidOperationExceptionWhenTheResultIsNotAFailureState()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Exception exception = Assert.Throws<ArgumentException>(() => RequireIsFailure(result));
+
+        // Then
+        Assert.Equal("Argument must be a Failure state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireIsFailure should return a Failure when the result is a failure state")]
+    public void RequireIsFailureShouldReturnFailureWhenTheResultIsAFailureState()
+    {
+        // Given
+        Result result = Exception;
+
+        // When
+        Result actual = RequireIsFailure(result);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+    }
+
+    [Fact(DisplayName = "RequireIsSuccess should throw an InvalidOperationException when the result is not a success state")]
+    public void RequireIsSuccessShouldThrowAnInvalidOperationExceptionWhenTheResultIsNotASuccessState()
+    {
+        // Given
+        Result result = Exception;
+
+        // When
+        Exception exception = Assert.Throws<ArgumentException>(() => RequireIsSuccess(result));
+
+        // Then
+        Assert.Equal("Argument must be a Success state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireIsSuccess should return a Success when the result is a success state")]
+    public void RequireIsSuccessShouldReturnFailureWhenTheResultIsASuccessState()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Result actual = RequireIsSuccess(result);
+
+        // Then
+        Assert.IsType<Success>(actual);
+    }
+
+    [Fact(DisplayName = "RequireIsFailure<T> should throw an InvalidOperationException when the result is not a failure state")]
+    public void RequireIsFailureTShouldThrowAnInvalidOperationExceptionWhenTheResultIsNotAFailureState()
+    {
+        // Given
+        Result<int> result = 1;
+
+        // When
+        Exception exception = Assert.Throws<ArgumentException>(() => RequireIsFailure(result));
+
+        // Then
+        Assert.Equal("Argument must be a Failure state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireIsFailure<T> should return a Failure when the result is a failure state")]
+    public void RequireIsFailureTShouldReturnFailureWhenTheResultIsAFailureState()
+    {
+        // Given
+        Result<int> result = Exception;
+
+        // When
+        Result<int> actual = RequireIsFailure(result);
+
+        // Then
+        Assert.IsType<Failure<int>>(actual);
+    }
+
+    [Fact(DisplayName = "RequireIsSuccess<T> should throw an InvalidOperationException when the result is not a success state")]
+    public void RequireIsSuccessTShouldThrowAnInvalidOperationExceptionWhenTheResultIsNotASuccessState()
+    {
+        // Given
+        Result<int> result = Exception;
+
+        // When
+        Exception exception = Assert.Throws<ArgumentException>(() => RequireIsSuccess(result));
+
+        // Then
+        Assert.Equal("Argument must be a Success state.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireIsSuccess<T> should return a Success when the result is a success state")]
+    public void RequireIsSuccessTShouldReturnFailureWhenTheResultIsASuccessState()
+    {
+        // Given
+        Result<int> result = 1;
+
+        // When
+        Result<int> actual = RequireIsSuccess(result);
+
+        // Then
+        Assert.IsType<Success<int>>(actual);
+    }
+
+    [Fact(DisplayName = "RequireIsNone<T> should throw an InvalidOperationException when the optional is not a None<T> value")]
+    public void RequireIsNoneShouldThrowAnInvalidOperationExceptionWhenTheOptionalIsNotNoneValue()
+    {
+        // Given
+        Optional<int> optional = 1;
+
+        // When
+        Exception exception = Assert.Throws<ArgumentException>(() => RequireIsNone(optional));
+
+        // Then
+        Assert.Equal("Argument must be a None<T> value.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireIsNone<T> should return a None<T> when the optional is a None<T> value")]
+    public void RequireIsNoneShouldReturnNoneWhenOptionalIsNoneValue()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        Optional<int> actual = RequireIsNone(optional);
+
+        // Then
+        Assert.IsType<None<int>>(actual);
+    }
+
+    [Fact(DisplayName = "RequireIsSome<T> should throw an InvalidOperationException when the optional is not a Some<T> value")]
+    public void RequireIsSomeShouldThrowAnInvalidOperationExceptionWhenTheOptionalIsNotSomeValue()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        Exception exception = Assert.Throws<ArgumentException>(() => RequireIsSome(optional));
+
+        // Then
+        Assert.Equal("Argument must be a Some<T> value.", exception.Message);
+    }
+
+    [Fact(DisplayName = "RequireIsSome<T> should return a Some<T> when the optional is a Some<T> value")]
+    public void RequireIsSomeShouldReturnSomeWhenOptionalIsSomeValue()
+    {
+        // Given
+        Optional<int> optional = 1;
+
+        // When
+        Optional<int> actual = RequireIsSome(optional);
+
+        // Then
+        Assert.IsType<Some<int>>(actual);
     }
 
     [Fact(DisplayName = "RequireWithinRangeInclusive should throw an ArgumentOutOfRangeException when the value falls below the specified range")]

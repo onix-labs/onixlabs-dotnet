@@ -502,22 +502,40 @@ public sealed class PreconditionTests
     [Fact(DisplayName = "RequireWithinRangeInclusive should not throw an ArgumentOutOfRangeException when the value is exactly the minimum value")]
     public void RequireWithinRangeInclusiveShouldNotThrowArgumentOutOfRangeExceptionWhenValueIsExactlyTheMinimumValue()
     {
-        // Given / When / Then
-        RequireWithinRangeInclusive(1, 1, 3);
+        // Given
+        const int expected = 1;
+
+        // When
+        int actual = RequireWithinRangeInclusive(expected, 1, 3);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 
     [Fact(DisplayName = "RequireWithinRangeInclusive should not throw an ArgumentOutOfRangeException when the value is exactly the maximum value")]
     public void RequireWithinRangeInclusiveShouldNotThrowArgumentOutOfRangeExceptionWhenValueIsExactlyTheMaximumValue()
     {
-        // Given / When / Then
-        RequireWithinRangeInclusive(3, 1, 3);
+        // Given
+        const int expected = 3;
+
+        // When
+        int actual = RequireWithinRangeInclusive(expected, 1, 3);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 
     [Fact(DisplayName = "RequireWithinRangeInclusive should not throw an ArgumentOutOfRangeException when the value is between the specified range")]
     public void RequireWithinRangeInclusiveShouldNotThrowArgumentOutOfRangeExceptionWhenValueIsBetweenSpecifiedRange()
     {
-        // Given / When / Then
-        RequireWithinRangeInclusive(2, 1, 3);
+        // Given
+        const int expected = 2;
+
+        // When
+        int actual = RequireWithinRangeInclusive(expected, 1, 3);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 
     [Fact(DisplayName = "RequireWithinRangeExclusive should throw an ArgumentOutOfRangeException when the value falls below the specified range")]
@@ -543,8 +561,14 @@ public sealed class PreconditionTests
     [Fact(DisplayName = "RequireWithinRangeExclusive should not throw an ArgumentOutOfRangeException when the value falls between the specified range")]
     public void RequireWithinRangeExclusiveShouldThrowArgumentOutOfRangeExceptionWhenValueFallsBetweenSpecifiedRange()
     {
-        // Given / When / Then
-        RequireWithinRangeExclusive(3, 2, 4);
+        // Given
+        const int expected = 2;
+
+        // When
+        int actual = RequireWithinRangeExclusive(expected, 1, 3);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 
     [Fact(DisplayName = "RequireNotNull should throw an ArgumentNullException when the condition is null")]

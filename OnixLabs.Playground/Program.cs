@@ -12,24 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Core;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
-        string[] names = ["Alice", "Bob", "Charlie", "Dave"];
-        Random random = new();
-
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
     }
 }

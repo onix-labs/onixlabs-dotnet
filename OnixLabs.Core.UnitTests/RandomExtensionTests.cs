@@ -13,23 +13,24 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Core;
+using Xunit;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Core.UnitTests;
 
-internal static class Program
+public sealed class RandomExtensionTests
 {
-    private static void Main()
+    [Fact(DisplayName = "Random.Next should produce the expected result")]
+    public void RandomNextShouldProduceExpectedResult()
     {
-        string[] names = ["Alice", "Bob", "Charlie", "Dave"];
-        Random random = new();
+        // Given
+        Random random = new(0);
+        const string expected = "klm";
+        string[] values = ["abc", "def", "hij", "klm", "xyz"];
 
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
-        Console.WriteLine(random.Next(names));
+        // When
+        string actual = random.Next(values);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

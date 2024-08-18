@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,6 +21,8 @@ namespace OnixLabs.Core.UnitTests;
 
 public sealed class ResultExtensionTests
 {
+    private static readonly Exception FailureException = new("Failure");
+
     [Fact(DisplayName = "Result Success.GetExceptionOrDefaultAsync should produce the expected result.")]
     public async Task ResultSuccessGetExceptionOrDefaultAsyncShouldProduceExpectedResult()
     {
@@ -37,14 +40,13 @@ public sealed class ResultExtensionTests
     public async Task ResultSuccessGetExceptionOrDefaultAsyncWithDefaultValueShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
         Result result = Result.Success();
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(expected);
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, actual);
     }
 
     [Fact(DisplayName = "Result Success.GetExceptionOrThrowAsync should produce the expected result.")]
@@ -64,42 +66,39 @@ public sealed class ResultExtensionTests
     public async Task ResultFailureGetExceptionOrDefaultAsyncShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result result = Result.Failure(expected);
+        Result result = Result.Failure(FailureException);
 
         // When
         Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, actual);
     }
 
     [Fact(DisplayName = "Result Failure.GetExceptionOrDefaultAsync with default value should produce the expected result.")]
     public async Task ResultFailureGetExceptionOrDefaultAsyncWithDefaultValueShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result result = Result.Failure(expected);
+        Result result = Result.Failure(FailureException);
 
         // When
         Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"));
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, actual);
     }
 
     [Fact(DisplayName = "Result Failure.GetExceptionOrThrowAsync should produce the expected result.")]
     public async Task ResultFailureGetExceptionOrThrowAsyncShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result result = Result.Failure(expected);
+        Result result = Result.Failure(FailureException);
 
         // When
         Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, actual);
     }
 
     [Fact(DisplayName = "Result<T> Success.GetExceptionOrDefaultAsync should produce the expected result.")]
@@ -119,14 +118,13 @@ public sealed class ResultExtensionTests
     public async Task ResultOfTSuccessGetExceptionOrDefaultAsyncWithDefaultValueShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
         Result<int> result = Result<int>.Success(123);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(expected);
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, actual);
     }
 
     [Fact(DisplayName = "Result<T> Success.GetExceptionOrThrowAsync should produce the expected result.")]
@@ -146,42 +144,39 @@ public sealed class ResultExtensionTests
     public async Task ResultOfTFailureGetExceptionOrDefaultAsyncShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result<int> result = Result<int>.Failure(expected);
+        Result<int> result = Result<int>.Failure(FailureException);
 
         // When
         Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, actual);
     }
 
     [Fact(DisplayName = "Result<T> Failure.GetExceptionOrDefaultAsync with default value should produce the expected result.")]
     public async Task ResultOfTFailureGetExceptionOrDefaultAsyncWithDefaultValueShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result<int> result = Result<int>.Failure(expected);
+        Result<int> result = Result<int>.Failure(FailureException);
 
         // When
         Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"));
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, actual);
     }
 
     [Fact(DisplayName = "Result<T> Failure.GetExceptionOrThrowAsync should produce the expected result.")]
     public async Task ResultOfTFailureGetExceptionOrThrowAsyncShouldProduceExpectedResult()
     {
         // Given
-        Exception expected = new("failure");
-        Result<int> result = Result<int>.Failure(expected);
+        Result<int> result = Result<int>.Failure(FailureException);
 
         // When
         Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync();
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(FailureException, actual);
     }
 
     [Fact(DisplayName = "Result.GetValueOrDefaultAsync should return the result value when the result is Success")]
@@ -208,9 +203,8 @@ public sealed class ResultExtensionTests
     public async Task ResultGetValueOrDefaultAsyncShouldReturnDefaultWhenResultIsFailure()
     {
         // Given
-        Exception exception = new("failure");
-        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw exception);
-        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw exception);
+        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException);
+        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException);
 
         // When
         int actualNumber = await numberTask.GetValueOrDefaultAsync();
@@ -248,9 +242,8 @@ public sealed class ResultExtensionTests
         // Given
         const int expectedNumber = 456;
         const string expectedText = "abc";
-        Exception exception = new("failure");
-        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw exception);
-        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw exception);
+        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException);
+        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException);
 
         // When
         int actualNumber = await numberTask.GetValueOrDefaultAsync(expectedNumber);
@@ -287,63 +280,126 @@ public sealed class ResultExtensionTests
     public async Task ResultGetValueOrThrowAsyncShouldReturnDefaultWhenResultIsFailure()
     {
         // Given
-        Exception exception = new("failure");
-        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw exception);
-        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw exception);
+        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException);
+        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException);
 
         // When
         Exception numberException = await Assert.ThrowsAsync<Exception>(async () => await numberTask.GetValueOrThrowAsync());
         Exception textException = await Assert.ThrowsAsync<Exception>(async () => await textTask.GetValueOrThrowAsync());
 
         // Then
-        Assert.Equal(numberException, exception);
-        Assert.Equal(textException, exception);
+        Assert.Equal(numberException, FailureException);
+        Assert.Equal(textException, FailureException);
     }
 
-    [Fact(DisplayName = "Result.GetValueOrNone should return the Optional value when the result is Success and the Optional value is not None")]
-    public void ResultGetValueOrNoneShouldReturnOptionalValueWhenResultIsSuccessAndOptionalValueIsNotNone()
+    [Fact(DisplayName = "Result<T>.GetValueOrNone should return the value wrapped in Optional when the result is Success and the value is not None")]
+    public void ResultGetValueOrNoneShouldReturnOptionalValueWhenResultIsSuccessAndValueIsNotNone()
     {
         // Given
-        Optional<int> expectedNumber = 123;
-        Optional<string> expectedText = "abc";
-        Result<Optional<int>> numberResult = expectedNumber;
-        Result<Optional<string>> textResult = expectedText;
+        const int expectedNumber = 123;
+        const string expectedText = "abc";
+        Result<int> numberResult = expectedNumber;
+        Result<string> textResult = expectedText;
 
         // When
         Optional<int> actualNumber = numberResult.GetValueOrNone();
         Optional<string> actualText = textResult.GetValueOrNone();
 
         // Then
-        Assert.Equal(expectedNumber, actualNumber);
-        Assert.Equal(expectedText, actualText);
+        Assert.Equal(Optional<int>.Of(expectedNumber), actualNumber);
+        Assert.Equal(Optional<string>.Of(expectedText), actualText);
     }
 
-    [Fact(DisplayName = "Result.GetValueOrNone should return None value when the result is Success and the Optional value is None")]
-    public void ResultGetValueOrNoneShouldReturnNoneWhenResultIsSuccessAndOptionalValueIsNotNone()
+    [Fact(DisplayName = "Result<T>.GetValueOrNone should return None when the result is Success and the value is None")]
+    public void ResultGetValueOrNoneShouldReturnNoneWhenResultIsSuccessAndValueIsNone()
     {
         // Given
-        Optional<int> expectedNumber = Optional<int>.None;
-        Optional<string> expectedText = Optional<string>.None;
-        Result<Optional<int>> numberResult = expectedNumber;
-        Result<Optional<string>> textResult = expectedText;
+        Result<int> numberResult = Result<int>.Success(0);
+        Result<string> textResult = Result<string>.Success(null!);
 
         // When
         Optional<int> actualNumber = numberResult.GetValueOrNone();
         Optional<string> actualText = textResult.GetValueOrNone();
 
         // Then
-        Assert.Equal(expectedNumber, actualNumber);
-        Assert.Equal(expectedText, actualText);
+        Assert.Equal(Optional<int>.None, actualNumber);
+        Assert.Equal(Optional<string>.None, actualText);
     }
 
-    [Fact(DisplayName = "Result.GetValueOrNone should return None value when the result is Failure")]
+    [Fact(DisplayName = "Result<T>.GetValueOrNone should return None when the result is Failure")]
     public void ResultGetValueOrNoneShouldReturnNoneWhenResultIsFailure()
     {
         // Given
-        Optional<int> expectedNumber = Optional<int>.None;
-        Optional<string> expectedText = Optional<string>.None;
-        Result<Optional<int>> numberResult = Result<Optional<int>>.Failure(new Exception("Result has failed."));
-        Result<Optional<string>> textResult = Result<Optional<string>>.Failure(new Exception("Result has failed."));
+        Result<int> numberResult = Result<int>.Failure(FailureException);
+        Result<string> textResult = Result<string>.Failure(FailureException);
+
+        // When
+        Optional<int> actualNumber = numberResult.GetValueOrNone();
+        Optional<string> actualText = textResult.GetValueOrNone();
+
+        // Then
+        Assert.Equal(Optional<int>.None, actualNumber);
+        Assert.Equal(Optional<string>.None, actualText);
+    }
+
+    [Fact(DisplayName = "Result<T>.GetValueOrNoneAsync should return the value wrapped in Optional when the result is Success and the value is not None")]
+    public async Task ResultGetValueOrNoneAsyncShouldReturnOptionalValueWhenResultIsSuccessAndValueIsNotNone()
+    {
+        // Given
+        const int expectedNumber = 123;
+        const string expectedText = "abc";
+        Result<int> numberResult = expectedNumber;
+        Result<string> textResult = expectedText;
+
+        // When
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+
+        // Then
+        Assert.Equal(Optional<int>.Of(expectedNumber), actualNumber);
+        Assert.Equal(Optional<string>.Of(expectedText), actualText);
+    }
+
+    [Fact(DisplayName = "Result<T>.GetValueOrNoneAsync should return None when the result is Success and the value is None")]
+    public async Task ResultGetValueOrNoneAsyncShouldReturnNoneWhenResultIsSuccessAndValueIsNone()
+    {
+        // Given
+        Result<int> numberResult = Result<int>.Success(default);
+        Result<string> textResult = Result<string>.Success(default!);
+
+        // When
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+
+        // Then
+        Assert.Equal(Optional<int>.None, actualNumber);
+        Assert.Equal(Optional<string>.None, actualText);
+    }
+
+    [Fact(DisplayName = "Result<T>.GetValueOrNoneAsync should return None when the result is Failure")]
+    public async Task ResultGetValueOrNoneAsyncShouldReturnNoneWhenResultIsFailure()
+    {
+        // Given
+        Result<int> numberResult = Result<int>.Failure(FailureException);
+        Result<string> textResult = Result<string>.Failure(FailureException);
+
+        // When
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+
+        // Then
+        Assert.Equal(Optional<int>.None, actualNumber);
+        Assert.Equal(Optional<string>.None, actualText);
+    }
+
+    [Fact(DisplayName = "Result<Optional<T>>.GetValueOrNone should return the Optional value when the result is Success and the Optional value is not None")]
+    public void ResultOptionalGetValueOrNoneShouldReturnOptionalValueWhenResultIsSuccessAndOptionalValueIsNotNone()
+    {
+        // Given
+        Optional<int> expectedNumber = 123;
+        Optional<string> expectedText = "abc";
+        Result<Optional<int>> numberResult = expectedNumber;
+        Result<Optional<string>> textResult = expectedText;
 
         // When
         Optional<int> actualNumber = numberResult.GetValueOrNone();
@@ -354,8 +410,44 @@ public sealed class ResultExtensionTests
         Assert.Equal(expectedText, actualText);
     }
 
-    [Fact(DisplayName = "Result.GetValueOrNoneAsync should return the Optional value when the result is Success and the Optional value is not None")]
-    public async Task ResultGetValueOrNoneAsyncShouldReturnOptionalValueWhenResultIsSuccessAndOptionalValueIsNotNone()
+    [Fact(DisplayName = "Result<Optional<T>>.GetValueOrNone should return None value when the result is Success and the Optional value is None")]
+    public void ResultOptionalGetValueOrNoneShouldReturnNoneWhenResultIsSuccessAndOptionalValueIsNone()
+    {
+        // Given
+        Optional<int> expectedNumber = Optional<int>.None;
+        Optional<string> expectedText = Optional<string>.None;
+        Result<Optional<int>> numberResult = expectedNumber;
+        Result<Optional<string>> textResult = expectedText;
+
+        // When
+        Optional<int> actualNumber = numberResult.GetValueOrNone();
+        Optional<string> actualText = textResult.GetValueOrNone();
+
+        // Then
+        Assert.Equal(expectedNumber, actualNumber);
+        Assert.Equal(expectedText, actualText);
+    }
+
+    [Fact(DisplayName = "Result<Optional<T>>.GetValueOrNone should return None value when the result is Failure")]
+    public void ResultOptionalGetValueOrNoneShouldReturnNoneWhenResultIsFailure()
+    {
+        // Given
+        Optional<int> expectedNumber = Optional<int>.None;
+        Optional<string> expectedText = Optional<string>.None;
+        Result<Optional<int>> numberResult = Result<Optional<int>>.Failure(FailureException);
+        Result<Optional<string>> textResult = Result<Optional<string>>.Failure(FailureException);
+
+        // When
+        Optional<int> actualNumber = numberResult.GetValueOrNone();
+        Optional<string> actualText = textResult.GetValueOrNone();
+
+        // Then
+        Assert.Equal(expectedNumber, actualNumber);
+        Assert.Equal(expectedText, actualText);
+    }
+
+    [Fact(DisplayName = "Result<Optional<T>>.GetValueOrNoneAsync should return the Optional value when the result is Success and the Optional value is not None")]
+    public async Task ResultOptionalGetValueOrNoneAsyncShouldReturnOptionalValueWhenResultIsSuccessAndOptionalValueIsNotNone()
     {
         // Given
         Optional<int> expectedNumber = 123;
@@ -372,8 +464,8 @@ public sealed class ResultExtensionTests
         Assert.Equal(expectedText, actualText);
     }
 
-    [Fact(DisplayName = "Result.GetValueOrNoneAsync should return None value when the result is Success and the Optional value is None")]
-    public async Task ResultGetValueOrNoneAsyncShouldReturnNoneWhenResultIsSuccessAndOptionalValueIsNotNone()
+    [Fact(DisplayName = "Result<Optional<T>>.GetValueOrNoneAsync should return None value when the result is Success and the Optional value is None")]
+    public async Task ResultOptionalGetValueOrNoneAsyncShouldReturnNoneWhenResultIsSuccessAndOptionalValueIsNone()
     {
         // Given
         Optional<int> expectedNumber = Optional<int>.None;
@@ -390,14 +482,14 @@ public sealed class ResultExtensionTests
         Assert.Equal(expectedText, actualText);
     }
 
-    [Fact(DisplayName = "Result.GetValueOrNoneAsync should return None value when the result is Failure")]
-    public async Task ResultGetValueOrNoneAsyncShouldReturnNoneWhenResultIsFailure()
+    [Fact(DisplayName = "Result<Optional<T>>.GetValueOrNoneAsync should return None value when the result is Failure")]
+    public async Task ResultOptionalGetValueOrNoneAsyncShouldReturnNoneWhenResultIsFailure()
     {
         // Given
         Optional<int> expectedNumber = Optional<int>.None;
         Optional<string> expectedText = Optional<string>.None;
-        Result<Optional<int>> numberResult = Result<Optional<int>>.Failure(new Exception("Result has failed."));
-        Result<Optional<string>> textResult = Result<Optional<string>>.Failure(new Exception("Result has failed."));
+        Result<Optional<int>> numberResult = Result<Optional<int>>.Failure(FailureException);
+        Result<Optional<string>> textResult = Result<Optional<string>>.Failure(FailureException);
 
         // When
         Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
@@ -617,354 +709,2146 @@ public sealed class ResultExtensionTests
         Assert.Equal(expectedText, actualText);
     }
 
-    [Fact(DisplayName = "Result Success.MatchAsync should execute the some action.")]
-    public async Task ResultSuccessMatchAsyncShouldExecuteSuccessAction()
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Action, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionActionException()
     {
         // Given
-        bool successCalled = false;
         Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(success: () => { successCalled = true; });
+        await Task.FromResult(result).MatchAsync(Success, Failure);
 
         // Then
         Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        void Failure(Exception exception) => failureCalled = true;
     }
 
-    [Fact(DisplayName = "Result Failure.MatchAsync should execute the none action.")]
-    public async Task ResultFailureMatchAsyncShouldExecuteFailureAction()
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Action, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateActionActionException()
     {
         // Given
-        bool failureCalled = false;
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
-
-        // When
-        await Task.FromResult(result).MatchAsync(failure: _ => { failureCalled = true; });
-
-        // Then
-        Assert.True(failureCalled);
-    }
-
-    [Fact(DisplayName = "Result Success.MatchAsync should produce the expected result.")]
-    public async Task ResultSuccessMatchAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        const int expected = 9;
-        Result result = Result.Success();
-
-        // When
-        int actual = await Task.FromResult(result).MatchAsync(
-            success: () => 9,
-            failure: _ => 0
-        );
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Failure.MatchAsync should produce the expected result.")]
-    public async Task ResultFailureMatchAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        const int expected = 0;
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
-
-        // When
-        int actual = await Task.FromResult(result).MatchAsync(
-            success: () => 9,
-            failure: _ => 0
-        );
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result<T> Success.MatchAsync should execute the some action.")]
-    public async Task ResultOfTSuccessMatchAsyncShouldExecuteSuccessAction()
-    {
-        // Given
+        Result result = Result.Failure(FailureException);
         bool successCalled = false;
-        Result<int> result = 123;
+        bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(success: _ => { successCalled = true; });
+        await Task.FromResult(result).MatchAsync(Success, Failure);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<Task>, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTaskActionException()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
 
         // Then
         Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async Task SuccessAsync() => await Task.Run(() => successCalled = true);
+        void Failure(Exception exception) => failureCalled = true;
     }
 
-    [Fact(DisplayName = "Result<T> Failure.MatchAsync should execute the none action.")]
-    public async Task ResultOfTFailureMatchAsyncShouldExecuteFailureAction()
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<Task>, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTaskActionException()
     {
         // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
         bool failureCalled = false;
-        Exception exception = new("failure");
-        Result<int> result = Result<int>.Failure(exception);
 
         // When
-        await Task.FromResult(result).MatchAsync(failure: _ => { failureCalled = true; });
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
 
         // Then
+        Assert.False(successCalled);
         Assert.True(failureCalled);
+
+        return;
+        async Task SuccessAsync() => await Task.Run(() => successCalled = true);
+        void Failure(Exception exception) => failureCalled = true;
     }
 
-    [Fact(DisplayName = "Result<T> Success.MatchAsync should produce the expected result.")]
-    public async Task ResultOfTSuccessMatchAsyncShouldProduceExpectedResult()
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<CancellationToken, Task>, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncCancellationTokenTaskActionException()
     {
         // Given
-        const int expected = 9;
-        Result<int> result = 3;
-
-        // When
-        int actual = await Task.FromResult(result).MatchAsync(
-            success: value => value * value,
-            failure: _ => 0
-        );
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result<T> Failure.MatchAsync should produce the expected result.")]
-    public async Task ResultOfTFailureMatchAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        const int expected = 0;
-        Exception exception = new("failure");
-        Result<int> result = Result<int>.Failure(exception);
-
-        // When
-        int actual = await Task.FromResult(result).MatchAsync(
-            success: value => value * value,
-            failure: _ => 0
-        );
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Success.SelectAsync should produce the expected result")]
-    public async Task ResultSuccessSelectAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        Result expected = Result.Success();
-
-        // When
-        Result actual = await Task.FromResult(expected).SelectAsync(() => { });
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Failure.SelectAsync should produce the expected result")]
-    public async Task ResultFailureSelectAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        Result expected = Result.Failure(new Exception("Failure"));
-
-        // When
-        Result actual = await Task.FromResult(expected).SelectAsync(() => { });
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Success.SelectAsync<TResult> should produce the expected result")]
-    public async Task ResultSuccessSelectAsyncTResultShouldProduceExpectedResult()
-    {
-        // Given
-        const int expected = 9;
         Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
 
         // When
-        Result<int> actual = await Task.FromResult(result).SelectAsync(() => 9);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async Task SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        void Failure(Exception exception) => failureCalled = true;
     }
 
-    [Fact(DisplayName = "Result Failure.SelectAsync<TResult> should produce the expected result")]
-    public async Task ResultFailureSelectAsyncTResultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<CancellationToken, Task>, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateFuncCancellationTokenTaskActionException()
     {
         // Given
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
 
         // When
-        Result<int> actual = await Task.FromResult(result).SelectAsync(() => 9);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
 
         // Then
-        Assert.Equal(Result<int>.Failure(exception), actual);
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async Task SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        void Failure(Exception exception) => failureCalled = true;
     }
 
-    [Fact(DisplayName = "Result<T> Success.SelectAsync should produce the expected result")]
-    public async Task ResultOfTSuccessSelectAsyncShouldProduceExpectedResult()
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Action, Func<Exception, Task>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionFuncExceptionTask()
     {
         // Given
-        Result expected = Result.Success();
-        Result<int> result = 123;
-
-        // When
-        Result actual = await Task.FromResult(result).SelectAsync(_ => { });
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result<T> Failure.SelectAsync should produce the expected result")]
-    public async Task ResultOfTFailureSelectAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        Exception exception = new("Failure");
-        Result expected = Result.Failure(exception);
-        Result<int> result = Result<int>.Failure(exception);
-
-        // When
-        Result actual = await Task.FromResult(result).SelectAsync(_ => { });
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result<T> Success.SelectAsync<TResult> should produce the expected result")]
-    public async Task ResultOfTSuccessSelectAsyncTResultShouldProduceExpectedResult()
-    {
-        // Given
-        Result<int> expected = 9;
-        Result<int> result = 3;
-
-        // When
-        Result<int> actual = await Task.FromResult(result).SelectAsync(x => x * x);
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result<T> Failure.SelectAsync<TResult> should produce the expected result")]
-    public async Task ResultOfTFailureSelectAsyncTResultShouldProduceExpectedResult()
-    {
-        // Given
-        Exception exception = new("failure");
-        Result<int> result = Result<int>.Failure(exception);
-
-        // When
-        Result<int> actual = await Task.FromResult(result).SelectAsync(x => x * x);
-
-        // Then
-        Assert.Equal(Result<int>.Failure(exception), actual);
-    }
-
-    [Fact(DisplayName = "Result Success.SelectManyAsync should produce the expected result")]
-    public async Task ResultSuccessSelectManyAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        Result expected = Result.Success();
-
-        // When
-        Result actual = await Task.FromResult(expected).SelectManyAsync(Result.Success);
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Failure.SelectManyAsync should produce the expected result")]
-    public async Task ResultFailureSelectManyAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        Result expected = Result.Failure(new Exception("Failure"));
-
-        // When
-        Result actual = await Task.FromResult(expected).SelectManyAsync(Result.Success);
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact(DisplayName = "Result Success.SelectManyAsync<TResult> should produce the expected result")]
-    public async Task ResultSuccessSelectManyAsyncTResultShouldProduceExpectedResult()
-    {
-        // Given
-        const int expected = 9;
         Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
 
         // When
-        Result<int> actual = await Task.FromResult(result).SelectManyAsync<int>(() => 9);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Action, Func<Exception, Task>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateActionFuncExceptionTask()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Action, Func<Exception, CancellationToken, Task>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionFuncExceptionCancellationTokenTask()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Action, Func<Exception, CancellationToken, Task>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateActionFuncExceptionCancellationTokenTask()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<Task>, Func<Exception, Task>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTaskFuncExceptionTask()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async Task SuccessAsync() => await Task.Run(() => successCalled = true);
+        async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<Task>, Func<Exception, Task>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTaskFuncExceptionTask()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async Task SuccessAsync() => await Task.Run(() => successCalled = true);
+        async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<CancellationToken, Task>, Func<Exception, CancellationToken, Task>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncCancellationTokenTaskFuncExceptionCancellationTokenTask()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async Task SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<CancellationToken, Task>, Func<Exception, CancellationToken, Task>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateFuncCancellationTokenTaskFuncExceptionCancellationTokenTask()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async Task SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<TResult>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncResultFuncExceptionResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure);
 
         // Then
         Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        string Failure(Exception exception) => "Failure";
     }
 
-    [Fact(DisplayName = "Result Failure.SelectManyAsync<TResult> should produce the expected result")]
-    public async Task ResultFailureSelectManyAsyncTResultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<TResult>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncResultFuncExceptionResult()
     {
         // Given
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
 
         // When
-        Result<int> actual = await Task.FromResult(result).SelectManyAsync<int>(() => 9);
-
-        // Then
-        Assert.Equal(Result<int>.Failure(exception), actual);
-    }
-
-    [Fact(DisplayName = "Result<T> Success.SelectManyAsync should produce the expected result")]
-    public async Task ResultOfTSuccessSelectManyAsyncShouldProduceExpectedResult()
-    {
-        // Given
-        Result expected = Result.Success();
-        Result<int> result = 3;
-
-        // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(_ => Result.Success());
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure);
 
         // Then
         Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        string Failure(Exception exception) => "Failure";
     }
 
-    [Fact(DisplayName = "Result<T> Failure.SelectManyAsync should produce the expected result")]
-    public async Task ResultOfTFailureSelectManyAsyncShouldProduceExpectedResult()
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<Task<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTaskResultFuncExceptionResult()
     {
         // Given
-        Exception exception = new("Failure");
-        Result expected = Result.Failure(exception);
-        Result<int> result = Result<int>.Failure(exception);
+        Result result = Result.Success();
+        const string expected = "Success";
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(_ => Result.Success());
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
 
         // Then
         Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync() => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
     }
 
-    [Fact(DisplayName = "Result<T> Success.SelectManyAsync<TResult> should produce the expected result")]
-    public async Task ResultOfTSuccessSelectManyAsyncTResultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<Task<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTaskResultFuncExceptionResult()
     {
         // Given
-        Result<int> expected = 9;
-        Result<int> result = 3;
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
 
         // When
-        Result<int> actual = await Task.FromResult(result).SelectManyAsync(x => Result<int>.Success(x * x));
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
 
         // Then
         Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync() => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
     }
 
-    [Fact(DisplayName = "Result<T> Failure.SelectManyAsync<TResult> should produce the expected result")]
-    public async Task ResultOfTFailureSelectManyAsyncTResultShouldProduceExpectedResult()
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<CancellationToken, Task<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncCancellationTokenTaskResultFuncExceptionResult()
     {
         // Given
-        Exception exception = new("failure");
-        Result<int> result = Result<int>.Failure(exception);
+        Result result = Result.Success();
+        const string expected = "Success";
 
         // When
-        Result<int> actual = await Task.FromResult(result).SelectManyAsync(x => Result<int>.Success(x * x));
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
 
         // Then
-        Assert.Equal(Result<int>.Failure(exception), actual);
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(CancellationToken ct) => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<CancellationToken, Task<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncCancellationTokenTaskResultFuncExceptionResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(CancellationToken ct) => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<TResult>, Func<Exception, Task<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncResultFuncExceptionTaskResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<TResult>, Func<Exception, Task<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncResultFuncExceptionTaskResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<TResult>, Func<Exception, CancellationToken, Task<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncResultFuncExceptionCancellationTokenTaskResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<TResult>, Func<Exception, CancellationToken, Task<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncResultFuncExceptionCancellationTokenTaskResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<Task<TResult>>, Func<Exception, Task<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTaskResultFuncExceptionTaskResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync() => await Task.FromResult("Success");
+        async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<Task<TResult>>, Func<Exception, Task<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTaskResultFuncExceptionTaskResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync() => await Task.FromResult("Success");
+        async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncCancellationTokenTaskResultFuncExceptionCancellationTokenTaskResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(CancellationToken ct) => await Task.FromResult("Success");
+        async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncCancellationTokenTaskResultFuncExceptionCancellationTokenTaskResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(CancellationToken ct) => await Task.FromResult("Success");
+        async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Action<T>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionTActionException()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, Failure);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = value == 42;
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Action<T>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateActionTActionException()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, Failure);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = true;
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, Task>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTTaskActionException()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async Task SuccessAsync(int value) => await Task.Run(() => successCalled = value == 42);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, Task>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTTaskActionException()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async Task SuccessAsync(int value) => await Task.Run(() => successCalled = true);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, CancellationToken, Task>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTCancellationTokenTaskActionException()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async Task SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = value == 42, ct);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, CancellationToken, Task>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTCancellationTokenTaskActionException()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async Task SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Action<T>, Func<Exception, Task>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionTFuncExceptionTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = value == 42;
+        async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Action<T>, Func<Exception, Task>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateActionTFuncExceptionTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = true;
+        async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Action<T>, Func<Exception, CancellationToken, Task>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionTFuncExceptionCancellationTokenTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = value == 42;
+        async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Action<T>, Func<Exception, CancellationToken, Task>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateActionTFuncExceptionCancellationTokenTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = true;
+        async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, Task>, Func<Exception, Task>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTTaskFuncExceptionTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async Task SuccessAsync(int value) => await Task.Run(() => successCalled = value == 42);
+        async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, Task>, Func<Exception, Task>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTTaskFuncExceptionTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async Task SuccessAsync(int value) => await Task.Run(() => successCalled = true);
+        async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, CancellationToken, Task>, Func<Exception, CancellationToken, Task>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTCancellationTokenTaskFuncExceptionCancellationTokenTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async Task SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = value == 42, ct);
+        async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, CancellationToken, Task>, Func<Exception, CancellationToken, Task>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTCancellationTokenTaskFuncExceptionCancellationTokenTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async Task SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, TResult>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTResultFuncExceptionResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => value == 42 ? "Success" : "Failure";
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, TResult>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTResultFuncExceptionResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => "Success";
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, Task<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTTaskResultFuncExceptionResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(int value) => await Task.FromResult(value == 42 ? "Success" : "Failure");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, Task<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTTaskResultFuncExceptionResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(int value) => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, CancellationToken, Task<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTCancellationTokenTaskResultFuncExceptionResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(int value, CancellationToken ct) => await Task.FromResult(value == 42 ? "Success" : "Failure");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, CancellationToken, Task<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTCancellationTokenTaskResultFuncExceptionResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(int value, CancellationToken ct) => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, TResult>, Func<Exception, Task<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTResultFuncExceptionTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => value == 42 ? "Success" : "Failure";
+        async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, TResult>, Func<Exception, Task<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTResultFuncExceptionTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => "Success";
+        async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, TResult>, Func<Exception, CancellationToken, Task<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTResultFuncExceptionCancellationTokenTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => value == 42 ? "Success" : "Failure";
+        async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, TResult>, Func<Exception, CancellationToken, Task<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTResultFuncExceptionCancellationTokenTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => "Success";
+        async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, Task<TResult>>, Func<Exception, Task<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTTaskResultFuncExceptionTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(int value) => await Task.FromResult(value == 42 ? "Success" : "Failure");
+        async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, Task<TResult>>, Func<Exception, Task<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTTaskResultFuncExceptionTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(int value) => await Task.FromResult("Success");
+        async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTCancellationTokenTaskResultFuncExceptionCancellationTokenTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(int value, CancellationToken ct) => await Task.FromResult(value == 42 ? "Success" : "Failure");
+        async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTCancellationTokenTaskResultFuncExceptionCancellationTokenTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async Task<string> SuccessAsync(int value, CancellationToken ct) => await Task.FromResult("Success");
+        async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Success should invoke the selector delegate (Action)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateAction()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(Selector);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+        void Selector() => selectorInvoked = true;
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Failure should not invoke the selector delegate (Action)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateAction()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(Selector);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+        void Selector() => selectorInvoked = true;
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Success should invoke the selector delegate (Func<Task>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTask()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+        async Task SelectorAsync() => await Task.Run(() => selectorInvoked = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Failure should not invoke the selector delegate (Func<Task>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTask()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+        async Task SelectorAsync() => await Task.Run(() => selectorInvoked = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Success should invoke the selector delegate (Func<CancellationToken, Task>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTask()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+        async Task SelectorAsync(CancellationToken ct) => await Task.Run(() => selectorInvoked = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Failure should not invoke the selector delegate (Func<CancellationToken, Task>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTask()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+        async Task SelectorAsync(CancellationToken ct) => await Task.Run(() => selectorInvoked = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<TResult>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        string Selector()
+        {
+            selectorInvoked = true;
+            return "Success Result";
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<TResult>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        string Selector()
+        {
+            selectorInvoked = true;
+            return "Success Result";
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<Task<TResult>>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTaskTResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        async Task<string> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await Task.FromResult("Success Result");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<Task<TResult>>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTaskTResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<string> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await Task.FromResult("Success Result");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<CancellationToken, Task<TResult>>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskTResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        async Task<string> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult("Success Result");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<CancellationToken, Task<TResult>>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskTResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<string> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult("Success Result");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Success should invoke the selector delegate (Action<T>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateActionT()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(Selector);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        void Selector(int value)
+        {
+            selectorInvoked = value == 42;
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Failure should not invoke the selector delegate (Action<T>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateActionT()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(Selector);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        void Selector(int value)
+        {
+            selectorInvoked = true;
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Success should invoke the selector delegate (Func<T, Task>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        async Task SelectorAsync(int value)
+        {
+            selectorInvoked = value == 42;
+            await Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Failure should not invoke the selector delegate (Func<T, Task>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task SelectorAsync(int value)
+        {
+            selectorInvoked = true;
+            await Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Success should invoke the selector delegate (Func<T, CancellationToken, Task>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        async Task SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = value == 42;
+            await Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Failure should not invoke the selector delegate (Func<T, CancellationToken, Task>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTask()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = true;
+            await Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<T, TResult>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Value is 42", actual.GetValueOrThrow());
+
+        return;
+
+        string Selector(int value)
+        {
+            selectorInvoked = value == 42;
+            return $"Value is {value}";
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<T, TResult>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        string Selector(int value)
+        {
+            selectorInvoked = true;
+            return $"Value is {value}";
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<T, Task<TResult>>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Value is 42", actual.GetValueOrThrow());
+
+        return;
+
+        async Task<string> SelectorAsync(int value)
+        {
+            selectorInvoked = value == 42;
+            return await Task.FromResult($"Value is {value}");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<T, Task<TResult>>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<string> SelectorAsync(int value)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult($"Value is {value}");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<T, CancellationToken, Task<TResult>>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Value is 42", actual.GetValueOrThrow());
+
+        return;
+
+        async Task<string> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = value == 42;
+            return await Task.FromResult($"Value is {value}");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<T, CancellationToken, Task<TResult>>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<string> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult($"Value is {value}");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Success should invoke the selector delegate (Func<Result>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+        return;
+
+        Result Selector()
+        {
+            selectorInvoked = true;
+            return Result.Success();
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Failure should not invoke the selector delegate (Func<Result>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+        return;
+
+        Result Selector()
+        {
+            selectorInvoked = true;
+            return Result.Success();
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Success should invoke the selector delegate (Func<Task<Result>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTaskResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+        return;
+
+        async Task<Result> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Failure should not invoke the selector delegate (Func<Task<Result>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTaskResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+        return;
+
+        async Task<Result> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Success should invoke the selector delegate (Func<CancellationToken, Task<Result>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+        return;
+
+        async Task<Result> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Failure should not invoke the selector delegate (Func<CancellationToken, Task<Result>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+        return;
+
+        async Task<Result> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<Result<TResult>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncResultTResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        Result<string> Selector()
+        {
+            selectorInvoked = true;
+            return Result<string>.Success("Success Result");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<Result<TResult>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncResultTResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        Result<string> Selector()
+        {
+            selectorInvoked = true;
+            return Result<string>.Success("Success Result");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<Task<Result<TResult>>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTaskResultTResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        async Task<Result<string>> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result<string>.Success("Success Result"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<Task<Result<TResult>>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTaskResultTResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<Result<string>> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result<string>.Success("Success Result"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<CancellationToken, Task<Result<TResult>>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskResultTResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        async Task<Result<string>> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result<string>.Success("Success Result"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<CancellationToken, Task<Result<TResult>>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskResultTResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<Result<string>> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result<string>.Success("Success Result"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Success should invoke the selector delegate (Func<T, Result>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        Result Selector(int value)
+        {
+            selectorInvoked = value == 42;
+            return Result.Success();
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Failure should not invoke the selector delegate (Func<T, Result>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        Result Selector(int value)
+        {
+            selectorInvoked = true;
+            return Result.Success();
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Success should invoke the selector delegate (Func<T, Task<Result>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        async Task<Result> SelectorAsync(int value)
+        {
+            selectorInvoked = value == 42;
+            return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Failure should not invoke the selector delegate (Func<T, Task<Result>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<Result> SelectorAsync(int value)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Success should invoke the selector delegate (Func<T, CancellationToken, Task<Result>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        async Task<Result> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = value == 42;
+            return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Failure should not invoke the selector delegate (Func<T, CancellationToken, Task<Result>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<Result> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<T, Result<TResult>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTResultTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Result is 42", actual.GetValueOrThrow());
+
+        return;
+
+        Result<string> Selector(int value)
+        {
+            selectorInvoked = value == 42;
+            return Result<string>.Success($"Result is {value}");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<T, Result<TResult>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTResultTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        Result<string> Selector(int value)
+        {
+            selectorInvoked = true;
+            return Result<string>.Success($"Result is {value}");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<T, Task<Result<TResult>>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTTaskResultTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Result is 42", actual.GetValueOrThrow());
+
+        return;
+
+        async Task<Result<string>> SelectorAsync(int value)
+        {
+            selectorInvoked = value == 42;
+            return await Task.FromResult(Result<string>.Success($"Result is {value}"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<T, Task<Result<TResult>>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTTaskResultTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<Result<string>> SelectorAsync(int value)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result<string>.Success($"Result is {value}"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<T, CancellationToken, Task<Result<TResult>>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResultTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Result is 42", actual.GetValueOrThrow());
+
+        return;
+
+        async Task<Result<string>> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = value == 42;
+            return await Task.FromResult(Result<string>.Success($"Result is {value}"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<T, CancellationToken, Task<Result<TResult>>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResultTResult()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async Task<Result<string>> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await Task.FromResult(Result<string>.Success($"Result is {value}"));
+        }
     }
 
     [Fact(DisplayName = "Result Success.ThrowAsync should do nothing")]
@@ -981,8 +2865,7 @@ public sealed class ResultExtensionTests
     public async Task ResultFailureThrowAsyncShouldThrowException()
     {
         // Given
-        Exception exception = new("failure");
-        Result result = Result.Failure(exception);
+        Result result = Result.Failure(FailureException);
 
         // When / Then
         await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync());
@@ -1002,8 +2885,7 @@ public sealed class ResultExtensionTests
     public async Task ResultOfTFailureThrowAsyncShouldThrowException()
     {
         // Given
-        Exception exception = new("failure");
-        Result<int> result = Result<int>.Failure(exception);
+        Result<int> result = Result<int>.Failure(FailureException);
 
         // When / Then
         await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync());
@@ -1013,44 +2895,41 @@ public sealed class ResultExtensionTests
     public async Task ResultFailureToTypedResultAsyncShouldProduceExpectedResult()
     {
         // Given
-        Exception exception = new("failure");
-        Failure result = Result.Failure(exception);
+        Failure result = Result.Failure(FailureException);
 
         // When
         Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<int>();
 
         // Then
         Assert.IsType<Failure<int>>(actual);
-        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
+        Assert.Equal(FailureException, actual.GetExceptionOrThrow());
     }
 
     [Fact(DisplayName = "Result<T> Failure.ToTypedResultAsync should produce the expected result.")]
     public async Task ResultOfTFailureToTypedResultAsyncShouldProduceExpectedResult()
     {
         // Given
-        Exception exception = new("failure");
-        Failure<string> result = Result<string>.Failure(exception);
+        Failure<string> result = Result<string>.Failure(FailureException);
 
         // When
         Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<string, int>();
 
         // Then
         Assert.IsType<Failure<int>>(actual);
-        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
+        Assert.Equal(FailureException, actual.GetExceptionOrThrow());
     }
 
     [Fact(DisplayName = "Result<T> Failure.ToUntypedResultAsync should produce the expected result.")]
     public async Task ResultOfTFailureToUntypedResultAsyncShouldProduceExpectedResult()
     {
         // Given
-        Exception exception = new("failure");
-        Failure<string> result = Result<string>.Failure(exception);
+        Failure<string> result = Result<string>.Failure(FailureException);
 
         // When
         Result actual = await Task.FromResult(result).ToUntypedResultAsync();
 
         // Then
         Assert.IsType<Failure>(actual);
-        Assert.Equal("System.Exception: failure", actual.GetExceptionOrThrow().ToString());
+        Assert.Equal("System.Exception: Failure", actual.GetExceptionOrThrow().ToString());
     }
 }

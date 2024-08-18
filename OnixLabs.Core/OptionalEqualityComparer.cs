@@ -38,6 +38,8 @@ public sealed class OptionalEqualityComparer<T>(EqualityComparer<T>? valueEquali
         if (ReferenceEquals(x, y)) return true;
         if (x is null || y is null) return x is null && y is null;
         if (Optional<T>.IsNone(x) && Optional<T>.IsNone(y)) return true;
+        if (Optional<T>.IsSome(x) && Optional<T>.IsNone(y)) return false;
+        if (Optional<T>.IsNone(x) && Optional<T>.IsSome(y)) return false;
         return (valueEqualityComparer ?? EqualityComparer<T>.Default).Equals(x.GetValueOrDefault(), y.GetValueOrDefault());
     }
 

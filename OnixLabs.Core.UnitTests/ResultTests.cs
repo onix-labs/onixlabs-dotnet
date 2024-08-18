@@ -244,6 +244,32 @@ public sealed class ResultTests
         Assert.Equal(FailureException, exception);
     }
 
+    [Fact(DisplayName = "Result.GetExceptionOrNone from success should produce the expected result.")]
+    public void ResultGetExceptionOrNoneFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+
+        // When
+        Optional<Exception> exception = result.GetExceptionOrNone();
+
+        // Then
+        Assert.Equal(Optional<Exception>.None, exception);
+    }
+
+    [Fact(DisplayName = "Result.GetExceptionOrNone from failure should produce the expected result.")]
+    public void ResultGetExceptionOrNoneFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+
+        // When
+        Optional<Exception> exception = result.GetExceptionOrNone();
+
+        // Then
+        Assert.Equal(Optional<Exception>.Some(FailureException), exception);
+    }
+
     [Fact(DisplayName = "Result.GetExceptionOrThrow from success should produce the expected result.")]
     public void ResultGetExceptionOrThrowFromSuccessShouldProduceExpectedResult()
     {
@@ -279,14 +305,15 @@ public sealed class ResultTests
         bool isFailure = false;
 
         // When
-        result.Match(
-            success: () => isSuccess = true,
-            failure: _ => isFailure = true
-        );
+        result.Match(Success, Failure);
 
         // Then
         Assert.True(isSuccess);
         Assert.False(isFailure);
+
+        return;
+        void Success() => isSuccess = true;
+        void Failure(Exception exception) => isFailure = true;
     }
 
     [Fact(DisplayName = "Result.Match action from failure should produce the expected result.")]
@@ -298,14 +325,347 @@ public sealed class ResultTests
         bool isFailure = false;
 
         // When
-        result.Match(
-            success: () => isSuccess = true,
-            failure: _ => isFailure = true
-        );
+        result.Match(Success, Failure);
 
         // Then
         Assert.False(isSuccess);
         Assert.True(isFailure);
+
+        return;
+        void Success() => isSuccess = true;
+        void Failure(Exception exception) => isFailure = true;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<Task>, Action<Exception>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTaskActionFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(Success, Failure);
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+
+        return;
+
+        Task Success()
+        {
+            isSuccess = true;
+            return Task.CompletedTask;
+        }
+
+        void Failure(Exception exception) => isFailure = true;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<Task>, Action<Exception>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTaskActionFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(Success, Failure);
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+
+        return;
+
+        Task Success()
+        {
+            isSuccess = false;
+            return Task.CompletedTask;
+        }
+
+        void Failure(Exception exception) => isFailure = true;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<CancellationToken, Task>, Action<Exception>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncCancellationTokenTaskActionFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken token = new();
+
+        // When
+        await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+
+        return;
+
+        Task Success(CancellationToken ct)
+        {
+            isSuccess = true;
+            return Task.CompletedTask;
+        }
+
+        void Failure(Exception exception) => isFailure = true;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<CancellationToken, Task>, Action<Exception>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncCancellationTokenTaskActionFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken token = new();
+
+        // When
+        await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+
+        return;
+
+        Task Success(CancellationToken ct)
+        {
+            isSuccess = false;
+            return Task.CompletedTask;
+        }
+
+        void Failure(Exception exception) => isFailure = true;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Action, Func<Exception, Task>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncActionFuncExceptionTaskFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(Success, Failure);
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+
+        return;
+        void Success() => isSuccess = true;
+
+        Task Failure(Exception exception)
+        {
+            isFailure = true;
+            return Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Action, Func<Exception, Task>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncActionFuncExceptionTaskFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(Success, Failure);
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+
+        return;
+        void Success() => isSuccess = false;
+
+        Task Failure(Exception exception)
+        {
+            isFailure = true;
+            return Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Action, Func<Exception, CancellationToken, Task>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncActionFuncExceptionCancellationTokenTaskFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken token = new();
+
+        // When
+        await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+
+        return;
+        void Success() => isSuccess = true;
+
+        Task Failure(Exception exception, CancellationToken ct)
+        {
+            isFailure = true;
+            return Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Action, Func<Exception, CancellationToken, Task>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncActionFuncExceptionCancellationTokenTaskFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken token = new();
+
+        // When
+        await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+
+        return;
+        void Success() => isSuccess = false;
+
+        Task Failure(Exception exception, CancellationToken ct)
+        {
+            isFailure = true;
+            return Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<Task>, Func<Exception, Task>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTaskFuncExceptionTaskFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken token = new();
+
+        // When
+        await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+
+        return;
+
+        Task Success()
+        {
+            isSuccess = true;
+            return Task.CompletedTask;
+        }
+
+        Task Failure(Exception exception)
+        {
+            isFailure = true;
+            return Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<Task>, Func<Exception, Task>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTaskFuncExceptionTaskFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken token = new();
+
+        // When
+        await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+
+        return;
+
+        Task Success()
+        {
+            isSuccess = false;
+            return Task.CompletedTask;
+        }
+
+        Task Failure(Exception exception)
+        {
+            isFailure = true;
+            return Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<CancellationToken, Task>, Func<Exception, CancellationToken, Task>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncCancellationTokenTaskFuncExceptionCancellationTokenTaskFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken token = new();
+
+        // When
+        await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+
+        return;
+
+        Task Success(CancellationToken ct)
+        {
+            isSuccess = true;
+            return Task.CompletedTask;
+        }
+
+        Task Failure(Exception exception, CancellationToken ct)
+        {
+            isFailure = true;
+            return Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<CancellationToken, Task>, Func<Exception, CancellationToken, Task>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncCancellationTokenTaskFuncExceptionCancellationTokenTaskFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken token = new();
+
+        // When
+        await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+
+        return;
+
+        Task Success(CancellationToken ct)
+        {
+            isSuccess = false;
+            return Task.CompletedTask;
+        }
+
+        Task Failure(Exception exception, CancellationToken ct)
+        {
+            isFailure = true;
+            return Task.CompletedTask;
+        }
     }
 
     [Fact(DisplayName = "Result.Match function from success should produce the expected result.")]
@@ -316,13 +676,14 @@ public sealed class ResultTests
         const int expected = 1;
 
         // When
-        int actual = result.Match(
-            success: () => 1,
-            failure: _ => 0
-        );
+        int actual = result.Match(Success, Failure);
 
         // Then
         Assert.Equal(expected, actual);
+
+        return;
+        int Success() => 1;
+        int Failure(Exception exception) => 0;
     }
 
     [Fact(DisplayName = "Result.Match function from failure should produce the expected result.")]
@@ -333,13 +694,238 @@ public sealed class ResultTests
         const int expected = 1;
 
         // When
-        int actual = result.Match(
-            success: () => 0,
-            failure: _ => 1
-        );
+        int actual = result.Match(Success, Failure);
 
         // Then
         Assert.Equal(expected, actual);
+
+        return;
+        int Success() => 0;
+        int Failure(Exception exception) => 1;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<Task<TResult>>, Func<Exception, TResult>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTaskTResultFuncExceptionTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        Task<int> Success() => Task.FromResult(1);
+        int Failure(Exception exception) => 0;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<Task<TResult>>, Func<Exception, TResult>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTaskTResultFuncExceptionTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const int expected = 0;
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        Task<int> Success() => Task.FromResult(1);
+        int Failure(Exception exception) => 0;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<CancellationToken, Task<TResult>>, Func<Exception, TResult>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncCancellationTokenTaskTResultFuncExceptionTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const int expected = 1;
+        CancellationToken token = new();
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        Task<int> Success(CancellationToken ct) => Task.FromResult(1);
+        int Failure(Exception exception) => 0;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<CancellationToken, Task<TResult>>, Func<Exception, TResult>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncCancellationTokenTaskTResultFuncExceptionTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const int expected = 0;
+        CancellationToken token = new();
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        Task<int> Success(CancellationToken ct) => Task.FromResult(1);
+        int Failure(Exception exception) => 0;
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<TResult>, Func<Exception, Task<TResult>>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionTaskTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        int Success() => 1;
+        Task<int> Failure(Exception exception) => Task.FromResult(0);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<TResult>, Func<Exception, Task<TResult>>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionTaskTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const int expected = 0;
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        int Success() => 1;
+        Task<int> Failure(Exception exception) => Task.FromResult(0);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<TResult>, Func<Exception, CancellationToken, Task<TResult>>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionCancellationTokenTaskTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const int expected = 1;
+        CancellationToken token = new();
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        int Success() => 1;
+        Task<int> Failure(Exception exception, CancellationToken ct) => Task.FromResult(0);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<TResult>, Func<Exception, CancellationToken, Task<TResult>>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionCancellationTokenTaskTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const int expected = 0;
+        CancellationToken token = new();
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        int Success() => 1;
+        Task<int> Failure(Exception exception, CancellationToken ct) => Task.FromResult(0);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<Task<TResult>>, Func<Exception, Task<TResult>>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTaskTResultFuncExceptionTaskTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const int expected = 1;
+        CancellationToken token = new();
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        Task<int> Success() => Task.FromResult(1);
+        Task<int> Failure(Exception exception) => Task.FromResult(0);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<Task<TResult>>, Func<Exception, Task<TResult>>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncTaskTResultFuncExceptionTaskTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const int expected = 0;
+        CancellationToken token = new();
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        Task<int> Success() => Task.FromResult(1);
+        Task<int> Failure(Exception exception) => Task.FromResult(0);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>) from success should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncCancellationTokenTaskTResultFuncExceptionCancellationTokenTaskTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        const int expected = 1;
+        CancellationToken token = new();
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        Task<int> Success(CancellationToken ct) => Task.FromResult(1);
+        Task<int> Failure(Exception exception, CancellationToken ct) => Task.FromResult(0);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync(Func<CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>) from failure should produce the expected result.")]
+    public async Task ResultMatchAsyncFuncCancellationTokenTaskTResultFuncExceptionCancellationTokenTaskTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const int expected = 0;
+        CancellationToken token = new();
+
+        // When
+        int actual = await result.MatchAsync(Success, Failure, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        Task<int> Success(CancellationToken ct) => Task.FromResult(1);
+        Task<int> Failure(Exception exception, CancellationToken ct) => Task.FromResult(0);
     }
 
     [Fact(DisplayName = "Result.Select action from failure should produce the expected result.")]
@@ -379,6 +965,93 @@ public sealed class ResultTests
 
         // Then
         Result actual = result.Select(() => throw FailureException);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync(Func<Task>) from failure should produce the expected result.")]
+    public async Task ResultSelectAsyncFuncTaskFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = await result.SelectAsync(() => Task.CompletedTask);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync(Func<Task>) from success should produce the expected result.")]
+    public async Task ResultSelectAsyncFuncTaskFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Success();
+
+        // When
+        Result actual = await result.SelectAsync(() => Task.CompletedTask);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync(Func<Task>) from success with exception should produce the expected result.")]
+    public async Task ResultSelectAsyncFuncTaskFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = await result.SelectAsync(() => throw FailureException);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync(Func<CancellationToken, Task>) from failure should produce the expected result.")]
+    public async Task ResultSelectAsyncFuncCancellationTokenTaskFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+        CancellationToken token = new();
+
+        // When
+        Result actual = await result.SelectAsync(_ => Task.CompletedTask, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync(Func<CancellationToken, Task>) from success should produce the expected result.")]
+    public async Task ResultSelectAsyncFuncCancellationTokenTaskFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Success();
+        CancellationToken token = new();
+
+        // When
+        Result actual = await result.SelectAsync(_ => Task.CompletedTask, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync(Func<CancellationToken, Task>) from success with exception should produce the expected result.")]
+    public async Task ResultSelectAsyncFuncCancellationTokenTaskFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Failure(FailureException);
+        CancellationToken token = new();
+
+        // When
+        Result actual = await result.SelectAsync(_ => throw FailureException, token);
 
         // Then
         Assert.Equal(expected, actual);
@@ -426,6 +1099,93 @@ public sealed class ResultTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync function of TResult from failure should produce the expected result.")]
+    public async Task ResultSelectAsyncFunctionOfTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // When
+        Result<int> actual = await result.SelectAsync(() => Task.FromResult(1));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult from success should produce the expected result.")]
+    public async Task ResultSelectAsyncFunctionOfTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = 1;
+
+        // When
+        Result<int> actual = await result.SelectAsync(() => Task.FromResult(1));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult from success with exception should produce the expected result.")]
+    public async Task ResultSelectAsyncFunctionOfTResultFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // When
+        Result<int> actual = await result.SelectAsync<int>(() => throw FailureException);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from failure should produce the expected result.")]
+    public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+        CancellationToken token = new();
+
+        // When
+        Result<int> actual = await result.SelectAsync(_ => Task.FromResult(1), token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from success should produce the expected result.")]
+    public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = 1;
+        CancellationToken token = new();
+
+        // When
+        Result<int> actual = await result.SelectAsync(_ => Task.FromResult(1), token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from success with exception should produce the expected result.")]
+    public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = Result<int>.Failure(FailureException);
+        CancellationToken token = new();
+
+        // When
+        Result<int> actual = await result.SelectAsync<int>(_ => throw FailureException, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectMany function from failure should produce the expected result.")]
     public void ResultSelectManyFunctionFromFailureShouldProduceExpectedResult()
     {
@@ -468,6 +1228,93 @@ public sealed class ResultTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function from failure should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = await result.SelectManyAsync(async () => await Task.FromResult(Result.Success()));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function from success should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Success();
+
+        // When
+        Result actual = await result.SelectManyAsync(async () => await Task.FromResult(Result.Success()));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function from success with exception should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = await result.SelectManyAsync(() => throw FailureException);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from failure should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+        CancellationToken token = new();
+
+        // When
+        Result actual = await result.SelectManyAsync(async _ => await Task.FromResult(Result.Success()), token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from success should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Success();
+        CancellationToken token = new();
+
+        // When
+        Result actual = await result.SelectManyAsync(async _ => await Task.FromResult(Result.Success()), token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from success with exception should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result expected = Result.Failure(FailureException);
+        CancellationToken token = new();
+
+        // When
+        Result actual = await result.SelectManyAsync(_ => throw FailureException, token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectMany function of TResult from failure should produce the expected result.")]
     public void ResultSelectManyFunctionOfTResultFromFailureShouldProduceExpectedResult()
     {
@@ -505,6 +1352,93 @@ public sealed class ResultTests
 
         // When
         Result<int> actual = result.SelectMany<int>(() => throw FailureException);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult from failure should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async () => await Task.FromResult(Result<int>.Success(1)));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult from success should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = Result<int>.Success(1);
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async () => await Task.FromResult(Result<int>.Success(1)));
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult from success with exception should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(() => throw FailureException);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from failure should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromFailureShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+        CancellationToken token = new();
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async _ => await Task.FromResult(Result<int>.Success(1)), token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from success should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromSuccessShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = Result<int>.Success(1);
+        CancellationToken token = new();
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async _ => await Task.FromResult(Result<int>.Success(1)), token);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from success with exception should produce the expected result.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromSuccessWithExceptionShouldProduceExpectedResult()
+    {
+        // Given
+        Result result = Result.Success();
+        Result<int> expected = Result<int>.Failure(FailureException);
+        CancellationToken token = new();
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(_ => throw FailureException, token);
 
         // Then
         Assert.Equal(expected, actual);

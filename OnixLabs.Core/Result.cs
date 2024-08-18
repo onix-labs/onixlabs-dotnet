@@ -203,6 +203,16 @@ public abstract class Result : IValueEquatable<Result>
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or <see cref="None{T}"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </summary>
+    /// <returns>
+    /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
+    /// or <see cref="None{T}"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
+    /// </returns>
+    public Optional<Exception> GetExceptionOrNone() => GetExceptionOrDefault();
+
+    /// <summary>
+    /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </summary>
     /// <returns>
@@ -215,8 +225,8 @@ public abstract class Result : IValueEquatable<Result>
     /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="success">The action to execute when the current <see cref="Result"/> instance is in a successful state.</param>
-    /// <param name="failure">The action to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
     public void Match(Action? success = null, Action<Exception>? failure = null)
     {
         switch (this)
@@ -231,23 +241,230 @@ public abstract class Result : IValueEquatable<Result>
     }
 
     /// <summary>
-    /// Executes the function that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// Asynchronously executes the action that matches the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="success">The action to execute when the current <see cref="Result"/> instance is in a successful state.</param>
-    /// <param name="failure">The action to execute when the current <see cref="Result"/> instance is in a failed state.</param>
-    /// <typeparam name="TResult">The underlying type of the result produced by the matching function.</typeparam>
-    /// <returns>
-    /// Returns the result of the <paramref name="success"/> function if the current <see cref="Result"/> instance is in a successful state;
-    /// otherwise, returns the result of the <paramref name="failure"/> function if the current <see cref="Result"/> instance is in a failed state.
-    /// </returns>
-    public TResult Match<TResult>(Func<TResult> success, Func<Exception, TResult> failure) => this is Failure failureResult ? failure(failureResult.Exception) : success();
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    public async Task MatchAsync(Func<Task>? success = null, Action<Exception>? failure = null, CancellationToken token = default)
+    {
+        switch (this)
+        {
+            case Failure failureResult:
+                failure?.Invoke(failureResult.Exception);
+                break;
+            default:
+                if (success is not null)
+                    await success().WaitAsync(token).ConfigureAwait(false);
+                break;
+        }
+    }
 
     /// <summary>
-    /// Applies the provided selector action to the value of the current <see cref="Result"/> instance.
+    /// Asynchronously executes the action that matches the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="selector">The action to apply to current <see cref="Result"/> instance.</param>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    public async Task MatchAsync(Func<CancellationToken, Task>? success = null, Action<Exception>? failure = null, CancellationToken token = default)
+    {
+        switch (this)
+        {
+            case Failure failureResult:
+                failure?.Invoke(failureResult.Exception);
+                break;
+            default:
+                if (success is not null)
+                    await success(token).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    public async Task MatchAsync(Action? success = null, Func<Exception, Task>? failure = null, CancellationToken token = default)
+    {
+        switch (this)
+        {
+            case Failure failureResult:
+                if (failure is not null)
+                    await failure(failureResult.Exception).WaitAsync(token).ConfigureAwait(false);
+                break;
+            default:
+                success?.Invoke();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    public async Task MatchAsync(Action? success = null, Func<Exception, CancellationToken, Task>? failure = null, CancellationToken token = default)
+    {
+        switch (this)
+        {
+            case Failure failureResult:
+                if (failure is not null)
+                    await failure(failureResult.Exception, token).ConfigureAwait(false);
+                break;
+            default:
+                success?.Invoke();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    public async Task MatchAsync(Func<Task>? success = null, Func<Exception, Task>? failure = null, CancellationToken token = default)
+    {
+        switch (this)
+        {
+            case Failure failureResult:
+                if (failure is not null)
+                    await failure(failureResult.Exception).WaitAsync(token).ConfigureAwait(false);
+                break;
+            default:
+                if (success is not null)
+                    await success().WaitAsync(token).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    public async Task MatchAsync(Func<CancellationToken, Task>? success = null, Func<Exception, CancellationToken, Task>? failure = null, CancellationToken token = default)
+    {
+        switch (this)
+        {
+            case Failure failureResult:
+                if (failure is not null)
+                    await failure(failureResult.Exception, token).ConfigureAwait(false);
+                break;
+            default:
+                if (success is not null)
+                    await success(token).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Executes the delegate that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the action invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="Result"/> instance is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate if the current <see cref="Result"/> instance is in a failed state.
+    /// </returns>
+    public TResult Match<TResult>(Func<TResult> success, Func<Exception, TResult> failure) =>
+        this is Failure failureResult ? failure(failureResult.Exception) : success();
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="Result"/> instance is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate if the current <see cref="Result"/> instance is in a failed state.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<Task<TResult>> success, Func<Exception, TResult> failure, CancellationToken token = default) =>
+        this is Failure failureResult ? failure(failureResult.Exception) : await success().WaitAsync(token).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="Result"/> instance is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate if the current <see cref="Result"/> instance is in a failed state.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<CancellationToken, Task<TResult>> success, Func<Exception, TResult> failure, CancellationToken token = default) =>
+        this is Failure failureResult ? failure(failureResult.Exception) : await success(token).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="Result"/> instance is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate if the current <see cref="Result"/> instance is in a failed state.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<TResult> success, Func<Exception, Task<TResult>> failure, CancellationToken token = default) =>
+        this is Failure failureResult ? await failure(failureResult.Exception).WaitAsync(token).ConfigureAwait(false) : success();
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="Result"/> instance is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate if the current <see cref="Result"/> instance is in a failed state.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<TResult> success, Func<Exception, CancellationToken, Task<TResult>> failure, CancellationToken token = default) =>
+        this is Failure failureResult ? await failure(failureResult.Exception, token).ConfigureAwait(false) : success();
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="Result"/> instance is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate if the current <see cref="Result"/> instance is in a failed state.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<Task<TResult>> success, Func<Exception, Task<TResult>> failure, CancellationToken token = default) =>
+        this is Failure failureResult ? await failure(failureResult.Exception).WaitAsync(token).ConfigureAwait(false) : await success().WaitAsync(token).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Result"/> instance and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="Result"/> instance is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="Result"/> instance is in a failed state.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="Result"/> instance is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate if the current <see cref="Result"/> instance is in a failed state.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<CancellationToken, Task<TResult>> success, Func<Exception, CancellationToken, Task<TResult>> failure, CancellationToken token = default) =>
+        this is Failure failureResult ? await failure(failureResult.Exception, token).ConfigureAwait(false) : await success(token).ConfigureAwait(false);
+
+    /// <summary>
+    /// Applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to current <see cref="Result"/> instance.</param>
+    /// <returns>
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
     public Result Select(Action selector)
     {
@@ -265,16 +482,62 @@ public abstract class Result : IValueEquatable<Result>
     }
 
     /// <summary>
-    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
-    /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
+    /// <param name="selector">The delegate to apply to current <see cref="Result"/> instance.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// </returns>
+    public async Task<Result> SelectAsync(Func<Task> selector, CancellationToken token = default)
+    {
+        if (this is Failure) return this;
+
+        try
+        {
+            await selector().WaitAsync(token).ConfigureAwait(false);
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to current <see cref="Result"/> instance.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <returns>
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// </returns>
+    public async Task<Result> SelectAsync(Func<CancellationToken, Task> selector, CancellationToken token = default)
+    {
+        if (this is Failure) return this;
+
+        try
+        {
+            await selector(token).ConfigureAwait(false);
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public Result<TResult> Select<TResult>(Func<TResult> selector)
     {
-        if (this is Failure failure) return failure.Exception;
+        if (this is Failure failure) return failure.ToTypedResult<TResult>();
 
         try
         {
@@ -287,11 +550,57 @@ public abstract class Result : IValueEquatable<Result>
     }
 
     /// <summary>
-    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
     /// <returns>
-    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// </returns>
+    public async Task<Result<TResult>> SelectAsync<TResult>(Func<Task<TResult>> selector, CancellationToken token = default)
+    {
+        if (this is Failure failure) return failure.ToTypedResult<TResult>();
+
+        try
+        {
+            return await selector().WaitAsync(token).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// </returns>
+    public async Task<Result<TResult>> SelectAsync<TResult>(Func<CancellationToken, Task<TResult>> selector, CancellationToken token = default)
+    {
+        if (this is Failure failure) return failure.ToTypedResult<TResult>();
+
+        try
+        {
+            return await selector(token).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <returns>
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure"/>.
     /// </returns>
     public Result SelectMany(Func<Result> selector)
     {
@@ -308,20 +617,110 @@ public abstract class Result : IValueEquatable<Result>
     }
 
     /// <summary>
-    /// Applies the provided selector function to the value of the current <see cref="Result"/> instance.
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
     /// </summary>
-    /// <param name="selector">The function to apply to the current <see cref="Result"/> instance.</param>
-    /// <typeparam name="TResult">The underlying type of the result produced by the selector function.</typeparam>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <returns>
-    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the function invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// </returns>
+    public async Task<Result> SelectManyAsync(Func<Task<Result>> selector, CancellationToken token = default)
+    {
+        if (this is Failure) return this;
+
+        try
+        {
+            return await selector().WaitAsync(token).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <returns>
+    /// Returns <see cref="Success"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure"/>.
+    /// </returns>
+    public async Task<Result> SelectManyAsync(Func<CancellationToken, Task<Result>> selector, CancellationToken token = default)
+    {
+        if (this is Failure) return this;
+
+        try
+        {
+            return await selector(token).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure{T}"/>.
     /// </returns>
     public Result<TResult> SelectMany<TResult>(Func<Result<TResult>> selector)
     {
-        if (this is Failure failure) return failure.Exception;
+        if (this is Failure failure) return failure.ToTypedResult<TResult>();
 
         try
         {
             return selector();
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// </returns>
+    public async Task<Result<TResult>> SelectManyAsync<TResult>(Func<Task<Result<TResult>>> selector, CancellationToken token = default)
+    {
+        if (this is Failure failure) return failure.ToTypedResult<TResult>();
+
+        try
+        {
+            return await selector().WaitAsync(token).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Result"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="Result"/> instance.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns <see cref="Success{T}"/> if the current <see cref="Result"/> is in a successful state, and the delegate invocation is also successful; otherwise; <see cref="Failure{T}"/>.
+    /// </returns>
+    public async Task<Result<TResult>> SelectManyAsync<TResult>(Func<CancellationToken, Task<Result<TResult>>> selector, CancellationToken token = default)
+    {
+        if (this is Failure failure) return failure.ToTypedResult<TResult>();
+
+        try
+        {
+            return await selector(token).ConfigureAwait(false);
         }
         catch (Exception exception)
         {

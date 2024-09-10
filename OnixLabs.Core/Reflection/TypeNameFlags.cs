@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Reflection;
 /// <summary>
 /// Specifies flags that control how a type name is formatted.
 /// </summary>
-[Flags]
+[Flags, Obsolete("This enumeration has been replaced with TypeDeclarationFlags and will be removed in version 10.0.0")]
 public enum TypeNameFlags
 {
     /// <summary>

@@ -123,7 +123,7 @@ public static class ObjectExtensions
             StringBuilder builder = new();
             IEnumerable<PropertyInfo> properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            builder.Append(type.GetName());
+            builder.Append(type.GetCSharpTypeDeclaration());
 
             if (properties.IsEmpty())
                 return builder.Append(ObjectEmptyBrackets).ToString();
@@ -160,7 +160,7 @@ public static class ObjectExtensions
         }
         catch
         {
-            return string.Concat(type.GetName(), ObjectEmptyBrackets);
+            return string.Concat(type.GetCSharpTypeDeclaration(), ObjectEmptyBrackets);
         }
     }
 

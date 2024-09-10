@@ -37,6 +37,7 @@ public static class TypeExtensions
     /// <param name="type">The current <see cref="Type"/> instance from which to obtain the formatted type name.</param>
     /// <param name="flags">The type name flags that will be used to format the type name.</param>
     /// <returns>Returns the formatted type name from the current <see cref="Type"/> instance.</returns>
+    [Obsolete("This method has been replaced with GetCSharpTypeDeclaration and will be removed in version 10.0.0")]
     public static string GetName(this Type type, TypeNameFlags flags = default)
     {
         RequireNotNull(type, TypeNullExceptionMessage, nameof(type));
@@ -66,4 +67,17 @@ public static class TypeExtensions
     /// <returns>Returns the simple type name from the current <see cref="Type"/> instance.</returns>
     private static string GetName(this Type type, bool useFullName) =>
         (useFullName ? type.FullName ?? type.Name : type.Name).SubstringBeforeFirst(GenericTypeIdentifierMarker);
+
+    /// <summary>
+    /// Gets the type declaration for the current <see cref="Type"/> instance.
+    /// <remarks>
+    /// Depending on the specified <see cref="TypeDeclarationFlags"/>, this method is capable or returning type declarations including
+    /// simple type names, namespace qualified types names, aliased types names, nullable shorthand notation, generic arguments, and value tuples.
+    /// </remarks>
+    /// </summary>
+    /// <param name="type">The current <see cref="Type"/> instance from which to obtain the type declaration.</param>
+    /// <param name="flags">The flags that specify how the type declaration should be formatted.</param>
+    /// <returns>Returns the type declaration for the current <see cref="Type"/> instance.</returns>
+    public static string GetCSharpTypeDeclaration(this Type type, TypeDeclarationFlags flags = default) =>
+        CSharpTypeDeclarationFormatter.GetTypeDeclaration(type, flags);
 }

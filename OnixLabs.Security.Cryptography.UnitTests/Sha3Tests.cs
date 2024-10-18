@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Security.Cryptography;
+using OnixLabs.Core;
 using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
@@ -594,6 +595,150 @@ public sealed class Sha3Tests
         // When
         Hash hash = Hash.Compute(algorithm, [character]);
         string actual = hash.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Sha3Hash224 multiple block transforms should produce the expected result")]
+    [InlineData("abcdef", "", "ceb3f4cd85af081120bf69ecf76bf61232bd5d810866f0eca3c8907d")]
+    [InlineData("abcde", "f", "ceb3f4cd85af081120bf69ecf76bf61232bd5d810866f0eca3c8907d")]
+    [InlineData("abcd", "ef", "ceb3f4cd85af081120bf69ecf76bf61232bd5d810866f0eca3c8907d")]
+    [InlineData("abc", "def", "ceb3f4cd85af081120bf69ecf76bf61232bd5d810866f0eca3c8907d")]
+    [InlineData("ab", "cdef", "ceb3f4cd85af081120bf69ecf76bf61232bd5d810866f0eca3c8907d")]
+    [InlineData("a", "bcdef", "ceb3f4cd85af081120bf69ecf76bf61232bd5d810866f0eca3c8907d")]
+    [InlineData("", "abcdef", "ceb3f4cd85af081120bf69ecf76bf61232bd5d810866f0eca3c8907d")]
+    public void Sha3Hash224MultipleBlockTransformsShouldProduceExpectedResult(string firstBlock, string lastBlock, string expected)
+    {
+        // Given
+        using HashAlgorithm algorithm = Sha3.CreateSha3Hash224();
+        byte[] firstBlockBytes = firstBlock.ToByteArray();
+        byte[] lastBlockBytes = lastBlock.ToByteArray();
+
+        // When
+        algorithm.TransformBlock(firstBlockBytes, 0, firstBlockBytes.Length, null, 0);
+        algorithm.TransformFinalBlock(lastBlockBytes, 0, lastBlockBytes.Length);
+        string actual = new Hash(algorithm.Hash).ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Sha3Hash256 multiple block transforms should produce the expected result")]
+    [InlineData("abcdef", "", "59890c1d183aa279505750422e6384ccb1499c793872d6f31bb3bcaa4bc9f5a5")]
+    [InlineData("abcde", "f", "59890c1d183aa279505750422e6384ccb1499c793872d6f31bb3bcaa4bc9f5a5")]
+    [InlineData("abcd", "ef", "59890c1d183aa279505750422e6384ccb1499c793872d6f31bb3bcaa4bc9f5a5")]
+    [InlineData("abc", "def", "59890c1d183aa279505750422e6384ccb1499c793872d6f31bb3bcaa4bc9f5a5")]
+    [InlineData("ab", "cdef", "59890c1d183aa279505750422e6384ccb1499c793872d6f31bb3bcaa4bc9f5a5")]
+    [InlineData("a", "bcdef", "59890c1d183aa279505750422e6384ccb1499c793872d6f31bb3bcaa4bc9f5a5")]
+    [InlineData("", "abcdef", "59890c1d183aa279505750422e6384ccb1499c793872d6f31bb3bcaa4bc9f5a5")]
+    public void Sha3Hash256MultipleBlockTransformsShouldProduceExpectedResult(string firstBlock, string lastBlock, string expected)
+    {
+        // Given
+        using HashAlgorithm algorithm = Sha3.CreateSha3Hash256();
+        byte[] firstBlockBytes = firstBlock.ToByteArray();
+        byte[] lastBlockBytes = lastBlock.ToByteArray();
+
+        // When
+        algorithm.TransformBlock(firstBlockBytes, 0, firstBlockBytes.Length, null, 0);
+        algorithm.TransformFinalBlock(lastBlockBytes, 0, lastBlockBytes.Length);
+        string actual = new Hash(algorithm.Hash).ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Sha3Hash384 multiple block transforms should produce the expected result")]
+    [InlineData("abcdef", "", "d77460b0ce6109168480e279a81af32facb689ab96e22623f0122ff3a10ead263db6607f83876a843d3264dc2a863805")]
+    [InlineData("abcde", "f", "d77460b0ce6109168480e279a81af32facb689ab96e22623f0122ff3a10ead263db6607f83876a843d3264dc2a863805")]
+    [InlineData("abcd", "ef", "d77460b0ce6109168480e279a81af32facb689ab96e22623f0122ff3a10ead263db6607f83876a843d3264dc2a863805")]
+    [InlineData("abc", "def", "d77460b0ce6109168480e279a81af32facb689ab96e22623f0122ff3a10ead263db6607f83876a843d3264dc2a863805")]
+    [InlineData("ab", "cdef", "d77460b0ce6109168480e279a81af32facb689ab96e22623f0122ff3a10ead263db6607f83876a843d3264dc2a863805")]
+    [InlineData("a", "bcdef", "d77460b0ce6109168480e279a81af32facb689ab96e22623f0122ff3a10ead263db6607f83876a843d3264dc2a863805")]
+    [InlineData("", "abcdef", "d77460b0ce6109168480e279a81af32facb689ab96e22623f0122ff3a10ead263db6607f83876a843d3264dc2a863805")]
+    public void Sha3Hash384MultipleBlockTransformsShouldProduceExpectedResult(string firstBlock, string lastBlock, string expected)
+    {
+        // Given
+        using HashAlgorithm algorithm = Sha3.CreateSha3Hash384();
+        byte[] firstBlockBytes = firstBlock.ToByteArray();
+        byte[] lastBlockBytes = lastBlock.ToByteArray();
+
+        // When
+        algorithm.TransformBlock(firstBlockBytes, 0, firstBlockBytes.Length, null, 0);
+        algorithm.TransformFinalBlock(lastBlockBytes, 0, lastBlockBytes.Length);
+        string actual = new Hash(algorithm.Hash).ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Sha3Hash512 multiple block transforms should produce the expected result")]
+    [InlineData("abcdef", "", "01309a45c57cd7faef9ee6bb95fed29e5e2e0312af12a95fffeee340e5e5948b4652d26ae4b75976a53cc1612141af6e24df36517a61f46a1a05f59cf667046a")]
+    [InlineData("abcde", "f", "01309a45c57cd7faef9ee6bb95fed29e5e2e0312af12a95fffeee340e5e5948b4652d26ae4b75976a53cc1612141af6e24df36517a61f46a1a05f59cf667046a")]
+    [InlineData("abcd", "ef", "01309a45c57cd7faef9ee6bb95fed29e5e2e0312af12a95fffeee340e5e5948b4652d26ae4b75976a53cc1612141af6e24df36517a61f46a1a05f59cf667046a")]
+    [InlineData("abc", "def", "01309a45c57cd7faef9ee6bb95fed29e5e2e0312af12a95fffeee340e5e5948b4652d26ae4b75976a53cc1612141af6e24df36517a61f46a1a05f59cf667046a")]
+    [InlineData("ab", "cdef", "01309a45c57cd7faef9ee6bb95fed29e5e2e0312af12a95fffeee340e5e5948b4652d26ae4b75976a53cc1612141af6e24df36517a61f46a1a05f59cf667046a")]
+    [InlineData("a", "bcdef", "01309a45c57cd7faef9ee6bb95fed29e5e2e0312af12a95fffeee340e5e5948b4652d26ae4b75976a53cc1612141af6e24df36517a61f46a1a05f59cf667046a")]
+    [InlineData("", "abcdef", "01309a45c57cd7faef9ee6bb95fed29e5e2e0312af12a95fffeee340e5e5948b4652d26ae4b75976a53cc1612141af6e24df36517a61f46a1a05f59cf667046a")]
+    public void Sha3Hash512MultipleBlockTransformsShouldProduceExpectedResult(string firstBlock, string lastBlock, string expected)
+    {
+        // Given
+        using HashAlgorithm algorithm = Sha3.CreateSha3Hash512();
+        byte[] firstBlockBytes = firstBlock.ToByteArray();
+        byte[] lastBlockBytes = lastBlock.ToByteArray();
+
+        // When
+        algorithm.TransformBlock(firstBlockBytes, 0, firstBlockBytes.Length, null, 0);
+        algorithm.TransformFinalBlock(lastBlockBytes, 0, lastBlockBytes.Length);
+        string actual = new Hash(algorithm.Hash).ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Sha3Shake128 multiple block transforms should produce the expected result")]
+    [InlineData("abcdef", "", "9428dbf9493c942630c0618d8a0983d518e828a7c0f4a39c2a54e013f64ebc125475308324e864c2617062639263a24bd58c26379342b40bad4a81e6f3e2c32e41bcd52927971ad0374c88f3244b6d229652a454fdc4fa422838eab19aa2fac7ddf457d66122ea674424e534b529e65684b2b4e3404914ad814a53")]
+    [InlineData("abcde", "f", "9428dbf9493c942630c0618d8a0983d518e828a7c0f4a39c2a54e013f64ebc125475308324e864c2617062639263a24bd58c26379342b40bad4a81e6f3e2c32e41bcd52927971ad0374c88f3244b6d229652a454fdc4fa422838eab19aa2fac7ddf457d66122ea674424e534b529e65684b2b4e3404914ad814a53")]
+    [InlineData("abcd", "ef", "9428dbf9493c942630c0618d8a0983d518e828a7c0f4a39c2a54e013f64ebc125475308324e864c2617062639263a24bd58c26379342b40bad4a81e6f3e2c32e41bcd52927971ad0374c88f3244b6d229652a454fdc4fa422838eab19aa2fac7ddf457d66122ea674424e534b529e65684b2b4e3404914ad814a53")]
+    [InlineData("abc", "def", "9428dbf9493c942630c0618d8a0983d518e828a7c0f4a39c2a54e013f64ebc125475308324e864c2617062639263a24bd58c26379342b40bad4a81e6f3e2c32e41bcd52927971ad0374c88f3244b6d229652a454fdc4fa422838eab19aa2fac7ddf457d66122ea674424e534b529e65684b2b4e3404914ad814a53")]
+    [InlineData("ab", "cdef", "9428dbf9493c942630c0618d8a0983d518e828a7c0f4a39c2a54e013f64ebc125475308324e864c2617062639263a24bd58c26379342b40bad4a81e6f3e2c32e41bcd52927971ad0374c88f3244b6d229652a454fdc4fa422838eab19aa2fac7ddf457d66122ea674424e534b529e65684b2b4e3404914ad814a53")]
+    [InlineData("a", "bcdef", "9428dbf9493c942630c0618d8a0983d518e828a7c0f4a39c2a54e013f64ebc125475308324e864c2617062639263a24bd58c26379342b40bad4a81e6f3e2c32e41bcd52927971ad0374c88f3244b6d229652a454fdc4fa422838eab19aa2fac7ddf457d66122ea674424e534b529e65684b2b4e3404914ad814a53")]
+    [InlineData("", "abcdef", "9428dbf9493c942630c0618d8a0983d518e828a7c0f4a39c2a54e013f64ebc125475308324e864c2617062639263a24bd58c26379342b40bad4a81e6f3e2c32e41bcd52927971ad0374c88f3244b6d229652a454fdc4fa422838eab19aa2fac7ddf457d66122ea674424e534b529e65684b2b4e3404914ad814a53")]
+    public void Sha3Shake128MultipleBlockTransformsShouldProduceExpectedResult(string firstBlock, string lastBlock, string expected)
+    {
+        // Given
+        using HashAlgorithm algorithm = Sha3.CreateSha3Shake128(123);
+        byte[] firstBlockBytes = firstBlock.ToByteArray();
+        byte[] lastBlockBytes = lastBlock.ToByteArray();
+
+        // When
+        algorithm.TransformBlock(firstBlockBytes, 0, firstBlockBytes.Length, null, 0);
+        algorithm.TransformFinalBlock(lastBlockBytes, 0, lastBlockBytes.Length);
+        string actual = new Hash(algorithm.Hash).ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Sha3Shake256 multiple block transforms should produce the expected result")]
+    [InlineData("abcdef", "", "81d5e45d095acf3c0decf25bcc63f6ee16c689b909b48040ad91c7c67dfe4e9fec910fa73b44e84541600b5a5736b7b0869c89b1e403e35e550158e09bdb7430a6617cff69c0f10fdaf1035ac62ab6277cd267616c06b9ce4d888543ba5771eecf12df031e9add88f314de262dc1bb0c4aae43c9b5316fea1af11d")]
+    [InlineData("abcde", "f", "81d5e45d095acf3c0decf25bcc63f6ee16c689b909b48040ad91c7c67dfe4e9fec910fa73b44e84541600b5a5736b7b0869c89b1e403e35e550158e09bdb7430a6617cff69c0f10fdaf1035ac62ab6277cd267616c06b9ce4d888543ba5771eecf12df031e9add88f314de262dc1bb0c4aae43c9b5316fea1af11d")]
+    [InlineData("abcd", "ef", "81d5e45d095acf3c0decf25bcc63f6ee16c689b909b48040ad91c7c67dfe4e9fec910fa73b44e84541600b5a5736b7b0869c89b1e403e35e550158e09bdb7430a6617cff69c0f10fdaf1035ac62ab6277cd267616c06b9ce4d888543ba5771eecf12df031e9add88f314de262dc1bb0c4aae43c9b5316fea1af11d")]
+    [InlineData("abc", "def", "81d5e45d095acf3c0decf25bcc63f6ee16c689b909b48040ad91c7c67dfe4e9fec910fa73b44e84541600b5a5736b7b0869c89b1e403e35e550158e09bdb7430a6617cff69c0f10fdaf1035ac62ab6277cd267616c06b9ce4d888543ba5771eecf12df031e9add88f314de262dc1bb0c4aae43c9b5316fea1af11d")]
+    [InlineData("ab", "cdef", "81d5e45d095acf3c0decf25bcc63f6ee16c689b909b48040ad91c7c67dfe4e9fec910fa73b44e84541600b5a5736b7b0869c89b1e403e35e550158e09bdb7430a6617cff69c0f10fdaf1035ac62ab6277cd267616c06b9ce4d888543ba5771eecf12df031e9add88f314de262dc1bb0c4aae43c9b5316fea1af11d")]
+    [InlineData("a", "bcdef", "81d5e45d095acf3c0decf25bcc63f6ee16c689b909b48040ad91c7c67dfe4e9fec910fa73b44e84541600b5a5736b7b0869c89b1e403e35e550158e09bdb7430a6617cff69c0f10fdaf1035ac62ab6277cd267616c06b9ce4d888543ba5771eecf12df031e9add88f314de262dc1bb0c4aae43c9b5316fea1af11d")]
+    [InlineData("", "abcdef", "81d5e45d095acf3c0decf25bcc63f6ee16c689b909b48040ad91c7c67dfe4e9fec910fa73b44e84541600b5a5736b7b0869c89b1e403e35e550158e09bdb7430a6617cff69c0f10fdaf1035ac62ab6277cd267616c06b9ce4d888543ba5771eecf12df031e9add88f314de262dc1bb0c4aae43c9b5316fea1af11d")]
+    public void Sha3Shake256MultipleBlockTransformsShouldProduceExpectedResult(string firstBlock, string lastBlock, string expected)
+    {
+        // Given
+        using HashAlgorithm algorithm = Sha3.CreateSha3Shake256(123);
+        byte[] firstBlockBytes = firstBlock.ToByteArray();
+        byte[] lastBlockBytes = lastBlock.ToByteArray();
+
+        // When
+        algorithm.TransformBlock(firstBlockBytes, 0, firstBlockBytes.Length, null, 0);
+        algorithm.TransformFinalBlock(lastBlockBytes, 0, lastBlockBytes.Length);
+        string actual = new Hash(algorithm.Hash).ToString();
 
         // Then
         Assert.Equal(expected, actual);

@@ -131,10 +131,7 @@ public abstract partial class Sha3 : HashAlgorithm
         Buffer.SetByte(state, blockSize, pad);
 
         // If the delimiter has its highest bit set, and we're at the last byte of the block, permute the state
-        if ((delimiter & 0x80) != 0 && blockSize == rateBytes - 1)
-        {
-            Permute(state);
-        }
+        if ((delimiter & 0x80) != 0 && blockSize == rateBytes - 1) Permute(state);
 
         // Apply final padding and permute the state
         pad = Convert.ToByte(Buffer.GetByte(state, rateBytes - 1) ^ 0x80);
@@ -152,10 +149,7 @@ public abstract partial class Sha3 : HashAlgorithm
             outputOffset += bytesToOutput;
             outputBytesLeft -= bytesToOutput;
 
-            if (outputBytesLeft > 0)
-            {
-                Permute(state);
-            }
+            if (outputBytesLeft > 0) Permute(state);
         }
 
         return result;

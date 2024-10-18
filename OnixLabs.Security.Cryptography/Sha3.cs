@@ -42,25 +42,10 @@ public abstract partial class Sha3 : HashAlgorithm
     /// </summary>
     private readonly int delimiter;
 
-    // /// <summary>
-    // /// The length of the hash in bits.
-    // /// </summary>
-    // private readonly int bitLength;
-
     /// <summary>
     /// The state block size.
     /// </summary>
     private int blockSize;
-
-    /// <summary>
-    /// The state input pointer.
-    /// </summary>
-    private int inputPointer;
-
-    /// <summary>
-    /// The state output pointer.
-    /// </summary>
-    private int outputPointer;
 
     /// <summary>
     /// The permutable sponge state.
@@ -83,17 +68,17 @@ public abstract partial class Sha3 : HashAlgorithm
         this.rateBytes = rateBytes;
         this.delimiter = delimiter;
         HashSizeValue = bitLength;
+
+        Initialize();
     }
 
     /// <summary>
     /// Initializes an implementation of the <see cref="Sha3"/> class.
     /// </summary>
-    public override void Initialize()
+    public sealed override void Initialize()
     {
         // ReSharper disable HeapView.ObjectAllocation.Evident
         blockSize = default;
-        inputPointer = default;
-        outputPointer = default;
         state = new ulong[25];
         result = new byte[HashSize / 8];
     }
@@ -106,23 +91,30 @@ public abstract partial class Sha3 : HashAlgorithm
     /// <param name="cbSize">The number of bytes in the byte array to use as data.</param>
     protected override void HashCore(byte[] array, int ibStart, int cbSize)
     {
-        Initialize();
+        int offset = ibStart;
 
         while (cbSize > 0)
         {
-            blockSize = Math.Min(cbSize, rateBytes);
+            // Calculate the number of bytes we can process in this iteration
+            int bytesToProcess = Math.Min(cbSize, rateBytes - blockSize);
 
-            for (int index = ibStart; index < blockSize; index++)
+            // Absorb the input into the state
+            for (int i = 0; i < bytesToProcess; i++)
             {
-                byte value = Convert.ToByte(Buffer.GetByte(state, index) ^ array[index + inputPointer]);
-                Buffer.SetByte(state, index, value);
+                int stateIndex = blockSize + i;
+                byte value = Convert.ToByte(Buffer.GetByte(state, stateIndex) ^ array[offset + i]);
+                Buffer.SetByte(state, stateIndex, value);
             }
 
-            inputPointer += blockSize;
-            cbSize -= blockSize;
+            // Update the block size and offsets
+            blockSize += bytesToProcess;
+            offset += bytesToProcess;
+            cbSize -= bytesToProcess;
 
+            // If the block isn't full, continue...
             if (blockSize != rateBytes) continue;
 
+            // ...otherwise, permute the state
             Permute(state);
             blockSize = 0;
         }
@@ -134,23 +126,28 @@ public abstract partial class Sha3 : HashAlgorithm
     /// <returns>The computed hash code.</returns>
     protected override byte[] HashFinal()
     {
+        // Apply padding to the current block
         byte pad = Convert.ToByte(Buffer.GetByte(state, blockSize) ^ delimiter);
         Buffer.SetByte(state, blockSize, pad);
 
+        // If the delimiter has its highest bit set, and we're at the last byte of the block, permute the state
         if ((delimiter & 0x80) != 0 && blockSize == rateBytes - 1) Permute(state);
 
+        // Apply final padding and permute the state
         pad = Convert.ToByte(Buffer.GetByte(state, rateBytes - 1) ^ 0x80);
         Buffer.SetByte(state, rateBytes - 1, pad);
         Permute(state);
 
         int outputBytesLeft = HashSize / 8;
+        int outputOffset = 0; // Local variable to track the offset in the result array
 
+        // Extract the hash output from the state
         while (outputBytesLeft > 0)
         {
-            blockSize = Math.Min(outputBytesLeft, rateBytes);
-            Buffer.BlockCopy(state, 0, result, outputPointer, blockSize);
-            outputPointer += blockSize;
-            outputBytesLeft -= blockSize;
+            int bytesToOutput = Math.Min(outputBytesLeft, rateBytes);
+            Buffer.BlockCopy(state, 0, result, outputOffset, bytesToOutput);
+            outputOffset += bytesToOutput;
+            outputBytesLeft -= bytesToOutput;
 
             if (outputBytesLeft > 0) Permute(state);
         }

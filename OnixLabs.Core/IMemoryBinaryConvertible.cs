@@ -16,7 +16,14 @@ using System;
 
 namespace OnixLabs.Core;
 
+/// <summary>
+/// Defines a type that is convertible to an instance of <see cref="ReadOnlyMemory{T}"/>.
+/// </summary>
 public interface IMemoryBinaryConvertible
 {
+    /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
     ReadOnlyMemory<byte> AsReadOnlyMemory();
 }

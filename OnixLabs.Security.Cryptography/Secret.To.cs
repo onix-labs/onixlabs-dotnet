@@ -20,10 +20,6 @@ namespace OnixLabs.Security.Cryptography;
 
 public readonly partial struct Secret
 {
-    public ReadOnlyMemory<byte> AsReadOnlyMemory() => protectedData.Decrypt(encryptedValue);
-
-    public ReadOnlySpan<byte> AsReadOnlySpan() => protectedData.Decrypt(encryptedValue);
-
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>

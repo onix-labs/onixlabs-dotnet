@@ -20,14 +20,6 @@ namespace OnixLabs.Security.Cryptography;
 
 public readonly partial struct DigitalSignature
 {
-    public ReadOnlyMemory<byte> AsReadOnlyMemory() => value;
-
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
-    public ReadOnlySpan<byte> AsReadOnlySpan() => value;
-
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>

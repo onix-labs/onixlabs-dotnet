@@ -19,8 +19,16 @@ namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class PrivateKey
 {
+    /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PrivateKey"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PrivateKey"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => KeyData;
 
+    /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PrivateKey"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PrivateKey"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
     public ReadOnlySpan<byte> AsReadOnlySpan() => KeyData;
 
     /// <summary>

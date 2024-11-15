@@ -19,10 +19,6 @@ namespace OnixLabs.Security.Cryptography;
 
 public readonly partial record struct NamedPrivateKey
 {
-    public ReadOnlyMemory<byte> AsReadOnlyMemory() => PrivateKey.AsReadOnlyMemory();
-
-    public ReadOnlySpan<byte> AsReadOnlySpan() => PrivateKey.AsReadOnlySpan();
-
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>

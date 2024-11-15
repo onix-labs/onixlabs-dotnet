@@ -19,24 +19,20 @@ namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class MerkleTree
 {
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance.</returns>
-    public byte[] ToByteArray() => Hash.ToByteArray();
+    public ReadOnlyMemory<byte> AsReadOnlyMemory() => Hash.AsReadOnlyMemory();
 
     /// <summary>
     /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
-    public ReadOnlySpan<byte> ToReadOnlySpan() => Hash.ToReadOnlySpan();
+    public ReadOnlySpan<byte> AsReadOnlySpan() => Hash.AsReadOnlySpan();
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
     /// <param name="provider">The format provider that will be used to determine the format of the string.</param>
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
-    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(ToByteArray(), provider);
+    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.

@@ -17,11 +17,4 @@ namespace OnixLabs.Core;
 /// <summary>
 /// Defines a type that is convertible to an instance of <see cref="T:Byte[]"/>.
 /// </summary>
-public interface IBinaryConvertible
-{
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="IBinaryConvertible"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="IBinaryConvertible"/> instance.</returns>
-    byte[] ToByteArray();
-}
+public interface IBinaryConvertible : ISpanBinaryConvertible, IMemoryBinaryConvertible;

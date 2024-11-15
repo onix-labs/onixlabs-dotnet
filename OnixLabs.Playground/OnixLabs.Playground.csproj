@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <LangVersion>12</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -13,7 +10,7 @@
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
         <ProjectReference Include="..\OnixLabs.Numerics\OnixLabs.Numerics.csproj"/>
         <ProjectReference Include="..\OnixLabs.Security.Cryptography\OnixLabs.Security.Cryptography.csproj"/>
-        <ProjectReference Include="..\OnixLabs.Security\OnixLabs.Security.csproj" />
+        <ProjectReference Include="..\OnixLabs.Security\OnixLabs.Security.csproj"/>
     </ItemGroup>
     <ItemGroup>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>

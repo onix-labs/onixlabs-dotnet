@@ -1,15 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <LangVersion>12</LangVersion>
-        <Nullable>enable</Nullable>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>OnixLabs.Core</Title>
-        <Authors>ONIXLabs</Authors>
         <Description>ONIXLabs Core API for .NET</Description>
-        <NeutralLanguage>en</NeutralLanguage>
-        <Copyright>Copyright © ONIXLabs 2020</Copyright>
-        <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
     </PropertyGroup>
     <PropertyGroup>
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

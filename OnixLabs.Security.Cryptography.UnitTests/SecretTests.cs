@@ -62,8 +62,7 @@ public sealed class SecretTests
         const string expected = "01020304";
 
         // When
-        byte[] value = candidate.ToByteArray();
-        value[0] = 0;
+        candidate.AsReadOnlySpan().ToArray()[0] = 0;
         string actual = candidate.ToString();
 
         // Then
@@ -132,10 +131,10 @@ public sealed class SecretTests
         // Given
         const string value = "test";
         Secret candidate = value;
-        byte[] expected = Encoding.UTF8.GetBytes(value);
+        ReadOnlySpan<byte> expected = Encoding.UTF8.GetBytes(value);
 
         // When
-        byte[] actual = candidate.ToByteArray();
+        ReadOnlySpan<byte> actual = candidate.AsReadOnlySpan();
 
         // Then
         Assert.Equal(expected, actual);
@@ -147,10 +146,10 @@ public sealed class SecretTests
         // Given
         char[] value = ['t', 'e', 's', 't'];
         Secret candidate = value;
-        byte[] expected = Encoding.UTF8.GetBytes(value);
+        ReadOnlySpan<byte> expected = Encoding.UTF8.GetBytes(value);
 
         // When
-        byte[] actual = candidate.ToByteArray();
+        ReadOnlySpan<byte> actual = candidate.AsReadOnlySpan();
 
         // Then
         Assert.Equal(expected, actual);
@@ -160,12 +159,12 @@ public sealed class SecretTests
     public void SecretShouldBeConstructableFromReadOnlySequence()
     {
         // Given
-        ReadOnlySequence<char> value = new ReadOnlySequence<char>(new char[] { 't', 'e', 's', 't' });
+        ReadOnlySequence<char> value = new(['t', 'e', 's', 't']);
         Secret candidate = value;
-        byte[] expected = Encoding.UTF8.GetBytes(value.ToArray());
+        ReadOnlySpan<byte> expected = Encoding.UTF8.GetBytes(value);
 
         // When
-        byte[] actual = candidate.ToByteArray();
+        ReadOnlySpan<byte> actual = candidate.AsReadOnlySpan();
 
         // Then
         Assert.Equal(expected, actual);

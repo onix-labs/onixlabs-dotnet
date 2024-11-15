@@ -78,8 +78,7 @@ public sealed class HashTests
         const string expected = "01020304";
 
         // When
-        byte[] value = candidate.ToByteArray();
-        value[0] = 0;
+        candidate.AsReadOnlySpan().ToArray()[0] = 0;
         string actual = candidate.ToString();
 
         // Then
@@ -243,7 +242,7 @@ public sealed class HashTests
     public void HashComputeShouldProduceTheExpectedHashUsingASpan(string data, string algorithmName, string expected)
     {
         // Given
-        ReadOnlySpan<byte> bytes = data.ToByteArray().AsSpan();
+        ReadOnlySpan<byte> bytes = data.ToByteArray();
         HashAlgorithm algorithm = algorithmName switch
         {
             "MD5" => MD5.Create(),
@@ -299,7 +298,7 @@ public sealed class HashTests
     public void HashComputeShouldProduceTheExpectedHashUsingASpanWithTwoRounds(string data, string algorithmName, string expected)
     {
         // Given
-        ReadOnlySpan<byte> bytes = data.ToByteArray().AsSpan();
+        ReadOnlySpan<byte> bytes = data.ToByteArray();
         HashAlgorithm algorithm = algorithmName switch
         {
             "MD5" => MD5.Create(),
@@ -355,7 +354,7 @@ public sealed class HashTests
     public void HashComputeShouldProduceTheExpectedHashUsingASpanWithAnOffsetAndCount(string data, int offset, int count, string algorithmName, string expected)
     {
         // Given
-        ReadOnlySpan<byte> bytes = data.ToByteArray().AsSpan();
+        ReadOnlySpan<byte> bytes = data.ToByteArray();
         HashAlgorithm algorithm = algorithmName switch
         {
             "MD5" => MD5.Create(),
@@ -411,7 +410,7 @@ public sealed class HashTests
     public void HashComputeShouldProduceTheExpectedHashUsingASpanWithAnOffsetCountAndTwoRounds(string data, int offset, int count, string algorithmName, string expected)
     {
         // Given
-        ReadOnlySpan<byte> bytes = data.ToByteArray().AsSpan();
+        ReadOnlySpan<byte> bytes = data.ToByteArray();
         HashAlgorithm algorithm = algorithmName switch
         {
             "MD5" => MD5.Create(),
@@ -523,7 +522,7 @@ public sealed class HashTests
     public void HashComputeShouldProduceTheExpectedHashUsingAnISpanBinaryConvertible(string data, string algorithmName, string expected)
     {
         // Given
-        SpanBinaryConvertible bytes = new(data.ToByteArray());
+        BinaryConvertible bytes = new(data.ToByteArray());
         HashAlgorithm algorithm = algorithmName switch
         {
             "MD5" => MD5.Create(),

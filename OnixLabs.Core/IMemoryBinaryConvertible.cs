@@ -1,4 +1,4 @@
-// Copyright 2020 ONIXLabs
+// Copyright 2020-2024 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
+using System;
 
-namespace OnixLabs.Core.UnitTests.Data;
+namespace OnixLabs.Core;
 
-public sealed record Record<T>(string Text, int Number, T Value, IEnumerable<T>? Values = null);
+public interface IMemoryBinaryConvertible
+{
+    ReadOnlyMemory<byte> AsReadOnlyMemory();
+}

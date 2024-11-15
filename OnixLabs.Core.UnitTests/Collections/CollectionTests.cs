@@ -22,23 +22,11 @@ namespace OnixLabs.Core.UnitTests.Collections;
 
 public sealed class CollectionTests
 {
-    private static readonly object[] EnumerableInitializers = [true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23];
-
-    private static readonly int[] NumericInitializers = [123, 456, 789, 0, 1, -1, -987, 123, 456, 789, 0, 1, -1, -987];
-
     private static readonly KeyValuePair<object, object?>[] DictionaryInitializers =
-    [
-        new KeyValuePair<object, object?>(123, true),
-        new KeyValuePair<object, object?>("abc", null),
-        new KeyValuePair<object, object?>(123.45f, "value")
-    ];
+        [new(123, true), new("abc", null), new(123.45f, "value")];
 
     private static readonly KeyValuePair<string, object>[] SortedDictionaryInitializers =
-    [
-        new KeyValuePair<string, object>("key1", 123),
-        new KeyValuePair<string, object>("key2", false),
-        new KeyValuePair<string, object>("key3", "abc")
-    ];
+        [new("key1", 123), new("key2", false), new("key3", "abc")];
 
     [Fact(DisplayName = "Collections.EmptyEnumerable should produce the expected result")]
     public void CollectionsEmptyEnumerableShouldProduceTheExpectedResult()
@@ -231,8 +219,8 @@ public sealed class CollectionTests
     public void CollectionsEnumerableOfShouldReturnTheExpectedResult()
     {
         // Given
-        IEnumerable<object> expected = EnumerableInitializers;
-        IEnumerable<object> actual = EnumerableOf(EnumerableInitializers);
+        IEnumerable<object> expected = [true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23];
+        IEnumerable<object> actual = EnumerableOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -242,8 +230,8 @@ public sealed class CollectionTests
     public void CollectionsArrayOfShouldReturnTheExpectedResult()
     {
         // Given
-        object[] expected = EnumerableInitializers.ToArray();
-        object[] actual = ArrayOf(EnumerableInitializers);
+        object[] expected = [true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23];
+        object[] actual = ArrayOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -253,8 +241,8 @@ public sealed class CollectionTests
     public void CollectionsImmutableArrayOfShouldReturnTheExpectedResult()
     {
         // Given
-        ImmutableArray<object> expected = [..EnumerableInitializers];
-        ImmutableArray<object> actual = ImmutableArrayOf(EnumerableInitializers);
+        ImmutableArray<object> expected = [true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23];
+        ImmutableArray<object> actual = ImmutableArrayOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -264,8 +252,8 @@ public sealed class CollectionTests
     public void CollectionsListOfShouldReturnTheExpectedResult()
     {
         // Given
-        List<object> expected = [..EnumerableInitializers];
-        List<object> actual = ListOf(EnumerableInitializers);
+        List<object> expected = [true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23];
+        List<object> actual = ListOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -275,8 +263,8 @@ public sealed class CollectionTests
     public void CollectionsImmutableListOfShouldReturnTheExpectedResult()
     {
         // Given
-        ImmutableList<object> expected = ImmutableList.Create(EnumerableInitializers);
-        ImmutableList<object> actual = ImmutableListOf(EnumerableInitializers);
+        ImmutableList<object> expected = ImmutableList.Create<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
+        ImmutableList<object> actual = ImmutableListOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -290,6 +278,7 @@ public sealed class CollectionTests
         Dictionary<object, object?> actual = DictionaryOf(DictionaryInitializers);
 
         // Then
+        // ReSharper disable once UsageOfDefaultStructEquality
         Assert.True(expected.SequenceEqual(actual));
     }
 
@@ -301,6 +290,7 @@ public sealed class CollectionTests
         ImmutableDictionary<object, object?> actual = ImmutableDictionaryOf(DictionaryInitializers);
 
         // Then
+        // ReSharper disable once UsageOfDefaultStructEquality
         Assert.True(expected.SequenceEqual(actual));
     }
 
@@ -312,6 +302,7 @@ public sealed class CollectionTests
         SortedDictionary<string, object> actual = SortedDictionaryOf(SortedDictionaryInitializers);
 
         // Then
+        // ReSharper disable once UsageOfDefaultStructEquality
         Assert.True(expected.SequenceEqual(actual));
     }
 
@@ -324,6 +315,7 @@ public sealed class CollectionTests
         ImmutableSortedDictionary<string, object> actual = ImmutableSortedDictionaryOf(SortedDictionaryInitializers);
 
         // Then
+        // ReSharper disable once UsageOfDefaultStructEquality
         Assert.True(expected.SequenceEqual(actual));
     }
 
@@ -331,8 +323,8 @@ public sealed class CollectionTests
     public void CollectionsHashSetOfShouldReturnTheExpectedResult()
     {
         // Given
-        HashSet<object> expected = [..EnumerableInitializers];
-        HashSet<object> actual = HashSetOf(EnumerableInitializers);
+        HashSet<object> expected = [true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23];
+        HashSet<object> actual = HashSetOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -342,8 +334,8 @@ public sealed class CollectionTests
     public void CollectionsImmutableHashSetOfShouldReturnTheExpectedResult()
     {
         // Given
-        ImmutableHashSet<object> expected = ImmutableHashSet.Create(EnumerableInitializers);
-        ImmutableHashSet<object> actual = ImmutableHashSetOf(EnumerableInitializers);
+        ImmutableHashSet<object> expected = ImmutableHashSet.Create<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
+        ImmutableHashSet<object> actual = ImmutableHashSetOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -353,8 +345,8 @@ public sealed class CollectionTests
     public void CollectionsSortedSetOfShouldReturnTheExpectedResult()
     {
         // Given
-        SortedSet<int> expected = new(NumericInitializers);
-        SortedSet<int> actual = SortedSetOf(NumericInitializers);
+        SortedSet<int> expected = new([123, 456, 789, 0, 1, -1, -987, 123, 456, 789, 0, 1, -1, -987]);
+        SortedSet<int> actual = SortedSetOf(123, 456, 789, 0, 1, -1, -987, 123, 456, 789, 0, 1, -1, -987);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -364,8 +356,8 @@ public sealed class CollectionTests
     public void CollectionsImmutableSortedSetOfShouldReturnTheExpectedResult()
     {
         // Given
-        ImmutableSortedSet<int> expected = ImmutableSortedSet.Create(NumericInitializers);
-        ImmutableSortedSet<int> actual = ImmutableSortedSetOf(NumericInitializers);
+        ImmutableSortedSet<int> expected = ImmutableSortedSet.Create(123, 456, 789, 0, 1, -1, -987, 123, 456, 789, 0, 1, -1, -987);
+        ImmutableSortedSet<int> actual = ImmutableSortedSetOf(123, 456, 789, 0, 1, -1, -987, 123, 456, 789, 0, 1, -1, -987);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -375,8 +367,8 @@ public sealed class CollectionTests
     public void CollectionsStackOfShouldReturnTheExpectedResult()
     {
         // Given
-        Stack<object> expected = new(EnumerableInitializers);
-        Stack<object> actual = StackOf(EnumerableInitializers);
+        Stack<object> expected = new([true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23]);
+        Stack<object> actual = StackOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -386,8 +378,8 @@ public sealed class CollectionTests
     public void CollectionsImmutableStackOfShouldReturnTheExpectedResult()
     {
         // Given
-        ImmutableStack<object> expected = ImmutableStack.Create(EnumerableInitializers);
-        ImmutableStack<object> actual = ImmutableStackOf(EnumerableInitializers);
+        ImmutableStack<object> expected = ImmutableStack.Create<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
+        ImmutableStack<object> actual = ImmutableStackOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -397,8 +389,8 @@ public sealed class CollectionTests
     public void CollectionsQueueOfShouldReturnTheExpectedResult()
     {
         // Given
-        Queue<object> expected = new(EnumerableInitializers);
-        Queue<object> actual = QueueOf(EnumerableInitializers);
+        Queue<object> expected = new([true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23]);
+        Queue<object> actual = QueueOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));
@@ -408,8 +400,8 @@ public sealed class CollectionTests
     public void CollectionsImmutableQueueOfShouldReturnTheExpectedResult()
     {
         // Given
-        ImmutableQueue<object> expected = ImmutableQueue.Create(EnumerableInitializers);
-        ImmutableQueue<object> actual = ImmutableQueueOf(EnumerableInitializers);
+        ImmutableQueue<object> expected = ImmutableQueue.Create<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
+        ImmutableQueue<object> actual = ImmutableQueueOf<object>(true, false, 123, "abc", 1.23, true, false, 123, "abc", 1.23);
 
         // Then
         Assert.True(expected.SequenceEqual(actual));

@@ -25,8 +25,8 @@ namespace OnixLabs.Security.Cryptography;
 // ReSharper disable HeapView.ObjectAllocation.Evident
 internal sealed class ProtectedData
 {
-    private readonly byte[] key = Salt.CreateNonZero(32).ToByteArray();
-    private readonly byte[] iv = Salt.CreateNonZero(16).ToByteArray();
+    private readonly byte[] key = Salt.CreateNonZero(32).AsReadOnlySpan().ToArray();
+    private readonly byte[] iv = Salt.CreateNonZero(16).AsReadOnlySpan().ToArray();
 
     /// <summary>
     /// Encrypted the specified data.

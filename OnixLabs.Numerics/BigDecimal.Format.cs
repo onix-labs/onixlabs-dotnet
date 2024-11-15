@@ -36,7 +36,7 @@ public readonly partial struct BigDecimal
             return false;
         }
 
-        formatted.AsSpan().CopyTo(destination);
+        formatted.CopyTo(destination);
         charsWritten = formatted.Length;
         return true;
     }

@@ -19,11 +19,11 @@ namespace OnixLabs.Core;
 /// <summary>
 /// Defines a type that is convertible to an instance of <see cref="ReadOnlySpan{T}"/>.
 /// </summary>
-public interface ISpanBinaryConvertible : IBinaryConvertible
+public interface ISpanBinaryConvertible
 {
     /// <summary>
     /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
-    ReadOnlySpan<byte> ToReadOnlySpan();
+    ReadOnlySpan<byte> AsReadOnlySpan();
 }

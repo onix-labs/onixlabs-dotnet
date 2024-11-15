@@ -92,7 +92,7 @@ public sealed partial class RsaPublicKey
     public bool IsDataValid(ReadOnlySpan<byte> signature, IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.VerifyData(data.ToByteArray(), signature, algorithm, padding);
+        return key.VerifyData(data.AsReadOnlySpan(), signature, algorithm, padding);
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ public sealed partial class RsaPublicKey
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.VerifyData(data, signature.ToByteArray(), algorithm, padding);
+        return key.VerifyData(data, signature.AsReadOnlySpan(), algorithm, padding);
     }
 
     /// <summary>
@@ -130,7 +130,7 @@ public sealed partial class RsaPublicKey
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.VerifyData(data.Slice(offset, count), signature.ToByteArray(), algorithm, padding);
+        return key.VerifyData(data.Slice(offset, count), signature.AsReadOnlySpan(), algorithm, padding);
     }
 
     /// <summary>
@@ -148,7 +148,8 @@ public sealed partial class RsaPublicKey
     public bool IsDataValid(DigitalSignature signature, Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.VerifyData(data, signature.ToByteArray(), algorithm, padding);
+        // TODO : Span for signature is inefficiently converted back to an array.
+        return key.VerifyData(data, signature.AsReadOnlySpan().ToArray(), algorithm, padding);
     }
 
     /// <summary>
@@ -166,7 +167,7 @@ public sealed partial class RsaPublicKey
     public bool IsDataValid(DigitalSignature signature, IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.VerifyData(data.ToByteArray(), signature.ToByteArray(), algorithm, padding);
+        return key.VerifyData(data.AsReadOnlySpan(), signature.AsReadOnlySpan(), algorithm, padding);
     }
 
     /// <summary>
@@ -202,7 +203,7 @@ public sealed partial class RsaPublicKey
     public bool IsHashValid(DigitalSignature signature, ReadOnlySpan<byte> hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.VerifyHash(hash, signature.ToByteArray(), algorithm, padding);
+        return key.VerifyHash(hash, signature.AsReadOnlySpan(), algorithm, padding);
     }
 
     /// <summary>
@@ -220,7 +221,7 @@ public sealed partial class RsaPublicKey
     public bool IsHashValid(ReadOnlySpan<byte> signature, Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.VerifyHash(hash.ToByteArray(), signature, algorithm, padding);
+        return key.VerifyHash(hash.AsReadOnlySpan(), signature, algorithm, padding);
     }
 
     /// <summary>
@@ -238,7 +239,7 @@ public sealed partial class RsaPublicKey
     public bool IsHashValid(DigitalSignature signature, Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.VerifyHash(hash.ToByteArray(), signature.ToByteArray(), algorithm, padding);
+        return key.VerifyHash(hash.AsReadOnlySpan(), signature.AsReadOnlySpan(), algorithm, padding);
     }
 
     /// <summary>

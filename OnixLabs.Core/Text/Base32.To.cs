@@ -18,17 +18,13 @@ namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base32
 {
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base32"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base32"/> instance.</returns>
-    public byte[] ToByteArray() => value.Copy();
+    public ReadOnlyMemory<byte> AsReadOnlyMemory() => value;
 
     /// <summary>
     /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base32"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// </summary>
     /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base32"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
-    public ReadOnlySpan<byte> ToReadOnlySpan() => value;
+    public ReadOnlySpan<byte> AsReadOnlySpan() => value;
 
     /// <summary>
     /// Returns a <see cref="String"/> that represents the current object.

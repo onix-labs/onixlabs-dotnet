@@ -91,7 +91,7 @@ public sealed partial class EcdsaPublicKey
     /// </returns>
     public bool IsDataValid(ReadOnlySpan<byte> signature, IBinaryConvertible data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToByteArray());
+        byte[] hash = algorithm.ComputeHash(data.AsReadOnlySpan());
         return IsHashValid(signature, hash, format);
     }
 
@@ -166,7 +166,7 @@ public sealed partial class EcdsaPublicKey
     public bool IsDataValid(ReadOnlySpan<byte> signature, IBinaryConvertible data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyData(data.ToByteArray(), signature, algorithm, format);
+        return key.VerifyData(data.AsReadOnlySpan(), signature, algorithm, format);
     }
 
     /// <summary>
@@ -239,7 +239,7 @@ public sealed partial class EcdsaPublicKey
     /// </returns>
     public bool IsDataValid(DigitalSignature signature, IBinaryConvertible data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToByteArray());
+        byte[] hash = algorithm.ComputeHash(data.AsReadOnlySpan());
         return IsHashValid(signature, hash, format);
     }
 
@@ -258,7 +258,7 @@ public sealed partial class EcdsaPublicKey
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyData(data, signature.ToByteArray(), algorithm, format);
+        return key.VerifyData(data, signature.AsReadOnlySpan(), algorithm, format);
     }
 
     /// <summary>
@@ -278,7 +278,8 @@ public sealed partial class EcdsaPublicKey
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyData(data.ToArray(), offset, count, signature.ToByteArray(), algorithm, format);
+        // TODO : Spans for data and signature are inefficiently converted back to an array.
+        return key.VerifyData(data.ToArray(), offset, count, signature.AsReadOnlySpan().ToArray(), algorithm, format);
     }
 
     /// <summary>
@@ -296,7 +297,8 @@ public sealed partial class EcdsaPublicKey
     public bool IsDataValid(DigitalSignature signature, Stream data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyData(data, signature.ToByteArray(), algorithm, format);
+        // TODO : Span for signature is inefficiently converted back to an array.
+        return key.VerifyData(data, signature.AsReadOnlySpan().ToArray(), algorithm, format);
     }
 
     /// <summary>
@@ -314,7 +316,7 @@ public sealed partial class EcdsaPublicKey
     public bool IsDataValid(DigitalSignature signature, IBinaryConvertible data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyData(data.ToByteArray(), signature.ToByteArray(), algorithm, format);
+        return key.VerifyData(data.AsReadOnlySpan(), signature.AsReadOnlySpan(), algorithm, format);
     }
 
     /// <summary>
@@ -331,7 +333,7 @@ public sealed partial class EcdsaPublicKey
     public bool IsHashValid(ReadOnlySpan<byte> signature, Hash hash, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyHash(hash.ToByteArray(), signature, format);
+        return key.VerifyHash(hash.AsReadOnlySpan(), signature, format);
     }
 
     /// <summary>
@@ -365,7 +367,7 @@ public sealed partial class EcdsaPublicKey
     public bool IsHashValid(DigitalSignature signature, Hash hash, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyHash(hash.ToByteArray(), signature.ToByteArray(), format);
+        return key.VerifyHash(hash.AsReadOnlySpan(), signature.AsReadOnlySpan(), format);
     }
 
     /// <summary>
@@ -382,7 +384,7 @@ public sealed partial class EcdsaPublicKey
     public bool IsHashValid(DigitalSignature signature, ReadOnlySpan<byte> hash, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyHash(hash, signature.ToByteArray(), format);
+        return key.VerifyHash(hash, signature.AsReadOnlySpan(), format);
     }
 
     /// <summary>

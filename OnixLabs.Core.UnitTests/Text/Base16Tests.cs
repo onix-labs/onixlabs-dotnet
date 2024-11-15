@@ -42,7 +42,7 @@ public sealed class Base16Tests
     {
         // Given
         const string expected = "414243616263313233";
-        ReadOnlySpan<byte> value = "ABCabc123".ToByteArray().AsSpan();
+        ReadOnlySpan<byte> value = "ABCabc123".ToByteArray();
 
         // When
         Base16 candidate = value;
@@ -106,7 +106,7 @@ public sealed class Base16Tests
 
         // When
         Base16 candidate = value;
-        byte[] actual = candidate.ToByteArray();
+        ReadOnlySpan<byte> actual = candidate.AsReadOnlySpan();
 
         // Then
         Assert.Equal(expected, actual);
@@ -136,8 +136,7 @@ public sealed class Base16Tests
         const string expected = "414243616263313233";
 
         // When
-        byte[] bytes = candidate.ToByteArray();
-        bytes[0] = 0;
+        candidate.AsReadOnlySpan().ToArray()[0] = 0;
         string actual = candidate.ToString();
 
         // Then
@@ -200,7 +199,7 @@ public sealed class Base16Tests
         Base16 candidate = Base16.Parse(value);
 
         // When
-        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+        string actual = Encoding.UTF8.GetString(candidate.AsReadOnlySpan());
 
         // Then
         Assert.Equal(expected, actual);
@@ -253,7 +252,7 @@ public sealed class Base16Tests
     {
         // Given
         ISpanFormattable candidate = new Base16(Encoding.UTF8.GetBytes(value));
-        Span<char> destination = stackalloc char[0];
+        Span<char> destination = [];
 
         // When
         bool result = candidate.TryFormat(destination, out int charsWritten, [], null);
@@ -274,7 +273,7 @@ public sealed class Base16Tests
     {
         // When
         bool result = Base16.TryParse(value, null, out Base16 candidate);
-        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+        string actual = Encoding.UTF8.GetString(candidate.AsReadOnlySpan());
 
         // Then
         Assert.True(result);
@@ -287,7 +286,7 @@ public sealed class Base16Tests
     {
         // When
         bool result = Base16.TryParse(value, null, out Base16 candidate);
-        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+        string actual = Encoding.UTF8.GetString(candidate.AsReadOnlySpan());
 
         // Then
         Assert.False(result);
@@ -304,7 +303,7 @@ public sealed class Base16Tests
     {
         // When
         bool result = Base16.TryParse(value.AsSpan(), null, out Base16 candidate);
-        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+        string actual = Encoding.UTF8.GetString(candidate.AsReadOnlySpan());
 
         // Then
         Assert.True(result);
@@ -317,7 +316,7 @@ public sealed class Base16Tests
     {
         // When
         bool result = Base16.TryParse(value.AsSpan(), null, out Base16 candidate);
-        string actual = Encoding.UTF8.GetString(candidate.ToByteArray());
+        string actual = Encoding.UTF8.GetString(candidate.AsReadOnlySpan());
 
         // Then
         Assert.False(result);

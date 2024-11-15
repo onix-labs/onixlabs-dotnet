@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Security.Cryptography;
 using Xunit;
 
@@ -23,10 +24,10 @@ public sealed class EcdsaKeyTests
     public void EcdsaSignAndVerifyWithTwoIdenticalKeysShouldSucceed()
     {
         // Given
-        byte[] data = Salt.CreateNonZero(2048).ToByteArray();
+        ReadOnlySpan<byte> data = Salt.CreateNonZero(2048).AsReadOnlySpan();
         using HashAlgorithm algorithm = SHA256.Create();
         IEcdsaPrivateKey privateKey1 = EcdsaPrivateKey.Create();
-        IEcdsaPrivateKey privateKey2 = new EcdsaPrivateKey(privateKey1.ToByteArray());
+        IEcdsaPrivateKey privateKey2 = new EcdsaPrivateKey(privateKey1.AsReadOnlySpan());
         IEcdsaPublicKey publicKey1 = privateKey1.GetPublicKey();
         IEcdsaPublicKey publicKey2 = privateKey2.GetPublicKey();
 
@@ -45,7 +46,7 @@ public sealed class EcdsaKeyTests
     public void EcdsaPkcs8RoundTripSignAndVerifyShouldSucceed()
     {
         // Given
-        byte[] data = Salt.CreateNonZero(2048).ToByteArray();
+        ReadOnlySpan<byte> data = Salt.CreateNonZero(2048).AsReadOnlySpan();
         using HashAlgorithm algorithm = SHA256.Create();
         PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
         byte[] exportedPrivateKey = EcdsaPrivateKey.Create().ExportPkcs8PrivateKey("Password", parameters);

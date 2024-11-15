@@ -20,6 +20,18 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Hash
 {
     /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    public ReadOnlyMemory<byte> AsReadOnlyMemory() => value;
+
+    /// <summary>
+    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// </summary>
+    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    public ReadOnlySpan<byte> AsReadOnlySpan() => value;
+
+    /// <summary>
     /// Create a new <see cref="Hash"/> instance from the specified <see cref="T:byte[]"/> value.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="Hash"/> instance.</param>

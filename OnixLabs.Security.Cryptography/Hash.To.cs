@@ -14,25 +14,12 @@
 
 using System;
 using System.Security.Cryptography;
-using OnixLabs.Core;
 using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
 public readonly partial struct Hash
 {
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance.</returns>
-    public byte[] ToByteArray() => value.Copy();
-
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
-    public ReadOnlySpan<byte> ToReadOnlySpan() => value;
-
     /// <summary>
     /// Creates a new <see cref="NamedHash"/> from the current <see cref="Hash"/> instance.
     /// </summary>
@@ -52,7 +39,7 @@ public readonly partial struct Hash
     /// </summary>
     /// <param name="provider">The format provider that will be used to determine the format of the string.</param>
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
-    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(ToByteArray(), provider);
+    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.

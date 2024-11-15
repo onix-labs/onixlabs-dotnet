@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Security.Cryptography;
-using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -28,7 +27,7 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash representing the concatenation of the left-hand and right-hand hash values.</returns>
     public static Hash Concatenate(HashAlgorithm algorithm, Hash left, Hash right)
     {
-        byte[] data = left.ToByteArray().ConcatenateWith(right.ToByteArray());
+        byte[] data = [..left.AsReadOnlySpan(), ..right.AsReadOnlySpan()];
         byte[] hash = algorithm.ComputeHash(data);
         return new Hash(hash);
     }

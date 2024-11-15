@@ -71,7 +71,7 @@ public sealed partial class EcdsaPrivateKey
     /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
     public byte[] SignData(IBinaryConvertible data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToByteArray());
+        byte[] hash = algorithm.ComputeHash(data.AsReadOnlySpan());
         return SignHash(hash, format);
     }
 
@@ -126,7 +126,7 @@ public sealed partial class EcdsaPrivateKey
     public byte[] SignData(IBinaryConvertible data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.SignData(data.ToByteArray(), algorithm, format);
+        return key.SignData(data.AsReadOnlySpan(), algorithm, format);
     }
 
     /// <summary>
@@ -138,7 +138,7 @@ public sealed partial class EcdsaPrivateKey
     public byte[] SignHash(Hash hash, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.SignHash(hash.ToByteArray(), format);
+        return key.SignHash(hash.AsReadOnlySpan(), format);
     }
 
     /// <summary>

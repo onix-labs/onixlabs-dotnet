@@ -12,18 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography.UnitTests.Data;
 
 public class BinaryConvertible(byte[] data) : IBinaryConvertible
 {
-    public byte[] ToByteArray() => data;
-    public ReadOnlySpan<byte> ToReadOnlySpan() => data;
-}
-
-public class SpanBinaryConvertible(byte[] data) : ISpanBinaryConvertible
-{
-    public byte[] ToByteArray() => data;
-    public ReadOnlySpan<byte> ToReadOnlySpan() => data;
+    public ReadOnlyMemory<byte> AsReadOnlyMemory() => data;
+    public ReadOnlySpan<byte> AsReadOnlySpan() => data;
 }

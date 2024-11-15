@@ -18,7 +18,6 @@ using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
-// ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class EcdhPrivateKey
 {
     /// <summary>
@@ -58,7 +57,7 @@ public sealed partial class EcdhPrivateKey
     /// <param name="bytesRead">The number of bytes read from the input data.</param>
     /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
     public static EcdhPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data, out int bytesRead) =>
-        ImportPkcs8PrivateKey(data.ToByteArray(), out bytesRead);
+        ImportPkcs8PrivateKey(data.AsReadOnlySpan(), out bytesRead);
 
     /// <summary>
     /// Imports the EC Diffie-Hellman cryptographic private key data in encrypted PKCS #8 format.
@@ -101,7 +100,7 @@ public sealed partial class EcdhPrivateKey
     /// <param name="bytesRead">The number of bytes read from the input data.</param>
     /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
     public static EcdhPrivateKey ImportPkcs8PrivateKey(IBinaryConvertible data, ReadOnlySpan<char> password, out int bytesRead) =>
-        ImportPkcs8PrivateKey(data.ToByteArray(), password, out bytesRead);
+        ImportPkcs8PrivateKey(data.AsReadOnlySpan(), password, out bytesRead);
 
     /// <summary>
     /// Imports the key data into a new <see cref="ECDiffieHellman"/> instance.

@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Threading.Tasks;
+
 namespace OnixLabs.Core.UnitTests.Data;
 
 public sealed class Disposable : IDisposable, IAsyncDisposable

@@ -16,6 +16,8 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdhPrivateKey
 {
+    private const string KeyName = "ECDH";
+
     /// <summary>
     /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="EcdhPrivateKey"/> instance.
     /// </summary>

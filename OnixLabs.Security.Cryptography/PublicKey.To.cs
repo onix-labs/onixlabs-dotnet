@@ -23,15 +23,6 @@ public abstract partial class PublicKey
     /// <summary>
     /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.
     /// </summary>
-    /// <param name="algorithmName">The name of the algorithm that was used to produce the associated public key.</param>
-    /// <returns>Returns a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.</returns>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [Obsolete("Passing custom algorithm names can lead to named keys. Use the parameterless ToNamedPublicKey method instead.")]
-    public NamedPublicKey ToNamedPublicKey(string algorithmName) => new(this, algorithmName);
-
-    /// <summary>
-    /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.
-    /// </summary>
     /// <returns>Returns a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.</returns>
     public abstract NamedPublicKey ToNamedPublicKey();
 

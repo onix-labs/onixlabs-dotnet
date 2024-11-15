@@ -16,9 +16,11 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class RsaPrivateKey
 {
+    private const string KeyName = "RSA";
+
     /// <summary>
     /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="RsaPrivateKey"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="NamedPrivateKey"/> from the current <see cref="RsaPrivateKey"/> instance.</returns>
-    public override NamedPrivateKey ToNamedPrivateKey() => new(this, "RSA");
+    public override NamedPrivateKey ToNamedPrivateKey() => new(this, KeyName);
 }

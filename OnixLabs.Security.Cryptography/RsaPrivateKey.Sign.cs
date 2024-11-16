@@ -72,7 +72,7 @@ public sealed partial class RsaPrivateKey
     public byte[] SignData(IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.SignData(data.ToByteArray(), algorithm, padding);
+        return key.SignData(data.AsReadOnlySpan(), algorithm, padding);
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public sealed partial class RsaPrivateKey
     public byte[] SignHash(Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        return key.SignHash(hash.ToByteArray(), algorithm, padding);
+        return key.SignHash(hash.AsReadOnlySpan(), algorithm, padding);
     }
 
     /// <summary>

@@ -21,23 +21,11 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct DigitalSignature
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance.</returns>
-    public byte[] ToByteArray() => value.Copy();
-
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
-    public ReadOnlySpan<byte> ToReadOnlySpan() => value;
-
-    /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.
     /// </summary>
     /// <param name="provider">The format provider that will be used to determine the format of the string.</param>
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
-    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(ToByteArray(), provider);
+    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.

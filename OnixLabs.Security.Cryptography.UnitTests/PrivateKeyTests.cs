@@ -58,8 +58,7 @@ public sealed class PrivateKeyTests
         const string expected = "01020304";
 
         // When
-        byte[] value = candidate.ToByteArray();
-        value[0] = 0;
+        candidate.AsReadOnlySpan().ToArray()[0] = 0;
         string actual = candidate.ToString();
 
         // Then

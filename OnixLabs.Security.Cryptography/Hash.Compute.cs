@@ -94,7 +94,7 @@ public readonly partial struct Hash
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     public static Hash Compute(HashAlgorithm algorithm, ISpanBinaryConvertible data, int rounds = 1) =>
-        algorithm.ComputeHash(data.ToReadOnlySpan(), rounds);
+        algorithm.ComputeHash(data.AsReadOnlySpan(), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.

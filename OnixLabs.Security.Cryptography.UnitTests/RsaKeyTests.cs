@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Security.Cryptography;
 using Xunit;
 
@@ -23,11 +24,11 @@ public sealed class RsaKeyTests
     public void RsaSignAndVerifyWithTwoIdenticalKeysShouldSucceed()
     {
         // Given
-        byte[] data = Salt.CreateNonZero(2048).ToByteArray();
+        ReadOnlySpan<byte> data = Salt.CreateNonZero(2048).AsReadOnlySpan();
         HashAlgorithmName algorithm = HashAlgorithmName.SHA256;
         RSASignaturePadding padding = RSASignaturePadding.Pkcs1;
         IRsaPrivateKey privateKey1 = RsaPrivateKey.Create();
-        IRsaPrivateKey privateKey2 = new RsaPrivateKey(privateKey1.ToByteArray());
+        IRsaPrivateKey privateKey2 = new RsaPrivateKey(privateKey1.AsReadOnlySpan());
         IRsaPublicKey publicKey1 = privateKey1.GetPublicKey();
         IRsaPublicKey publicKey2 = privateKey2.GetPublicKey();
 
@@ -46,7 +47,7 @@ public sealed class RsaKeyTests
     public void EcdsaPkcs8RoundTripSignAndVerifyShouldSucceed()
     {
         // Given
-        byte[] data = Salt.CreateNonZero(2048).ToByteArray();
+        ReadOnlySpan<byte> data = Salt.CreateNonZero(2048).AsReadOnlySpan();
         HashAlgorithmName algorithm = HashAlgorithmName.SHA256;
         RSASignaturePadding padding = RSASignaturePadding.Pkcs1;
         PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);

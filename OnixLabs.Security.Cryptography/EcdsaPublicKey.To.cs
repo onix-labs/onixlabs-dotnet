@@ -16,9 +16,11 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdsaPublicKey
 {
+    private const string KeyName = "ECDSA";
+
     /// <summary>
     /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="EcdsaPublicKey"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="NamedPublicKey"/> from the current <see cref="EcdsaPublicKey"/> instance.</returns>
-    public override NamedPublicKey ToNamedPublicKey() => new(this, "ECDSA");
+    public override NamedPublicKey ToNamedPublicKey() => new(this, KeyName);
 }

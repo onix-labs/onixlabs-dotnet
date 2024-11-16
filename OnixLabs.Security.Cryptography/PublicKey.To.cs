@@ -14,34 +14,12 @@
 
 using System;
 using System.ComponentModel;
-using OnixLabs.Core;
 using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class PublicKey
 {
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance.</returns>
-    public byte[] ToByteArray() => KeyData.Copy();
-
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="PublicKey"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
-    public ReadOnlySpan<byte> ToReadOnlySpan() => KeyData;
-
-    /// <summary>
-    /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.
-    /// </summary>
-    /// <param name="algorithmName">The name of the algorithm that was used to produce the associated public key.</param>
-    /// <returns>Returns a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.</returns>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [Obsolete("Passing custom algorithm names can lead to named keys. Use the parameterless ToNamedPublicKey method instead.")]
-    public NamedPublicKey ToNamedPublicKey(string algorithmName) => new(this, algorithmName);
-
     /// <summary>
     /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="PublicKey"/> instance.
     /// </summary>
@@ -53,7 +31,7 @@ public abstract partial class PublicKey
     /// </summary>
     /// <param name="provider">The format provider that will be used to determine the format of the string.</param>
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
-    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(ToByteArray(), provider);
+    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents the current object.

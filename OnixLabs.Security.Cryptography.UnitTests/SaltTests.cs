@@ -58,8 +58,7 @@ public sealed class SaltTests
         const string expected = "01020304";
 
         // When
-        byte[] value = candidate.ToByteArray();
-        value[0] = 0;
+        candidate.AsReadOnlySpan().ToArray()[0] = 0;
         string actual = candidate.ToString();
 
         // Then
@@ -149,7 +148,7 @@ public sealed class SaltTests
         Salt candidate = Salt.Create(expected);
 
         // Then
-        Assert.Equal(expected, candidate.ToByteArray().Length);
+        Assert.Equal(expected, candidate.AsReadOnlySpan().Length);
     }
 
     [Fact(DisplayName = "Salt.CreateNonZero should produce a salt of the specified length of non-zero bytes")]
@@ -160,7 +159,7 @@ public sealed class SaltTests
         Salt candidate = Salt.CreateNonZero(expected);
 
         // Then
-        Assert.Equal(expected, candidate.ToByteArray().Length);
-        Assert.True(candidate.ToByteArray().None(value => value is 0));
+        Assert.Equal(expected, candidate.AsReadOnlySpan().Length);
+        Assert.True(candidate.AsReadOnlySpan().ToArray().None(value => value is 0));
     }
 }

@@ -21,31 +21,6 @@ namespace OnixLabs.Core.UnitTests.Reflection;
 
 public sealed class TypeExtensionTests
 {
-#pragma warning disable CS0618 // Type or member is obsolete
-    [Theory(DisplayName = "Type.GetName should produce the expected result")]
-    [InlineData(typeof(object), TypeNameFlags.None, "Object")]
-    [InlineData(typeof(List<>), TypeNameFlags.None, "List")]
-    [InlineData(typeof(Dictionary<,>), TypeNameFlags.None, "Dictionary")]
-    [InlineData(typeof(object), TypeNameFlags.UseFullNames, "System.Object")]
-    [InlineData(typeof(List<>), TypeNameFlags.UseFullNames, "System.Collections.Generic.List")]
-    [InlineData(typeof(Dictionary<,>), TypeNameFlags.UseFullNames, "System.Collections.Generic.Dictionary")]
-    [InlineData(typeof(object), TypeNameFlags.UseGenericTypeArguments, "Object")]
-    [InlineData(typeof(List<>), TypeNameFlags.UseGenericTypeArguments, "List<>")]
-    [InlineData(typeof(Dictionary<,>), TypeNameFlags.UseGenericTypeArguments, "Dictionary<>")]
-    [InlineData(typeof(List<Action<int>>), TypeNameFlags.UseGenericTypeArguments, "List<Action<Int32>>")]
-    [InlineData(typeof(Dictionary<string, ISet<Guid>>), TypeNameFlags.UseGenericTypeArguments, "Dictionary<String, ISet<Guid>>")]
-    [InlineData(typeof(List<Action<int>>), TypeNameFlags.All, "System.Collections.Generic.List<System.Action<System.Int32>>")]
-    [InlineData(typeof(Dictionary<string, ISet<Guid>>), TypeNameFlags.All, "System.Collections.Generic.Dictionary<System.String, System.Collections.Generic.ISet<System.Guid>>")]
-    public void TypeGetNameShouldProduceExpectedResult(Type type, TypeNameFlags flags, string expected)
-    {
-        // When
-        string actual = type.GetName(flags);
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-#pragma warning restore CS0618 // Type or member is obsolete
-
     [Theory(DisplayName = "Type.GetCSharpTypeDeclaration should produce the expected result")]
     [InlineData(typeof(byte), TypeDeclarationFlags.None, "Byte")]
     [InlineData(typeof(byte), TypeDeclarationFlags.UseNamespaceQualifiedTypeNames, "System.Byte")]

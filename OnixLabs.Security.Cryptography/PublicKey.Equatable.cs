@@ -25,13 +25,11 @@ public abstract partial class PublicKey
     /// </summary>
     /// <param name="other">An object to compare with the current object.</param>
     /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(PublicKey? other)
-    {
-        return ReferenceEquals(this, other)
-               || other is not null
-               && other.GetType() == GetType()
-               && other.KeyData.SequenceEqual(KeyData);
-    }
+    public bool Equals(PublicKey? other) =>
+        ReferenceEquals(this, other)
+        || other is not null
+        && other.GetType() == GetType()
+        && other.KeyData.SequenceEqual(KeyData);
 
     /// <summary>
     /// Checks for equality between the current instance and another object.

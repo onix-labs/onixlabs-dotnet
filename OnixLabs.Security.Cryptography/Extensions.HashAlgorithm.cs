@@ -90,7 +90,7 @@ public static class HashAlgorithmExtensions
     /// <returns>Returns the computed hash value.</returns>
     /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1) =>
-        algorithm.ComputeHash(data.ToByteArray(), rounds);
+        algorithm.ComputeHash(data.AsReadOnlySpan(), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="IBinaryConvertible"/> value.
@@ -103,7 +103,7 @@ public static class HashAlgorithmExtensions
     /// <returns>Returns the computed hash value.</returns>
     /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, IBinaryConvertible data, int offset, int count, int rounds = 1) =>
-        algorithm.ComputeHash(data.ToByteArray(), offset, count, rounds);
+        algorithm.ComputeHash(data.AsReadOnlySpan(), offset, count, rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="ISpanBinaryConvertible"/> value.
@@ -114,7 +114,7 @@ public static class HashAlgorithmExtensions
     /// <returns>Returns the computed hash value.</returns>
     /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, ISpanBinaryConvertible data, int rounds = 1) =>
-        algorithm.ComputeHash(data.ToReadOnlySpan(), rounds);
+        algorithm.ComputeHash(data.AsReadOnlySpan(), rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="ISpanBinaryConvertible"/> value.
@@ -127,7 +127,7 @@ public static class HashAlgorithmExtensions
     /// <returns>Returns the computed hash value.</returns>
     /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
     public static byte[] ComputeHash(this HashAlgorithm algorithm, ISpanBinaryConvertible data, int offset, int count, int rounds = 1) =>
-        algorithm.ComputeHash(data.ToReadOnlySpan(), offset, count, rounds);
+        algorithm.ComputeHash(data.AsReadOnlySpan(), offset, count, rounds);
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="Stream"/> value.

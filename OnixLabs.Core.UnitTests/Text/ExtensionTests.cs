@@ -46,7 +46,7 @@ public sealed class ExtensionTests
     public void ReadOnlySpanOfByteToBase16ShouldProduceExpectedResult(string value, string expected)
     {
         // Given
-        ReadOnlySpan<byte> source = value.ToByteArray().AsSpan();
+        ReadOnlySpan<byte> source = value.ToByteArray();
 
         // When
         Base16 result = source.ToBase16();
@@ -82,7 +82,7 @@ public sealed class ExtensionTests
     public void ReadOnlySpanOfByteToBase32ShouldProduceExpectedResult(string value, string expected)
     {
         // Given
-        ReadOnlySpan<byte> source = value.ToByteArray().AsSpan();
+        ReadOnlySpan<byte> source = value.ToByteArray();
 
         // When
         Base32 result = source.ToBase32();
@@ -118,7 +118,7 @@ public sealed class ExtensionTests
     public void ReadOnlySpanOfByteToBase58ShouldProduceExpectedResult(string value, string expected)
     {
         // Given
-        ReadOnlySpan<byte> source = value.ToByteArray().AsSpan();
+        ReadOnlySpan<byte> source = value.ToByteArray();
 
         // When
         Base58 result = source.ToBase58();
@@ -154,7 +154,7 @@ public sealed class ExtensionTests
     public void ReadOnlySpanOfByteToBase64ShouldProduceExpectedResult(string value, string expected)
     {
         // Given
-        ReadOnlySpan<byte> source = value.ToByteArray().AsSpan();
+        ReadOnlySpan<byte> source = value.ToByteArray();
 
         // When
         Base64 result = source.ToBase64();

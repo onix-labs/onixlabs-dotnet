@@ -18,7 +18,7 @@ using System.ComponentModel;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Provides extension methods for read-only sequences.
+/// Provides extension methods for <see cref="ReadOnlySequence{T}"/> instances.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ReadOnlySequenceExtensions

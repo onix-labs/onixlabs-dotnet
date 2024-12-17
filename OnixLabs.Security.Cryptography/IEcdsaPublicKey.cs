@@ -22,7 +22,7 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Defines an ECDSA cryptographic public key.
 /// </summary>
-public interface IEcdsaPublicKey : IBinaryConvertible
+public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublicKeyExportable, IBinaryConvertible
 {
     /// <summary>
     /// Determines whether the specified data was signed by the ECDSA cryptographic private key that corresponds to the current

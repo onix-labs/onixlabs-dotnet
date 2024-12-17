@@ -51,8 +51,8 @@ public sealed class RsaKeyTests
         HashAlgorithmName algorithm = HashAlgorithmName.SHA256;
         RSASignaturePadding padding = RSASignaturePadding.Pkcs1;
         PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
-        byte[] exportedPrivateKey = RsaPrivateKey.Create().ExportPkcs8PrivateKey("Password", parameters);
-        IRsaPrivateKey privateKey = RsaPrivateKey.ImportPkcs8PrivateKey(exportedPrivateKey, "Password");
+        byte[] exportedPrivateKey = RsaPrivateKey.Create().ExportPkcs8("Password", parameters);
+        IRsaPrivateKey privateKey = RsaPrivateKey.ImportPkcs8(exportedPrivateKey, "Password");
         IRsaPublicKey publicKey = privateKey.GetPublicKey();
 
         // When
@@ -60,5 +60,119 @@ public sealed class RsaKeyTests
 
         // Then
         Assert.True(publicKey.IsDataValid(signature, data, algorithm, padding));
+    }
+
+    [Fact(DisplayName = "RsaPrivateKey should be exportable and importable")]
+    public void RsaPrivateKeyShouldBeExportableAndImportable()
+    {
+        // Given
+        RsaPrivateKey expected = RsaPrivateKey.Create();
+
+        // When
+        byte[] privateKeyData = expected.Export();
+        RsaPrivateKey actual = RsaPrivateKey.Import(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "RsaPrivateKey should be exportable and importable as PEM")]
+    public void RsaPrivateKeyShouldBeExportableAndImportableAsPem()
+    {
+        // Given
+        RsaPrivateKey expected = RsaPrivateKey.Create();
+
+        // When
+        string privateKeyData = expected.ExportPem();
+        RsaPrivateKey actual = RsaPrivateKey.ImportPem(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "RsaPrivateKey should be exportable and importable as PKCS8")]
+    public void RsaPrivateKeyShouldBeExportableAndImportableAsPkcs8()
+    {
+        // Given
+        RsaPrivateKey expected = RsaPrivateKey.Create();
+
+        // When
+        byte[] privateKeyData = expected.ExportPkcs8();
+        RsaPrivateKey actual = RsaPrivateKey.ImportPkcs8(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "RsaPrivateKey should be exportable and importable as PKCS8 PEM")]
+    public void RsaPrivateKeyShouldBeExportableAndImportableAsPkcs8Pem()
+    {
+        // Given
+        RsaPrivateKey expected = RsaPrivateKey.Create();
+
+        // When
+        string privateKeyData = expected.ExportPkcs8Pem();
+        RsaPrivateKey actual = RsaPrivateKey.ImportPem(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "RsaPrivateKey should be exportable and importable as encrypted PKCS8")]
+    public void RsaPrivateKeyShouldBeExportableAndImportableAsEncryptedPkcs8()
+    {
+        // Given
+        RsaPrivateKey expected = RsaPrivateKey.Create();
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
+
+        // When
+        byte[] privateKeyData = expected.ExportPkcs8("Password", parameters);
+        RsaPrivateKey actual = RsaPrivateKey.ImportPkcs8(privateKeyData, "Password");
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "RsaPrivateKey should be exportable and importable as encrypted PKCS8 PEM")]
+    public void RsaPrivateKeyShouldBeExportableAndImportableAsEncryptedPkcs8Pem()
+    {
+        // Given
+        RsaPrivateKey expected = RsaPrivateKey.Create();
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
+
+        // When
+        string privateKeyData = expected.ExportPkcs8Pem("Password", parameters);
+        RsaPrivateKey actual = RsaPrivateKey.ImportPem(privateKeyData, "Password");
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "RsaPublicKey should be exportable and importable")]
+    public void RsaPublicKeyShouldBeExportableAndImportable()
+    {
+        // Given
+        RsaPublicKey expected = RsaPrivateKey.Create().GetPublicKey();
+
+        // When
+        byte[] privateKeyData = expected.Export();
+        RsaPublicKey actual = RsaPublicKey.Import(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "RsaPublicKey should be exportable and importable as PEM")]
+    public void RsaPublicKeyShouldBeExportableAndImportableAsPem()
+    {
+        // Given
+        RsaPublicKey expected = RsaPrivateKey.Create().GetPublicKey();
+
+        // When
+        string privateKeyData = expected.ExportPem();
+        RsaPublicKey actual = RsaPublicKey.ImportPem(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

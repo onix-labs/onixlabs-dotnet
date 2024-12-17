@@ -12,21 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Security.Cryptography;
-
 namespace OnixLabs.Security.Cryptography;
 
-public sealed partial class EcdhPrivateKey
+/// <summary>
+/// Defines a cryptographic private key that can export a cryptographic public key component.
+/// </summary>
+/// <typeparam name="T">The underlying type of <see cref="PublicKey"/> that the cryptographic private key exports.</typeparam>
+public interface IPrivateKeyDerivable<out T> where T : PublicKey
 {
     /// <summary>
-    /// Gets the EC Diffie-Hellman cryptographic public key component from the current cryptographic private key.
+    /// Gets the cryptographic public key component from the current cryptographic private key.
     /// </summary>
-    /// <returns>Returns the EC Diffie-Hellman cryptographic public key component from the current cryptographic private key.</returns>
-    public EcdhPublicKey GetPublicKey()
-    {
-        using ECDiffieHellman algorithm = ImportKeyData();
-        byte[] keyData = algorithm.ExportSubjectPublicKeyInfo();
-        // ReSharper disable once HeapView.ObjectAllocation.Evident
-        return new EcdhPublicKey(keyData);
-    }
+    /// <returns>Returns the cryptographic public key component from the current cryptographic private key.</returns>
+    T GetPublicKey();
 }

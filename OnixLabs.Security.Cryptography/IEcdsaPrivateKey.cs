@@ -22,7 +22,11 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Defines an ECDSA cryptographic private key.
 /// </summary>
-public interface IEcdsaPrivateKey : IPublicKeyExportable<EcdsaPublicKey>, IPrivateKeyImportablePkcs8<EcdsaPrivateKey>, IPrivateKeyExportablePkcs8, IBinaryConvertible
+public interface IEcdsaPrivateKey :
+    IPrivateKeyDerivable<EcdsaPublicKey>,
+    IPrivateKeyImportable<EcdsaPrivateKey>,
+    IPrivateKeyExportable,
+    IBinaryConvertible
 {
     /// <summary>
     /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.

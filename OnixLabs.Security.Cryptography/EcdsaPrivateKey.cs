@@ -14,6 +14,7 @@
 
 using System;
 using System.Buffers;
+using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -29,6 +30,14 @@ public sealed partial class EcdsaPrivateKey(ReadOnlySpan<byte> keyData) : Privat
     /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="EcdsaPrivateKey"/> instance.</param>
     // ReSharper disable once MemberCanBePrivate.Global
     public EcdsaPrivateKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdsaPrivateKey"/> struct.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="ECDsa"/> algorithm with which to initialize the <see cref="EcdsaPrivateKey"/> instance.</param>
+    private EcdsaPrivateKey(ECDsa algorithm) : this(algorithm.ExportECPrivateKey())
     {
     }
 }

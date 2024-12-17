@@ -19,7 +19,11 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Defines an EC Diffie-Hellman cryptographic private key.
 /// </summary>
-public interface IEcdhPrivateKey : IPublicKeyExportable<EcdhPublicKey>, IPrivateKeyImportablePkcs8<EcdhPrivateKey>, IPrivateKeyExportablePkcs8, IBinaryConvertible
+public interface IEcdhPrivateKey :
+    IPrivateKeyDerivable<EcdhPublicKey>,
+    IPrivateKeyImportable<EcdhPrivateKey>,
+    IPrivateKeyExportable,
+    IBinaryConvertible
 {
     /// <summary>
     /// Derives a cryptographic shared secret from the current EC Diffie-Hellman cryptographic private key, and the specified cryptographic public key.

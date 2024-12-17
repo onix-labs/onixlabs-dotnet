@@ -14,6 +14,7 @@
 
 using System;
 using System.Buffers;
+using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -29,6 +30,14 @@ public sealed partial class RsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey
     /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="RsaPublicKey"/> instance.</param>
     // ReSharper disable once MemberCanBePrivate.Global
     public RsaPublicKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RsaPublicKey"/> struct.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="RSA"/> algorithm with which to initialize the <see cref="RsaPublicKey"/> instance.</param>
+    private RsaPublicKey(RSA algorithm) : this(algorithm.ExportRSAPublicKey())
     {
     }
 }

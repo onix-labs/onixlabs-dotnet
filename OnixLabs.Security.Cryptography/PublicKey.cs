@@ -21,7 +21,7 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents a cryptographic public key.
 /// </summary>
 /// <param name="keyData">The underlying key data of the cryptographic public key.</param>
-public abstract partial class PublicKey(ReadOnlySpan<byte> keyData) : ICryptoPrimitive<PublicKey>, ISpanBinaryConvertible
+public abstract partial class PublicKey(ReadOnlySpan<byte> keyData) : ICryptoPrimitive<PublicKey>
 {
     /// <summary>
     /// Gets the cryptographic public key data.

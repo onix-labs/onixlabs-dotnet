@@ -15,14 +15,19 @@
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Defines a cryptographic private key that can export a cryptographic public key component.
+/// Defines a cryptographic public key that can be exported.
 /// </summary>
-/// <typeparam name="T">The underlying type of <see cref="PublicKey"/> that the cryptographic private key exports.</typeparam>
-public interface IPublicKeyExportable<out T> where T : PublicKey
+public interface IPublicKeyExportable
 {
     /// <summary>
-    /// Gets the cryptographic public key component from the current cryptographic private key.
+    /// Exports the cryptographic public key data.
     /// </summary>
-    /// <returns>Returns the cryptographic public key component from the current cryptographic private key.</returns>
-    T GetPublicKey();
+    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic public key data.</returns>
+    byte[] Export();
+
+    /// <summary>
+    /// Exports the cryptographic public key data in RFC 7468 PEM format.
+    /// </summary>
+    /// <returns>Returns a new <see cref="string"/> instance containing the cryptographic public key data in RFC 7468 format.</returns>
+    string ExportPem();
 }

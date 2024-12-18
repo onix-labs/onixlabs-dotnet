@@ -19,7 +19,7 @@ using System.ComponentModel;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Provides extension methods for objects.
+/// Provides extension methods for <see cref="Random"/> instances.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class RandomExtensions

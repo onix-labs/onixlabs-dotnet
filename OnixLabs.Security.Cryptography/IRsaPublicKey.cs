@@ -22,7 +22,7 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Defines an RSA cryptographic public key.
 /// </summary>
-public interface IRsaPublicKey : IBinaryConvertible
+public interface IRsaPublicKey : IPublicKeyImportable<RsaPublicKey>, IPublicKeyExportable, IBinaryConvertible
 {
     /// <summary>
     /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current

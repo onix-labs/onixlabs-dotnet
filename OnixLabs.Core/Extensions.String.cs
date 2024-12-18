@@ -22,7 +22,7 @@ using OnixLabs.Core.Text;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Provides extension methods for strings.
+/// Provides extension methods for <see cref="string"/> instances.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class StringExtensions

@@ -25,7 +25,7 @@ using OnixLabs.Core.Text;
 namespace OnixLabs.Core;
 
 /// <summary>
-/// Provides extension methods for objects.
+/// Provides extension methods for <see cref="object"/> instances.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ObjectExtensions

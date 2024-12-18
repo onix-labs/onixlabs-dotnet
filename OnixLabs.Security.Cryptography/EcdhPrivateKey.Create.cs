@@ -25,9 +25,8 @@ public sealed partial class EcdhPrivateKey
     /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance.</returns>
     public static EcdhPrivateKey Create()
     {
-        using ECDiffieHellman key = ECDiffieHellman.Create();
-        byte[] keyData = key.ExportECPrivateKey();
-        return new EcdhPrivateKey(keyData);
+        using ECDiffieHellman algorithm = ECDiffieHellman.Create();
+        return new EcdhPrivateKey(algorithm);
     }
 
     /// <summary>
@@ -37,9 +36,8 @@ public sealed partial class EcdhPrivateKey
     /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance.</returns>
     public static EcdhPrivateKey Create(ECCurve curve)
     {
-        using ECDiffieHellman key = ECDiffieHellman.Create(curve);
-        byte[] keyData = key.ExportECPrivateKey();
-        return new EcdhPrivateKey(keyData);
+        using ECDiffieHellman algorithm = ECDiffieHellman.Create(curve);
+        return new EcdhPrivateKey(algorithm);
     }
 
     /// <summary>
@@ -49,8 +47,7 @@ public sealed partial class EcdhPrivateKey
     /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance.</returns>
     public static EcdhPrivateKey Create(ECParameters parameters)
     {
-        using ECDiffieHellman key = ECDiffieHellman.Create(parameters);
-        byte[] keyData = key.ExportECPrivateKey();
-        return new EcdhPrivateKey(keyData);
+        using ECDiffieHellman algorithm = ECDiffieHellman.Create(parameters);
+        return new EcdhPrivateKey(algorithm);
     }
 }

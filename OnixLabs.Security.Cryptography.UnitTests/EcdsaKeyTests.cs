@@ -49,8 +49,8 @@ public sealed class EcdsaKeyTests
         ReadOnlySpan<byte> data = Salt.CreateNonZero(2048).AsReadOnlySpan();
         using HashAlgorithm algorithm = SHA256.Create();
         PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
-        byte[] exportedPrivateKey = EcdsaPrivateKey.Create().ExportPkcs8PrivateKey("Password", parameters);
-        IEcdsaPrivateKey privateKey = EcdsaPrivateKey.ImportPkcs8PrivateKey(exportedPrivateKey, "Password");
+        byte[] exportedPrivateKey = EcdsaPrivateKey.Create().ExportPkcs8("Password", parameters);
+        IEcdsaPrivateKey privateKey = EcdsaPrivateKey.ImportPkcs8(exportedPrivateKey, "Password");
         IEcdsaPublicKey publicKey = privateKey.GetPublicKey();
 
         // When
@@ -58,5 +58,119 @@ public sealed class EcdsaKeyTests
 
         // Then
         Assert.True(publicKey.IsDataValid(signature, data, algorithm));
+    }
+
+    [Fact(DisplayName = "EcdsaPrivateKey should be exportable and importable")]
+    public void EcdsaPrivateKeyShouldBeExportableAndImportable()
+    {
+        // Given
+        EcdsaPrivateKey expected = EcdsaPrivateKey.Create();
+
+        // When
+        byte[] privateKeyData = expected.Export();
+        EcdsaPrivateKey actual = EcdsaPrivateKey.Import(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "EcdsaPrivateKey should be exportable and importable as PEM")]
+    public void EcdsaPrivateKeyShouldBeExportableAndImportableAsPem()
+    {
+        // Given
+        EcdsaPrivateKey expected = EcdsaPrivateKey.Create();
+
+        // When
+        string privateKeyData = expected.ExportPem();
+        EcdsaPrivateKey actual = EcdsaPrivateKey.ImportPem(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "EcdsaPrivateKey should be exportable and importable as PKCS8")]
+    public void EcdsaPrivateKeyShouldBeExportableAndImportableAsPkcs8()
+    {
+        // Given
+        EcdsaPrivateKey expected = EcdsaPrivateKey.Create();
+
+        // When
+        byte[] privateKeyData = expected.ExportPkcs8();
+        EcdsaPrivateKey actual = EcdsaPrivateKey.ImportPkcs8(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "EcdsaPrivateKey should be exportable and importable as PKCS8 PEM")]
+    public void EcdsaPrivateKeyShouldBeExportableAndImportableAsPkcs8Pem()
+    {
+        // Given
+        EcdsaPrivateKey expected = EcdsaPrivateKey.Create();
+
+        // When
+        string privateKeyData = expected.ExportPkcs8Pem();
+        EcdsaPrivateKey actual = EcdsaPrivateKey.ImportPem(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "EcdsaPrivateKey should be exportable and importable as encrypted PKCS8")]
+    public void EcdsaPrivateKeyShouldBeExportableAndImportableAsEncryptedPkcs8()
+    {
+        // Given
+        EcdsaPrivateKey expected = EcdsaPrivateKey.Create();
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
+
+        // When
+        byte[] privateKeyData = expected.ExportPkcs8("Password", parameters);
+        EcdsaPrivateKey actual = EcdsaPrivateKey.ImportPkcs8(privateKeyData, "Password");
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "EcdsaPrivateKey should be exportable and importable as encrypted PKCS8 PEM")]
+    public void EcdsaPrivateKeyShouldBeExportableAndImportableAsEncryptedPkcs8Pem()
+    {
+        // Given
+        EcdsaPrivateKey expected = EcdsaPrivateKey.Create();
+        PbeParameters parameters = new(PbeEncryptionAlgorithm.Aes256Cbc, HashAlgorithmName.SHA256, 10);
+
+        // When
+        string privateKeyData = expected.ExportPkcs8Pem("Password", parameters);
+        EcdsaPrivateKey actual = EcdsaPrivateKey.ImportPem(privateKeyData, "Password");
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "EcdsaPublicKey should be exportable and importable")]
+    public void EcdsaPublicKeyShouldBeExportableAndImportable()
+    {
+        // Given
+        EcdsaPublicKey expected = EcdsaPrivateKey.Create().GetPublicKey();
+
+        // When
+        byte[] privateKeyData = expected.Export();
+        EcdsaPublicKey actual = EcdsaPublicKey.Import(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "EcdsaPublicKey should be exportable and importable as PEM")]
+    public void EcdsaPublicKeyShouldBeExportableAndImportableAsPem()
+    {
+        // Given
+        EcdsaPublicKey expected = EcdsaPrivateKey.Create().GetPublicKey();
+
+        // When
+        string privateKeyData = expected.ExportPem();
+        EcdsaPublicKey actual = EcdsaPublicKey.ImportPem(privateKeyData);
+
+        // Then
+        Assert.Equal(expected, actual);
     }
 }

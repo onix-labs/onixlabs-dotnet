@@ -22,7 +22,11 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Defines an RSA cryptographic private key.
 /// </summary>
-public interface IRsaPrivateKey : IPublicKeyExportable<RsaPublicKey>, IPrivateKeyImportablePkcs8<RsaPrivateKey>, IPrivateKeyExportablePkcs8, IBinaryConvertible
+public interface IRsaPrivateKey :
+    IPrivateKeyDerivable<RsaPublicKey>,
+    IPrivateKeyImportable<RsaPrivateKey>,
+    IPrivateKeyExportable,
+    IBinaryConvertible
 {
     /// <summary>
     /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.

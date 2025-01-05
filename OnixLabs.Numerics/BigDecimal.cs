@@ -35,7 +35,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// <param name="value">The unscaled integer value from which to construct a <see cref="BigDecimal"/> value.</param>
     /// <param name="scale">The scale of the <see cref="BigDecimal"/> value.</param>
     /// <param name="mode">The scale mode that determines how the specified value should be scaled.</param>
-    public BigDecimal(BigInteger value, int scale = default, ScaleMode mode = default)
+    public BigDecimal(BigInteger value, int scale = 0, ScaleMode mode = default)
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
         RequireIsDefined(mode, nameof(mode));

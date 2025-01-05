@@ -34,7 +34,7 @@ internal static class TestDataGenerator
             yield return value.ToDecimal(scale, mode);
     }
 
-    public static IEnumerable<decimal> GenerateRandomValues(int? count = null, int seed = default)
+    public static IEnumerable<decimal> GenerateRandomValues(int? count = null, int seed = 0)
     {
         count ??= Provider.RandomCount;
         Random random = new(seed);

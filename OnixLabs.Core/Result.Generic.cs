@@ -222,7 +222,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public sealed override int GetHashCode() => this switch
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
-        Success<T> success => success.Value?.GetHashCode() ?? default,
+        Success<T> success => success.Value?.GetHashCode() ?? 0,
         Failure<T> failure => failure.Exception.GetHashCode(),
         _ => throw UnrecognisedResultType
     };
@@ -299,6 +299,17 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// otherwise throws the underlying exception if the current <see cref="Result{T}"/> is in a failed stated.
     /// </returns>
     public T GetValueOrThrow() => this is Success<T> success ? success.Value : throw GetExceptionOrThrow();
+
+    /// <summary>
+    /// Gets the underlying value of the current <see cref="Result{T}"/> instance as an <see langword="out"/> parameter.
+    /// </summary>
+    /// <param name="value">The value of the current <see cref="Result{T}"/> instance.</param>
+    /// <returns>Returns the current <see cref="Result{T}"/> instance.</returns>
+    public Result<T> GetValue(out T value)
+    {
+        value = Match(value => value, _ => default!);
+        return this;
+    }
 
     /// <summary>
     /// Executes the delegate that matches the value of the current <see cref="Result{T}"/> instance.

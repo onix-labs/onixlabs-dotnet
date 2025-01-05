@@ -205,7 +205,7 @@ public static class IEnumerableExtensions
     /// <returns>Returns the computed content hash code of the current <see cref="IEnumerable"/>.</returns>
     public static int GetContentHashCode(this IEnumerable? enumerable)
     {
-        if (enumerable is null) return default;
+        if (enumerable is null) return 0;
 
         HashCode result = new();
 
@@ -223,7 +223,7 @@ public static class IEnumerableExtensions
     /// <returns>Returns the computed content hash code of the current <see cref="IEnumerable{T}"/>.</returns>
     public static int GetContentHashCode<T>(this IEnumerable<T>? enumerable)
     {
-        if (enumerable is null) return default;
+        if (enumerable is null) return 0;
 
         HashCode result = new();
 

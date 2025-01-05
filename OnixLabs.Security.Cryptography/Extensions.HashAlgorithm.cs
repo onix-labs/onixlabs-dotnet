@@ -159,18 +159,18 @@ public static class HashAlgorithmExtensions
         {
             if (rounds < 1 || destination.Length < algorithm.HashSize / 8)
             {
-                bytesWritten = default;
+                bytesWritten = 0;
                 return false;
             }
 
             source = source.Slice(offset, count);
-            int result = default;
+            int result = 0;
 
             while (rounds-- > 0)
             {
                 if (!algorithm.TryComputeHash(source, destination, out result))
                 {
-                    bytesWritten = default;
+                    bytesWritten = 0;
                     return false;
                 }
 
@@ -182,7 +182,7 @@ public static class HashAlgorithmExtensions
         }
         catch
         {
-            bytesWritten = default;
+            bytesWritten = 0;
             return false;
         }
     }

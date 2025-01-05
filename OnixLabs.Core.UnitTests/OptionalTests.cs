@@ -42,8 +42,8 @@ public sealed class OptionalTests
     public void OptionalOfShouldProduceExpectedResultForImplicitDefaultValues()
     {
         // Given / When
-        Optional<int> number = Optional<int>.Of(default);
-        Optional<string> text = Optional<string>.Of(default);
+        Optional<int> number = Optional<int>.Of(0);
+        Optional<string> text = Optional<string>.Of(null);
 
         // Then
         Assert.True(Optional<int>.IsNone(number));
@@ -100,7 +100,7 @@ public sealed class OptionalTests
     {
         // Given / When
         Optional<int> number = Optional<int>.Of((int?)null);
-        Optional<Guid> identifier = Optional<Guid>.Of((Guid?)default);
+        Optional<Guid> identifier = Optional<Guid>.Of((Guid?)null);
 
         // Then
         Assert.False(number.HasValue);
@@ -171,7 +171,7 @@ public sealed class OptionalTests
     public void OptionalImplicitOperatorShouldProduceExpectedNoneResult()
     {
         // Given / When
-        const string? value = default;
+        const string? value = null;
         Optional<string> optional = value;
 
         // Then
@@ -297,7 +297,7 @@ public sealed class OptionalTests
     public void OptionalNoneGetHashCodeShouldProduceExpectedResult()
     {
         // Given
-        const int expected = default;
+        const int expected = 0;
         Optional<int> optional = Optional<int>.None;
 
         // When
@@ -335,8 +335,8 @@ public sealed class OptionalTests
         string? actualText = text.GetValueOrDefault();
 
         // Then
-        Assert.Equal(default, actualNumber);
-        Assert.Equal(default, actualText);
+        Assert.Equal(0, actualNumber);
+        Assert.Equal(null, actualText);
     }
 
     [Fact(DisplayName = "Optional Some.GetValueOrDefault with default value should produce the expected result.")]

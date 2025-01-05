@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Security.Cryptography;
 using OnixLabs.Security.Cryptography.UnitTests.Data;
 using Xunit;
 
@@ -119,5 +120,20 @@ public sealed class PublicKeyTests
 
         // Then
         Assert.NotEqual(leftHashCode, rightHashCode);
+    }
+
+    [Fact(DisplayName = "PublicKey.GetHash should produce the expected result")]
+    public void PublicKeyGetHashShouldProduceTheExpectedResult()
+    {
+        // Given
+        const string expected = "9f64a747e1b97f131fabb6b447296c9b6f0201e79fb3c5356e6c77e89b6a806a";
+        PublicKey publicKey = new TestPublicKey([1, 2, 3, 4]);
+
+        // When
+        Hash hash = publicKey.GetHash(SHA256.Create());
+        string actual = hash.ToString();
+
+        // then
+        Assert.Equal(expected, actual);
     }
 }

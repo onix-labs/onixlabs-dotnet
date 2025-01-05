@@ -217,18 +217,47 @@ public sealed class ResultGenericTests
         Assert.True(Result<int>.Failure(FailureException) == Result<int>.Failure(FailureException));
         Assert.False(Result<int>.Success(1) == Result<int>.Success(2));
         Assert.False(Result<int>.Success(1) == Result<int>.Failure(FailureException));
-        Assert.False(Result<int>.Success(1) == null);
-        Assert.False(null == Result<int>.Success(1));
+        Assert.NotNull(Result<int>.Success(1));
+        Assert.NotNull(Result<int>.Success(1));
 
         // Inequality Operator
         Assert.True(Result<int>.Success(1) != Result<int>.Failure(FailureException));
         Assert.True(Result<int>.Failure(FailureException) != Result<int>.Failure(new Exception()));
-        Assert.True(Result<int>.Success(1) != null);
-        Assert.True(null != Result<int>.Success(1));
+        Assert.NotNull(Result<int>.Success(1));
+        Assert.NotNull(Result<int>.Success(1));
 
         // Hash Code Generation
         Assert.True(Result<int>.Success(1).GetHashCode() == Result<int>.Success(1).GetHashCode());
         Assert.True(Result<int>.Failure(FailureException).GetHashCode() == Result<int>.Failure(FailureException).GetHashCode());
+    }
+
+    [Fact(DisplayName = "Result.GetValue should produce the expected result when the result is Success.")]
+    public void ResultGetValueShouldProduceExpectedResultWhenResultIsSuccess()
+    {
+        // Given
+        const string expected = "abc";
+        Result<string> result = expected;
+
+        // When
+        Result<string> actual = result.GetValue(out string value);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.Equal(expected, value);
+    }
+
+    [Fact(DisplayName = "Result.GetValue should produce the expected result when the result is Failure.")]
+    public void ResultGetValueShouldProduceExpectedResultWhenResultIsFailure()
+    {
+        // Given
+        Result<string> result = FailureException;
+
+        // When
+        Result<string> actual = result.GetValue(out string value);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.Null(value);
     }
 
     [Fact(DisplayName = "Result.GetExceptionOrDefault from success should produce the expected result.")]
@@ -428,7 +457,7 @@ public sealed class ResultGenericTests
         Result<int> result = Result<int>.Success(1);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(
@@ -453,7 +482,7 @@ public sealed class ResultGenericTests
         Result<int> result = Result<int>.Failure(FailureException);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(
@@ -524,7 +553,7 @@ public sealed class ResultGenericTests
         Result<int> result = Result<int>.Success(1);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(
@@ -549,7 +578,7 @@ public sealed class ResultGenericTests
         Result<int> result = Result<int>.Failure(FailureException);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(
@@ -574,7 +603,7 @@ public sealed class ResultGenericTests
         Result<int> result = Result<int>.Success(1);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(
@@ -603,7 +632,7 @@ public sealed class ResultGenericTests
         Result<int> result = Result<int>.Failure(FailureException);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(
@@ -632,7 +661,7 @@ public sealed class ResultGenericTests
         Result<int> result = Result<int>.Success(1);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(
@@ -661,7 +690,7 @@ public sealed class ResultGenericTests
         Result<int> result = Result<int>.Failure(FailureException);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(
@@ -757,7 +786,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(
@@ -776,7 +805,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Failure(FailureException);
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(
@@ -829,7 +858,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(
@@ -848,7 +877,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Failure(FailureException);
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(
@@ -867,7 +896,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(
@@ -886,7 +915,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Failure(FailureException);
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(
@@ -905,7 +934,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(
@@ -924,7 +953,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Failure(FailureException);
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(
@@ -1027,7 +1056,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Failure(FailureException);
         Result expected = Result.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectAsync((_, _) => Task.CompletedTask, token);
@@ -1042,7 +1071,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         Result expected = Result.Success();
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectAsync((_, _) => Task.CompletedTask, token);
@@ -1057,7 +1086,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         Result expected = Result.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectAsync((_, _) => throw FailureException, token);
@@ -1156,7 +1185,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Failure(FailureException);
         Result<int> expected = Result<int>.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectAsync((_, _) => Task.FromResult(1), token);
@@ -1171,7 +1200,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(2);
         Result<int> expected = Result<int>.Success(1);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectAsync((_, _) => Task.FromResult(1), token);
@@ -1186,7 +1215,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         Result<int> expected = Result<int>.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectAsync<int>((_, _) => throw FailureException, token);
@@ -1285,7 +1314,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Failure(FailureException);
         Result expected = Result.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectManyAsync(async (_, _) => await Task.FromResult(Result.Success()), token);
@@ -1300,7 +1329,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         Result expected = Result.Success();
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectManyAsync(async (_, _) => await Task.FromResult(Result.Success()), token);
@@ -1315,7 +1344,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         Result expected = Result.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectManyAsync((_, _) => throw FailureException, token);
@@ -1414,7 +1443,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Failure(FailureException);
         Result<int> expected = Result<int>.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectManyAsync<int>(async (_, _) => await Task.FromResult(Result<int>.Success(1)), token);
@@ -1429,7 +1458,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(2);
         Result<int> expected = Result<int>.Success(1);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectManyAsync<int>(async (_, _) => await Task.FromResult(Result<int>.Success(1)), token);
@@ -1444,7 +1473,7 @@ public sealed class ResultGenericTests
         // Given
         Result<int> result = Result<int>.Success(1);
         Result<int> expected = Result<int>.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectManyAsync<int>((_, _) => throw FailureException, token);

@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.Reflection;
 using OnixLabs.Core.Text;
@@ -170,4 +172,22 @@ public static class ObjectExtensions
     /// <param name="value">The current <see cref="Object"/> from which to obtain a <see cref="String"/> representation.</param>
     /// <returns>Returns a <see cref="String"/> representation of the current <see cref="Object"/>, or a string literal null if the current object is <see langword="null"/>.</returns>
     public static string ToStringOrNull(this object? value) => value?.ToString() ?? Null;
+
+    /// <summary>
+    /// Obtains a <see cref="Success{T}"/> representation of the current <see cref="Object"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="Object"/> to wrap as a <see cref="Success{T}"/> result.</param>
+    /// <typeparam name="T">The underlying type of the value.</typeparam>
+    /// <returns>Returns a <see cref="Success{T}"/> representation of the current <see cref="Object"/>.</returns>
+    public static Result<T> ToSuccessResult<T>(this T value) => Result<T>.Success(value);
+
+    /// <summary>
+    /// Asynchronously obtains a <see cref="Success{T}"/> representation of the current <see cref="Object"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="Object"/> to wrap as a <see cref="Success{T}"/> result.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="T">The underlying type of the value.</typeparam>
+    /// <returns>Returns a <see cref="Success{T}"/> representation of the current <see cref="Object"/>.</returns>
+    public static async Task<Result<T>> ToSuccessResultAsync<T>(this Task<T> value, CancellationToken token = default) =>
+        Result<T>.Success(await value.WaitAsync(token).ConfigureAwait(false));
 }

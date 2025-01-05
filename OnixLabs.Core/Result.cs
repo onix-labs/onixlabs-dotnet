@@ -178,7 +178,7 @@ public abstract class Result : IValueEquatable<Result>
     /// Serves as a hash code function for the current instance.
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
-    public sealed override int GetHashCode() => this is Failure failure ? failure.Exception.GetHashCode() : default;
+    public sealed override int GetHashCode() => this is Failure failure ? failure.Exception.GetHashCode() : 0;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,

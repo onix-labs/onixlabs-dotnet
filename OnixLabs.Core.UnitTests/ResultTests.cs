@@ -395,7 +395,7 @@ public sealed class ResultTests
         Result result = Result.Success();
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(Success, Failure, token);
@@ -422,7 +422,7 @@ public sealed class ResultTests
         Result result = Result.Failure(FailureException);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(Success, Failure, token);
@@ -499,7 +499,7 @@ public sealed class ResultTests
         Result result = Result.Success();
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(Success, Failure, token);
@@ -525,7 +525,7 @@ public sealed class ResultTests
         Result result = Result.Failure(FailureException);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(Success, Failure, token);
@@ -551,7 +551,7 @@ public sealed class ResultTests
         Result result = Result.Success();
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(Success, Failure, token);
@@ -582,7 +582,7 @@ public sealed class ResultTests
         Result result = Result.Failure(FailureException);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(Success, Failure, token);
@@ -613,7 +613,7 @@ public sealed class ResultTests
         Result result = Result.Success();
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(Success, Failure, token);
@@ -644,7 +644,7 @@ public sealed class ResultTests
         Result result = Result.Failure(FailureException);
         bool isSuccess = false;
         bool isFailure = false;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         await result.MatchAsync(Success, Failure, token);
@@ -746,7 +746,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(Success, Failure, token);
@@ -765,7 +765,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Failure(FailureException);
         const int expected = 0;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(Success, Failure, token);
@@ -820,7 +820,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(Success, Failure, token);
@@ -839,7 +839,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Failure(FailureException);
         const int expected = 0;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(Success, Failure, token);
@@ -858,7 +858,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(Success, Failure, token);
@@ -877,7 +877,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Failure(FailureException);
         const int expected = 0;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(Success, Failure, token);
@@ -896,7 +896,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         const int expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(Success, Failure, token);
@@ -915,7 +915,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Failure(FailureException);
         const int expected = 0;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         int actual = await result.MatchAsync(Success, Failure, token);
@@ -1018,7 +1018,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Failure(FailureException);
         Result expected = Result.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectAsync(_ => Task.CompletedTask, token);
@@ -1033,7 +1033,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         Result expected = Result.Success();
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectAsync(_ => Task.CompletedTask, token);
@@ -1048,7 +1048,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         Result expected = Result.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectAsync(_ => throw FailureException, token);
@@ -1147,7 +1147,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Failure(FailureException);
         Result<int> expected = Result<int>.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectAsync(_ => Task.FromResult(1), token);
@@ -1162,7 +1162,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         Result<int> expected = 1;
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectAsync(_ => Task.FromResult(1), token);
@@ -1177,7 +1177,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         Result<int> expected = Result<int>.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectAsync<int>(_ => throw FailureException, token);
@@ -1276,7 +1276,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Failure(FailureException);
         Result expected = Result.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectManyAsync(async _ => await Task.FromResult(Result.Success()), token);
@@ -1291,7 +1291,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         Result expected = Result.Success();
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectManyAsync(async _ => await Task.FromResult(Result.Success()), token);
@@ -1306,7 +1306,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         Result expected = Result.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result actual = await result.SelectManyAsync(_ => throw FailureException, token);
@@ -1405,7 +1405,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Failure(FailureException);
         Result<int> expected = Result<int>.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectManyAsync<int>(async _ => await Task.FromResult(Result<int>.Success(1)), token);
@@ -1420,7 +1420,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         Result<int> expected = Result<int>.Success(1);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectManyAsync<int>(async _ => await Task.FromResult(Result<int>.Success(1)), token);
@@ -1435,7 +1435,7 @@ public sealed class ResultTests
         // Given
         Result result = Result.Success();
         Result<int> expected = Result<int>.Failure(FailureException);
-        CancellationToken token = new();
+        CancellationToken token = CancellationToken.None;
 
         // When
         Result<int> actual = await result.SelectManyAsync<int>(_ => throw FailureException, token);

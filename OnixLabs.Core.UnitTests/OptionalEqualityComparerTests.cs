@@ -158,7 +158,7 @@ public class OptionalEqualityComparerTests
     public void OptionalEqualityComparerGetHashCodeShouldReturnZeroWhenOptionalValueIsNone()
     {
         // Given
-        const int expected = default;
+        const int expected = 0;
         Optional<string> optional = Optional<string>.None;
         OptionalEqualityComparer<string> comparer = new();
 

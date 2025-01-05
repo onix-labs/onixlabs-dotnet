@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Threading.Tasks;
 using OnixLabs.Core.UnitTests.Data;
 using Xunit;
 
@@ -222,5 +223,34 @@ public sealed class ObjectExtensionTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "ToSuccessResult should produce the expected result")]
+    public void ToSuccessResultShouldProduceTheExpectedResult()
+    {
+        // Given
+        const string expected = "abc";
+
+        // When
+        Result<string> result = expected.ToSuccessResult();
+
+        // Then
+        Success<string> success = Assert.IsType<Success<string>>(result);
+        Assert.Equal(expected, success.Value);
+    }
+
+    [Fact(DisplayName = "ToSuccessResultAsync should produce the expected result")]
+    public async Task ToSuccessResultAsyncShouldProduceTheExpectedResult()
+    {
+        // Given
+        const string expected = "abc";
+
+        // When
+        Task<string> task = Task.FromResult(expected);
+        Result<string> result = await task.ToSuccessResultAsync();
+
+        // Then
+        Success<string> success = Assert.IsType<Success<string>>(result);
+        Assert.Equal(expected, success.Value);
     }
 }

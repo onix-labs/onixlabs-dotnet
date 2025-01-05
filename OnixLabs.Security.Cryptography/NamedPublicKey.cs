@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core;
-
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
 /// Represents a named cryptographic public key.
 /// </summary>
-public readonly partial record struct NamedPublicKey : ICryptoPrimitive<NamedPublicKey>, ISpanBinaryConvertible
+public readonly partial record struct NamedPublicKey : ICryptoPrimitive<NamedPublicKey>
 {
     private const string Separator = ":";
     private const string KeyAlgorithmNameNullOrWhiteSpace = "Key algorithm name must not be null or whitespace.";

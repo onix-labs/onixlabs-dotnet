@@ -127,7 +127,7 @@ internal sealed partial class NumberInfoParser
 
     private bool TryTrimExponent(ref ReadOnlySpan<char> value, out int exponent)
     {
-        exponent = default;
+        exponent = 0;
 
         int index = value.IndexOf(ExponentSymbol, Comparison);
         int lastIndex = value.LastIndexOf(ExponentSymbol, Comparison);

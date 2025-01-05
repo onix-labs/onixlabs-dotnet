@@ -26,7 +26,7 @@ public enum TypeDeclarationFlags
     /// Specifies that no type name arguments are applied.
     /// <remarks>Only simple CLR type names will be used, and excludes generic type arguments and tuple syntax.</remarks>
     /// </summary>
-    None = default,
+    None = 0,
 
     /// <summary>
     /// Specifies that namespace qualified CLR type names will be used, where applicable.

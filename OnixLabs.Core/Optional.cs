@@ -155,7 +155,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// </summary>
     /// <returns>Returns a hash code for the current instance.</returns>
     // ReSharper disable once HeapView.PossibleBoxingAllocation
-    public sealed override int GetHashCode() => this is Some<T> some ? some.Value.GetHashCode() : default;
+    public sealed override int GetHashCode() => this is Some<T> some ? some.Value.GetHashCode() : 0;
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;

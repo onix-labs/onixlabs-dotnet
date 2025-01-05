@@ -211,7 +211,7 @@ public sealed class ResultExtensionTests
         string? actualText = await textTask.GetValueOrDefaultAsync();
 
         // Then
-        Assert.Equal(default, actualNumber);
+        Assert.Equal(0, actualNumber);
         Assert.Null(actualText);
     }
 
@@ -364,8 +364,8 @@ public sealed class ResultExtensionTests
     public async Task ResultGetValueOrNoneAsyncShouldReturnNoneWhenResultIsSuccessAndValueIsNone()
     {
         // Given
-        Result<int> numberResult = Result<int>.Success(default);
-        Result<string> textResult = Result<string>.Success(default!);
+        Result<int> numberResult = Result<int>.Success(0);
+        Result<string> textResult = Result<string>.Success(null!);
 
         // When
         Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();

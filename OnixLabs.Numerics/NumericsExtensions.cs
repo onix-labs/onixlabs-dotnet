@@ -86,7 +86,7 @@ public static class NumericsExtensions
     /// <param name="mode">The scale mode that determines how the current value should be scaled.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type of the value to convert.</typeparam>
     /// <returns>Returns a <see cref="BigDecimal"/> representing the current value.</returns>
-    public static BigDecimal ToBigDecimal<T>(this T value, int scale = default, ScaleMode mode = ScaleMode.Integral) where T : IBinaryInteger<T> =>
+    public static BigDecimal ToBigDecimal<T>(this T value, int scale = 0, ScaleMode mode = ScaleMode.Integral) where T : IBinaryInteger<T> =>
         new(value.ToBigInteger(), scale, mode);
 
     /// <summary>
@@ -128,7 +128,7 @@ public static class NumericsExtensions
     /// <param name="mode">The scale mode that determines how the current value should be scaled.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type of the value to convert.</typeparam>
     /// <returns>Returns a new <see cref="decimal"/> representing the current value.</returns>
-    public static decimal ToDecimal<T>(this T value, int scale = default, ScaleMode mode = default) where T : IBinaryInteger<T>
+    public static decimal ToDecimal<T>(this T value, int scale = 0, ScaleMode mode = default) where T : IBinaryInteger<T>
     {
         Require(scale.IsBetween(0, 28), "Scale must be between 0 and 28.");
         RequireIsDefined(mode, nameof(mode));
@@ -152,7 +152,7 @@ public static class NumericsExtensions
     /// <param name="mode">The scale mode that determines how the specified value should be scaled.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type.</typeparam>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
-    public static NumberInfo ToNumberInfo<T>(this T value, int scale = default, ScaleMode mode = default) where T : IBinaryInteger<T>
+    public static NumberInfo ToNumberInfo<T>(this T value, int scale = 0, ScaleMode mode = default) where T : IBinaryInteger<T>
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero", nameof(scale));
         RequireIsDefined(mode, nameof(mode));

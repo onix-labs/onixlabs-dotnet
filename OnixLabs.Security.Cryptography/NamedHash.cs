@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Security.Cryptography;
-using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
 /// Represents a named cryptographic hash.
 /// </summary>
-public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, ISpanBinaryConvertible
+public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, ISpanParsable<NamedHash>
 {
     private const string Separator = ":";
     private const string HashAlgorithmNameNullOrWhiteSpace = "Hash algorithm name must not be null or whitespace.";

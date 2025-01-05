@@ -12,19 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Security.Cryptography;
+using System.Security.Cryptography;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Security.Cryptography;
 
-internal static class Program
+public abstract partial class PublicKey
 {
-    private static void Main()
-    {
-        string value = "SHA256:043a718774c572bd8a25adbeb1bfcd5c0256ae11cecf9f9c3f925d0e52beaf89";
-
-        NamedHash hash = NamedHash.Parse(value);
-
-        Console.WriteLine(hash);
-    }
+    /// <summary>
+    /// Gets a <see cref="Hash"/> representation of the current <see cref="PublicKey"/> instance.
+    /// </summary>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> that will be used to hash the public key data.</param>
+    /// <returns>Returns a <see cref="Hash"/> representation of the current <see cref="PublicKey"/> instance.</returns>
+    public Hash GetHash(HashAlgorithm algorithm) => Hash.Compute(algorithm, KeyData);
 }

@@ -217,13 +217,13 @@ public sealed class PreconditionTests
     {
         // Given
         int? expected = null;
-        int actual = default;
+        int actual = 0;
 
         // When
         Exception exception = Assert.Throws<InvalidOperationException>(() => actual = CheckNotNull(expected));
 
         // Then
-        Assert.Equal(default, actual);
+        Assert.Equal(0, actual);
         Assert.Equal("Argument must not be null.", exception.Message);
     }
 
@@ -593,13 +593,13 @@ public sealed class PreconditionTests
     {
         // Given
         int? expected = null;
-        int actual = default;
+        int actual = 0;
 
         // When
         Exception exception = Assert.Throws<ArgumentNullException>(() => actual = RequireNotNull(expected));
 
         // Then
-        Assert.Equal(default, actual);
+        Assert.Equal(0, actual);
         Assert.Equal("Argument must not be null.", exception.Message);
     }
 

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Security.Cryptography;
 using Xunit;
 
@@ -32,5 +33,32 @@ public sealed class NamedHashTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "NamedHash.Parse should produce the expected result")]
+    public void NamedHashParseShouldProduceExpectedResult()
+    {
+        // Given
+        const string expected = "SHA256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
+
+        // When
+        NamedHash hash = NamedHash.Parse(expected);
+        string actual = hash.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "NamedHash.Parse should throw FormatException")]
+    public void NamedHashParseShouldThrowFormatException()
+    {
+        // Given
+        const string expected = "SHA256:InvalidData";
+
+        // When
+        Exception exception = Assert.Throws<FormatException>(() => NamedHash.Parse(expected));
+
+        // Then
+        Assert.Equal("The input string 'SHA256:InvalidData' was not in a correct format.", exception.Message);
     }
 }

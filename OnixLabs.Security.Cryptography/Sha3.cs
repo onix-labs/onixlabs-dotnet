@@ -78,7 +78,7 @@ public abstract partial class Sha3 : HashAlgorithm
     public sealed override void Initialize()
     {
         // ReSharper disable HeapView.ObjectAllocation.Evident
-        blockSize = default;
+        blockSize = 0;
         state = new ulong[25];
         result = new byte[HashSize / 8];
     }

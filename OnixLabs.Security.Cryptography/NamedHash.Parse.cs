@@ -37,14 +37,14 @@ public readonly partial record struct NamedHash
 
         if (index < 0) return false;
 
-        ReadOnlySpan<char> nameData = value[..index];
-        ReadOnlySpan<char> hashData = value[(index + 1)..];
+        ReadOnlySpan<char> name = value[..index];
+        ReadOnlySpan<char> data = value[(index + 1)..];
 
-        if (nameData.IsEmpty || hashData.IsEmpty) return false;
+        if (name.IsEmpty || data.IsEmpty) return false;
 
-        bool isDecoded = Hash.TryParse(hashData, provider, out Hash hash);
+        bool isDecoded = Hash.TryParse(data, provider, out Hash hash);
 
-        result = new NamedHash(hash, nameData.ToString());
+        result = new NamedHash(hash, name.ToString());
 
         return isDecoded;
     }

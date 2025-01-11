@@ -8,8 +8,8 @@
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>Copyright © ONIXLabs 2020</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
-        <Version>11.1.0</Version>
-        <PackageVersion>11.1.0</PackageVersion>
-        <AssemblyVersion>11.1.0</AssemblyVersion>
+        <Version>11.2.0</Version>
+        <PackageVersion>11.2.0</PackageVersion>
+        <AssemblyVersion>11.2.0</AssemblyVersion>
     </PropertyGroup>
 </Project>

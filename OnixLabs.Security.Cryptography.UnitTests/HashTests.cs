@@ -36,6 +36,7 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(expected, actual);
+        Assert.Equal(16, candidate.Length);
     }
 
     [Fact(DisplayName = "Hash should be constructable from byte and length")]
@@ -52,6 +53,7 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(expected, actual);
+        Assert.Equal(16, candidate.Length);
     }
 
     [Fact(DisplayName = "Hash value should not be modified when altering the original byte array")]
@@ -68,6 +70,7 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(expected, actual);
+        Assert.Equal(4, candidate.Length);
     }
 
     [Fact(DisplayName = "Hash value should not be modified when altering the obtained byte array")]
@@ -83,6 +86,7 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(expected, actual);
+        Assert.Equal(4, candidate.Length);
     }
 
     [Fact(DisplayName = "Identical default hash values should be considered equal")]
@@ -98,6 +102,9 @@ public sealed class HashTests
         Assert.True(left.Equals(right));
         Assert.True(left == right);
         Assert.False(left != right);
+
+        Assert.Equal(0, left.Length);
+        Assert.Equal(0, right.Length);
     }
 
     [Fact(DisplayName = "Identical hash values should be considered equal")]
@@ -113,6 +120,9 @@ public sealed class HashTests
         Assert.True(left.Equals(right));
         Assert.True(left == right);
         Assert.False(left != right);
+
+        Assert.Equal(4, left.Length);
+        Assert.Equal(4, right.Length);
     }
 
     [Fact(DisplayName = "Different hash values should not be considered equal")]
@@ -128,6 +138,9 @@ public sealed class HashTests
         Assert.False(left.Equals(right));
         Assert.False(left == right);
         Assert.True(left != right);
+
+        Assert.Equal(4, left.Length);
+        Assert.Equal(4, right.Length);
     }
 
     [Fact(DisplayName = "Identical hash values should produce identical hash codes")]
@@ -143,6 +156,9 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(leftHashCode, rightHashCode);
+
+        Assert.Equal(4, left.Length);
+        Assert.Equal(4, right.Length);
     }
 
     [Fact(DisplayName = "Different hash values should produce different hash codes")]
@@ -158,6 +174,9 @@ public sealed class HashTests
 
         // Then
         Assert.NotEqual(leftHashCode, rightHashCode);
+
+        Assert.Equal(4, left.Length);
+        Assert.Equal(4, right.Length);
     }
 
     [Fact(DisplayName = "Hashes should produce a negative-one sort order when the left-hand hash is lesser than the right-hand hash")]
@@ -173,6 +192,9 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(expected, actual);
+
+        Assert.Equal(1, left.Length);
+        Assert.Equal(1, right.Length);
     }
 
     [Fact(DisplayName = "Hashes should produce a positive-one sort order when the left-hand hash is greater than the right-hand hash")]
@@ -188,6 +210,9 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(expected, actual);
+
+        Assert.Equal(1, left.Length);
+        Assert.Equal(1, right.Length);
     }
 
     [Fact(DisplayName = "Hashes should produce a zero sort order when the left-hand hash is equal to the right-hand hash")]
@@ -203,6 +228,9 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(expected, actual);
+
+        Assert.Equal(1, left.Length);
+        Assert.Equal(1, right.Length);
     }
 
     [Theory(DisplayName = "Hash.Compute should produce the expected hash using a byte array")]

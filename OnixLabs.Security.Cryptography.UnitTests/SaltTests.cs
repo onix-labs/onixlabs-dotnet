@@ -32,6 +32,7 @@ public sealed class SaltTests
 
         // Then
         Assert.Equal(expected, actual);
+        Assert.Equal(16, candidate.Length);
     }
 
     [Fact(DisplayName = "Salt value should not be modified when altering the original byte array")]
@@ -48,6 +49,7 @@ public sealed class SaltTests
 
         // Then
         Assert.Equal(expected, actual);
+        Assert.Equal(4, candidate.Length);
     }
 
     [Fact(DisplayName = "Salt value should not be modified when altering the obtained byte array")]
@@ -63,6 +65,7 @@ public sealed class SaltTests
 
         // Then
         Assert.Equal(expected, actual);
+        Assert.Equal(4, candidate.Length);
     }
 
     [Fact(DisplayName = "Identical default salt values should be considered equal")]
@@ -78,6 +81,9 @@ public sealed class SaltTests
         Assert.True(left.Equals(right));
         Assert.True(left == right);
         Assert.False(left != right);
+
+        Assert.Equal(0, left.Length);
+        Assert.Equal(0, right.Length);
     }
 
     [Fact(DisplayName = "Identical salt values should be considered equal")]
@@ -93,6 +99,9 @@ public sealed class SaltTests
         Assert.True(left.Equals(right));
         Assert.True(left == right);
         Assert.False(left != right);
+
+        Assert.Equal(4, left.Length);
+        Assert.Equal(4, right.Length);
     }
 
     [Fact(DisplayName = "Different salt values should not be considered equal")]
@@ -108,6 +117,9 @@ public sealed class SaltTests
         Assert.False(left.Equals(right));
         Assert.False(left == right);
         Assert.True(left != right);
+
+        Assert.Equal(4, left.Length);
+        Assert.Equal(4, right.Length);
     }
 
     [Fact(DisplayName = "Identical salt values should produce identical hash codes")]
@@ -123,6 +135,9 @@ public sealed class SaltTests
 
         // Then
         Assert.Equal(leftHashCode, rightHashCode);
+
+        Assert.Equal(4, left.Length);
+        Assert.Equal(4, right.Length);
     }
 
     [Fact(DisplayName = "Different salt values should produce different hash codes")]
@@ -138,6 +153,9 @@ public sealed class SaltTests
 
         // Then
         Assert.NotEqual(leftHashCode, rightHashCode);
+
+        Assert.Equal(4, left.Length);
+        Assert.Equal(4, right.Length);
     }
 
     [Fact(DisplayName = "Salt.Create should produce a salt of the specified length")]
@@ -149,6 +167,8 @@ public sealed class SaltTests
 
         // Then
         Assert.Equal(expected, candidate.AsReadOnlySpan().Length);
+
+        Assert.Equal(32, candidate.Length);
     }
 
     [Fact(DisplayName = "Salt.CreateNonZero should produce a salt of the specified length of non-zero bytes")]
@@ -161,5 +181,7 @@ public sealed class SaltTests
         // Then
         Assert.Equal(expected, candidate.AsReadOnlySpan().Length);
         Assert.True(candidate.AsReadOnlySpan().ToArray().None(value => value is 0));
+
+        Assert.Equal(32, candidate.Length);
     }
 }

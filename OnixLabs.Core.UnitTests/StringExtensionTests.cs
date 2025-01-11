@@ -20,6 +20,38 @@ namespace OnixLabs.Core.UnitTests;
 
 public sealed class StringExtensionTests
 {
+    [Theory(DisplayName = "String.NthIndexOf should return the expected result")]
+    [InlineData("First:Second:Third:Fourth", ':', 0, -1)]
+    [InlineData("First:Second:Third:Fourth", ':', 1, 5)]
+    [InlineData("First:Second:Third:Fourth", ':', 2, 12)]
+    [InlineData("First:Second:Third:Fourth", ':', 3, 18)]
+    [InlineData("First:Second:Third:Fourth", ':', 4, -1)]
+    [InlineData("First:Second:Third:Fourth", ':', 100, -1)]
+    public void NthIndexOfCharShouldProduceExpectedResult(string value, char seekValue, int count, int expected)
+    {
+        // When
+        int actual = value.NthIndexOf(seekValue, count);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "String.NthIndexOf should return the expected result")]
+    [InlineData("First_split_Second_split_Third_split_Fourth", "_split_", 0, -1)]
+    [InlineData("First_split_Second_split_Third_split_Fourth", "_split_", 1, 5)]
+    [InlineData("First_split_Second_split_Third_split_Fourth", "_split_", 2, 18)]
+    [InlineData("First_split_Second_split_Third_split_Fourth", "_split_", 3, 30)]
+    [InlineData("First_split_Second_split_Third_split_Fourth", "_split_", 4, -1)]
+    [InlineData("First_split_Second_split_Third_split_Fourth", "_split_", 100, -1)]
+    public void NthIndexOfStringShouldProduceExpectedResult(string value, string seekValue, int count, int expected)
+    {
+        // When
+        int actual = value.NthIndexOf(seekValue, count);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Theory(DisplayName = "String.Repeat should return the expected result")]
     [InlineData("0", 10, "0000000000")]
     [InlineData("Abc1", 3, "Abc1Abc1Abc1")]
@@ -123,6 +155,72 @@ public sealed class StringExtensionTests
     {
         // When
         string actual = value.SubstringAfterLast(delimiter);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "String.SubstringBeforeNth(char) should return the expected substring or default value")]
+    [InlineData("One:Two:Three:Four", ':', 1, null, "One")]
+    [InlineData("One:Two:Three:Four", ':', 2, null, "One:Two")]
+    [InlineData("One:Two:Three:Four", ':', 3, null, "One:Two:Three")]
+    [InlineData("One:Two:Three:Four", ':', 4, null, "One:Two:Three:Four")]
+    [InlineData("One:Two:Three:Four", ':', 4, "NOT_FOUND", "NOT_FOUND")]
+    [InlineData("One:Two:Three", ':', 0, null, "One:Two:Three")]
+    [InlineData("One:Two:Three", ':', -1, null, "One:Two:Three")]
+    public void SubstringBeforeNthCharShouldProduceExpectedResult(string value, char delimiter, int nth, string? defaultValue, string expected)
+    {
+        // When
+        string actual = value.SubstringBeforeNth(delimiter, nth, defaultValue);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "String.SubstringBeforeNth(string) should return the expected substring or default value")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 1, null, "One")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 2, null, "One_split_Two")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 3, null, "One_split_Two_split_Three")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 4, null, "One_split_Two_split_Three_split_Four")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 4, "NOT_FOUND", "NOT_FOUND")]
+    [InlineData("NoDelimiterHere", "_split_", 1, null, "NoDelimiterHere")]
+    public void SubstringBeforeNthStringShouldProduceExpectedResult(string value, string delimiter, int nth, string? defaultValue, string expected)
+    {
+        // When
+        string actual = value.SubstringBeforeNth(delimiter, nth, defaultValue);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "String.SubstringAfterNth(char) should return the expected substring or default value")]
+    [InlineData("One:Two:Three:Four", ':', 1, null, "Two:Three:Four")]
+    [InlineData("One:Two:Three:Four", ':', 2, null, "Three:Four")]
+    [InlineData("One:Two:Three:Four", ':', 3, null, "Four")]
+    [InlineData("One:Two:Three:Four", ':', 4, null, "One:Two:Three:Four")]
+    [InlineData("One:Two:Three:Four", ':', 4, "NOT_FOUND", "NOT_FOUND")]
+    [InlineData("One:Two:Three", ':', 0, null, "One:Two:Three")]
+    [InlineData("One:Two:Three", ':', -1, null, "One:Two:Three")]
+    public void SubstringAfterNthCharShouldProduceExpectedResult(string value, char delimiter, int nth, string? defaultValue, string expected)
+    {
+        // When
+        string actual = value.SubstringAfterNth(delimiter, nth, defaultValue);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "String.SubstringAfterNth(string) should return the expected substring or default value")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 1, null, "Two_split_Three_split_Four")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 2, null, "Three_split_Four")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 3, null, "Four")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 4, null, "One_split_Two_split_Three_split_Four")]
+    [InlineData("One_split_Two_split_Three_split_Four", "_split_", 4, "NOT_FOUND", "NOT_FOUND")]
+    [InlineData("NoDelimiterHere", "_split_", 1, null, "NoDelimiterHere")]
+    public void SubstringAfterNthStringShouldProduceExpectedResult(string value, string delimiter, int nth, string? defaultValue, string expected)
+    {
+        // When
+        string actual = value.SubstringAfterNth(delimiter, nth, defaultValue);
 
         // Then
         Assert.Equal(expected, actual);

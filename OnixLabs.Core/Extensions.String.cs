@@ -43,12 +43,77 @@ public static class StringExtensions
     private const DateTimeStyles DefaultStyles = DateTimeStyles.None;
 
     /// <summary>
+    /// Obtains the zero-based index of the nth occurrence of the specified character in this instance.
+    /// If the specified occurrence does not exist, returns -1.
+    /// </summary>
+    /// <param name="value">The string to search.</param>
+    /// <param name="seekValue">The character to seek.</param>
+    /// <param name="count">The number of occurrences to skip before returning an index.</param>
+    /// <returns>
+    /// Returns the zero-based index position of the nth occurrence of <paramref name="seekValue"/>, if found; otherwise, -1.
+    /// </returns>
+    public static int NthIndexOf(this string value, char seekValue, int count)
+    {
+        if (string.IsNullOrEmpty(value) || count <= 0) return -1;
+
+        int occurrences = 0;
+
+        for (int i = 0; i < value.Length; i++)
+        {
+            if (value[i] != seekValue) continue;
+
+            occurrences++;
+
+            if (occurrences != count) continue;
+
+            return i;
+        }
+
+        return NotFound;
+    }
+
+    /// <summary>
+    /// Obtains the zero-based index of the nth occurrence of the specified character in this instance.
+    /// If the specified occurrence does not exist, returns -1.
+    /// </summary>
+    /// <param name="value">The string to search.</param>
+    /// <param name="seekValue">The substring to seek.</param>
+    /// <param name="count">The number of occurrences to skip before returning an index.</param>
+    /// <param name="comparison">The comparison that will be used to compare the current value and the seek value.</param>
+    /// <returns>
+    /// Returns the zero-based index position of the nth occurrence of <paramref name="seekValue"/>, if found; otherwise, -1.
+    /// </returns>
+    public static int NthIndexOf(this string value, string seekValue, int count, StringComparison comparison = DefaultComparison)
+    {
+        if (string.IsNullOrEmpty(value) || string.IsNullOrEmpty(seekValue) || count <= 0) return -1;
+
+        int occurrences = 0;
+        int startIndex = 0;
+
+        while (true)
+        {
+            int index = value.IndexOf(seekValue, startIndex, comparison);
+
+            if (index == -1) return -1;
+
+            occurrences++;
+
+            if (occurrences == count) return index;
+
+            startIndex = index + seekValue.Length;
+
+            if (startIndex >= value.Length) return NotFound;
+        }
+    }
+
+    /// <summary>
     /// Repeats the current <see cref="String"/> by the specified number of repetitions.
     /// </summary>
     /// <param name="value">The <see cref="String"/> instance to repeat.</param>
     /// <param name="count">The number of repetitions of the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the repetition of the current <see cref="String"/> instance.</returns>
-    public static string Repeat(this string value, int count) => count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
+    public static string Repeat(this string value, int count) =>
+        count > 0 ? string.Join(string.Empty, Enumerable.Repeat(value, count)) : string.Empty;
 
     /// <summary>
     /// Obtains a sub-string before the specified index within the current <see cref="String"/> instance.
@@ -64,7 +129,8 @@ public static class StringExtensions
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance will be returned.
     /// </returns>
     // ReSharper disable once HeapView.ObjectAllocation
-    private static string SubstringBeforeIndex(this string value, int index, string? defaultValue = null) => index <= NotFound ? defaultValue ?? value : value[..index];
+    private static string SubstringBeforeIndex(this string value, int index, string? defaultValue = null) =>
+        index <= NotFound ? defaultValue ?? value : value[..index];
 
     /// <summary>
     /// Obtains a sub-string after the specified index within the current <see cref="String"/> instance.
@@ -81,7 +147,8 @@ public static class StringExtensions
     /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance will be returned.
     /// </returns>
     // ReSharper disable once HeapView.ObjectAllocation
-    private static string SubstringAfterIndex(this string value, int index, int offset, string? defaultValue = null) => index <= NotFound ? defaultValue ?? value : value[(index + offset)..value.Length];
+    private static string SubstringAfterIndex(this string value, int index, int offset, string? defaultValue = null) =>
+        index <= NotFound ? defaultValue ?? value : value[(index + offset)..value.Length];
 
     /// <summary>
     /// Obtains a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
@@ -236,6 +303,95 @@ public static class StringExtensions
         value.SubstringAfterIndex(value.LastIndexOf(delimiter, comparison), 1, defaultValue);
 
     /// <summary>
+    /// Obtains a sub-string before the nth occurrence of the specified character within the current <see cref="String"/> instance.
+    /// If the nth occurrence is not found, returns the <paramref name="defaultValue"/> or the entire string if default is null.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="seekValue">The character to find the nth occurrence of.</param>
+    /// <param name="count">The nth occurrence to find.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return if the nth occurrence is not found.
+    /// If the default value is <see langword="null"/>, the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <returns>
+    /// A sub-string before the nth occurrence of <paramref name="seekValue"/> if found; otherwise,
+    /// <paramref name="defaultValue"/> or the entire string if default is null.
+    /// </returns>
+    public static string SubstringBeforeNth(this string value, char seekValue, int count, string? defaultValue = null)
+    {
+        int index = value.NthIndexOf(seekValue, count);
+        return value.SubstringBeforeIndex(index, defaultValue);
+    }
+
+    /// <summary>
+    /// Obtains a sub-string before the nth occurrence of the specified substring within the current <see cref="String"/> instance.
+    /// If the nth occurrence is not found, returns the <paramref name="defaultValue"/> or the entire string if default is null.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="seekValue">The substring to find the nth occurrence of.</param>
+    /// <param name="count">The nth occurrence to find.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return if the nth occurrence is not found.
+    /// If the default value is <see langword="null"/>, the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <param name="comparison">The comparison that will be used to compare the current value and the seek value.</param>
+    /// <returns>
+    /// A sub-string before the nth occurrence of <paramref name="seekValue"/> if found; otherwise,
+    /// <paramref name="defaultValue"/> or the entire string if default is null.
+    /// </returns>
+    public static string SubstringBeforeNth(this string value, string seekValue, int count, string? defaultValue = null, StringComparison comparison = DefaultComparison)
+    {
+        int index = value.NthIndexOf(seekValue, count, comparison);
+        return value.SubstringBeforeIndex(index, defaultValue);
+    }
+
+    /// <summary>
+    /// Obtains a sub-string after the nth occurrence of the specified character within the current <see cref="String"/> instance.
+    /// If the nth occurrence is not found, returns the <paramref name="defaultValue"/> or the entire string if default is null.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="seekValue">The character to find the nth occurrence of.</param>
+    /// <param name="count">The nth occurrence to find.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return if the nth occurrence is not found.
+    /// If the default value is <see langword="null"/>, the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <returns>
+    /// A sub-string after the nth occurrence of <paramref name="seekValue"/> if found; otherwise,
+    /// <paramref name="defaultValue"/> or the entire string if default is null.
+    /// </returns>
+    public static string SubstringAfterNth(this string value, char seekValue, int count, string? defaultValue = null)
+    {
+        int index = value.NthIndexOf(seekValue, count);
+        // Move 1 character after the nth occurrence index.
+        return value.SubstringAfterIndex(index, 1, defaultValue);
+    }
+
+    /// <summary>
+    /// Obtains a sub-string after the nth occurrence of the specified substring within the current <see cref="String"/> instance.
+    /// If the nth occurrence is not found, returns the <paramref name="defaultValue"/> or the entire string if default is null.
+    /// </summary>
+    /// <param name="value">The current <see cref="String"/> instance from which to obtain a sub-string.</param>
+    /// <param name="seekValue">The substring to find the nth occurrence of.</param>
+    /// <param name="count">The nth occurrence to find.</param>
+    /// <param name="defaultValue">
+    /// The <see cref="String"/> value to return if the nth occurrence is not found.
+    /// If the default value is <see langword="null"/>, the current <see cref="String"/> instance is returned.
+    /// </param>
+    /// <param name="comparison">The comparison that will be used to compare the current value and the seek value.</param>
+    /// <returns>
+    /// A sub-string after the nth occurrence of <paramref name="seekValue"/> if found; otherwise,
+    /// <paramref name="defaultValue"/> or the entire string if default is null.
+    /// </returns>
+    public static string SubstringAfterNth(this string value, string seekValue, int count, string? defaultValue = null, StringComparison comparison = DefaultComparison)
+    {
+        int index = value.NthIndexOf(seekValue, count, comparison);
+        // Move by the length of the found substring after the nth occurrence index.
+        int offset = (index != NotFound && !string.IsNullOrEmpty(seekValue)) ? seekValue.Length : 0;
+        return value.SubstringAfterIndex(index, offset, defaultValue);
+    }
+
+    /// <summary>
     /// Converts the current <see cref="String"/> instance into a new <see cref="T:Byte[]"/> instance.
     /// </summary>
     /// <param name="value">The current <see cref="String"/> from which to obtain a <see cref="T:Byte[]"/>.</param>
@@ -336,7 +492,8 @@ public static class StringExtensions
     /// <param name="before">The <see cref="Char"/> that should precede the current <see cref="String"/> instance.</param>
     /// <param name="after">The <see cref="Char"/> that should succeed the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="Char"/> instances.</returns>
-    public static string Wrap(this string value, char before, char after) => string.Concat(before.ToString(), value, after.ToString());
+    public static string Wrap(this string value, char before, char after) =>
+        string.Concat(before.ToString(), value, after.ToString());
 
     /// <summary>
     /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="String"/> instances.
@@ -345,5 +502,6 @@ public static class StringExtensions
     /// <param name="before">The <see cref="String"/> that should precede the current <see cref="String"/> instance.</param>
     /// <param name="after">The <see cref="String"/> that should succeed the current <see cref="String"/> instance.</param>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="String"/> instances.</returns>
-    public static string Wrap(this string value, string before, string after) => string.Concat(before, value, after);
+    public static string Wrap(this string value, string before, string after) =>
+        string.Concat(before, value, after);
 }

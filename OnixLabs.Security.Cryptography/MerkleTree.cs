@@ -13,14 +13,13 @@
 // limitations under the License.
 
 using System.Security.Cryptography;
-using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
 /// Represents a Merkle tree.
 /// </summary>
-public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>, ISpanBinaryConvertible
+public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="MerkleTree"/> class.

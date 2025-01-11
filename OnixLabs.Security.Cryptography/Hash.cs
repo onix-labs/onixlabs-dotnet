@@ -23,7 +23,7 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents a cryptographic hash.
 /// </summary>
 /// <param name="value">The underlying value of the cryptographic hash.</param>
-public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive<Hash>, IValueComparable<Hash>, ISpanParsable<Hash>, ISpanBinaryConvertible
+public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive<Hash>, IValueComparable<Hash>, ISpanParsable<Hash>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Hash"/> struct.
@@ -42,4 +42,9 @@ public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive
     }
 
     private readonly byte[] value = value.ToArray();
+
+    /// <summary>
+    /// Gets the length of the current <see cref="Hash"/> in bytes.
+    /// </summary>
+    public int Length => value?.Length ?? 0;
 }

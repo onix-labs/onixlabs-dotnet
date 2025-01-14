@@ -336,7 +336,7 @@ public sealed class OptionalTests
 
         // Then
         Assert.Equal(0, actualNumber);
-        Assert.Equal(null, actualText);
+        Assert.Null(actualText);
     }
 
     [Fact(DisplayName = "Optional Some.GetValueOrDefault with default value should produce the expected result.")]

@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+namespace OnixLabs.Core.UnitTests.Data;
 
-namespace OnixLabs.Core;
-
-/// <summary>
-/// Defines a type that is convertible to a <see cref="ReadOnlySpan{T}"/>, or <see cref="ReadOnlyMemory{T}"/>.
-/// </summary>
-public interface IBinaryConvertible : ISpanBinaryConvertible, IMemoryBinaryConvertible;
+public sealed record Location(string City, string Country)
+{
+    public static readonly Location London = new("London", "England");
+    public static readonly Location Paris = new("Paris", "France");
+    public static readonly Location Lisbon = new("Lisbon", "Postugal");
+    public static readonly Location Berlin = new("Berlin", "Germany");
+    public static readonly Location Brussels = new("Brussels", "Belgium");
+}

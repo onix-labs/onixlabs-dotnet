@@ -12,11 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Collections.Generic;
 
-namespace OnixLabs.Core;
+namespace OnixLabs.Core.UnitTests.Data;
 
-/// <summary>
-/// Defines a type that is convertible to a <see cref="ReadOnlySpan{T}"/>, or <see cref="ReadOnlyMemory{T}"/>.
-/// </summary>
-public interface IBinaryConvertible : ISpanBinaryConvertible, IMemoryBinaryConvertible;
+public sealed record Person(string Name, int Age, IEnumerable<Location> Locations)
+{
+    public static readonly Person Alice = new("Alice", 12, [Location.London, Location.Paris]);
+    public static readonly Person Bob = new("Bob", 23, [Location.Lisbon, Location.London]);
+    public static readonly Person Charlie = new("Charlie", 34, [Location.Berlin, Location.Brussels]);
+
+    public static readonly IEnumerable<Person> People = [Alice, Bob, Charlie];
+}

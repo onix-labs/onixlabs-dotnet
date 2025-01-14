@@ -38,6 +38,7 @@ public static class IEnumerableExtensions
     private const string EnumerableNullExceptionMessage = "Enumerable must not be null.";
     private const string SelectorNullExceptionMessage = "Selector must not be null.";
     private const string PredicateNullExceptionMessage = "Predicate must not be null.";
+    private const string SpecificationNullExceptionMessage = "Specification must not be null.";
     private const string ActionNullExceptionMessage = "Action must not be null.";
 
     /// <summary>
@@ -110,16 +111,7 @@ public static class IEnumerableExtensions
         // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
 
-        int count = 0;
-
-        // ReSharper disable once HeapView.ObjectAllocation.Possible
-        foreach (object? _ in enumerable)
-            checked
-            {
-                ++count;
-            }
-
-        return count;
+        return Enumerable.Count(enumerable.Cast<object?>());
     }
 
     /// <summary>
@@ -549,6 +541,38 @@ public static class IEnumerableExtensions
         RequireNotNull(selector, SelectorNullExceptionMessage, nameof(selector));
 
         return enumerable.Select(selector).Sum();
+    }
+
+    /// <summary>
+    /// Filters a sequence of values based on a specification.
+    /// </summary>
+    /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> to filter.</param>
+    /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns an <see cref="IEnumerable{T}"/> that contains elements from the input sequence that satisfy the specification.</returns>
+    public static IEnumerable<T> Where<T>(this IEnumerable<T> enumerable, Specification<T> specification)
+    {
+        // ReSharper disable PossibleMultipleEnumeration
+        RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
+        RequireNotNull(specification, SpecificationNullExceptionMessage, nameof(specification));
+
+        return enumerable.Where(specification.Criteria.Compile());
+    }
+
+    /// <summary>
+    /// Filters a sequence of values based on a negated specification.
+    /// </summary>
+    /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> to filter.</param>
+    /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
+    /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
+    /// <returns>Returns an <see cref="IEnumerable{T}"/> that contains elements from the input sequence that satisfy the negated specification.</returns>
+    public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> enumerable, Specification<T> specification)
+    {
+        // ReSharper disable PossibleMultipleEnumeration
+        RequireNotNull(enumerable, EnumerableNullExceptionMessage, nameof(enumerable));
+        RequireNotNull(specification, SpecificationNullExceptionMessage, nameof(specification));
+
+        return enumerable.Where(specification.Not().Criteria.Compile());
     }
 
     /// <summary>

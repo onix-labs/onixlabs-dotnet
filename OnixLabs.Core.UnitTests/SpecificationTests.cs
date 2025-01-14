@@ -163,10 +163,10 @@ public sealed class SpecificationTests
         Specification<Person> specification = PersonSpecification.Or(
             new PersonNameStartsWithSpecification("A"),
             new PersonHasLocationCitySpecification("Lisbon")
-        ).Not();
+        );
 
         // When
-        IEnumerable<Person> result = Person.People.Where(specification).ToList();
+        IEnumerable<Person> result = Person.People.WhereNot(specification).ToList();
 
         // Then
         Assert.Single(result);

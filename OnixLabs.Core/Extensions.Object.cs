@@ -174,12 +174,48 @@ public static class ObjectExtensions
     public static string ToStringOrNull(this object? value) => value?.ToString() ?? Null;
 
     /// <summary>
+    /// Obtains an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="Object"/> to wrap as an <see cref="Optional{T}"/> value.</param>
+    /// <typeparam name="T">The underlying type of the value.</typeparam>
+    /// <returns>Returns an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.</returns>
+    public static Optional<T> ToOptional<T>(this T? value) where T : notnull => Optional<T>.Of(value);
+
+    /// <summary>
+    /// Obtains an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="Object"/> to wrap as an <see cref="Optional{T}"/> value.</param>
+    /// <typeparam name="T">The underlying type of the value.</typeparam>
+    /// <returns>Returns an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.</returns>
+    public static Optional<T> ToOptional<T>(this T? value) where T : struct => Optional<T>.Of(value);
+
+    /// <summary>
+    /// Asynchronously obtains an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="Object"/> to wrap as an <see cref="Optional{T}"/> value.</param>
+    /// /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="T">The underlying type of the value.</typeparam>
+    /// <returns>Returns an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.</returns>
+    public static async Task<Optional<T>> ToOptionalAsync<T>(this Task<T?> value, CancellationToken token = default) where T : notnull =>
+        Optional<T>.Of(await value.WaitAsync(token).ConfigureAwait(false));
+
+    /// <summary>
+    /// Asynchronously obtains an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="Object"/> to wrap as an <see cref="Optional{T}"/> value.</param>
+    /// /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <typeparam name="T">The underlying type of the value.</typeparam>
+    /// <returns>Returns an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.</returns>
+    public static async Task<Optional<T>> ToOptionalAsync<T>(this Task<T?> value, CancellationToken token = default) where T : struct =>
+        Optional<T>.Of(await value.WaitAsync(token).ConfigureAwait(false));
+
+    /// <summary>
     /// Obtains a <see cref="Success{T}"/> representation of the current <see cref="Object"/>.
     /// </summary>
     /// <param name="value">The <see cref="Object"/> to wrap as a <see cref="Success{T}"/> result.</param>
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a <see cref="Success{T}"/> representation of the current <see cref="Object"/>.</returns>
-    public static Result<T> ToSuccessResult<T>(this T value) => Result<T>.Success(value);
+    public static Success<T> ToSuccess<T>(this T value) => Result<T>.Success(value);
 
     /// <summary>
     /// Asynchronously obtains a <see cref="Success{T}"/> representation of the current <see cref="Object"/>.
@@ -188,6 +224,6 @@ public static class ObjectExtensions
     /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns a <see cref="Success{T}"/> representation of the current <see cref="Object"/>.</returns>
-    public static async Task<Result<T>> ToSuccessResultAsync<T>(this Task<T> value, CancellationToken token = default) =>
+    public static async Task<Success<T>> ToSuccessAsync<T>(this Task<T> value, CancellationToken token = default) =>
         Result<T>.Success(await value.WaitAsync(token).ConfigureAwait(false));
 }

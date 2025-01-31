@@ -225,29 +225,137 @@ public sealed class ObjectExtensionTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "ToSuccessResult should produce the expected result")]
-    public void ToSuccessResultShouldProduceTheExpectedResult()
+    [Fact(DisplayName = "ToOptional should produce the expected result when using a non-null reference type")]
+    public void ToOptionalShouldProduceExpectedResultWhenUsingNonNullReferenceType()
     {
         // Given
         const string expected = "abc";
 
         // When
-        Result<string> result = expected.ToSuccessResult();
+        Optional<string> optional = expected.ToOptional();
+
+        // Then
+        Some<string> some = Assert.IsType<Some<string>>(optional);
+        Assert.Equal(expected, some.Value);
+    }
+
+    [Fact(DisplayName = "ToOptional should produce the expected result when using a null reference type")]
+    public void ToOptionalShouldProduceExpectedResultWhenUsingNullReferenceType()
+    {
+        // Given
+        const string? expected = null;
+
+        // When
+        Optional<string> optional = expected.ToOptional();
+
+        // Then
+        Assert.IsType<None<string>>(optional);
+    }
+
+    [Fact(DisplayName = "ToOptional should produce the expected result when using a non-null value type")]
+    public void ToOptionalShouldProduceExpectedResultWhenUsingNonNullValueType()
+    {
+        // Given
+        const int expected = 123;
+
+        // When
+        Optional<int> optional = expected.ToOptional();
+
+        // Then
+        Some<int> some = Assert.IsType<Some<int>>(optional);
+        Assert.Equal(expected, some.Value);
+    }
+
+    [Fact(DisplayName = "ToOptional should produce the expected result when using a null value type")]
+    public void ToOptionalShouldProduceExpectedResultWhenUsingNullValueType()
+    {
+        // Given
+        int? expected = null;
+
+        // When
+        Optional<int> optional = expected.ToOptional();
+
+        // Then
+        Assert.IsType<None<int>>(optional);
+    }
+
+    [Fact(DisplayName = "ToOptionalAsync should produce the expected result when using a non-null reference type")]
+    public async Task ToOptionalAsyncShouldProduceExpectedResultWhenUsingNonNullReferenceType()
+    {
+        // Given
+        const string expected = "abc";
+
+        // When
+        Optional<string> optional = await Task.FromResult<string?>(expected).ToOptionalAsync();
+
+        // Then
+        Some<string> some = Assert.IsType<Some<string>>(optional);
+        Assert.Equal(expected, some.Value);
+    }
+
+    [Fact(DisplayName = "ToOptionalAsync should produce the expected result when using a null reference type")]
+    public async Task ToOptionalAsyncShouldProduceExpectedResultWhenUsingNullReferenceType()
+    {
+        // Given
+        const string? expected = null;
+
+        // When
+        Optional<string> optional = await Task.FromResult(expected).ToOptionalAsync();
+
+        // Then
+        Assert.IsType<None<string>>(optional);
+    }
+
+    [Fact(DisplayName = "ToOptionalAsync should produce the expected result when using a non-null value type")]
+    public async Task ToOptionalAsyncShouldProduceExpectedResultWhenUsingNonNullValueType()
+    {
+        // Given
+        const int expected = 123;
+
+        // When
+        Optional<int> optional = await Task.FromResult(expected).ToOptionalAsync();
+
+        // Then
+        Some<int> some = Assert.IsType<Some<int>>(optional);
+        Assert.Equal(expected, some.Value);
+    }
+
+    [Fact(DisplayName = "ToOptionalAsync should produce the expected result when using a null value type")]
+    public async Task ToOptionalAsyncShouldProduceExpectedResultWhenUsingNullValueType()
+    {
+        // Given
+        int? expected = null;
+
+        // When
+        Optional<int> optional = await Task.FromResult(expected).ToOptionalAsync();
+
+        // Then
+        Assert.IsType<None<int>>(optional);
+    }
+
+    [Fact(DisplayName = "ToSuccess should produce the expected result")]
+    public void ToSuccessShouldProduceTheExpectedResult()
+    {
+        // Given
+        const string expected = "abc";
+
+        // When
+        Result<string> result = expected.ToSuccess();
 
         // Then
         Success<string> success = Assert.IsType<Success<string>>(result);
         Assert.Equal(expected, success.Value);
     }
 
-    [Fact(DisplayName = "ToSuccessResultAsync should produce the expected result")]
-    public async Task ToSuccessResultAsyncShouldProduceTheExpectedResult()
+    [Fact(DisplayName = "ToSuccessAsync should produce the expected result")]
+    public async Task ToSuccessAsyncShouldProduceTheExpectedResult()
     {
         // Given
         const string expected = "abc";
 
         // When
         Task<string> task = Task.FromResult(expected);
-        Result<string> result = await task.ToSuccessResultAsync();
+        Result<string> result = await task.ToSuccessAsync();
 
         // Then
         Success<string> success = Assert.IsType<Success<string>>(result);

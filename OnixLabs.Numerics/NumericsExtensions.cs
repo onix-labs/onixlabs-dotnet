@@ -52,6 +52,73 @@ public static class NumericsExtensions
     }
 
     /// <summary>
+    /// Sets the scale (number of digits after the decimal point) of the current <see cref="decimal"/> value.
+    /// <remarks>
+    /// If the scale of the current <see cref="decimal"/> value is less than the specified scale, then the scale will be padded with zeroes.
+    /// If the scale of the current <see cref="decimal"/> value is greater that the specified scale, then the scale will be truncated,
+    /// provided that there is no loss of precision; otherwise, <see cref="InvalidOperationException"/> will be thrown.
+    /// </remarks>
+    /// </summary>
+    /// <param name="value">The decimal value to adjust.</param>
+    /// <param name="scale">The desired, non-negative scale.</param>
+    /// <returns>A new <see cref="decimal"/> with the exact specified scale.</returns>
+    /// <exception cref="InvalidOperationException"> if reducing the scale would result in a loss of precision.</exception>
+    /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
+    public static decimal SetScale(this decimal value, int scale)
+    {
+        Require(scale >= 0, "Scale must be greater than, or equal to zero.", nameof(scale));
+
+        if (value.Scale == scale)
+            return value;
+
+        if (value.Scale < scale)
+        {
+            decimal factor = GenericMath.Pow10<decimal>(scale - value.Scale);
+            return value * factor / factor;
+        }
+
+        decimal pow10 = GenericMath.Pow10<decimal>(scale);
+        decimal truncated = Math.Truncate(value * pow10) / pow10;
+
+        if (value == truncated)
+            return truncated;
+
+        throw new InvalidOperationException($"Cannot reduce scale without losing precision: {value}");
+    }
+
+    /// <summary>
+    /// Sets the scale (number of digits after the decimal point) of the current <see cref="decimal"/> value.
+    /// <remarks>
+    /// If the scale of the current <see cref="decimal"/> value is less than the specified scale, then the scale will be padded with zeroes.
+    /// If the scale of the current <see cref="decimal"/> value is greater that the specified scale, then the scale will be truncated,
+    /// provided that there is no loss of precision; otherwise, the value is rounded using the specified <see cref="MidpointRounding"/> mode.
+    /// </remarks>
+    /// </summary>
+    /// <param name="value">The decimal value to adjust.</param>
+    /// <param name="scale">The desired scale (number of decimal digits). Must be non-negative.</param>
+    /// <param name="mode">The rounding strategy to apply if the scale must be reduced with precision loss.</param>
+    /// <returns>A new <see cref="decimal"/> with the exact specified scale.</returns>
+    /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
+    public static decimal SetScale(this decimal value, int scale, MidpointRounding mode)
+    {
+        Require(scale >= 0, "Scale must be greater than, or equal to zero.", nameof(scale));
+
+        if (value.Scale == scale)
+            return value;
+
+        if (value.Scale < scale)
+        {
+            decimal factor = GenericMath.Pow10<decimal>(scale - value.Scale);
+            return value * factor / factor;
+        }
+
+        decimal pow10 = GenericMath.Pow10<decimal>(scale);
+        decimal truncated = Math.Truncate(value * pow10) / pow10;
+
+        return value == truncated ? truncated : Math.Round(value, scale, mode);
+    }
+
+    /// <summary>
     /// Gets the current value as an unscaled integer.
     /// </summary>
     /// <param name="value">The value to get as an unscaled integer.</param>

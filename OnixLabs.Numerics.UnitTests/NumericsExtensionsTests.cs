@@ -80,6 +80,107 @@ public sealed class NumericExtensionsTests
         Assert.Equal(expected, actual);
     }
 
+    [Theory(DisplayName = "Decimal.SetScale should preserve or pad when scale is less or equal")]
+    [InlineData("123.0", 2, "123.00")]
+    [InlineData("123.00", 2, "123.00")]
+    [InlineData("123.000", 2, "123.00")]
+    [InlineData("0.0", 2, "0.00")]
+    [InlineData("123.12", 2, "123.12")]
+    public void DecimalSetScaleShouldPreserveOrPadWhenScaleIsLessOrEqual(string inputStr, int scale, string expectedStr)
+    {
+        // Given
+        decimal input = decimal.Parse(inputStr);
+        decimal expected = decimal.Parse(expectedStr);
+
+        // When
+        decimal result = input.SetScale(scale);
+
+        // Then
+        Assert.Equal(expected, result);
+    }
+
+    [Theory(DisplayName = "Decimal.SetScale should truncate when no precision loss")]
+    [InlineData("123.1200", 2, "123.12")]
+    [InlineData("0.1000", 1, "0.1")]
+    [InlineData("999.0000", 3, "999.000")]
+    public void DecimalSetScaleShouldTruncateWhenNoPrecisionLoss(string inputStr, int scale, string expectedStr)
+    {
+        // Given
+        decimal input = decimal.Parse(inputStr);
+        decimal expected = decimal.Parse(expectedStr);
+
+        // When
+        decimal result = input.SetScale(scale);
+
+        // Then
+        Assert.Equal(expected, result);
+    }
+
+    [Theory(DisplayName = "Decimal.SetScale should throw when truncation would lose precision")]
+    [InlineData("123.456", 2)]
+    [InlineData("1.001", 2)]
+    [InlineData("0.123456789", 5)]
+    public void DecimalSetScaleShouldThrowWhenTruncationWouldLosePrecision(string inputStr, int scale)
+    {
+        // Given
+        decimal input = decimal.Parse(inputStr);
+
+        // When / Then
+        Assert.Throws<InvalidOperationException>(() => input.SetScale(scale));
+    }
+
+    [Theory(DisplayName = "Decimal.SetScale(rounding) should apply correct rounding")]
+    [InlineData("123.456", 2, MidpointRounding.AwayFromZero, "123.46")]
+    [InlineData("123.454", 2, MidpointRounding.AwayFromZero, "123.45")]
+    [InlineData("123.455", 2, MidpointRounding.ToZero, "123.45")]
+    [InlineData("123.455", 2, MidpointRounding.ToEven, "123.46")]
+    [InlineData("0.125", 2, MidpointRounding.ToEven, "0.12")]
+    [InlineData("0.135", 2, MidpointRounding.ToEven, "0.14")]
+    public void DecimalSetScaleWithRoundingShouldApplyCorrectRounding(string inputStr, int scale, MidpointRounding mode, string expectedStr)
+    {
+        // Given
+        decimal input = decimal.Parse(inputStr);
+        decimal expected = decimal.Parse(expectedStr);
+
+        // When
+        decimal result = input.SetScale(scale, mode);
+
+        // Then
+        Assert.Equal(expected, result);
+    }
+
+    [Theory(DisplayName = "Decimal.SetScale(rounding) should truncate when no precision loss")]
+    [InlineData("123.0000", 2, MidpointRounding.AwayFromZero, "123.00")]
+    [InlineData("1.000", 1, MidpointRounding.ToEven, "1.0")]
+    public void DecimalSetScaleWithRoundingShouldTruncateWhenNoPrecisionLoss(string inputStr, int scale, MidpointRounding mode, string expectedStr)
+    {
+        // Given
+        decimal input = decimal.Parse(inputStr);
+        decimal expected = decimal.Parse(expectedStr);
+
+        // When
+        decimal result = input.SetScale(scale, mode);
+
+        // Then
+        Assert.Equal(expected, result);
+    }
+
+    [Fact(DisplayName = "Decimal.SetScale should throw when scale is negative")]
+    public void DecimalSetScaleShouldThrowWhenScaleIsNegative()
+    {
+        // Given / When / Then
+        Exception exception = Assert.Throws<ArgumentException>(() => 123.45m.SetScale(-1));
+        Assert.Contains("Scale must be greater than, or equal to zero.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Decimal.SetScale(rounding) should throw when scale is negative")]
+    public void DecimalSetScaleWithRoundingShouldThrowWhenScaleIsNegative()
+    {
+        // Given / When / Then
+        Exception exception = Assert.Throws<ArgumentException>(() => 123.45m.SetScale(-1, MidpointRounding.AwayFromZero));
+        Assert.Contains("Scale must be greater than, or equal to zero.", exception.Message);
+    }
+
     [Theory(DisplayName = "INumber<T>.IsBetween should produce the expected result")]
     [InlineData(0, 0, 0, true)]
     [InlineData(0, 0, 1, true)]

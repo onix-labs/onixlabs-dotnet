@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using System.Numerics;
 
@@ -41,7 +42,7 @@ public static class GenericMath
     {
         Require(value >= T.Zero, "Value must be greater than or equal to zero.");
 
-        if(value <= T.One) return BigInteger.One;
+        if (value <= T.One) return BigInteger.One;
 
         BigInteger result = BigInteger.One;
 
@@ -71,4 +72,33 @@ public static class GenericMath
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
     /// <returns>Returns the minimum and maximum values from the specified left-hand and right-hand values.</returns>
     public static (T Min, T Max) MinMax<T>(T left, T right) where T : INumber<T> => (T.Min(left, right), T.Max(left, right));
+
+    /// <summary>
+    /// Computes 10 raised to the power of a non-negative integer exponent using exponentiation by squaring, for any numeric type implementing <see cref="INumber{T}"/>.
+    /// </summary>
+    /// <typeparam name="T">The numeric type. Must implement <see cref="INumber{T}"/>.</typeparam>
+    /// <param name="exponent">The exponent to raise 10 to. Must be greater than or equal to zero.</param>
+    /// <returns>A value of type <typeparamref name="T"/> equal to 10 raised to the power of <paramref name="exponent"/>.</returns>
+    /// <exception cref="ArgumentException"> if <paramref name="exponent"/> is less than zero.</exception>
+    public static T Pow10<T>(int exponent) where T : INumber<T>
+    {
+        Require(exponent >= 0, "Exponent must be greater than, or equal to zero.", nameof(exponent));
+
+        if (exponent == 0)
+            return T.One;
+
+        T result = T.One;
+        T baseValue = T.CreateChecked(10);
+
+        while (exponent > 0)
+        {
+            if ((exponent & 1) == 1)
+                result *= baseValue;
+
+            baseValue *= baseValue;
+            exponent >>= 1;
+        }
+
+        return result;
+    }
 }

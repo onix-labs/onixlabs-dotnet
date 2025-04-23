@@ -25,6 +25,11 @@ namespace OnixLabs.Numerics;
 public static class NumericsExtensions
 {
     /// <summary>
+    /// The maximum scale of a <see cref="decimal"/> value.
+    /// </summary>
+    private const int MaxScale = 28;
+
+    /// <summary>
     /// Gets the minimum value of a <see cref="decimal"/> value as a <see cref="BigInteger"/>.
     /// </summary>
     private static readonly BigInteger MinDecimal = new(decimal.MinValue);
@@ -66,24 +71,39 @@ public static class NumericsExtensions
     /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
     public static decimal SetScale(this decimal value, int scale)
     {
-        Require(scale >= 0, "Scale must be greater than, or equal to zero.", nameof(scale));
+        RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.", nameof(scale));
 
+        // Determine maximum representable scale given the integer part length
+        BigInteger unscaledValue = value.GetUnscaledValue();
+        BigInteger absUnscaled = BigInteger.Abs(unscaledValue);
+        BigInteger factorCurrent = BigInteger.Pow(10, value.Scale);
+        BigInteger integerPart = BigInteger.DivRem(absUnscaled, factorCurrent, out _);
+        int integerDigits = integerPart.IsZero ? 1 : integerPart.ToString().Length;
+        int maxPossibleScale = MaxScale - integerDigits;
+
+        Require(scale <= maxPossibleScale, $"Maximum possible scale for the specified value is {maxPossibleScale}.", nameof(scale));
+
+        // No change needed
         if (value.Scale == scale)
             return value;
 
+        // Increase scale: pad with zeros
         if (value.Scale < scale)
         {
-            decimal factor = GenericMath.Pow10<decimal>(scale - value.Scale);
-            return value * factor / factor;
+            int diff = scale - value.Scale;
+            BigInteger padded = unscaledValue * BigInteger.Pow(10, diff);
+            return padded.ToDecimal(scale);
         }
 
-        decimal pow10 = GenericMath.Pow10<decimal>(scale);
-        decimal truncated = Math.Truncate(value * pow10) / pow10;
+        // Decrease scale: drop extra digits
+        int drop = value.Scale - scale;
+        BigInteger divisor = BigInteger.Pow(10, drop);
+        BigInteger quotient = BigInteger.DivRem(unscaledValue, divisor, out BigInteger remainder);
 
-        if (value == truncated)
-            return truncated;
+        // If there is any remainder, dropping would lose precision
+        Check(remainder == 0, $"Cannot set scale to {scale} due to a loss of precision.");
 
-        throw new InvalidOperationException($"Cannot reduce scale without losing precision: {value}");
+        return quotient.ToDecimal(scale);
     }
 
     /// <summary>
@@ -101,21 +121,42 @@ public static class NumericsExtensions
     /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
     public static decimal SetScale(this decimal value, int scale, MidpointRounding mode)
     {
-        Require(scale >= 0, "Scale must be greater than, or equal to zero.", nameof(scale));
+        RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.", nameof(scale));
 
+        // Determine maximum representable scale
+        BigInteger unscaledValue = value.GetUnscaledValue();
+        BigInteger absUnscaled = BigInteger.Abs(unscaledValue);
+        BigInteger factorCurrent = BigInteger.Pow(10, value.Scale);
+        BigInteger integerPart = BigInteger.DivRem(absUnscaled, factorCurrent, out _);
+        int integerDigits = integerPart.IsZero ? 1 : integerPart.ToString().Length;
+        int maxPossibleScale = MaxScale - integerDigits;
+
+        Require(scale <= maxPossibleScale, $"Maximum possible scale for the specified value is {maxPossibleScale}.", nameof(scale));
+
+        // No change needed
         if (value.Scale == scale)
             return value;
 
+        // Increase scale: pad with zeros
         if (value.Scale < scale)
         {
-            decimal factor = GenericMath.Pow10<decimal>(scale - value.Scale);
-            return value * factor / factor;
+            int diff = scale - value.Scale;
+            BigInteger padded = unscaledValue * BigInteger.Pow(10, diff);
+            return padded.ToDecimal(scale);
         }
 
-        decimal pow10 = GenericMath.Pow10<decimal>(scale);
-        decimal truncated = Math.Truncate(value * pow10) / pow10;
+        // Decrease scale: drop or round extra digits
+        int drop = value.Scale - scale;
+        BigInteger divisor = BigInteger.Pow(10, drop);
+        BigInteger.DivRem(unscaledValue, divisor, out BigInteger remainder);
 
-        return value == truncated ? truncated : Math.Round(value, scale, mode);
+        // If fractional remainder, then rounding required
+        if (remainder != 0)
+            return decimal.Round(value, scale, mode);
+
+        // No rounding required
+        BigInteger quotient = unscaledValue / divisor;
+        return quotient.ToDecimal(scale);
     }
 
     /// <summary>

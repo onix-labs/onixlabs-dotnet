@@ -169,16 +169,16 @@ public sealed class NumericExtensionsTests
     public void DecimalSetScaleShouldThrowWhenScaleIsNegative()
     {
         // Given / When / Then
-        Exception exception = Assert.Throws<ArgumentException>(() => 123.45m.SetScale(-1));
-        Assert.Contains("Scale must be greater than, or equal to zero.", exception.Message);
+        Exception exception = Assert.Throws<ArgumentOutOfRangeException>(() => 123.45m.SetScale(-1));
+        Assert.Contains("Scale must be within the inclusive range of 0 to 28.", exception.Message);
     }
 
     [Fact(DisplayName = "Decimal.SetScale(rounding) should throw when scale is negative")]
     public void DecimalSetScaleWithRoundingShouldThrowWhenScaleIsNegative()
     {
         // Given / When / Then
-        Exception exception = Assert.Throws<ArgumentException>(() => 123.45m.SetScale(-1, MidpointRounding.AwayFromZero));
-        Assert.Contains("Scale must be greater than, or equal to zero.", exception.Message);
+        Exception exception = Assert.Throws<ArgumentOutOfRangeException>(() => 123.45m.SetScale(-1, MidpointRounding.AwayFromZero));
+        Assert.Contains("Scale must be within the inclusive range of 0 to 28.", exception.Message);
     }
 
     [Theory(DisplayName = "INumber<T>.IsBetween should produce the expected result")]

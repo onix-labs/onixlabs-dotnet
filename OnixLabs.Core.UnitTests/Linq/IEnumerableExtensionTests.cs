@@ -20,7 +20,6 @@ using System.Linq;
 using System.Numerics;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data;
-using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Linq;
 

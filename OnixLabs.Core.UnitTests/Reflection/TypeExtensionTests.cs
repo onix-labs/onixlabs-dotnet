@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using OnixLabs.Core.Reflection;
-using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Reflection;
 

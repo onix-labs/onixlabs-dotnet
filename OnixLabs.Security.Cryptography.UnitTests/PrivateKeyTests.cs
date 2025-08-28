@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using OnixLabs.Security.Cryptography.UnitTests.Data;
-using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 

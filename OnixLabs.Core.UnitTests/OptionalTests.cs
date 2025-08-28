@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using Xunit;
 
 namespace OnixLabs.Core.UnitTests;
 

@@ -14,7 +14,6 @@
 
 using System.Globalization;
 using OnixLabs.Numerics.UnitTests.Data;
-using Xunit;
 
 namespace OnixLabs.Numerics.UnitTests;
 

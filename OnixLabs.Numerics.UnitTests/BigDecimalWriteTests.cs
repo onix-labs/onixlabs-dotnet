@@ -15,7 +15,6 @@
 using System.Buffers.Binary;
 using System.Numerics;
 using OnixLabs.Numerics.UnitTests.Data;
-using Xunit;
 
 namespace OnixLabs.Numerics.UnitTests;
 

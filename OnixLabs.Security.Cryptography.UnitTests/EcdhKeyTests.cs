@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Security.Cryptography;
-using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 

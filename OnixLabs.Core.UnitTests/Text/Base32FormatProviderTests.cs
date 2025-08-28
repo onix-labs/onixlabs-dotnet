@@ -14,7 +14,6 @@
 
 using System;
 using OnixLabs.Core.Text;
-using Xunit;
 
 namespace OnixLabs.Core.UnitTests.Text;
 

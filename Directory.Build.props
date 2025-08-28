@@ -1,4 +1,6 @@
 <Project>
+
+    <!--GLOBAL-->
     <PropertyGroup>
         <Version>12.1.1</Version>
         <PackageVersion>12.1.1</PackageVersion>
@@ -11,5 +13,64 @@
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>Copyright © ONIXLabs 2020</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
+        <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
     </PropertyGroup>
+
+    <!--NUGET PACKAGES-->
+    <PropertyGroup Condition="!$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests')) and !$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <DebugType>embedded</DebugType>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IncludeSymbols>true</IncludeSymbols>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/onix-labs/onixlabs-dotnet</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup  Condition="!$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests')) and !$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <!--UNIT TESTS-->
+    <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests'))">
+        <IsTestProject>true</IsTestProject>
+        <IsPackable>false</IsPackable>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests'))">
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+        <PackageReference Include="xunit" Version="2.9.3"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+        <PackageReference Include="coverlet.collector" Version="6.0.4"/>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <!--UNIT TEST DATA-->
+    <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
+        <IsTestProject>false</IsTestProject>
+        <IsPackable>false</IsPackable>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+        <PackageReference Include="xunit" Version="2.9.3"/>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <!--PLAYGROUND-->
+    <PropertyGroup Condition="'$(OutputType)' == 'Exe'">
+        <IsPackable>false</IsPackable>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    </PropertyGroup>
+
 </Project>

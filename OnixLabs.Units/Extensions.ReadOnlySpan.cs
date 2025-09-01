@@ -41,13 +41,13 @@ internal static class ReadOnlySpanExtensions
         ReadOnlySpan<char> scaleCharacters = format[index..];
 
         if (scaleCharacters.IsEmpty)
-            return (specifier.ToUpperInvariant(), defaultScale);
+            return (specifier, defaultScale);
 
         if (scaleCharacters[0] is plus or minus)
             throw new FormatException($"Scale must not begin with a leading '{plus}' or '{minus}' sign.");
 
         return int.TryParse(scaleCharacters, NumberStyles.None, CultureInfo.InvariantCulture, out int scale)
-            ? (specifier.ToUpperInvariant(), scale)
+            ? (specifier, scale)
             : throw new FormatException("Scale must contain only decimal digits.");
     }
 }

@@ -41,9 +41,9 @@ public readonly partial struct Temperature<T>
     /// <returns>The value of the current instance in the specified format.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        (string specifier, int scale) = format.GetSpecifierAndScale(KelvinSpecifier);
+        (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: KelvinSpecifier);
 
-        (T value, string symbol) = specifier switch
+        (T value, string symbol) = specifier.ToUpperInvariant() switch
         {
             CelsiusSpecifier => (Celsius, CelsiusSymbol),
             DelisleSpecifier => (Delisle, DelisleSymbol),

@@ -234,11 +234,11 @@ public sealed class TemperatureTests
     public void TemperatureAddShouldProduceExpectedValue()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(100.0);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(50.0);
+        Temperature<double> left = Temperature<double>.FromKelvin(100.0);
+        Temperature<double> right = Temperature<double>.FromKelvin(50.0);
 
         // When
-        Temperature<double> result = temperature1.Add(temperature2);
+        Temperature<double> result = left.Add(right);
 
         // Then
         Assert.Equal(150.0, result.Kelvin, Tolerance);
@@ -248,11 +248,11 @@ public sealed class TemperatureTests
     public void TemperatureSubtractShouldProduceExpectedValue()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(100.0);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(40.0);
+        Temperature<double> left = Temperature<double>.FromKelvin(100.0);
+        Temperature<double> right = Temperature<double>.FromKelvin(40.0);
 
         // When
-        Temperature<double> result = temperature1.Subtract(temperature2);
+        Temperature<double> result = left.Subtract(right);
 
         // Then
         Assert.Equal(60.0, result.Kelvin, Tolerance);
@@ -262,11 +262,11 @@ public sealed class TemperatureTests
     public void TemperatureMultiplyShouldProduceExpectedValue()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(10.0);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(3.0);
+        Temperature<double> left = Temperature<double>.FromKelvin(10.0);
+        Temperature<double> right = Temperature<double>.FromKelvin(3.0);
 
         // When
-        Temperature<double> result = temperature1.Multiply(temperature2);
+        Temperature<double> result = left.Multiply(right);
 
         // Then
         Assert.Equal(30.0, result.Kelvin, Tolerance);
@@ -276,11 +276,11 @@ public sealed class TemperatureTests
     public void TemperatureDivideShouldProduceExpectedValue()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(100.0);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(20.0);
+        Temperature<double> left = Temperature<double>.FromKelvin(100.0);
+        Temperature<double> right = Temperature<double>.FromKelvin(20.0);
 
         // When
-        Temperature<double> result = temperature1.Divide(temperature2);
+        Temperature<double> result = left.Divide(right);
 
         // Then
         Assert.Equal(5.0, result.Kelvin, Tolerance);
@@ -290,131 +290,131 @@ public sealed class TemperatureTests
     public void TemperatureComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(123);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(123);
+        Temperature<double> left = Temperature<double>.FromKelvin(123);
+        Temperature<double> right = Temperature<double>.FromKelvin(123);
 
         // When / Then
-        Assert.Equal(0, Temperature<double>.Compare(temperature1, temperature2));
-        Assert.Equal(0, temperature1.CompareTo(temperature2));
-        Assert.Equal(0, temperature1.CompareTo((object)temperature2));
-        Assert.False(temperature1 > temperature2);
-        Assert.True(temperature1 >= temperature2);
-        Assert.False(temperature1 < temperature2);
-        Assert.True(temperature1 <= temperature2);
+        Assert.Equal(0, Temperature<double>.Compare(left, right));
+        Assert.Equal(0, left.CompareTo(right));
+        Assert.Equal(0, left.CompareTo((object)right));
+        Assert.False(left > right);
+        Assert.True(left >= right);
+        Assert.False(left < right);
+        Assert.True(left <= right);
     }
 
     [Fact(DisplayName = "Temperature comparison should produce the expected result (left greater than right)")]
     public void TemperatureComparisonShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(456);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(123);
+        Temperature<double> left = Temperature<double>.FromKelvin(456);
+        Temperature<double> right = Temperature<double>.FromKelvin(123);
 
         // When / Then
-        Assert.Equal(1, Temperature<double>.Compare(temperature1, temperature2));
-        Assert.Equal(1, temperature1.CompareTo(temperature2));
-        Assert.Equal(1, temperature1.CompareTo((object)temperature2));
-        Assert.True(temperature1 > temperature2);
-        Assert.True(temperature1 >= temperature2);
-        Assert.False(temperature1 < temperature2);
-        Assert.False(temperature1 <= temperature2);
+        Assert.Equal(1, Temperature<double>.Compare(left, right));
+        Assert.Equal(1, left.CompareTo(right));
+        Assert.Equal(1, left.CompareTo((object)right));
+        Assert.True(left > right);
+        Assert.True(left >= right);
+        Assert.False(left < right);
+        Assert.False(left <= right);
     }
 
     [Fact(DisplayName = "Temperature comparison should produce the expected result (left greater than or equal to right)")]
     public void TemperatureComparisonShouldProduceExpectedLeftGreaterThanOrEqualToRight()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(456);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(123);
+        Temperature<double> left = Temperature<double>.FromKelvin(456);
+        Temperature<double> right = Temperature<double>.FromKelvin(123);
 
         // When / Then
-        Assert.Equal(1, Temperature<double>.Compare(temperature1, temperature2));
-        Assert.Equal(1, temperature1.CompareTo(temperature2));
-        Assert.Equal(1, temperature1.CompareTo((object)temperature2));
-        Assert.True(temperature1 > temperature2);
-        Assert.True(temperature1 >= temperature2);
-        Assert.False(temperature1 < temperature2);
-        Assert.False(temperature1 <= temperature2);
+        Assert.Equal(1, Temperature<double>.Compare(left, right));
+        Assert.Equal(1, left.CompareTo(right));
+        Assert.Equal(1, left.CompareTo((object)right));
+        Assert.True(left > right);
+        Assert.True(left >= right);
+        Assert.False(left < right);
+        Assert.False(left <= right);
     }
 
     [Fact(DisplayName = "Temperature comparison should produce the expected result (left less than right)")]
     public void TemperatureComparisonShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(123);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(456);
+        Temperature<double> left = Temperature<double>.FromKelvin(123);
+        Temperature<double> right = Temperature<double>.FromKelvin(456);
 
         // When / Then
-        Assert.Equal(-1, Temperature<double>.Compare(temperature1, temperature2));
-        Assert.Equal(-1, temperature1.CompareTo(temperature2));
-        Assert.Equal(-1, temperature1.CompareTo((object)temperature2));
-        Assert.False(temperature1 > temperature2);
-        Assert.False(temperature1 >= temperature2);
-        Assert.True(temperature1 < temperature2);
-        Assert.True(temperature1 <= temperature2);
+        Assert.Equal(-1, Temperature<double>.Compare(left, right));
+        Assert.Equal(-1, left.CompareTo(right));
+        Assert.Equal(-1, left.CompareTo((object)right));
+        Assert.False(left > right);
+        Assert.False(left >= right);
+        Assert.True(left < right);
+        Assert.True(left <= right);
     }
 
     [Fact(DisplayName = "Temperature comparison should produce the expected result (left less than or equal to right)")]
     public void TemperatureComparisonShouldProduceExpectedLeftLessThanOrEqualToRight()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(123);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(456);
+        Temperature<double> left = Temperature<double>.FromKelvin(123);
+        Temperature<double> right = Temperature<double>.FromKelvin(456);
 
         // When / Then
-        Assert.Equal(-1, Temperature<double>.Compare(temperature1, temperature2));
-        Assert.Equal(-1, temperature1.CompareTo(temperature2));
-        Assert.Equal(-1, temperature1.CompareTo((object)temperature2));
-        Assert.False(temperature1 > temperature2);
-        Assert.False(temperature1 >= temperature2);
-        Assert.True(temperature1 < temperature2);
-        Assert.True(temperature1 <= temperature2);
+        Assert.Equal(-1, Temperature<double>.Compare(left, right));
+        Assert.Equal(-1, left.CompareTo(right));
+        Assert.Equal(-1, left.CompareTo((object)right));
+        Assert.False(left > right);
+        Assert.False(left >= right);
+        Assert.True(left < right);
+        Assert.True(left <= right);
     }
 
     [Fact(DisplayName = "Temperature equality should produce the expected result (left equal to right)")]
     public void TemperatureEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(123);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(123);
+        Temperature<double> left = Temperature<double>.FromKelvin(123);
+        Temperature<double> right = Temperature<double>.FromKelvin(123);
 
         // When / Then
-        Assert.True(Temperature<double>.Equals(temperature1, temperature2));
-        Assert.True(temperature1.Equals(temperature2));
-        Assert.True(temperature1.Equals((object)temperature2));
-        Assert.True(temperature1 == temperature2);
-        Assert.False(temperature1 != temperature2);
+        Assert.True(Temperature<double>.Equals(left, right));
+        Assert.True(left.Equals(right));
+        Assert.True(left.Equals((object)right));
+        Assert.True(left == right);
+        Assert.False(left != right);
     }
 
     [Fact(DisplayName = "Temperature equality should produce the expected result (left not equal to right)")]
     public void TemperatureEqualityShouldProduceExpectedResultLeftNotEqualToRight()
     {
         // Given
-        Temperature<double> temperature1 = Temperature<double>.FromKelvin(123);
-        Temperature<double> temperature2 = Temperature<double>.FromKelvin(456);
+        Temperature<double> left = Temperature<double>.FromKelvin(123);
+        Temperature<double> right = Temperature<double>.FromKelvin(456);
 
         // When / Then
-        Assert.False(Temperature<double>.Equals(temperature1, temperature2));
-        Assert.False(temperature1.Equals(temperature2));
-        Assert.False(temperature1.Equals((object)temperature2));
-        Assert.False(temperature1 == temperature2);
-        Assert.True(temperature1 != temperature2);
+        Assert.False(Temperature<double>.Equals(left, right));
+        Assert.False(left.Equals(right));
+        Assert.False(left.Equals((object)right));
+        Assert.False(left == right);
+        Assert.True(left != right);
     }
 
     [Fact(DisplayName = "Temperature.ToString should produce the expected result")]
     public void TemperatureToStringShouldProduceExpectedResult()
     {
         // Given / When
-        Temperature<double> temp = Temperature<double>.FromCelsius(100.0);
+        Temperature<double> temperature = Temperature<double>.FromCelsius(100.0);
 
         // Then
-        Assert.Equal("373.150 K", $"{temp:K}");
-        Assert.Equal("100.000 °C", $"{temp:C}");
-        Assert.Equal("0.000 °De", $"{temp:DE}");
-        Assert.Equal("212.000 °F", $"{temp:F}");
-        Assert.Equal("33.000 °N", $"{temp:N}");
-        Assert.Equal("80.000 °Ré", $"{temp:RE}");
-        Assert.Equal("671.670 °R", $"{temp:R}");
+        Assert.Equal("373.150 K", $"{temperature:K}");
+        Assert.Equal("100.000 °C", $"{temperature:C}");
+        Assert.Equal("0.000 °De", $"{temperature:DE}");
+        Assert.Equal("212.000 °F", $"{temperature:F}");
+        Assert.Equal("33.000 °N", $"{temperature:N}");
+        Assert.Equal("80.000 °Ré", $"{temperature:RE}");
+        Assert.Equal("671.670 °R", $"{temperature:R}");
     }
 
     [Fact(DisplayName = "Temperature.ToString should honor custom culture separators")]
@@ -422,10 +422,10 @@ public sealed class TemperatureTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        Temperature<double> temp = Temperature<double>.FromKelvin(1234.56);
+        Temperature<double> temperature = Temperature<double>.FromKelvin(1234.56);
 
         // When
-        string formatted = temp.ToString("K2", customCulture);
+        string formatted = temperature.ToString("K2", customCulture);
 
         // Then
         Assert.Equal("1.234,56 K", formatted);

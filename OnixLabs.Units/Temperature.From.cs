@@ -64,4 +64,11 @@ public readonly partial struct Temperature<T>
     /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
     /// <returns>A newly created <see cref="Temperature{T}"/> instance.</returns>
     public static Temperature<T> FromReaumur(T value) => new(value * T.CreateChecked(1.25) + T.CreateChecked(273.15));
+
+    /// <summary>
+    /// Creates a new <see cref="Temperature{T}"/> instance from a Rømer value.
+    /// </summary>
+    /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
+    /// <returns>A newly created <see cref="Temperature{T}"/> instance.</returns>
+    public static Temperature<T> FromRomer(T value) => new((value - T.CreateChecked(7.5)) * T.CreateChecked(40.0 / 21.0) + T.CreateChecked(273.15));
 }

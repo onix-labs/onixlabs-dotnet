@@ -41,4 +41,7 @@ public readonly partial struct Temperature<T>
 
     private const string ReaumurSpecifier = "RE";
     private const string ReaumurSymbol = "°Ré";
+
+    private const string RomerSpecifier = "RO";
+    private const string RomerSymbol = "°Rø";
 }

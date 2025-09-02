@@ -35,14 +35,15 @@ public sealed class TemperatureTests
         Assert.Equal(-90.1395, temperature.Newton, Tolerance);
         Assert.Equal(0.0, temperature.Rankine, Tolerance);
         Assert.Equal(-218.52, temperature.Reaumur, Tolerance);
+        Assert.Equal(-135.90375, temperature.Romer, Tolerance);
     }
 
     [Theory(DisplayName = "Temperature.FromCelsius should produce the expected result")]
-    [InlineData(-273.15, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52)]
-    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0)]
-    [InlineData(100.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0)]
-    [InlineData(-40.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0)]
-    [InlineData(20.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0)]
+    [InlineData(-273.15, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
+    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
+    [InlineData(100.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
+    [InlineData(-40.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
+    [InlineData(20.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
     public void TemperatureFromCelsiusShouldProduceExpectedResult(
         double celsius,
         double expectedCelsius,
@@ -51,7 +52,8 @@ public sealed class TemperatureTests
         double expectedDelisle,
         double expectedNewton,
         double expectedRankine,
-        double expectedReaumur)
+        double expectedReaumur,
+        double expectedRomer)
     {
         // When
         Temperature<double> temperature = Temperature<double>.FromCelsius(celsius);
@@ -64,14 +66,15 @@ public sealed class TemperatureTests
         Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
         Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
         Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
+        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
     }
 
     [Theory(DisplayName = "Temperature.FromDelisle should produce the expected result")]
-    [InlineData(559.725, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52)]
-    [InlineData(150.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0)]
-    [InlineData(0.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0)]
-    [InlineData(210.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0)]
-    [InlineData(120.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0)]
+    [InlineData(559.725, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
+    [InlineData(150.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
+    [InlineData(0.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
+    [InlineData(210.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
+    [InlineData(120.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
     public void TemperatureFromDelisleShouldProduceExpectedResult(
         double delisle,
         double expectedCelsius,
@@ -80,7 +83,8 @@ public sealed class TemperatureTests
         double expectedDelisle,
         double expectedNewton,
         double expectedRankine,
-        double expectedReaumur)
+        double expectedReaumur,
+        double expectedRomer)
     {
         // When
         Temperature<double> temperature = Temperature<double>.FromDelisle(delisle);
@@ -93,14 +97,15 @@ public sealed class TemperatureTests
         Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
         Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
         Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
+        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
     }
 
     [Theory(DisplayName = "Temperature.FromFahrenheit should produce the expected result")]
-    [InlineData(-459.67, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52)]
-    [InlineData(32.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0)]
-    [InlineData(212.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0)]
-    [InlineData(-40.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0)]
-    [InlineData(68.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0)]
+    [InlineData(-459.67, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
+    [InlineData(32.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
+    [InlineData(212.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
+    [InlineData(-40.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
+    [InlineData(68.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
     public void TemperatureFromFahrenheitShouldProduceExpectedResult(
         double fahrenheit,
         double expectedCelsius,
@@ -109,7 +114,8 @@ public sealed class TemperatureTests
         double expectedDelisle,
         double expectedNewton,
         double expectedRankine,
-        double expectedReaumur)
+        double expectedReaumur,
+        double expectedRomer)
     {
         Temperature<double> temperature = Temperature<double>.FromFahrenheit(fahrenheit);
 
@@ -120,14 +126,15 @@ public sealed class TemperatureTests
         Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
         Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
         Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
+        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
     }
 
     [Theory(DisplayName = "Temperature.FromKelvin should produce the expected result")]
-    [InlineData(0.0, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52)]
-    [InlineData(273.15, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0)]
-    [InlineData(373.15, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0)]
-    [InlineData(233.15, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0)]
-    [InlineData(293.15, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0)]
+    [InlineData(0.0, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
+    [InlineData(273.15, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
+    [InlineData(373.15, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
+    [InlineData(233.15, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
+    [InlineData(293.15, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
     public void TemperatureFromKelvinShouldProduceExpectedResult(
         double kelvin,
         double expectedCelsius,
@@ -136,7 +143,8 @@ public sealed class TemperatureTests
         double expectedDelisle,
         double expectedNewton,
         double expectedRankine,
-        double expectedReaumur)
+        double expectedReaumur,
+        double expectedRomer)
     {
         Temperature<double> temperature = Temperature<double>.FromKelvin(kelvin);
 
@@ -147,14 +155,15 @@ public sealed class TemperatureTests
         Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
         Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
         Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
+        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
     }
 
     [Theory(DisplayName = "Temperature.FromNewton should produce the expected result")]
-    [InlineData(-90.1395, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52)]
-    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0)]
-    [InlineData(33.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0)]
-    [InlineData(-13.2, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0)]
-    [InlineData(6.6, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0)]
+    [InlineData(-90.1395, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
+    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
+    [InlineData(33.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
+    [InlineData(-13.2, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
+    [InlineData(6.6, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
     public void TemperatureFromNewtonShouldProduceExpectedResult(
         double newton,
         double expectedCelsius,
@@ -163,7 +172,8 @@ public sealed class TemperatureTests
         double expectedDelisle,
         double expectedNewton,
         double expectedRankine,
-        double expectedReaumur)
+        double expectedReaumur,
+        double expectedRomer)
     {
         Temperature<double> temperature = Temperature<double>.FromNewton(newton);
 
@@ -174,14 +184,15 @@ public sealed class TemperatureTests
         Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
         Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
         Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
+        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
     }
 
     [Theory(DisplayName = "Temperature.FromRankine should produce the expected result")]
-    [InlineData(0.0, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52)]
-    [InlineData(491.67, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0)]
-    [InlineData(671.67, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0)]
-    [InlineData(419.67, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0)]
-    [InlineData(527.67, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0)]
+    [InlineData(0.0, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
+    [InlineData(491.67, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
+    [InlineData(671.67, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
+    [InlineData(419.67, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
+    [InlineData(527.67, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
     public void TemperatureFromRankineShouldProduceExpectedResult(
         double rankine,
         double expectedCelsius,
@@ -190,7 +201,8 @@ public sealed class TemperatureTests
         double expectedDelisle,
         double expectedNewton,
         double expectedRankine,
-        double expectedReaumur)
+        double expectedReaumur,
+        double expectedRomer)
     {
         Temperature<double> temperature = Temperature<double>.FromRankine(rankine);
 
@@ -201,14 +213,15 @@ public sealed class TemperatureTests
         Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
         Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
         Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
+        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
     }
 
     [Theory(DisplayName = "Temperature.FromReaumur should produce the expected result")]
-    [InlineData(-218.52, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52)]
-    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0)]
-    [InlineData(80.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0)]
-    [InlineData(-32.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0)]
-    [InlineData(16.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0)]
+    [InlineData(-218.52, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
+    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
+    [InlineData(80.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
+    [InlineData(-32.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
+    [InlineData(16.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
     public void TemperatureFromReaumurShouldProduceExpectedResult(
         double reaumur,
         double expectedCelsius,
@@ -217,7 +230,8 @@ public sealed class TemperatureTests
         double expectedDelisle,
         double expectedNewton,
         double expectedRankine,
-        double expectedReaumur)
+        double expectedReaumur,
+        double expectedRomer)
     {
         Temperature<double> temperature = Temperature<double>.FromReaumur(reaumur);
 
@@ -228,6 +242,36 @@ public sealed class TemperatureTests
         Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
         Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
         Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
+        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+    }
+
+    [Theory(DisplayName = "Temperature.FromRomer should produce the expected result")]
+    [InlineData(-135.90375, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
+    [InlineData(7.5, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
+    [InlineData(60.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
+    [InlineData(-13.5, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
+    [InlineData(18.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    public void TemperatureFromRomerShouldProduceExpectedResult(
+        double romer,
+        double expectedCelsius,
+        double expectedKelvin,
+        double expectedFahrenheit,
+        double expectedDelisle,
+        double expectedNewton,
+        double expectedRankine,
+        double expectedReaumur,
+        double expectedRomer)
+    {
+        Temperature<double> temperature = Temperature<double>.FromRomer(romer);
+
+        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
+        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
+        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
+        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
+        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
+        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
+        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
+        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
     }
 
     [Fact(DisplayName = "Temperature.Add should produce the expected result")]
@@ -413,8 +457,9 @@ public sealed class TemperatureTests
         Assert.Equal("0.000 °De", $"{temperature:DE}");
         Assert.Equal("212.000 °F", $"{temperature:F}");
         Assert.Equal("33.000 °N", $"{temperature:N}");
-        Assert.Equal("80.000 °Ré", $"{temperature:RE}");
         Assert.Equal("671.670 °R", $"{temperature:R}");
+        Assert.Equal("80.000 °Ré", $"{temperature:RE}");
+        Assert.Equal("60.000 °Rø", $"{temperature:RO}");
     }
 
     [Fact(DisplayName = "Temperature.ToString should honor custom culture separators")]

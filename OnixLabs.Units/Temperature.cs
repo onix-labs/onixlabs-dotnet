@@ -68,4 +68,9 @@ public readonly partial struct Temperature<T> :
     /// Gets the temperature in Réaumur.
     /// </summary>
     public T Reaumur => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(0.80);
+
+    /// <summary>
+    /// Gets the temperature in Rømer.
+    /// </summary>
+    public T Romer => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(21.0 / 40.0) + T.CreateChecked(7.5);
 }

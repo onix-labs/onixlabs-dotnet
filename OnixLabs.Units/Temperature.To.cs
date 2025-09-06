@@ -17,12 +17,13 @@ using System.Globalization;
 
 namespace OnixLabs.Units;
 
+// ReSharper disable MemberCanBePrivate.Global
 public readonly partial struct Temperature<T>
 {
     /// <summary>
     /// Formats the value of the current instance using the default format.
     /// </summary>
-    /// <returns>The value of the current instance in the default format.</returns>
+    /// <returns>Returns the value of the current instance in the default format.</returns>
     public override string ToString() => ToString(KelvinSpecifier);
 
     /// <summary>
@@ -30,7 +31,7 @@ public readonly partial struct Temperature<T>
     /// </summary>
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
+    /// <returns>Returns the value of the current instance in the specified format.</returns>
     public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString(format.AsSpan(), formatProvider);
 
     /// <summary>
@@ -38,7 +39,7 @@ public readonly partial struct Temperature<T>
     /// </summary>
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
+    /// <returns>Returns the value of the current instance in the specified format.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: KelvinSpecifier);

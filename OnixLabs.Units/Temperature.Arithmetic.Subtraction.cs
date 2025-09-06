@@ -14,6 +14,7 @@
 
 namespace OnixLabs.Units;
 
+// ReSharper disable MemberCanBePrivate.Global
 public readonly partial struct Temperature<T>
 {
     /// <summary>

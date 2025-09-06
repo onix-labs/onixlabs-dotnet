@@ -22,6 +22,7 @@ namespace OnixLabs.Units;
 /// Represents a unit of temperature. The default value is absolute zero, or 0 K.
 /// </summary>
 /// <typeparam name="T">The underlying floating point value.</typeparam>
+// ReSharper disable MemberCanBePrivate.Global
 public readonly partial struct Temperature<T> :
     IValueEquatable<Temperature<T>>,
     IValueComparable<Temperature<T>>,

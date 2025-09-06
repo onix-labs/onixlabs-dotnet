@@ -22,6 +22,7 @@ namespace OnixLabs.Units;
 /// Represents a unit of data size.
 /// </summary>
 /// <typeparam name="T">The underlying floating point value.</typeparam>
+// ReSharper disable MemberCanBePrivate.Global
 public readonly partial struct DataSize<T> :
     IValueEquatable<DataSize<T>>,
     IValueComparable<DataSize<T>>,

@@ -360,4 +360,32 @@ public sealed class ObjectExtensionTests
         Success<string> success = Assert.IsType<Success<string>>(result);
         Assert.Equal(expected, success.Value);
     }
+
+    [Fact(DisplayName = "TryGetNonNull should produce the expected result (true)")]
+    public void TryGetNotNullShouldProduceExpectedResultTrue()
+    {
+        // Given
+        const string? value = "Hello, World!";
+
+        // When
+        bool result = value.TryGetNonNull(out string output);
+
+        // Then
+        Assert.True(result);
+        Assert.NotNull(output);
+    }
+
+    [Fact(DisplayName = "TryGetNonNull should produce the expected result (false)")]
+    public void TryGetNotNullShouldProduceExpectedResultFalse()
+    {
+        // Given
+        const string? value = null;
+
+        // When
+        bool result = value.TryGetNonNull(out string? output);
+
+        // Then
+        Assert.False(result);
+        Assert.Null(output);
+    }
 }

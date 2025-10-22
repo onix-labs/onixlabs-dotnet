@@ -41,32 +41,31 @@ public static class ObjectExtensions
     private const string ObjectPropertyAssignment = " = ";
 
     /// <summary>
-    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, inclusive of the specified minimum and maximum values.
+    /// Calls the specified <see cref="Action{T}"/> with the current <paramref name="value"/>.
     /// </summary>
-    /// <param name="value">The value to test.</param>
-    /// <param name="min">The inclusive minimum value.</param>
-    /// <param name="max">The inclusive maximum value.</param>
-    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
-    /// <returns>
-    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
-    /// inclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
-    /// </returns>
-    public static bool IsWithinRangeInclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
-        value.CompareTo(min) is 0 or 1 && value.CompareTo(max) is 0 or -1;
+    /// <param name="value">The value to pass to the specified <see cref="Action{T}"/>.</param>
+    /// <param name="action">The action into which the current <paramref name="value"/> will be passed.</param>
+    /// <typeparam name="T">The underlying type of the current value.</typeparam>
+    /// <returns>Returns the current <paramref name="value"/> once the specified <see cref="Action{T}"/> has been executed.</returns>
+    public static T Apply<T>(this T value, Action<T> action) where T : class
+    {
+        RequireNotNull(action, "Action must not be null.", nameof(action));
+        action(value);
+        return value;
+    }
 
     /// <summary>
-    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, exclusive of the specified minimum and maximum values.
+    /// Calls the specified <see cref="Func{T, TResult}"/> with the current <paramref name="value"/>.
     /// </summary>
-    /// <param name="value">The value to test.</param>
-    /// <param name="min">The exclusive minimum value.</param>
-    /// <param name="max">The exclusive maximum value.</param>
-    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
-    /// <returns>
-    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
-    /// exclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
-    /// </returns>
-    public static bool IsWithinRangeExclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
-        value.CompareTo(min) is 1 && value.CompareTo(max) is -1;
+    /// <param name="value">The value to pass to the specified <see cref="Func{T, TResult}"/>.</param>
+    /// <param name="function">The function into which the current <paramref name="value"/> will be passed.</param>
+    /// <typeparam name="T">The underlying type of the current value.</typeparam>
+    /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
+    public static T Apply<T>(this T value, Func<T, T> function) where T : struct
+    {
+        RequireNotNull(function, "Function must not be null.", nameof(function));
+        return function(value);
+    }
 
     /// <summary>
     /// Compares the current <typeparamref name="T"/> instance with the specified <typeparamref name="T"/> instance.
@@ -107,6 +106,48 @@ public static class ObjectExtensions
         T other => left.CompareTo(other),
         _ => throw new ArgumentException($"Object must be of type {typeof(T).FullName}", nameof(right))
     };
+
+    /// <summary>
+    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, inclusive of the specified minimum and maximum values.
+    /// </summary>
+    /// <param name="value">The value to test.</param>
+    /// <param name="min">The inclusive minimum value.</param>
+    /// <param name="max">The inclusive maximum value.</param>
+    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
+    /// <returns>
+    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
+    /// inclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
+    /// </returns>
+    public static bool IsWithinRangeInclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
+        value.CompareTo(min) is 0 or 1 && value.CompareTo(max) is 0 or -1;
+
+    /// <summary>
+    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, exclusive of the specified minimum and maximum values.
+    /// </summary>
+    /// <param name="value">The value to test.</param>
+    /// <param name="min">The exclusive minimum value.</param>
+    /// <param name="max">The exclusive maximum value.</param>
+    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
+    /// <returns>
+    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
+    /// exclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
+    /// </returns>
+    public static bool IsWithinRangeExclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
+        value.CompareTo(min) is 1 && value.CompareTo(max) is -1;
+
+    /// <summary>
+    /// Calls the specified <see cref="Func{T, TResult}"/> with the current <paramref name="value"/> as its argument and returns the result.
+    /// </summary>
+    /// <param name="value">The value to pass to the specified <see cref="Func{T, TResult}"/>.</param>
+    /// <param name="function">The function into which the current <paramref name="value"/> will be passed.</param>
+    /// <typeparam name="TSource">The underlying type of the current value.</typeparam>
+    /// <typeparam name="TResult">The underlying type of the result value.</typeparam>
+    /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
+    public static TResult Let<TSource, TResult>(this TSource value, Func<TSource, TResult> function)
+    {
+        RequireNotNull(function, "Function must not be null.", nameof(function));
+        return function(value);
+    }
 
     /// <summary>
     /// Gets a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.

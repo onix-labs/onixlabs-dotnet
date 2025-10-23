@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Xunit;
 using static OnixLabs.Core.Collections.Collection;
 
 namespace OnixLabs.Core.UnitTests.Collections;

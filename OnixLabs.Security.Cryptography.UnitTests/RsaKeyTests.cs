@@ -14,7 +14,6 @@
 
 using System;
 using System.Security.Cryptography;
-using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 

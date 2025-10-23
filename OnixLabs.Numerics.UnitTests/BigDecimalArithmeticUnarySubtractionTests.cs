@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using OnixLabs.Numerics.UnitTests.Data;
-using Xunit;
 
 namespace OnixLabs.Numerics.UnitTests;
 

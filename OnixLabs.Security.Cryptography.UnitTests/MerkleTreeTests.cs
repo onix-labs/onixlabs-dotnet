@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using Xunit;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 

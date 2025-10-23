@@ -15,40 +15,36 @@
 using System;
 using System.Threading.Tasks;
 using OnixLabs.Core.UnitTests.Data;
-using Xunit;
 
 namespace OnixLabs.Core.UnitTests;
 
 public sealed class ObjectExtensionTests
 {
-    [Theory(DisplayName = "IsWithinRangeInclusive should produce the expected result")]
-    [InlineData(2, 1, 3, true)]
-    [InlineData(1, 1, 3, true)]
-    [InlineData(3, 1, 3, true)]
-    [InlineData(0, 1, 3, false)]
-    [InlineData(4, 1, 3, false)]
-    public void IsWithinRangeInclusiveShouldProduceExpectedResult(int value, int min, int max, bool expected)
+    [Fact(DisplayName = "Apply should produce the expected result (reference type)")]
+    public void ApplyShouldProduceExpectedResultReferenceType()
     {
+        // Given
+        Mutable value = new() { Value = 123 };
+
         // When
-        bool actual = value.IsWithinRangeInclusive(min, max);
+        Mutable result = value.Apply(it => it.Value = 456);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(456, value.Value);
+        Assert.Same(value, result);
     }
 
-    [Theory(DisplayName = "IsWithinRangeExclusive should produce the expected result")]
-    [InlineData(2, 1, 3, true)]
-    [InlineData(1, 1, 3, false)]
-    [InlineData(3, 1, 3, false)]
-    [InlineData(0, 1, 3, false)]
-    [InlineData(4, 1, 3, false)]
-    public void IsWithinRangeExclusiveShouldProduceExpectedResult(int value, int min, int max, bool expected)
+    [Fact(DisplayName = "Apply should produce the expected result (value type)")]
+    public void ApplyShouldProduceExpectedResultValueType()
     {
+        // Given
+        int value = 123;
+
         // When
-        bool actual = value.IsWithinRangeExclusive(min, max);
+        value = value.Apply(it => it * 2);
 
         // Then
-        Assert.Equal(expected, actual);
+        Assert.Equal(246, value);
     }
 
     [Fact(DisplayName = "CompareToObject should produce zero if the current IComparable<T> is equal to the specified object.")]
@@ -111,6 +107,51 @@ public sealed class ObjectExtensionTests
 
         // Then
         Assert.Equal("Object must be of type System.Int32 (Parameter 'right')", exception.Message);
+    }
+
+    [Theory(DisplayName = "IsWithinRangeInclusive should produce the expected result")]
+    [InlineData(2, 1, 3, true)]
+    [InlineData(1, 1, 3, true)]
+    [InlineData(3, 1, 3, true)]
+    [InlineData(0, 1, 3, false)]
+    [InlineData(4, 1, 3, false)]
+    public void IsWithinRangeInclusiveShouldProduceExpectedResult(int value, int min, int max, bool expected)
+    {
+        // When
+        bool actual = value.IsWithinRangeInclusive(min, max);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "IsWithinRangeExclusive should produce the expected result")]
+    [InlineData(2, 1, 3, true)]
+    [InlineData(1, 1, 3, false)]
+    [InlineData(3, 1, 3, false)]
+    [InlineData(0, 1, 3, false)]
+    [InlineData(4, 1, 3, false)]
+    public void IsWithinRangeExclusiveShouldProduceExpectedResult(int value, int min, int max, bool expected)
+    {
+        // When
+        bool actual = value.IsWithinRangeExclusive(min, max);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Let should produce the expected result")]
+    public void LetShouldProduceExpectedResult()
+    {
+        // Given
+        const string value = "123";
+
+        // When
+        int result = value
+            .Let(int.Parse)
+            .Let(it => it * 2);
+
+        // Then
+        Assert.Equal(246, result);
     }
 
     [Fact(DisplayName = "ToRecordString should produce null when the object is null")]
@@ -360,5 +401,33 @@ public sealed class ObjectExtensionTests
         // Then
         Success<string> success = Assert.IsType<Success<string>>(result);
         Assert.Equal(expected, success.Value);
+    }
+
+    [Fact(DisplayName = "TryGetNonNull should produce the expected result (true)")]
+    public void TryGetNotNullShouldProduceExpectedResultTrue()
+    {
+        // Given
+        const string? value = "Hello, World!";
+
+        // When
+        bool result = value.TryGetNonNull(out string output);
+
+        // Then
+        Assert.True(result);
+        Assert.NotNull(output);
+    }
+
+    [Fact(DisplayName = "TryGetNonNull should produce the expected result (false)")]
+    public void TryGetNotNullShouldProduceExpectedResultFalse()
+    {
+        // Given
+        const string? value = null;
+
+        // When
+        bool result = value.TryGetNonNull(out string? output);
+
+        // Then
+        Assert.False(result);
+        Assert.Null(output);
     }
 }

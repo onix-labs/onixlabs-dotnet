@@ -25,37 +25,45 @@ namespace OnixLabs.Core;
 public static class ArrayExtensions
 {
     /// <summary>
-    /// Creates a copy of the current <see cref="T:T[]"/>.
+    /// Provides extension methods for generic arrays.
     /// </summary>
-    /// <param name="array">The current <see cref="T:T[]"/> to copy.</param>
-    /// <typeparam name="T">The underlying type of the array.</typeparam>
-    /// <returns>Returns an exact copy of the current <see cref="T:T[]"/>.</returns>
-    public static T[] Copy<T>(this T[] array) => [..array];
+    /// <param name="array">The current generic array.</param>
+    /// <typeparam name="T">The underlying element type of the array.</typeparam>
+    extension<T>(T[] array)
+    {
+        /// <summary>
+        /// Creates a copy of the current <typeparamref name="T"/> array.
+        /// </summary>
+        /// <returns>Returns an exact copy of the current <typeparamref name="T"/> array.</returns>
+        public T[] Copy() => [..array];
+
+        /// <summary>
+        /// Creates a copy of the current <typeparamref name="T"/> array.
+        /// </summary>
+        /// <param name="index">The index of the array to begin copying from.</param>
+        /// <param name="count">The number of elements of the array to copy.</param>
+        /// <returns>Returns an exact copy of the current <typeparamref name="T"/> array.</returns>
+        public T[] Copy(int index, int count) => [..array[index..(index + count)]];
+
+        /// <summary>
+        /// Concatenates the current <typeparamref name="T"/> array with another <typeparamref name="T"/> array.
+        /// </summary>
+        /// <param name="other">The other <typeparamref name="T"/> array to concatenate with the source <typeparamref name="T"/> array.</param>
+        /// <returns>Returns the current <typeparamref name="T"/> array concatenated with the other <typeparamref name="T"/> array.</returns>
+        public T[] ConcatenateWith(T[] other) => [..array, ..other];
+    }
 
     /// <summary>
-    /// Creates a copy of the current <see cref="T:T[]"/>.
+    /// Provides extension methods for <see cref="byte"/> arrays.
     /// </summary>
-    /// <param name="array">The current <see cref="T:T[]"/> to copy.</param>
-    /// <param name="index">The index of the array to begin copying from.</param>
-    /// <param name="count">The number of elements of the array to copy.</param>
-    /// <typeparam name="T">The underlying type of the array.</typeparam>
-    /// <returns>Returns an exact copy of the current <see cref="T:T[]"/>.</returns>
-    public static T[] Copy<T>(this T[] array, int index, int count) => [..array[index..(index + count)]];
-
-    /// <summary>
-    /// Concatenates the current <see cref="T:T[]"/> with another <see cref="T:T[]"/>.
-    /// </summary>
-    /// <param name="array">The source <see cref="T:T[]"/> to concatenate with the other <see cref="T:T[]"/>.</param>
-    /// <param name="other">The other <see cref="T:T[]"/> to concatenate with the source <see cref="T:T[]"/>.</param>
-    /// <typeparam name="T">The underlying type of the <see cref="T:T[]"/>.</typeparam>
-    /// <returns>Returns the current <see cref="T:T[]"/> concatenated with the other <see cref="T:T[]"/>.</returns>
-    public static T[] ConcatenateWith<T>(this T[] array, T[] other) => [..array, ..other];
-
-    /// <summary>
-    /// Obtains the <see cref="string"/> representation of the current <see cref="T:Byte[]"/>.
-    /// </summary>
-    /// <param name="array">The <see cref="T:Byte[]"/> instance from which to obtain a <see cref="string"/> representation.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the current <see cref="T:Byte[]"/> into a <see cref="string"/> representation.</param>
-    /// <returns>Returns the <see cref="string"/> representation of the current <see cref="T:Byte[]"/>.</returns>
-    public static string ToString(this byte[] array, Encoding encoding) => encoding.GetString(array);
+    /// <param name="array">The current <see cref="byte"/> array.</param>
+    extension(byte[] array)
+    {
+        /// <summary>
+        /// Obtains the <see cref="string"/> representation of the current <see cref="byte"/> array.
+        /// </summary>
+        /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the current <see cref="byte"/> array into a <see cref="string"/> representation.</param>
+        /// <returns>Returns the <see cref="string"/> representation of the current <see cref="byte"/> array.</returns>
+        public string ToString(Encoding encoding) => encoding.GetString(array);
+    }
 }

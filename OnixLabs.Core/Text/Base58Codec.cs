@@ -153,6 +153,7 @@ public sealed class Base58Codec : IBaseCodec
 
             IEnumerable<byte> bytesWithoutLeadingZeros = data
                 .ToByteArray()
+                .AsEnumerable()
                 .Reverse()
                 .SkipWhile(byteValue => byteValue == 0);
 

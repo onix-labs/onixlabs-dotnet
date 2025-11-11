@@ -24,16 +24,21 @@ namespace OnixLabs.Core;
 public static class DateTimeExtensions
 {
     /// <summary>
-    /// Obtains a <see cref="DateOnly"/> instance from the current <see cref="DateTime"/> instance.
+    /// Provides extension methods for <see cref="DateTime"/> instances.
     /// </summary>
-    /// <param name="value">The <see cref="DateTime"/> instance from which to obtain a <see cref="DateOnly"/> instance.</param>
-    /// <returns>Returns the <see cref="DateOnly"/> instance obtained from the current <see cref="DateTime"/> instance.</returns>
-    public static DateOnly ToDateOnly(this DateTime value) => DateOnly.FromDateTime(value);
+    /// <param name="value">The current <see cref="DateTime"/> instance.</param>
+    extension(DateTime value)
+    {
+        /// <summary>
+        /// Obtains a <see cref="DateOnly"/> instance from the current <see cref="DateTime"/> instance.
+        /// </summary>
+        /// <returns>Returns the <see cref="DateOnly"/> instance obtained from the current <see cref="DateTime"/> instance.</returns>
+        public DateOnly ToDateOnly() => DateOnly.FromDateTime(value);
 
-    /// <summary>
-    /// Obtains a <see cref="TimeOnly"/> instance from the current <see cref="TimeOnly"/> instance.
-    /// </summary>
-    /// <param name="value">The <see cref="DateTime"/> instance from which to obtain a <see cref="TimeOnly"/> instance.</param>
-    /// <returns>Returns the <see cref="TimeOnly"/> instance obtained from the current <see cref="DateTime"/> instance.</returns>
-    public static TimeOnly ToTimeOnly(this DateTime value) => TimeOnly.FromDateTime(value);
+        /// <summary>
+        /// Obtains a <see cref="TimeOnly"/> instance from the current <see cref="TimeOnly"/> instance.
+        /// </summary>
+        /// <returns>Returns the <see cref="TimeOnly"/> instance obtained from the current <see cref="DateTime"/> instance.</returns>
+        public TimeOnly ToTimeOnly() => TimeOnly.FromDateTime(value);
+    }
 }

@@ -12,6 +12,8 @@ on:
 env:
     USE_FULL_NUMERIC_PROVIDER: "true"
     MSBUILDDISABLENODEREUSE: "1"
+    # Force single MSBuild worker to reduce crash risk
+    DOTNET_CLI_TELEMETRY_OPTOUT: "1"
 
 jobs:
     build:
@@ -26,21 +28,21 @@ jobs:
                     global-json-file: global.json
 
             -   name: Restore dependencies
-                run: dotnet restore
+                run: |
+                    dotnet restore --configuration Release
 
             -   name: Build
                 run: |
-                    dotnet build --no-restore \
-                      -maxcpucount:1 /nodeReuse:false \
-                      --configuration Release
+                    dotnet build --configuration Release --no-restore \
+                      -maxcpucount:1 /nodeReuse:false
 
             -   name: Test
                 run: |
-                    dotnet test --no-build \
-                      --configuration Release \
+                    dotnet test --configuration Release --no-build \
                       --verbosity minimal \
-                      --logger "trx;LogFileName=test_results.trx" \
-                      --results-directory ./TestResults
+                      --results-directory ./TestResults \
+                      --logger "trx;LogFileName=test_results.trx"
+
             -   name: Upload test results
                 uses: actions/upload-artifact@v4
                 if: always()

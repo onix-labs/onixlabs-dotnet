@@ -3,21 +3,20 @@ name: .NET
 on:
     push:
         branches:
-            - main
-            - release
+            - 'main'
+            - 'release'
     pull_request:
         branches:
             - '**'
 
 env:
     USE_FULL_NUMERIC_PROVIDER: "true"
-    DOTNET_CLI_TELEMETRY_OPTOUT: "1"
-    MSBUILDDISABLENODEREUSE: "1"
-    MSBUILDDEBUGPATH: "./msbuild-debug"
 
 jobs:
-    restore:
+    build:
+
         runs-on: ubuntu-latest
+
         steps:
             -   uses: actions/checkout@v4
             -   name: Setup .NET
@@ -25,87 +24,8 @@ jobs:
                 with:
                     global-json-file: global.json
             -   name: Restore dependencies
-                run: dotnet restore --configuration Release
-
-    build:
-        needs: restore
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-            -   name: Setup .NET
-                uses: actions/setup-dotnet@v4
-                with:
-                    global-json-file: global.json
-            -   name: Build Solution
-                run: |
-                    dotnet build --configuration Release --no-restore \
-                      -maxcpucount:1 /nodeReuse:false
-
-    test-net8:
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-            -   name: Setup .NET
-                uses: actions/setup-dotnet@v4
-                with:
-                    global-json-file: global.json
-            -   name: Test net8.0
-                run: |
-                    dotnet test --configuration Release --no-build \
-                      --framework net8.0 \
-                      --verbosity minimal \
-                      --results-directory ./TestResults/net8 \
-                      --logger "trx;LogFileName=results_net8.trx"
-            -   name: Upload net8 results
-                uses: actions/upload-artifact@v4
-                if: always()
-                with:
-                    name: test-results-net8
-                    path: ./TestResults/net8
-
-    test-net9:
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-            -   name: Setup .NET
-                uses: actions/setup-dotnet@v4
-                with:
-                    global-json-file: global.json
-            -   name: Test net9.0
-                run: |
-                    dotnet test --configuration Release --no-build \
-                      --framework net9.0 \
-                      --verbosity minimal \
-                      --results-directory ./TestResults/net9 \
-                      --logger "trx;LogFileName=results_net9.trx"
-            -   name: Upload net9 results
-                uses: actions/upload-artifact@v4
-                if: always()
-                with:
-                    name: test-results-net9
-                    path: ./TestResults/net9
-
-    test-net10:
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-            -   name: Setup .NET
-                uses: actions/setup-dotnet@v4
-                with:
-                    global-json-file: global.json
-            -   name: Test net10.0
-                run: |
-                    dotnet test --configuration Release --no-build \
-                      --framework net10.0 \
-                      --verbosity minimal \
-                      --results-directory ./TestResults/net10 \
-                      --logger "trx;LogFileName=results_net10.trx"
-            -   name: Upload net10 results
-                uses: actions/upload-artifact@v4
-                if: always()
-                with:
-                    name: test-results-net10
-                    path: ./TestResults/net10
+                run: dotnet restore
+            -   name: Build
+                run: dotnet build --no-restore
+            -   name: Test
+                run: dotnet test --no-build --verbosity quiet

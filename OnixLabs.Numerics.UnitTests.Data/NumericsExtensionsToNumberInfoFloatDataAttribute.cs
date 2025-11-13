@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Numerics;
-using System.Reflection;
-using Xunit.Sdk;
 
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class NumericsExtensionsToNumberInfoFloatDataAttribute : DataAttribute
+public sealed class NumericsExtensionsToNumberInfoFloatDataAttribute : TestDataAttribute
 {
     private static readonly (float Value, BigInteger UnscaledValue, int Scale, BigInteger Significand, int Exponent, int Sign, int Precision)[] Data =
     [

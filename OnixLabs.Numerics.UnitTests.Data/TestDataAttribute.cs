@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020-2025 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
 
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class BigDecimalArithmeticTruncateDataAttribute : TestDataAttribute
+public abstract class TestDataAttribute : DataAttribute
 {
-    public override IEnumerable<object[]> GetData(MethodInfo testMethod)
-    {
-        foreach (decimal value in TestDataGenerator.GenerateScaledValues())
-            yield return [value, Guid.NewGuid()];
+    public abstract IEnumerable<object[]> GetData(MethodInfo testMethod);
 
-        foreach (decimal value in TestDataGenerator.GenerateRandomValues())
-            yield return [value, Guid.NewGuid()];
+    public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(MethodInfo testMethod, DisposalTracker disposalTracker)
+    {
+        List<ITheoryDataRow> rows = [];
+
+        foreach (object[] objects in GetData(testMethod))
+            rows.Add(new TheoryDataRow(objects));
+
+        return new ValueTask<IReadOnlyCollection<ITheoryDataRow>>(rows);
     }
+
+    public sealed override bool SupportsDiscoveryEnumeration() => false;
 }

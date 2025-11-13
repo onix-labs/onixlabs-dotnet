@@ -25,11 +25,17 @@ namespace OnixLabs.Core;
 public static class RandomExtensions
 {
     /// <summary>
-    /// Obtains a random element from the specified <see cref="IReadOnlyList{T}"/> items.
+    /// Provides extension methods for <see cref="Random"/> instances.
     /// </summary>
     /// <param name="random">The current <see cref="Random"/> instance.</param>
-    /// <param name="items">The <see cref="IReadOnlyList{T}"/> items from which to obtain a random element.</param>
-    /// <typeparam name="T">The underlying type of the <see cref="IReadOnlyList{T}"/> collection.</typeparam>
-    /// <returns>Returns a random element from the specified <see cref="IReadOnlyList{T}"/> items.</returns>
-    public static T Next<T>(this Random random, IReadOnlyList<T> items) => items[random.Next(0, items.Count)];
+    extension(Random random)
+    {
+        /// <summary>
+        /// Obtains a random element from the specified <see cref="IReadOnlyList{T}"/> items.
+        /// </summary>
+        /// <param name="items">The <see cref="IReadOnlyList{T}"/> items from which to obtain a random element.</param>
+        /// <typeparam name="T">The underlying type of the <see cref="IReadOnlyList{T}"/> collection.</typeparam>
+        /// <returns>Returns a random element from the specified <see cref="IReadOnlyList{T}"/> items.</returns>
+        public T Next<T>(IReadOnlyList<T> items) => items[random.Next(0, items.Count)];
+    }
 }

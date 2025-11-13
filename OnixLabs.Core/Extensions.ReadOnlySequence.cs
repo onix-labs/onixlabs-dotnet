@@ -24,22 +24,26 @@ namespace OnixLabs.Core;
 public static class ReadOnlySequenceExtensions
 {
     /// <summary>
-    /// Copies the current <see cref="ReadOnlySequence{T}"/> to the specified <see cref="T:[]"/> by reference.
+    /// Provides extension methods for <see cref="ReadOnlySequence{T}"/> instances.
     /// </summary>
-    /// <param name="sequence">The current <see cref="ReadOnlySequence{T}"/> to copy.</param>
-    /// <param name="array">The <see cref="T:[]"/> to copy to.</param>
-    /// <typeparam name="T">The underlying type of the specified <see cref="ReadOnlySequence{T}"/> and <see cref="T:[]"/>.</typeparam>
-    public static void CopyTo<T>(this ReadOnlySequence<T> sequence, out T[] array)
+    /// <param name="sequence">The current <see cref="ReadOnlySequence{T}"/> instance.</param>
+    /// <typeparam name="T">The underlying type of the current <see cref="ReadOnlySequence{T}"/> instance.</typeparam>
+    extension<T>(ReadOnlySequence<T> sequence)
     {
-        if (sequence.IsSingleSegment)
+        /// <summary>
+        /// Copies the current <see cref="ReadOnlySequence{T}"/> to the specified <typeparamref name="T"/> array.
+        /// </summary>
+        /// <param name="array">The <typeparamref name="T"/> array to copy in to.</param>
+        public void CopyTo(out T[] array)
         {
-            array = sequence.First.Span.ToArray();
-        }
-        else
-        {
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            array = new T[sequence.Length];
-            sequence.CopyTo(array);
+            if (sequence.IsSingleSegment)
+                array = sequence.First.Span.ToArray();
+            else
+            {
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                array = new T[sequence.Length];
+                sequence.CopyTo(array);
+            }
         }
     }
 }

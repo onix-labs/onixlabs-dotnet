@@ -27,8 +27,8 @@ public static class RandomExtensions
     /// <summary>
     /// Provides extension methods for <see cref="Random"/> instances.
     /// </summary>
-    /// <param name="random">The current <see cref="Random"/> instance.</param>
-    extension(Random random)
+    /// <param name="receiver">The current <see cref="Random"/> instance.</param>
+    extension(Random receiver)
     {
         /// <summary>
         /// Obtains a random element from the specified <see cref="IReadOnlyList{T}"/> items.
@@ -36,6 +36,6 @@ public static class RandomExtensions
         /// <param name="items">The <see cref="IReadOnlyList{T}"/> items from which to obtain a random element.</param>
         /// <typeparam name="T">The underlying type of the <see cref="IReadOnlyList{T}"/> collection.</typeparam>
         /// <returns>Returns a random element from the specified <see cref="IReadOnlyList{T}"/> items.</returns>
-        public T Next<T>(IReadOnlyList<T> items) => items[random.Next(0, items.Count)];
+        public T Next<T>(IReadOnlyList<T> items) => items[receiver.Next(0, items.Count)];
     }
 }

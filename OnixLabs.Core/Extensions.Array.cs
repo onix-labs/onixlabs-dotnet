@@ -56,14 +56,14 @@ public static class ArrayExtensions
     /// <summary>
     /// Provides extension methods for <see cref="byte"/> arrays.
     /// </summary>
-    /// <param name="array">The current <see cref="byte"/> array.</param>
-    extension(byte[] array)
+    /// <param name="receiver">The current <see cref="byte"/> array.</param>
+    extension(byte[] receiver)
     {
         /// <summary>
         /// Obtains the <see cref="string"/> representation of the current <see cref="byte"/> array.
         /// </summary>
         /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the current <see cref="byte"/> array into a <see cref="string"/> representation.</param>
         /// <returns>Returns the <see cref="string"/> representation of the current <see cref="byte"/> array.</returns>
-        public string ToString(Encoding encoding) => encoding.GetString(array);
+        public string ToString(Encoding encoding) => encoding.GetString(receiver);
     }
 }

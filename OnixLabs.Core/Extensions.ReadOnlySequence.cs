@@ -26,9 +26,9 @@ public static class ReadOnlySequenceExtensions
     /// <summary>
     /// Provides extension methods for <see cref="ReadOnlySequence{T}"/> instances.
     /// </summary>
-    /// <param name="sequence">The current <see cref="ReadOnlySequence{T}"/> instance.</param>
+    /// <param name="receiver">The current <see cref="ReadOnlySequence{T}"/> instance.</param>
     /// <typeparam name="T">The underlying type of the current <see cref="ReadOnlySequence{T}"/> instance.</typeparam>
-    extension<T>(ReadOnlySequence<T> sequence)
+    extension<T>(ReadOnlySequence<T> receiver)
     {
         /// <summary>
         /// Copies the current <see cref="ReadOnlySequence{T}"/> to the specified <typeparamref name="T"/> array.
@@ -36,13 +36,13 @@ public static class ReadOnlySequenceExtensions
         /// <param name="array">The <typeparamref name="T"/> array to copy in to.</param>
         public void CopyTo(out T[] array)
         {
-            if (sequence.IsSingleSegment)
-                array = sequence.First.Span.ToArray();
+            if (receiver.IsSingleSegment)
+                array = receiver.First.Span.ToArray();
             else
             {
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
-                array = new T[sequence.Length];
-                sequence.CopyTo(array);
+                array = new T[receiver.Length];
+                receiver.CopyTo(array);
             }
         }
     }

@@ -11,6 +11,7 @@ on:
 
 env:
   USE_FULL_NUMERIC_PROVIDER: "true"
+  MSBUILDDISABLENODEREUSE: "1"
 
 jobs:
   build:
@@ -27,5 +28,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity quiet
+    - name: Test (.NET 8.0)
+      run: dotnet test --no-build --framework net8.0 --verbosity quiet
+    - name: Test (.NET 9.0)
+      run: dotnet test --no-build --framework net9.0 --verbosity quiet
+    - name: Test (.NET 10.0)
+      run: dotnet test --no-build --framework net10.0 --verbosity quiet

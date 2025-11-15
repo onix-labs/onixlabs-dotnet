@@ -38,7 +38,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     public BigDecimal(BigInteger value, int scale = 0, ScaleMode mode = default)
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
         number = value.ToNumberInfo(scale, mode);
     }
 
@@ -49,7 +49,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
     public BigDecimal(float value, ConversionMode mode = default)
     {
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
         number = value.ToNumberInfo(mode);
     }
 
@@ -60,7 +60,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
     public BigDecimal(double value, ConversionMode mode = default)
     {
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
         number = value.ToNumberInfo(mode);
     }
 

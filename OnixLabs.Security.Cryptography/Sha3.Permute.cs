@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-
 namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class Sha3
@@ -22,7 +20,7 @@ public abstract partial class Sha3
     /// Performs the FIPS 202 SHA-3 permutation.
     /// </summary>
     /// <param name="state">The state upon which to perform the permutation.</param>
-    private static void Permute(IList<ulong> state)
+    private static void Permute(ulong[] state)
     {
         const int hashRounds = 24;
 

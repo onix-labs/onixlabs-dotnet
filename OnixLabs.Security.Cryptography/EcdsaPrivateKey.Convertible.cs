@@ -21,10 +21,10 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EcdsaPrivateKey
 {
     /// <summary>
-    /// Create a new <see cref="EcdsaPrivateKey"/> instance from the specified <see cref="T:byte[]"/> value.
+    /// Create a new <see cref="EcdsaPrivateKey"/> instance from the specified <see cref="byte"/> array value.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="EcdsaPrivateKey"/> instance.</param>
-    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance from the specified <see cref="T:byte[]"/> value.</returns>
+    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance from the specified <see cref="byte"/> array value.</returns>
     public static implicit operator EcdsaPrivateKey(byte[] value) => new(value);
 
     /// <summary>

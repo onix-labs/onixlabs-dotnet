@@ -35,7 +35,7 @@ internal static class Ieee754Converter
     public static NumberInfo Convert(float value, ConversionMode mode)
     {
         RequireRealNumber(value);
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
 
         if (IsZeroOrOne(value, out NumberInfo result)) return result;
 
@@ -56,7 +56,7 @@ internal static class Ieee754Converter
     public static NumberInfo Convert(double value, ConversionMode mode)
     {
         RequireRealNumber(value);
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
 
         if (IsZeroOrOne(value, out NumberInfo result)) return result;
 

@@ -22,5 +22,5 @@ public sealed partial class EcdhPrivateKey
     /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="EcdhPrivateKey"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="NamedPrivateKey"/> from the current <see cref="EcdhPrivateKey"/> instance.</returns>
-    public override NamedPrivateKey ToNamedPrivateKey() => new(this, "ECDH");
+    public override NamedPrivateKey ToNamedPrivateKey() => new(this, KeyName);
 }

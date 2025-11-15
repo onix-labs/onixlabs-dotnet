@@ -19,4 +19,5 @@ namespace OnixLabs.Security.Cryptography;
 /// </summary>
 /// <param name="Signature">The underlying cryptographic digital signature.</param>
 /// <param name="Key">The underlying named cryptographic public key.</param>
+// ReSharper disable UnusedType.Global NotAccessedPositionalProperty.Global
 public readonly record struct DigitalSignatureAndPublicKey(DigitalSignature Signature, NamedPublicKey Key);

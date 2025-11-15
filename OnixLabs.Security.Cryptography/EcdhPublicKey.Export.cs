@@ -22,7 +22,7 @@ public sealed partial class EcdhPublicKey
     /// <summary>
     /// Exports the EC Diffie-Hellman cryptographic public key data.
     /// </summary>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the EC Diffie-Hellman cryptographic public key data.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the EC Diffie-Hellman cryptographic public key data.</returns>
     public byte[] Export()
     {
         using ECDiffieHellman algorithm = ImportKeyData();

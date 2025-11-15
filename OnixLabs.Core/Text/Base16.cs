@@ -14,8 +14,6 @@
 
 using System;
 using System.Buffers;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 
 namespace OnixLabs.Core.Text;

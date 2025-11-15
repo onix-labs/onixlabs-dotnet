@@ -32,10 +32,10 @@ public readonly partial struct DigitalSignature
     public ReadOnlySpan<byte> AsReadOnlySpan() => value;
 
     /// <summary>
-    /// Create a new <see cref="DigitalSignature"/> instance from the specified <see cref="byte"/> array value.
+    /// Create a new <see cref="DigitalSignature"/> instance from the specified <see cref="byte"/> array.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="DigitalSignature"/> instance.</param>
-    /// <returns>Returns a new <see cref="DigitalSignature"/> instance from the specified <see cref="byte"/> array value.</returns>
+    /// <returns>Returns a new <see cref="DigitalSignature"/> instance from the specified <see cref="byte"/> array.</returns>
     public static implicit operator DigitalSignature(byte[] value) => new(value);
 
     /// <summary>

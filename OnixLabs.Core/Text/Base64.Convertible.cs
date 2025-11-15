@@ -62,11 +62,11 @@ public readonly partial struct Base64
     public static implicit operator Base64(string value) => new(value);
 
     /// <summary>
-    /// Create a new <see cref="Base64"/> instance from the specified <see cref="char"/> array value.
-    /// <remarks>The <see cref="char"/> array value will be encoded using the <see cref="Encoding.UTF8"/> encoding.</remarks>
+    /// Create a new <see cref="Base64"/> instance from the specified <see cref="char"/> array.
+    /// <remarks>The <see cref="char"/> array will be encoded using the <see cref="Encoding.UTF8"/> encoding.</remarks>
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="Base64"/> instance.</param>
-    /// <returns>Returns a new <see cref="Base64"/> instance from the specified <see cref="char"/> array value.</returns>
+    /// <returns>Returns a new <see cref="Base64"/> instance from the specified <see cref="char"/> array.</returns>
     public static implicit operator Base64(char[] value) => new(value);
 
     /// <summary>

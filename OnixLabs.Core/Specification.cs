@@ -25,6 +25,7 @@ namespace OnixLabs.Core;
 /// </summary>
 /// <typeparam name="T">The underlying type of the subject to which the specification applies.</typeparam>
 // ReSharper disable PossibleMultipleEnumeration
+// ReSharper disable MemberCanBePrivate.Global
 public abstract class Specification<T>
 {
     /// <summary>

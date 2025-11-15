@@ -30,9 +30,9 @@ public static class IQueryableExtensions
     /// <summary>
     /// Provides LINQ-like extension methods for <see cref="IQueryable{T}"/> instances.
     /// </summary>
-    /// <param name="receiver">The current <see cref="IQueryable{T}"/> instance.</param>
+    /// <param name="queryable">The current <see cref="IQueryable{T}"/> instance.</param>
     /// <typeparam name="T">The underlying type of the current <see cref="IQueryable{T}"/> instance.</typeparam>
-    extension<T>(IQueryable<T> receiver)
+    extension<T>(IQueryable<T> queryable)
     {
         /// <summary>
         /// Filters a sequence of values based on a specification.
@@ -41,10 +41,10 @@ public static class IQueryableExtensions
         /// <returns>Returns an <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the specification.</returns>
         public IQueryable<T> Where(Specification<T> specification)
         {
-            RequireNotNull(receiver, QueryableNullExceptionMessage, nameof(receiver));
-            RequireNotNull(specification, SpecificationNullExceptionMessage, nameof(specification));
+            RequireNotNull(queryable, QueryableNullExceptionMessage);
+            RequireNotNull(specification, SpecificationNullExceptionMessage);
 
-            return receiver.Where(specification.Criteria);
+            return queryable.Where(specification.Criteria);
         }
 
         /// <summary>
@@ -54,10 +54,10 @@ public static class IQueryableExtensions
         /// <returns>Returns an <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the negated specification.</returns>
         public IQueryable<T> WhereNot(Specification<T> specification)
         {
-            RequireNotNull(receiver, QueryableNullExceptionMessage, nameof(receiver));
-            RequireNotNull(specification, SpecificationNullExceptionMessage, nameof(specification));
+            RequireNotNull(queryable, QueryableNullExceptionMessage);
+            RequireNotNull(specification, SpecificationNullExceptionMessage);
 
-            return receiver.Where(specification.Not().Criteria);
+            return queryable.Where(specification.Not().Criteria);
         }
     }
 }

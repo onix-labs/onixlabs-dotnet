@@ -22,8 +22,8 @@ namespace OnixLabs.Core;
 public interface IMemoryBinaryConvertible
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
+    /// Gets the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    /// <returns>Return the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
     ReadOnlyMemory<byte> AsReadOnlyMemory();
 }

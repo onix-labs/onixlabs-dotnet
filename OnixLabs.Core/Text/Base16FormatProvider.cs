@@ -19,12 +19,12 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-16 format provider.
 /// </summary>
-// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.ObjectAllocation.Evident StringLiteralTypo
 public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IFormatProvider
 {
     /// <summary>
     /// Gets the invariant Base-16 format provider.
-    /// The invariant format provider favours lowercase for Base-16 encoding.
+    /// The invariant format provider favors lowercase for Base-16 encoding.
     /// The alphabet provided by this format provider is not a strict Base-16 alphabet as it contains all uppercase and lowercase values.
     /// </summary>
     public static readonly Base16FormatProvider Invariant = new(0, nameof(Invariant), "0123456789ABCDEFabcdef");

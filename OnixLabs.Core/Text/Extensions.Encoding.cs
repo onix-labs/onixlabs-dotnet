@@ -24,14 +24,10 @@ namespace OnixLabs.Core.Text;
 internal static class EncodingExtensions
 {
     /// <summary>
-    /// The default encoding, which is <see cref="Encoding.UTF8"/>.
-    /// </summary>
-    private static readonly Encoding Default = Encoding.UTF8;
-
-    /// <summary>
     /// Gets the current <see cref="Encoding"/>, or the default encoding if the current <see cref="Encoding"/> is <see langword="null"/>.
     /// </summary>
+    /// <remarks>The default encoding is <see cref="Encoding.UTF8"/>.</remarks>
     /// <param name="encoding">The current <see cref="Encoding"/>.</param>
     /// <returns>Returns the current <see cref="Encoding"/>, or the default encoding if the current <see cref="Encoding"/> is <see langword="null"/>.</returns>
-    public static Encoding GetOrDefault(this Encoding? encoding) => encoding ?? Default;
+    public static Encoding GetOrDefault(this Encoding? encoding) => encoding ?? Encoding.UTF8;
 }

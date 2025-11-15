@@ -94,7 +94,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
-    public static Some<T> Some(T value) => new(RequireNotNull(value, "Value must not be null.", nameof(value)));
+    public static Some<T> Some(T value) => new(RequireNotNull(value, "Value must not be null."));
 
     /// <summary>
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if

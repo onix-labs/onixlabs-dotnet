@@ -22,9 +22,9 @@ namespace OnixLabs.Core;
 public abstract partial class Enumeration<T>
 {
     /// <summary>
-    /// Gets all of the enumeration entries for the current type.
+    /// Gets all the enumeration entries for the current type.
     /// </summary>
-    /// <returns>Returns all of the enumeration entries for the current type.</returns>
+    /// <returns>Returns all the enumeration entries for the current type.</returns>
     public static IReadOnlySet<T> GetAll() => typeof(T)
         .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
         .Select(field => field.GetValue(null))
@@ -32,20 +32,20 @@ public abstract partial class Enumeration<T>
         .ToFrozenSet();
 
     /// <summary>
-    /// Gets all of the enumeration entries for the current type.
+    /// Gets all the enumeration entries for the current type.
     /// </summary>
-    /// <returns>Returns all of the enumeration entries for the current type.</returns>
+    /// <returns>Returns all the enumeration entries for the current type.</returns>
     public static IReadOnlySet<(int Value, string Name)> GetEntries() => GetAll().Select(entry => entry.ToEntry()).ToFrozenSet();
 
     /// <summary>
-    /// Gets all of the enumeration names for the current type.
+    /// Gets all the enumeration names for the current type.
     /// </summary>
-    /// <returns>Returns all of the enumeration names for the current type.</returns>
+    /// <returns>Returns all the enumeration names for the current type.</returns>
     public static IReadOnlySet<string> GetNames() => GetAll().Select(entry => entry.Name).ToFrozenSet();
 
     /// <summary>
-    /// Gets all of the enumeration values for the current type.
+    /// Gets all the enumeration values for the current type.
     /// </summary>
-    /// <returns>Returns all of the enumeration values for the current type.</returns>
+    /// <returns>Returns all the enumeration values for the current type.</returns>
     public static IReadOnlySet<int> GetValues() => GetAll().Select(entry => entry.Value).ToFrozenSet();
 }

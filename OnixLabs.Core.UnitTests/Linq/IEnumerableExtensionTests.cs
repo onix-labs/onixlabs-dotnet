@@ -20,6 +20,7 @@ using System.Linq;
 using System.Numerics;
 using OnixLabs.Core.Linq;
 using OnixLabs.Core.UnitTests.Data;
+using static OnixLabs.Core.Collections.Collection;
 
 namespace OnixLabs.Core.UnitTests.Linq;
 
@@ -30,7 +31,7 @@ public sealed class IEnumerableExtensionTests
     public void AllEqualByShouldProduceExpectedResultTrueWhenEnumerableIsEmpty()
     {
         // Given
-        IEnumerable<Record<Guid>> elements = [];
+        IEnumerable<Record<Guid>> elements = EmptyEnumerable<Record<Guid>>();
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -46,7 +47,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("abc", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -62,7 +63,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
 
         // When
         bool result = elements.AllEqualBy(element => element.Text);
@@ -78,7 +79,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
 
         // When
         bool result = elements.AnyEqualBy(element => element.Text);
@@ -94,7 +95,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 123, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
 
         // When
         bool result = elements.AnyEqualBy(element => element.Text);
@@ -108,7 +109,7 @@ public sealed class IEnumerableExtensionTests
     {
         // Given
         const int expected = 3;
-        IEnumerable elements = new[] { 1, 2, 3 };
+        IEnumerable elements = EnumerableOf(1, 2, 3);
 
         // When
         int actual = elements.Count();
@@ -125,7 +126,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 123, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 456, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
 
         // When
         int actual = elements.CountNot(element => element.Number == 456);
@@ -138,7 +139,7 @@ public sealed class IEnumerableExtensionTests
     public void FirstOrNoneShouldReturnNoneWhenEnumerableIsEmpty()
     {
         // Given
-        IEnumerable<int> elements = [];
+        IEnumerable<int> elements = EmptyEnumerable<int>();
         Optional<int> expected = Optional<int>.None;
 
         // When
@@ -152,7 +153,7 @@ public sealed class IEnumerableExtensionTests
     public void FirstOrNoneShouldReturnFirstElementWhenCollectionIsNotEmpty()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Optional<int> expected = 1;
 
         // When
@@ -166,7 +167,7 @@ public sealed class IEnumerableExtensionTests
     public void FirstOrNoneShouldReturnFirstElementMatchingPredicateWhenCollectionIsNotEmpty()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Optional<int> expected = 2;
 
         // When
@@ -180,7 +181,7 @@ public sealed class IEnumerableExtensionTests
     public void FirstOrNoneShouldReturnNoneWhenNoElementMatchesPredicateAndCollectionIsNotEmpty()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Optional<int> expected = Optional<int>.None;
 
         // When
@@ -194,7 +195,7 @@ public sealed class IEnumerableExtensionTests
     public void ForEachShouldProduceExpectedResultNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new[] { new Element(), new Element(), new Element() };
+        IEnumerable enumerable = ArrayOf(new Element(), new Element(), new Element());
 
         // When
         enumerable.ForEach(element => (element as Element)!.Called = true);
@@ -207,7 +208,7 @@ public sealed class IEnumerableExtensionTests
     public void ForEachShouldProduceExpectedResult()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element(), new Element(), new Element() };
+        IEnumerable<Element> enumerable = ArrayOf(new Element(), new Element(), new Element());
 
         // When
         enumerable.ForEach(element => element.Called = true);
@@ -220,8 +221,8 @@ public sealed class IEnumerableExtensionTests
     public void GetContentHashCodeShouldProduceExpectedResultEqualNonGeneric()
     {
         // Given
-        IEnumerable enumerable1 = new[] { new Element(1), new Element(2), new Element(3) };
-        IEnumerable enumerable2 = new[] { new Element(1), new Element(2), new Element(3) };
+        IEnumerable enumerable1 = EnumerableOf(new Element(1), new Element(2), new Element(3));
+        IEnumerable enumerable2 = EnumerableOf(new Element(1), new Element(2), new Element(3));
 
         // When
         int hashCode1 = enumerable1.GetContentHashCode();
@@ -235,8 +236,8 @@ public sealed class IEnumerableExtensionTests
     public void GetContentHashCodeShouldProduceExpectedResultEqual()
     {
         // Given
-        IEnumerable<Element> enumerable1 = [new Element(1), new Element(2), new Element(3)];
-        IEnumerable<Element> enumerable2 = [new Element(1), new Element(2), new Element(3)];
+        IEnumerable<Element> enumerable1 = EnumerableOf(new Element(1), new Element(2), new Element(3));
+        IEnumerable<Element> enumerable2 = EnumerableOf(new Element(1), new Element(2), new Element(3));
 
         // When
         int hashCode1 = enumerable1.GetContentHashCode();
@@ -250,8 +251,8 @@ public sealed class IEnumerableExtensionTests
     public void GetContentHashCodeShouldProduceExpectedResultDifferent()
     {
         // Given
-        IEnumerable<Element> enumerable1 = [new Element(1), new Element(2), new Element(3)];
-        IEnumerable<Element> enumerable2 = [new Element(3), new Element(2), new Element(1)];
+        IEnumerable<Element> enumerable1 = EnumerableOf(new Element(1), new Element(2), new Element(3));
+        IEnumerable<Element> enumerable2 = EnumerableOf(new Element(3), new Element(2), new Element(1));
 
         // When
         int hashCode1 = enumerable1.GetContentHashCode();
@@ -265,7 +266,7 @@ public sealed class IEnumerableExtensionTests
     public void IsEmptyShouldProduceExpectedResultTrueNonGeneric()
     {
         // Given
-        IEnumerable enumerable = Array.Empty<object>();
+        IEnumerable enumerable = EmptyEnumerable<object>();
 
         // When
         bool result = enumerable.IsEmpty();
@@ -278,7 +279,7 @@ public sealed class IEnumerableExtensionTests
     public void IsEmptyShouldProduceExpectedResultFalseNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new[] { new Element() };
+        IEnumerable enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsEmpty();
@@ -291,7 +292,7 @@ public sealed class IEnumerableExtensionTests
     public void IsEmptyShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = [];
+        IEnumerable<Element> enumerable = EmptyEnumerable<Element>();
 
         // When
         bool result = enumerable.IsEmpty();
@@ -304,7 +305,7 @@ public sealed class IEnumerableExtensionTests
     public void IsEmptyShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = [new Element()];
+        IEnumerable<Element> enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsEmpty();
@@ -317,7 +318,7 @@ public sealed class IEnumerableExtensionTests
     public void IsNotEmptyShouldProduceExpectedResultTrueNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new[] { new Element() };
+        IEnumerable enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsNotEmpty();
@@ -330,7 +331,7 @@ public sealed class IEnumerableExtensionTests
     public void IsNotEmptyShouldProduceExpectedResultFalseNonGeneric()
     {
         // Given
-        IEnumerable enumerable = Array.Empty<object>();
+        IEnumerable enumerable = EmptyEnumerable<object>();
 
         // When
         bool result = enumerable.IsNotEmpty();
@@ -343,7 +344,7 @@ public sealed class IEnumerableExtensionTests
     public void IsNotEmptyShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = [new Element()];
+        IEnumerable<Element> enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsNotEmpty();
@@ -356,7 +357,7 @@ public sealed class IEnumerableExtensionTests
     public void IsNotEmptyShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = [];
+        IEnumerable<Element> enumerable = EmptyEnumerable<Element>();
 
         // When
         bool result = enumerable.IsNotEmpty();
@@ -369,7 +370,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultTrueNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new[] { new Element() };
+        IEnumerable enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsSingle();
@@ -382,7 +383,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultFalseWhenEmptyNonGeneric()
     {
         // Given
-        IEnumerable enumerable = Array.Empty<object>();
+        IEnumerable enumerable = EmptyEnumerable<object>();
 
         // When
         bool result = enumerable.IsSingle();
@@ -395,7 +396,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultFalseWhenMoreThanOneElementNonGeneric()
     {
         // Given
-        IEnumerable<Element> enumerable = new[] { new Element(), new Element() };
+        IEnumerable<Element> enumerable = EnumerableOf(new Element(), new Element());
 
         // When
         bool result = enumerable.IsSingle();
@@ -408,7 +409,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = [new Element()];
+        IEnumerable<Element> enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsSingle();
@@ -421,7 +422,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultFalseWhenEmpty()
     {
         // Given
-        IEnumerable<Element> enumerable = [];
+        IEnumerable<Element> enumerable = EmptyEnumerable<Element>();
 
         // When
         bool result = enumerable.IsSingle();
@@ -434,7 +435,7 @@ public sealed class IEnumerableExtensionTests
     public void IsSingleShouldProduceExpectedResultFalseWhenMoreThanOneElement()
     {
         // Given
-        IEnumerable<Element> enumerable = [new Element(), new Element()];
+        IEnumerable<Element> enumerable = EnumerableOf(new Element(), new Element());
 
         // When
         bool result = enumerable.IsSingle();
@@ -447,7 +448,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountEvenShouldProduceExpectedResultTrueNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new[] { new Element(), new Element() };
+        IEnumerable enumerable = EnumerableOf(new Element(), new Element());
 
         // When
         bool result = enumerable.IsCountEven();
@@ -460,7 +461,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountEvenShouldProduceExpectedResultFalseNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new[] { new Element() };
+        IEnumerable enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsCountEven();
@@ -473,7 +474,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountEvenShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = [new Element(), new Element()];
+        IEnumerable<Element> enumerable = EnumerableOf(new Element(), new Element());
 
         // When
         bool result = enumerable.IsCountEven();
@@ -486,7 +487,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountEvenShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = [new Element()];
+        IEnumerable<Element> enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsCountEven();
@@ -499,7 +500,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountOddShouldProduceExpectedResultTrueNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new[] { new Element() };
+        IEnumerable enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsCountOdd();
@@ -512,7 +513,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountOddShouldProduceExpectedResultFalseNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new[] { new Element(), new Element() };
+        IEnumerable enumerable = EnumerableOf(new Element(), new Element());
 
         // When
         bool result = enumerable.IsCountOdd();
@@ -525,7 +526,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountOddShouldProduceExpectedResultTrue()
     {
         // Given
-        IEnumerable<Element> enumerable = [new Element()];
+        IEnumerable<Element> enumerable = EnumerableOf(new Element());
 
         // When
         bool result = enumerable.IsCountOdd();
@@ -538,7 +539,7 @@ public sealed class IEnumerableExtensionTests
     public void IsCountOddShouldProduceExpectedResultFalse()
     {
         // Given
-        IEnumerable<Element> enumerable = [new Element(), new Element()];
+        IEnumerable<Element> enumerable = EnumerableOf(new Element(), new Element());
 
         // When
         bool result = enumerable.IsCountOdd();
@@ -551,7 +552,7 @@ public sealed class IEnumerableExtensionTests
     public void JoinToStringShouldProduceExpectedResultWithDefaultSeparatorNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        IEnumerable enumerable = EnumerableOf<object>(1, 2, 3, 4.5, true, false);
         const string expected = "1, 2, 3, 4.5, True, False";
 
         // When
@@ -565,7 +566,7 @@ public sealed class IEnumerableExtensionTests
     public void JoinToStringShouldProduceExpectedResultWithCustomSeparatorNonGeneric()
     {
         // Given
-        IEnumerable enumerable = new object[] { 1, 2, 3, 4.5, true, false };
+        IEnumerable enumerable = EnumerableOf<object>(1, 2, 3, 4.5, true, false);
         const string expected = "1 *$ 2 *$ 3 *$ 4.5 *$ True *$ False";
 
         // When
@@ -579,7 +580,7 @@ public sealed class IEnumerableExtensionTests
     public void JoinToStringShouldProduceExpectedResultWithDefaultSeparator()
     {
         // Given
-        IEnumerable<object> enumerable = [1, 2, 3, 4.5, true, false];
+        IEnumerable<object> enumerable = EnumerableOf<object>(1, 2, 3, 4.5, true, false);
         const string expected = "1, 2, 3, 4.5, True, False";
 
         // When
@@ -593,7 +594,7 @@ public sealed class IEnumerableExtensionTests
     public void JoinToStringShouldProduceExpectedResultWithCustomSeparator()
     {
         // Given
-        IEnumerable<object> enumerable = [1, 2, 3, 4.5, true, false];
+        IEnumerable<object> enumerable = EnumerableOf<object>(1, 2, 3, 4.5, true, false);
         const string expected = "1 *$ 2 *$ 3 *$ 4.5 *$ True *$ False";
 
         // When
@@ -607,7 +608,7 @@ public sealed class IEnumerableExtensionTests
     public void LastOrNoneShouldReturnNoneWhenEnumerableIsEmpty()
     {
         // Given
-        IEnumerable<int> elements = [];
+        IEnumerable<int> elements = EmptyEnumerable<int>();
         Optional<int> expected = Optional<int>.None;
 
         // When
@@ -621,7 +622,7 @@ public sealed class IEnumerableExtensionTests
     public void LastOrNoneShouldReturnLastElementWhenCollectionIsNotEmpty()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Optional<int> expected = 3;
 
         // When
@@ -635,7 +636,7 @@ public sealed class IEnumerableExtensionTests
     public void LastOrNoneShouldReturnFirstElementMatchingPredicateWhenCollectionIsNotEmpty()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Optional<int> expected = 3;
 
         // When
@@ -649,7 +650,7 @@ public sealed class IEnumerableExtensionTests
     public void LastOrNoneShouldReturnNoneWhenNoElementMatchesPredicateAndCollectionIsNotEmpty()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Optional<int> expected = Optional<int>.None;
 
         // When
@@ -666,7 +667,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 789, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -682,7 +683,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 0, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -698,7 +699,7 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 0, Guid.NewGuid());
         Record<Guid> element2 = new("def", 0, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 0, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
 
         // When
         bool result = elements.None(element => element.Number == 0);
@@ -725,7 +726,7 @@ public sealed class IEnumerableExtensionTests
     public void SequenceEqualOrNullShouldReturnTrueWhenCurrentEnumerableIsNotNullAndOtherEnumerableIsNull()
     {
         // Given
-        IEnumerable<int> enumerable = [1, 2, 3];
+        IEnumerable<int> enumerable = EnumerableOf(1, 2, 3);
         IEnumerable<int>? other = null;
 
         // When
@@ -740,7 +741,7 @@ public sealed class IEnumerableExtensionTests
     {
         // Given
         IEnumerable<int>? enumerable = null;
-        IEnumerable<int> other = [1, 2, 3];
+        IEnumerable<int> other = EnumerableOf(1, 2, 3);
 
         // When
         bool result = enumerable.SequenceEqualOrNull(other);
@@ -753,8 +754,9 @@ public sealed class IEnumerableExtensionTests
     public void SequenceEqualOrNullShouldReturnTrueWhenCurrentEnumerableIsEqualToTheOtherEnumerable()
     {
         // Given
-        IEnumerable<int>? enumerable = [1, 2, 3];
-        IEnumerable<int> other = [1, 2, 3];
+        // ReSharper disable once VariableCanBeNotNullable : THIS IS DELIBERATE!
+        IEnumerable<int>? enumerable = EnumerableOf(1, 2, 3);
+        IEnumerable<int> other = EnumerableOf(1, 2, 3);
 
         // When
         bool result = enumerable.SequenceEqualOrNull(other);
@@ -767,8 +769,9 @@ public sealed class IEnumerableExtensionTests
     public void SequenceEqualOrNullShouldReturnTrueWhenCurrentEnumerableIsNotEqualToTheOtherEnumerable()
     {
         // Given
-        IEnumerable<int>? enumerable = [1, 2, 3];
-        IEnumerable<int> other = [3, 2, 1];
+        // ReSharper disable once VariableCanBeNotNullable : THIS IS DELIBERATE!
+        IEnumerable<int>? enumerable = EnumerableOf(1, 2, 3);
+        IEnumerable<int> other = EnumerableOf(3, 2, 1);
 
         // When
         bool result = enumerable.SequenceEqualOrNull(other);
@@ -781,7 +784,7 @@ public sealed class IEnumerableExtensionTests
     public void SingleOrNoneShouldReturnSuccessNoneWhenEnumerableContainsNoElements()
     {
         // Given
-        IEnumerable<int> elements = [];
+        IEnumerable<int> elements = EmptyEnumerable<int>();
         Result<Optional<int>> expected = Optional<int>.None.ToResult();
 
         // When
@@ -795,7 +798,7 @@ public sealed class IEnumerableExtensionTests
     public void SingleOrNoneShouldReturnSuccessSomeWhenEnumerableContainsSingleElement()
     {
         // Given
-        IEnumerable<int> elements = [1];
+        IEnumerable<int> elements = EnumerableOf(1);
         Result<Optional<int>> expected = Optional<int>.Some(1).ToResult();
 
         // When
@@ -809,7 +812,7 @@ public sealed class IEnumerableExtensionTests
     public void SingleOrNoneShouldReturnFailureSomeWhenEnumerableContainsMoreThanOneElement()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Failure<Optional<int>> expected = Result<Optional<int>>.Failure(new InvalidOperationException("Sequence contains more than one matching element"));
 
         // When
@@ -826,7 +829,7 @@ public sealed class IEnumerableExtensionTests
     public void SingleOrNoneShouldReturnSuccessNoneWhenEnumerableContainsNoElementsMatchingPredicate()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Result<Optional<int>> expected = Optional<int>.None.ToResult();
 
         // When
@@ -840,7 +843,7 @@ public sealed class IEnumerableExtensionTests
     public void SingleOrNoneShouldReturnSuccessSomeWhenEnumerableContainsSingleElementMatchingPredicate()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Result<Optional<int>> expected = Optional<int>.Some(1).ToResult();
 
         // When
@@ -854,7 +857,7 @@ public sealed class IEnumerableExtensionTests
     public void SingleOrNoneShouldReturnFailureSomeWhenEnumerableContainsMoreThanOneElementMatchingPredidate()
     {
         // Given
-        IEnumerable<int> elements = [1, 2, 3];
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
         Failure<Optional<int>> expected = Result<Optional<int>>.Failure(new InvalidOperationException("Sequence contains more than one matching element"));
 
         // When
@@ -874,7 +877,7 @@ public sealed class IEnumerableExtensionTests
         static T SumProxy<T>(IEnumerable<T> enumerable) where T : INumberBase<T> => enumerable.Sum();
 
         // Given
-        IEnumerable<decimal> elements = [12.34m, 34.56m, 56.78m];
+        IEnumerable<decimal> elements = EnumerableOf(12.34m, 34.56m, 56.78m);
         const decimal expected = 103.68m;
 
         // When
@@ -891,7 +894,7 @@ public sealed class IEnumerableExtensionTests
         Numeric<decimal> element1 = new(1234.567m);
         Numeric<decimal> element2 = new(890.1234m);
         Numeric<decimal> element3 = new(56.78901m);
-        IEnumerable<Numeric<decimal>> elements = [element1, element2, element3];
+        IEnumerable<Numeric<decimal>> elements = EnumerableOf(element1, element2, element3);
         const decimal expected = 2181.47941m;
 
         // When
@@ -908,8 +911,8 @@ public sealed class IEnumerableExtensionTests
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
         Record<Guid> element3 = new("xyz", 789, Guid.NewGuid());
-        IEnumerable<Record<Guid>> elements = [element1, element2, element3];
-        IEnumerable<Record<Guid>> expected = [element2, element3];
+        IEnumerable<Record<Guid>> elements = EnumerableOf(element1, element2, element3);
+        IEnumerable<Record<Guid>> expected = EnumerableOf(element2, element3);
 
         // When
         IEnumerable<Record<Guid>> actual = elements.WhereNot(element => element.Number == 123);
@@ -924,8 +927,8 @@ public sealed class IEnumerableExtensionTests
         // Given
         Record<Guid> element1 = new("abc", 123, Guid.NewGuid());
         Record<Guid> element2 = new("def", 456, Guid.NewGuid());
-        IEnumerable<Record<Guid>?> elements = [element1, element2, null];
-        IEnumerable<Record<Guid>> expected = [element1, element2];
+        IEnumerable<Record<Guid>?> elements = EnumerableOf(element1, element2, null);
+        IEnumerable<Record<Guid>> expected = EnumerableOf(element1, element2);
 
         // When
         IEnumerable<Record<Guid>> actual = elements.WhereNotNull();
@@ -938,8 +941,8 @@ public sealed class IEnumerableExtensionTests
     public void WhereNotNullShouldProduceExpectedResultStruct()
     {
         // Given
-        IEnumerable<int?> elements = [1, 2, null, 3, null, 4, 5];
-        IEnumerable<int> expected = [1, 2, 3, 4, 5];
+        IEnumerable<int?> elements = EnumerableOf<int?>(1, 2, null, 3, null, 4, 5);
+        IEnumerable<int> expected = EnumerableOf(1, 2, 3, 4, 5);
 
         // When
         IEnumerable<int> actual = elements.WhereNotNull();
@@ -952,7 +955,7 @@ public sealed class IEnumerableExtensionTests
     public void ToCollectionStringShouldProduceExpectedResultObjectNonGeneric()
     {
         // Given
-        IEnumerable values = new object[] { 123, "abc", true, 123.456 };
+        IEnumerable values = EnumerableOf<object>(123, "abc", true, 123.456);
         const string expected = "[123, abc, True, 123.456]";
 
         // When
@@ -966,7 +969,7 @@ public sealed class IEnumerableExtensionTests
     public void ToCollectionStringShouldProduceExpectedResultStringNonGeneric()
     {
         // Given
-        IEnumerable values = new[] { "abc", "xyz", "123" };
+        IEnumerable values = EnumerableOf("abc", "xyz", "123");
         const string expected = "[abc, xyz, 123]";
 
         // When
@@ -980,7 +983,7 @@ public sealed class IEnumerableExtensionTests
     public void ToCollectionStringShouldProduceExpectedResultInt32NonGeneric()
     {
         // Given
-        IEnumerable values = new[] { 0, 1, 12, 123, 1234, -1, -12, -123, -1234 };
+        IEnumerable values = EnumerableOf(0, 1, 12, 123, 1234, -1, -12, -123, -1234);
         const string expected = "[0, 1, 12, 123, 1234, -1, -12, -123, -1234]";
 
         // When
@@ -994,7 +997,7 @@ public sealed class IEnumerableExtensionTests
     public void ToCollectionStringShouldProduceExpectedResultObject()
     {
         // Given
-        object[] values = [123, "abc", true, 123.456];
+        IEnumerable values = EnumerableOf<object>(123, "abc", true, 123.456);
         const string expected = "[123, abc, True, 123.456]";
 
         // When
@@ -1008,7 +1011,7 @@ public sealed class IEnumerableExtensionTests
     public void ToCollectionStringShouldProduceExpectedResultString()
     {
         // Given
-        string[] values = ["abc", "xyz", "123"];
+        IEnumerable<string> values = EnumerableOf("abc", "xyz", "123");
         const string expected = "[abc, xyz, 123]";
 
         // When
@@ -1022,7 +1025,7 @@ public sealed class IEnumerableExtensionTests
     public void ToCollectionStringShouldProduceExpectedResultInt32()
     {
         // Given
-        int[] values = [0, 1, 12, 123, 1234, -1, -12, -123, -1234];
+        IEnumerable<int> values = EnumerableOf(0, 1, 12, 123, 1234, -1, -12, -123, -1234);
         const string expected = "[0, 1, 12, 123, 1234, -1, -12, -123, -1234]";
 
         // When
@@ -1036,7 +1039,7 @@ public sealed class IEnumerableExtensionTests
     public void ToCollectionStringShouldProduceExpectedResultInt32IFormattable()
     {
         // Given
-        int[] values = [0, 1, 12, 123, 1234, -1, -12, -123, -1234];
+        IEnumerable<int> values = EnumerableOf(0, 1, 12, 123, 1234, -1, -12, -123, -1234);
         const string expected = "[£0.00, £1.00, £12.00, £123.00, £1,234.00, -£1.00, -£12.00, -£123.00, -£1,234.00]";
 
         // When

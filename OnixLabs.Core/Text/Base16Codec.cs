@@ -20,10 +20,10 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a codec for encoding and decoding Base-16 values.
 /// </summary>
+// ReSharper disable StringLiteralTypo
 public sealed class Base16Codec : IBaseCodec
 {
     private static readonly SearchValues<char> Base16UppercaseValues = SearchValues.Create("ABCDEF");
-
     private static readonly SearchValues<char> Base16LowercaseValues = SearchValues.Create("abcdef");
 
     /// <summary>
@@ -39,11 +39,11 @@ public sealed class Base16Codec : IBaseCodec
     }
 
     /// <summary>
-    /// Decodes the specified <see cref="ReadOnlySpan{T}"/> Base-16 representation into a <see cref="T:Byte[]"/>.
+    /// Decodes the specified <see cref="ReadOnlySpan{T}"/> Base-16 representation into a <see cref="byte"/> array.
     /// </summary>
-    /// <param name="value">The Base-16 value to decode into a <see cref="T:Byte[]"/>.</param>
+    /// <param name="value">The Base-16 value to decode into a <see cref="byte"/> array.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> decoded from the specified value.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array decoded from the specified value.</returns>
     public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null)
     {
         if (TryDecode(value, provider, out byte[] result)) return result;
@@ -90,13 +90,13 @@ public sealed class Base16Codec : IBaseCodec
     }
 
     /// <summary>
-    /// Tries to decode the specified <see cref="ReadOnlySpan{T}"/> Base-16 representation into a <see cref="T:Byte[]"/>.
+    /// Tries to decode the specified <see cref="ReadOnlySpan{T}"/> Base-16 representation into a <see cref="byte"/> array.
     /// </summary>
-    /// <param name="value">The Base-16 value to decode into a <see cref="T:Byte[]"/>.</param>
+    /// <param name="value">The Base-16 value to decode into a <see cref="byte"/> array.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <param name="result">
-    /// A new <see cref="T:Byte[]"/> decoded from the specified value,
-    /// or an empty <see cref="T:Byte[]"/> if the specified value could not be decoded.
+    /// A new <see cref="byte"/> array decoded from the specified value,
+    /// or an empty <see cref="byte"/> array if the specified value could not be decoded.
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was decoded successfully; otherwise, <see langword="false"/>.</returns>
     public bool TryDecode(ReadOnlySpan<char> value, IFormatProvider? provider, out byte[] result)

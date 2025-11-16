@@ -20,15 +20,15 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Hash
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
+    /// Gets the underlying <see cref="byte"/> array representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="byte"/> array representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => value;
 
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// Gets the underlying <see cref="byte"/> array representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="byte"/> array representation of the current <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
     public ReadOnlySpan<byte> AsReadOnlySpan() => value;
 
     /// <summary>

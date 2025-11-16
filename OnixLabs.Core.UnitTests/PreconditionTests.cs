@@ -332,7 +332,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireIsFailure(result));
 
         // Then
-        Assert.Equal("Argument must be a Failure state.", exception.Message);
+        Assert.Equal("Argument must be a Failure state. (Parameter 'result')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireIsFailure should return a Failure when the result is a failure state")]
@@ -358,7 +358,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireIsSuccess(result));
 
         // Then
-        Assert.Equal("Argument must be a Success state.", exception.Message);
+        Assert.Equal("Argument must be a Success state. (Parameter 'result')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireIsSuccess should return a Success when the result is a success state")]
@@ -384,7 +384,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireIsFailure(result));
 
         // Then
-        Assert.Equal("Argument must be a Failure state.", exception.Message);
+        Assert.Equal("Argument must be a Failure state. (Parameter 'result')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireIsFailure<T> should return a Failure when the result is a failure state")]
@@ -410,7 +410,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireIsSuccess(result));
 
         // Then
-        Assert.Equal("Argument must be a Success state.", exception.Message);
+        Assert.Equal("Argument must be a Success state. (Parameter 'result')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireIsSuccess<T> should return a Success when the result is a success state")]
@@ -436,7 +436,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireIsNone(optional));
 
         // Then
-        Assert.Equal("Argument must be a None<T> value.", exception.Message);
+        Assert.Equal("Argument must be a None<T> value. (Parameter 'optional')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireIsNone<T> should return a None<T> when the optional is a None<T> value")]
@@ -462,7 +462,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireIsSome(optional));
 
         // Then
-        Assert.Equal("Argument must be a Some<T> value.", exception.Message);
+        Assert.Equal("Argument must be a Some<T> value. (Parameter 'optional')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireIsSome<T> should return a Some<T> when the optional is a Some<T> value")]
@@ -485,7 +485,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentOutOfRangeException>(() => RequireWithinRangeInclusive(1, 2, 3));
 
         // Then
-        Assert.Equal("Argument must be within range.", exception.Message);
+        Assert.Equal("Argument must be within range. (Parameter '1')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireWithinRangeInclusive should throw an ArgumentOutOfRangeException when the value falls above the specified range")]
@@ -495,7 +495,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentOutOfRangeException>(() => RequireWithinRangeInclusive(4, 2, 3));
 
         // Then
-        Assert.Equal("Argument must be within range.", exception.Message);
+        Assert.Equal("Argument must be within range. (Parameter '4')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireWithinRangeInclusive should not throw an ArgumentOutOfRangeException when the value is exactly the minimum value")]
@@ -544,7 +544,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentOutOfRangeException>(() => RequireWithinRangeExclusive(2, 2, 4));
 
         // Then
-        Assert.Equal("Argument must be within range.", exception.Message);
+        Assert.Equal("Argument must be within range. (Parameter '2')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireWithinRangeExclusive should throw an ArgumentOutOfRangeException when the value falls above the specified range")]
@@ -554,7 +554,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentOutOfRangeException>(() => RequireWithinRangeExclusive(4, 2, 4));
 
         // Then
-        Assert.Equal("Argument must be within range.", exception.Message);
+        Assert.Equal("Argument must be within range. (Parameter '4')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireWithinRangeExclusive should not throw an ArgumentOutOfRangeException when the value falls between the specified range")]
@@ -577,7 +577,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentNullException>(() => RequireNotNull<object>(null));
 
         // Then
-        Assert.Equal("Argument must not be null.", exception.Message);
+        Assert.Equal("Argument must not be null. (Parameter 'null')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireNotNull should not throw an InvalidOperationException when the condition is not null")]
@@ -599,7 +599,7 @@ public sealed class PreconditionTests
 
         // Then
         Assert.Equal(0, actual);
-        Assert.Equal("Argument must not be null.", exception.Message);
+        Assert.Equal("Argument must not be null. (Parameter 'expected')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireNotNull of ValueType should not throw an InvalidOperationException when the condition is not null")]
@@ -622,7 +622,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireNotNullOrEmpty(null));
 
         // Then
-        Assert.Equal("Argument must not be null or empty.", exception.Message);
+        Assert.Equal("Argument must not be null or empty. (Parameter 'null')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireNotNullOrEmpty should throw an ArgumentException when the value is empty")]
@@ -632,7 +632,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireNotNullOrEmpty(string.Empty));
 
         // Then
-        Assert.Equal("Argument must not be null or empty.", exception.Message);
+        Assert.Equal("Argument must not be null or empty. (Parameter 'string.Empty')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireNotNullOrEmpty should return the argument value when the value is not null and not empty")]
@@ -655,7 +655,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireNotNullOrWhiteSpace(null));
 
         // Then
-        Assert.Equal("Argument must not be null or whitespace.", exception.Message);
+        Assert.Equal("Argument must not be null or whitespace. (Parameter 'null')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireNotNullOrWhiteSpace should throw an ArgumentException when the value is whitespace")]
@@ -665,7 +665,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentException>(() => RequireNotNullOrWhiteSpace("    "));
 
         // Then
-        Assert.Equal("Argument must not be null or whitespace.", exception.Message);
+        Assert.Equal("Argument must not be null or whitespace. (Parameter '\"    \"')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireNotNullOrWhiteSpace should return the argument value when the value is not null and not whitespace")]
@@ -688,7 +688,7 @@ public sealed class PreconditionTests
         Exception exception = Assert.Throws<ArgumentOutOfRangeException>(() => RequireIsDefined((Shape)2));
 
         // Then
-        Assert.Equal("Invalid Shape enum value: 2. Valid values include: Square, Circle.", exception.Message);
+        Assert.Equal("Invalid Shape enum value: 2. Valid values include: Square, Circle. (Parameter '(Shape)2')", exception.Message);
     }
 
     [Fact(DisplayName = "RequireIsDefined should not throw an ArgumentOutOfRangeException when the specified enum value is defined")]

@@ -69,7 +69,7 @@ public sealed class ResultTests
     public async Task ResultOfAsyncShouldProduceExpectedSuccessResult()
     {
         // Given / When
-        Result result = await Result.OfAsync(async () => await Task.CompletedTask);
+        Result result = await Result.OfAsync(async () => await Task.CompletedTask, TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(result);
@@ -79,7 +79,7 @@ public sealed class ResultTests
     public async Task ResultOfAsyncShouldProduceExpectedFailureResult()
     {
         // Given / When
-        Result result = await Result.OfAsync(async () => await Task.FromException(FailureException));
+        Result result = await Result.OfAsync(async () => await Task.FromException(FailureException), TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(result);
@@ -344,7 +344,7 @@ public sealed class ResultTests
         bool isFailure = false;
 
         // When
-        await result.MatchAsync(Success, Failure);
+        await result.MatchAsync(Success, Failure, TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(isSuccess);
@@ -370,7 +370,7 @@ public sealed class ResultTests
         bool isFailure = false;
 
         // When
-        await result.MatchAsync(Success, Failure);
+        await result.MatchAsync(Success, Failure, TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(isSuccess);
@@ -450,7 +450,7 @@ public sealed class ResultTests
         bool isFailure = false;
 
         // When
-        await result.MatchAsync(Success, Failure);
+        await result.MatchAsync(Success, Failure, TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(isSuccess);
@@ -475,7 +475,7 @@ public sealed class ResultTests
         bool isFailure = false;
 
         // When
-        await result.MatchAsync(Success, Failure);
+        await result.MatchAsync(Success, Failure, TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(isSuccess);
@@ -711,7 +711,7 @@ public sealed class ResultTests
         const int expected = 1;
 
         // When
-        int actual = await result.MatchAsync(Success, Failure);
+        int actual = await result.MatchAsync(Success, Failure, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -729,7 +729,7 @@ public sealed class ResultTests
         const int expected = 0;
 
         // When
-        int actual = await result.MatchAsync(Success, Failure);
+        int actual = await result.MatchAsync(Success, Failure, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -785,7 +785,7 @@ public sealed class ResultTests
         const int expected = 1;
 
         // When
-        int actual = await result.MatchAsync(Success, Failure);
+        int actual = await result.MatchAsync(Success, Failure, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -803,7 +803,7 @@ public sealed class ResultTests
         const int expected = 0;
 
         // When
-        int actual = await result.MatchAsync(Success, Failure);
+        int actual = await result.MatchAsync(Success, Failure, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -977,7 +977,7 @@ public sealed class ResultTests
         Result expected = Result.Failure(FailureException);
 
         // When
-        Result actual = await result.SelectAsync(() => Task.CompletedTask);
+        Result actual = await result.SelectAsync(() => Task.CompletedTask, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -991,7 +991,7 @@ public sealed class ResultTests
         Result expected = Result.Success();
 
         // When
-        Result actual = await result.SelectAsync(() => Task.CompletedTask);
+        Result actual = await result.SelectAsync(() => Task.CompletedTask, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1005,7 +1005,7 @@ public sealed class ResultTests
         Result expected = Result.Failure(FailureException);
 
         // When
-        Result actual = await result.SelectAsync(() => throw FailureException);
+        Result actual = await result.SelectAsync(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1106,7 +1106,7 @@ public sealed class ResultTests
         Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = await result.SelectAsync(() => Task.FromResult(1));
+        Result<int> actual = await result.SelectAsync(() => Task.FromResult(1), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1120,7 +1120,7 @@ public sealed class ResultTests
         Result<int> expected = 1;
 
         // When
-        Result<int> actual = await result.SelectAsync(() => Task.FromResult(1));
+        Result<int> actual = await result.SelectAsync(() => Task.FromResult(1), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1134,7 +1134,7 @@ public sealed class ResultTests
         Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = await result.SelectAsync<int>(() => throw FailureException);
+        Result<int> actual = await result.SelectAsync<int>(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1235,7 +1235,7 @@ public sealed class ResultTests
         Result expected = Result.Failure(FailureException);
 
         // When
-        Result actual = await result.SelectManyAsync(async () => await Task.FromResult(Result.Success()));
+        Result actual = await result.SelectManyAsync(async () => await Task.FromResult(Result.Success()), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1249,7 +1249,7 @@ public sealed class ResultTests
         Result expected = Result.Success();
 
         // When
-        Result actual = await result.SelectManyAsync(async () => await Task.FromResult(Result.Success()));
+        Result actual = await result.SelectManyAsync(async () => await Task.FromResult(Result.Success()), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1263,7 +1263,7 @@ public sealed class ResultTests
         Result expected = Result.Failure(FailureException);
 
         // When
-        Result actual = await result.SelectManyAsync(() => throw FailureException);
+        Result actual = await result.SelectManyAsync(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1364,7 +1364,8 @@ public sealed class ResultTests
         Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = await result.SelectManyAsync<int>(async () => await Task.FromResult(Result<int>.Success(1)));
+        Result<int> actual = await result.SelectManyAsync<int>(async () =>
+            await Task.FromResult(Result<int>.Success(1)), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1378,7 +1379,8 @@ public sealed class ResultTests
         Result<int> expected = Result<int>.Success(1);
 
         // When
-        Result<int> actual = await result.SelectManyAsync<int>(async () => await Task.FromResult(Result<int>.Success(1)));
+        Result<int> actual = await result.SelectManyAsync<int>(async () =>
+            await Task.FromResult(Result<int>.Success(1)), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1392,7 +1394,7 @@ public sealed class ResultTests
         Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = await result.SelectManyAsync<int>(() => throw FailureException);
+        Result<int> actual = await result.SelectManyAsync<int>(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);

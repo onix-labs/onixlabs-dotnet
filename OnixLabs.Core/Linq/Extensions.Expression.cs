@@ -20,7 +20,7 @@ using System.Linq.Expressions;
 namespace OnixLabs.Core.Linq;
 
 /// <summary>
-/// Provides extension methods for <see cref="Expression{TDelegate}"/>.
+/// Provides extension methods for <see cref="Expression{TDelegate}"/> instances.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ExpressionExtensions
@@ -28,72 +28,74 @@ public static class ExpressionExtensions
     private const string ParameterName = "$param";
 
     /// <summary>
-    /// Combines two <see cref="Expression{TDelegate}"/> instances into a single expression using the logical AND operator.
+    /// Provides extension methods for <see cref="Expression{TDelegate}"/> instances.
     /// </summary>
-    /// <param name="left">The left-hand expression to combine.</param>
-    /// <param name="right">The right-hand expression to combine.</param>
-    /// <typeparam name="T">The underlying type of the expression.</typeparam>
-    /// <returns>
-    /// Returns a new <see cref="Expression{TDelegate}"/> that combines two <see cref="Expression{TDelegate}"/> instances
-    /// into a single expression using the logical AND operator.
-    /// </returns>
-    /// <remarks>
-    /// Calling this method introduces a new expression parameter (named <c>$param</c>) to ensure both expressions share the same parameter.
-    /// Internal or nested lambda parameters that do not match the replaced parameter remain untouched.
-    /// </remarks>
-    public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
+    /// <param name="receiver">The current (left-hand) <see cref="Expression{TDelegate}"/> instance.</param>
+    /// <typeparam name="T">The underlying type of the current (left-hand) <see cref="Expression{TDelegate}"/> instance.</typeparam>
+    extension<T>(Expression<Func<T, bool>> receiver)
     {
-        ParameterExpression parameter = Expression.Parameter(typeof(T), ParameterName);
-        Expression leftBody = new ReplaceParameterVisitor(left.Parameters.First(), parameter).Visit(left.Body);
-        Expression rightBody = new ReplaceParameterVisitor(right.Parameters.First(), parameter).Visit(right.Body);
-        BinaryExpression binaryExpression = Expression.AndAlso(leftBody, rightBody);
+        /// <summary>
+        /// Combines two <see cref="Expression{TDelegate}"/> instances into a single expression using the logical AND operator.
+        /// </summary>
+        /// <param name="other">The other (right-hand) expression to combine.</param>
+        /// <returns>
+        /// Returns a new <see cref="Expression{TDelegate}"/> that combines two <see cref="Expression{TDelegate}"/> instances
+        /// into a single expression using the logical AND operator.
+        /// </returns>
+        /// <remarks>
+        /// Calling this method introduces a new expression parameter (named <c>$param</c>) to ensure both expressions share the same parameter.
+        /// Internal or nested lambda parameters that do not match the replaced parameter remain untouched.
+        /// </remarks>
+        public Expression<Func<T, bool>> And(Expression<Func<T, bool>> other)
+        {
+            ParameterExpression parameter = Expression.Parameter(typeof(T), ParameterName);
+            Expression leftBody = new ReplaceParameterVisitor(receiver.Parameters.First(), parameter).Visit(receiver.Body);
+            Expression rightBody = new ReplaceParameterVisitor(other.Parameters.First(), parameter).Visit(other.Body);
+            BinaryExpression binaryExpression = Expression.AndAlso(leftBody, rightBody);
 
-        return Expression.Lambda<Func<T, bool>>(binaryExpression, parameter);
-    }
+            return Expression.Lambda<Func<T, bool>>(binaryExpression, parameter);
+        }
 
-    /// <summary>
-    /// Combines two <see cref="Expression{TDelegate}"/> instances into a single expression using the logical OR operator.
-    /// </summary>
-    /// <param name="left">The left-hand expression to combine.</param>
-    /// <param name="right">The right-hand expression to combine.</param>
-    /// <typeparam name="T">The underlying type of the expression.</typeparam>
-    /// <returns>
-    /// Returns a new <see cref="Expression{TDelegate}"/> that combines two <see cref="Expression{TDelegate}"/> instances
-    /// into a single expression using the logical OR operator.
-    /// </returns>
-    /// <remarks>
-    /// Calling this method introduces a new expression parameter (named <c>$param</c>) to ensure both expressions share the same parameter.
-    /// Internal or nested lambda parameters that do not match the replaced parameter remain untouched.
-    /// </remarks>
-    public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
-    {
-        ParameterExpression parameter = Expression.Parameter(typeof(T), ParameterName);
-        Expression leftBody = new ReplaceParameterVisitor(left.Parameters.First(), parameter).Visit(left.Body);
-        Expression rightBody = new ReplaceParameterVisitor(right.Parameters.First(), parameter).Visit(right.Body);
-        BinaryExpression binaryExpression = Expression.OrElse(leftBody, rightBody);
+        /// <summary>
+        /// Combines two <see cref="Expression{TDelegate}"/> instances into a single expression using the logical OR operator.
+        /// </summary>
+        /// <param name="other">The other (right-hand) expression to combine.</param>
+        /// <returns>
+        /// Returns a new <see cref="Expression{TDelegate}"/> that combines two <see cref="Expression{TDelegate}"/> instances
+        /// into a single expression using the logical OR operator.
+        /// </returns>
+        /// <remarks>
+        /// Calling this method introduces a new expression parameter (named <c>$param</c>) to ensure both expressions share the same parameter.
+        /// Internal or nested lambda parameters that do not match the replaced parameter remain untouched.
+        /// </remarks>
+        public Expression<Func<T, bool>> Or(Expression<Func<T, bool>> other)
+        {
+            ParameterExpression parameter = Expression.Parameter(typeof(T), ParameterName);
+            Expression leftBody = new ReplaceParameterVisitor(receiver.Parameters.First(), parameter).Visit(receiver.Body);
+            Expression rightBody = new ReplaceParameterVisitor(other.Parameters.First(), parameter).Visit(other.Body);
+            BinaryExpression binaryExpression = Expression.OrElse(leftBody, rightBody);
 
-        return Expression.Lambda<Func<T, bool>>(binaryExpression, parameter);
-    }
+            return Expression.Lambda<Func<T, bool>>(binaryExpression, parameter);
+        }
 
-    /// <summary>
-    /// Negates the current <see cref="Expression{TDelegate}"/> instance using the logical NOT operator.
-    /// </summary>
-    /// <param name="expression">The expression to negate.</param>
-    /// <typeparam name="T">The underlying type of the expression.</typeparam>
-    /// <returns>
-    /// Returns a new <see cref="Expression{TDelegate}"/> that negates the current <see cref="Expression{TDelegate}"/> instance using the logical NOT operator.
-    /// </returns>
-    /// <remarks>
-    /// Calling this method introduces a new expression parameter (named <c>$param</c>) to ensure a uniform parameter expression.
-    /// Internal or nested lambda parameters that do not match the replaced parameter remain untouched.
-    /// </remarks>
-    public static Expression<Func<T, bool>> Not<T>(this Expression<Func<T, bool>> expression)
-    {
-        ParameterExpression parameter = Expression.Parameter(typeof(T), ParameterName);
-        Expression expressionBody = new ReplaceParameterVisitor(expression.Parameters.First(), parameter).Visit(expression.Body);
+        /// <summary>
+        /// Negates the current <see cref="Expression{TDelegate}"/> instance using the logical NOT operator.
+        /// </summary>
+        /// <returns>
+        /// Returns a new <see cref="Expression{TDelegate}"/> that negates the current <see cref="Expression{TDelegate}"/> instance using the logical NOT operator.
+        /// </returns>
+        /// <remarks>
+        /// Calling this method introduces a new expression parameter (named <c>$param</c>) to ensure a uniform parameter expression.
+        /// Internal or nested lambda parameters that do not match the replaced parameter remain untouched.
+        /// </remarks>
+        public Expression<Func<T, bool>> Not()
+        {
+            ParameterExpression parameter = Expression.Parameter(typeof(T), ParameterName);
+            Expression expressionBody = new ReplaceParameterVisitor(receiver.Parameters.First(), parameter).Visit(receiver.Body);
 
-        UnaryExpression unaryExpression = Expression.Not(expressionBody);
-        return Expression.Lambda<Func<T, bool>>(unaryExpression, parameter);
+            UnaryExpression unaryExpression = Expression.Not(expressionBody);
+            return Expression.Lambda<Func<T, bool>>(unaryExpression, parameter);
+        }
     }
 
     /// <summary>

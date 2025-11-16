@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-64 format provider.
 /// </summary>
-// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.ObjectAllocation.Evident StringLiteralTypo
 public sealed class Base64FormatProvider : Enumeration<Base64FormatProvider>, IFormatProvider
 {
     /// <summary>
@@ -33,10 +33,7 @@ public sealed class Base64FormatProvider : Enumeration<Base64FormatProvider>, IF
     /// <param name="value">The value of the enumeration entry.</param>
     /// <param name="name">The name of the enumeration entry.</param>
     /// <param name="alphabet">The alphabet of the format provider.</param>
-    private Base64FormatProvider(int value, string name, string alphabet) : base(value, name)
-    {
-        Alphabet = alphabet;
-    }
+    private Base64FormatProvider(int value, string name, string alphabet) : base(value, name) => Alphabet = alphabet;
 
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base64FormatProvider"/> instance.

@@ -18,17 +18,23 @@ using System.ComponentModel;
 namespace OnixLabs.Core.Collections.Generic;
 
 /// <summary>
-/// Provides LINQ-like extension methods for <see cref="IEqualityComparer{T}"/>.
+/// Provides extension methods for <see cref="IEqualityComparer{T}"/> instances.
 /// </summary>
 // ReSharper disable InconsistentNaming
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class IEqualityComparerExtensions
 {
     /// <summary>
-    /// Gets the current <see cref="IEqualityComparer{T}"/>, or the default comparer if the current comparer is <see langword="null"/>.
+    /// Provides extension methods for <see cref="IEqualityComparer{T}"/> instances.
     /// </summary>
-    /// <param name="comparer">The current <see cref="IEqualityComparer{T}"/>.</param>
-    /// <typeparam name="T">The underlying type of the current <see cref="IEqualityComparer{T}"/>.</typeparam>
-    /// <returns>Returns the current <see cref="IEqualityComparer{T}"/>, or the default comparer if the current comparer is <see langword="null"/>.</returns>
-    public static IEqualityComparer<T> GetOrDefault<T>(this IEqualityComparer<T>? comparer) => comparer ?? EqualityComparer<T>.Default;
+    /// <param name="receiver">The current <see cref="IEqualityComparer{T}"/> instance.</param>
+    /// <typeparam name="T">The underlying type of the current <see cref="IEqualityComparer{T}"/> instance.</typeparam>
+    extension<T>(IEqualityComparer<T>? receiver)
+    {
+        /// <summary>
+        /// Gets the current <see cref="IEqualityComparer{T}"/>, or the default comparer if the current comparer is <see langword="null"/>.
+        /// </summary>
+        /// <returns>Returns the current <see cref="IEqualityComparer{T}"/>, or the default comparer if the current comparer is <see langword="null"/>.</returns>
+        public IEqualityComparer<T> GetOrDefault() => receiver ?? EqualityComparer<T>.Default;
+    }
 }

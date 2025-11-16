@@ -24,7 +24,7 @@ namespace OnixLabs.Core;
 /// Represents the base class for implementing composable specifications using logical operations.
 /// </summary>
 /// <typeparam name="T">The underlying type of the subject to which the specification applies.</typeparam>
-// ReSharper disable PossibleMultipleEnumeration
+// ReSharper disable PossibleMultipleEnumeration MemberCanBePrivate.Global
 public abstract class Specification<T>
 {
     /// <summary>

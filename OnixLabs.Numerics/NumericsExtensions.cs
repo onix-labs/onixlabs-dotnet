@@ -71,7 +71,7 @@ public static class NumericsExtensions
     /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
     public static decimal SetScale(this decimal value, int scale)
     {
-        RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.", nameof(scale));
+        RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.");
 
         // Determine maximum representable scale given the integer part length
         BigInteger unscaledValue = value.GetUnscaledValue();
@@ -121,7 +121,7 @@ public static class NumericsExtensions
     /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
     public static decimal SetScale(this decimal value, int scale, MidpointRounding mode)
     {
-        RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.", nameof(scale));
+        RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.");
 
         // Determine maximum representable scale
         BigInteger unscaledValue = value.GetUnscaledValue();
@@ -170,7 +170,7 @@ public static class NumericsExtensions
     private static BigInteger GetUnscaledInteger<T>(this T value, int scale, ScaleMode mode) where T : IBinaryInteger<T>
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(value));
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
 
         BigInteger integer = value.ToBigInteger();
         return scale == 0 || mode == ScaleMode.Fractional ? integer : integer * BigInteger.Pow(10, scale);
@@ -239,7 +239,7 @@ public static class NumericsExtensions
     public static decimal ToDecimal<T>(this T value, int scale = 0, ScaleMode mode = default) where T : IBinaryInteger<T>
     {
         Require(scale.IsBetween(0, 28), "Scale must be between 0 and 28.");
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
 
         BigInteger scaled = value.GetUnscaledInteger(scale, mode);
         Check(scaled.IsBetween(MinDecimal, MaxDecimal), $"Value is either too large or too small to convert to {nameof(Decimal)}.");
@@ -263,7 +263,7 @@ public static class NumericsExtensions
     public static NumberInfo ToNumberInfo<T>(this T value, int scale = 0, ScaleMode mode = default) where T : IBinaryInteger<T>
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero", nameof(scale));
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
         BigInteger unscaledValue = value.GetUnscaledInteger(scale, mode);
         return new NumberInfo(unscaledValue, scale);
     }
@@ -276,7 +276,7 @@ public static class NumericsExtensions
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
     public static NumberInfo ToNumberInfo(this float value, ConversionMode mode = default)
     {
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
         return Ieee754Converter.Convert(value, mode);
     }
 
@@ -288,7 +288,7 @@ public static class NumericsExtensions
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
     public static NumberInfo ToNumberInfo(this double value, ConversionMode mode = default)
     {
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
         return Ieee754Converter.Convert(value, mode);
     }
 

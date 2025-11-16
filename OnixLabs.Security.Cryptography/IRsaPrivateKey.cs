@@ -34,7 +34,7 @@ public interface IRsaPrivateKey :
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
     /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
     byte[] SignData(ReadOnlySpan<byte> data, HashAlgorithmName algorithm, RSASignaturePadding padding);
 
     /// <summary>
@@ -45,7 +45,7 @@ public interface IRsaPrivateKey :
     /// <param name="count">The number of bytes in the array to use as data.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
     /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
     byte[] SignData(ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, RSASignaturePadding padding);
 
     /// <summary>
@@ -54,7 +54,7 @@ public interface IRsaPrivateKey :
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
     /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
     byte[] SignData(Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding);
 
     /// <summary>
@@ -63,7 +63,7 @@ public interface IRsaPrivateKey :
     /// <param name="data">The input data to hash and sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
     /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
     byte[] SignData(IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding);
 
     /// <summary>
@@ -72,7 +72,7 @@ public interface IRsaPrivateKey :
     /// <param name="hash">The hash to sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input hash.</param>
     /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
     byte[] SignHash(Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding);
 
     /// <summary>
@@ -81,6 +81,6 @@ public interface IRsaPrivateKey :
     /// <param name="hash">The hash to sign.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input hash.</param>
     /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
     byte[] SignHash(ReadOnlySpan<byte> hash, HashAlgorithmName algorithm, RSASignaturePadding padding);
 }

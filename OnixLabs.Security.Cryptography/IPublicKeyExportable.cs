@@ -22,7 +22,7 @@ public interface IPublicKeyExportable
     /// <summary>
     /// Exports the cryptographic public key data.
     /// </summary>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic public key data.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic public key data.</returns>
     byte[] Export();
 
     /// <summary>

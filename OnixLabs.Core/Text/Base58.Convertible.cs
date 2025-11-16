@@ -21,22 +21,22 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base58
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base58"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
+    /// Gets the underlying <see cref="byte"/> array representation of the current <see cref="Base58"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base58"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="byte"/> array representation of the current <see cref="Base58"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => value;
 
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base58"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// Gets the underlying <see cref="byte"/> array representation of the current <see cref="Base58"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="Base58"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="byte"/> array representation of the current <see cref="Base58"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
     public ReadOnlySpan<byte> AsReadOnlySpan() => value;
 
     /// <summary>
-    /// Create a new <see cref="Base58"/> instance from the specified <see cref="T:byte[]"/> value.
+    /// Create a new <see cref="Base58"/> instance from the specified <see cref="byte"/> array.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="Base58"/> instance.</param>
-    /// <returns>Returns a new <see cref="Base58"/> instance from the specified <see cref="T:byte[]"/> value.</returns>
+    /// <returns>Returns a new <see cref="Base58"/> instance from the specified <see cref="byte"/> array.</returns>
     public static implicit operator Base58(byte[] value) => new(value);
 
     /// <summary>
@@ -62,11 +62,11 @@ public readonly partial struct Base58
     public static implicit operator Base58(string value) => new(value);
 
     /// <summary>
-    /// Create a new <see cref="Base58"/> instance from the specified <see cref="T:char[]"/> value.
-    /// <remarks>The <see cref="T:char[]"/> value will be encoded using the <see cref="Encoding.UTF8"/> encoding.</remarks>
+    /// Create a new <see cref="Base58"/> instance from the specified <see cref="char"/> array.
+    /// <remarks>The <see cref="char"/> array will be encoded using the <see cref="Encoding.UTF8"/> encoding.</remarks>
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="Base58"/> instance.</param>
-    /// <returns>Returns a new <see cref="Base58"/> instance from the specified <see cref="T:char[]"/> value.</returns>
+    /// <returns>Returns a new <see cref="Base58"/> instance from the specified <see cref="char"/> array.</returns>
     public static implicit operator Base58(char[] value) => new(value);
 
     /// <summary>

@@ -29,7 +29,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Success();
 
         // When
-        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Null(actual);
@@ -42,7 +42,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Success();
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException);
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -55,7 +55,8 @@ public sealed class ResultExtensionTests
         Result result = Result.Success();
 
         // When
-        Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.FromResult(result).GetExceptionOrThrowAsync());
+        Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal("The current result is not in a failure state.", exception.Message);
@@ -68,7 +69,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Failure(FailureException);
 
         // When
-        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -81,7 +82,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Failure(FailureException);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"));
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"), token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -94,7 +95,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Failure(FailureException);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync();
+        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -107,7 +108,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Success(123);
 
         // When
-        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Null(actual);
@@ -120,7 +121,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Success(123);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException);
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -133,7 +134,8 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Success(123);
 
         // When
-        Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.FromResult(result).GetExceptionOrThrowAsync());
+        Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal("The current result is not in a failure state.", exception.Message);
@@ -146,7 +148,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Failure(FailureException);
 
         // When
-        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync();
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -159,7 +161,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Failure(FailureException);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"));
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"), token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -172,7 +174,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Failure(FailureException);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync();
+        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -184,12 +186,12 @@ public sealed class ResultExtensionTests
         // Given
         const int expectedNumber = 123;
         const string expectedText = "abc";
-        Task<Result<int>> numberTask = Result<int>.OfAsync(async () => await Task.FromResult(expectedNumber));
-        Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText));
+        Task<Result<int>> numberTask = Result<int>.OfAsync(async () => await Task.FromResult(expectedNumber), TestContext.Current.CancellationToken);
+        Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText), TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrDefaultAsync();
-        string? actualText = await textTask.GetValueOrDefaultAsync();
+        int actualNumber = await numberTask.GetValueOrDefaultAsync(token: TestContext.Current.CancellationToken);
+        string? actualText = await textTask.GetValueOrDefaultAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -202,12 +204,12 @@ public sealed class ResultExtensionTests
     public async Task ResultGetValueOrDefaultAsyncShouldReturnDefaultWhenResultIsFailure()
     {
         // Given
-        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException);
-        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException);
+        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException, TestContext.Current.CancellationToken);
+        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrDefaultAsync();
-        string? actualText = await textTask.GetValueOrDefaultAsync();
+        int actualNumber = await numberTask.GetValueOrDefaultAsync(token: TestContext.Current.CancellationToken);
+        string? actualText = await textTask.GetValueOrDefaultAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, actualNumber);
@@ -220,13 +222,13 @@ public sealed class ResultExtensionTests
         // Given
         const int expectedNumber = 123;
         const string expectedText = "abc";
-        Task<Result<int>> numberTask = Result<int>.OfAsync(async () => await Task.FromResult(expectedNumber));
-        Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText));
+        Task<Result<int>> numberTask = Result<int>.OfAsync(async () => await Task.FromResult(expectedNumber), TestContext.Current.CancellationToken);
+        Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText), TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrDefaultAsync(456);
+        int actualNumber = await numberTask.GetValueOrDefaultAsync(456, token: TestContext.Current.CancellationToken);
         // ReSharper disable once VariableCanBeNotNullable
-        string? actualText = await textTask.GetValueOrDefaultAsync("xyz");
+        string? actualText = await textTask.GetValueOrDefaultAsync("xyz", token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -241,12 +243,12 @@ public sealed class ResultExtensionTests
         // Given
         const int expectedNumber = 456;
         const string expectedText = "abc";
-        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException);
-        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException);
+        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException, TestContext.Current.CancellationToken);
+        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrDefaultAsync(expectedNumber);
-        string actualText = await textTask.GetValueOrDefaultAsync(expectedText);
+        int actualNumber = await numberTask.GetValueOrDefaultAsync(expectedNumber, token: TestContext.Current.CancellationToken);
+        string actualText = await textTask.GetValueOrDefaultAsync(expectedText, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -261,12 +263,12 @@ public sealed class ResultExtensionTests
         // Given
         const int expectedNumber = 123;
         const string expectedText = "abc";
-        Task<Result<int>> numberTask = Result<int>.OfAsync(async () => await Task.FromResult(expectedNumber));
-        Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText));
+        Task<Result<int>> numberTask = Result<int>.OfAsync(async () => await Task.FromResult(expectedNumber), TestContext.Current.CancellationToken);
+        Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText), TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrThrowAsync();
-        string actualText = await textTask.GetValueOrThrowAsync();
+        int actualNumber = await numberTask.GetValueOrThrowAsync(token: TestContext.Current.CancellationToken);
+        string actualText = await textTask.GetValueOrThrowAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -279,12 +281,15 @@ public sealed class ResultExtensionTests
     public async Task ResultGetValueOrThrowAsyncShouldReturnDefaultWhenResultIsFailure()
     {
         // Given
-        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException);
-        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException);
+        Task<Result<int>> numberTask = Result<int>.OfAsync(() => throw FailureException, TestContext.Current.CancellationToken);
+        Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // When
-        Exception numberException = await Assert.ThrowsAsync<Exception>(async () => await numberTask.GetValueOrThrowAsync());
-        Exception textException = await Assert.ThrowsAsync<Exception>(async () => await textTask.GetValueOrThrowAsync());
+        Exception numberException = await Assert.ThrowsAsync<Exception>(async () =>
+            await numberTask.GetValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+
+        Exception textException = await Assert.ThrowsAsync<Exception>(async () =>
+            await textTask.GetValueOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal(numberException, FailureException);
@@ -351,8 +356,8 @@ public sealed class ResultExtensionTests
         Result<string> textResult = expectedText;
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.Of(expectedNumber), actualNumber);
@@ -367,8 +372,8 @@ public sealed class ResultExtensionTests
         Result<string> textResult = Result<string>.Success(null!);
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.None, actualNumber);
@@ -383,8 +388,8 @@ public sealed class ResultExtensionTests
         Result<string> textResult = Result<string>.Failure(FailureException);
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.None, actualNumber);
@@ -455,8 +460,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = expectedText;
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -473,8 +478,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = expectedText;
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -491,8 +496,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Result<Optional<string>>.Failure(FailureException);
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync();
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync();
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -559,8 +564,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Optional<string>.Some(expectedText);
 
         // When
-        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync();
-        string actualText = await Task.FromResult(textResult).GetOptionalValueOrThrowAsync();
+        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken);
+        string actualText = await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -575,8 +580,11 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Optional<string>.None;
 
         // When
-        Exception numberException = await Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync());
-        Exception textException = await Assert.ThrowsAsync<InvalidOperationException>(async () => await Task.FromResult(textResult).GetOptionalValueOrThrowAsync());
+        Exception numberException = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+
+        Exception textException = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal("Optional value of type System.Int32 is not present.", numberException.Message);
@@ -591,8 +599,11 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Result<Optional<string>>.Failure(new Exception("Result has failed."));
 
         // When
-        Exception numberException = await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync());
-        Exception textException = await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(textResult).GetOptionalValueOrThrowAsync());
+        Exception numberException = await Assert.ThrowsAsync<Exception>(async () =>
+            await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+
+        Exception textException = await Assert.ThrowsAsync<Exception>(async () =>
+            await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal("Result has failed.", numberException.Message);
@@ -664,8 +675,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Optional<string>.Some(expectedText);
 
         // When
-        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(456);
-        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync("xyz");
+        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(456, token: TestContext.Current.CancellationToken);
+        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync("xyz", token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -682,8 +693,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Optional<string>.None;
 
         // When
-        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(expectedNumber);
-        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync(expectedText);
+        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(expectedNumber, token: TestContext.Current.CancellationToken);
+        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync(expectedText, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -700,8 +711,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Result<Optional<string>>.Failure(new Exception("Result has failed."));
 
         // When
-        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(expectedNumber);
-        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync(expectedText);
+        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(expectedNumber, token: TestContext.Current.CancellationToken);
+        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync(expectedText, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -717,7 +728,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, Failure);
+        await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -737,7 +748,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, Failure);
+        await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -757,7 +768,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -777,7 +788,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -797,7 +808,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -817,7 +828,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -837,7 +848,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -857,7 +868,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -877,7 +888,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -897,7 +908,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -917,7 +928,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -937,7 +948,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -957,7 +968,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -977,7 +988,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -996,7 +1007,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1014,7 +1025,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1032,7 +1043,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1050,7 +1061,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1068,7 +1079,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1086,7 +1097,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1104,7 +1115,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1122,7 +1133,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1140,7 +1151,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1158,7 +1169,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1176,7 +1187,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1194,7 +1205,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1212,7 +1223,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1230,7 +1241,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1249,7 +1260,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, Failure);
+        await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1269,7 +1280,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, Failure);
+        await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1289,7 +1300,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1309,7 +1320,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1329,7 +1340,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1349,7 +1360,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1369,7 +1380,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1389,7 +1400,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1409,7 +1420,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1429,7 +1440,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1449,7 +1460,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1469,7 +1480,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1489,7 +1500,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1509,7 +1520,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1528,7 +1539,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1546,7 +1557,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1564,7 +1575,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1582,7 +1593,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1600,7 +1611,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1618,7 +1629,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1636,7 +1647,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1654,7 +1665,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1672,7 +1683,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1690,7 +1701,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1708,7 +1719,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1726,7 +1737,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1744,7 +1755,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1762,7 +1773,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1780,7 +1791,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(Selector);
+        Result actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -1798,7 +1809,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(Selector);
+        Result actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -1816,7 +1827,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -1834,7 +1845,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -1852,7 +1863,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -1870,7 +1881,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -1888,7 +1899,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -1912,7 +1923,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -1935,7 +1946,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -1959,7 +1970,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -1982,7 +1993,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2006,7 +2017,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2029,7 +2040,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(Selector);
+        Result actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2051,7 +2062,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(Selector);
+        Result actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2073,7 +2084,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2096,7 +2107,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2119,7 +2130,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2142,7 +2153,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2165,7 +2176,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2189,7 +2200,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2212,7 +2223,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2236,7 +2247,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2259,7 +2270,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2283,7 +2294,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2306,7 +2317,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(Selector);
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2328,7 +2339,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(Selector);
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2350,7 +2361,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2372,7 +2383,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2394,7 +2405,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2416,7 +2427,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2438,7 +2449,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2462,7 +2473,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2485,7 +2496,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2509,7 +2520,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2532,7 +2543,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2556,7 +2567,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2579,7 +2590,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(Selector);
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2602,7 +2613,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(Selector);
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2625,7 +2636,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2648,7 +2659,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2671,7 +2682,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2694,7 +2705,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2717,7 +2728,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2741,7 +2752,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2764,7 +2775,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2788,7 +2799,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2811,7 +2822,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2835,7 +2846,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2857,7 +2868,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Success();
 
         // When / Then
-        await Task.FromResult(result).ThrowAsync();
+        await Task.FromResult(result).ThrowAsync(token: TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "Result Failure.Throw should throw Exception")]
@@ -2867,7 +2878,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Failure(FailureException);
 
         // When / Then
-        await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync());
+        await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync(token: TestContext.Current.CancellationToken));
     }
 
     [Fact(DisplayName = "Result<T> Success.ThrowAsync should do nothing")]
@@ -2877,7 +2888,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Success(123);
 
         // When / Then
-        await Task.FromResult(result).ThrowAsync();
+        await Task.FromResult(result).ThrowAsync(token: TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "Result<T> Failure.ThrowAsync should throw Exception")]
@@ -2887,7 +2898,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Failure(FailureException);
 
         // When / Then
-        await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync());
+        await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync(token: TestContext.Current.CancellationToken));
     }
 
     [Fact(DisplayName = "Result Failure.ToTypedResultAsync should produce the expected result.")]
@@ -2897,7 +2908,7 @@ public sealed class ResultExtensionTests
         Failure result = Result.Failure(FailureException);
 
         // When
-        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<int>();
+        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<int>(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<int>>(actual);
@@ -2911,7 +2922,7 @@ public sealed class ResultExtensionTests
         Failure<string> result = Result<string>.Failure(FailureException);
 
         // When
-        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<string, int>();
+        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<string, int>(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<int>>(actual);
@@ -2925,10 +2936,10 @@ public sealed class ResultExtensionTests
         Failure<string> result = Result<string>.Failure(FailureException);
 
         // When
-        Result actual = await Task.FromResult(result).ToUntypedResultAsync();
+        Result actual = await Task.FromResult(result).ToUntypedResultAsync(token: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
-        Assert.Equal("System.Exception: Failure", actual.GetExceptionOrThrow().ToString());
+        Assert.StartsWith("System.Exception: Failure", actual.GetExceptionOrThrow().ToString());
     }
 }

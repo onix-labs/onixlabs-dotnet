@@ -18,37 +18,28 @@ using System.ComponentModel;
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Provides extension methods for byte arrays and read-only spans.
+/// Provides extension methods for <see cref="ReadOnlySpan{T}"/> instances.
 /// </summary>
 // ReSharper disable UnusedMethodReturnValue.Global
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class Extensions
 {
     /// <summary>
-    /// Converts the current <see cref="T:Byte[]"/> into a new <see cref="Hash"/> instance.
+    /// /// Provides extension methods for <see cref="ReadOnlySpan{T}"/> instances.
     /// </summary>
-    /// <param name="value">The <see cref="T:Byte[]"/> value to convert.</param>
-    /// <returns>Returns a new <see cref="Hash"/> instance.</returns>
-    public static Hash ToHash(this byte[] value) => value;
+    /// <param name="receiver">The current <see cref="ReadOnlySpan{T}"/> instance.</param>
+    extension(ReadOnlySpan<byte> receiver)
+    {
+        /// <summary>
+        /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Hash"/> instance.
+        /// </summary>
+        /// <returns>Returns a new <see cref="Hash"/> instance.</returns>
+        public Hash ToHash() => receiver;
 
-    /// <summary>
-    /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Hash"/> instance.
-    /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value to convert.</param>
-    /// <returns>Returns a new <see cref="Hash"/> instance.</returns>
-    public static Hash ToHash(this ReadOnlySpan<byte> value) => value;
-
-    /// <summary>
-    /// Converts the current <see cref="T:Byte[]"/> into a new <see cref="Secret"/> instance.
-    /// </summary>
-    /// <param name="value">The <see cref="T:Byte[]"/> value to convert.</param>
-    /// <returns>Returns a new <see cref="Secret"/> instance.</returns>
-    public static Secret ToSecret(this byte[] value) => value;
-
-    /// <summary>
-    /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Secret"/> instance.
-    /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySpan{T}"/> value to convert.</param>
-    /// <returns>Returns a new <see cref="Secret"/> instance.</returns>
-    public static Secret ToSecret(this ReadOnlySpan<byte> value) => value;
+        /// <summary>
+        /// Converts the current <see cref="ReadOnlySpan{T}"/> into a new <see cref="Secret"/> instance.
+        /// </summary>
+        /// <returns>Returns a new <see cref="Secret"/> instance.</returns>
+        public Secret ToSecret() => receiver;
+    }
 }

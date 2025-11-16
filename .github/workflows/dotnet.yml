@@ -29,11 +29,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test (.NET 8.0)
-      run: dotnet test --no-build --framework net8.0 \
-        --logger "console;verbosity=detailed"
+      run: dotnet test --no-build --framework net8.0 --verbosity detailed --output detailed
     - name: Test (.NET 9.0)
-      run: dotnet test --no-build --framework net9.0 \
-        --logger "console;verbosity=detailed"
+      run: dotnet test --no-build --framework net9.0 --verbosity detailed --output detailed
     - name: Test (.NET 10.0)
-      run: dotnet test --no-build --framework net10.0 \
-        --logger "console;verbosity=detailed"
+      run: dotnet test --no-build --framework net10.0 --verbosity detailed --output detailed

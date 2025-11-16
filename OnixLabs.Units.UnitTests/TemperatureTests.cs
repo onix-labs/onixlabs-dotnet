@@ -452,14 +452,14 @@ public sealed class TemperatureTests
         Temperature<double> temperature = Temperature<double>.FromCelsius(100.0);
 
         // Then
-        Assert.Equal("373.150 K", $"{temperature:K}");
-        Assert.Equal("100.000 °C", $"{temperature:C}");
-        Assert.Equal("0.000 °De", $"{temperature:DE}");
-        Assert.Equal("212.000 °F", $"{temperature:F}");
-        Assert.Equal("33.000 °N", $"{temperature:N}");
-        Assert.Equal("671.670 °R", $"{temperature:R}");
-        Assert.Equal("80.000 °Ré", $"{temperature:RE}");
-        Assert.Equal("60.000 °Rø", $"{temperature:RO}");
+        Assert.Equal("373.150 K", $"{temperature:K3}");
+        Assert.Equal("100.000 °C", $"{temperature:C3}");
+        Assert.Equal("0.000 °De", $"{temperature:DE3}");
+        Assert.Equal("212.000 °F", $"{temperature:F3}");
+        Assert.Equal("33.000 °N", $"{temperature:N3}");
+        Assert.Equal("671.670 °R", $"{temperature:R3}");
+        Assert.Equal("80.000 °Ré", $"{temperature:RE3}");
+        Assert.Equal("60.000 °Rø", $"{temperature:RO3}");
     }
 
     [Fact(DisplayName = "Temperature.ToString should honor custom culture separators")]

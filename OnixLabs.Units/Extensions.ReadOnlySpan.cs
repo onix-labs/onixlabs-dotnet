@@ -19,35 +19,38 @@ namespace OnixLabs.Units;
 
 internal static class ReadOnlySpanExtensions
 {
-    public static (string specifier, int scale) GetSpecifierAndScale(this ReadOnlySpan<char> format, string defaultSpecifier)
+    extension(ReadOnlySpan<char> format)
     {
-        const char plus = '+';
-        const char minus = '-';
+        public (string specifier, int scale) GetSpecifierAndScale(string defaultSpecifier)
+        {
+            const char plus = '+';
+            const char minus = '-';
 
-        int defaultScale = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalDigits;
+            int defaultScale = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalDigits;
 
-        if (format.IsEmpty)
-            return (defaultSpecifier, defaultScale);
+            if (format.IsEmpty)
+                return (defaultSpecifier, defaultScale);
 
-        int index = 0;
+            int index = 0;
 
-        while (index < format.Length && char.IsLetter(format[index]))
-            index++;
+            while (index < format.Length && char.IsLetter(format[index]))
+                index++;
 
-        if (index == 0)
-            throw new FormatException("Format must start with a letter specifier.");
+            if (index == 0)
+                throw new FormatException("Format must start with a letter specifier.");
 
-        string specifier = new(format[..index]);
-        ReadOnlySpan<char> scaleCharacters = format[index..];
+            string specifier = new(format[..index]);
+            ReadOnlySpan<char> scaleCharacters = format[index..];
 
-        if (scaleCharacters.IsEmpty)
-            return (specifier, defaultScale);
+            if (scaleCharacters.IsEmpty)
+                return (specifier, defaultScale);
 
-        if (scaleCharacters[0] is plus or minus)
-            throw new FormatException($"Scale must not begin with a leading '{plus}' or '{minus}' sign.");
+            if (scaleCharacters[0] is plus or minus)
+                throw new FormatException($"Scale must not begin with a leading '{plus}' or '{minus}' sign.");
 
-        return int.TryParse(scaleCharacters, NumberStyles.None, CultureInfo.InvariantCulture, out int scale)
-            ? (specifier, scale)
-            : throw new FormatException("Scale must contain only decimal digits.");
+            return int.TryParse(scaleCharacters, NumberStyles.None, CultureInfo.InvariantCulture, out int scale)
+                ? (specifier, scale)
+                : throw new FormatException("Scale must contain only decimal digits.");
+        }
     }
 }

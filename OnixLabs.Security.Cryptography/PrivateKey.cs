@@ -23,7 +23,6 @@ public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>
 {
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     private readonly ProtectedData protectedData = new();
-    private readonly byte[] encryptedKeyData;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PrivateKey"/> class.
@@ -31,11 +30,11 @@ public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>
     /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
     protected PrivateKey(ReadOnlySpan<byte> keyData)
     {
-        encryptedKeyData = protectedData.Encrypt(keyData.ToArray());
+        KeyData = protectedData.Encrypt(keyData.ToArray());
     }
 
     /// <summary>
     /// Gets the cryptographic private key data.
     /// </summary>
-    protected byte[] KeyData => protectedData.Decrypt(encryptedKeyData);
+    protected byte[] KeyData => protectedData.Decrypt(field);
 }

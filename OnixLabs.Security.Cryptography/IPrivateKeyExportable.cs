@@ -25,13 +25,13 @@ public interface IPrivateKeyExportable
     /// <summary>
     /// Exports the cryptographic private key data.
     /// </summary>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic private key data.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data.</returns>
     byte[] Export();
 
     /// <summary>
     /// Exports the cryptographic private key data in PKCS #8 format.
     /// </summary>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic private key data in PKCS #8 format.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data in PKCS #8 format.</returns>
     byte[] ExportPkcs8();
 
     /// <summary>
@@ -39,7 +39,7 @@ public interface IPrivateKeyExportable
     /// </summary>
     /// <param name="password">The password to use for encryption.</param>
     /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic private key data in PKCS #8 format.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data in PKCS #8 format.</returns>
     byte[] ExportPkcs8(ReadOnlySpan<char> password, PbeParameters parameters);
 
     /// <summary>
@@ -47,7 +47,7 @@ public interface IPrivateKeyExportable
     /// </summary>
     /// <param name="password">The password to use for encryption.</param>
     /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic private key data in PKCS #8 format.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data in PKCS #8 format.</returns>
     byte[] ExportPkcs8(ReadOnlySpan<byte> password, PbeParameters parameters);
 
     /// <summary>

@@ -28,7 +28,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Divide(BigDecimal left, BigDecimal right, MidpointRounding mode = default)
     {
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
 
         if (right == Zero) throw new DivideByZeroException();
         if (right == One) return left;

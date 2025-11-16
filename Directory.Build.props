@@ -2,11 +2,11 @@
 
     <!--GLOBAL-->
     <PropertyGroup>
-        <Version>12.2.0</Version>
-        <PackageVersion>12.2.0</PackageVersion>
-        <AssemblyVersion>12.2.0</AssemblyVersion>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
-        <LangVersion>13</LangVersion>
+        <Version>13.0.0</Version>
+        <PackageVersion>13.0.0</PackageVersion>
+        <AssemblyVersion>13.0.0</AssemblyVersion>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <LangVersion>14</LangVersion>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Authors>ONIXLabs</Authors>
@@ -41,16 +41,15 @@
 
     <!--UNIT TESTS-->
     <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests'))">
+        <OutputType>Exe</OutputType>
         <IsTestProject>true</IsTestProject>
         <IsPackable>false</IsPackable>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     </PropertyGroup>
 
     <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests'))">
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
-        <PackageReference Include="xunit" Version="2.9.3"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
-        <PackageReference Include="coverlet.collector" Version="6.0.4"/>
+        <PackageReference Include="xunit.v3" Version="3.2.0"/>
         <Using Include="Xunit"/>
     </ItemGroup>
 
@@ -62,9 +61,14 @@
     </PropertyGroup>
 
     <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
-        <PackageReference Include="xunit" Version="2.9.3"/>
+        <PackageReference Include="xunit.v3.extensibility.core" Version="3.2.0"/>
+        <Using Include="System"/>
+        <Using Include="System.Collections.Generic"/>
+        <Using Include="System.Reflection"/>
+        <Using Include="System.Threading.Tasks"/>
         <Using Include="Xunit"/>
+        <Using Include="Xunit.Sdk"/>
+        <Using Include="Xunit.v3"/>
     </ItemGroup>
 
     <!--PLAYGROUND-->

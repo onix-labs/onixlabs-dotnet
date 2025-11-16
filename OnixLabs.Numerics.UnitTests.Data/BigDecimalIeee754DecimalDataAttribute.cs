@@ -18,7 +18,7 @@ using Xunit.Sdk;
 
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class BigDecimalIeee754DecimalDataAttribute : DataAttribute
+public sealed class BigDecimalIeee754DecimalDataAttribute : TestDataAttribute
 {
     private static readonly (double Value, string Expected)[] Data =
     [

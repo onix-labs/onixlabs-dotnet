@@ -21,7 +21,7 @@ public sealed partial class EcdsaPublicKey
     /// <summary>
     /// Exports the ECDSA cryptographic public key data.
     /// </summary>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the ECDSA cryptographic public key data.</returns>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the ECDSA cryptographic public key data.</returns>
     public byte[] Export()
     {
         using ECDsa algorithm = ImportKeyData();

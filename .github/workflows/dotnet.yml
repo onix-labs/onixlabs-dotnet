@@ -11,6 +11,7 @@ on:
 
 env:
   USE_FULL_NUMERIC_PROVIDER: "true"
+  MSBUILDDISABLENODEREUSE: "1"
 
 jobs:
   build:
@@ -18,14 +19,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         global-json-file: global.json
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Test (.NET 8.0)
+      run: dotnet test --no-build --framework net8.0 --verbosity quiet
+    - name: Test (.NET 9.0)
+      run: dotnet test --no-build --framework net9.0 --verbosity quiet
+    - name: Test (.NET 10.0)
+      run: dotnet test --no-build --framework net10.0 --verbosity quiet

@@ -19,16 +19,16 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial record struct NamedHash
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the underlying <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
+    /// Gets the underlying <see cref="byte"/> array representation of the underlying <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
     /// <remarks>This method only obtains the bytes representing the hash value. The name of the hash will not be encoded into the resulting span.</remarks>
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the underlying <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="byte"/> array representation of the underlying <see cref="Hash"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => Hash.AsReadOnlyMemory();
 
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the underlying <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// Gets the underlying <see cref="byte"/> array representation of the underlying <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// <remarks>This method only obtains the bytes representing the hash value. The name of the hash will not be encoded into the resulting span.</remarks>
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the underlying <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    /// <returns>Return the underlying <see cref="byte"/> array representation of the underlying <see cref="Hash"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
     public ReadOnlySpan<byte> AsReadOnlySpan() => Hash.AsReadOnlySpan();
 }

@@ -18,7 +18,7 @@ using System.Text;
 namespace OnixLabs.Core.Text;
 
 /// <summary>
-/// Provides extension methods for string builders.
+/// Provides extension methods for <see cref="StringBuilder"/> instances.
 /// </summary>
 // ReSharper disable UnusedMethodReturnValue.Global
 [EditorBrowsable(EditorBrowsableState.Never)]
@@ -29,152 +29,151 @@ public static class StringBuilderExtensions
     /// <summary>
     /// Appends the specified values to the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to append to.</param>
     /// <param name="values">The values to append.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values appended.</returns>
-    public static StringBuilder Append(this StringBuilder builder, params object[] values) => builder.AppendJoin(string.Empty, values);
+    public static StringBuilder Append(this StringBuilder receiver, params object[] values) => receiver.AppendJoin(string.Empty, values);
 
     /// <summary>
     /// Appends the specified value, prefixed with the escape sequence to the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to append to.</param>
     /// <param name="value">The value to append.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the escape sequence and specified value appended.</returns>
-    internal static StringBuilder AppendEscaped(this StringBuilder builder, char value) => builder.Append(EscapeSequence).Append(value);
+    internal static StringBuilder AppendEscaped(this StringBuilder receiver, char value) => receiver.Append(EscapeSequence).Append(value);
 
     /// <summary>
     /// Prepends the specified value to the current <see cref="StringBuilder"/>
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
     /// <param name="value">The value to prepend.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
-    public static StringBuilder Prepend(this StringBuilder builder, object value) => builder.Insert(0, value);
+    public static StringBuilder Prepend(this StringBuilder receiver, object value) => receiver.Insert(0, value);
 
     /// <summary>
     /// Prepends the specified value to the current <see cref="StringBuilder"/>
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
     /// <param name="value">The value to prepend.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
-    public static StringBuilder Prepend(this StringBuilder builder, char value) => builder.Insert(0, value);
+    public static StringBuilder Prepend(this StringBuilder receiver, char value) => receiver.Insert(0, value);
 
     /// <summary>
     /// Prepends the specified value to the current <see cref="StringBuilder"/>
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
     /// <param name="value">The value to prepend.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
-    public static StringBuilder Prepend(this StringBuilder builder, string value) => builder.Insert(0, value);
+    public static StringBuilder Prepend(this StringBuilder receiver, string value) => receiver.Insert(0, value);
 
     /// <summary>
     /// Prepends the specified values to the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
     /// <param name="values">The values to prepend.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
-    public static StringBuilder Prepend(this StringBuilder builder, params object[] values) => builder.PrependJoin(string.Empty, values);
+    public static StringBuilder Prepend(this StringBuilder receiver, params object[] values) => receiver.PrependJoin(string.Empty, values);
 
     /// <summary>
     /// Concatenates the string representations of the elements in the provided array of objects, using the specified separator between each member, then prepends the result to the current instance of the string builder.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to prepend to.</param>
     /// <param name="separator">The string to use as a separator. <paramref name="separator" /> is included in the joined strings only if <paramref name="values" /> has more than one element.</param>
     /// <param name="values">An array that contains the strings to concatenate and append to the current instance of the string builder.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values joined and prepended.</returns>
-    public static StringBuilder PrependJoin(this StringBuilder builder, string separator, params object?[] values) =>
-        builder.Prepend(string.Join(separator, values));
+    public static StringBuilder PrependJoin(this StringBuilder receiver, string separator, params object?[] values) => receiver.Prepend(string.Join(separator, values));
 
     /// <summary>
     /// Trims the specified <see cref="char"/> value from the start and end of the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to trim.</param>
     /// <param name="value">The <see cref="char"/> value to trim.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="char"/> value trimmed from the start and end.</returns>
-    public static StringBuilder Trim(this StringBuilder builder, char value) => builder.TrimStart(value).TrimEnd(value);
+    public static StringBuilder Trim(this StringBuilder receiver, char value) => receiver.TrimStart(value).TrimEnd(value);
 
     /// <summary>
     /// Trims the specified <see cref="char"/> value from the end of the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to trim.</param>
     /// <param name="value">The <see cref="char"/> value to trim.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="char"/> value trimmed from the end.</returns>
-    public static StringBuilder TrimEnd(this StringBuilder builder, char value)
+    public static StringBuilder TrimEnd(this StringBuilder receiver, char value)
     {
-        while (builder.Length > 0 && builder[^1] == value)
-            builder.Remove(builder.Length - 1, 1);
+        while (receiver.Length > 0 && receiver[^1] == value)
+            receiver.Remove(receiver.Length - 1, 1);
 
-        return builder;
+        return receiver;
     }
 
     /// <summary>
     /// Trims the specified <see cref="char"/> value from the start of the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to trim.</param>
     /// <param name="value">The <see cref="char"/> value to trim.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="char"/> value trimmed from the start.</returns>
-    public static StringBuilder TrimStart(this StringBuilder builder, char value)
+    public static StringBuilder TrimStart(this StringBuilder receiver, char value)
     {
-        while (builder.Length > 0 && builder[0] == value)
-            builder.Remove(0, 1);
+        while (receiver.Length > 0 && receiver[0] == value)
+            receiver.Remove(0, 1);
 
-        return builder;
+        return receiver;
     }
 
     /// <summary>
     /// Trims the specified <see cref="string"/> value from the start and end of the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to trim.</param>
     /// <param name="value">The <see cref="string"/> value to trim.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="string"/> value trimmed from the start and end.</returns>
-    public static StringBuilder Trim(this StringBuilder builder, string value) => builder.TrimStart(value).TrimEnd(value);
+    public static StringBuilder Trim(this StringBuilder receiver, string value) => receiver.TrimStart(value).TrimEnd(value);
 
     /// <summary>
     /// Trims the specified <see cref="string"/> value from the end of the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to trim.</param>
     /// <param name="value">The <see cref="string"/> value to trim.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="string"/> value trimmed from the end.</returns>
-    public static StringBuilder TrimEnd(this StringBuilder builder, string value)
+    public static StringBuilder TrimEnd(this StringBuilder receiver, string value)
     {
-        if (string.IsNullOrEmpty(value)) return builder;
+        if (string.IsNullOrEmpty(value)) return receiver;
 
-        while (builder.Length >= value.Length && builder.ToString(builder.Length - value.Length, value.Length) == value)
-            builder.Remove(builder.Length - value.Length, value.Length);
+        while (receiver.Length >= value.Length && receiver.ToString(receiver.Length - value.Length, value.Length) == value)
+            receiver.Remove(receiver.Length - value.Length, value.Length);
 
-        return builder;
+        return receiver;
     }
 
     /// <summary>
     /// Trims the specified <see cref="string"/> value from the start of the current <see cref="StringBuilder"/>.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to trim.</param>
     /// <param name="value">The <see cref="string"/> value to trim.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="string"/> value trimmed from the start.</returns>
-    public static StringBuilder TrimStart(this StringBuilder builder, string value)
+    public static StringBuilder TrimStart(this StringBuilder receiver, string value)
     {
-        if (string.IsNullOrEmpty(value)) return builder;
+        if (string.IsNullOrEmpty(value)) return receiver;
 
-        while (builder.Length >= value.Length && builder.ToString(0, value.Length) == value)
-            builder.Remove(0, value.Length);
+        while (receiver.Length >= value.Length && receiver.ToString(0, value.Length) == value)
+            receiver.Remove(0, value.Length);
 
-        return builder;
+        return receiver;
     }
 
     /// <summary>
     /// Wraps the current <see cref="StringBuilder"/> between the specified start and end <see cref="char"/> values.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to wrap.</param>
     /// <param name="start">The <see cref="char"/> value to prepend.</param>
     /// <param name="end">The <see cref="char"/> value to append.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> wrapped between the specified start and end <see cref="char"/> values.</returns>
-    public static StringBuilder Wrap(this StringBuilder builder, char start, char end) => builder.Prepend(start).Append(end);
+    public static StringBuilder Wrap(this StringBuilder receiver, char start, char end) => receiver.Prepend(start).Append(end);
 
     /// <summary>
     /// Wraps the current <see cref="StringBuilder"/> between the specified start and end <see cref="string"/> values.
     /// </summary>
-    /// <param name="builder">The <see cref="StringBuilder"/> to wrap.</param>
     /// <param name="start">The <see cref="string"/> value to prepend.</param>
     /// <param name="end">The <see cref="string"/> value to append.</param>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> wrapped between the specified start and end <see cref="string"/> values.</returns>
-    public static StringBuilder Wrap(this StringBuilder builder, string start, string end) => builder.Prepend(start).Append(end);
+    public static StringBuilder Wrap(this StringBuilder receiver, string start, string end) => receiver.Prepend(start).Append(end);
 }

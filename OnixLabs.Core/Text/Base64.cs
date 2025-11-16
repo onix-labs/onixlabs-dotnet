@@ -24,6 +24,8 @@ namespace OnixLabs.Core.Text;
 /// <param name="value">The <see cref="ReadOnlySpan{T}"/> with which to initialize the <see cref="Base64"/> instance.</param>
 public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseValue<Base64>
 {
+    private readonly byte[] value = value.ToArray();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Base64"/> struct.
     /// </summary>
@@ -44,7 +46,7 @@ public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseValue<Bas
     /// <summary>
     /// Initializes a new instance of the <see cref="Base64"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="T:char[]"/> with which to initialize the <see cref="Base64"/> instance.</param>
+    /// <param name="value">The <see cref="char"/> array with which to initialize the <see cref="Base64"/> instance.</param>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
     // ReSharper disable once MemberCanBePrivate.Global
     public Base64(char[] value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
@@ -60,6 +62,4 @@ public readonly partial struct Base64(ReadOnlySpan<byte> value) : IBaseValue<Bas
     public Base64(ReadOnlySequence<char> value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
     {
     }
-
-    private readonly byte[] value = value.ToArray();
 }

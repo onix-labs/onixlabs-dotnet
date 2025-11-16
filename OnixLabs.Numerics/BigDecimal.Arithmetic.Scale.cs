@@ -30,7 +30,7 @@ public readonly partial struct BigDecimal
     public static BigDecimal SetScale(BigDecimal value, int scale, MidpointRounding mode = default)
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
-        RequireIsDefined(mode, nameof(mode));
+        RequireIsDefined(mode);
 
         if (scale == value.Scale) return value;
         if (scale < value.Scale) return Round(value, scale, mode);

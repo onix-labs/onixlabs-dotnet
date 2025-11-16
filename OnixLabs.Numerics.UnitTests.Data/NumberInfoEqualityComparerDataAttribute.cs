@@ -12,14 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Xunit.Sdk;
-
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class NumberInfoEqualityComparerDataAttribute : DataAttribute
+public sealed class NumberInfoEqualityComparerDataAttribute : TestDataAttribute
 {
     private static readonly int[] Values = [0, 123456000, -123456000];
     private static readonly int[] Scales = [0, 1, 2, 3, 10];

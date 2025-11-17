@@ -18,13 +18,13 @@ using System.Globalization;
 namespace OnixLabs.Units;
 
 // ReSharper disable MemberCanBePrivate.Global
-public readonly partial struct DataSize<T>
+public readonly partial struct Mass<T>
 {
     /// <summary>
     /// Formats the value of the current instance using the default format.
     /// </summary>
     /// <returns>Returns the value of the current instance in the default format.</returns>
-    public override string ToString() => ToString(BitsSpecifier);
+    public override string ToString() => ToString(YoctoGramsSpecifier);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
@@ -42,49 +42,45 @@ public readonly partial struct DataSize<T>
     /// <returns>Returns the value of the current instance in the specified format.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: BitsSpecifier);
+        (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: YoctoGramsSpecifier);
 
         T value = specifier switch
         {
-            BitsSpecifier => Bits,
-            BytesSpecifier => Bytes,
-            KibiBitsSpecifier => KibiBits,
-            KibiBytesSpecifier => KibiBytes,
-            KiloBitsSpecifier => KiloBits,
-            KiloBytesSpecifier => KiloBytes,
-            MebiBitsSpecifier => MebiBits,
-            MebiBytesSpecifier => MebiBytes,
-            MegaBitsSpecifier => MegaBits,
-            MegaBytesSpecifier => MegaBytes,
-            GibiBitsSpecifier => GibiBits,
-            GibiBytesSpecifier => GibiBytes,
-            GigaBitsSpecifier => GigaBits,
-            GigaBytesSpecifier => GigaBytes,
-            TebiBitsSpecifier => TebiBits,
-            TebiBytesSpecifier => TebiBytes,
-            TeraBitsSpecifier => TeraBits,
-            TeraBytesSpecifier => TeraBytes,
-            PebiBitsSpecifier => PebiBits,
-            PebiBytesSpecifier => PebiBytes,
-            PetaBitsSpecifier => PetaBits,
-            PetaBytesSpecifier => PetaBytes,
-            ExbiBitsSpecifier => ExbiBits,
-            ExbiBytesSpecifier => ExbiBytes,
-            ExaBitsSpecifier => ExaBits,
-            ExaBytesSpecifier => ExaBytes,
-            ZebiBitsSpecifier => ZebiBits,
-            ZebiBytesSpecifier => ZebiBytes,
-            ZettaBitsSpecifier => ZettaBits,
-            ZettaBytesSpecifier => ZettaBytes,
-            YobiBitsSpecifier => YobiBits,
-            YobiBytesSpecifier => YobiBytes,
-            YottaBitsSpecifier => YottaBits,
-            YottaBytesSpecifier => YottaBytes,
+            YoctoGramsSpecifier => YoctoGrams,
+            ZeptoGramsSpecifier => ZeptoGrams,
+            AttoGramsSpecifier => AttoGrams,
+            FemtoGramsSpecifier => FemtoGrams,
+            PicoGramsSpecifier => PicoGrams,
+            NanoGramsSpecifier => NanoGrams,
+            MicroGramsSpecifier => MicroGrams,
+            MilliGramsSpecifier => MilliGrams,
+            GramsSpecifier => Grams,
+            KiloGramsSpecifier => KiloGrams,
+            MegaGramsSpecifier => MegaGrams,
+            TonneSpecifier => Tonnes,
+            GigaGramsSpecifier => GigaGrams,
+            TeraGramsSpecifier => TeraGrams,
+            PetaGramsSpecifier => PetaGrams,
+            ExaGramsSpecifier => ExaGrams,
+            ZettaGramsSpecifier => ZettaGrams,
+            YottaGramsSpecifier => YottaGrams,
+            PoundsSpecifier => Pounds,
+            OuncesSpecifier => Ounces,
+            StonesSpecifier => Stones,
+            GrainsSpecifier => Grains,
+            ShortTonsSpecifier => ShortTons,
+            LongTonsSpecifier => LongTons,
+            HundredweightUsSpecifier => HundredweightUs,
+            HundredweightUkSpecifier => HundredweightUk,
+            QuartersSpecifier => Quarters,
+            TroyPoundsSpecifier => TroyPounds,
+            TroyOuncesSpecifier => TroyOunces,
+            PennyweightsSpecifier => Pennyweights,
             _ => throw new ArgumentException(
-                $"Format '{format}' is invalid. Valid format specifiers are: " +
-                "b, B, Kib, KiB, Kb, KB, Mib, MiB, Mb, MB, Gib, GiB, Gb, GB, " +
-                "Tib, TiB, Tb, TB, Pib, PiB, Pb, PB, Eib, EiB, Eb, EB, " +
-                "Zib, ZiB, Zb, ZB, Yib, YiB, Yb, YB. " +
+                $"Format '{format.ToString()}' is invalid. " +
+                "Valid format specifiers are: " +
+                "yg, zg, ag, fg, pg, ng, ug, mg, g, kg, Mg, t, Gg, Tg, Pg, Eg, Zg, Yg, " +
+                "lb, oz, st, gr, ton, lt, cwtUS, cwtUK, qr, lbt, ozt, dwt. " +
                 "Format specifiers may also be suffixed with a scale value.",
                 nameof(format))
         };

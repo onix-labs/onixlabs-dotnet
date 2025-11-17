@@ -19,241 +19,241 @@ namespace OnixLabs.Units;
 public readonly partial struct DataSize<T>
 {
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a Bits value.
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified Bits value.
     /// </summary>
-    /// <param name="value">The value to convert from bits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a Bits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromBits(T value) => new(value);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a Bytes value.
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified Bytes value.
     /// </summary>
-    /// <param name="value">The value to convert from bytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a Bytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromBytes(T value) => new(value * T.CreateChecked(8));
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a KibiBits value (IEC, <c>2^10</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified KibiBits value.
     /// </summary>
-    /// <param name="value">The value to convert from kibibits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a KibiBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromKibiBits(T value) => CreateFromBinaryValue(value, 1, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a KibiBytes value (IEC, <c>2^10</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified KibiBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from kibibytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a KibiBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromKibiBytes(T value) => CreateFromBinaryValue(value, 1, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a KiloBits value (SI, <c>10^3</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified KiloBits value.
     /// </summary>
-    /// <param name="value">The value to convert from kilobits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a KiloBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromKiloBits(T value) => CreateFromMetricValue(value, 1, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a KiloBytes value (SI, <c>10^3</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified KiloBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from kilobytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a KiloBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromKiloBytes(T value) => CreateFromMetricValue(value, 1, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a MebiBits value (IEC, <c>2^20</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified MebiBits value.
     /// </summary>
-    /// <param name="value">The value to convert from mebibits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a MebiBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromMebiBits(T value) => CreateFromBinaryValue(value, 2, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a MebiBytes value (IEC, <c>2^20</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified MebiBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from mebibytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a MebiBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromMebiBytes(T value) => CreateFromBinaryValue(value, 2, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a MegaBits value (SI, <c>10^6</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified MegaBits value.
     /// </summary>
-    /// <param name="value">The value to convert from megabits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a MegaBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromMegaBits(T value) => CreateFromMetricValue(value, 2, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a MegaBytes value (SI, <c>10^6</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified MegaBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from megabytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a MegaBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromMegaBytes(T value) => CreateFromMetricValue(value, 2, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a GibiBits value (IEC, <c>2^30</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified GibiBits value.
     /// </summary>
-    /// <param name="value">The value to convert from gibibits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a GibiBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromGibiBits(T value) => CreateFromBinaryValue(value, 3, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a GibiBytes value (IEC, <c>2^30</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified GibiBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from gibibytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a GibiBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromGibiBytes(T value) => CreateFromBinaryValue(value, 3, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a GigaBits value (SI, <c>10^9</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified GigaBits value.
     /// </summary>
-    /// <param name="value">The value to convert from gigabits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a GigaBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromGigaBits(T value) => CreateFromMetricValue(value, 3, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a GigaBytes value (SI, <c>10^9</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified GigaBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from gigabytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a GigaBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromGigaBytes(T value) => CreateFromMetricValue(value, 3, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a TebiBits value (IEC, <c>2^40</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified TebiBits value.
     /// </summary>
-    /// <param name="value">The value to convert from tebibits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a TebiBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromTebiBits(T value) => CreateFromBinaryValue(value, 4, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a TebiBytes value (IEC, <c>2^40</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified TebiBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from tebibytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a TebiBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromTebiBytes(T value) => CreateFromBinaryValue(value, 4, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a TeraBits value (SI, <c>10^12</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified TeraBits value.
     /// </summary>
-    /// <param name="value">The value to convert from terabits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a TeraBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromTeraBits(T value) => CreateFromMetricValue(value, 4, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a TeraBytes value (SI, <c>10^12</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified TeraBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from terabytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a TeraBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromTeraBytes(T value) => CreateFromMetricValue(value, 4, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a PebiBits value (IEC, <c>2^50</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified PebiBits value.
     /// </summary>
-    /// <param name="value">The value to convert from pebibits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a PebiBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromPebiBits(T value) => CreateFromBinaryValue(value, 5, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a PebiBytes value (IEC, <c>2^50</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified PebiBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from pebibytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a PebiBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromPebiBytes(T value) => CreateFromBinaryValue(value, 5, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a PetaBits value (SI, <c>10^15</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified PetaBits value.
     /// </summary>
-    /// <param name="value">The value to convert from petabits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a PetaBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromPetaBits(T value) => CreateFromMetricValue(value, 5, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a PetaBytes value (SI, <c>10^15</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified PetaBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from petabytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a PetaBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromPetaBytes(T value) => CreateFromMetricValue(value, 5, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from an ExbiBits value (IEC, <c>2^60</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified ExbiBits value.
     /// </summary>
-    /// <param name="value">The value to convert from exbibits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from an ExbiBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromExbiBits(T value) => CreateFromBinaryValue(value, 6, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from an ExbiBytes value (IEC, <c>2^60</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified ExbiBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from exbibytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from an ExbiBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromExbiBytes(T value) => CreateFromBinaryValue(value, 6, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from an ExaBits value (SI, <c>10^18</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified ExaBits value.
     /// </summary>
-    /// <param name="value">The value to convert from exabits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from an ExaBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromExaBits(T value) => CreateFromMetricValue(value, 6, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from an ExaBytes value (SI, <c>10^18</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified ExaBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from exabytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from an ExaBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromExaBytes(T value) => CreateFromMetricValue(value, 6, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a ZebiBits value (IEC, <c>2^70</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified ZebiBits value.
     /// </summary>
-    /// <param name="value">The value to convert from zebibits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a ZebiBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromZebiBits(T value) => CreateFromBinaryValue(value, 7, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a ZebiBytes value (IEC, <c>2^70</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified ZebiBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from zebibytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a ZebiBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromZebiBytes(T value) => CreateFromBinaryValue(value, 7, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a ZettaBits value (SI, <c>10^21</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified ZettaBits value.
     /// </summary>
-    /// <param name="value">The value to convert from zettabits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a ZettaBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromZettaBits(T value) => CreateFromMetricValue(value, 7, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a ZettaBytes value (SI, <c>10^21</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified ZettaBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from zettabytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a ZettaBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromZettaBytes(T value) => CreateFromMetricValue(value, 7, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a YobiBits value (IEC, <c>2^80</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified YobiBits value.
     /// </summary>
-    /// <param name="value">The value to convert from yobibits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a YobiBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromYobiBits(T value) => CreateFromBinaryValue(value, 8, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a YobiBytes value (IEC, <c>2^80</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified YobiBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from yobibytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a YobiBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromYobiBytes(T value) => CreateFromBinaryValue(value, 8, true);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a YottaBits value (SI, <c>10^24</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified YottaBits value.
     /// </summary>
-    /// <param name="value">The value to convert from yottabits.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a YottaBits value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromYottaBits(T value) => CreateFromMetricValue(value, 8, false);
 
     /// <summary>
-    /// Creates a new <see cref="DataSize{T}"/> instance from a YottaBytes value (SI, <c>10^24</c>).
+    /// Creates a new <see cref="DataSize{T}"/> instance from the specified YottaBytes value.
     /// </summary>
-    /// <param name="value">The value to convert from yottabytes.</param>
-    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from a YottaBytes value.</returns>
+    /// <param name="value">The value from which to construct a new <see cref="DataSize{T}"/> instance.</param>
+    /// <returns>Returns a new <see cref="DataSize{T}"/> instance from the specified value.</returns>
     public static DataSize<T> FromYottaBytes(T value) => CreateFromMetricValue(value, 8, true);
 
     /// <summary>

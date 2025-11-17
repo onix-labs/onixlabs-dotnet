@@ -42,7 +42,7 @@ public readonly partial struct Distance<T>
     /// <returns>Returns the value of the current instance in the specified format.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: MetersSpecifier);
+        (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: QuectoMetersSpecifier);
 
         T value = specifier switch
         {

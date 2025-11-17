@@ -19,9 +19,12 @@ using OnixLabs.Core;
 namespace OnixLabs.Units;
 
 /// <summary>
-/// Represents a unit of temperature. The default value is absolute zero, or 0 K.
+/// Represents a unit of temperature.
 /// </summary>
-/// <typeparam name="T">The underlying floating point value.</typeparam>
+/// <remarks>
+/// The default value is absolute zero, or 0 K.
+/// </remarks>
+/// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 public readonly partial struct Temperature<T> :
     IValueEquatable<Temperature<T>>,
@@ -30,48 +33,48 @@ public readonly partial struct Temperature<T> :
     where T : IFloatingPoint<T>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Temperature{T}" /> struct.
+    /// Initializes a new instance of the <see cref="Temperature{T}"/> struct.
     /// </summary>
-    /// <param name="value">The value in Kelvin with which to initialize the current <see cref="Temperature{T}" /> instance.</param>
+    /// <param name="value">The temperature unit in <see cref="Kelvin"/>.</param>
     private Temperature(T value) => Kelvin = value;
 
     /// <summary>
-    /// Gets the temperature in Kelvin.
+    /// Gets the temperature in Kelvin (K).
     /// </summary>
     public T Kelvin { get; }
 
     /// <summary>
-    /// Gets the temperature in Celsius.
+    /// Gets the temperature in Celsius (C).
     /// </summary>
     public T Celsius => Kelvin - T.CreateChecked(273.15);
 
     /// <summary>
-    /// Gets the temperature in Delisle.
+    /// Gets the temperature in Delisle (DE).
     /// </summary>
     public T Delisle => (T.CreateChecked(373.15) - Kelvin) * T.CreateChecked(1.50);
 
     /// <summary>
-    /// Gets the temperature in Fahrenheit.
+    /// Gets the temperature in Fahrenheit (F).
     /// </summary>
     public T Fahrenheit => Kelvin * T.CreateChecked(1.80) - T.CreateChecked(459.67);
 
     /// <summary>
-    /// Gets the temperature in Newton.
+    /// Gets the temperature in Newton (N).
     /// </summary>
     public T Newton => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(33.00) / T.CreateChecked(100.00);
 
     /// <summary>
-    /// Gets the temperature in Rankine.
+    /// Gets the temperature in Rankine (R).
     /// </summary>
     public T Rankine => Kelvin * T.CreateChecked(1.8);
 
     /// <summary>
-    /// Gets the temperature in Réaumur.
+    /// Gets the temperature in Réaumur (RE).
     /// </summary>
     public T Reaumur => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(0.80);
 
     /// <summary>
-    /// Gets the temperature in Rømer.
+    /// Gets the temperature in Rømer (RO).
     /// </summary>
     public T Romer => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(21.0 / 40.0) + T.CreateChecked(7.5);
 }

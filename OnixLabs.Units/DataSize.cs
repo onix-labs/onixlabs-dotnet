@@ -21,7 +21,7 @@ namespace OnixLabs.Units;
 /// <summary>
 /// Represents a unit of data size.
 /// </summary>
-/// <typeparam name="T">The underlying floating point value.</typeparam>
+/// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 public readonly partial struct DataSize<T> :
     IValueEquatable<DataSize<T>>,
@@ -29,175 +29,179 @@ public readonly partial struct DataSize<T> :
     ISpanFormattable
     where T : IFloatingPoint<T>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DataSize{T}"/> struct.
+    /// </summary>
+    /// <param name="value">The data size unit in <see cref="Bits"/>.</param>
     private DataSize(T value) => Bits = value;
 
     /// <summary>
-    /// Gets the data size in bits.
+    /// Gets the data size in bits (b).
     /// </summary>
     public T Bits { get; }
 
     /// <summary>
-    /// Gets the data size in bytes.
+    /// Gets the data size in bytes (B).
     /// </summary>
     public T Bytes => Bits / T.CreateChecked(8);
 
     /// <summary>
-    /// Gets the data size in kibibits.
+    /// Gets the data size in kibibits (Kib).
     /// </summary>
     public T KibiBits => GetBinaryValue(1, false);
 
     /// <summary>
-    /// Gets the data size in kibibytes.
+    /// Gets the data size in kibibytes (KiB).
     /// </summary>
     public T KibiBytes => GetBinaryValue(1, true);
 
     /// <summary>
-    /// Gets the data size in kilobits.
+    /// Gets the data size in kilobits (Kb).
     /// </summary>
     public T KiloBits => GetMetricValue(1, false);
 
     /// <summary>
-    /// Gets the data size in kilobytes.
+    /// Gets the data size in kilobytes (KB).
     /// </summary>
     public T KiloBytes => GetMetricValue(1, true);
 
     /// <summary>
-    /// Gets the data size in mebibits.
+    /// Gets the data size in mebibits (Mib).
     /// </summary>
     public T MebiBits => GetBinaryValue(2, false);
 
     /// <summary>
-    /// Gets the data size in mebibytes.
+    /// Gets the data size in mebibytes (MiB).
     /// </summary>
     public T MebiBytes => GetBinaryValue(2, true);
 
     /// <summary>
-    /// Gets the data size in megabits.
+    /// Gets the data size in megabits (Mb).
     /// </summary>
     public T MegaBits => GetMetricValue(2, false);
 
     /// <summary>
-    /// Gets the data size in megabytes.
+    /// Gets the data size in megabytes (MB).
     /// </summary>
     public T MegaBytes => GetMetricValue(2, true);
 
     /// <summary>
-    /// Gets the data size in gibibits.
+    /// Gets the data size in gibibits (Gib).
     /// </summary>
     public T GibiBits => GetBinaryValue(3, false);
 
     /// <summary>
-    /// Gets the data size in gibibytes.
+    /// Gets the data size in gibibytes (GiB).
     /// </summary>
     public T GibiBytes => GetBinaryValue(3, true);
 
     /// <summary>
-    /// Gets the data size in gigabits.
+    /// Gets the data size in gigabits (Gb).
     /// </summary>
     public T GigaBits => GetMetricValue(3, false);
 
     /// <summary>
-    /// Gets the data size in gigabytes.
+    /// Gets the data size in gigabytes (GB).
     /// </summary>
     public T GigaBytes => GetMetricValue(3, true);
 
     /// <summary>
-    /// Gets the data size in tebibits.
+    /// Gets the data size in tebibits (Tib).
     /// </summary>
     public T TebiBits => GetBinaryValue(4, false);
 
     /// <summary>
-    /// Gets the data size in tebibytes.
+    /// Gets the data size in tebibytes (TiB).
     /// </summary>
     public T TebiBytes => GetBinaryValue(4, true);
 
     /// <summary>
-    /// Gets the data size in terabits.
+    /// Gets the data size in terabits (Tb).
     /// </summary>
     public T TeraBits => GetMetricValue(4, false);
 
     /// <summary>
-    /// Gets the data size in terabytes.
+    /// Gets the data size in terabytes (TB).
     /// </summary>
     public T TeraBytes => GetMetricValue(4, true);
 
     /// <summary>
-    /// Gets the data size in pebibits.
+    /// Gets the data size in pebibits (Pib).
     /// </summary>
     public T PebiBits => GetBinaryValue(5, false);
 
     /// <summary>
-    /// Gets the data size in pebibytes.
+    /// Gets the data size in pebibytes (PiB).
     /// </summary>
     public T PebiBytes => GetBinaryValue(5, true);
 
     /// <summary>
-    /// Gets the data size in petabits.
+    /// Gets the data size in petabits (Pb).
     /// </summary>
     public T PetaBits => GetMetricValue(5, false);
 
     /// <summary>
-    /// Gets the data size in petabytes.
+    /// Gets the data size in petabytes (PB).
     /// </summary>
     public T PetaBytes => GetMetricValue(5, true);
 
     /// <summary>
-    /// Gets the data size in exbibits.
+    /// Gets the data size in exbibits (Eib).
     /// </summary>
     public T ExbiBits => GetBinaryValue(6, false);
 
     /// <summary>
-    /// Gets the data size in exbibytes.
+    /// Gets the data size in exbibytes (EiB).
     /// </summary>
     public T ExbiBytes => GetBinaryValue(6, true);
 
     /// <summary>
-    /// Gets the data size in exabits.
+    /// Gets the data size in exabits (Eb).
     /// </summary>
     public T ExaBits => GetMetricValue(6, false);
 
     /// <summary>
-    /// Gets the data size in exabytes.
+    /// Gets the data size in exabytes (EB).
     /// </summary>
     public T ExaBytes => GetMetricValue(6, true);
 
     /// <summary>
-    /// Gets the data size in zebibits.
+    /// Gets the data size in zebibits (Zib).
     /// </summary>
     public T ZebiBits => GetBinaryValue(7, false);
 
     /// <summary>
-    /// Gets the data size in zebibytes.
+    /// Gets the data size in zebibytes (ZiB).
     /// </summary>
     public T ZebiBytes => GetBinaryValue(7, true);
 
     /// <summary>
-    /// Gets the data size in zettabits.
+    /// Gets the data size in zettabits (Zb).
     /// </summary>
     public T ZettaBits => GetMetricValue(7, false);
 
     /// <summary>
-    /// Gets the data size in zettabytes.
+    /// Gets the data size in zettabytes (ZB).
     /// </summary>
     public T ZettaBytes => GetMetricValue(7, true);
 
     /// <summary>
-    /// Gets the data size in yobibits.
+    /// Gets the data size in yobibits (Yib).
     /// </summary>
     public T YobiBits => GetBinaryValue(8, false);
 
     /// <summary>
-    /// Gets the data size in yobibytes.
+    /// Gets the data size in yobibytes (YiB).
     /// </summary>
     public T YobiBytes => GetBinaryValue(8, true);
 
     /// <summary>
-    /// Gets the data size in yottabits.
+    /// Gets the data size in yottabits. (Yb)
     /// </summary>
     public T YottaBits => GetMetricValue(8, false);
 
     /// <summary>
-    /// Gets the data size in yottabytes.
+    /// Gets the data size in yottabytes (YB).
     /// </summary>
     public T YottaBytes => GetMetricValue(8, true);
 

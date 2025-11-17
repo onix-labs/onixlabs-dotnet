@@ -43,7 +43,7 @@ public readonly partial struct Distance<T>
     /// <summary>
     /// Serves as a hash code function for this instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for this instance.</returns>
     public override int GetHashCode() => QuectoMeters.GetHashCode();
 
     /// <summary>

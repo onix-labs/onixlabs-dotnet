@@ -16,49 +16,50 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Temperature<T>
+// ReSharper disable MemberCanBePrivate.Global
+public readonly partial struct Mass<T>
 {
     /// <summary>
-    /// Compares two instances of <see cref="Temperature{T}"/> to determine whether their values are equal.
+    /// Compares two instances of <see cref="Mass{T}"/> to determine whether their values are equal.
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool Equals(Temperature<T> left, Temperature<T> right) => Equals(left.Kelvin, right.Kelvin);
+    public static bool Equals(Mass<T> left, Mass<T> right) => Equals(left.YoctoGrams, right.YoctoGrams);
 
     /// <summary>
-    /// Compares the current instance of <see cref="Temperature{T}"/> with the specified other instance of <see cref="Temperature{T}"/>.
+    /// Compares the current instance of <see cref="Mass{T}"/> with the specified other instance of <see cref="Mass{T}"/>.
     /// </summary>
-    /// <param name="other">The other instance of <see cref="Temperature{T}"/> to compare with the current instance.</param>
+    /// <param name="other">The other instance of <see cref="Mass{T}"/> to compare with the current instance.</param>
     /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(Temperature<T> other) => Equals(this, other);
+    public bool Equals(Mass<T> other) => Equals(this, other);
 
     /// <summary>
     /// Checks for equality between this instance and another object.
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Temperature<T> other && Equals(other);
+    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Mass<T> other && Equals(other);
 
     /// <summary>
     /// Serves as a hash code function for this instance.
     /// </summary>
     /// <returns>Returns a hash code for this instance.</returns>
-    public override int GetHashCode() => Kelvin.GetHashCode();
+    public override int GetHashCode() => YoctoGrams.GetHashCode();
 
     /// <summary>
-    /// Compares two instances of <see cref="Temperature{T}"/> to determine whether their values are equal.
+    /// Compares two instances of <see cref="Mass{T}"/> to determine whether their values are equal.
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Temperature<T> left, Temperature<T> right) => Equals(left, right);
+    public static bool operator ==(Mass<T> left, Mass<T> right) => Equals(left, right);
 
     /// <summary>
-    /// Compares two instances of <see cref="Temperature{T}"/> to determine whether their values are not equal.
+    /// Compares two instances of <see cref="Mass{T}"/> to determine whether their values are not equal.
     /// </summary>
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Temperature<T> left, Temperature<T> right) => !Equals(left, right);
+    public static bool operator !=(Mass<T> left, Mass<T> right) => !Equals(left, right);
 }

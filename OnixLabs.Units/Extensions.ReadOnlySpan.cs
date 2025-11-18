@@ -48,7 +48,7 @@ internal static class ReadOnlySpanExtensions
             if (scaleCharacters[0] is plus or minus)
                 throw new FormatException($"Scale must not begin with a leading '{plus}' or '{minus}' sign.");
 
-            return int.TryParse(scaleCharacters, NumberStyles.None, CultureInfo.InvariantCulture, out int scale)
+            return int.TryParse(scaleCharacters, NumberStyles.Integer, CultureInfo.InvariantCulture, out int scale)
                 ? (specifier, scale)
                 : throw new FormatException("Scale must contain only decimal digits.");
         }

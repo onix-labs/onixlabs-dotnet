@@ -26,7 +26,7 @@ public sealed class AreaTests
     public void AreaEmptyShouldProduceExpectedResult()
     {
         // Given / When
-        Area<double> area = Area<double>.Empty;
+        Area<double> area = Area<double>.Zero;
 
         // Then
         Assert.Equal(0.0, area.SquareYoctoMeters, Tolerance);

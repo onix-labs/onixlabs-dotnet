@@ -17,9 +17,9 @@ namespace OnixLabs.Units;
 public readonly partial struct Area<T>
 {
     /// <summary>
-    /// Gets an empty <see cref="Area{T}"/> value.
+    /// Gets a zero <c>0</c> <see cref="Area{T}"/> value.
     /// </summary>
-    public static Area<T> Empty => new(T.Zero);
+    public static Area<T> Zero => new(T.Zero);
 
     private const string SquareYoctoMetersSpecifier = "sqym";
     private const string SquareZeptoMetersSpecifier = "sqzm";

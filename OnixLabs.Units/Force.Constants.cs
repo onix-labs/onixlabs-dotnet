@@ -17,7 +17,7 @@ namespace OnixLabs.Units;
 public readonly partial struct Force<T>
 {
     /// <summary>
-    /// Gets a zero <see cref="Force{T}"/> value, equal to zero yoctonewtons.
+    /// Gets a zero <c>0</c> <see cref="Force{T}"/> value.
     /// </summary>
     public static readonly Force<T> Zero = new(T.Zero);
 

@@ -175,6 +175,7 @@ public readonly partial struct Distance<T> :
     /// </summary>
     public T Yards => QuectoMeters / T.CreateChecked(0.9144e30);
 
+    // ReSharper disable once GrammarMistakeInComment
     /// <summary>
     /// Gets the distance in Miles (mi).
     /// </summary>

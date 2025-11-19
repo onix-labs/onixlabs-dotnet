@@ -12,16 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Units;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
-        Area<double> area = Area<double>.FromSquareMeters(567);
-        Console.WriteLine($"{area:sqin0}");
     }
 }

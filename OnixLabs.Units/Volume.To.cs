@@ -79,12 +79,10 @@ public readonly partial struct Volume<T>
             PintsSpecifier => Pints,
             QuartsSpecifier => Quarts,
             GallonsSpecifier => Gallons,
-            _ => throw new ArgumentException(
-                $"Format '{format.ToString()}' is invalid. Valid format specifiers are: " +
-                "cuym, cuzm, cuam, cufm, cupm, cunm, cuum, cumm, cucm, cudm, cum, cudam, cuhm, cukm, cuMm, " +
-                "cuGm, cuTm, cuPm, cuEm, cuZm, cuYm, l, ml, cl, dl, cuin, cuft, cuyd, floz, cup, pt, qt, gal. " +
-                "Format specifiers may also be suffixed with a scale value.",
-                nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format,
+                "cuym, cuzm, cuam, cufm, cupm, cunm, cuum, cumm, cucm, cudm, " +
+                "cum, cudam, cuhm, cukm, cuMm, cuGm, cuTm, cuPm, cuEm, cuZm, " +
+                "cuYm, l, ml, cl, dl, cuin, cuft, cuyd, floz, cup, pt, qt, and gal")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

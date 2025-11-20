@@ -54,7 +54,7 @@ public readonly partial struct Temperature<T>
             RankineSpecifier => (Rankine, RankineSymbol),
             ReaumurSpecifier => (Reaumur, ReaumurSymbol),
             RomerSpecifier => (Romer, RomerSymbol),
-            _ => throw new ArgumentException($"Format '{format}' is invalid. Valid format specifiers are: C, De, F, K, N, R, Re, and Ro. Format specifiers may also be suffixed with a scale value.", nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format, "C, De, F, K, N, R, Re, and Ro")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

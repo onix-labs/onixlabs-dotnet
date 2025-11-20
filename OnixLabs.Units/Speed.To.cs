@@ -77,12 +77,10 @@ public readonly partial struct Speed<T>
             KilometersPerHourSpecifier => KilometersPerHour,
             MilesPerHourSpecifier => MilesPerHour,
             KnotsSpecifier => Knots,
-            _ => throw new ArgumentException(
-                $"Format '{format.ToString()}' is invalid. Valid format specifiers are: " +
-                "qmps, rmps, ymps, zmps, amps, fmps, pmps, nmps, umps, mmps, cmps, dmps, mps, damps, " +
-                "hmps, kmps, Mmps, Gmps, Tmps, Pmps, Emps, Zmps, Ymps, Rmps, Qmps, ips, fps, kmph, mph, kt. " +
-                "Format specifiers may also be suffixed with a scale value.",
-                nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format,
+                "qmps, rmps, ymps, zmps, amps, fmps, pmps, nmps, umps, mmps, " +
+                "cmps, dmps, mps, damps, hmps, kmps, Mmps, Gmps, Tmps, Pmps, " +
+                "Emps, Zmps, Ymps, Rmps, Qmps, ips, fps, kmph, mph, and kt")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

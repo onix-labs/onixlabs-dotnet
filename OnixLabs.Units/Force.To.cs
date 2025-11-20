@@ -32,8 +32,7 @@ public readonly partial struct Force<T>
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>Returns the value of the current instance in the specified format.</returns>
-    public string ToString(string? format, IFormatProvider? formatProvider = null) =>
-        ToString(format.AsSpan(), formatProvider);
+    public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString(format.AsSpan(), formatProvider);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
@@ -73,13 +72,10 @@ public readonly partial struct Force<T>
             PoundalsSpecifier => Poundals,
             ShortTonForceSpecifier => ShortTonForce,
             LongTonForceSpecifier => LongTonForce,
-            _ => throw new ArgumentException(
-                $"Format '{format.ToString()}' is invalid. " +
-                "Valid format specifiers are: " +
-                "yN, zN, aN, fN, pN, nN, uN, mN, N, kN, MN, GN, TN, PN, EN, ZN, YN, " +
-                "dyn, kgf, gf, tf, lbf, ozf, pdl, tonf, ltf. " +
-                "Format specifiers may also be suffixed with a scale value.",
-                nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format,
+                "yN, zN, aN, fN, pN, nN, uN, mN, N, " +
+                "kN, MN, GN, TN, PN, EN, ZN, YN, dyn, " +
+                "kgf, gf, tf, lbf, ozf, pdl, tonf, and ltf")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

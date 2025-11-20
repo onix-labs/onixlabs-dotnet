@@ -80,13 +80,10 @@ public readonly partial struct DataSize<T>
             YobiBytesSpecifier => YobiBytes,
             YottaBitsSpecifier => YottaBits,
             YottaBytesSpecifier => YottaBytes,
-            _ => throw new ArgumentException(
-                $"Format '{format}' is invalid. Valid format specifiers are: " +
-                "b, B, Kib, KiB, Kb, KB, Mib, MiB, Mb, MB, Gib, GiB, Gb, GB, " +
-                "Tib, TiB, Tb, TB, Pib, PiB, Pb, PB, Eib, EiB, Eb, EB, " +
-                "Zib, ZiB, Zb, ZB, Yib, YiB, Yb, YB. " +
-                "Format specifiers may also be suffixed with a scale value.",
-                nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format,
+                "b, B, Kib, KiB, Kb, KB, Mib, MiB, Mb, MB, Gib, GiB, " +
+                "Gb, GB, Tib, TiB, Tb, TB, Pib, PiB, Pb, PB, Eib, EiB, " +
+                "Eb, EB, Zib, ZiB, Zb, ZB, Yib, YiB, Yb, and YB")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

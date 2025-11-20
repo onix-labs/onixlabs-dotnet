@@ -84,13 +84,10 @@ public readonly partial struct Pressure<T>
             BaryeSpecifier => Barye,
             MillimetersOfWaterColumnSpecifier => MillimetersOfWaterColumn,
             InchesOfWaterColumnSpecifier => InchesOfWaterColumn,
-            _ => throw new ArgumentException(
-                $"Format '{format.ToString()}' is invalid. " +
-                "Valid format specifiers are: " +
-                "qPa, rPa, yPa, zPa, aPa, fPa, pPa, nPa, uPa, mPa, cPa, dPa, Pa, daPa, hPa, kPa, MPa, GPa, TPa, " +
-                "PPa, EPa, ZPa, YPa, RPa, QPa, bar, mbar, atm, at, Torr, mmHg, inHg, psi, psf, Ba, mmH2O, inH2O. " +
-                "Format specifiers may also be suffixed with a scale value.",
-                nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format,
+                "qPa, rPa, yPa, zPa, aPa, fPa, pPa, nPa, uPa, mPa, cPa, dPa, Pa, " +
+                "daPa, hPa, kPa, MPa, GPa, TPa, PPa, EPa, ZPa, YPa, RPa, QPa, bar, " +
+                "mbar, atm, at, Torr, mmHg, inHg, psi, psf, Ba, mmwc, and inwc")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

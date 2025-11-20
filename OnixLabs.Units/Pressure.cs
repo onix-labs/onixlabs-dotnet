@@ -211,12 +211,12 @@ public readonly partial struct Pressure<T> :
     public T Barye => QuectoPascals / T.CreateChecked(0.1e30);
 
     /// <summary>
-    /// Gets the pressure in millimetres of water column (mmH₂O).
+    /// Gets the pressure in millimetres of water column (mmwc).
     /// </summary>
     public T MillimetersOfWaterColumn => QuectoPascals / T.CreateChecked(9.80665e30);
 
     /// <summary>
-    /// Gets the pressure in inches of water column (inH₂O).
+    /// Gets the pressure in inches of water column (inwc).
     /// </summary>
     public T InchesOfWaterColumn => QuectoPascals / T.CreateChecked(249.08891e30);
 }

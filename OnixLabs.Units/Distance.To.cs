@@ -81,13 +81,10 @@ public readonly partial struct Distance<T>
             AstronomicalUnitsSpecifier => AstronomicalUnits,
             LightYearsSpecifier => LightYears,
             ParsecsSpecifier => Parsecs,
-            _ => throw new ArgumentException(
-                $"Format '{format.ToString()}' is invalid. " +
-                "Valid format specifiers are: " +
-                "qm, rm, ym, zm, am, fm, pm, nm, um, mm, cm, dm, m, dam, hm, km, Mm, Gm, Tm, Pm, Em, Zm, Ym, Rm, Qm, " +
-                "in, ft, yd, mi, nmi, fmi, a, au, ly, pc. " +
-                "Format specifiers may also be suffixed with a scale value.",
-                nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format,
+                "qm, rm, ym, zm, am, fm, pm, nm, um, mm, cm, dm, " +
+                "m, dam, hm, km, Mm, Gm, Tm, Pm, Em, Zm, Ym, Rm, " +
+                "Qm, in, ft, yd, mi, nmi, fmi, a, au, ly, and pc")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

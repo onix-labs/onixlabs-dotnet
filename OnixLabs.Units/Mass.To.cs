@@ -76,13 +76,10 @@ public readonly partial struct Mass<T>
             TroyPoundsSpecifier => TroyPounds,
             TroyOuncesSpecifier => TroyOunces,
             PennyweightsSpecifier => Pennyweights,
-            _ => throw new ArgumentException(
-                $"Format '{format.ToString()}' is invalid. " +
-                "Valid format specifiers are: " +
-                "yg, zg, ag, fg, pg, ng, ug, mg, g, kg, Mg, t, Gg, Tg, Pg, Eg, Zg, Yg, " +
-                "lb, oz, st, gr, ton, lt, cwtUS, cwtUK, qr, lbt, ozt, dwt. " +
-                "Format specifiers may also be suffixed with a scale value.",
-                nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format,
+                "yg, zg, ag, fg, pg, ng, ug, mg, g, kg, Mg, " +
+                "t, Gg, Tg, Pg, Eg, Zg, Yg, lb, oz, st, gr, " +
+                "ton, lt, cwtUS, cwtUK, qr, lbt, ozt, and dwt")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

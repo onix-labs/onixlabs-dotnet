@@ -32,8 +32,7 @@ public readonly partial struct Area<T>
     /// <param name="format">A standard or custom format string.</param>
     /// <param name="formatProvider">An object that provides culture-specific formatting information.</param>
     /// <returns>Returns a string representation of the current instance in the specified format.</returns>
-    public string ToString(string? format, IFormatProvider? formatProvider = null) =>
-        ToString(format.AsSpan(), formatProvider);
+    public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString(format.AsSpan(), formatProvider);
 
     /// <summary>
     /// Returns a string representation of the current instance using the specified format and format provider.
@@ -74,12 +73,10 @@ public readonly partial struct Area<T>
             SquareMilesSpecifier => SquareMiles,
             AcresSpecifier => Acres,
             HectaresSpecifier => Hectares,
-            _ => throw new ArgumentException(
-                $"Format '{format.ToString()}' is invalid. Valid format specifiers are: " +
-                "sqym, sqzm, sqam, sqfm, sqpm, sqnm, squm, sqmm, sqcm, sqdm, sqm, sqdam, sqhm, sqkm, " +
-                "sqMm, sqGm, sqTm, sqPm, sqEm, sqZm, sqYm, sqin, sqft, sqyd, sqmi, ac, ha. " +
-                "Format specifiers may also be suffixed with a scale value.",
-                nameof(format))
+            _ => throw ArgumentException.InvalidFormat(format,
+                "sqym, sqzm, sqam, sqfm, sqpm, sqnm, squm, sqmm, sqcm, " +
+                "sqdm, sqm, sqdam, sqhm, sqkm, sqMm, sqGm, sqTm, sqPm, " +
+                "sqEm, sqZm, sqYm, sqin, sqft, sqyd, sqmi, ac, and ha")
         };
 
         T rounded = scale > 0 ? T.Round(value, scale) : value;

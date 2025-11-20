@@ -40,7 +40,7 @@ public static class GenericMath
     /// <returns>Returns the factorial of the specified <see cref="IBinaryInteger{TSelf}"/> value.</returns>
     public static BigInteger Factorial<T>(T value) where T : IBinaryInteger<T>
     {
-        Require(value >= T.Zero, "Value must be greater than or equal to zero.");
+        Require(value >= T.Zero, "Value must be greater than or equal to zero.", nameof(value));
 
         if (value <= T.One) return BigInteger.One;
 
@@ -84,7 +84,7 @@ public static class GenericMath
     {
         Require(exponent >= 0, "Exponent must be greater than, or equal to zero.", nameof(exponent));
 
-        if (exponent == 0)
+        if (exponent is 0)
             return T.One;
 
         T result = T.One;
@@ -92,7 +92,7 @@ public static class GenericMath
 
         while (exponent > 0)
         {
-            if ((exponent & 1) == 1)
+            if ((exponent & 1) is 1)
                 result *= baseValue;
 
             baseValue *= baseValue;

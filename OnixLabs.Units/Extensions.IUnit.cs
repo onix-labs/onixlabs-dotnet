@@ -60,11 +60,52 @@ public static class IUnitExtensions
         /// <returns>Returns the quotient of the specified <typeparamref name="T"/> values.</returns>
         public static T operator /(T left, T right) => T.Divide(left, right);
 
+        /// <summary>
+        /// Determines whether the specified left-hand and right-hand <typeparamref name="T"/> values are equal.
+        /// </summary>
+        /// <param name="left">The left-hand value to compare.</param>
+        /// <param name="right">The right-hand value to compare.</param>
+        /// <returns>Returns <see langword="true"/> if the specified left-hand and right-hand <typeparamref name="T"/> values are equal; otherwise <see langword="false"/>.</returns>
         public static bool operator ==(T left, T right) => T.Equals(left, right);
+
+        /// <summary>
+        /// Determines whether the specified left-hand and right-hand <typeparamref name="T"/> values are not equal.
+        /// </summary>
+        /// <param name="left">The left-hand value to compare.</param>
+        /// <param name="right">The right-hand value to compare.</param>
+        /// <returns>Returns <see langword="true"/> if the specified left-hand and right-hand <typeparamref name="T"/> values are not equal; otherwise <see langword="false"/>.</returns>
         public static bool operator !=(T left, T right) => !T.Equals(left, right);
+
+        /// <summary>
+        /// Determines whether the specified left-hand <typeparamref name="T"/> value is greater than the specified right-hand <typeparamref name="T"/> value.
+        /// </summary>
+        /// <param name="left">The left-hand value to compare.</param>
+        /// <param name="right">The right-hand value to compare.</param>
+        /// <returns>Returns <see langword="true"/> if the specified left-hand <typeparamref name="T"/> value is greater than the specified right-hand <typeparamref name="T"/> value; otherwise <see langword="false"/>.</returns>
         public static bool operator >(T left, T right) => T.Compare(left, right) is 1;
+
+        /// <summary>
+        /// Determines whether the specified left-hand <typeparamref name="T"/> value is greater than or equal to the specified right-hand <typeparamref name="T"/> value.
+        /// </summary>
+        /// <param name="left">The left-hand value to compare.</param>
+        /// <param name="right">The right-hand value to compare.</param>
+        /// <returns>Returns <see langword="true"/> if the specified left-hand <typeparamref name="T"/> value is greater than or equal to the specified right-hand <typeparamref name="T"/> value; otherwise <see langword="false"/>.</returns>
         public static bool operator >=(T left, T right) => T.Compare(left, right) is 1 or 0;
+
+        /// <summary>
+        /// Determines whether the specified left-hand <typeparamref name="T"/> value is less than the specified right-hand <typeparamref name="T"/> value.
+        /// </summary>
+        /// <param name="left">The left-hand value to compare.</param>
+        /// <param name="right">The right-hand value to compare.</param>
+        /// <returns>Returns <see langword="true"/> if the specified left-hand <typeparamref name="T"/> value is less than the specified right-hand <typeparamref name="T"/> value; otherwise <see langword="false"/>.</returns>
         public static bool operator <(T left, T right) => T.Compare(left, right) is -1;
+
+        /// <summary>
+        /// Determines whether the specified left-hand <typeparamref name="T"/> value is less than or equal to the specified right-hand <typeparamref name="T"/> value.
+        /// </summary>
+        /// <param name="left">The left-hand value to compare.</param>
+        /// <param name="right">The right-hand value to compare.</param>
+        /// <returns>Returns <see langword="true"/> if the specified left-hand <typeparamref name="T"/> value is less than or equal to the specified right-hand <typeparamref name="T"/> value; otherwise <see langword="false"/>.</returns>
         public static bool operator <=(T left, T right) => T.Compare(left, right) is -1 or 0;
     }
 

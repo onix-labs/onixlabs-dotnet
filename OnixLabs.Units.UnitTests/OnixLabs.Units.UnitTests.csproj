@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\OnixLabs.Numerics\OnixLabs.Numerics.csproj"/>
+        <ProjectReference Include="..\OnixLabs.Units\OnixLabs.Units.csproj"/>
+    </ItemGroup>
+</Project>

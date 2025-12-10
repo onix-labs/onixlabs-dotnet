@@ -23,7 +23,7 @@ public readonly partial struct Temperature<T>
     public override string ToString() => ToString(KelvinSpecifier);
 
     /// <inheritdoc/>
-    public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format.AsSpan(), formatProvider);
+    public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString(format.AsSpan(), formatProvider);
 
     /// <inheritdoc/>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)

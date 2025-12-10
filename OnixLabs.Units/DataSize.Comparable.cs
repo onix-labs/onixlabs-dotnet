@@ -12,22 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Diagnostics.CodeAnalysis;
+using OnixLabs.Core;
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Temperature<T>
+public readonly partial struct DataSize<T>
 {
     /// <inheritdoc/>
-    public static bool Equals(Temperature<T> left, Temperature<T> right) => left.Kelvin == right.Kelvin;
+    public static int Compare(DataSize<T> left, DataSize<T> right) => left.Bits.CompareTo(right.Bits);
 
     /// <inheritdoc/>
-    public bool Equals(Temperature<T> other) => Equals(this, other);
+    public int CompareTo(DataSize<T> other) => Compare(this, other);
 
     /// <inheritdoc/>
-    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Temperature<T> other && Equals(other);
-
-    /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(Kelvin);
+    public int CompareTo(object? obj) => this.CompareToObject(obj);
 }

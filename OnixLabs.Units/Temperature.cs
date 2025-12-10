@@ -21,7 +21,9 @@ namespace OnixLabs.Units;
 /// </summary>
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
+#pragma warning disable CA2231
 public readonly partial struct Temperature<T> : IUnit<Temperature<T>> where T : IFloatingPoint<T>
+#pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Temperature{T}"/> struct.

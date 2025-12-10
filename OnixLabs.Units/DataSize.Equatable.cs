@@ -17,17 +17,17 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Temperature<T>
+public readonly partial struct DataSize<T>
 {
     /// <inheritdoc/>
-    public static bool Equals(Temperature<T> left, Temperature<T> right) => left.Kelvin == right.Kelvin;
+    public static bool Equals(DataSize<T> left, DataSize<T> right) => left.Bits == right.Bits;
 
     /// <inheritdoc/>
-    public bool Equals(Temperature<T> other) => Equals(this, other);
+    public bool Equals(DataSize<T> other) => Equals(this, other);
 
     /// <inheritdoc/>
-    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Temperature<T> other && Equals(other);
+    public override bool Equals([NotNullWhen(true)] object? obj) => obj is DataSize<T> other && Equals(other);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(Kelvin);
+    public override int GetHashCode() => HashCode.Combine(Bits);
 }

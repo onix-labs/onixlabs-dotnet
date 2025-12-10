@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <Title>OnixLabs.Units</Title>
+        <Description>ONIXLabs Units API for .NET</Description>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
+        <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
+    </ItemGroup>
+</Project>

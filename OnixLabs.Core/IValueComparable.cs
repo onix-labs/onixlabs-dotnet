@@ -20,8 +20,8 @@ namespace OnixLabs.Core;
 /// Defines an extension to the default <see cref="IComparable{T}"/> and <see cref="IComparable"/> interfaces,
 /// including equality, inequality, greater than, greater than or equal, less than, and less than or equal operators.
 /// </summary>
-/// <typeparam name="T">The underlying type of the objects to compare.</typeparam>
-public interface IValueComparable<in T> : IComparable<T>, IComparable where T : IValueComparable<T>
+/// <typeparam name="TSelf">The underlying type of the objects to compare.</typeparam>
+public interface IValueComparable<in TSelf> : IComparable<TSelf>, IComparable where TSelf : IValueComparable<TSelf>
 {
     /// <summary>
     /// Performs an equality comparison between two object instances.
@@ -29,7 +29,7 @@ public interface IValueComparable<in T> : IComparable<T>, IComparable where T : 
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator ==(T left, T right);
+    public static abstract bool operator ==(TSelf left, TSelf right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
@@ -37,7 +37,7 @@ public interface IValueComparable<in T> : IComparable<T>, IComparable where T : 
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator !=(T left, T right);
+    public static abstract bool operator !=(TSelf left, TSelf right);
 
     /// <summary>
     /// Performs a greater than comparison between two object instances.
@@ -45,7 +45,7 @@ public interface IValueComparable<in T> : IComparable<T>, IComparable where T : 
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is greater than the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator >(T left, T right);
+    public static abstract bool operator >(TSelf left, TSelf right);
 
     /// <summary>
     /// Performs a greater than or equal comparison between two object instances.
@@ -53,7 +53,7 @@ public interface IValueComparable<in T> : IComparable<T>, IComparable where T : 
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is greater than or equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator >=(T left, T right);
+    public static abstract bool operator >=(TSelf left, TSelf right);
 
     /// <summary>
     /// Performs a less than comparison between two object instances.
@@ -61,7 +61,7 @@ public interface IValueComparable<in T> : IComparable<T>, IComparable where T : 
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is less than the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator <(T left, T right);
+    public static abstract bool operator <(TSelf left, TSelf right);
 
     /// <summary>
     /// Performs a less than or equal comparison between two object instances.
@@ -69,5 +69,5 @@ public interface IValueComparable<in T> : IComparable<T>, IComparable where T : 
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is less than or equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static abstract bool operator <=(T left, T right);
+    public static abstract bool operator <=(TSelf left, TSelf right);
 }

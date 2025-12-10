@@ -16,10 +16,8 @@ namespace OnixLabs.Units;
 
 public readonly partial struct Distance<T>
 {
-    /// <summary>
-    /// Gets a zero <c>0</c> <see cref="Distance{T}"/> value.
-    /// </summary>
-    public static readonly Distance<T> Zero = new(T.Zero);
+    /// <inheritdoc/>
+    public static Distance<T> Zero => new(T.Zero);
 
     private const string QuectoMetersSpecifier = "qm";
     private const string RontoMetersSpecifier = "rm";

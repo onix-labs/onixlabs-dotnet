@@ -23,6 +23,11 @@ namespace OnixLabs.Units;
 public interface IUnit<TSelf> : IEquatable<TSelf>, IComparable<TSelf>, IComparable, ISpanFormattable where TSelf : struct
 {
     /// <summary>
+    /// Gets a zero <c>0</c> <typeparamref name="TSelf"/> value.
+    /// </summary>
+    static abstract TSelf Zero { get; }
+
+    /// <summary>
     /// Computes the sum of the specified <typeparamref name="TSelf"/> values.
     /// </summary>
     /// <param name="left">The left-hand value to add to.</param>

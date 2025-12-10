@@ -16,10 +16,8 @@ namespace OnixLabs.Units;
 
 public readonly partial struct DataSize<T>
 {
-    /// <summary>
-    /// Gets a zero <c>0</c> <see cref="DataSize{T}"/> value, equal to zero bits.
-    /// </summary>
-    public static readonly DataSize<T> Zero = new(T.Zero);
+    /// <inheritdoc/>
+    public static DataSize<T> Zero => new(T.Zero);
 
     private const string BitsSpecifier = "b";
     private const string BytesSpecifier = "B";

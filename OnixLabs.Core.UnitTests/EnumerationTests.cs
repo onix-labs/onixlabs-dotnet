@@ -45,16 +45,30 @@ public sealed class EnumerationTests
         Assert.False(a == b);
     }
 
-    [Fact(DisplayName = "Enumeration should return all enumeration instances")]
-    public void EnumerationsShouldReturnAllEnumerationInstances()
+    [Fact(DisplayName = "Enumeration.Deconstruct should return a value/name tuple")]
+    public void EnumerationDeconstructShouldReturnValueNameTuple()
     {
         // Given
-        IEnumerable<Color> colors = Color.GetAll();
+        Color color = Color.Red;
+
+        // When
+        (int value, string name) = color;
 
         // Then
-        Assert.Contains(colors, item => item == Color.Red);
-        Assert.Contains(colors, item => item == Color.Green);
-        Assert.Contains(colors, item => item == Color.Blue);
+        Assert.Equal(1, value);
+        Assert.Equal("Red", name);
+    }
+
+    [Fact(DisplayName = "Enumeration.GetAll should return all enumeration entries")]
+    public void EnumerationGetAllShouldReturnAllEnumerationEntries()
+    {
+        // Given
+        IEnumerable<Color> entries = Color.GetAll();
+
+        // Then
+        Assert.Contains(Color.Blue, entries);
+        Assert.Contains(Color.Green, entries);
+        Assert.Contains(Color.Red, entries);
     }
 
     [Fact(DisplayName = "Enumeration.FromName should return the expected enumeration entry")]
@@ -75,18 +89,6 @@ public sealed class EnumerationTests
 
         // Then
         Assert.Equal(Color.Green, color);
-    }
-
-    [Fact(DisplayName = "Enumeration.GetAll should return all enumeration entries")]
-    public void EnumerationGetAllShouldReturnAllEnumerationEntries()
-    {
-        // Given
-        IEnumerable<Color> entries = Color.GetAll();
-
-        // Then
-        Assert.Contains(Color.Blue, entries);
-        Assert.Contains(Color.Green, entries);
-        Assert.Contains(Color.Red, entries);
     }
 
     [Fact(DisplayName = "Enumeration.GetEntries should return all enumeration entries")]

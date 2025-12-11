@@ -38,11 +38,9 @@ public sealed class Base32Codec : IBaseCodec
     /// <param name="value">The value to encode into a Base-32 <see cref="String"/> representation.</param>
     /// <param name="provider">The format provider that will be used to encode the specified value.</param>
     /// <returns>Returns a new Base-32 <see cref="String"/> representation encoded from the specified value.</returns>
-    public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null)
-    {
-        if (TryEncode(value, provider, out string result)) return result;
-        throw new FormatException(IBaseCodec.EncodingFormatException);
-    }
+    public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null) => TryEncode(value, provider, out string result)
+        ? result
+        : throw new FormatException(IBaseCodec.EncodingFormatException);
 
     /// <summary>
     /// Decodes the specified <see cref="ReadOnlySpan{T}"/> Base-32 representation into a <see cref="byte"/> array.
@@ -50,11 +48,9 @@ public sealed class Base32Codec : IBaseCodec
     /// <param name="value">The Base-32 value to decode into a <see cref="byte"/> array.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <returns>Returns a new <see cref="byte"/> array decoded from the specified value.</returns>
-    public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null)
-    {
-        if (TryDecode(value, provider, out byte[] result)) return result;
-        throw new FormatException(IBaseCodec.DecodingFormatException);
-    }
+    public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null) => TryDecode(value, provider, out byte[] result)
+        ? result
+        : throw new FormatException(IBaseCodec.DecodingFormatException);
 
     /// <summary>
     /// Tries to encode the specified <see cref="ReadOnlySpan{T}"/> value into a Base-32 <see cref="String"/> representation.
@@ -155,6 +151,7 @@ public sealed class Base32Codec : IBaseCodec
                 return true;
             }
 
+            // ReSharper disable once DuplicatedSequentialIfBodies
             if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.Rfc4648, out Base32FormatProvider formatProvider))
             {
                 result = [];

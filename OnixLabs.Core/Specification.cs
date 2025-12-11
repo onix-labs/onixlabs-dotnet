@@ -96,6 +96,40 @@ public abstract class Specification<T>
     /// <param name="subject">The subject to evaluate.</param>
     /// <returns>Returns <see langword="true"/> if the subject satisfies the specification; otherwise, <see langword="false"/>.</returns>
     public bool IsSatisfiedBy(T subject) => Criteria.Compile().Invoke(subject);
+
+    /// <summary>
+    /// Combines the specified <paramref name="left"/> specification and the
+    /// specified <see cref="right"/> specification using a logical AND operation.
+    /// </summary>
+    /// <param name="left">The left-hand specification to combine.</param>
+    /// <param name="right">The right-hand specification to combine.</param>
+    /// <returns>
+    /// Returns a combined specification that evaluates to <see langword="true"/> if both specifications are satisfied;
+    /// otherwise, the specification evaluates to <see langword="false"/>.
+    /// </returns>
+    public static Specification<T> operator &(Specification<T> left, Specification<T> right) => left.And(right);
+
+    /// <summary>
+    /// Combines the specified <paramref name="left"/> specification and the
+    /// specified <see cref="right"/> specification using a logical OR operation.
+    /// </summary>
+    /// <param name="left">The left-hand specification to combine.</param>
+    /// <param name="right">The right-hand specification to combine.</param>
+    /// <returns>
+    /// Returns a combined specification that evaluates to <see langword="true"/> if both specifications are satisfied;
+    /// otherwise, the specification evaluates to <see langword="false"/>.
+    /// </returns>
+    public static Specification<T> operator |(Specification<T> left, Specification<T> right) => left.Or(right);
+
+    /// <summary>
+    /// Negates the specified <paramref name="specification"/> specification.
+    /// </summary>
+    /// <param name="specification">The specification to negate.</param>
+    /// <returns>
+    /// Returns a specification that evaluates to <see langword="true"/> if the current specification is not satisfied;
+    /// otherwise, the specification evaluates to <see langword="false"/>.
+    /// </returns>
+    public static Specification<T> operator !(Specification<T> specification) => specification.Not();
 }
 
 /// <summary>

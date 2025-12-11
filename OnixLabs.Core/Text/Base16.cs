@@ -21,44 +21,50 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-16 value.
 /// </summary>
-/// <param name="value">The <see cref="ReadOnlySpan{T}"/> with which to initialize the <see cref="Base16"/> instance.</param>
-public readonly partial struct Base16(ReadOnlySpan<byte> value) : IBaseValue<Base16>
+// ReSharper disable MemberCanBePrivate.Global
+public readonly partial struct Base16 : IBaseValue<Base16>
 {
-    private readonly byte[] value = value.ToArray();
+    private readonly byte[] value;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base16"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Base16"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public Base16(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
+    /// <remarks>
+    /// This constructor exists only to assign the <see cref="byte"/> array without allocating a new copy.
+    /// </remarks>
+    /// <param name="value">The value with which to initialize the new <see cref="Base16"/> instance.</param>
+    private Base16(byte[] value) => this.value = value;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base16"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="string"/> with which to initialize the <see cref="Base16"/> instance.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public Base16(string value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
+    /// <param name="value">The value with which to initialize the new <see cref="Base16"/> instance.</param>
+    public Base16(ReadOnlySpan<byte> value) : this(value.ToArray())
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base16"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="char"/> array with which to initialize the <see cref="Base16"/> instance.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public Base16(char[] value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
+    /// <param name="value">The value with which to initialize the new <see cref="Base16"/> instance.</param>
+    public Base16(ReadOnlySequence<byte> value) : this(value.ToArray())
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base16"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Base16"/> instance.</param>
+    /// <param name="value">The value with which to initialize the new <see cref="Base16"/> instance.</param>
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
+    public Base16(ReadOnlySpan<char> value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base16"/> struct.
+    /// </summary>
+    /// <param name="value">The value with which to initialize the new <see cref="Base16"/> instance.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
     public Base16(ReadOnlySequence<char> value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
     {
     }

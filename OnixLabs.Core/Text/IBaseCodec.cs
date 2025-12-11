@@ -66,11 +66,9 @@ public interface IBaseCodec
     /// </param>
     /// <returns>Returns a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
-    public static string GetString(ReadOnlySpan<byte> value, IFormatProvider provider)
-    {
-        if (TryGetString(value, provider, out string result)) return result;
-        throw new FormatException(EncodingFormatException);
-    }
+    public static string GetString(ReadOnlySpan<byte> value, IFormatProvider provider) => TryGetString(value, provider, out string result)
+        ? result
+        : throw new FormatException(EncodingFormatException);
 
     /// <summary>
     /// Obtains a new <see cref="byte"/> array array by converting the specified <see cref="ReadOnlySpan{T}"/> value.
@@ -82,11 +80,9 @@ public interface IBaseCodec
     /// </param>
     /// <returns>Returns a new <see cref="byte"/> array array by converting the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
-    public static byte[] GetBytes(ReadOnlySpan<char> value, IFormatProvider provider)
-    {
-        if (TryGetBytes(value, provider, out byte[] result)) return result;
-        throw new FormatException(DecodingFormatException);
-    }
+    public static byte[] GetBytes(ReadOnlySpan<char> value, IFormatProvider provider) => TryGetBytes(value, provider, out byte[] result)
+        ? result
+        : throw new FormatException(DecodingFormatException);
 
     /// <summary>
     /// Tries to obtain a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.

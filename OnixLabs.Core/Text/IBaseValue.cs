@@ -26,7 +26,7 @@ public interface IBaseValue : IBinaryConvertible, ISpanFormattable
     /// </summary>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    string ToString(IFormatProvider? formatProvider);
+    string ToString(IFormatProvider? formatProvider = null);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
@@ -34,10 +34,23 @@ public interface IBaseValue : IBinaryConvertible, ISpanFormattable
     /// <param name="format">The format to use.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
     /// <returns>The value of the current instance in the specified format.</returns>
-    string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider);
+    string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null);
 }
 
 /// <summary>
 /// Defines a generic base encoding representation.
 /// </summary>
-public interface IBaseValue<T> : IValueEquatable<T>, ISpanParsable<T>, IBaseValue where T : struct, IBaseValue<T>;
+public interface IBaseValue<T> : IEquatable<T>, ISpanParsable<T>, IBaseValue where T : struct, IBaseValue<T>
+{
+    /// <summary>
+    /// Determines whether the specified <paramref name="left"/> <typeparamref name="T"/>
+    /// value is equal to the specified <paramref name="right"/> <typeparamref name="T"/> value.
+    /// </summary>
+    /// <param name="left">The left-hand value to compare.</param>
+    /// <param name="right">The right-hand value to compare.</param>
+    /// <returns>
+    /// Returns <see langword="true"/> if the specified <paramref name="left"/> <typeparamref name="T"/> value is equal to
+    /// the specified <paramref name="right"/> <typeparamref name="T"/> value; otherwise, <see langword="false"/>.
+    /// </returns>
+    static abstract bool Equals(T left, T right);
+}

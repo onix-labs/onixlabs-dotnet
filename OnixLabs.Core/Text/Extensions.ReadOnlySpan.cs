@@ -22,7 +22,7 @@ namespace OnixLabs.Core.Text;
 /// </summary>
 // ReSharper disable UnusedMethodReturnValue.Global
 [EditorBrowsable(EditorBrowsableState.Never)]
-public static class Extensions
+public static class ReadOnlySpanExtensions
 {
     /// <summary>
     /// Provides extension methods <see cref="ReadOnlySpan{T}"/> instances.

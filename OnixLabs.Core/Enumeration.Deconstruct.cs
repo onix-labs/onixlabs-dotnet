@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+namespace OnixLabs.Core;
 
-namespace OnixLabs.Core.Text;
-
-public readonly partial struct Base16
+public abstract partial class Enumeration<T>
 {
-    /// <inheritdoc/>
-    bool ISpanFormattable.TryFormat(
-        Span<char> destination,
-        out int charsWritten,
-        ReadOnlySpan<char> format,
-        IFormatProvider? provider
-    ) => ToString(format, provider).TryCopyTo(destination, out charsWritten);
+    /// <summary>
+    /// Deconstructs the current <see cref="Enumeration{T}"/> into a value and name tuple.
+    /// </summary>
+    /// <param name="value">The value of the current <see cref="Enumeration{T}"/> instance.</param>
+    /// <param name="name">The name of the current <see cref="Enumeration{T}"/> instance.</param>
+    public void Deconstruct(out int value, out string name) => (value, name) = (Value, Name);
 }

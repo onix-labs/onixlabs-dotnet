@@ -18,32 +18,15 @@ namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base32
 {
-    /// <summary>
-    /// Returns a <see cref="String"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
+    /// <inheritdoc/>
     public override string ToString() => ToString(Base32FormatProvider.Rfc4648);
 
-    /// <summary>
-    /// Formats the value of the current instance using the specified format.
-    /// </summary>
-    /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(IFormatProvider? formatProvider) => ToString(null, formatProvider);
+    /// <inheritdoc/>
+    public string ToString(IFormatProvider? formatProvider = null) => ToString(null, formatProvider);
 
-    /// <summary>
-    /// Formats the value of the current instance using the specified format.
-    /// </summary>
-    /// <param name="format">The format to use.</param>
-    /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(string? format, IFormatProvider? formatProvider) => ToString(format.AsSpan(), formatProvider);
+    /// <inheritdoc/>
+    public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString(format.AsSpan(), formatProvider);
 
-    /// <summary>
-    /// Formats the value of the current instance using the specified format.
-    /// </summary>
-    /// <param name="format">The format to use.</param>
-    /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
-    public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider) => IBaseCodec.Base32.Encode(value, formatProvider);
+    /// <inheritdoc/>
+    public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null) => IBaseCodec.Base32.Encode(value, formatProvider);
 }

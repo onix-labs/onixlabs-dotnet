@@ -16,9 +16,6 @@ namespace OnixLabs.Security;
 
 public readonly partial struct SecurityToken
 {
-    /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    /// <inheritdoc/>
     public override string ToString() => value;
 }

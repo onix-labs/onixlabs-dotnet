@@ -136,26 +136,14 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Optional<T>? left, Optional<T>? right) => !Equals(left, right);
 
-    /// <summary>
-    /// Checks whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with the current object.</param>
-    /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public bool Equals(Optional<T>? other) => OptionalEqualityComparer<T>.Default.Equals(this, other);
 
-    /// <summary>
-    /// Checks for equality between the current instance and another object.
-    /// </summary>
-    /// <param name="obj">The object to check for equality.</param>
-    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public sealed override bool Equals(object? obj) => Equals(obj as Optional<T>);
 
-    /// <summary>
-    /// Serves as a hash code function for the current instance.
-    /// </summary>
-    /// <returns>Returns a hash code for the current instance.</returns>
-    // ReSharper disable once HeapView.PossibleBoxingAllocation
-    public sealed override int GetHashCode() => this is Some<T> some ? some.Value.GetHashCode() : 0;
+    /// <inheritdoc/>
+    public sealed override int GetHashCode() => this is Some<T> some ? HashCode.Combine(some.Value) : 0;
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;
@@ -258,10 +246,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <returns>Returns a new, successful <see cref="Result{T}"/> instance containing the current <see cref="Optional{T}"/> instance.</returns>
     public Result<Optional<T>> ToResult() => Result<Optional<T>>.Success(this);
 
-    /// <summary>
-    /// Returns a <see cref="String"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
+    /// <inheritdoc/>
     // ReSharper disable once HeapView.PossibleBoxingAllocation
     public sealed override string ToString() => this is Some<T> some ? some.Value.ToString() ?? string.Empty : nameof(None);
 }

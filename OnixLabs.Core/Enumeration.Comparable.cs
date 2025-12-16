@@ -16,21 +16,9 @@ namespace OnixLabs.Core;
 
 public abstract partial class Enumeration<T>
 {
-    /// <summary>
-    /// Compares the current instance with another object of the same type and returns an integer that indicates
-    /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
-    /// other object.
-    /// </summary>
-    /// <param name="other">An object to compare with the current instance.</param>
-    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    /// <inheritdoc/>
     public int CompareTo(T? other) => Value.CompareToNullable(other?.Value);
 
-    /// <summary>
-    /// Compares the current instance with another object of the same type and returns an integer that indicates
-    /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
-    /// other object.
-    /// </summary>
-    /// <param name="obj">An object to compare with the current instance.</param>
-    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    /// <inheritdoc/>
     public int CompareTo(object? obj) => this.CompareToObject(obj);
 }

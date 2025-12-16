@@ -143,7 +143,8 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public sealed override bool Equals(object? obj) => Equals(obj as Optional<T>);
 
     /// <inheritdoc/>
-    public sealed override int GetHashCode() => this is Some<T> some ? HashCode.Combine(some.Value) : 0;
+    // ReSharper disable once HeapView.PossibleBoxingAllocation
+    public sealed override int GetHashCode() => this is Some<T> some ? some.Value.GetHashCode() : 0;
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Optional{T}"/> instance, if the underlying value is present;

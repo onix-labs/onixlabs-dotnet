@@ -29,10 +29,7 @@ public sealed class OptionalEqualityComparer<T>(EqualityComparer<T>? valueEquali
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly OptionalEqualityComparer<T> Default = new();
 
-    /// <summary>Determines whether the specified <see cref="Optional{T}"/> values are equal.</summary>
-    /// <param name="x">The first object of type <see cref="Optional{T}"/> to compare.</param>
-    /// <param name="y">The second object of type <see cref="Optional{T}"/> to compare.</param>
-    /// <returns> Returns <see langword="true" /> if the specified <see cref="Optional{T}"/> values are equal; otherwise, <see langword="false" />.</returns>
+    /// <inheritdoc/>
     public bool Equals(Optional<T>? x, Optional<T>? y)
     {
         if (ReferenceEquals(x, y)) return true;
@@ -43,8 +40,6 @@ public sealed class OptionalEqualityComparer<T>(EqualityComparer<T>? valueEquali
         return (valueEqualityComparer ?? EqualityComparer<T>.Default).Equals(x.GetValueOrDefault(), y.GetValueOrDefault());
     }
 
-    /// <summary>Returns a hash code for the specified object.</summary>
-    /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
-    /// <returns>A hash code for the specified object.</returns>
+    /// <inheritdoc/>
     public int GetHashCode(Optional<T> obj) => obj.GetHashCode();
 }

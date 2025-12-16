@@ -105,9 +105,7 @@ public abstract class Specification<T>
 /// <typeparam name="T">The underlying type of the subject to which the specification applies.</typeparam>
 public class CriteriaSpecification<T>(Expression<Func<T, bool>> criteria) : Specification<T>
 {
-    /// <summary>
-    /// Gets the underlying expression criteria of the current specification.
-    /// </summary>
+    /// <inheritdoc/>
     public override Expression<Func<T, bool>> Criteria => criteria;
 }
 

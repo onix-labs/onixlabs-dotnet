@@ -30,10 +30,7 @@ public sealed class ResultEqualityComparer<T>(EqualityComparer<T>? valueComparer
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly ResultEqualityComparer<T> Default = new();
 
-    /// <summary>Determines whether the specified <see cref="Result{T}"/> values are equal.</summary>
-    /// <param name="x">The first object of type <see cref="Result{T}"/> to compare.</param>
-    /// <param name="y">The second object of type <see cref="Result{T}"/> to compare.</param>
-    /// <returns> Returns <see langword="true" /> if the specified <see cref="Result{T}"/> values are equal; otherwise, <see langword="false" />.</returns>
+    /// <inheritdoc/>
     public bool Equals(Result<T>? x, Result<T>? y)
     {
         if (ReferenceEquals(x, y)) return true;
@@ -48,8 +45,6 @@ public sealed class ResultEqualityComparer<T>(EqualityComparer<T>? valueComparer
         return valueComparer.GetOrDefault().Equals(xValue, yValue);
     }
 
-    /// <summary>Returns a hash code for the specified object.</summary>
-    /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
-    /// <returns>A hash code for the specified object.</returns>
+    /// <inheritdoc/>
     public int GetHashCode(Result<T> obj) => obj.GetHashCode();
 }

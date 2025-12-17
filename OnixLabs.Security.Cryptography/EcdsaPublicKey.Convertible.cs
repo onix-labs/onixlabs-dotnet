@@ -21,21 +21,21 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EcdsaPublicKey
 {
     /// <summary>
-    /// Create a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="byte"/> array.
-    /// </summary>
-    /// <param name="value">The value from which to create a new <see cref="EcdsaPublicKey"/> instance.</param>
-    /// <returns>Returns a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="byte"/> array.</returns>
-    public static implicit operator EcdsaPublicKey(byte[] value) => new(value);
-
-    /// <summary>
-    /// Create a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.
+    /// Creates a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="EcdsaPublicKey"/> instance.</param>
     /// <returns>Returns a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static implicit operator EcdsaPublicKey(ReadOnlySpan<byte> value) => new(value);
 
     /// <summary>
-    /// Create a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.
+    /// Creates a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="ReadOnlyMemory{T}"/> value.
+    /// </summary>
+    /// <param name="value">The value from which to create a new <see cref="EcdsaPublicKey"/> instance.</param>
+    /// <returns>Returns a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="ReadOnlyMemory{T}"/> value.</returns>
+    public static implicit operator EcdsaPublicKey(ReadOnlyMemory<byte> value) => new(value);
+
+    /// <summary>
+    /// Creates a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="EcdsaPublicKey"/> instance.</param>
     /// <returns>Returns a new <see cref="EcdsaPublicKey"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.</returns>

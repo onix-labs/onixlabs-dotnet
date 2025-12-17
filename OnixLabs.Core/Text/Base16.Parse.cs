@@ -19,13 +19,16 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base16
 {
     /// <inheritdoc/>
-    public static Base16 Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
+    public static Base16 Parse(string value, IFormatProvider? provider = null) =>
+        Parse(value.AsSpan(), provider);
 
     /// <inheritdoc/>
-    public static Base16 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null) => new(IBaseCodec.Base16.Decode(value, provider));
+    public static Base16 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null) =>
+        new(IBaseCodec.Base16.Decode(value, provider));
 
     /// <inheritdoc/>
-    public static bool TryParse(string? value, IFormatProvider? provider, out Base16 result) => TryParse(value.AsSpan(), provider, out result);
+    public static bool TryParse(string? value, IFormatProvider? provider, out Base16 result) =>
+        TryParse(value.AsSpan(), provider, out result);
 
     /// <inheritdoc/>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out Base16 result)

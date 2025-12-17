@@ -21,37 +21,19 @@ namespace OnixLabs.Security.Cryptography;
 // ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class EcdsaPrivateKey
 {
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic private key data to import.</param>
-    /// <returns>Returns a new ECDSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPrivateKey Import(IBinaryConvertible data) =>
         Import(data.AsReadOnlySpan());
 
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic private key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new ECDSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPrivateKey Import(IBinaryConvertible data, out int bytesRead) =>
         Import(data.AsReadOnlySpan(), out bytesRead);
 
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic private key data to import.</param>
-    /// <returns>Returns a new ECDSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPrivateKey Import(ReadOnlySpan<byte> data) =>
         Import(data, out int _);
 
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic private key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new ECDSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPrivateKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
         using ECDsa algorithm = ECDsa.Create();

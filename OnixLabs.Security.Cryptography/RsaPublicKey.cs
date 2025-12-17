@@ -21,15 +21,30 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents an RSA cryptographic public key.
 /// </summary>
-/// <param name="keyData">The underlying key data of the RSA cryptographic public key.</param>
-public sealed partial class RsaPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IRsaPublicKey, ISpanParsable<RsaPublicKey>
+// ReSharper disable MemberCanBePrivate.Global
+public sealed partial class RsaPublicKey : PublicKey, IRsaPublicKey, ISpanParsable<RsaPublicKey>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RsaPublicKey"/> struct.
+    /// Initializes a new instance of the <see cref="RsaPublicKey"/> class.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="RsaPublicKey"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public RsaPublicKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    /// <param name="keyData">The underlying key data of the RSA cryptographic public key.</param>
+    public RsaPublicKey(ReadOnlySpan<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RsaPublicKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the RSA cryptographic public key.</param>
+    public RsaPublicKey(ReadOnlyMemory<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RsaPublicKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the RSA cryptographic public key.</param>
+    public RsaPublicKey(ReadOnlySequence<byte> keyData) : base(keyData)
     {
     }
 

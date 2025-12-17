@@ -21,130 +21,49 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class RsaPublicKey
 {
-    /// <summary>
-    /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified data was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyData(data, signature, algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified data was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyData(data.Slice(offset, count), signature, algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified data was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsDataValid(ReadOnlySpan<byte> signature, Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyData(data, signature.ToArray(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified data was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsDataValid(ReadOnlySpan<byte> signature, IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyData(data.AsReadOnlySpan(), signature, algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified data was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyData(data, signature.AsReadOnlySpan(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified data was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyData(data.Slice(offset, count), signature.AsReadOnlySpan(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified data was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsDataValid(DigitalSignature signature, Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
@@ -152,263 +71,108 @@ public sealed partial class RsaPublicKey
         return key.VerifyData(data, signature.AsReadOnlySpan().ToArray(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified data was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsDataValid(DigitalSignature signature, IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyData(data.AsReadOnlySpan(), signature.AsReadOnlySpan(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified hash was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="hash">The unsigned hash to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified hash was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsHashValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyHash(hash, signature, algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified hash was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="hash">The unsigned hash to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified hash was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsHashValid(DigitalSignature signature, ReadOnlySpan<byte> hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyHash(hash, signature.AsReadOnlySpan(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified hash was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="hash">The unsigned hash to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified hash was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsHashValid(ReadOnlySpan<byte> signature, Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyHash(hash.AsReadOnlySpan(), signature, algorithm, padding);
     }
 
-    /// <summary>
-    /// Determines whether the specified hash was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="hash">The unsigned hash to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <returns>
-    /// Returns <see langword="true"/> if the specified hash was signed by the RSA cryptographic private key that corresponds to the
-    /// current RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature; otherwise, <see langword="false"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public bool IsHashValid(DigitalSignature signature, Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.VerifyHash(hash.AsReadOnlySpan(), signature.AsReadOnlySpan(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Verifies that the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyData(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsDataValid(signature, data, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyData(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsDataValid(signature, data, offset, count, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyData(ReadOnlySpan<byte> signature, Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsDataValid(signature, data, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyData(ReadOnlySpan<byte> signature, IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsDataValid(signature, data, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyData(DigitalSignature signature, ReadOnlySpan<byte> data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsDataValid(signature, data, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyData(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsDataValid(signature, data, offset, count, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyData(DigitalSignature signature, Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsDataValid(signature, data, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified data was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="data">The unsigned data to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyData(DigitalSignature signature, IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsDataValid(signature, data, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified hash was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="hash">The unsigned hash to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyHash(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsHashValid(signature, hash, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified hash was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="hash">The unsigned hash to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyHash(DigitalSignature signature, ReadOnlySpan<byte> hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsHashValid(signature, hash, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified hash was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="hash">The unsigned hash to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyHash(ReadOnlySpan<byte> signature, Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsHashValid(signature, hash, algorithm, padding));
     }
 
-    /// <summary>
-    /// Verifies that the specified hash was signed by the RSA cryptographic private key that corresponds to the current
-    /// RSA cryptographic public key, and that the signed hash matches the specified cryptographic digital signature.
-    /// </summary>
-    /// <param name="signature">The signature to validate against the current RSA cryptographic public key.</param>
-    /// <param name="hash">The unsigned hash to validate against the current RSA cryptographic public key.</param>
-    /// <param name="algorithm">The hash algorithm that was used to hash and sign the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that was used to generate the cryptographic digital signature.</param>
-    /// <exception cref="CryptographicException">If the specified signature could not be verified.</exception>
+    /// <inheritdoc/>
     public void VerifyHash(DigitalSignature signature, Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         CheckSignature(IsHashValid(signature, hash, algorithm, padding));

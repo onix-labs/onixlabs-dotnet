@@ -19,13 +19,7 @@ namespace OnixLabs.Security.Cryptography;
 
 public readonly partial struct Hash
 {
-    /// <summary>
-    /// Compares the current instance with another object of the same type and returns an integer that indicates
-    /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
-    /// other object.
-    /// </summary>
-    /// <param name="other">An object to compare with this instance.</param>
-    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    /// <inheritdoc/>
     public int CompareTo(Hash other)
     {
         BigInteger left = new(value);
@@ -34,44 +28,18 @@ public readonly partial struct Hash
         return left.CompareTo(right);
     }
 
-    /// <summary>
-    /// Compares the current instance with another object of the same type and returns an integer that indicates
-    /// whether the current instance precedes, follows, or occurs in the same position in the sort order as the
-    /// other object.
-    /// </summary>
-    /// <param name="obj">An object to compare with this instance.</param>
-    /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
+    /// <inheritdoc/>
     public int CompareTo(object? obj) => this.CompareToObject(obj);
 
-    /// <summary>
-    /// Performs a greater than comparison between two object instances.
-    /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is greater than the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public static bool operator >(Hash left, Hash right) => left.CompareTo(right) is 1;
 
-    /// <summary>
-    /// Performs a greater than or equal comparison between two object instances.
-    /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is greater than or equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public static bool operator >=(Hash left, Hash right) => left.CompareTo(right) is 0 or 1;
 
-    /// <summary>
-    /// Performs a less than comparison between two object instances.
-    /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is less than the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public static bool operator <(Hash left, Hash right) => left.CompareTo(right) is -1;
 
-    /// <summary>
-    /// Performs a less than or equal comparison between two object instances.
-    /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is less than or equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public static bool operator <=(Hash left, Hash right) => left.CompareTo(right) is 0 or -1;
 }

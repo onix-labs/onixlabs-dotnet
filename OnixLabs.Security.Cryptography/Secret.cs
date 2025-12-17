@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
@@ -20,6 +21,7 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents a cryptographic secret.
 /// </summary>
+// ReSharper disable MemberCanBePrivate.Global
 public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<Secret>
 {
     // ReSharper disable once HeapView.ObjectAllocation.Evident
@@ -30,10 +32,39 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<
     /// <summary>
     /// Initializes a new instance of the <see cref="Secret"/> struct.
     /// </summary>
-    /// <param name="value">The underlying value of the cryptographic secret.</param>
-    public Secret(ReadOnlySpan<byte> value)
+    /// <remarks>
+    /// This constructor is intentionally marked <see langword="private"/> and is used exclusively to initialize the underlying <see cref="byte"/> array.
+    /// Because <see cref="Secret"/> is designed to be immutable, external array references are not permitted.
+    /// The overloaded constructors below ensure immutability by creating defensive copies of the provided arrays.
+    /// </remarks>
+    /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
+    private Secret(byte[] value)
     {
-        encryptedValue = protectedData.Encrypt(value.ToArray());
-        hash = Hash.Compute(SHA256.Create(), value.ToArray());
+        encryptedValue = protectedData.Encrypt(value);
+        hash = Hash.Compute(SHA256.Create(), value);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Secret"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
+    public Secret(ReadOnlySpan<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Secret"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
+    public Secret(ReadOnlyMemory<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Secret"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
+    public Secret(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
     }
 }

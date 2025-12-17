@@ -19,34 +19,28 @@ namespace OnixLabs.Security.Cryptography;
 
 public readonly partial struct DigitalSignature
 {
-    /// <summary>
-    /// Gets the underlying <see cref="byte"/> array representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="byte"/> array representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    /// <inheritdoc/>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => value;
 
-    /// <summary>
-    /// Gets the underlying <see cref="byte"/> array representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="byte"/> array representation of the current <see cref="DigitalSignature"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    /// <inheritdoc/>
     public ReadOnlySpan<byte> AsReadOnlySpan() => value;
 
     /// <summary>
-    /// Create a new <see cref="DigitalSignature"/> instance from the specified <see cref="byte"/> array.
-    /// </summary>
-    /// <param name="value">The value from which to create a new <see cref="DigitalSignature"/> instance.</param>
-    /// <returns>Returns a new <see cref="DigitalSignature"/> instance from the specified <see cref="byte"/> array.</returns>
-    public static implicit operator DigitalSignature(byte[] value) => new(value);
-
-    /// <summary>
-    /// Create a new <see cref="DigitalSignature"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.
+    /// Creates a new <see cref="DigitalSignature"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="DigitalSignature"/> instance.</param>
     /// <returns>Returns a new <see cref="DigitalSignature"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
     public static implicit operator DigitalSignature(ReadOnlySpan<byte> value) => new(value);
 
     /// <summary>
-    /// Create a new <see cref="DigitalSignature"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.
+    /// Creates a new <see cref="DigitalSignature"/> instance from the specified <see cref="ReadOnlyMemory{T}"/> value.
+    /// </summary>
+    /// <param name="value">The value from which to create a new <see cref="DigitalSignature"/> instance.</param>
+    /// <returns>Returns a new <see cref="DigitalSignature"/> instance from the specified <see cref="ReadOnlyMemory{T}"/> value.</returns>
+    public static implicit operator DigitalSignature(ReadOnlyMemory<byte> value) => new(value);
+
+    /// <summary>
+    /// Creates a new <see cref="DigitalSignature"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.
     /// </summary>
     /// <param name="value">The value from which to create a new <see cref="DigitalSignature"/> instance.</param>
     /// <returns>Returns a new <see cref="DigitalSignature"/> instance from the specified <see cref="ReadOnlySequence{T}"/> value.</returns>

@@ -21,20 +21,35 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents an RSA cryptographic private key.
 /// </summary>
-/// <param name="keyData">The underlying key data of the RSA cryptographic private key.</param>
-public sealed partial class RsaPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IRsaPrivateKey, ISpanParsable<RsaPrivateKey>
+// ReSharper disable MemberCanBePrivate.Global
+public sealed partial class RsaPrivateKey : PrivateKey, IRsaPrivateKey, ISpanParsable<RsaPrivateKey>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RsaPrivateKey"/> struct.
+    /// Initializes a new instance of the <see cref="RsaPrivateKey"/> class.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="RsaPrivateKey"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public RsaPrivateKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    /// <param name="keyData">The underlying key data of the RSA cryptographic private key.</param>
+    public RsaPrivateKey(ReadOnlySpan<byte> keyData) : base(keyData)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RsaPrivateKey"/> struct.
+    /// Initializes a new instance of the <see cref="RsaPrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the RSA cryptographic private key.</param>
+    public RsaPrivateKey(ReadOnlyMemory<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RsaPrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the RSA cryptographic private key.</param>
+    public RsaPrivateKey(ReadOnlySequence<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RsaPrivateKey"/> class.
     /// </summary>
     /// <param name="algorithm">The <see cref="RSA"/> algorithm with which to initialize the <see cref="RsaPrivateKey"/> instance.</param>
     private RsaPrivateKey(RSA algorithm) : this(algorithm.ExportRSAPrivateKey())

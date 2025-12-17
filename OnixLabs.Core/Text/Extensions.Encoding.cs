@@ -22,7 +22,7 @@ namespace OnixLabs.Core.Text;
 /// Provides extension methods <see cref="Encoding"/> instances.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal static class EncodingExtensions
+public static class EncodingExtensions
 {
     /// <summary>
     /// Provides extension methods <see cref="Encoding"/> instances.

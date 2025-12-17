@@ -20,37 +20,19 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdhPrivateKey
 {
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic private key data.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPrivateKey Import(IBinaryConvertible data) =>
         Import(data.AsReadOnlySpan());
 
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic private key data.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPrivateKey Import(IBinaryConvertible data, out int bytesRead) =>
         Import(data.AsReadOnlySpan(), out bytesRead);
 
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic private key data.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPrivateKey Import(ReadOnlySpan<byte> data) =>
         Import(data, out int _);
 
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic private key data.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPrivateKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();

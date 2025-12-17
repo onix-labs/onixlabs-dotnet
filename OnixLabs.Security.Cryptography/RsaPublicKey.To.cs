@@ -18,9 +18,6 @@ public sealed partial class RsaPublicKey
 {
     private const string KeyName = "RSA";
 
-    /// <summary>
-    /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="RsaPublicKey"/> instance.
-    /// </summary>
-    /// <returns>Returns a new <see cref="NamedPublicKey"/> from the current <see cref="RsaPublicKey"/> instance.</returns>
+    /// <inheritdoc/>
     public override NamedPublicKey ToNamedPublicKey() => new(this, KeyName);
 }

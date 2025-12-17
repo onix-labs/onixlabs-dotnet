@@ -21,23 +21,38 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents an EC Diffie-Hellman cryptographic private key.
 /// </summary>
-/// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic private key.</param>
-public sealed partial class EcdhPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IEcdhPrivateKey, ISpanParsable<EcdhPrivateKey>
+// ReSharper disable MemberCanBePrivate.Global
+public sealed partial class EcdhPrivateKey : PrivateKey, IEcdhPrivateKey, ISpanParsable<EcdhPrivateKey>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> struct.
+    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="EcdhPrivateKey"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public EcdhPrivateKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic private key.</param>
+    public EcdhPrivateKey(ReadOnlySpan<byte> keyData) : base(keyData)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> struct.
+    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic private key.</param>
+    public EcdhPrivateKey(ReadOnlyMemory<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic private key.</param>
+    public EcdhPrivateKey(ReadOnlySequence<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
     /// </summary>
     /// <param name="algorithm">The <see cref="ECDiffieHellman"/> algorithm with which to initialize the <see cref="EcdhPrivateKey"/> instance.</param>
-    private EcdhPrivateKey(ECDiffieHellman algorithm) : this(algorithm.ExportECPrivateKey())
+    private EcdhPrivateKey(ECDiffieHellman algorithm) : base(algorithm.ExportECPrivateKey())
     {
     }
 }

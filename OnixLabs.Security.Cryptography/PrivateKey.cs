@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -27,10 +28,36 @@ public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>
     /// <summary>
     /// Initializes a new instance of the <see cref="PrivateKey"/> class.
     /// </summary>
+    /// <remarks>
+    /// This constructor is intentionally marked <see langword="private"/> and is used exclusively to initialize the underlying <see cref="byte"/> array.
+    /// Because <see cref="PrivateKey"/> is designed to be immutable, external array references are not permitted.
+    /// The overloaded constructors below ensure immutability by creating defensive copies of the provided arrays.
+    /// </remarks>
     /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
-    protected PrivateKey(ReadOnlySpan<byte> keyData)
+    private PrivateKey(byte[] keyData) => KeyData = protectedData.Encrypt(keyData);
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
+    protected PrivateKey(ReadOnlySpan<byte> keyData) : this(keyData.ToArray())
     {
-        KeyData = protectedData.Encrypt(keyData.ToArray());
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
+    protected PrivateKey(ReadOnlyMemory<byte> keyData) : this(keyData.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
+    protected PrivateKey(ReadOnlySequence<byte> keyData) : this(keyData.ToArray())
+    {
     }
 
     /// <summary>

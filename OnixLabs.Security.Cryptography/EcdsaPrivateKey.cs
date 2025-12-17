@@ -21,20 +21,35 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents an ECDSA cryptographic private key.
 /// </summary>
-/// <param name="keyData">The underlying key data of the ECDSA cryptographic private key.</param>
-public sealed partial class EcdsaPrivateKey(ReadOnlySpan<byte> keyData) : PrivateKey(keyData), IEcdsaPrivateKey, ISpanParsable<EcdsaPrivateKey>
+// ReSharper disable MemberCanBePrivate.Global
+public sealed partial class EcdsaPrivateKey : PrivateKey, IEcdsaPrivateKey, ISpanParsable<EcdsaPrivateKey>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdsaPrivateKey"/> struct.
+    /// Initializes a new instance of the <see cref="EcdsaPrivateKey"/> class.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="EcdsaPrivateKey"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public EcdsaPrivateKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    /// <param name="keyData">The underlying key data of the ECDSA cryptographic private key.</param>
+    public EcdsaPrivateKey(ReadOnlySpan<byte> keyData) : base(keyData)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdsaPrivateKey"/> struct.
+    /// Initializes a new instance of the <see cref="EcdsaPrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the ECDSA cryptographic private key.</param>
+    public EcdsaPrivateKey(ReadOnlyMemory<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdsaPrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the ECDSA cryptographic private key.</param>
+    public EcdsaPrivateKey(ReadOnlySequence<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdsaPrivateKey"/> class.
     /// </summary>
     /// <param name="algorithm">The <see cref="ECDsa"/> algorithm with which to initialize the <see cref="EcdsaPrivateKey"/> instance.</param>
     private EcdsaPrivateKey(ECDsa algorithm) : this(algorithm.ExportECPrivateKey())

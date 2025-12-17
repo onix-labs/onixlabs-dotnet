@@ -21,17 +21,45 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents a cryptographically secure random number, otherwise known as a salt value.
 /// </summary>
-/// <param name="value">The underlying value of the salt.</param>
-public readonly partial struct Salt(ReadOnlySpan<byte> value) : ICryptoPrimitive<Salt>
+// ReSharper disable MemberCanBePrivate.Global
+public readonly partial struct Salt : ICryptoPrimitive<Salt>
 {
-    private readonly byte[] value = value.ToArray();
+    private readonly byte[] value;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Salt"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Salt"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public Salt(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
+    /// <remarks>
+    /// This constructor is intentionally marked <see langword="private"/> and is used exclusively to initialize the underlying <see cref="byte"/> array.
+    /// Because <see cref="Salt"/> is designed to be immutable, external array references are not permitted.
+    /// The overloaded constructors below ensure immutability by creating defensive copies of the provided arrays.
+    /// </remarks>
+    /// <param name="value">The value from which to initialize a new <see cref="Salt"/> instance.</param>
+    private Salt(byte[] value) => this.value = value;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Salt"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Salt"/> instance.</param>
+    public Salt(ReadOnlySpan<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Salt"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Salt"/> instance.</param>
+    public Salt(ReadOnlyMemory<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Salt"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Salt"/> instance.</param>
+    public Salt(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
 
     /// <summary>
     /// Gets the length of the current <see cref="Salt"/> in bytes.

@@ -27,16 +27,9 @@ public readonly partial struct Secret
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
     public string ToString(Encoding encoding) => encoding.GetString(AsReadOnlySpan());
 
-    /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object.
-    /// </summary>
-    /// <param name="provider">The format provider that will be used to determine the format of the string.</param>
-    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    /// <inheritdoc/>
     public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
 
-    /// <summary>
-    /// Returns a <see cref="string"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    /// <inheritdoc/>
     public override string ToString() => ToString(Base16FormatProvider.Invariant);
 }

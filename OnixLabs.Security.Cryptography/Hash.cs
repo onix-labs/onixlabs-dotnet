@@ -22,15 +22,45 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents a cryptographic hash.
 /// </summary>
-/// <param name="value">The underlying value of the cryptographic hash.</param>
-public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive<Hash>, IValueComparable<Hash>, ISpanParsable<Hash>
+// ReSharper disable MemberCanBePrivate.Global
+public readonly partial struct Hash : ICryptoPrimitive<Hash>, IValueComparable<Hash>, ISpanParsable<Hash>
 {
+    private readonly byte[] value;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Hash"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Hash"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public Hash(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
+    /// <remarks>
+    /// This constructor is intentionally marked <see langword="private"/> and is used exclusively to initialize the underlying <see cref="byte"/> array.
+    /// Because <see cref="Hash"/> is designed to be immutable, external array references are not permitted.
+    /// The overloaded constructors below ensure immutability by creating defensive copies of the provided arrays.
+    /// </remarks>
+    /// <param name="value">The value from which to initialize a new <see cref="Hash"/> instance.</param>
+    private Hash(byte[] value) => this.value = value;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Hash"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Hash"/> instance.</param>
+    public Hash(ReadOnlySpan<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Hash"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Hash"/> instance.</param>
+    public Hash(ReadOnlyMemory<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Hash"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="Hash"/> instance.</param>
+    public Hash(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Hash"/> struct.
@@ -40,8 +70,6 @@ public readonly partial struct Hash(ReadOnlySpan<byte> value) : ICryptoPrimitive
     public Hash(byte value, int length) : this(Enumerable.Repeat(value, length).ToArray())
     {
     }
-
-    private readonly byte[] value = value.ToArray();
 
     /// <summary>
     /// Gets the length of the current <see cref="Hash"/> in bytes.

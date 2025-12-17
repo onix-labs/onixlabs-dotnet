@@ -18,20 +18,14 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdsaPublicKey
 {
-    /// <summary>
-    /// Exports the ECDSA cryptographic public key data.
-    /// </summary>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the ECDSA cryptographic public key data.</returns>
+    /// <inheritdoc/>
     public byte[] Export()
     {
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportSubjectPublicKeyInfo();
     }
 
-    /// <summary>
-    /// Exports the ECDSA cryptographic public key data in RFC 7468 PEM format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="string"/> instance containing the ECDSA cryptographic public key data in RFC 7468 format.</returns>
+    /// <inheritdoc/>
     public string ExportPem()
     {
         using ECDsa algorithm = ImportKeyData();

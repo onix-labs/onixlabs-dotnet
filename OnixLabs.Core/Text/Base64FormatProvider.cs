@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-64 format provider.
 /// </summary>
-// ReSharper disable HeapView.ObjectAllocation.Evident
+// ReSharper disable HeapView.ObjectAllocation.Evident StringLiteralTypo
 public sealed class Base64FormatProvider : Enumeration<Base64FormatProvider>, IFormatProvider
 {
     /// <summary>
@@ -33,21 +33,13 @@ public sealed class Base64FormatProvider : Enumeration<Base64FormatProvider>, IF
     /// <param name="value">The value of the enumeration entry.</param>
     /// <param name="name">The name of the enumeration entry.</param>
     /// <param name="alphabet">The alphabet of the format provider.</param>
-    private Base64FormatProvider(int value, string name, string alphabet) : base(value, name)
-    {
-        Alphabet = alphabet;
-    }
+    private Base64FormatProvider(int value, string name, string alphabet) : base(value, name) => Alphabet = alphabet;
 
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base64FormatProvider"/> instance.
     /// </summary>
     public string Alphabet { get; }
 
-    /// <summary>Gets an object that provides formatting services for the specified type.</summary>
-    /// <param name="formatType">An object that specifies the type of format object to return.</param>
-    /// <returns>
-    /// Returns an instance of the object specified by <paramref name="formatType"/>,
-    /// if the <see cref="T:IFormatProvider"/> implementation can supply that type of object; otherwise, <see langword="null"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public object? GetFormat(Type? formatType) => formatType == typeof(Base64FormatProvider) ? this : null;
 }

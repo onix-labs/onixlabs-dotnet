@@ -18,9 +18,6 @@ public sealed partial class EcdsaPublicKey
 {
     private const string KeyName = "ECDSA";
 
-    /// <summary>
-    /// Creates a new <see cref="NamedPublicKey"/> from the current <see cref="EcdsaPublicKey"/> instance.
-    /// </summary>
-    /// <returns>Returns a new <see cref="NamedPublicKey"/> from the current <see cref="EcdsaPublicKey"/> instance.</returns>
+    /// <inheritdoc/>
     public override NamedPublicKey ToNamedPublicKey() => new(this, KeyName);
 }

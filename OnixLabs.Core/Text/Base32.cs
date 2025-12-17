@@ -21,45 +21,70 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-32 value.
 /// </summary>
-/// <param name="value">The <see cref="ReadOnlySpan{T}"/> with which to initialize the <see cref="Base32"/> instance.</param>
-public readonly partial struct Base32(ReadOnlySpan<byte> value) : IBaseValue<Base32>
+// ReSharper disable MemberCanBePrivate.Global
+public readonly partial struct Base32 : IBaseValue<Base32>
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Base32"/> struct.
-    /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Base32"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public Base32(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
+    private readonly byte[] value;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base32"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="string"/> with which to initialize the <see cref="Base32"/> instance.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public Base32(string value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
+    /// <remarks>
+    /// This constructor is intentionally marked <see langword="private"/> and is used exclusively to initialize the underlying <see cref="byte"/> array.
+    /// Because <see cref="Base32"/> is designed to be immutable, external array references are not permitted.
+    /// The overloaded constructors below ensure immutability by creating defensive copies of the provided arrays.
+    /// </remarks>
+    /// <param name="value">The value from which to initialize the new <see cref="Base32"/> instance.</param>
+    private Base32(byte[] value) => this.value = value;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base32"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize the new <see cref="Base32"/> instance.</param>
+    public Base32(ReadOnlySpan<byte> value) : this(value.ToArray())
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base32"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="T:char[]"/> with which to initialize the <see cref="Base32"/> instance.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public Base32(char[] value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
+    /// <param name="value">The value from which to initialize the new <see cref="Base32"/> instance.</param>
+    public Base32(ReadOnlyMemory<byte> value) : this(value.ToArray())
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base32"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="Base32"/> instance.</param>
-    /// <param name="encoding">The <see cref="Encoding"/> which will be used to obtain the underlying value.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
+    /// <param name="value">The value from which to initialize the new <see cref="Base32"/> instance.</param>
+    public Base32(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base32"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize the new <see cref="Base32"/> instance.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> that will be used to transform the specified value, or <see langword="null"/> to use the default <see cref="Encoding"/>.</param>
+    public Base32(ReadOnlySpan<char> value, Encoding? encoding = null) : this(encoding.GetBytes(value))
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base32"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize the new <see cref="Base32"/> instance.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> that will be used to transform the specified value, or <see langword="null"/> to use the default <see cref="Encoding"/>.</param>
+    public Base32(ReadOnlyMemory<char> value, Encoding? encoding = null) : this(encoding.GetBytes(value.Span))
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Base32"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize the new <see cref="Base32"/> instance.</param>
+    /// <param name="encoding">The <see cref="Encoding"/> that will be used to transform the specified value, or <see langword="null"/> to use the default <see cref="Encoding"/>.</param>
     public Base32(ReadOnlySequence<char> value, Encoding? encoding = null) : this(encoding.GetOrDefault().GetBytes(value))
     {
     }
-
-    private readonly byte[] value = value.ToArray();
 }

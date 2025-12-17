@@ -12,14 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Xunit.Sdk;
-
 namespace OnixLabs.Numerics.UnitTests.Data;
 
-public sealed class BigDecimalArithmeticScaleDataAttribute : DataAttribute
+public sealed class BigDecimalArithmeticScaleDataAttribute : TestDataAttribute
 {
     private static readonly int[] Integers = [0, 1, 2, 3, 123, 123456789, -1, -2, -3, -123, -123456789];
 

@@ -20,37 +20,19 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class RsaPublicKey
 {
-    /// <summary>
-    /// Imports the RSA cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic public key data to import.</param>
-    /// <returns>Returns a new RSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPublicKey Import(IBinaryConvertible data) =>
         Import(data.AsReadOnlySpan());
 
-    /// <summary>
-    /// Imports the RSA cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic public key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new RSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPublicKey Import(IBinaryConvertible data, out int bytesRead) =>
         Import(data.AsReadOnlySpan(), out bytesRead);
 
-    /// <summary>
-    /// Imports the RSA cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic public key data to import.</param>
-    /// <returns>Returns a new RSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPublicKey Import(ReadOnlySpan<byte> data) =>
         Import(data, out int _);
 
-    /// <summary>
-    /// Imports the RSA cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic public key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new RSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPublicKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
         using RSA algorithm = RSA.Create();

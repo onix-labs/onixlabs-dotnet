@@ -21,80 +21,42 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class RsaPrivateKey
 {
-    /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.SignData(data, algorithm, padding);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.SignData(data.Slice(offset, count), algorithm, padding);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="Stream"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.SignData(data, algorithm, padding);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="IBinaryConvertible"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(IBinaryConvertible data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.SignData(data.AsReadOnlySpan(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Signs the specified <see cref="Hash"/>.
-    /// </summary>
-    /// <param name="hash">The hash to sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignHash(Hash hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
         return key.SignHash(hash.AsReadOnlySpan(), algorithm, padding);
     }
 
-    /// <summary>
-    /// Signs the specified <see cref="ReadOnlySpan{T}"/>.
-    /// </summary>
-    /// <param name="hash">The hash to sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input hash.</param>
-    /// <param name="padding">The RSA signature padding mode that will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="T:Byte[]"/> instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignHash(ReadOnlySpan<byte> hash, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();

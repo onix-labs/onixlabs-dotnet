@@ -73,7 +73,7 @@ internal static class CSharpTypeDeclarationFormatter
     /// <returns>Returns the type declaration for the current <see cref="Type"/> instance.</returns>
     public static string GetTypeDeclaration(Type type, TypeDeclarationFlags flags)
     {
-        RequireNotNull(type, TypeNullExceptionMessage, nameof(type));
+        RequireNotNull(type, TypeNullExceptionMessage);
 
         Type unwrappedType = ConditionallyUnwrapNullableType(type, flags);
         StringBuilder builder = new();

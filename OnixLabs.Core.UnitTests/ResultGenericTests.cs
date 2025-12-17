@@ -70,7 +70,7 @@ public sealed class ResultGenericTests
     public async Task ResultOfAsyncShouldProduceExpectedSuccessResult()
     {
         // Given / When
-        Result<int> result = await Result<int>.OfAsync(async () => await Task.FromResult(1));
+        Result<int> result = await Result<int>.OfAsync(async () => await Task.FromResult(1), TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<int>>(result);
@@ -80,7 +80,7 @@ public sealed class ResultGenericTests
     public async Task ResultOfAsyncShouldProduceExpectedFailureResult()
     {
         // Given / When
-        Result<int> result = await Result<int>.OfAsync(async () => await Task.FromException<int>(FailureException));
+        Result<int> result = await Result<int>.OfAsync(async () => await Task.FromException<int>(FailureException), TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<int>>(result);
@@ -418,7 +418,8 @@ public sealed class ResultGenericTests
                 isSuccess = true;
                 return Task.CompletedTask;
             },
-            failure: _ => isFailure = true
+            failure: _ => isFailure = true,
+            token: TestContext.Current.CancellationToken
         );
 
         // Then
@@ -441,7 +442,8 @@ public sealed class ResultGenericTests
                 isSuccess = true;
                 return Task.CompletedTask;
             },
-            failure: _ => isFailure = true
+            failure: _ => isFailure = true,
+            token: TestContext.Current.CancellationToken
         );
 
         // Then
@@ -514,7 +516,8 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return Task.CompletedTask;
-            }
+            },
+            token: TestContext.Current.CancellationToken
         );
 
         // Then
@@ -537,7 +540,8 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return Task.CompletedTask;
-            }
+            },
+            token: TestContext.Current.CancellationToken
         );
 
         // Then
@@ -755,7 +759,8 @@ public sealed class ResultGenericTests
         // When
         int actual = await result.MatchAsync(
             success: _ => Task.FromResult(1),
-            failure: _ => 0
+            failure: _ => 0,
+            token: TestContext.Current.CancellationToken
         );
 
         // Then
@@ -772,7 +777,8 @@ public sealed class ResultGenericTests
         // When
         int actual = await result.MatchAsync(
             success: _ => Task.FromResult(0),
-            failure: _ => 1
+            failure: _ => 1,
+            token: TestContext.Current.CancellationToken
         );
 
         // Then
@@ -827,7 +833,8 @@ public sealed class ResultGenericTests
         // When
         int actual = await result.MatchAsync(
             success: _ => 1,
-            failure: _ => Task.FromResult(0)
+            failure: _ => Task.FromResult(0),
+            token: TestContext.Current.CancellationToken
         );
 
         // Then
@@ -844,7 +851,8 @@ public sealed class ResultGenericTests
         // When
         int actual = await result.MatchAsync(
             success: _ => 0,
-            failure: _ => Task.FromResult(1)
+            failure: _ => Task.FromResult(1),
+            token: TestContext.Current.CancellationToken
         );
 
         // Then
@@ -1015,7 +1023,7 @@ public sealed class ResultGenericTests
         Result expected = Result.Failure(FailureException);
 
         // When
-        Result actual = await result.SelectAsync(_ => Task.CompletedTask);
+        Result actual = await result.SelectAsync(_ => Task.CompletedTask, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1029,7 +1037,7 @@ public sealed class ResultGenericTests
         Result expected = Result.Success();
 
         // When
-        Result actual = await result.SelectAsync(_ => Task.CompletedTask);
+        Result actual = await result.SelectAsync(_ => Task.CompletedTask, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1043,7 +1051,7 @@ public sealed class ResultGenericTests
         Result expected = Result.Failure(FailureException);
 
         // When
-        Result actual = await result.SelectAsync(_ => throw FailureException);
+        Result actual = await result.SelectAsync(_ => throw FailureException, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1144,7 +1152,7 @@ public sealed class ResultGenericTests
         Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = await result.SelectAsync(_ => Task.FromResult(1));
+        Result<int> actual = await result.SelectAsync(_ => Task.FromResult(1), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1158,7 +1166,7 @@ public sealed class ResultGenericTests
         Result<int> expected = Result<int>.Success(1);
 
         // When
-        Result<int> actual = await result.SelectAsync(_ => Task.FromResult(1));
+        Result<int> actual = await result.SelectAsync(_ => Task.FromResult(1), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1172,7 +1180,7 @@ public sealed class ResultGenericTests
         Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = await result.SelectAsync<int>(_ => throw FailureException);
+        Result<int> actual = await result.SelectAsync<int>(_ => throw FailureException, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1273,7 +1281,8 @@ public sealed class ResultGenericTests
         Result expected = Result.Failure(FailureException);
 
         // When
-        Result actual = await result.SelectManyAsync(async _ => await Task.FromResult(Result.Success()));
+        Result actual = await result.SelectManyAsync(async _ =>
+            await Task.FromResult(Result.Success()), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1287,7 +1296,8 @@ public sealed class ResultGenericTests
         Result expected = Result.Success();
 
         // When
-        Result actual = await result.SelectManyAsync(async _ => await Task.FromResult(Result.Success()));
+        Result actual = await result.SelectManyAsync(async _ =>
+            await Task.FromResult(Result.Success()), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1301,7 +1311,7 @@ public sealed class ResultGenericTests
         Result expected = Result.Failure(FailureException);
 
         // When
-        Result actual = await result.SelectManyAsync(_ => throw FailureException);
+        Result actual = await result.SelectManyAsync(_ => throw FailureException, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1402,7 +1412,8 @@ public sealed class ResultGenericTests
         Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = await result.SelectManyAsync<int>(async _ => await Task.FromResult(Result<int>.Success(1)));
+        Result<int> actual = await result.SelectManyAsync<int>(async _ =>
+            await Task.FromResult(Result<int>.Success(1)), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1416,7 +1427,8 @@ public sealed class ResultGenericTests
         Result<int> expected = Result<int>.Success(1);
 
         // When
-        Result<int> actual = await result.SelectManyAsync<int>(async _ => await Task.FromResult(Result<int>.Success(1)));
+        Result<int> actual = await result.SelectManyAsync<int>(async _ =>
+            await Task.FromResult(Result<int>.Success(1)), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1430,7 +1442,7 @@ public sealed class ResultGenericTests
         Result<int> expected = Result<int>.Failure(FailureException);
 
         // When
-        Result<int> actual = await result.SelectManyAsync<int>(_ => throw FailureException);
+        Result<int> actual = await result.SelectManyAsync<int>(_ => throw FailureException, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);

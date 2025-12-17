@@ -21,37 +21,19 @@ namespace OnixLabs.Security.Cryptography;
 // ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class EcdhPublicKey
 {
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic public key data to import.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPublicKey Import(IBinaryConvertible data) =>
         Import(data.AsReadOnlySpan());
 
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic public key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPublicKey Import(IBinaryConvertible data, out int bytesRead) =>
         Import(data.AsReadOnlySpan(), out bytesRead);
 
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic public key data to import.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPublicKey Import(ReadOnlySpan<byte> data) =>
         Import(data, out int _);
 
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic public key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPublicKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();

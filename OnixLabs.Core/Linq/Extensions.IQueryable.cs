@@ -18,7 +18,7 @@ using System.Linq;
 namespace OnixLabs.Core.Linq;
 
 /// <summary>
-/// Provides LINQ-like extension methods for <see cref="IQueryable{T}"/>.
+/// Provides LINQ-like extension methods for <see cref="IQueryable{T}"/> instances.
 /// </summary>
 // ReSharper disable InconsistentNaming
 [EditorBrowsable(EditorBrowsableState.Never)]
@@ -28,32 +28,36 @@ public static class IQueryableExtensions
     private const string SpecificationNullExceptionMessage = "Specification must not be null.";
 
     /// <summary>
-    /// Filters a sequence of values based on a specification.
+    /// Provides LINQ-like extension methods for <see cref="IQueryable{T}"/> instances.
     /// </summary>
-    /// <param name="queryable">The current <see cref="IQueryable{T}"/> to filter.</param>
-    /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
-    /// <typeparam name="T">The underlying type of the <see cref="IQueryable{T}"/>.</typeparam>
-    /// <returns>Returns an <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the specification.</returns>
-    public static IQueryable<T> Where<T>(this IQueryable<T> queryable, Specification<T> specification)
+    /// <param name="queryable">The current <see cref="IQueryable{T}"/> instance.</param>
+    /// <typeparam name="T">The underlying type of the current <see cref="IQueryable{T}"/> instance.</typeparam>
+    extension<T>(IQueryable<T> queryable)
     {
-        RequireNotNull(queryable, QueryableNullExceptionMessage, nameof(queryable));
-        RequireNotNull(specification, SpecificationNullExceptionMessage, nameof(specification));
+        /// <summary>
+        /// Filters a sequence of values based on a specification.
+        /// </summary>
+        /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
+        /// <returns>Returns an <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the specification.</returns>
+        public IQueryable<T> Where(Specification<T> specification)
+        {
+            RequireNotNull(queryable, QueryableNullExceptionMessage);
+            RequireNotNull(specification, SpecificationNullExceptionMessage);
 
-        return queryable.Where(specification.Criteria);
-    }
+            return queryable.Where(specification.Criteria);
+        }
 
-    /// <summary>
-    /// Filters a sequence of values based on a negated specification.
-    /// </summary>
-    /// <param name="queryable">The current <see cref="IQueryable{T}"/> to filter.</param>
-    /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
-    /// <typeparam name="T">The underlying type of the <see cref="IQueryable{T}"/>.</typeparam>
-    /// <returns>Returns an <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the negated specification.</returns>
-    public static IQueryable<T> WhereNot<T>(this IQueryable<T> queryable, Specification<T> specification)
-    {
-        RequireNotNull(queryable, QueryableNullExceptionMessage, nameof(queryable));
-        RequireNotNull(specification, SpecificationNullExceptionMessage, nameof(specification));
+        /// <summary>
+        /// Filters a sequence of values based on a negated specification.
+        /// </summary>
+        /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
+        /// <returns>Returns an <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the negated specification.</returns>
+        public IQueryable<T> WhereNot(Specification<T> specification)
+        {
+            RequireNotNull(queryable, QueryableNullExceptionMessage);
+            RequireNotNull(specification, SpecificationNullExceptionMessage);
 
-        return queryable.Where(specification.Not().Criteria);
+            return queryable.Where(specification.Not().Criteria);
+        }
     }
 }

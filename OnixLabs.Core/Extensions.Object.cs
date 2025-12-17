@@ -49,7 +49,7 @@ public static class ObjectExtensions
     /// <returns>Returns the current <paramref name="value"/> once the specified <see cref="Action{T}"/> has been executed.</returns>
     public static T Apply<T>(this T value, Action<T> action) where T : class
     {
-        RequireNotNull(action, "Action must not be null.", nameof(action));
+        RequireNotNull(action, "Action must not be null.");
         action(value);
         return value;
     }
@@ -63,7 +63,7 @@ public static class ObjectExtensions
     /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
     public static T Apply<T>(this T value, Func<T, T> function) where T : struct
     {
-        RequireNotNull(function, "Function must not be null.", nameof(function));
+        RequireNotNull(function, "Function must not be null.");
         return function(value);
     }
 
@@ -145,7 +145,7 @@ public static class ObjectExtensions
     /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
     public static TResult Let<TSource, TResult>(this TSource value, Func<TSource, TResult> function)
     {
-        RequireNotNull(function, "Function must not be null.", nameof(function));
+        RequireNotNull(function, "Function must not be null.");
         return function(value);
     }
 

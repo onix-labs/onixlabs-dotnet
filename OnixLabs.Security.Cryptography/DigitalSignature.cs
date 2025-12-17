@@ -14,22 +14,49 @@
 
 using System;
 using System.Buffers;
-using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
 /// Represents a cryptographic digital signature.
 /// </summary>
-/// <param name="value">The underlying value of the cryptographic digital signature.</param>
-public readonly partial struct DigitalSignature(ReadOnlySpan<byte> value) : ICryptoPrimitive<DigitalSignature>, ISpanParsable<DigitalSignature>
+// ReSharper disable MemberCanBePrivate.Global
+public readonly partial struct DigitalSignature : ICryptoPrimitive<DigitalSignature>, ISpanParsable<DigitalSignature>
 {
+    private readonly byte[] value;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="DigitalSignature"/> struct.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="DigitalSignature"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public DigitalSignature(ReadOnlySequence<byte> value) : this(ReadOnlySpan<byte>.Empty) => value.CopyTo(out this.value);
+    /// <remarks>
+    /// This constructor is intentionally marked <see langword="private"/> and is used exclusively to initialize the underlying <see cref="byte"/> array.
+    /// Because <see cref="DigitalSignature"/> is designed to be immutable, external array references are not permitted.
+    /// The overloaded constructors below ensure immutability by creating defensive copies of the provided arrays.
+    /// </remarks>
+    /// <param name="value">The value from which to initialize a new <see cref="DigitalSignature"/> instance.</param>
+    private DigitalSignature(byte[] value) => this.value = value;
 
-    private readonly byte[] value = value.ToArray();
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DigitalSignature"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="DigitalSignature"/> instance.</param>
+    public DigitalSignature(ReadOnlySpan<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DigitalSignature"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="DigitalSignature"/> instance.</param>
+    public DigitalSignature(ReadOnlyMemory<byte> value) : this(value.ToArray())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DigitalSignature"/> struct.
+    /// </summary>
+    /// <param name="value">The value from which to initialize a new <see cref="DigitalSignature"/> instance.</param>
+    public DigitalSignature(ReadOnlySequence<byte> value) : this(value.ToArray())
+    {
+    }
 }

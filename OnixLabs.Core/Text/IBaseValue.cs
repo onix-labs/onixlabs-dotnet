@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
+using System.Text;
 
 namespace OnixLabs.Core.Text;
 
@@ -40,4 +42,47 @@ public interface IBaseValue : IBinaryConvertible, ISpanFormattable
 /// <summary>
 /// Defines a generic base encoding representation.
 /// </summary>
-public interface IBaseValue<T> : IValueEquatable<T>, ISpanParsable<T>, IBaseValue where T : struct, IBaseValue<T>;
+public interface IBaseValue<T> : IValueEquatable<T>, ISpanParsable<T>, IBaseValue where T : struct, IBaseValue<T>
+{
+    /// <summary>
+    /// Implicitly converts the specified <see cref="ReadOnlySpan{T}"/> into a new <typeparamref name="T"/> instance.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a new <typeparamref name="T"/> instance, converted from the specified <see cref="ReadOnlySpan{T}"/>.</returns>
+    public static abstract implicit operator T(ReadOnlySpan<byte> value);
+
+    /// <summary>
+    /// Implicitly converts the specified <see cref="ReadOnlyMemory{T}"/> into a new <typeparamref name="T"/> instance.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a new <typeparamref name="T"/> instance, converted from the specified <see cref="ReadOnlyMemory{T}"/>.</returns>
+    public static abstract implicit operator T(ReadOnlyMemory<byte> value);
+
+    /// <summary>
+    /// Implicitly converts the specified <see cref="ReadOnlySequence{T}"/> into a new <typeparamref name="T"/> instance.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a new <typeparamref name="T"/> instance, converted from the specified <see cref="ReadOnlySequence{T}"/>.</returns>
+    public static abstract implicit operator T(ReadOnlySequence<byte> value);
+
+    /// <summary>
+    /// Implicitly converts the specified <see cref="ReadOnlySpan{T}"/> into a new <typeparamref name="T"/> instance using the default <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a new <typeparamref name="T"/> instance, converted from the specified <see cref="ReadOnlySpan{T}"/>.</returns>
+    public static abstract implicit operator T(ReadOnlySpan<char> value);
+
+    /// <summary>
+    /// Implicitly converts the specified <see cref="ReadOnlyMemory{T}"/> into a new <typeparamref name="T"/> instance using the default <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a new <typeparamref name="T"/> instance, converted from the specified <see cref="ReadOnlyMemory{T}"/>.</returns>
+    public static abstract implicit operator T(ReadOnlyMemory<char> value);
+
+    /// <summary>
+    /// Implicitly converts the specified <see cref="ReadOnlySequence{T}"/> into a new <typeparamref name="T"/> instance using the default <see cref="Encoding"/>.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a new <typeparamref name="T"/> instance, converted from the specified <see cref="ReadOnlySequence{T}"/>.</returns>
+    public static abstract implicit operator T(ReadOnlySequence<char> value);
+}

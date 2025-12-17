@@ -18,9 +18,6 @@ public sealed partial class EcdhPrivateKey
 {
     private const string KeyName = "ECDH";
 
-    /// <summary>
-    /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="EcdhPrivateKey"/> instance.
-    /// </summary>
-    /// <returns>Returns a new <see cref="NamedPrivateKey"/> from the current <see cref="EcdhPrivateKey"/> instance.</returns>
-    public override NamedPrivateKey ToNamedPrivateKey() => new(this, "ECDH");
+    /// <inheritdoc/>
+    public override NamedPrivateKey ToNamedPrivateKey() => new(this, KeyName);
 }

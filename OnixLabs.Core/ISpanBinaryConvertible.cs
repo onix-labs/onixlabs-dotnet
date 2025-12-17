@@ -22,8 +22,8 @@ namespace OnixLabs.Core;
 public interface ISpanBinaryConvertible
 {
     /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
+    /// Gets the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    /// <returns>Return the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
     ReadOnlySpan<byte> AsReadOnlySpan();
 }

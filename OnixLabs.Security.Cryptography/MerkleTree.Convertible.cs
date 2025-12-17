@@ -18,15 +18,9 @@ namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class MerkleTree
 {
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    /// <inheritdoc/>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => Hash.AsReadOnlyMemory();
 
-    /// <summary>
-    /// Gets the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="T:Byte[]"/> representation of the current <see cref="MerkleTree"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    /// <inheritdoc/>
     public ReadOnlySpan<byte> AsReadOnlySpan() => Hash.AsReadOnlySpan();
 }

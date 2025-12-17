@@ -18,10 +18,7 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdhPrivateKey
 {
-    /// <summary>
-    /// Gets the EC Diffie-Hellman cryptographic public key component from the current cryptographic private key.
-    /// </summary>
-    /// <returns>Returns the EC Diffie-Hellman cryptographic public key component from the current cryptographic private key.</returns>
+    /// <inheritdoc/>
     public EcdhPublicKey GetPublicKey()
     {
         using ECDiffieHellman algorithm = ImportKeyData();

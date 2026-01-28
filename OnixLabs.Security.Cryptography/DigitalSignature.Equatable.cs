@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Security.Cryptography;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
@@ -19,7 +20,16 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct DigitalSignature
 {
     /// <inheritdoc/>
-    public bool Equals(DigitalSignature other) => value.SequenceEqualOrNull(other.value);
+    /// <remarks>
+    /// This method uses constant-time comparison to prevent timing attacks.
+    /// </remarks>
+    public bool Equals(DigitalSignature other)
+    {
+        if (value is null || other.value is null)
+            return value is null && other.value is null;
+
+        return CryptographicOperations.FixedTimeEquals(value, other.value);
+    }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj) => obj is DigitalSignature other && Equals(other);

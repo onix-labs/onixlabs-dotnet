@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using OnixLabs.Core.Linq;
@@ -23,18 +24,21 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents an in-memory data protection mechanism for sensitive, long-lived cryptographic data.
 /// </summary>
 // ReSharper disable HeapView.ObjectAllocation.Evident
-internal sealed class ProtectedData
+internal sealed class ProtectedData : IDisposable
 {
     private readonly byte[] key = Salt.CreateNonZero(32).AsReadOnlySpan().ToArray();
     private readonly byte[] iv = Salt.CreateNonZero(16).AsReadOnlySpan().ToArray();
+    private bool isDisposed;
 
     /// <summary>
-    /// Encrypted the specified data.
+    /// Encrypts the specified data.
     /// </summary>
     /// <param name="data">The data to encrypt.</param>
     /// <returns>Returns the encrypted data.</returns>
+    /// <exception cref="ObjectDisposedException">If the current instance has been disposed.</exception>
     public byte[] Encrypt(byte[] data)
     {
+        ObjectDisposedException.ThrowIf(isDisposed, this);
         if (data.IsEmpty()) return data;
 
         using Aes algorithm = Aes.Create();
@@ -59,8 +63,10 @@ internal sealed class ProtectedData
     /// </summary>
     /// <param name="data">The data to decrypt.</param>
     /// <returns>Returns the decrypted data.</returns>
+    /// <exception cref="ObjectDisposedException">If the current instance has been disposed.</exception>
     public byte[] Decrypt(byte[] data)
     {
+        ObjectDisposedException.ThrowIf(isDisposed, this);
         if (data.IsEmpty()) return data;
 
         using Aes algorithm = Aes.Create();
@@ -78,5 +84,18 @@ internal sealed class ProtectedData
         cryptoStream.CopyTo(resultStream);
 
         return resultStream.ToArray();
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        if (isDisposed) return;
+
+        CryptographicOperations.ZeroMemory(key);
+        CryptographicOperations.ZeroMemory(iv);
+
+        isDisposed = true;
     }
 }

@@ -155,7 +155,7 @@ public async Task<Exception?> GetExceptionOrDefaultAsync(CancellationToken token
 
 - **TODO:** `ProtectedData.cs` uses static key/IV per instance lifetime. Consider rotating keys periodically
 
-- **TODO:** No constant-time comparison for cryptographic values. Add `CryptographicOperations.FixedTimeEquals()` where comparing hashes/signatures
+- ~~**TODO:** No constant-time comparison for cryptographic values.~~ **COMPLETED** - `Hash`, `DigitalSignature`, `Salt`, `PrivateKey`, and `PublicKey` now use `CryptographicOperations.FixedTimeEquals()` for constant-time comparison. `Secret` benefits automatically via `Hash` comparison.
 
 - **TODO:** `EcdsaPrivateKey.Sign.cs:27` calls `ToArray()` on span - consider span-based hashing to avoid allocation of sensitive data
 
@@ -267,7 +267,7 @@ public byte[] Decrypt(byte[] data)
 ### High Priority (Security/Correctness)
 
 1. ~~Zero key material in `ProtectedData` on disposal~~ **COMPLETED**
-2. Add constant-time comparison for cryptographic values
+2. ~~Add constant-time comparison for cryptographic values~~ **COMPLETED**
 3. Cache compiled `Specification<T>` delegates
 4. Add `[SecurityCritical]` attributes where appropriate
 

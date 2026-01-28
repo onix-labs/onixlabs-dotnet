@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,12 +34,20 @@ public abstract class Result : IValueEquatable<Result>
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result"/> is in a successful state.
     /// </summary>
-    public bool IsSuccess => this is Success;
+    public bool IsSuccess
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => this is Success;
+    }
 
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result"/> is in a failed state.
     /// </summary>
-    public bool IsFailure => this is Failure;
+    public bool IsFailure
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => this is Failure;
+    }
 
     /// <summary>
     /// Creates a new instance of the <see cref="Result"/> class, where the underlying value is the result of a successful invocation
@@ -142,6 +151,7 @@ public abstract class Result : IValueEquatable<Result>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Result? left, Result? right) => Equals(left, right);
 
     /// <summary>
@@ -150,6 +160,7 @@ public abstract class Result : IValueEquatable<Result>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(Result? left, Result? right) => !Equals(left, right);
 
     /// <inheritdoc/>

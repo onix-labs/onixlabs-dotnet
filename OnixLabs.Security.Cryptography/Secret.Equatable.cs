@@ -12,22 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
+
 namespace OnixLabs.Security.Cryptography;
 
 public readonly partial struct Secret
 {
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(Secret other) => hash == other.hash;
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is Secret other && Equals(other);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => hash.GetHashCode();
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Secret left, Secret right) => left.Equals(right);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(Secret left, Secret right) => !left.Equals(right);
 }

@@ -14,6 +14,7 @@
 
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
@@ -28,14 +29,17 @@ public abstract partial class PrivateKey
         && other.KeyData.SequenceEqual(KeyData);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => Equals(obj as PrivateKey);
 
     /// <inheritdoc/>
     public override int GetHashCode() => HashCode.Combine(GetType(), KeyData.GetContentHashCode());
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(PrivateKey? left, PrivateKey? right) => Equals(left, right);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(PrivateKey? left, PrivateKey? right) => !Equals(left, right);
 }

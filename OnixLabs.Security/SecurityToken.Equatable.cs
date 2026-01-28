@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security;
@@ -19,17 +20,22 @@ namespace OnixLabs.Security;
 public readonly partial struct SecurityToken
 {
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(SecurityToken other) => value.SequenceEqualOrNull(other.value);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is SecurityToken other && Equals(other);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => value.GetContentHashCode();
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(SecurityToken left, SecurityToken right) => left.Equals(right);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(SecurityToken left, SecurityToken right) => !left.Equals(right);
 }

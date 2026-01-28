@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
+
 namespace OnixLabs.Numerics;
 
 public readonly partial struct NumberInfo
@@ -23,6 +25,7 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Equals(NumberInfo left, NumberInfo right) => Equals(left, right, NumberInfoEqualityComparer.Strict);
 
     /// <summary>
@@ -33,6 +36,7 @@ public readonly partial struct NumberInfo
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Equals(NumberInfo left, NumberInfo right, NumberInfoEqualityComparer comparer) => comparer.Equals(left, right);
 
     /// <summary>
@@ -41,6 +45,7 @@ public readonly partial struct NumberInfo
     /// </summary>
     /// <param name="other">The other instance of <see cref="NumberInfo"/> to compare with the current instance.</param>
     /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(NumberInfo other) => Equals(this, other);
 
     /// <summary>
@@ -50,6 +55,7 @@ public readonly partial struct NumberInfo
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the current instance is equal to the specified other instance; otherwise, <see langword="false"/>.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(NumberInfo other, NumberInfoEqualityComparer comparer) => Equals(this, other, comparer);
 
     /// <summary>
@@ -58,6 +64,7 @@ public readonly partial struct NumberInfo
     /// </summary>
     /// <param name="obj">The object to check for equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is NumberInfo other && Equals(other);
 
     /// <summary>
@@ -66,6 +73,7 @@ public readonly partial struct NumberInfo
     /// <param name="obj">The object to check for equality.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the object is equal to this instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(object? obj, NumberInfoEqualityComparer comparer) => obj is NumberInfo other && Equals(other, comparer);
 
     /// <summary>
@@ -73,6 +81,7 @@ public readonly partial struct NumberInfo
     /// This method implements the <see cref="NumberInfoEqualityComparer.Strict"/> comparer.
     /// </summary>
     /// <returns>A hash code for this instance.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => NumberInfoEqualityComparer.Strict.GetHashCode(this);
 
     /// <summary>
@@ -82,6 +91,7 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(NumberInfo left, NumberInfo right) => Equals(left, right, NumberInfoEqualityComparer.Semantic);
 
     /// <summary>
@@ -91,5 +101,6 @@ public readonly partial struct NumberInfo
     /// <param name="left">The left-hand value to compare.</param>
     /// <param name="right">The right-hand value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are not equal; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(NumberInfo left, NumberInfo right) => !Equals(left, right, NumberInfoEqualityComparer.Semantic);
 }

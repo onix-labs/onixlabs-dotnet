@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -22,14 +23,18 @@ public abstract partial class MerkleTree
     public bool Equals(MerkleTree? other) => ReferenceEquals(this, other) || other is not null && other.Hash == Hash;
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => Equals(obj as MerkleTree);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => HashCode.Combine(GetType(), Hash);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(MerkleTree? left, MerkleTree? right) => Equals(left, right);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(MerkleTree? left, MerkleTree? right) => !Equals(left, right);
 }

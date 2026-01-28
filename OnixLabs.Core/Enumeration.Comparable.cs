@@ -12,13 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
+
 namespace OnixLabs.Core;
 
 public abstract partial class Enumeration<T>
 {
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int CompareTo(T? other) => Value.CompareToNullable(other?.Value);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public int CompareTo(object? obj) => this.CompareToObject(obj);
 }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.CompilerServices;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text;
@@ -19,17 +20,22 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base16
 {
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(Base16 other) => other.value.SequenceEqualOrNull(value);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is Base16 other && Equals(other);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => value.GetContentHashCode();
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Base16 left, Base16 right) => left.Equals(right);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(Base16 left, Base16 right) => !left.Equals(right);
 }

@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace OnixLabs.Core;
 
@@ -39,13 +40,18 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <summary>
     /// Gets a value indicating whether the underlying value of the current <see cref="Optional{T}"/> instance is present.
     /// </summary>
-    public bool HasValue => IsSome(this);
+    public bool HasValue
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => IsSome(this);
+    }
 
     /// <summary>
     /// Gets a value indicating whether the specified <see cref="Optional{T}"/> instance is <see cref="None{T}"/>.
     /// </summary>
     /// <param name="value">The <see cref="Optional{T}"/> value to check.</param>
     /// <returns>Returns <see langword="true"/> if the specified <see cref="Optional{T}"/> instance is <see cref="None{T}"/>; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsNone(Optional<T> value) => value is None<T>;
 
     /// <summary>
@@ -53,6 +59,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// </summary>
     /// <param name="value">The <see cref="Optional{T}"/> value to check.</param>
     /// <returns>Returns <see langword="true"/> if the specified <see cref="Optional{T}"/> instance is <see cref="Some{T}"/>; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsSome(Optional<T> value) => value is Some<T>;
 
     /// <summary>
@@ -126,6 +133,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Optional<T>? left, Optional<T>? right) => Equals(left, right);
 
     /// <summary>
@@ -134,6 +142,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(Optional<T>? left, Optional<T>? right) => !Equals(left, right);
 
     /// <inheritdoc/>

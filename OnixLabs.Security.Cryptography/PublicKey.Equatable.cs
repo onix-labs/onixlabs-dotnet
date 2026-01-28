@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.CompilerServices;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
@@ -27,14 +28,17 @@ public abstract partial class PublicKey
         && other.KeyData.SequenceEqual(KeyData);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => Equals(obj as PublicKey);
 
     /// <inheritdoc/>
     public override int GetHashCode() => HashCode.Combine(GetType(), KeyData.GetContentHashCode());
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(PublicKey? left, PublicKey? right) => Equals(left, right);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(PublicKey? left, PublicKey? right) => !Equals(left, right);
 }

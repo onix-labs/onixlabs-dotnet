@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
@@ -20,17 +21,22 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Salt
 {
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool Equals(Salt other) => value.SequenceEqualOrNull(other.value);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => obj is Salt other && Equals(other);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => value.GetContentHashCode();
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Salt left, Salt right) => EqualityComparer<Salt>.Default.Equals(left, right);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(Salt left, Salt right) => !EqualityComparer<Salt>.Default.Equals(left, right);
 }

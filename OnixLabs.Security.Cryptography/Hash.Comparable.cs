@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -32,14 +33,18 @@ public readonly partial struct Hash
     public int CompareTo(object? obj) => this.CompareToObject(obj);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator >(Hash left, Hash right) => left.CompareTo(right) is 1;
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator >=(Hash left, Hash right) => left.CompareTo(right) is 0 or 1;
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator <(Hash left, Hash right) => left.CompareTo(right) is -1;
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator <=(Hash left, Hash right) => left.CompareTo(right) is 0 or -1;
 }

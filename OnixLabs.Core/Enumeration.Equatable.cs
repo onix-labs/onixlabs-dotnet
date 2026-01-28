@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace OnixLabs.Core;
 
@@ -27,9 +28,11 @@ public abstract partial class Enumeration<T>
         && other.Name == Name;
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override bool Equals(object? obj) => Equals(obj as T);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode() => HashCode.Combine(GetType(), Name, Value);
 
     /// <summary>
@@ -38,6 +41,7 @@ public abstract partial class Enumeration<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator ==(Enumeration<T> left, Enumeration<T> right) => Equals(left, right);
 
     /// <summary>
@@ -46,5 +50,6 @@ public abstract partial class Enumeration<T>
     /// <param name="left">The left-hand instance to compare.</param>
     /// <param name="right">The right-hand instance to compare.</param>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool operator !=(Enumeration<T> left, Enumeration<T> right) => !Equals(left, right);
 }

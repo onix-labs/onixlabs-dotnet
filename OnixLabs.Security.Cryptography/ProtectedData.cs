@@ -24,7 +24,7 @@ namespace OnixLabs.Security.Cryptography;
 /// Represents an in-memory data protection mechanism for sensitive, long-lived cryptographic data.
 /// </summary>
 // ReSharper disable HeapView.ObjectAllocation.Evident
-internal sealed class ProtectedData : IDisposable
+internal sealed partial class ProtectedData : IDisposable
 {
     private readonly byte[] key = Salt.CreateNonZero(32).AsReadOnlySpan().ToArray();
     private readonly byte[] iv = Salt.CreateNonZero(16).AsReadOnlySpan().ToArray();
@@ -39,6 +39,7 @@ internal sealed class ProtectedData : IDisposable
     public byte[] Encrypt(byte[] data)
     {
         ObjectDisposedException.ThrowIf(isDisposed, this);
+
         if (data.IsEmpty()) return data;
 
         using Aes algorithm = Aes.Create();
@@ -67,6 +68,7 @@ internal sealed class ProtectedData : IDisposable
     public byte[] Decrypt(byte[] data)
     {
         ObjectDisposedException.ThrowIf(isDisposed, this);
+
         if (data.IsEmpty()) return data;
 
         using Aes algorithm = Aes.Create();
@@ -84,18 +86,5 @@ internal sealed class ProtectedData : IDisposable
         cryptoStream.CopyTo(resultStream);
 
         return resultStream.ToArray();
-    }
-
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        if (isDisposed) return;
-
-        CryptographicOperations.ZeroMemory(key);
-        CryptographicOperations.ZeroMemory(iv);
-
-        isDisposed = true;
     }
 }

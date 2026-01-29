@@ -123,7 +123,7 @@ public bool IsSatisfiedBy(T subject) => Criteria.Compile().Invoke(subject);
 
 ### Areas for Improvement
 
-- **TODO:** Consider using `ValueTask<T>` for methods that often complete synchronously to reduce allocations
+- ~~**TODO:** Consider using `ValueTask<T>` for methods that often complete synchronously to reduce allocations~~ **COMPLETED** - Terminal async methods (`GetValueOrDefaultAsync`, `GetExceptionOrDefaultAsync`, `ThrowAsync`, etc.) now return `ValueTask<T>`. Chaining methods (`SelectAsync`, `MatchAsync`) retain `Task<T>` for API flexibility.
 - **TODO:** No `IAsyncEnumerable<T>` support for streaming scenarios - consider adding `SelectManyAsync` variant that yields results
 - **TODO:** Missing async stream support for `MerkleTree` construction from large datasets
 - **TODO:** Consider adding `Task.Run` overloads for CPU-bound work to avoid blocking threadpool threads
@@ -159,7 +159,7 @@ public async Task<Exception?> GetExceptionOrDefaultAsync(CancellationToken token
 
 - **TODO:** `EcdsaPrivateKey.Sign.cs:27` calls `ToArray()` on span - consider span-based hashing to avoid allocation of sensitive data
 
-- **TODO:** Add `[SecurityCritical]` or `[SecuritySafeCritical]` attributes where appropriate
+- ~~**TODO:** Add `[SecurityCritical]` or `[SecuritySafeCritical]` attributes where appropriate~~ **N/A** - Code Access Security (CAS) is not supported in .NET Core+. These attributes are no-ops in modern .NET.
 
 - **TODO:** Consider implementing `SecureString` or `System.Security.SecureString` alternative for key material
 
@@ -269,11 +269,11 @@ public byte[] Decrypt(byte[] data)
 1. ~~Zero key material in `ProtectedData` on disposal~~ **COMPLETED**
 2. ~~Add constant-time comparison for cryptographic values~~ **COMPLETED**
 3. ~~Cache compiled `Specification<T>` delegates~~ **COMPLETED**
-4. Add `[SecurityCritical]` attributes where appropriate
+4. ~~Add `[SecurityCritical]` attributes where appropriate~~ **N/A** - CAS not supported in .NET Core+
 
 ### Medium Priority (Performance)
 
-5. Use `ValueTask<T>` for often-synchronous async methods
+5. ~~Use `ValueTask<T>` for often-synchronous async methods~~ **COMPLETED**
 6. Add `stackalloc` / `ArrayPool<byte>` for transient buffers
 7. Consider struct-based `Result<T>` variant for hot paths
 8. Add `[MethodImpl(AggressiveInlining)]` on hot-path methods

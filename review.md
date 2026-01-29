@@ -34,7 +34,7 @@ This is a well-architected, production-quality .NET library suite demonstrating 
 - **TODO:** Consider using `[MethodImpl(MethodImplOptions.AggressiveInlining)]` on hot-path methods like `IsSuccess`, `IsFailure`, `HasValue`
 - **TODO:** The static `UnrecognisedResultType` exception in `Result<T>` is allocated per generic instantiation. Consider using a non-generic helper or `ThrowHelper` pattern
 - **TODO:** Some methods have verbose names (e.g., `RequireWithinRangeInclusive`). Consider if brevity would improve readability without sacrificing clarity
-- **TODO:** `Specification<T>.IsSatisfiedBy` calls `Criteria.Compile()` on every invocation - consider caching the compiled delegate
+- ~~**TODO:** `Specification<T>.IsSatisfiedBy` calls `Criteria.Compile()` on every invocation~~ **COMPLETED** - Now uses `Lazy<Func<T, bool>>` to cache the compiled delegate per specification instance.
 
 ### Code Sample Concerns
 
@@ -155,7 +155,7 @@ public async Task<Exception?> GetExceptionOrDefaultAsync(CancellationToken token
 
 - **TODO:** `ProtectedData.cs` uses static key/IV per instance lifetime. Consider rotating keys periodically
 
-- ~~**TODO:** No constant-time comparison for cryptographic values.~~ **COMPLETED** - `Hash`, `DigitalSignature`, `Salt`, `PrivateKey`, and `PublicKey` now use `CryptographicOperations.FixedTimeEquals()` for constant-time comparison. `Secret` benefits automatically via `Hash` comparison.
+- ~~**TODO:** No constant-time comparison for cryptographic values.~~ **COMPLETED** - `Hash`, `DigitalSignature`, and `Salt` now use `CryptographicOperations.FixedTimeEquals()` for constant-time comparison. `Secret` benefits automatically via `Hash` comparison.
 
 - **TODO:** `EcdsaPrivateKey.Sign.cs:27` calls `ToArray()` on span - consider span-based hashing to avoid allocation of sensitive data
 
@@ -268,7 +268,7 @@ public byte[] Decrypt(byte[] data)
 
 1. ~~Zero key material in `ProtectedData` on disposal~~ **COMPLETED**
 2. ~~Add constant-time comparison for cryptographic values~~ **COMPLETED**
-3. Cache compiled `Specification<T>` delegates
+3. ~~Cache compiled `Specification<T>` delegates~~ **COMPLETED**
 4. Add `[SecurityCritical]` attributes where appropriate
 
 ### Medium Priority (Performance)

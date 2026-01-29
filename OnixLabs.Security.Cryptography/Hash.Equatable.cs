@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
+using System.Security.Cryptography;
 using OnixLabs.Core;
 using OnixLabs.Core.Linq;
 
@@ -21,7 +21,16 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Hash
 {
     /// <inheritdoc/>
-    public bool Equals(Hash other) => value.SequenceEqualOrNull(other.value);
+    /// <remarks>
+    /// This method uses constant-time comparison to prevent timing attacks.
+    /// </remarks>
+    public bool Equals(Hash other)
+    {
+        if (value is null || other.value is null)
+            return value is null && other.value is null;
+
+        return CryptographicOperations.FixedTimeEquals(value, other.value);
+    }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj) => obj is Hash other && Equals(other);

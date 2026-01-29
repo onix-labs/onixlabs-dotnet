@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Linq;
+using System.Security.Cryptography;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
@@ -25,7 +25,7 @@ public abstract partial class PrivateKey
         ReferenceEquals(this, other)
         || other is not null
         && other.GetType() == GetType()
-        && other.KeyData.SequenceEqual(KeyData);
+        && CryptographicOperations.FixedTimeEquals(other.KeyData, KeyData);
 
     /// <inheritdoc/>
     public override bool Equals(object? obj) => Equals(obj as PrivateKey);

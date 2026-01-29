@@ -21,8 +21,14 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents a cryptographic secret.
 /// </summary>
+/// <remarks>
+/// This type implements <see cref="IDisposable"/> to securely zero key material from memory.
+/// Because this is a struct, be aware that copies share the same underlying <see cref="ProtectedData"/> instance.
+/// Disposing any copy will invalidate all copies. Avoid passing <see cref="Secret"/> by value after creation
+/// if you intend to dispose it.
+/// </remarks>
 // ReSharper disable MemberCanBePrivate.Global
-public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<Secret>
+public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<Secret>, IDisposable
 {
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     private readonly ProtectedData protectedData = new();

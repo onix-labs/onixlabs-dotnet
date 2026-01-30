@@ -32,10 +32,17 @@ public abstract class Specification<T>
     /// </summary>
     public static readonly Specification<T> Empty = new BooleanSpecification<T>(true);
 
+    private Lazy<Func<T, bool>>? compiledCriteria;
+
     /// <summary>
     /// Gets the underlying expression criteria of the current specification.
     /// </summary>
     public abstract Expression<Func<T, bool>> Criteria { get; }
+
+    /// <summary>
+    /// Gets the compiled criteria delegate, caching it for subsequent invocations.
+    /// </summary>
+    private Func<T, bool> CompiledCriteria => (compiledCriteria ??= new Lazy<Func<T, bool>>(Criteria.Compile)).Value;
 
     /// <summary>
     /// Combines multiple specifications using a logical AND operation.
@@ -95,7 +102,7 @@ public abstract class Specification<T>
     /// </summary>
     /// <param name="subject">The subject to evaluate.</param>
     /// <returns>Returns <see langword="true"/> if the subject satisfies the specification; otherwise, <see langword="false"/>.</returns>
-    public bool IsSatisfiedBy(T subject) => Criteria.Compile().Invoke(subject);
+    public bool IsSatisfiedBy(T subject) => CompiledCriteria(subject);
 }
 
 /// <summary>

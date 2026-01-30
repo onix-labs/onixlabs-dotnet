@@ -20,10 +20,11 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents a cryptographic private key.
 /// </summary>
-public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>
+public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>, IDisposable
 {
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     private readonly ProtectedData protectedData = new();
+    private bool isDisposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PrivateKey"/> class.

@@ -40,7 +40,7 @@ public static class ResultExtensions
         /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
         /// or <see langword="null"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
         /// </returns>
-        public async Task<Exception?> GetExceptionOrDefaultAsync(CancellationToken token = default) =>
+        public async ValueTask<Exception?> GetExceptionOrDefaultAsync(CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetExceptionOrDefault();
 
         /// <summary>
@@ -53,7 +53,7 @@ public static class ResultExtensions
         /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
         /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
         /// </returns>
-        public async Task<Exception> GetExceptionOrDefaultAsync(Exception defaultException, CancellationToken token = default) =>
+        public async ValueTask<Exception> GetExceptionOrDefaultAsync(Exception defaultException, CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetExceptionOrDefault(defaultException);
 
         /// <summary>
@@ -65,7 +65,7 @@ public static class ResultExtensions
         /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
         /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
         /// </returns>
-        public async Task<Exception> GetExceptionOrThrowAsync(CancellationToken token = default) =>
+        public async ValueTask<Exception> GetExceptionOrThrowAsync(CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetExceptionOrThrow();
 
         /// <summary>
@@ -371,7 +371,7 @@ public static class ResultExtensions
         /// Asynchronously throws the underlying exception if the current <see cref="Result"/> is in a failure state.
         /// </summary>
         /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
-        public async Task ThrowAsync(CancellationToken token = default) =>
+        public async ValueTask ThrowAsync(CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).Throw();
     }
 
@@ -390,7 +390,7 @@ public static class ResultExtensions
         /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
         /// or <see langword="null"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
         /// </returns>
-        public async Task<Exception?> GetExceptionOrDefaultAsync(CancellationToken token = default) =>
+        public async ValueTask<Exception?> GetExceptionOrDefaultAsync(CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetExceptionOrDefault();
 
         /// <summary>
@@ -403,7 +403,7 @@ public static class ResultExtensions
         /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
         /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
         /// </returns>
-        public async Task<Exception> GetExceptionOrDefaultAsync(Exception defaultException, CancellationToken token = default) =>
+        public async ValueTask<Exception> GetExceptionOrDefaultAsync(Exception defaultException, CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetExceptionOrDefault(defaultException);
 
         /// <summary>
@@ -415,7 +415,7 @@ public static class ResultExtensions
         /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
         /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
         /// </returns>
-        public async Task<Exception> GetExceptionOrThrowAsync(CancellationToken token = default) =>
+        public async ValueTask<Exception> GetExceptionOrThrowAsync(CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetExceptionOrThrow();
 
         /// <summary>
@@ -427,7 +427,7 @@ public static class ResultExtensions
         /// Returns the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;
         /// otherwise returns the default <typeparamref name="T"/> value.
         /// </returns>
-        public async Task<T?> GetValueOrDefaultAsync(CancellationToken token = default) =>
+        public async ValueTask<T?> GetValueOrDefaultAsync(CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetValueOrDefault();
 
         /// <summary>
@@ -440,7 +440,7 @@ public static class ResultExtensions
         /// Returns the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;
         /// otherwise returns the specified default value.
         /// </returns>
-        public async Task<T> GetValueOrDefaultAsync(T defaultValue, CancellationToken token = default) =>
+        public async ValueTask<T> GetValueOrDefaultAsync(T defaultValue, CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetValueOrDefault(defaultValue);
 
         /// <summary>
@@ -452,7 +452,7 @@ public static class ResultExtensions
         /// Returns the underlying value of the current <see cref="Result{T}"/> instance;
         /// otherwise throws the underlying exception if the current <see cref="Result{T}"/> is in a failed stated.
         /// </returns>
-        public async Task<T> GetValueOrThrowAsync(CancellationToken token = default) =>
+        public async ValueTask<T> GetValueOrThrowAsync(CancellationToken token = default) =>
             (await receiver.WaitAsync(token).ConfigureAwait(false)).GetValueOrThrow();
 
         /// <summary>
@@ -758,7 +758,7 @@ public static class ResultExtensions
         /// Asynchronously throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.
         /// </summary>
         /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
-        public async Task ThrowAsync(CancellationToken token = default) => (await receiver.WaitAsync(token).ConfigureAwait(false)).Throw();
+        public async ValueTask ThrowAsync(CancellationToken token = default) => (await receiver.WaitAsync(token).ConfigureAwait(false)).Throw();
     }
 
     /// <summary>
@@ -798,7 +798,7 @@ public static class ResultExtensions
     /// Return the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
     /// or <see cref="Optional{T}.None"/> if the result is in a <see cref="Failure{T}"/> state.
     /// </returns>
-    public static async Task<Optional<T>> GetValueOrNoneAsync<T>(this Task<Result<T>> task, CancellationToken token = default) where T : notnull =>
+    public static async ValueTask<Optional<T>> GetValueOrNoneAsync<T>(this Task<Result<T>> task, CancellationToken token = default) where T : notnull =>
         (await task.WaitAsync(token).ConfigureAwait(false)).GetValueOrNone();
 
     /// <summary>
@@ -812,7 +812,7 @@ public static class ResultExtensions
     /// Return the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
     /// or <see cref="Optional{T}.None"/> if the result is in a <see cref="Failure{T}"/> state.
     /// </returns>
-    public static async Task<Optional<T>> GetValueOrNoneAsync<T>(this Task<Result<Optional<T>>> task, CancellationToken token = default) where T : notnull =>
+    public static async ValueTask<Optional<T>> GetValueOrNoneAsync<T>(this Task<Result<Optional<T>>> task, CancellationToken token = default) where T : notnull =>
         (await task.WaitAsync(token).ConfigureAwait(false)).GetValueOrNone();
 
     /// <summary>
@@ -839,7 +839,7 @@ public static class ResultExtensions
     /// Returns the underlying <typeparamref name="T"/> value from the current <see cref="Result{T}"/> of <see cref="Optional{T}"/>,
     /// or throws an exception if the result is in a <see cref="Failure{T}"/> state, or the <see cref="Optional{T}"/> is <see cref="Optional{T}.None"/>.
     /// </returns>
-    public static async Task<T> GetOptionalValueOrThrowAsync<T>(this Task<Result<Optional<T>>> task, CancellationToken token = default) where T : notnull =>
+    public static async ValueTask<T> GetOptionalValueOrThrowAsync<T>(this Task<Result<Optional<T>>> task, CancellationToken token = default) where T : notnull =>
         (await task.WaitAsync(token).ConfigureAwait(false)).GetOptionalValueOrThrow();
 
     /// <summary>
@@ -868,7 +868,7 @@ public static class ResultExtensions
     /// Returns the underlying <typeparamref name="T"/> value from the current <see cref="Result{T}"/> of <see cref="Optional{T}"/>,
     /// or returns the default value if the result is in a <see cref="Failure{T}"/> state, or the <see cref="Optional{T}"/> is <see cref="Optional{T}.None"/>.
     /// </returns>
-    public static async Task<T> GetOptionalValueOrDefaultAsync<T>(this Task<Result<Optional<T>>> task, T defaultValue, CancellationToken token = default) where T : notnull =>
+    public static async ValueTask<T> GetOptionalValueOrDefaultAsync<T>(this Task<Result<Optional<T>>> task, T defaultValue, CancellationToken token = default) where T : notnull =>
         (await task.WaitAsync(token).ConfigureAwait(false)).GetOptionalValueOrDefault(defaultValue);
 
     /// <summary>
@@ -878,7 +878,7 @@ public static class ResultExtensions
     /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <typeparam name="TResult">The underlying type of the <see cref="Failure{T}"/> to return.</typeparam>
     /// <returns>Returns a new <see cref="Failure{T}"/> instance containing the current exception.</returns>
-    public static async Task<Failure<TResult>> ToTypedResultAsync<TResult>(this Task<Failure> task, CancellationToken token = default) =>
+    public static async ValueTask<Failure<TResult>> ToTypedResultAsync<TResult>(this Task<Failure> task, CancellationToken token = default) =>
         (await task.WaitAsync(token).ConfigureAwait(false)).ToTypedResult<TResult>();
 
     /// <summary>
@@ -889,7 +889,7 @@ public static class ResultExtensions
     /// /// <typeparam name="T">The underlying type of the current <see cref="Failure{T}"/>.</typeparam>
     /// <typeparam name="TResult">The underlying type of the <see cref="Failure{T}"/> to return.</typeparam>
     /// <returns>Returns a new <see cref="Failure{T}"/> instance containing the current exception.</returns>
-    public static async Task<Failure<TResult>> ToTypedResultAsync<T, TResult>(this Task<Failure<T>> task, CancellationToken token = default) =>
+    public static async ValueTask<Failure<TResult>> ToTypedResultAsync<T, TResult>(this Task<Failure<T>> task, CancellationToken token = default) =>
         (await task.WaitAsync(token).ConfigureAwait(false)).ToTypedResult<TResult>();
 
     /// <summary>
@@ -899,6 +899,6 @@ public static class ResultExtensions
     /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <typeparam name="T">The underlying type of the current <see cref="Failure{T}"/>.</typeparam>
     /// <returns>Returns a new <see cref="Failure"/> instance containing the current exception.</returns>
-    public static async Task<Failure> ToUntypedResultAsync<T>(this Task<Failure<T>> task, CancellationToken token = default) =>
+    public static async ValueTask<Failure> ToUntypedResultAsync<T>(this Task<Failure<T>> task, CancellationToken token = default) =>
         (await task.WaitAsync(token).ConfigureAwait(false)).ToUntypedResult();
 }

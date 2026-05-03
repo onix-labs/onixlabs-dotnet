@@ -46,7 +46,7 @@ public readonly partial struct BigDecimal
     short IConvertible.ToInt16(IFormatProvider? provider) => (short)this;
 
     /// <summary>
-    /// Converts the value of this instance to an equivalent <see cref="ushort"/> 32-bit signed integer using the specified culture-specific formatting information.
+    /// Converts the value of this instance to an equivalent <see cref="int"/> 32-bit signed integer using the specified culture-specific formatting information.
     /// </summary>
     /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that supplies culture-specific formatting information.</param>
     /// <returns>Returns a 32-bit signed integer equivalent to the value of this instance.</returns>
@@ -119,7 +119,7 @@ public readonly partial struct BigDecimal
     /// Converts the value of this instance to an equivalent <see cref="char"/> Unicode character using the specified culture-specific formatting information.
     /// </summary>
     /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that supplies culture-specific formatting information.</param>
-    /// <returns>Returns a <see cref="char"/> Unicode character equivalent to the value of this instance</returns>.
+    /// <returns>Returns a <see cref="char"/> Unicode character equivalent to the value of this instance.</returns>
     char IConvertible.ToChar(IFormatProvider? provider) => (char)this;
 
     /// <summary>

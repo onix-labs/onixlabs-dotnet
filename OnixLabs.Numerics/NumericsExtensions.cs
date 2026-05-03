@@ -30,12 +30,12 @@ public static class NumericsExtensions
     private const int MaxScale = 28;
 
     /// <summary>
-    /// Gets the minimum value of a <see cref="decimal"/> value as a <see cref="BigInteger"/>.
+    /// The minimum value of a <see cref="decimal"/> as a <see cref="BigInteger"/>.
     /// </summary>
     private static readonly BigInteger MinDecimal = new(decimal.MinValue);
 
     /// <summary>
-    /// Gets the maximum value of a <see cref="decimal"/> value as a <see cref="BigInteger"/>.
+    /// The maximum value of a <see cref="decimal"/> as a <see cref="BigInteger"/>.
     /// </summary>
     private static readonly BigInteger MaxDecimal = new(decimal.MaxValue);
 
@@ -58,17 +58,17 @@ public static class NumericsExtensions
 
     /// <summary>
     /// Sets the scale (number of digits after the decimal point) of the current <see cref="decimal"/> value.
+    /// </summary>
     /// <remarks>
     /// If the scale of the current <see cref="decimal"/> value is less than the specified scale, then the scale will be padded with zeroes.
     /// If the scale of the current <see cref="decimal"/> value is greater that the specified scale, then the scale will be truncated,
     /// provided that there is no loss of precision; otherwise, <see cref="InvalidOperationException"/> will be thrown.
     /// </remarks>
-    /// </summary>
     /// <param name="value">The decimal value to adjust.</param>
     /// <param name="scale">The desired, non-negative scale.</param>
-    /// <returns>A new <see cref="decimal"/> with the exact specified scale.</returns>
-    /// <exception cref="InvalidOperationException"> if reducing the scale would result in a loss of precision.</exception>
-    /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
+    /// <returns>Returns a new <see cref="decimal"/> with the exact specified scale.</returns>
+    /// <exception cref="InvalidOperationException">If reducing the scale would result in a loss of precision.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="scale"/> is outside the inclusive range of 0 to 28.</exception>
     public static decimal SetScale(this decimal value, int scale)
     {
         RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.");
@@ -107,18 +107,18 @@ public static class NumericsExtensions
     }
 
     /// <summary>
-    /// Sets the scale (number of digits after the decimal point) of the current <see cref="decimal"/> value.
+    /// Sets the scale (number of digits after the decimal point) of the current <see cref="decimal"/> value, rounding away any precision loss.
+    /// </summary>
     /// <remarks>
     /// If the scale of the current <see cref="decimal"/> value is less than the specified scale, then the scale will be padded with zeroes.
     /// If the scale of the current <see cref="decimal"/> value is greater that the specified scale, then the scale will be truncated,
     /// provided that there is no loss of precision; otherwise, the value is rounded using the specified <see cref="MidpointRounding"/> mode.
     /// </remarks>
-    /// </summary>
     /// <param name="value">The decimal value to adjust.</param>
     /// <param name="scale">The desired scale (number of decimal digits). Must be non-negative.</param>
     /// <param name="mode">The rounding strategy to apply if the scale must be reduced with precision loss.</param>
-    /// <returns>A new <see cref="decimal"/> with the exact specified scale.</returns>
-    /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
+    /// <returns>Returns a new <see cref="decimal"/> with the exact specified scale.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="scale"/> is outside the inclusive range of 0 to 28.</exception>
     public static decimal SetScale(this decimal value, int scale, MidpointRounding mode)
     {
         RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.");

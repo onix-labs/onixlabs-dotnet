@@ -78,8 +78,8 @@ public static class GenericMath
     /// </summary>
     /// <typeparam name="T">The numeric type. Must implement <see cref="INumber{T}"/>.</typeparam>
     /// <param name="exponent">The exponent to raise 10 to. Must be greater than or equal to zero.</param>
-    /// <returns>A value of type <typeparamref name="T"/> equal to 10 raised to the power of <paramref name="exponent"/>.</returns>
-    /// <exception cref="ArgumentException"> if <paramref name="exponent"/> is less than zero.</exception>
+    /// <returns>Returns a value of type <typeparamref name="T"/> equal to 10 raised to the power of <paramref name="exponent"/>.</returns>
+    /// <exception cref="ArgumentException">If <paramref name="exponent"/> is less than zero.</exception>
     public static T Pow10<T>(int exponent) where T : INumber<T>
     {
         Require(exponent >= 0, "Exponent must be greater than, or equal to zero.", nameof(exponent));

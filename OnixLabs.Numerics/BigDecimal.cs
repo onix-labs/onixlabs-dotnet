@@ -45,7 +45,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// <summary>
     /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
     /// </summary>
-    /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/>value.</param>
+    /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/> value.</param>
     /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
     public BigDecimal(float value, ConversionMode mode = default)
     {
@@ -56,7 +56,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// <summary>
     /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
     /// </summary>
-    /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/>value.</param>
+    /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/> value.</param>
     /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
     public BigDecimal(double value, ConversionMode mode = default)
     {
@@ -67,16 +67,18 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// <summary>
     /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
     /// </summary>
-    /// <param name="value">The decimal value from which to construct a <see cref="BigDecimal"/>value.</param>
+    /// <param name="value">The decimal value from which to construct a <see cref="BigDecimal"/> value.</param>
     public BigDecimal(decimal value) => number = value.ToNumberInfo();
 
     /// <summary>
     /// Gets the unscaled value of the current <see cref="BigDecimal"/> value.
     /// </summary>
+    /// <value>The unscaled <see cref="BigInteger"/> significand of the current <see cref="BigDecimal"/> value.</value>
     public BigInteger UnscaledValue => number.UnscaledValue;
 
     /// <summary>
     /// Gets the scale of the current <see cref="BigDecimal"/> value.
     /// </summary>
+    /// <value>The number of decimal digits to the right of the decimal point.</value>
     public int Scale => number.Scale;
 }

@@ -95,7 +95,7 @@ public readonly partial struct BigDecimal
     public static bool TryParse(string? value, NumberStyles style, IFormatProvider? provider, out BigDecimal result) => TryParse(value.AsSpan(), style, provider, out result);
 
     /// <summary>
-    /// Tries to parse the specified <see cref="string"/> value into a <see cref="BigDecimal"/> value.
+    /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="result">
@@ -107,7 +107,7 @@ public readonly partial struct BigDecimal
     public static bool TryParse(ReadOnlySpan<char> value, out BigDecimal result) => TryParse(value, DefaultCulture, out result);
 
     /// <summary>
-    /// Tries to parse the specified <see cref="string"/> value into a <see cref="BigDecimal"/> value.
+    /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">An object that provides culture-specific information about the specified value.</param>
@@ -119,7 +119,7 @@ public readonly partial struct BigDecimal
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out BigDecimal result) => TryParse(value, DefaultNumberStyles, provider, out result);
 
     /// <summary>
-    /// Tries to parse the specified <see cref="string"/> value into a <see cref="BigDecimal"/> value.
+    /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="BigDecimal"/> value.
     /// </summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="style">A bitwise combination of number styles that can be present in the specified value.</param>

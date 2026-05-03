@@ -169,7 +169,7 @@ public static class NumericsExtensions
     /// <returns>Returns an unscaled integer representation of the current value.</returns>
     private static BigInteger GetUnscaledInteger<T>(this T value, int scale, ScaleMode mode) where T : IBinaryInteger<T>
     {
-        Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(value));
+        Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
         RequireIsDefined(mode);
 
         BigInteger integer = value.ToBigInteger();

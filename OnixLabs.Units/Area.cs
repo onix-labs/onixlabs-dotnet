@@ -34,176 +34,281 @@ public readonly partial struct Area<T> : IUnit<Area<T>> where T : IFloatingPoint
     /// <summary>
     /// Gets the area in Square Quectometers (qm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqqm.
+    /// </remarks>
     public T SquareQuectoMeters { get; }
 
     /// <summary>
     /// Gets the area in Square Rontometers (rm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqrm.
+    /// </remarks>
     public T SquareRontoMeters => SquareQuectoMeters / T.CreateChecked(1e6);
 
     /// <summary>
     /// Gets the area in Square Yoctometers (ym²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqym.
+    /// </remarks>
     public T SquareYoctoMeters => SquareQuectoMeters / T.CreateChecked(1e12);
 
     /// <summary>
     /// Gets the area in Square Zeptometers (zm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqzm.
+    /// </remarks>
     public T SquareZeptoMeters => SquareQuectoMeters / T.CreateChecked(1e18);
 
     /// <summary>
     /// Gets the area in Square Attometers (am²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqam.
+    /// </remarks>
     public T SquareAttoMeters => SquareQuectoMeters / T.CreateChecked(1e24);
 
     /// <summary>
     /// Gets the area in Square Femtometers (fm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqfm.
+    /// </remarks>
     public T SquareFemtoMeters => SquareQuectoMeters / T.CreateChecked(1e30);
 
     /// <summary>
     /// Gets the area in Square Picometers (pm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqpm.
+    /// </remarks>
     public T SquarePicoMeters => SquareQuectoMeters / T.CreateChecked(1e36);
 
     /// <summary>
     /// Gets the area in Square Nanometers (nm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqnm.
+    /// </remarks>
     public T SquareNanoMeters => SquareQuectoMeters / T.CreateChecked(1e42);
 
     /// <summary>
     /// Gets the area in Square Micrometers (µm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is squm.
+    /// </remarks>
     public T SquareMicroMeters => SquareQuectoMeters / T.CreateChecked(1e48);
 
     /// <summary>
     /// Gets the area in Square Millimeters (mm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqmm.
+    /// </remarks>
     public T SquareMilliMeters => SquareQuectoMeters / T.CreateChecked(1e54);
 
     /// <summary>
     /// Gets the area in Square Centimeters (cm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqcm.
+    /// </remarks>
     public T SquareCentiMeters => SquareQuectoMeters / T.CreateChecked(1e56);
 
     /// <summary>
     /// Gets the area in Square Decimeters (dm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqdm.
+    /// </remarks>
     public T SquareDeciMeters => SquareQuectoMeters / T.CreateChecked(1e58);
 
     /// <summary>
     /// Gets the area in Square Meters (m²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqm.
+    /// </remarks>
     public T SquareMeters => SquareQuectoMeters / T.CreateChecked(1e60);
 
     /// <summary>
     /// Gets the area in Square Decameters (dam²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqdam.
+    /// </remarks>
     public T SquareDecaMeters => SquareQuectoMeters / T.CreateChecked(1e62);
 
     /// <summary>
     /// Gets the area in Square Hectometers (hm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqhm.
+    /// </remarks>
     public T SquareHectoMeters => SquareQuectoMeters / T.CreateChecked(1e64);
 
     /// <summary>
     /// Gets the area in Square Kilometers (km²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqkm.
+    /// </remarks>
     public T SquareKiloMeters => SquareQuectoMeters / T.CreateChecked(1e66);
 
     /// <summary>
     /// Gets the area in Square Megameters (Mm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqMm.
+    /// </remarks>
     public T SquareMegaMeters => SquareQuectoMeters / T.CreateChecked(1e72);
 
     /// <summary>
     /// Gets the area in Square Gigameters (Gm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqGm.
+    /// </remarks>
     public T SquareGigaMeters => SquareQuectoMeters / T.CreateChecked(1e78);
 
     /// <summary>
     /// Gets the area in Square Terameters (Tm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqTm.
+    /// </remarks>
     public T SquareTeraMeters => SquareQuectoMeters / T.CreateChecked(1e84);
 
     /// <summary>
     /// Gets the area in Square Petameters (Pm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqPm.
+    /// </remarks>
     public T SquarePetaMeters => SquareQuectoMeters / T.CreateChecked(1e90);
 
     /// <summary>
     /// Gets the area in Square Exameters (Em²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqEm.
+    /// </remarks>
     public T SquareExaMeters => SquareQuectoMeters / T.CreateChecked(1e96);
 
     /// <summary>
     /// Gets the area in Square Zettameters (Zm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqZm.
+    /// </remarks>
     public T SquareZettaMeters => SquareQuectoMeters / T.CreateChecked(1e102);
 
     /// <summary>
     /// Gets the area in Square Yottameters (Ym²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqYm.
+    /// </remarks>
     public T SquareYottaMeters => SquareQuectoMeters / T.CreateChecked(1e108);
 
     /// <summary>
     /// Gets the area in Square Ronnameters (Rm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqRm.
+    /// </remarks>
     public T SquareRonnaMeters => SquareQuectoMeters / T.CreateChecked(1e114);
 
     /// <summary>
     /// Gets the area in Square Quettameters (Qm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqQm.
+    /// </remarks>
     public T SquareQuettaMeters => SquareQuectoMeters / T.CreateChecked(1e120);
 
     /// <summary>
     /// Gets the area in Square Inches (in²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqin.
+    /// </remarks>
     public T SquareInches => SquareQuectoMeters / T.CreateChecked(6.4516e56);
 
     /// <summary>
     /// Gets the area in Square Feet (ft²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqft.
+    /// </remarks>
     public T SquareFeet => SquareQuectoMeters / T.CreateChecked(9.290304e58);
 
     /// <summary>
     /// Gets the area in Square Yards (yd²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqyd.
+    /// </remarks>
     public T SquareYards => SquareQuectoMeters / T.CreateChecked(8.3612736e59);
 
     /// <summary>
     /// Gets the area in Square Miles (mi²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqmi.
+    /// </remarks>
     public T SquareMiles => SquareQuectoMeters / T.CreateChecked(2.589988110336e66);
 
     /// <summary>
     /// Gets the area in Square Nautical Miles (nmi²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqnmi.
+    /// </remarks>
     public T SquareNauticalMiles => SquareQuectoMeters / T.CreateChecked(3.4299040000e66);
 
     /// <summary>
-    /// Gets the area in Square Fermis (fmi²).
+    /// Gets the area in Square Fermis (fm²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqfmi.
+    /// </remarks>
     public T SquareFermis => SquareQuectoMeters / T.CreateChecked(1e30);
 
     /// <summary>
     /// Gets the area in Square Angstroms (Å²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqa.
+    /// </remarks>
     public T SquareAngstroms => SquareQuectoMeters / T.CreateChecked(1e40);
 
     /// <summary>
     /// Gets the area in Square Astronomical Units (au²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqau.
+    /// </remarks>
     public T SquareAstronomicalUnits => SquareQuectoMeters / T.CreateChecked(2.2379522821e82);
 
     /// <summary>
     /// Gets the area in Square Light Years (ly²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqly.
+    /// </remarks>
     public T SquareLightYears => SquareQuectoMeters / T.CreateChecked(8.9505421074819e91);
 
     /// <summary>
     /// Gets the area in Square Parsecs (pc²).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is sqpc.
+    /// </remarks>
     public T SquareParsecs
     {
         get

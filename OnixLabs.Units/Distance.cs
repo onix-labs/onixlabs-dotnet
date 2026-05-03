@@ -32,177 +32,282 @@ public readonly partial struct Distance<T> : IUnit<Distance<T>> where T : IFloat
     /// <summary>
     /// Gets the distance in Quectometers (qm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is qm.
+    /// </remarks>
     public T QuectoMeters { get; }
 
     /// <summary>
     /// Gets the distance in Rontometers (rm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is rm.
+    /// </remarks>
     public T RontoMeters => QuectoMeters.ToRontoUnits();
 
     /// <summary>
     /// Gets the distance in Yoctometers (ym).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is ym.
+    /// </remarks>
     public T YoctoMeters => QuectoMeters.ToYoctoUnits();
 
     /// <summary>
     /// Gets the distance in Zeptometers (zm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is zm.
+    /// </remarks>
     public T ZeptoMeters => QuectoMeters.ToZeptoUnits();
 
     /// <summary>
     /// Gets the distance in Attometers (am).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is am.
+    /// </remarks>
     public T AttoMeters => QuectoMeters.ToAttoUnits();
 
     /// <summary>
     /// Gets the distance in Femtometers (fm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is fm.
+    /// </remarks>
     public T FemtoMeters => QuectoMeters.ToFemtoUnits();
 
     /// <summary>
     /// Gets the distance in Picometers (pm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is pm.
+    /// </remarks>
     public T PicoMeters => QuectoMeters.ToPicoUnits();
 
     /// <summary>
     /// Gets the distance in Nanometers (nm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is nm.
+    /// </remarks>
     public T NanoMeters => QuectoMeters.ToNanoUnits();
 
     /// <summary>
-    /// Gets the distance in Micrometers (um).
+    /// Gets the distance in Micrometers (µm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is um.
+    /// </remarks>
     public T MicroMeters => QuectoMeters.ToMicroUnits();
 
     /// <summary>
     /// Gets the distance in Millimeters (mm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is mm.
+    /// </remarks>
     public T MilliMeters => QuectoMeters.ToMilliUnits();
 
     /// <summary>
     /// Gets the distance in Centimeters (cm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is cm.
+    /// </remarks>
     public T CentiMeters => QuectoMeters.ToCentiUnits();
 
     /// <summary>
     /// Gets the distance in Decimeters (dm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is dm.
+    /// </remarks>
     public T DeciMeters => QuectoMeters.ToDeciUnits();
 
     /// <summary>
     /// Gets the distance in Meters (m).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is m.
+    /// </remarks>
     public T Meters => QuectoMeters.ToBaseUnits();
 
     /// <summary>
     /// Gets the distance in Decameters (dam).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is dam.
+    /// </remarks>
     public T DecaMeters => QuectoMeters.ToDecaUnits();
 
     /// <summary>
     /// Gets the distance in Hectometers (hm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is hm.
+    /// </remarks>
     public T HectoMeters => QuectoMeters.ToHectoUnits();
 
     /// <summary>
     /// Gets the distance in Kilometers (km).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is km.
+    /// </remarks>
     public T KiloMeters => QuectoMeters.ToKiloUnits();
 
     /// <summary>
     /// Gets the distance in Megameters (Mm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Mm.
+    /// </remarks>
     public T MegaMeters => QuectoMeters.ToMegaUnits();
 
     /// <summary>
     /// Gets the distance in Gigameters (Gm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Gm.
+    /// </remarks>
     public T GigaMeters => QuectoMeters.ToGigaUnits();
 
     /// <summary>
     /// Gets the distance in Terameters (Tm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Tm.
+    /// </remarks>
     public T TeraMeters => QuectoMeters.ToTeraUnits();
 
     /// <summary>
     /// Gets the distance in Petameters (Pm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Pm.
+    /// </remarks>
     public T PetaMeters => QuectoMeters.ToPetaUnits();
 
     /// <summary>
     /// Gets the distance in Exameters (Em).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Em.
+    /// </remarks>
     public T ExaMeters => QuectoMeters.ToExaUnits();
 
     /// <summary>
     /// Gets the distance in Zettameters (Zm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Zm.
+    /// </remarks>
     public T ZettaMeters => QuectoMeters.ToZettaUnits();
 
     /// <summary>
     /// Gets the distance in Yottameters (Ym).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Ym.
+    /// </remarks>
     public T YottaMeters => QuectoMeters.ToYottaUnits();
 
     /// <summary>
     /// Gets the distance in Ronnameters (Rm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Rm.
+    /// </remarks>
     public T RonnaMeters => QuectoMeters.ToRonnaUnits();
 
     /// <summary>
     /// Gets the distance in Quettameters (Qm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is Qm.
+    /// </remarks>
     public T QuettaMeters => QuectoMeters.ToQuettaUnits();
 
     /// <summary>
     /// Gets the distance in Inches (in).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is in.
+    /// </remarks>
     public T Inches => QuectoMeters / T.CreateChecked(0.0254e30);
 
     /// <summary>
     /// Gets the distance in Feet (ft).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is ft.
+    /// </remarks>
     public T Feet => QuectoMeters / T.CreateChecked(0.3048e30);
 
     /// <summary>
     /// Gets the distance in Yards (yd).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is yd.
+    /// </remarks>
     public T Yards => QuectoMeters / T.CreateChecked(0.9144e30);
 
     // ReSharper disable once GrammarMistakeInComment
     /// <summary>
     /// Gets the distance in Miles (mi).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is mi.
+    /// </remarks>
     public T Miles => QuectoMeters / T.CreateChecked(1609.344e30);
 
     /// <summary>
     /// Gets the distance in Nautical Miles (nmi).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is nmi.
+    /// </remarks>
     public T NauticalMiles => QuectoMeters / T.CreateChecked(1852e30);
 
     /// <summary>
-    /// Gets the distance in Fermis (fmi).
+    /// Gets the distance in Fermis (fm).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is fmi.
+    /// </remarks>
     public T Fermis => QuectoMeters / T.CreateChecked(1e15);
 
     /// <summary>
-    /// Gets the distance in Angstroms (a).
+    /// Gets the distance in Angstroms (Å).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is a.
+    /// </remarks>
     public T Angstroms => QuectoMeters / T.CreateChecked(1e20);
 
     /// <summary>
     /// Gets the distance in Astronomical Units (au).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is au.
+    /// </remarks>
     public T AstronomicalUnits => QuectoMeters / T.CreateChecked(149_597_870_700L * 1e30);
 
     /// <summary>
     /// Gets the distance in Light Years (ly).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is ly.
+    /// </remarks>
     public T LightYears => QuectoMeters / T.CreateChecked(9_460_730_472_580_800L * 1e30);
 
     /// <summary>
     /// Gets the distance in Parsecs (pc).
     /// </summary>
+    /// <remarks>
+    /// The format specifier for this value is pc.
+    /// </remarks>
     public T Parsecs
     {
         get

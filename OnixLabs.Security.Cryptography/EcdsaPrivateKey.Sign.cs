@@ -21,132 +21,70 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdsaPrivateKey
 {
-    /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
         byte[] hash = algorithm.ComputeHash(data.ToArray());
         return SignHash(hash, format);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data, int offset, int count, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
         byte[] hash = algorithm.ComputeHash(data.ToArray(), offset, count);
         return SignHash(hash, format);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="Stream"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(Stream data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
         byte[] hash = algorithm.ComputeHash(data);
         return SignHash(hash, format);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="IBinaryConvertible"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(IBinaryConvertible data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
         byte[] hash = algorithm.ComputeHash(data.AsReadOnlySpan());
         return SignHash(hash, format);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
         return key.SignData(data, algorithm, format);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
         return key.SignData(data.ToArray(), offset, count, algorithm, format);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="Stream"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(Stream data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
         return key.SignData(data, algorithm, format);
     }
 
-    /// <summary>
-    /// Hashes the specified <see cref="IBinaryConvertible"/> data and signs the resulting hash.
-    /// </summary>
-    /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignData(IBinaryConvertible data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
         return key.SignData(data.AsReadOnlySpan(), algorithm, format);
     }
 
-    /// <summary>
-    /// Signs the specified <see cref="Hash"/>.
-    /// </summary>
-    /// <param name="hash">The hash to sign.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignHash(Hash hash, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
         return key.SignHash(hash.AsReadOnlySpan(), format);
     }
 
-    /// <summary>
-    /// Signs the specified <see cref="ReadOnlySpan{T}"/>.
-    /// </summary>
-    /// <param name="hash">The hash to sign.</param>
-    /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
+    /// <inheritdoc/>
     public byte[] SignHash(ReadOnlySpan<byte> hash, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();

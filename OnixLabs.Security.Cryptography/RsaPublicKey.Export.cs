@@ -18,20 +18,14 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class RsaPublicKey
 {
-    /// <summary>
-    /// Exports the RSA cryptographic public key data.
-    /// </summary>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the RSA cryptographic public key data.</returns>
+    /// <inheritdoc/>
     public byte[] Export()
     {
         using RSA algorithm = ImportKeyData();
         return algorithm.ExportSubjectPublicKeyInfo();
     }
 
-    /// <summary>
-    /// Exports the RSA cryptographic public key data in RFC 7468 PEM format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="string"/> instance containing the RSA cryptographic public key data in RFC 7468 format.</returns>
+    /// <inheritdoc/>
     public string ExportPem()
     {
         using RSA algorithm = ImportKeyData();

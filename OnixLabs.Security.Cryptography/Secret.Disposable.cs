@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Core.Text;
-
 namespace OnixLabs.Security.Cryptography;
 
-public readonly partial record struct NamedPublicKey
+public readonly partial struct Secret
 {
-    /// <inheritdoc/>
-    public string ToString(IFormatProvider provider) => string.Concat(AlgorithmName, Separator, IBaseCodec.GetString(AsReadOnlySpan(), provider));
-
-    /// <inheritdoc/>
-    public override string ToString() => ToString(Base16FormatProvider.Invariant);
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    /// <remarks>
+    /// Because <see cref="Secret"/> is a struct, all copies share the same underlying <see cref="ProtectedData"/> instance.
+    /// Disposing any copy will invalidate all copies of this <see cref="Secret"/>.
+    /// </remarks>
+    public void Dispose() => protectedData.Dispose();
 }

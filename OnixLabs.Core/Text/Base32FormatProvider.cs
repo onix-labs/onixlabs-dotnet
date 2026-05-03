@@ -91,11 +91,6 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// </summary>
     public bool IsPadded { get; }
 
-    /// <summary>Gets an object that provides formatting services for the specified type.</summary>
-    /// <param name="formatType">An object that specifies the type of format object to return.</param>
-    /// <returns>
-    /// Returns an instance of the object specified by <paramref name="formatType"/>,
-    /// if the <see cref="T:IFormatProvider"/> implementation can supply that type of object; otherwise, <see langword="null"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public object? GetFormat(Type? formatType) => formatType == typeof(Base32FormatProvider) ? this : null;
 }

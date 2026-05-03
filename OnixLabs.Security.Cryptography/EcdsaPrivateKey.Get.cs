@@ -18,10 +18,7 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdsaPrivateKey
 {
-    /// <summary>
-    /// Gets the ECDSA cryptographic public key component from the current ECDSA cryptographic private key.
-    /// </summary>
-    /// <returns>Returns a new <see cref="EcdsaPublicKey"/> instance containing the ECDSA cryptographic public key component from the current ECDSA cryptographic private key.</returns>
+    /// <inheritdoc/>
     public EcdsaPublicKey GetPublicKey()
     {
         using ECDsa key = ImportKeyData();

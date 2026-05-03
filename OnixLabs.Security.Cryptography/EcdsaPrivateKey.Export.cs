@@ -19,88 +19,56 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdsaPrivateKey
 {
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data.
-    /// </summary>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the ECDSA cryptographic private key data.</returns>
+    /// <inheritdoc/>
     public byte[] Export()
     {
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportECPrivateKey();
     }
 
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in PKCS #8 format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the ECDSA cryptographic private key data in PKCS #8 format.</returns>
+    /// <inheritdoc/>
     public byte[] ExportPkcs8()
     {
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportPkcs8PrivateKey();
     }
 
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in encrypted PKCS #8 format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the ECDSA cryptographic private key data in PKCS #8 format.</returns>
+    /// <inheritdoc/>
     public byte[] ExportPkcs8(ReadOnlySpan<char> password, PbeParameters parameters)
     {
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportEncryptedPkcs8PrivateKey(password, parameters);
     }
 
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in encrypted PKCS #8 format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the ECDSA cryptographic private key data in PKCS #8 format.</returns>
+    /// <inheritdoc/>
     public byte[] ExportPkcs8(ReadOnlySpan<byte> password, PbeParameters parameters)
     {
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportEncryptedPkcs8PrivateKey(password, parameters);
     }
 
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in RFC 7468 PEM format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="string"/> instance containing the ECDSA cryptographic private key data in RFC 7468 PEM format.</returns>
+    /// <inheritdoc/>
     public string ExportPem()
     {
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportECPrivateKeyPem();
     }
 
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="string"/> instance containing the ECDSA cryptographic private key data in PKCS #8 RFC 7468 PEM format.</returns>
+    /// <inheritdoc/>
     public string ExportPkcs8Pem()
     {
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportPkcs8PrivateKeyPem();
     }
 
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="string"/> instance containing the ECDSA cryptographic private key data in PKCS #8 RFC 7468 PEM format.</returns>
+    /// <inheritdoc/>
     public string ExportPkcs8Pem(ReadOnlySpan<char> password, PbeParameters parameters)
     {
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportEncryptedPkcs8PrivateKeyPem(password, parameters);
     }
 
-    /// <summary>
-    /// Exports the ECDSA cryptographic private key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="string"/> instance containing the ECDSA cryptographic private key data in PKCS #8 RFC 7468 PEM format.</returns>
+    /// <inheritdoc/>
     public string ExportPkcs8Pem(ReadOnlySpan<byte> password, PbeParameters parameters)
     {
         using ECDsa algorithm = ImportKeyData();

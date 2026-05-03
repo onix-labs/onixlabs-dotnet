@@ -18,10 +18,7 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class RsaPrivateKey
 {
-    /// <summary>
-    /// Gets the RSA cryptographic public key component from the current RSA cryptographic private key.
-    /// </summary>
-    /// <returns>Returns a new <see cref="RsaPublicKey"/> instance containing the RSA cryptographic public key component from the current RSA cryptographic private key.</returns>
+    /// <inheritdoc/>
     public RsaPublicKey GetPublicKey()
     {
         using RSA key = ImportKeyData();

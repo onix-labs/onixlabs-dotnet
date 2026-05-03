@@ -18,11 +18,7 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdhPrivateKey
 {
-    /// <summary>
-    /// Derives a cryptographic shared secret from the current EC Diffie-Hellman cryptographic private key, and the specified cryptographic public key.
-    /// </summary>
-    /// <param name="publicKey">The EC Diffie-Hellman cryptographic public key from which to derive cryptographic shared secret.</param>
-    /// <returns>Returns a cryptographic shared secret, derived from the current EC Diffie-Hellman cryptographic private key, and the specified cryptographic public key.</returns>
+    /// <inheritdoc/>
     public Secret DeriveSharedSecret(IEcdhPublicKey publicKey)
     {
         using ECDiffieHellman ourKey = ImportKeyData();

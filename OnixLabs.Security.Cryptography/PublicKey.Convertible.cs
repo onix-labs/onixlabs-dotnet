@@ -18,15 +18,9 @@ namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class PublicKey
 {
-    /// <summary>
-    /// Gets the underlying <see cref="byte"/> array representation of the current <see cref="PublicKey"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="byte"/> array representation of the current <see cref="PublicKey"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    /// <inheritdoc/>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => KeyData;
 
-    /// <summary>
-    /// Gets the underlying <see cref="byte"/> array representation of the current <see cref="PublicKey"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
-    /// </summary>
-    /// <returns>Return the underlying <see cref="byte"/> array representation of the current <see cref="PublicKey"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    /// <inheritdoc/>
     public ReadOnlySpan<byte> AsReadOnlySpan() => KeyData;
 }

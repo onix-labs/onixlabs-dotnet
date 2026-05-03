@@ -13,21 +13,31 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class PrivateKey
 {
     /// <summary>
-    /// Creates a new <see cref="NamedPrivateKey"/> from the current <see cref="PrivateKey"/> instance.
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
-    /// <returns>Returns a new <see cref="NamedPrivateKey"/> from the current <see cref="PrivateKey"/> instance.</returns>
-    public abstract NamedPrivateKey ToNamedPrivateKey();
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-    /// <inheritdoc/>
-    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    /// <param name="disposing">A value indicating whether the object is being disposed deterministically.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (isDisposed) return;
 
-    /// <inheritdoc/>
-    public override string ToString() => ToString(Base16FormatProvider.Invariant);
+        if (disposing)
+            protectedData.Dispose();
+
+        isDisposed = true;
+    }
 }

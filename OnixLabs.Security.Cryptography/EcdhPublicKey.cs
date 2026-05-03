@@ -21,23 +21,38 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents an EC Diffie-Hellman cryptographic public key.
 /// </summary>
-/// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
-public sealed partial class EcdhPublicKey(ReadOnlySpan<byte> keyData) : PublicKey(keyData), IEcdhPublicKey, ISpanParsable<EcdhPublicKey>
+// ReSharper disable MemberCanBePrivate.Global
+public sealed partial class EcdhPublicKey : PublicKey, IEcdhPublicKey, ISpanParsable<EcdhPublicKey>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdhPublicKey"/> struct.
+    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
     /// </summary>
-    /// <param name="value">The <see cref="ReadOnlySequence{T}"/> with which to initialize the <see cref="EcdhPublicKey"/> instance.</param>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public EcdhPublicKey(ReadOnlySequence<byte> value) : this(value.ToArray())
+    /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
+    public EcdhPublicKey(ReadOnlySpan<byte> keyData) : base(keyData)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdhPublicKey"/> struct.
+    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
+    public EcdhPublicKey(ReadOnlyMemory<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
+    /// </summary>
+    /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
+    public EcdhPublicKey(ReadOnlySequence<byte> keyData) : base(keyData)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EcdhPublicKey"/> class.
     /// </summary>
     /// <param name="algorithm">The <see cref="ECDiffieHellman"/> algorithm with which to initialize the <see cref="EcdhPublicKey"/> instance.</param>
-    private EcdhPublicKey(ECDiffieHellman algorithm) : this(algorithm.ExportSubjectPublicKeyInfo())
+    private EcdhPublicKey(ECDiffieHellman algorithm) : base(algorithm.ExportSubjectPublicKeyInfo())
     {
     }
 }

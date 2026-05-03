@@ -19,41 +19,30 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdhPrivateKey
 {
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic private key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPrivateKey ImportPem(ReadOnlySpan<char> data)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
         algorithm.ImportFromPem(data);
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new EcdhPrivateKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic private key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
         algorithm.ImportFromEncryptedPem(data, password);
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new EcdhPrivateKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the EC Diffie-Hellman cryptographic private key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The EC Diffie-Hellman cryptographic private key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new EC Diffie-Hellman cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdhPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
         algorithm.ImportFromEncryptedPem(data, password);
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new EcdhPrivateKey(algorithm);
     }
 }

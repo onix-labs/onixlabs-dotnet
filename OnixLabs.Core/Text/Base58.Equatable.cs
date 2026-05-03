@@ -12,46 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core.Text;
 
 public readonly partial struct Base58
 {
-    /// <summary>
-    /// Checks whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with the current object.</param>
-    /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public bool Equals(Base58 other) => other.value.SequenceEqualOrNull(value);
 
-    /// <summary>
-    /// Checks for equality between the current instance and another object.
-    /// </summary>
-    /// <param name="obj">The object to check for equality.</param>
-    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
-    public override bool Equals(object? obj) => obj is Base58 other && Equals(other);
+    /// <inheritdoc/>
+    public override bool Equals(object? obj) => obj is Base16 other && Equals(other);
 
-    /// <summary>
-    /// Serves as a hash code function for the current instance.
-    /// </summary>
-    /// <returns>Returns a hash code for the current instance.</returns>
+    /// <inheritdoc/>
     public override int GetHashCode() => value.GetContentHashCode();
 
-    /// <summary>
-    /// Performs an equality comparison between two object instances.
-    /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Base58 left, Base58 right) => EqualityComparer<Base58>.Default.Equals(left, right);
+    /// <inheritdoc/>
+    public static bool operator ==(Base58 left, Base58 right) => left.Equals(right);
 
-    /// <summary>
-    /// Performs an inequality comparison between two object instances.
-    /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Base58 left, Base58 right) => !EqualityComparer<Base58>.Default.Equals(left, right);
+    /// <inheritdoc/>
+    public static bool operator !=(Base58 left, Base58 right) => !left.Equals(right);
 }

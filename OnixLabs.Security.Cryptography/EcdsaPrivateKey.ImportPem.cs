@@ -20,11 +20,7 @@ namespace OnixLabs.Security.Cryptography;
 // ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class EcdsaPrivateKey
 {
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic private key data to import.</param>
-    /// <returns>Returns a new ECDSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPrivateKey ImportPem(ReadOnlySpan<char> data)
     {
         using ECDsa algorithm = ECDsa.Create();
@@ -32,12 +28,7 @@ public sealed partial class EcdsaPrivateKey
         return new EcdsaPrivateKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic private key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new ECDSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using ECDsa algorithm = ECDsa.Create();
@@ -45,12 +36,7 @@ public sealed partial class EcdsaPrivateKey
         return new EcdsaPrivateKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the ECDSA cryptographic private key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic private key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new ECDSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using ECDsa algorithm = ECDsa.Create();

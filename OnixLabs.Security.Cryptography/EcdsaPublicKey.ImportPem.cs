@@ -19,11 +19,7 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdsaPublicKey
 {
-    /// <summary>
-    /// Imports the ECDSA cryptographic public key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic public key data to import.</param>
-    /// <returns>Returns a new ECDSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPublicKey ImportPem(ReadOnlySpan<char> data)
     {
         using ECDsa algorithm = ECDsa.Create();
@@ -31,12 +27,7 @@ public sealed partial class EcdsaPublicKey
         return new EcdsaPublicKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the ECDSA cryptographic public key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic public key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new ECDSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPublicKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using ECDsa algorithm = ECDsa.Create();
@@ -44,12 +35,7 @@ public sealed partial class EcdsaPublicKey
         return new EcdsaPublicKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the ECDSA cryptographic public key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The ECDSA cryptographic public key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new ECDSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static EcdsaPublicKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using ECDsa algorithm = ECDsa.Create();

@@ -18,11 +18,7 @@ namespace OnixLabs.Core;
 
 public abstract partial class Enumeration<T>
 {
-    /// <summary>
-    /// Checks whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with the current object.</param>
-    /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public bool Equals(T? other) =>
         ReferenceEquals(this, other)
         || other is not null
@@ -30,17 +26,10 @@ public abstract partial class Enumeration<T>
         && other.Value == Value
         && other.Name == Name;
 
-    /// <summary>
-    /// Checks for equality between the current instance and another object.
-    /// </summary>
-    /// <param name="obj">The object to check for equality.</param>
-    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public override bool Equals(object? obj) => Equals(obj as T);
 
-    /// <summary>
-    /// Serves as a hash code function for the current instance.
-    /// </summary>
-    /// <returns>Returns a hash code for the current instance.</returns>
+    /// <inheritdoc/>
     public override int GetHashCode() => HashCode.Combine(GetType(), Name, Value);
 
     /// <summary>

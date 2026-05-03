@@ -174,9 +174,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Result<T>? left, Result<T>? right) => !Equals(left, right);
 
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-    /// </summary>
+    /// <inheritdoc/>
     public void Dispose()
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
@@ -186,12 +184,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources asynchronously.
-    /// </summary>
-    /// <returns>
-    /// Returns a task that represents the asynchronous dispose operation.
-    /// </returns>
+    /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
@@ -201,24 +194,13 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    /// Checks whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with the current object.</param>
-    /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public bool Equals(Result<T>? other) => ResultEqualityComparer<T>.Default.Equals(this, other);
 
-    /// <summary>
-    /// Checks for equality between the current instance and another object.
-    /// </summary>
-    /// <param name="obj">The object to check for equality.</param>
-    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public sealed override bool Equals(object? obj) => Equals(obj as Result<T>);
 
-    /// <summary>
-    /// Serves as a hash code function for the current instance.
-    /// </summary>
-    /// <returns>Returns a hash code for the current instance.</returns>
+    /// <inheritdoc/>
     public sealed override int GetHashCode() => this switch
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
@@ -855,10 +837,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
             throw failure.Exception;
     }
 
-    /// <summary>
-    /// Returns a <see cref="String"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
+    /// <inheritdoc/>
     public sealed override string ToString() => this switch
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation

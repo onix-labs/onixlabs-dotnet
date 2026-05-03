@@ -24,9 +24,6 @@ public abstract partial class Enumeration<T>
     /// <returns>Returns a tuple that represents the current object.</returns>
     public (int Value, string Name) ToEntry() => (Value, Name);
 
-    /// <summary>
-    /// Returns a <see cref="String"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
+    /// <inheritdoc/>
     public override string ToString() => Name;
 }

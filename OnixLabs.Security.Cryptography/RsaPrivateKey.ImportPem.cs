@@ -20,11 +20,7 @@ namespace OnixLabs.Security.Cryptography;
 // ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class RsaPrivateKey
 {
-    /// <summary>
-    /// Imports the RSA cryptographic private key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic private key data to import.</param>
-    /// <returns>Returns a new RSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPrivateKey ImportPem(ReadOnlySpan<char> data)
     {
         using RSA algorithm = RSA.Create();
@@ -32,12 +28,7 @@ public sealed partial class RsaPrivateKey
         return new RsaPrivateKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic private key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new RSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using RSA algorithm = RSA.Create();
@@ -45,12 +36,7 @@ public sealed partial class RsaPrivateKey
         return new RsaPrivateKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the RSA cryptographic private key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic private key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new RSA cryptographic private key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using RSA algorithm = RSA.Create();

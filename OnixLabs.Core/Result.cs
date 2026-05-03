@@ -152,11 +152,7 @@ public abstract class Result : IValueEquatable<Result>
     /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Result? left, Result? right) => !Equals(left, right);
 
-    /// <summary>
-    /// Checks whether the current object is equal to another object of the same type.
-    /// </summary>
-    /// <param name="other">An object to compare with the current object.</param>
-    /// <returns>Returns <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public bool Equals(Result? other)
     {
         if (ReferenceEquals(this, other)) return true;
@@ -167,17 +163,10 @@ public abstract class Result : IValueEquatable<Result>
         return this is Success && other is Success;
     }
 
-    /// <summary>
-    /// Checks for equality between the current instance and another object.
-    /// </summary>
-    /// <param name="obj">The object to check for equality.</param>
-    /// <returns>Returns <see langword="true"/> if the object is equal to the current instance; otherwise, <see langword="false"/>.</returns>
+    /// <inheritdoc/>
     public sealed override bool Equals(object? obj) => Equals(obj as Result);
 
-    /// <summary>
-    /// Serves as a hash code function for the current instance.
-    /// </summary>
-    /// <returns>Returns a hash code for the current instance.</returns>
+    /// <inheritdoc/>
     public sealed override int GetHashCode() => this is Failure failure ? failure.Exception.GetHashCode() : 0;
 
     /// <summary>
@@ -738,10 +727,7 @@ public abstract class Result : IValueEquatable<Result>
             throw failure.Exception;
     }
 
-    /// <summary>
-    /// Returns a <see cref="String"/> that represents the current object.
-    /// </summary>
-    /// <returns>Returns a <see cref="String"/> that represents the current object.</returns>
+    /// <inheritdoc/>
     public sealed override string ToString() => this is Failure failure ? failure.Exception.Message : string.Empty;
 }
 

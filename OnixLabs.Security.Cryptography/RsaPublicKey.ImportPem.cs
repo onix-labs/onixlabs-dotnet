@@ -19,11 +19,7 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class RsaPublicKey
 {
-    /// <summary>
-    /// Imports the RSA cryptographic public key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic public key data to import.</param>
-    /// <returns>Returns a new RSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPublicKey ImportPem(ReadOnlySpan<char> data)
     {
         using RSA algorithm = RSA.Create();
@@ -31,12 +27,7 @@ public sealed partial class RsaPublicKey
         return new RsaPublicKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the RSA cryptographic public key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic public key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new RSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPublicKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using RSA algorithm = RSA.Create();
@@ -44,12 +35,7 @@ public sealed partial class RsaPublicKey
         return new RsaPublicKey(algorithm);
     }
 
-    /// <summary>
-    /// Imports the RSA cryptographic public key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The RSA cryptographic public key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new RSA cryptographic public key from the imported data.</returns>
+    /// <inheritdoc/>
     public static RsaPublicKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using RSA algorithm = RSA.Create();

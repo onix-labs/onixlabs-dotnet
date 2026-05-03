@@ -24,9 +24,11 @@ public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IF
 {
     /// <summary>
     /// Gets the invariant Base-16 format provider.
+    /// </summary>
+    /// <remarks>
     /// The invariant format provider favors lowercase for Base-16 encoding.
     /// The alphabet provided by this format provider is not a strict Base-16 alphabet as it contains all uppercase and lowercase values.
-    /// </summary>
+    /// </remarks>
     public static readonly Base16FormatProvider Invariant = new(0, nameof(Invariant), "0123456789ABCDEFabcdef");
 
     /// <summary>
@@ -52,11 +54,6 @@ public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IF
     /// </summary>
     public string Alphabet { get; }
 
-    /// <summary>Gets an object that provides formatting services for the specified type.</summary>
-    /// <param name="formatType">An object that specifies the type of format object to return.</param>
-    /// <returns>
-    /// Returns an instance of the object specified by <paramref name="formatType"/>,
-    /// if the <see cref="T:IFormatProvider"/> implementation can supply that type of object; otherwise, <see langword="null"/>.
-    /// </returns>
+    /// <inheritdoc/>
     public object? GetFormat(Type? formatType) => formatType == typeof(Base16FormatProvider) ? this : null;
 }

@@ -26,7 +26,7 @@ namespace OnixLabs.DependencyInjection;
 public static class IServiceCollectionExtensions
 {
     /// <summary>
-    /// Provides extension methods for <see cref="IServiceCollection"/> instances.
+    /// Defines instance-style extensions over an <see cref="IServiceCollection"/> for registering services with a configurable <see cref="ServiceLifetime"/>.
     /// </summary>
     /// <param name="services">The current <see cref="IServiceCollection"/> instance.</param>
     extension(IServiceCollection services)
@@ -87,7 +87,7 @@ public static class IServiceCollectionExtensions
         };
 
         /// <summary>
-        /// Adds keyed a service of the type specified in <typeparamref name="TService"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds a keyed service of the type specified in <typeparamref name="TService"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="implementationFactory">The factory that creates the service.</param>
         /// <param name="serviceKey">The <see cref="ServiceDescriptor.ServiceKey"/> of the service.</param>

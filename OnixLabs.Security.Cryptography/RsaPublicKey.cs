@@ -49,7 +49,7 @@ public sealed partial class RsaPublicKey : PublicKey, IRsaPublicKey, ISpanParsab
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RsaPublicKey"/> struct.
+    /// Initializes a new instance of the <see cref="RsaPublicKey"/> class.
     /// </summary>
     /// <param name="algorithm">The <see cref="RSA"/> algorithm with which to initialize the <see cref="RsaPublicKey"/> instance.</param>
     private RsaPublicKey(RSA algorithm) : this(algorithm.ExportRSAPublicKey())

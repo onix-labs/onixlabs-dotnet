@@ -36,12 +36,14 @@ public readonly partial record struct NamedPrivateKey : ICryptoPrimitive<NamedPr
     /// <summary>
     /// Gets the underlying private key value.
     /// </summary>
+    /// <value>The underlying <see cref="PrivateKey"/> value.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public PrivateKey PrivateKey { get; }
 
     /// <summary>
     /// Gets the name of the key algorithm that was used to produce the associated private key.
     /// </summary>
+    /// <value>The name of the key algorithm that was used to produce the associated private key.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public string AlgorithmName { get; }
 }

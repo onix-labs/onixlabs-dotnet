@@ -30,6 +30,7 @@ public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>
     /// <summary>
     /// Gets the <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.
     /// </summary>
+    /// <value>The <see cref="Hash"/> of the current <see cref="MerkleTree"/> node.</value>
     public Hash Hash { get; }
 
     /// <summary>
@@ -38,7 +39,7 @@ public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>
     private sealed class MerkleTreeBranchNode : MerkleTree
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="MerkleTree.MerkleTreeBranchNode"/> class.
+        /// Initializes a new instance of the <see cref="MerkleTreeBranchNode"/> class.
         /// </summary>
         /// <param name="left">The left-hand <see cref="MerkleTree"/> node.</param>
         /// <param name="right">The right-hand <see cref="MerkleTree"/> node.</param>
@@ -52,11 +53,13 @@ public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>
         /// <summary>
         /// Gets the left-hand <see cref="MerkleTree"/> node.
         /// </summary>
+        /// <value>The left-hand child <see cref="MerkleTree"/> node.</value>
         public MerkleTree Left { get; }
 
         /// <summary>
         /// Gets the right-hand <see cref="MerkleTree"/> node.
         /// </summary>
+        /// <value>The right-hand child <see cref="MerkleTree"/> node.</value>
         public MerkleTree Right { get; }
     }
 
@@ -66,7 +69,7 @@ public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>
     private sealed class MerkleTreeLeafNode : MerkleTree
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="MerkleTree.MerkleTreeLeafNode"/> class.
+        /// Initializes a new instance of the <see cref="MerkleTreeLeafNode"/> class.
         /// </summary>
         /// <param name="hash">The <see cref="Hash"/> value for the current node.</param>
         public MerkleTreeLeafNode(Hash hash) : base(hash)
@@ -80,7 +83,7 @@ public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>
     private sealed class MerkleTreeEmptyNode : MerkleTree
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="MerkleTree.MerkleTreeEmptyNode"/> class.
+        /// Initializes a new instance of the <see cref="MerkleTreeEmptyNode"/> class.
         /// </summary>
         /// <param name="algorithm">The hash algorithm that will be used to determine the size of the required empty hash.</param>
         public MerkleTreeEmptyNode(HashAlgorithm algorithm) : base(new Hash(0x00, algorithm.HashSize / 8))

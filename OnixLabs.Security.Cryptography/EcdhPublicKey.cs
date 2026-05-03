@@ -25,7 +25,7 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EcdhPublicKey : PublicKey, IEcdhPublicKey, ISpanParsable<EcdhPublicKey>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
+    /// Initializes a new instance of the <see cref="EcdhPublicKey"/> class.
     /// </summary>
     /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
     public EcdhPublicKey(ReadOnlySpan<byte> keyData) : base(keyData)
@@ -33,7 +33,7 @@ public sealed partial class EcdhPublicKey : PublicKey, IEcdhPublicKey, ISpanPars
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
+    /// Initializes a new instance of the <see cref="EcdhPublicKey"/> class.
     /// </summary>
     /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
     public EcdhPublicKey(ReadOnlyMemory<byte> keyData) : base(keyData)
@@ -41,7 +41,7 @@ public sealed partial class EcdhPublicKey : PublicKey, IEcdhPublicKey, ISpanPars
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EcdhPrivateKey"/> class.
+    /// Initializes a new instance of the <see cref="EcdhPublicKey"/> class.
     /// </summary>
     /// <param name="keyData">The underlying key data of the EC Diffie-Hellman cryptographic public key.</param>
     public EcdhPublicKey(ReadOnlySequence<byte> keyData) : base(keyData)

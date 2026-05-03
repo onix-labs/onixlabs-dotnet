@@ -20,10 +20,11 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents a generic Merkle tree.
 /// </summary>
+/// <typeparam name="T">The underlying <see cref="IHashable"/> type of the Merkle tree leaf values.</typeparam>
 public abstract partial class MerkleTree<T> : MerkleTree, IValueEquatable<MerkleTree<T>> where T : IHashable
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="MerkleTree"/> class.
+    /// Initializes a new instance of the <see cref="MerkleTree{T}"/> class.
     /// This constructor is marked private to prevent external implementation.
     /// </summary>
     private MerkleTree(Hash hash) : base(hash)
@@ -36,11 +37,11 @@ public abstract partial class MerkleTree<T> : MerkleTree, IValueEquatable<Merkle
     private sealed class MerkleTreeBranchNode : MerkleTree<T>
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="MerkleTree{T}.MerkleTreeBranchNode"/> class.
+        /// Initializes a new instance of the <see cref="MerkleTreeBranchNode"/> class.
         /// </summary>
         /// <param name="left">The left-hand <see cref="MerkleTree{T}"/> node.</param>
         /// <param name="right">The right-hand <see cref="MerkleTree{T}"/> node.</param>
-        /// <param name="algorithm">The hash algorithm that will be used to hash together the left-hand and right-hand <see cref="MerkleTree"/> nodes.</param>
+        /// <param name="algorithm">The hash algorithm that will be used to hash together the left-hand and right-hand <see cref="MerkleTree{T}"/> nodes.</param>
         public MerkleTreeBranchNode(MerkleTree<T> left, MerkleTree<T> right, HashAlgorithm algorithm) : base(Hash.Concatenate(algorithm, left.Hash, right.Hash))
         {
             Left = left;
@@ -50,11 +51,13 @@ public abstract partial class MerkleTree<T> : MerkleTree, IValueEquatable<Merkle
         /// <summary>
         /// Gets the left-hand <see cref="MerkleTree{T}"/> node.
         /// </summary>
+        /// <value>The left-hand child <see cref="MerkleTree{T}"/> node.</value>
         public MerkleTree<T> Left { get; }
 
         /// <summary>
         /// Gets the right-hand <see cref="MerkleTree{T}"/> node.
         /// </summary>
+        /// <value>The right-hand child <see cref="MerkleTree{T}"/> node.</value>
         public MerkleTree<T> Right { get; }
     }
 
@@ -64,7 +67,7 @@ public abstract partial class MerkleTree<T> : MerkleTree, IValueEquatable<Merkle
     private sealed class MerkleTreeLeafNode : MerkleTree<T>
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="MerkleTree{T}.MerkleTreeLeafNode"/> class.
+        /// Initializes a new instance of the <see cref="MerkleTreeLeafNode"/> class.
         /// </summary>
         /// <param name="value">The underlying value of the current node.</param>
         /// <param name="algorithm">The hash algorithm that will be used to hash the specified value.</param>
@@ -73,6 +76,7 @@ public abstract partial class MerkleTree<T> : MerkleTree, IValueEquatable<Merkle
         /// <summary>
         /// Gets the underlying value of the current node.
         /// </summary>
+        /// <value>The underlying <typeparamref name="T"/> value carried by the current leaf node.</value>
         public T Value { get; }
     }
 
@@ -82,7 +86,7 @@ public abstract partial class MerkleTree<T> : MerkleTree, IValueEquatable<Merkle
     private sealed class MerkleTreeEmptyNode : MerkleTree<T>
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="MerkleTree{T}.MerkleTreeEmptyNode"/> class.
+        /// Initializes a new instance of the <see cref="MerkleTreeEmptyNode"/> class.
         /// </summary>
         /// <param name="algorithm">The hash algorithm that will be used to determine the size of the required empty hash.</param>
         public MerkleTreeEmptyNode(HashAlgorithm algorithm) : base(new Hash(0x00, algorithm.HashSize / 8))

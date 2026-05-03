@@ -193,7 +193,7 @@ public readonly partial struct DataSize<T> : IUnit<DataSize<T>> where T : IFloat
     public T YobiBytes => GetBinaryValue(8, true);
 
     /// <summary>
-    /// Gets the data size in yottabits. (Yb)
+    /// Gets the data size in yottabits (Yb).
     /// </summary>
     public T YottaBits => GetMetricValue(8, false);
 
@@ -203,11 +203,11 @@ public readonly partial struct DataSize<T> : IUnit<DataSize<T>> where T : IFloat
     public T YottaBytes => GetMetricValue(8, true);
 
     /// <summary>
-    /// Obtains the size represented by <c>Bits</c> converted into a binary scaled unit, based
+    /// Obtains the size represented by <see cref="Bits"/> converted into a binary scaled unit, based
     /// on the specified power of 1024 and whether the value is expressed in bits or bytes.
     /// </summary>
     /// <param name="power">The exponent applied to 1024 when calculating the divisor.</param>
-    /// <param name="isByteValue">Determines whether the calculation should be computed in bites or bytes.</param>
+    /// <param name="isByteValue">Determines whether the calculation should be computed in bits or bytes.</param>
     /// <returns>Returns the size converted to the requested unit.</returns>
     private T GetBinaryValue(int power, bool isByteValue)
     {
@@ -216,11 +216,11 @@ public readonly partial struct DataSize<T> : IUnit<DataSize<T>> where T : IFloat
     }
 
     /// <summary>
-    /// Obtains the size represented by <c>Bits</c> converted into a metric scaled unit, based
+    /// Obtains the size represented by <see cref="Bits"/> converted into a metric scaled unit, based
     /// on the specified power of 1000 and whether the value is expressed in bits or bytes.
     /// </summary>
     /// <param name="power">The exponent applied to 1000 when calculating the divisor.</param>
-    /// <param name="isByteValue">Determines whether the calculation should be computed in bites or bytes.</param>
+    /// <param name="isByteValue">Determines whether the calculation should be computed in bits or bytes.</param>
     /// <returns>Returns the size converted to the requested unit.</returns>
     private T GetMetricValue(int power, bool isByteValue)
     {

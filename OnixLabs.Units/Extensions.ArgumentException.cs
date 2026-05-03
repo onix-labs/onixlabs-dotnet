@@ -25,10 +25,17 @@ namespace OnixLabs.Units;
 internal static class ArgumentExceptionExtensions
 {
     /// <summary>
-    /// Provides extension methods for <see cref="ArgumentException"/> instances.
+    /// Provides static factory methods for constructing <see cref="ArgumentException"/> instances.
     /// </summary>
     extension(ArgumentException)
     {
+        /// <summary>
+        /// Creates an <see cref="ArgumentException"/> describing an invalid format specifier.
+        /// </summary>
+        /// <param name="format">The invalid format that was supplied by the caller.</param>
+        /// <param name="specifiers">The list of valid format specifiers.</param>
+        /// <param name="parameterName">The name of the parameter that caused the exception.</param>
+        /// <returns>Returns a new <see cref="ArgumentException"/> describing the invalid format.</returns>
         public static ArgumentException InvalidFormat(
             ReadOnlySpan<char> format,
             string specifiers,

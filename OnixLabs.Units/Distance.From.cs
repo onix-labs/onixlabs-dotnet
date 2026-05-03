@@ -129,7 +129,7 @@ public readonly partial struct Distance<T>
     public static Distance<T> FromKilometers(T value) => new(value.FromKiloUnits());
 
     /// <summary>
-    /// Creates a new <see cref="Distance{T}"/> instance from the specified Quectometers value.
+    /// Creates a new <see cref="Distance{T}"/> instance from the specified Megameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>

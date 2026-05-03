@@ -23,7 +23,7 @@ namespace OnixLabs.Units;
 public static class IUnitExtensions
 {
     /// <summary>
-    /// Provides extension methods for <see cref="IUnit{T}"/> instances.
+    /// Provides operator overloads for <see cref="IUnit{T}"/> instances.
     /// </summary>
     /// <typeparam name="T">The underlying type of the <see cref="IUnit{T}"/> instance.</typeparam>
     extension<T>(T) where T : struct, IUnit<T>
@@ -110,7 +110,7 @@ public static class IUnitExtensions
     }
 
     /// <summary>
-    /// Provides extension methods for <see cref="IUnit{T}"/> instances.
+    /// Provides instance arithmetic methods for <see cref="IUnit{T}"/> instances.
     /// </summary>
     /// <param name="left">The left-hand value of the arithmetic operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IUnit{T}"/> instance.</typeparam>

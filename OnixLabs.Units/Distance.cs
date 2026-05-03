@@ -181,12 +181,12 @@ public readonly partial struct Distance<T> : IUnit<Distance<T>> where T : IFloat
     public T NauticalMiles => QuectoMeters / T.CreateChecked(1852e30);
 
     /// <summary>
-    /// Gets the distance in Nautical Fermis (fmi).
+    /// Gets the distance in Fermis (fmi).
     /// </summary>
     public T Fermis => QuectoMeters / T.CreateChecked(1e15);
 
     /// <summary>
-    /// Gets the distance in Nautical Angstroms (a).
+    /// Gets the distance in Angstroms (a).
     /// </summary>
     public T Angstroms => QuectoMeters / T.CreateChecked(1e20);
 

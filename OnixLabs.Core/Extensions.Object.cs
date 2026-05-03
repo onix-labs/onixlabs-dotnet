@@ -151,8 +151,8 @@ public static class ObjectExtensions
 
     /// <summary>
     /// Gets a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.
-    /// <remarks>This method is designed specifically for record-like objects and may produce undesirable results when applied to primitive-like objects.</remarks>
     /// </summary>
+    /// <remarks>This method is designed specifically for record-like objects and may produce undesirable results when applied to primitive-like objects.</remarks>
     /// <param name="value">The current <see cref="Object"/> instance.</param>
     /// <returns>Returns a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.</returns>
     public static string ToRecordString(this object? value)
@@ -232,20 +232,20 @@ public static class ObjectExtensions
     public static Optional<T> ToOptional<T>(this T? value) where T : struct => Optional<T>.Of(value);
 
     /// <summary>
-    /// Asynchronously obtains an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.
+    /// Asynchronously obtains an <see cref="Optional{T}"/> representation of the current reference-type <see cref="Object"/>.
     /// </summary>
     /// <param name="value">The <see cref="Object"/> to wrap as an <see cref="Optional{T}"/> value.</param>
-    /// /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.</returns>
     public static async Task<Optional<T>> ToOptionalAsync<T>(this Task<T?> value, CancellationToken token = default) where T : notnull =>
         Optional<T>.Of(await value.WaitAsync(token).ConfigureAwait(false));
 
     /// <summary>
-    /// Asynchronously obtains an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.
+    /// Asynchronously obtains an <see cref="Optional{T}"/> representation of the current value-type <see cref="Object"/>.
     /// </summary>
     /// <param name="value">The <see cref="Object"/> to wrap as an <see cref="Optional{T}"/> value.</param>
-    /// /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+    /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <typeparam name="T">The underlying type of the value.</typeparam>
     /// <returns>Returns an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.</returns>
     public static async Task<Optional<T>> ToOptionalAsync<T>(this Task<T?> value, CancellationToken token = default) where T : struct =>

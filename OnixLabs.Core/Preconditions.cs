@@ -181,7 +181,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <returns>Returns the current <see cref="Result"/> as a <see cref="Failure"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</exception>
         public static Failure RequireIsFailure(
             Result result,
             string message = ArgumentIsNotFailure,
@@ -196,7 +196,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Result"/> is not of type <see cref="Success"/>.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <returns>Returns the current <see cref="Result"/> as a <see cref="Success"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Result"/> is not of type <see cref="Success"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified <see cref="Result"/> is not of type <see cref="Success"/>.</exception>
         public static Success RequireIsSuccess(
             Result result,
             string message = ArgumentIsNotSuccess,
@@ -212,7 +212,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Result{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Result{T}"/> as a <see cref="Failure{T}"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Result{T}"/> is not of type <see cref="Failure{T}"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified <see cref="Result{T}"/> is not of type <see cref="Failure{T}"/>.</exception>
         public static Failure<T> RequireIsFailure<T>(
             Result<T> result,
             string message = ArgumentIsNotFailure,
@@ -228,7 +228,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Result{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Result{T}"/> as a <see cref="Success{T}"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Result{T}"/> is not of type <see cref="Success{T}"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified <see cref="Result{T}"/> is not of type <see cref="Success{T}"/>.</exception>
         public static Success<T> RequireIsSuccess<T>(
             Result<T> result,
             string message = ArgumentIsNotSuccess,
@@ -244,7 +244,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Optional{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Optional{T}"/> as a <see cref="None{T}"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Optional{T}"/> is not of type <see cref="None{T}"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified <see cref="Optional{T}"/> is not of type <see cref="None{T}"/>.</exception>
         public static None<T> RequireIsNone<T>(
             Optional<T> optional,
             string message = ArgumentIsNotNone,
@@ -260,7 +260,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Optional{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Optional{T}"/> as a <see cref="Some{T}"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Optional{T}"/> is not of type <see cref="Some{T}"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified <see cref="Optional{T}"/> is not of type <see cref="Some{T}"/>.</exception>
         public static Some<T> RequireIsSome<T>(
             Optional<T> optional,
             string message = ArgumentIsNotSome,
@@ -351,6 +351,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified value falls inclusively outside the specified minimum and maximum values.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the value to check.</typeparam>
+        /// <returns>Returns the specified value if it falls within the inclusive minimum and maximum range.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the specified value falls inclusively outside the specified minimum and maximum values.</exception>
         public static T RequireWithinRangeInclusive<T>(
             T value,
@@ -372,6 +373,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified value falls exclusively outside the specified minimum and maximum values.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the value to check.</typeparam>
+        /// <returns>Returns the specified value if it falls within the exclusive minimum and maximum range.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the specified value falls exclusively outside the specified minimum and maximum values.</exception>
         public static T RequireWithinRangeExclusive<T>(
             T value,
@@ -390,6 +392,7 @@ public static class Preconditions
         /// <param name="value">The enum value to check.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the <see cref="Enum"/>.</typeparam>
+        /// <returns>Returns the specified value if it is defined by the specified <see cref="Enum"/> type.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the specified value is not defined by the specified <see cref="Enum"/> type.</exception>
         public static T RequireIsDefined<T>(
             T value,

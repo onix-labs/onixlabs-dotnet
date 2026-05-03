@@ -37,11 +37,13 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result{T}"/> is in a successful state.
     /// </summary>
+    /// <value><see langword="true"/> if the current <see cref="Result{T}"/> is in a successful state; otherwise, <see langword="false"/>.</value>
     public bool IsSuccess => this is Success<T>;
 
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result{T}"/> is in a failed state.
     /// </summary>
+    /// <value><see langword="true"/> if the current <see cref="Result{T}"/> is in a failed state; otherwise, <see langword="false"/>.</value>
     public bool IsFailure => this is Failure<T>;
 
     /// <summary>
@@ -225,7 +227,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// </summary>
     /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</param>
     /// <returns>
-    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure"/> state,
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
     public Exception GetExceptionOrDefault(Exception defaultException) => this is Failure<T> failure ? failure.Exception : defaultException;
@@ -829,8 +831,8 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
 
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.
-    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
     /// </summary>
+    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
     public void Throw()
     {
         if (this is Failure<T> failure)
@@ -862,6 +864,7 @@ public sealed class Success<T> : Result<T>
     /// <summary>
     /// Gets the underlying result value.
     /// </summary>
+    /// <value>The underlying value representing the successful result.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public T Value { get; }
 }
@@ -881,6 +884,7 @@ public sealed class Failure<T> : Result<T>
     /// <summary>
     /// Gets the underlying result exception.
     /// </summary>
+    /// <value>The underlying exception representing the failed result.</value>
     public Exception Exception { get; }
 
     /// <summary>

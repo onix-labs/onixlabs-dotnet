@@ -23,7 +23,7 @@ namespace OnixLabs.Core.Text;
 public sealed class Base64FormatProvider : Enumeration<Base64FormatProvider>, IFormatProvider
 {
     /// <summary>
-    /// Gets the RFC 4648 Base-64 format provider.
+    /// The RFC 4648 Base-64 format provider.
     /// </summary>
     public static readonly Base64FormatProvider Rfc4648 = new(0, nameof(Rfc4648), "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=");
 
@@ -38,6 +38,7 @@ public sealed class Base64FormatProvider : Enumeration<Base64FormatProvider>, IF
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base64FormatProvider"/> instance.
     /// </summary>
+    /// <value>The Base-64 alphabet associated with the current format provider.</value>
     public string Alphabet { get; }
 
     /// <inheritdoc/>

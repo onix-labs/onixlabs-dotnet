@@ -33,11 +33,13 @@ public abstract class Result : IValueEquatable<Result>
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result"/> is in a successful state.
     /// </summary>
+    /// <value><see langword="true"/> if the current <see cref="Result"/> is in a successful state; otherwise, <see langword="false"/>.</value>
     public bool IsSuccess => this is Success;
 
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result"/> is in a failed state.
     /// </summary>
+    /// <value><see langword="true"/> if the current <see cref="Result"/> is in a failed state; otherwise, <see langword="false"/>.</value>
     public bool IsFailure => this is Failure;
 
     /// <summary>
@@ -719,8 +721,8 @@ public abstract class Result : IValueEquatable<Result>
 
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result"/> is in a failure state.
-    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
     /// </summary>
+    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
     public void Throw()
     {
         if (this is Failure failure)
@@ -737,7 +739,7 @@ public abstract class Result : IValueEquatable<Result>
 public sealed class Success : Result
 {
     /// <summary>
-    /// Gets the singleton <see cref="Success"/> instance.
+    /// The singleton <see cref="Success"/> instance.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     internal static readonly Success Instance = new();
@@ -750,10 +752,11 @@ public sealed class Success : Result
     }
 
     /// <summary>
-    /// Obtains a new <see cref="Success{T}"/> instance containing the current exception.
+    /// Obtains a new <see cref="Success{T}"/> instance containing the specified value.
     /// </summary>
+    /// <param name="value">The underlying successful result value.</param>
     /// <typeparam name="TResult">The underlying type of the <see cref="Success{T}"/> to return.</typeparam>
-    /// <returns>Returns a new <see cref="Success{T}"/> instance containing the current exception.</returns>
+    /// <returns>Returns a new <see cref="Success{T}"/> instance containing the specified value.</returns>
     // ReSharper disable once MemberCanBeMadeStatic.Global
 #pragma warning disable CA1822
     public Success<TResult> ToTypedResult<TResult>(TResult value) => Result<TResult>.Success(value);
@@ -774,6 +777,7 @@ public sealed class Failure : Result
     /// <summary>
     /// Gets the underlying result exception.
     /// </summary>
+    /// <value>The underlying exception representing the failed result.</value>
     public Exception Exception { get; }
 
     /// <summary>

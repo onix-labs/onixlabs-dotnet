@@ -38,11 +38,11 @@ public static class ArrayExtensions
         public T[] Copy() => [..receiver];
 
         /// <summary>
-        /// Creates a copy of the current <typeparamref name="T"/> array.
+        /// Creates a copy of a contiguous range of the current <typeparamref name="T"/> array.
         /// </summary>
         /// <param name="index">The index of the array to begin copying from.</param>
         /// <param name="count">The number of elements of the array to copy.</param>
-        /// <returns>Returns an exact copy of the current <typeparamref name="T"/> array.</returns>
+        /// <returns>Returns a new <typeparamref name="T"/> array containing the specified range of elements from the current <typeparamref name="T"/> array.</returns>
         public T[] Copy(int index, int count) => [..receiver[index..(index + count)]];
 
         /// <summary>

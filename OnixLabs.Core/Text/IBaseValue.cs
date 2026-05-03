@@ -24,18 +24,18 @@ namespace OnixLabs.Core.Text;
 public interface IBaseValue : IBinaryConvertible, ISpanFormattable
 {
     /// <summary>
-    /// Formats the value of the current instance using the specified format.
+    /// Formats the value of the current instance using the specified format provider.
     /// </summary>
     /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
+    /// <returns>Returns the value of the current instance formatted using the specified format provider.</returns>
     string ToString(IFormatProvider? formatProvider);
 
     /// <summary>
-    /// Formats the value of the current instance using the specified format.
+    /// Formats the value of the current instance using the specified format and format provider.
     /// </summary>
     /// <param name="format">The format to use.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
+    /// <returns>Returns the value of the current instance formatted using the specified format and format provider.</returns>
     string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider);
 }
 

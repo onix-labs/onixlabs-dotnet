@@ -12,18 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Core;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Velocity<T>
+public readonly partial struct Current<T>
 {
     /// <inheritdoc/>
-    public static int Compare(Velocity<T> left, Velocity<T> right) => left.QuectoMetersPerSecond.CompareTo(right.QuectoMetersPerSecond);
+    public static bool Equals(Current<T> left, Current<T> right) => left.QuectoAmperes == right.QuectoAmperes;
 
     /// <inheritdoc/>
-    public int CompareTo(Velocity<T> other) => Compare(this, other);
+    public bool Equals(Current<T> other) => Equals(this, other);
 
     /// <inheritdoc/>
-    public int CompareTo(object? obj) => this.CompareToObject(obj);
+    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Current<T> other && Equals(other);
+
+    /// <inheritdoc/>
+    public override int GetHashCode() => HashCode.Combine(QuectoAmperes);
 }

@@ -17,7 +17,7 @@ using OnixLabs.Core;
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Velocity<T>
+public readonly partial struct Current<T>
 {
     /// <inheritdoc/>
     public bool TryFormat(

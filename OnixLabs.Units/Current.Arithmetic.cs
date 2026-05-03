@@ -14,17 +14,17 @@
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Velocity<T>
+public readonly partial struct Current<T>
 {
     /// <inheritdoc/>
-    public static Velocity<T> Add(Velocity<T> left, Velocity<T> right) => new(left.QuectoMetersPerSecond + right.QuectoMetersPerSecond);
+    public static Current<T> Add(Current<T> left, Current<T> right) => new(left.QuectoAmperes + right.QuectoAmperes);
 
     /// <inheritdoc/>
-    public static Velocity<T> Subtract(Velocity<T> left, Velocity<T> right) => new(left.QuectoMetersPerSecond - right.QuectoMetersPerSecond);
+    public static Current<T> Subtract(Current<T> left, Current<T> right) => new(left.QuectoAmperes - right.QuectoAmperes);
 
     /// <inheritdoc/>
-    public static Velocity<T> Multiply(Velocity<T> left, Velocity<T> right) => new(left.QuectoMetersPerSecond * right.QuectoMetersPerSecond);
+    public static Current<T> Multiply(Current<T> left, Current<T> right) => new(left.QuectoAmperes * right.QuectoAmperes);
 
     /// <inheritdoc/>
-    public static Velocity<T> Divide(Velocity<T> left, Velocity<T> right) => new(left.QuectoMetersPerSecond / right.QuectoMetersPerSecond);
+    public static Current<T> Divide(Current<T> left, Current<T> right) => new(left.QuectoAmperes / right.QuectoAmperes);
 }

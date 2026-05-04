@@ -12,22 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Diagnostics.CodeAnalysis;
+using OnixLabs.Core;
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Power<T>
+public readonly partial struct Time<T>
 {
     /// <inheritdoc/>
-    public static bool Equals(Power<T> left, Power<T> right) => left.QuectoWatts == right.QuectoWatts;
+    public static int Compare(Time<T> left, Time<T> right) => left.QuectoSeconds.CompareTo(right.QuectoSeconds);
 
     /// <inheritdoc/>
-    public bool Equals(Power<T> other) => Equals(this, other);
+    public int CompareTo(Time<T> other) => Compare(this, other);
 
     /// <inheritdoc/>
-    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Power<T> other && Equals(other);
-
-    /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(QuectoWatts);
+    public int CompareTo(object? obj) => this.CompareToObject(obj);
 }

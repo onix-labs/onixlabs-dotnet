@@ -12,18 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Core;
-
 namespace OnixLabs.Units;
 
-public readonly partial struct Force<T>
+public readonly partial struct Time<T>
 {
     /// <inheritdoc/>
-    public bool TryFormat(
-        Span<char> destination,
-        out int charsWritten,
-        ReadOnlySpan<char> format,
-        IFormatProvider? provider
-    ) => ToString(format, provider).TryCopyTo(destination, out charsWritten);
+    public static Time<T> Add(Time<T> left, Time<T> right) => new(left.QuectoSeconds + right.QuectoSeconds);
+
+    /// <inheritdoc/>
+    public static Time<T> Subtract(Time<T> left, Time<T> right) => new(left.QuectoSeconds - right.QuectoSeconds);
+
+    /// <inheritdoc/>
+    public static Time<T> Multiply(Time<T> left, Time<T> right) => new(left.QuectoSeconds * right.QuectoSeconds);
+
+    /// <inheritdoc/>
+    public static Time<T> Divide(Time<T> left, Time<T> right) => new(left.QuectoSeconds / right.QuectoSeconds);
 }

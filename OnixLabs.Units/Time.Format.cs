@@ -13,21 +13,17 @@
 // limitations under the License.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
+using OnixLabs.Core;
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Charge<T>
+public readonly partial struct Time<T>
 {
     /// <inheritdoc/>
-    public static bool Equals(Charge<T> left, Charge<T> right) => left.QuectoCoulombs == right.QuectoCoulombs;
-
-    /// <inheritdoc/>
-    public bool Equals(Charge<T> other) => Equals(this, other);
-
-    /// <inheritdoc/>
-    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Charge<T> other && Equals(other);
-
-    /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(QuectoCoulombs);
+    public bool TryFormat(
+        Span<char> destination,
+        out int charsWritten,
+        ReadOnlySpan<char> format,
+        IFormatProvider? provider
+    ) => ToString(format, provider).TryCopyTo(destination, out charsWritten);
 }

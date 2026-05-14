@@ -23,8 +23,12 @@ namespace OnixLabs.Security.Cryptography;
 /// </summary>
 public interface IEddsaPrivateKey :
     IPrivateKeyDerivable<EddsaPublicKey>,
-    IPrivateKeyImportable<EddsaPrivateKey>,
-    IPrivateKeyExportable,
+    IPrivateKeyRawImportable<EddsaPrivateKey>,
+    IPrivateKeyPkcs8Importable<EddsaPrivateKey>,
+    IPrivateKeyPemImportable<EddsaPrivateKey>,
+    IPrivateKeyRawExportable,
+    IPrivateKeyPkcs8Exportable,
+    IPrivateKeyPkcs8PemExportable,
     IBinaryConvertible
 {
     /// <summary>

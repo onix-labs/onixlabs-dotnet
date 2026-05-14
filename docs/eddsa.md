@@ -45,7 +45,7 @@ No production code has been wired up yet — stubs only.
   - No `IsHashValid` / `VerifyHash` — PureEdDSA signs messages, not hashes
 - `OnixLabs.Security.Cryptography/IEddsaPrivateKey.cs`
   - `SignData(ReadOnlySpan<byte> [, int offset, int count])`, `SignData(Stream)`, `SignData(IBinaryConvertible)`
-  - Inherits `IPrivateKeyDerivable<EddsaPublicKey>`, `IPrivateKeyImportable<EddsaPrivateKey>`, `IPrivateKeyExportable`, `IBinaryConvertible`
+  - Inherits `IPrivateKeyDerivable<EddsaPublicKey>`, `IBinaryConvertible`, plus the granular import/export interfaces per §3a: `IPrivateKeyRawImportable<EddsaPrivateKey>` + `IPrivateKeyPkcs8Importable<EddsaPrivateKey>` + `IPrivateKeyPemImportable<EddsaPrivateKey>` + `IPrivateKeyRawExportable` + `IPrivateKeyPkcs8Exportable` + `IPrivateKeyPkcs8PemExportable`. Deliberately omits `IPrivateKeyRawPemExportable` — no `ExportPem()` on EDDSA.
 
 ### `EddsaPublicKey` partials (8)
 | File | Contents |
@@ -65,7 +65,7 @@ No production code has been wired up yet — stubs only.
 | `EddsaPrivateKey.cs` | `public sealed partial class EddsaPrivateKey : PrivateKey, IEddsaPrivateKey, ISpanParsable<EddsaPrivateKey>` + three public ctors |
 | `EddsaPrivateKey.Convertible.cs` | Three implicit operators |
 | `EddsaPrivateKey.Create.cs` | Single parameterless `Create()` (no curve overloads — Ed25519 is fixed) — stub |
-| `EddsaPrivateKey.Export.cs` | `Export`, `ExportPkcs8` (× 3), `ExportPem`, `ExportPkcs8Pem` (× 3) — stubs |
+| `EddsaPrivateKey.Export.cs` | `Export`, `ExportPkcs8` (× 3), `ExportPkcs8Pem` (× 3) — stubs. No `ExportPem` (Ed25519 has no raw-form PEM). |
 | `EddsaPrivateKey.Get.cs` | `GetPublicKey()` — stub |
 | `EddsaPrivateKey.Import.cs` | Four `Import` overloads — stubs |
 | `EddsaPrivateKey.ImportPem.cs` | Three `ImportPem` overloads — stubs |

@@ -32,9 +32,6 @@ public sealed partial class EddsaPrivateKey
     public byte[] ExportPkcs8(ReadOnlySpan<byte> password, PbeParameters parameters) => throw new NotImplementedException();
 
     /// <inheritdoc/>
-    public string ExportPem() => throw new NotImplementedException();
-
-    /// <inheritdoc/>
     public string ExportPkcs8Pem() => throw new NotImplementedException();
 
     /// <inheritdoc/>

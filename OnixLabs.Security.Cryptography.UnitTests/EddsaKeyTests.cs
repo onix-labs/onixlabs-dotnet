@@ -103,20 +103,6 @@ public sealed class EddsaKeyTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "EddsaPrivateKey should be exportable and importable as PEM")]
-    public void EddsaPrivateKeyShouldBeExportableAndImportableAsPem()
-    {
-        // Given
-        EddsaPrivateKey expected = EddsaPrivateKey.Create();
-
-        // When
-        string privateKeyData = expected.ExportPem();
-        EddsaPrivateKey actual = EddsaPrivateKey.ImportPem(privateKeyData);
-
-        // Then
-        Assert.Equal(expected, actual);
-    }
-
     [Fact(DisplayName = "EddsaPrivateKey should be exportable and importable as PKCS8")]
     public void EddsaPrivateKeyShouldBeExportableAndImportableAsPkcs8()
     {

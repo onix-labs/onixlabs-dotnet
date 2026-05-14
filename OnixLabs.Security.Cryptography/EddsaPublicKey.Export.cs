@@ -19,7 +19,7 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EddsaPublicKey
 {
     /// <inheritdoc/>
-    public byte[] Export() => throw new NotImplementedException();
+    public byte[] Export() => KeyData.AsSpan().ToArray();
 
     /// <inheritdoc/>
     public string ExportPem() => throw new NotImplementedException();

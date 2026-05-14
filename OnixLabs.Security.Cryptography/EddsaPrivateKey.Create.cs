@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -23,5 +24,17 @@ public sealed partial class EddsaPrivateKey
     /// Creates a new EdDSA cryptographic private key from a randomly generated seed.
     /// </summary>
     /// <returns>Returns a new <see cref="EddsaPrivateKey"/> instance.</returns>
-    public static EddsaPrivateKey Create() => throw new NotImplementedException();
+    public static EddsaPrivateKey Create()
+    {
+        Span<byte> seed = stackalloc byte[Ed25519.SeedLength];
+        try
+        {
+            RandomNumberGenerator.Fill(seed);
+            return new EddsaPrivateKey(seed);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(seed);
+        }
+    }
 }

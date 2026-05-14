@@ -20,7 +20,7 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EddsaPrivateKey
 {
     /// <inheritdoc/>
-    public byte[] Export() => throw new NotImplementedException();
+    public byte[] Export() => KeyData;
 
     /// <inheritdoc/>
     public byte[] ExportPkcs8() => throw new NotImplementedException();

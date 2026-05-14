@@ -13,11 +13,26 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
+// ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed partial class EddsaPrivateKey
 {
     /// <inheritdoc/>
-    public EddsaPublicKey GetPublicKey() => throw new NotImplementedException();
+    public EddsaPublicKey GetPublicKey()
+    {
+        byte[] seed = KeyData;
+        try
+        {
+            Span<byte> publicKey = stackalloc byte[Ed25519.PublicKeyLength];
+            Ed25519.DerivePublicKey(seed, publicKey);
+            return new EddsaPublicKey(publicKey);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(seed);
+        }
+    }
 }

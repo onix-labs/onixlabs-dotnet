@@ -22,28 +22,47 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EddsaPublicKey
 {
     /// <inheritdoc/>
-    public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data) => throw new NotImplementedException();
+    public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data) =>
+        Ed25519.Verify(KeyData, data, signature);
 
     /// <inheritdoc/>
-    public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count) => throw new NotImplementedException();
+    public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count) =>
+        IsDataValid(signature, data.Slice(offset, count));
+
+    /// <summary>
+    /// Determines whether the specified stream data was signed by the EdDSA cryptographic private
+    /// key corresponding to the current public key.
+    /// </summary>
+    /// <remarks>
+    /// PureEdDSA requires the entire message in memory during verification. This overload therefore
+    /// reads the stream to completion into an in-memory buffer before verifying.
+    /// </remarks>
+    public bool IsDataValid(ReadOnlySpan<byte> signature, Stream data)
+    {
+        using MemoryStream buffer = new();
+        data.CopyTo(buffer);
+        return IsDataValid(signature, buffer.GetBuffer().AsSpan(0, (int)buffer.Length));
+    }
 
     /// <inheritdoc/>
-    public bool IsDataValid(ReadOnlySpan<byte> signature, Stream data) => throw new NotImplementedException();
+    public bool IsDataValid(ReadOnlySpan<byte> signature, IBinaryConvertible data) =>
+        IsDataValid(signature, data.AsReadOnlySpan());
 
     /// <inheritdoc/>
-    public bool IsDataValid(ReadOnlySpan<byte> signature, IBinaryConvertible data) => throw new NotImplementedException();
+    public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data) =>
+        IsDataValid(signature.AsReadOnlySpan(), data);
 
     /// <inheritdoc/>
-    public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data) => throw new NotImplementedException();
+    public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count) =>
+        IsDataValid(signature.AsReadOnlySpan(), data, offset, count);
 
     /// <inheritdoc/>
-    public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count) => throw new NotImplementedException();
+    public bool IsDataValid(DigitalSignature signature, Stream data) =>
+        IsDataValid(signature.AsReadOnlySpan(), data);
 
     /// <inheritdoc/>
-    public bool IsDataValid(DigitalSignature signature, Stream data) => throw new NotImplementedException();
-
-    /// <inheritdoc/>
-    public bool IsDataValid(DigitalSignature signature, IBinaryConvertible data) => throw new NotImplementedException();
+    public bool IsDataValid(DigitalSignature signature, IBinaryConvertible data) =>
+        IsDataValid(signature.AsReadOnlySpan(), data);
 
     /// <inheritdoc/>
     public void VerifyData(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data)

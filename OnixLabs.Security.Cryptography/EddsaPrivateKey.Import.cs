@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -20,14 +21,27 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EddsaPrivateKey
 {
     /// <inheritdoc/>
-    public static EddsaPrivateKey Import(IBinaryConvertible data) => throw new NotImplementedException();
+    public static EddsaPrivateKey Import(ReadOnlySpan<byte> data)
+    {
+        if (data.Length != Ed25519.SeedLength)
+        {
+            throw new CryptographicException($"Ed25519 private key must be exactly {Ed25519.SeedLength} bytes.");
+        }
+        return new EddsaPrivateKey(data);
+    }
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey Import(IBinaryConvertible data, out int bytesRead) => throw new NotImplementedException();
+    public static EddsaPrivateKey Import(ReadOnlySpan<byte> data, out int bytesRead)
+    {
+        EddsaPrivateKey key = Import(data);
+        bytesRead = Ed25519.SeedLength;
+        return key;
+    }
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey Import(ReadOnlySpan<byte> data) => throw new NotImplementedException();
+    public static EddsaPrivateKey Import(IBinaryConvertible data) => Import(data.AsReadOnlySpan());
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey Import(ReadOnlySpan<byte> data, out int bytesRead) => throw new NotImplementedException();
+    public static EddsaPrivateKey Import(IBinaryConvertible data, out int bytesRead) =>
+        Import(data.AsReadOnlySpan(), out bytesRead);
 }

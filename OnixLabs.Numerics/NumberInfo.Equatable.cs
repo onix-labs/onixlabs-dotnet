@@ -20,16 +20,16 @@ public readonly partial struct NumberInfo
     /// Compares two instances of <see cref="NumberInfo"/> to determine whether their values are equal.
     /// This method implements the <see cref="NumberInfoEqualityComparer.Strict"/> comparer.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool Equals(NumberInfo left, NumberInfo right) => Equals(left, right, NumberInfoEqualityComparer.Strict);
 
     /// <summary>
     /// Compares two instances of <see cref="NumberInfo"/> to determine whether their values are equal.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
@@ -79,8 +79,8 @@ public readonly partial struct NumberInfo
     /// Compares two instances of <see cref="NumberInfo"/> to determine whether their values are equal.
     /// This method implements the <see cref="NumberInfoEqualityComparer.Semantic"/> comparer.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(NumberInfo left, NumberInfo right) => Equals(left, right, NumberInfoEqualityComparer.Semantic);
 
@@ -88,8 +88,8 @@ public readonly partial struct NumberInfo
     /// Compares two instances of <see cref="NumberInfo"/> to determine whether their values are not equal.
     /// This method implements the <see cref="NumberInfoEqualityComparer.Semantic"/> comparer.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are not equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(NumberInfo left, NumberInfo right) => !Equals(left, right, NumberInfoEqualityComparer.Semantic);
 }

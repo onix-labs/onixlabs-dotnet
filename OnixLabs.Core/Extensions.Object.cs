@@ -70,8 +70,8 @@ public static class ObjectExtensions
     /// <summary>
     /// Compares the current <typeparamref name="T"/> instance with the specified <typeparamref name="T"/> instance.
     /// </summary>
-    /// <param name="left">The left-hand <typeparamref name="T"/> instance to compare.</param>
-    /// <param name="right">The right-hand <typeparamref name="T"/> instance to compare.</param>
+    /// <param name="left">The <paramref name="left"/> <typeparamref name="T"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <typeparamref name="T"/> instance to compare.</param>
     /// <typeparam name="T">The underlying type of the current <typeparamref name="T"/>.</typeparam>
     /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
     public static int CompareToNullable<T>(this T left, T? right) where T : struct, IComparable<T> =>
@@ -80,8 +80,8 @@ public static class ObjectExtensions
     /// <summary>
     /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="IComparable{T}"/> instance to compare.</param>
-    /// <param name="right">The right-hand <see cref="Object"/> instance to compare.</param>
+    /// <param name="left">The <paramref name="left"/> <see cref="IComparable{T}"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <see cref="Object"/> instance to compare.</param>
     /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
     /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
     /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
@@ -95,8 +95,8 @@ public static class ObjectExtensions
     /// <summary>
     /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="IComparable{T}"/> instance to compare.</param>
-    /// <param name="right">The right-hand <see cref="Object"/> instance to compare.</param>
+    /// <param name="left">The <paramref name="left"/> <see cref="IComparable{T}"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <see cref="Object"/> instance to compare.</param>
     /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
     /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
     /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>

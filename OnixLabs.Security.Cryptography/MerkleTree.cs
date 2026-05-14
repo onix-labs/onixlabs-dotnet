@@ -41,9 +41,9 @@ public abstract partial class MerkleTree : ICryptoPrimitive<MerkleTree>
         /// <summary>
         /// Initializes a new instance of the <see cref="MerkleTreeBranchNode"/> class.
         /// </summary>
-        /// <param name="left">The left-hand <see cref="MerkleTree"/> node.</param>
-        /// <param name="right">The right-hand <see cref="MerkleTree"/> node.</param>
-        /// <param name="algorithm">The hash algorithm that will be used to hash together the left-hand and right-hand <see cref="MerkleTree"/> nodes.</param>
+        /// <param name="left">The <paramref name="left"/> <see cref="MerkleTree"/> node.</param>
+        /// <param name="right">The <paramref name="right"/> <see cref="MerkleTree"/> node.</param>
+        /// <param name="algorithm">The hash algorithm that will be used to hash together the <paramref name="left"/> and <paramref name="right"/> <see cref="MerkleTree"/> nodes.</param>
         public MerkleTreeBranchNode(MerkleTree left, MerkleTree right, HashAlgorithm algorithm) : base(Hash.Concatenate(algorithm, left.Hash, right.Hash))
         {
             Left = left;

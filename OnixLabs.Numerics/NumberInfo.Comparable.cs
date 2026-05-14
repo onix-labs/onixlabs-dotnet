@@ -18,10 +18,10 @@ public readonly partial struct NumberInfo
 {
     /// <summary>
     /// Compares two <see cref="NumberInfo"/> values and returns an integer that indicates
-    /// whether the left-hand value is less than, equal to, or greater than the right-hand value.
+    /// whether the <paramref name="left"/> value is less than, equal to, or greater than the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public static int Compare(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.Compare(left, right);
 
@@ -45,34 +45,34 @@ public readonly partial struct NumberInfo
     public int CompareTo(object? obj) => NumberInfoOrdinalityComparer.Default.Compare(this, obj);
 
     /// <summary>
-    /// Determines whether the left-hand value is greater than the right-hand value.
+    /// Determines whether the <paramref name="left"/> value is greater than the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand operand is greater than right-hand operand; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> operand is greater than <paramref name="right"/> operand; otherwise, <see langword="false"/>.</returns>
     public static bool operator >(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.IsGreaterThan(left, right);
 
     /// <summary>
-    /// Determines whether the left-hand value is greater than or equal to the right-hand value.
+    /// Determines whether the <paramref name="left"/> value is greater than or equal to the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand operand is greater than or equal to the right-hand operand; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> operand is greater than or equal to the <paramref name="right"/> operand; otherwise, <see langword="false"/>.</returns>
     public static bool operator >=(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.IsGreaterThanOrEqual(left, right);
 
     /// <summary>
-    /// Determines whether the left-hand value is less than right-hand value.
+    /// Determines whether the <paramref name="left"/> value is less than <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand operand is less than the right-hand operand; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> operand is less than the <paramref name="right"/> operand; otherwise, <see langword="false"/>.</returns>
     public static bool operator <(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.IsLessThan(left, right);
 
     /// <summary>
-    /// Determines whether the left-hand value is less than or equal to the right-hand value.
+    /// Determines whether the <paramref name="left"/> value is less than or equal to the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand operand is less than or equal to the right-hand operand; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> operand is less than or equal to the <paramref name="right"/> operand; otherwise, <see langword="false"/>.</returns>
     public static bool operator <=(NumberInfo left, NumberInfo right) => NumberInfoOrdinalityComparer.Default.IsLessThanOrEqual(left, right);
 }

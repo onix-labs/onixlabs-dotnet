@@ -120,8 +120,8 @@ public class CriteriaSpecification<T>(Expression<Func<T, bool>> criteria) : Spec
 /// <summary>
 /// Represents a specification that combines two specifications using a logical AND operation.
 /// </summary>
-/// <param name="left">The left-hand specification to combine.</param>
-/// <param name="right">The right-hand specification to combine.</param>
+/// <param name="left">The <paramref name="left"/> specification to combine.</param>
+/// <param name="right">The <paramref name="right"/> specification to combine.</param>
 /// <typeparam name="T">The underlying type of the subject to which the specification applies.</typeparam>
 file sealed class AndSpecification<T>(Specification<T> left, Specification<T> right) :
     CriteriaSpecification<T>(left.Criteria.And(right.Criteria));
@@ -129,8 +129,8 @@ file sealed class AndSpecification<T>(Specification<T> left, Specification<T> ri
 /// <summary>
 /// Represents a specification that combines two specifications using a logical OR operation.
 /// </summary>
-/// <param name="left">The left-hand specification to combine.</param>
-/// <param name="right">The right-hand specification to combine.</param>
+/// <param name="left">The <paramref name="left"/> specification to combine.</param>
+/// <param name="right">The <paramref name="right"/> specification to combine.</param>
 /// <typeparam name="T">The underlying type of the subject to which the specification applies.</typeparam>
 file sealed class OrSpecification<T>(Specification<T> left, Specification<T> right) :
     CriteriaSpecification<T>(left.Criteria.Or(right.Criteria));

@@ -22,8 +22,8 @@ public readonly partial struct BigDecimal
     /// <summary>
     /// Computes the quotient of the specified <see cref="BigDecimal"/> values.
     /// </summary>
-    /// <param name="left">The left-hand value to divide.</param>
-    /// <param name="right">The right-hand value to divide by.</param>
+    /// <param name="left">The <paramref name="left"/> value to divide.</param>
+    /// <param name="right">The <paramref name="right"/> value to divide by.</param>
     /// <param name="mode">The rounding strategy to use. The default value is <see cref="MidpointRounding.ToEven"/>.</param>
     /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Divide(BigDecimal left, BigDecimal right, MidpointRounding mode = default)
@@ -43,8 +43,8 @@ public readonly partial struct BigDecimal
     /// <summary>
     /// Computes the quotient of the specified <see cref="BigDecimal"/> values.
     /// </summary>
-    /// <param name="left">The left-hand value to divide.</param>
-    /// <param name="right">The right-hand value to divide by.</param>
+    /// <param name="left">The <paramref name="left"/> value to divide.</param>
+    /// <param name="right">The <paramref name="right"/> value to divide by.</param>
     /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal operator /(BigDecimal left, BigDecimal right) => Divide(left, right);
 

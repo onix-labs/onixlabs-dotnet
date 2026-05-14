@@ -91,27 +91,27 @@ public readonly partial struct BigDecimal
     }
 
     /// <summary>
-    /// Obtains the minimum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.
+    /// Obtains the minimum scale of the specified <paramref name="left"/> and <paramref name="right"/> <see cref="BigDecimal"/> values.
     /// </summary>
-    /// <param name="left">The left-hand value from which to obtain the minimum scale value.</param>
-    /// <param name="right">The right-hand value from which to obtain the minimum scale value.</param>
-    /// <returns>Returns the minimum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.</returns>
+    /// <param name="left">The <paramref name="left"/> value from which to obtain the minimum scale value.</param>
+    /// <param name="right">The <paramref name="right"/> value from which to obtain the minimum scale value.</param>
+    /// <returns>Returns the minimum scale of the specified <paramref name="left"/> and <paramref name="right"/> <see cref="BigDecimal"/> values.</returns>
     public static int MinScale(BigDecimal left, BigDecimal right) => int.Min(left.Scale, right.Scale);
 
     /// <summary>
-    /// Obtains the maximum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.
+    /// Obtains the maximum scale of the specified <paramref name="left"/> and <paramref name="right"/> <see cref="BigDecimal"/> values.
     /// </summary>
-    /// <param name="left">The left-hand value from which to obtain the maximum scale value.</param>
-    /// <param name="right">The right-hand value from which to obtain the maximum scale value.</param>
-    /// <returns>Returns the maximum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.</returns>
+    /// <param name="left">The <paramref name="left"/> value from which to obtain the maximum scale value.</param>
+    /// <param name="right">The <paramref name="right"/> value from which to obtain the maximum scale value.</param>
+    /// <returns>Returns the maximum scale of the specified <paramref name="left"/> and <paramref name="right"/> <see cref="BigDecimal"/> values.</returns>
     public static int MaxScale(BigDecimal left, BigDecimal right) => int.Max(left.Scale, right.Scale);
 
     /// <summary>
-    /// Obtains the minimum and maximum scale of the specified left-hand and right-hand <see cref="BigDecimal"/> values.
+    /// Obtains the minimum and maximum scale of the specified <paramref name="left"/> and <paramref name="right"/> <see cref="BigDecimal"/> values.
     /// </summary>
-    /// <param name="left">The left-hand value from which to obtain the minimum and maximum values.</param>
-    /// <param name="right">The right-hand value from which to obtain the minimum and maximum values.</param>
-    /// <returns>Returns the minimum and maximum of the specified left-hand and right-hand <see cref="BigDecimal"/> values.</returns>
+    /// <param name="left">The <paramref name="left"/> value from which to obtain the minimum and maximum values.</param>
+    /// <param name="right">The <paramref name="right"/> value from which to obtain the minimum and maximum values.</param>
+    /// <returns>Returns the minimum and maximum of the specified <paramref name="left"/> and <paramref name="right"/> <see cref="BigDecimal"/> values.</returns>
     public static (int Min, int Max) MinMaxScale(BigDecimal left, BigDecimal right)
     {
         int min = MinScale(left, right);

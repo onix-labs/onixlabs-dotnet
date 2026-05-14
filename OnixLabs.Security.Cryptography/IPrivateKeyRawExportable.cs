@@ -15,12 +15,13 @@
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Defines a cryptographic private key that can be imported from raw binary, PKCS #8 binary,
-/// and RFC 7468 PEM-encoded data.
+/// Defines a cryptographic private key that can be exported in its raw binary form.
 /// </summary>
-/// <typeparam name="T">The underlying type of <see cref="PrivateKey"/> that the import functions will return.</typeparam>
-public interface IPrivateKeyImportable<out T> :
-    IPrivateKeyRawImportable<T>,
-    IPrivateKeyPkcs8Importable<T>,
-    IPrivateKeyPemImportable<T>
-    where T : PrivateKey;
+public interface IPrivateKeyRawExportable
+{
+    /// <summary>
+    /// Exports the cryptographic private key data.
+    /// </summary>
+    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data.</returns>
+    byte[] Export();
+}

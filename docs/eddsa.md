@@ -74,9 +74,9 @@ No production code has been wired up yet — stubs only.
 | `EddsaPrivateKey.Sign.cs` | Four `SignData` overloads — stubs |
 | `EddsaPrivateKey.To.cs` | `ToNamedPrivateKey()`, `KeyName = "EDDSA"` |
 
-## Design choices (worth confirming before implementation)
+## Design choices
 
-### 1. Narrower API surface than `EcdsaPublicKey` / `EcdsaPrivateKey`
+### 1. Narrower API surface than `EcdsaPublicKey` / `EcdsaPrivateKey` — **decided: narrow**
 
 `IEcdsaPrivateKey.SignData` and `IEcdsaPublicKey.IsDataValid` take `HashAlgorithm` / `HashAlgorithmName` and `DSASignatureFormat`. For Ed25519 / PureEdDSA per RFC 8032 these are meaningless:
 
@@ -84,17 +84,92 @@ No production code has been wired up yet — stubs only.
 - The signature format is fixed: 64 raw bytes (`R || S`) with `S < L`.
 - `SignHash` / `IsHashValid` / `VerifyHash` are dropped: PureEdDSA signs messages, not pre-hashes. (Ed25519ph exists in RFC 8032 §5.1 but is a separate algorithm and not in scope.)
 
-**If you'd prefer literal mirror of the Ecdsa surface with ignored parameters,** widen `IEddsaPublicKey` / `IEddsaPrivateKey` accordingly. Cheap to do — the stubs are all `=> throw new NotImplementedException();`.
+`IEddsaPublicKey` / `IEddsaPrivateKey` therefore omit these parameters entirely rather than accepting and ignoring them.
 
-### 2. `KeyName = "EDDSA"`
+### 2. `KeyName = "EDDSA"` — **decided**
 
-Used by `ToNamedPublicKey` / `ToNamedPrivateKey`. Could be `"Ed25519"` for algorithm specificity. `EDDSA` was chosen for symmetry with `ECDSA` / `RSA`.
+Used by `ToNamedPublicKey` / `ToNamedPrivateKey`. Chosen for symmetry with `ECDSA` / `RSA`. (Algorithm-specific `"Ed25519"` was the alternative.)
 
-### 3. `ExportPem` vs `ExportPkcs8Pem` on the private key
+### 3. `ExportPem` vs `ExportPkcs8Pem` on the private key — **resolved by interface split (§3a)**
 
 For ECDSA they differ: `ExportPem` emits SEC1 `EC PRIVATE KEY`, `ExportPkcs8Pem` emits PKCS#8 `PRIVATE KEY`.
 
-For Ed25519, RFC 8410 defines only PKCS#8 PEM as the standard form; there is no separate raw-form PEM label. The stubs keep both methods but the implementation will likely have them produce identical output. Alternative: drop `ExportPem` (and `ImportPem` reads PKCS#8 PEM). Decide during implementation.
+For Ed25519, RFC 8410 defines only PKCS#8 PEM; there is no separate raw-form PEM label. Rather than have both methods emit identical output, `EddsaPrivateKey` simply does not declare `ExportPem` at all — see §3a below.
+
+### 3a. Interface segregation for Export / Import — **decided: 4-way max granularity**
+
+The four existing interfaces (`IPrivateKeyExportable`, `IPrivateKeyImportable<T>`, `IPublicKeyExportable`, `IPublicKeyImportable<T>`) are split into granular pieces along the orthogonal axes of **format** (Raw vs PKCS#8) × **encoding** (binary vs PEM). The originals become composites that inherit every granular piece, so `EcdsaPrivateKey` / `RsaPrivateKey` / `EcdhPrivateKey` need no source changes.
+
+**Private key export (4 granular):**
+
+| Interface | Methods |
+|---|---|
+| `IPrivateKeyRawExportable` | `byte[] Export()` |
+| `IPrivateKeyRawPemExportable` | `string ExportPem()` |
+| `IPrivateKeyPkcs8Exportable` | `ExportPkcs8()` (unencrypted) + 2 encrypted overloads |
+| `IPrivateKeyPkcs8PemExportable` | `ExportPkcs8Pem()` (unencrypted) + 2 encrypted overloads |
+
+**Private key import (3 granular):**
+
+| Interface | Methods |
+|---|---|
+| `IPrivateKeyRawImportable<T>` | `Import(...)` family (span / `IBinaryConvertible`, with/without `bytesRead`) |
+| `IPrivateKeyPkcs8Importable<T>` | `ImportPkcs8(...)` family (all 12 overloads) |
+| `IPrivateKeyPemImportable<T>` | `ImportPem(...)` family (3 overloads, universal-PEM dispatcher) |
+
+**Public key export (2 granular):** `IPublicKeyRawExportable` (`Export()`) + `IPublicKeyPemExportable` (`ExportPem()`).
+
+**Public key import (2 granular):** `IPublicKeyRawImportable<T>` (`Import(...)` family) + `IPublicKeyPemImportable<T>` (`ImportPem(...)` family).
+
+**Composites recompose the originals:**
+
+```csharp
+public interface IPrivateKeyExportable
+    : IPrivateKeyRawExportable,
+      IPrivateKeyRawPemExportable,
+      IPrivateKeyPkcs8Exportable,
+      IPrivateKeyPkcs8PemExportable;
+
+public interface IPrivateKeyImportable<out T>
+    : IPrivateKeyRawImportable<T>,
+      IPrivateKeyPkcs8Importable<T>,
+      IPrivateKeyPemImportable<T>
+    where T : PrivateKey;
+
+public interface IPublicKeyExportable
+    : IPublicKeyRawExportable,
+      IPublicKeyPemExportable;
+
+public interface IPublicKeyImportable<out T>
+    : IPublicKeyRawImportable<T>,
+      IPublicKeyPemImportable<T>
+    where T : PublicKey;
+```
+
+**Asymmetry (4 export / 3 import) is intentional.** The BCL provides separate exporters per format (`ExportECPrivateKeyPem` vs `ExportPkcs8PrivateKeyPem`) but a single dispatching importer (`AsymmetricAlgorithm.ImportFromPem` parses any supported PEM label). Splitting `ImportPem` into `ImportPkcs8Pem` + a hypothetical raw-PEM importer was considered and rejected — it would either lock in a misleading name (the method accepts SEC1 / PKCS#1 PEM too) or silently restrict behavior at runtime. The asymmetry honestly tracks the BCL surface.
+
+**Bug fix bundled with the split:** the existing XML docstrings on `IPrivateKeyImportable<T>.ImportPem` claim "PKCS #8 RFC 7468 PEM format" — wrong, the method accepts any PEM label the underlying algorithm understands. Fix the docstrings as part of the refactor.
+
+**`IEddsaPrivateKey` picks:**
+
+```csharp
+public interface IEddsaPrivateKey :
+    IPrivateKeyRawExportable,
+    IPrivateKeyPkcs8Exportable,
+    IPrivateKeyPkcs8PemExportable,
+    IPrivateKeyRawImportable<EddsaPrivateKey>,
+    IPrivateKeyPkcs8Importable<EddsaPrivateKey>,
+    IPrivateKeyPemImportable<EddsaPrivateKey>,
+    IPrivateKeyDerivable<EddsaPublicKey>,
+    IBinaryConvertible
+{
+    // SignData overloads
+}
+```
+
+Note the deliberate omission of `IPrivateKeyRawPemExportable` — `ExportPem()` does not appear on `EddsaPrivateKey` at all, because Ed25519 has no raw-form PEM label.
+
+**`IEddsaPublicKey` picks** both public granular pieces (`Raw` + `Pem`) for export and import — Ed25519 has a standard SPKI / PEM form per RFC 8410.
 
 ### 4. No `Create(ECCurve)` / `Create(ECParameters)` overloads
 

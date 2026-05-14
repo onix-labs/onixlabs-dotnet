@@ -106,6 +106,8 @@ public static class ExpressionExtensions
     /// It ensures all expressions use a consistent parameter expression, which is necessary for creating valid and
     /// executable combined expressions.
     /// </remarks>
+    /// <param name="source">The parameter expression to replace.</param>
+    /// <param name="target">The parameter expression to use in place of <paramref name="source"/>.</param>
     private sealed class ReplaceParameterVisitor(ParameterExpression source, ParameterExpression target) : ExpressionVisitor
     {
         protected override Expression VisitParameter(ParameterExpression node) =>

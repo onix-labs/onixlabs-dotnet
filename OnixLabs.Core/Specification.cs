@@ -28,7 +28,7 @@ namespace OnixLabs.Core;
 public abstract class Specification<T>
 {
     /// <summary>
-    /// Represents an empty specification that always evaluates to <see langword="true"/>.
+    /// The empty specification, which always evaluates to <see langword="true"/>.
     /// </summary>
     public static readonly Specification<T> Empty = new BooleanSpecification<T>(true);
 
@@ -37,6 +37,7 @@ public abstract class Specification<T>
     /// <summary>
     /// Gets the underlying expression criteria of the current specification.
     /// </summary>
+    /// <value>The expression criteria evaluated by the current specification.</value>
     public abstract Expression<Func<T, bool>> Criteria { get; }
 
     /// <summary>
@@ -119,6 +120,8 @@ public class CriteriaSpecification<T>(Expression<Func<T, bool>> criteria) : Spec
 /// <summary>
 /// Represents a specification that combines two specifications using a logical AND operation.
 /// </summary>
+/// <param name="left">The <paramref name="left"/> specification to combine.</param>
+/// <param name="right">The <paramref name="right"/> specification to combine.</param>
 /// <typeparam name="T">The underlying type of the subject to which the specification applies.</typeparam>
 file sealed class AndSpecification<T>(Specification<T> left, Specification<T> right) :
     CriteriaSpecification<T>(left.Criteria.And(right.Criteria));
@@ -126,6 +129,8 @@ file sealed class AndSpecification<T>(Specification<T> left, Specification<T> ri
 /// <summary>
 /// Represents a specification that combines two specifications using a logical OR operation.
 /// </summary>
+/// <param name="left">The <paramref name="left"/> specification to combine.</param>
+/// <param name="right">The <paramref name="right"/> specification to combine.</param>
 /// <typeparam name="T">The underlying type of the subject to which the specification applies.</typeparam>
 file sealed class OrSpecification<T>(Specification<T> left, Specification<T> right) :
     CriteriaSpecification<T>(left.Criteria.Or(right.Criteria));
@@ -133,6 +138,7 @@ file sealed class OrSpecification<T>(Specification<T> left, Specification<T> rig
 /// <summary>
 /// Represents a specification that negates another specification's logic using a logical NOT operation.
 /// </summary>
+/// <param name="specification">The specification whose logic will be negated.</param>
 /// <typeparam name="T">The underlying type of the subject to which the specification applies.</typeparam>
 file sealed class NotSpecification<T>(Specification<T> specification) :
     CriteriaSpecification<T>(specification.Criteria.Not());

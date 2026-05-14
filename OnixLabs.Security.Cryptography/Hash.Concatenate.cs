@@ -19,12 +19,12 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Hash
 {
     /// <summary>
-    /// Concatenates the left-hand and right-hand hashes using the specified hash algorithm.
+    /// Concatenates the <paramref name="left"/> and <paramref name="right"/> hashes using the specified hash algorithm.
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
-    /// <param name="left">The left-hand hash to concatenate.</param>
-    /// <param name="right">The right-hand hash to concatenate.</param>
-    /// <returns>Returns a cryptographic hash representing the concatenation of the left-hand and right-hand hash values.</returns>
+    /// <param name="left">The <paramref name="left"/> hash to concatenate.</param>
+    /// <param name="right">The <paramref name="right"/> hash to concatenate.</param>
+    /// <returns>Returns a cryptographic hash representing the concatenation of the <paramref name="left"/> and <paramref name="right"/> hash values.</returns>
     public static Hash Concatenate(HashAlgorithm algorithm, Hash left, Hash right)
     {
         byte[] data = [..left.AsReadOnlySpan(), ..right.AsReadOnlySpan()];

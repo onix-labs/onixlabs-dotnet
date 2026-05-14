@@ -19,9 +19,9 @@ namespace OnixLabs.Core;
 public abstract partial class Enumeration<T>
 {
     /// <summary>
-    /// Returns a <see cref="ValueTuple{T1,T2}"/> that represents the current object.
+    /// Obtains a <see cref="ValueTuple{T1,T2}"/> that represents the current enumeration entry.
     /// </summary>
-    /// <returns>Returns a tuple that represents the current object.</returns>
+    /// <returns>Returns a tuple that represents the current enumeration entry.</returns>
     public (int Value, string Name) ToEntry() => (Value, Name);
 
     /// <inheritdoc/>

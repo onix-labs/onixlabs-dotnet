@@ -18,10 +18,10 @@ public readonly partial struct BigDecimal
 {
     /// <summary>
     /// Compares two <see cref="BigDecimal"/> values and returns an integer that indicates
-    /// whether the left-hand value is less than, equal to, or greater than the right-hand value.
+    /// whether the <paramref name="left"/> value is less than, equal to, or greater than the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns a value that indicates the relative order of the objects being compared.</returns>
     public static int Compare(BigDecimal left, BigDecimal right) => BigDecimalOrdinalityComparer.Default.Compare(left, right);
 
@@ -45,34 +45,34 @@ public readonly partial struct BigDecimal
     public int CompareTo(BigDecimal other) => Compare(this, other);
 
     /// <summary>
-    /// Determines whether the left-hand value is greater than the right-hand value.
+    /// Determines whether the <paramref name="left"/> value is greater than the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand operand is greater than right-hand operand; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> operand is greater than <paramref name="right"/> operand; otherwise, <see langword="false"/>.</returns>
     public static bool operator >(BigDecimal left, BigDecimal right) => BigDecimalOrdinalityComparer.Default.IsGreaterThan(left, right);
 
     /// <summary>
-    /// Determines whether the left-hand value is greater than or equal to the right-hand value.
+    /// Determines whether the <paramref name="left"/> value is greater than or equal to the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand operand is greater than or equal to the right-hand operand; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> operand is greater than or equal to the <paramref name="right"/> operand; otherwise, <see langword="false"/>.</returns>
     public static bool operator >=(BigDecimal left, BigDecimal right) => BigDecimalOrdinalityComparer.Default.IsGreaterThanOrEqual(left, right);
 
     /// <summary>
-    /// Determines whether the left-hand value is less than right-hand value.
+    /// Determines whether the <paramref name="left"/> value is less than <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand operand is less than the right-hand operand; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> operand is less than the <paramref name="right"/> operand; otherwise, <see langword="false"/>.</returns>
     public static bool operator <(BigDecimal left, BigDecimal right) => BigDecimalOrdinalityComparer.Default.IsLessThan(left, right);
 
     /// <summary>
-    /// Determines whether the left-hand value is less than or equal to the right-hand value.
+    /// Determines whether the <paramref name="left"/> value is less than or equal to the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand operand is less than or equal to the right-hand operand; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> operand is less than or equal to the <paramref name="right"/> operand; otherwise, <see langword="false"/>.</returns>
     public static bool operator <=(BigDecimal left, BigDecimal right) => BigDecimalOrdinalityComparer.Default.IsLessThanOrEqual(left, right);
 }

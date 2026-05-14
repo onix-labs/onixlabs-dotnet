@@ -325,10 +325,10 @@ public static class IEnumerableExtensions
         public bool IsSingle() => enumerable.LongCount() is 1;
 
         /// <summary>
-        /// Determines whether the current <see cref="IEnumerable{T}"/> contains an even number of elements.
+        /// Determines whether the current <see cref="IEnumerable{T}"/> contains an even number of elements that match the specified predicate, or in total when no predicate is supplied.
         /// </summary>
-        /// <param name="predicate">The function to test each element for a condition.</param>
-        /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an even number of elements; otherwise, <see langword="false"/>.</returns>
+        /// <param name="predicate">An optional function to test each element for a condition. If <see langword="null"/>, all elements are counted.</param>
+        /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an even number of matching elements; otherwise, <see langword="false"/>.</returns>
         public bool IsCountEven(Func<T, bool>? predicate = null)
         {
             // ReSharper disable PossibleMultipleEnumeration
@@ -338,10 +338,10 @@ public static class IEnumerableExtensions
         }
 
         /// <summary>
-        /// Determines whether the current <see cref="IEnumerable{T}"/> contains an odd number of elements.
+        /// Determines whether the current <see cref="IEnumerable{T}"/> contains an odd number of elements that match the specified predicate, or in total when no predicate is supplied.
         /// </summary>
-        /// <param name="predicate">The function to test each element for a condition.</param>
-        /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an odd number of elements; otherwise, <see langword="false"/>.</returns>
+        /// <param name="predicate">An optional function to test each element for a condition. If <see langword="null"/>, all elements are counted.</param>
+        /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an odd number of matching elements; otherwise, <see langword="false"/>.</returns>
         public bool IsCountOdd(Func<T, bool>? predicate = null) => !enumerable.IsCountEven(predicate);
 
         /// <summary>
@@ -377,10 +377,12 @@ public static class IEnumerableExtensions
             return !enumerable.Any(predicate);
         }
 
-        /// <summary>Determines whether two sequences are <see langword="null"/>, or equal by comparing their elements by using a specified <see cref="T:IEqualityComparer{T}" />.</summary>
-        /// <param name="other">An <see cref="T:IEnumerable{T}" /> to compare to the first sequence.</param>
-        /// <param name="comparer">An <see cref="T:IEqualityComparer{T}" /> to use to compare elements.</param>
-        /// <returns> Returns <see langword="true" /> if the two source sequences are <see langword="null"/>, or of equal length and their corresponding elements compare equal according to <paramref name="comparer" />; otherwise, <see langword="false" />.</returns>
+        /// <summary>
+        /// Determines whether two sequences are <see langword="null"/>, or equal by comparing their elements by using a specified <see cref="IEqualityComparer{T}"/>.
+        /// </summary>
+        /// <param name="other">An <see cref="IEnumerable{T}"/> to compare to the first sequence.</param>
+        /// <param name="comparer">An <see cref="IEqualityComparer{T}"/> to use to compare elements.</param>
+        /// <returns>Returns <see langword="true"/> if the two source sequences are <see langword="null"/>, or of equal length and their corresponding elements compare equal according to <paramref name="comparer"/>; otherwise, <see langword="false"/>.</returns>
         public bool SequenceEqualOrNull(IEnumerable<T>? other, IEqualityComparer<T>? comparer = null)
         {
             if (enumerable is null || other is null)

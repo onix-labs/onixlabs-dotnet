@@ -26,8 +26,8 @@ public static class GenericMath
     /// <summary>
     /// Computes the delta, or difference between the specified numbers.
     /// </summary>
-    /// <param name="left">The left-hand number from which to compute the delta.</param>
-    /// <param name="right">The right-hand number from which to compute the delta.</param>
+    /// <param name="left">The <paramref name="left"/> number from which to compute the delta.</param>
+    /// <param name="right">The <paramref name="right"/> number from which to compute the delta.</param>
     /// <typeparam name="T">The underlying <see cref="INumberBase{TSelf}"/> type.</typeparam>
     /// <returns>Returns the delta, or difference between the specified numbers.</returns>
     public static T Delta<T>(T left, T right) where T : INumberBase<T> => T.Abs(left - right);
@@ -65,12 +65,12 @@ public static class GenericMath
     }
 
     /// <summary>
-    /// Obtains the minimum and maximum values from the specified left-hand and right-hand values.
+    /// Obtains the minimum and maximum values from the specified <paramref name="left"/> and <paramref name="right"/> values.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="INumber{TSelf}"/> value to compare.</param>
-    /// <param name="right">The right-hand <see cref="INumber{TSelf}"/> value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> <see cref="INumber{TSelf}"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <see cref="INumber{TSelf}"/> value to compare.</param>
     /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
-    /// <returns>Returns the minimum and maximum values from the specified left-hand and right-hand values.</returns>
+    /// <returns>Returns the minimum and maximum values from the specified <paramref name="left"/> and <paramref name="right"/> values.</returns>
     public static (T Min, T Max) MinMax<T>(T left, T right) where T : INumber<T> => (T.Min(left, right), T.Max(left, right));
 
     /// <summary>
@@ -78,8 +78,8 @@ public static class GenericMath
     /// </summary>
     /// <typeparam name="T">The numeric type. Must implement <see cref="INumber{T}"/>.</typeparam>
     /// <param name="exponent">The exponent to raise 10 to. Must be greater than or equal to zero.</param>
-    /// <returns>A value of type <typeparamref name="T"/> equal to 10 raised to the power of <paramref name="exponent"/>.</returns>
-    /// <exception cref="ArgumentException"> if <paramref name="exponent"/> is less than zero.</exception>
+    /// <returns>Returns a value of type <typeparamref name="T"/> equal to 10 raised to the power of <paramref name="exponent"/>.</returns>
+    /// <exception cref="ArgumentException">If <paramref name="exponent"/> is less than zero.</exception>
     public static T Pow10<T>(int exponent) where T : INumber<T>
     {
         Require(exponent >= 0, "Exponent must be greater than, or equal to zero.", nameof(exponent));

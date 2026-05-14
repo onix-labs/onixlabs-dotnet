@@ -20,7 +20,7 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Defines a cryptographic public key that can be imported.
 /// </summary>
-/// <typeparam name="T">The underlying type of <see cref="PrivateKey"/> that the import functions will return.</typeparam>
+/// <typeparam name="T">The underlying type of <see cref="PublicKey"/> that the import functions will return.</typeparam>
 public interface IPublicKeyImportable<out T> where T : PublicKey
 {
     /// <summary>

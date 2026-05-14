@@ -74,5 +74,6 @@ public readonly partial struct Hash : ICryptoPrimitive<Hash>, IValueComparable<H
     /// <summary>
     /// Gets the length of the current <see cref="Hash"/> in bytes.
     /// </summary>
+    /// <value>The number of bytes in the underlying hash value.</value>
     public int Length => value?.Length ?? 0;
 }

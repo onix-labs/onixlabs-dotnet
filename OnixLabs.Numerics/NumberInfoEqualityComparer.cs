@@ -24,13 +24,13 @@ namespace OnixLabs.Numerics;
 public abstract class NumberInfoEqualityComparer : IEqualityComparer<NumberInfo>, IEqualityComparer
 {
     /// <summary>
-    /// Gets a <see cref="NumberInfoEqualityComparer"/> that strictly compares <see cref="NumberInfo"/> values.
+    /// A <see cref="NumberInfoEqualityComparer"/> that strictly compares <see cref="NumberInfo"/> values, including their scale.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly NumberInfoEqualityComparer Strict = new NumberInfoStrictEqualityComparer();
 
     /// <summary>
-    /// Gets a <see cref="NumberInfoEqualityComparer"/> that semantically compares <see cref="NumberInfo"/> values.
+    /// A <see cref="NumberInfoEqualityComparer"/> that semantically compares <see cref="NumberInfo"/> values, treating numerically equivalent values as equal regardless of scale.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly NumberInfoEqualityComparer Semantic = new NumberInfoSemanticEqualityComparer();

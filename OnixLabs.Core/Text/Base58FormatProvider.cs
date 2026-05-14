@@ -23,18 +23,17 @@ namespace OnixLabs.Core.Text;
 public sealed class Base58FormatProvider : Enumeration<Base58FormatProvider>, IFormatProvider
 {
     /// <summary>
-    /// Gets the Bitcoin Base-58 format provider.
-    /// This is also the same format used by Monero and IPFS.
+    /// The Bitcoin Base-58 format provider. This is also the same format used by Monero and IPFS.
     /// </summary>
     public static readonly Base58FormatProvider Bitcoin = new(0, nameof(Bitcoin), "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
 
     /// <summary>
-    /// Gets the Flickr Base-58 format provider.
+    /// The Flickr Base-58 format provider.
     /// </summary>
     public static readonly Base58FormatProvider Flickr = new(1, nameof(Flickr), "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ");
 
     /// <summary>
-    /// Gets the Ripple Base-58 format provider.
+    /// The Ripple Base-58 format provider.
     /// </summary>
     public static readonly Base58FormatProvider Ripple = new(2, nameof(Ripple), "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz");
 
@@ -49,6 +48,7 @@ public sealed class Base58FormatProvider : Enumeration<Base58FormatProvider>, IF
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base58FormatProvider"/> instance.
     /// </summary>
+    /// <value>The Base-58 alphabet associated with the current format provider.</value>
     public string Alphabet { get; }
 
     /// <inheritdoc/>

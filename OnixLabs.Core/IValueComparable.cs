@@ -26,48 +26,48 @@ public interface IValueComparable<in T> : IComparable<T>, IComparable where T : 
     /// <summary>
     /// Performs an equality comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is equal to the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static abstract bool operator ==(T left, T right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is not equal to the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static abstract bool operator !=(T left, T right);
 
     /// <summary>
     /// Performs a greater than comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is greater than the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is greater than the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static abstract bool operator >(T left, T right);
 
     /// <summary>
     /// Performs a greater than or equal comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is greater than or equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is greater than or equal to the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static abstract bool operator >=(T left, T right);
 
     /// <summary>
     /// Performs a less than comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is less than the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is less than the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static abstract bool operator <(T left, T right);
 
     /// <summary>
     /// Performs a less than or equal comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is less than or equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is less than or equal to the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static abstract bool operator <=(T left, T right);
 }

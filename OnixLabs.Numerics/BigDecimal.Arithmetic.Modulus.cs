@@ -19,11 +19,11 @@ namespace OnixLabs.Numerics;
 public readonly partial struct BigDecimal
 {
     /// <summary>
-    /// Gets the modulus of the specified <see cref="BigDecimal"/> values by dividing the left-hand value by the right-hand value.
+    /// Gets the modulus of the specified <see cref="BigDecimal"/> values by dividing the <paramref name="left"/> value by the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to divide.</param>
-    /// <param name="right">The right-hand value to divide by.</param>
-    /// <returns>Returns the modulus of the specified <see cref="BigDecimal"/> values by dividing the left-hand value by the right-hand value.</returns>
+    /// <param name="left">The <paramref name="left"/> value to divide.</param>
+    /// <param name="right">The <paramref name="right"/> value to divide by.</param>
+    /// <returns>Returns the modulus of the specified <see cref="BigDecimal"/> values by dividing the <paramref name="left"/> value by the <paramref name="right"/> value.</returns>
     public static BigDecimal Mod(BigDecimal left, BigDecimal right)
     {
         int scale = MaxScale(left, right);
@@ -35,10 +35,10 @@ public readonly partial struct BigDecimal
     }
 
     /// <summary>
-    /// Gets the modulus of the specified <see cref="BigDecimal"/> values by dividing the left-hand value by the right-hand value.
+    /// Gets the modulus of the specified <see cref="BigDecimal"/> values by dividing the <paramref name="left"/> value by the <paramref name="right"/> value.
     /// </summary>
-    /// <param name="left">The left-hand value to divide.</param>
-    /// <param name="right">The right-hand value to divide by.</param>
-    /// <returns>Returns the modulus of the specified <see cref="BigDecimal"/> values by dividing the left-hand value by the right-hand value.</returns>
+    /// <param name="left">The <paramref name="left"/> value to divide.</param>
+    /// <param name="right">The <paramref name="right"/> value to divide by.</param>
+    /// <returns>Returns the modulus of the specified <see cref="BigDecimal"/> values by dividing the <paramref name="left"/> value by the <paramref name="right"/> value.</returns>
     public static BigDecimal operator %(BigDecimal left, BigDecimal right) => Mod(left, right);
 }

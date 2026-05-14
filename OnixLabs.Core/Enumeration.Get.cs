@@ -32,9 +32,9 @@ public abstract partial class Enumeration<T>
         .ToFrozenSet();
 
     /// <summary>
-    /// Gets all the enumeration entries for the current type.
+    /// Gets all the enumeration entries, as value/name tuples, for the current type.
     /// </summary>
-    /// <returns>Returns all the enumeration entries for the current type.</returns>
+    /// <returns>Returns all the enumeration entries, as value/name tuples, for the current type.</returns>
     public static IReadOnlySet<(int Value, string Name)> GetEntries() => GetAll().Select(entry => entry.ToEntry()).ToFrozenSet();
 
     /// <summary>

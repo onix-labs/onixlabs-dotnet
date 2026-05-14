@@ -44,7 +44,8 @@ public abstract partial class MerkleTree
     /// </summary>
     /// <param name="leaves">The Merkle tree leaf nodes from which to build a Merkle tree.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash together left-hand and right-hand <see cref="MerkleTree"/> nodes.</param>
-    /// <returns>Returns a new <see cref="MerkleTree"/> node that represents the Merkle root.</returns>
+    /// <typeparam name="T">The underlying <see cref="IHashable"/> type of the Merkle tree leaf values.</typeparam>
+    /// <returns>Returns a new <see cref="MerkleTree{T}"/> node that represents the Merkle root.</returns>
     public static MerkleTree<T> Create<T>(IEnumerable<T> leaves, HashAlgorithm algorithm) where T : IHashable => MerkleTree<T>.Create(leaves, algorithm);
 
     /// <summary>

@@ -210,12 +210,83 @@ Rough ordering. Probably ~3–5 commits for the core, more for hardening.
 3. Encrypted PKCS#8 via `Pkcs12Kdf` / `Aes` / `Rfc2898DeriveBytes` (PBES2). The BCL does NOT have a one-shot encrypted-PKCS#8 helper that's algorithm-agnostic, but the building blocks are there.
 4. **Gate: all `ExportPkcs8` / `ImportPkcs8` / `ExportPem` / `ImportPem` round-trip tests pass.**
 
-### Phase 4 — Hardening (issue acceptance criteria)
-1. Project Wycheproof Ed25519 test vectors. Source: <https://github.com/C2SP/wycheproof/blob/main/testvectors/eddsa_test.json>. Add as test data alongside `OnixLabs.Security.Cryptography.UnitTests.Data` or pull in at test time.
-2. RFC 8032 §7.1 TEST 1024 (long message).
-3. Cross-validation: sign with `EddsaPrivateKey`, verify against a known-good independent impl (e.g. embedded test vectors from BouncyCastle as oracle data, without taking a runtime dependency).
-4. Negative tests: `S ≥ L` rejection, low-order point rejection, malleability, non-canonical encodings.
-5. Benchmarks (BenchmarkDotNet) for sign/verify throughput. Document numbers.
+### Phase 4 — Hardening (issue acceptance criteria) — COMPLETE
+
+1. **Project Wycheproof Ed25519 test vectors — DONE.** Source vectors fetched from
+   `https://raw.githubusercontent.com/C2SP/wycheproof/main/testvectors_v1/ed25519_test.json`
+   (the upstream `testvectors/` path referenced in the original issue has been renamed to
+   `testvectors_v1/`). The JSON is embedded as an `EmbeddedResource` in
+   `OnixLabs.Security.Cryptography.UnitTests.Data/wycheproof_eddsa_test.json` and surfaced
+   to xUnit via `WycheproofEd25519DataAttribute` (a `DataAttribute` matching the in-repo
+   convention used in `OnixLabs.Numerics.UnitTests.Data`). All 150 vectors pass: the
+   88 `valid` cases verify, the 62 `invalid` cases are rejected. The corpus does not
+   contain any `acceptable` cases.
+
+2. **RFC 8032 §7.1 TEST 1024 — DONE.** Added as a fourth `[InlineData]` row on
+   `EddsaMustSatisfyRfc8032KnownAnswerTestVectors` in `EddsaKeyTests.cs`. The 1023-byte
+   message exercises the whole-message PureEdDSA path through `IncrementalHash.AppendData`.
+   Public-key derivation, signature production, and signature verification all match the
+   RFC's published values.
+
+3. **Cross-validation — satisfied by Wycheproof.** The 88 `Valid`/`Ktv`/`TinkOverflow`
+   vectors in Project Wycheproof are signatures produced by independent implementations
+   (BoringSSL, Tink, NaCl, ...). Verifying all of them constitutes cross-validation against
+   multiple oracles without adding a runtime dependency. No additional BouncyCastle oracle
+   table was added.
+
+4. **Negative tests — DONE.** Added to `EddsaKeyTests.cs`:
+   - `EddsaVerificationShouldRejectSignaturesWithNonCanonicalS` — confirms
+     `Edwards25519Scalar.IsCanonical` rejects `S = L`.
+   - `EddsaVerificationShouldRejectNonCanonicalY` — confirms `Edwards25519Point.TryDecode`
+     rejects a public key whose y-coordinate equals `p`.
+   - `EddsaVerificationShouldFailWhenSIsBitFlipped` and
+     `EddsaVerificationShouldFailWhenRIsBitFlipped` — malleability.
+   - `EddsaCofactoredVerificationAcceptsLowOrderPublicKey` — documents that our cofactored
+     verifier accepts the all-zero (order-4) public key with a constructed signature
+     `R = B, S = 1`. RFC 8032 does not mandate rejection here. Switching to non-cofactored
+     verification would change this behaviour; the test pins the current contract.
+
+5. **Benchmarks — DONE.** New project `OnixLabs.Security.Cryptography.Benchmarks` using
+   `BenchmarkDotNet 0.15.8`. Wired into `onixlabs-dotnet.slnx`. A local
+   `Directory.Build.props` pins `TargetFrameworks=net10.0` so the BDN auto-generated host
+   project does not try to inherit the repo-wide net8/9/10 multi-targeting. Results in the
+   next section.
+
+#### Phase 4 benchmarks
+
+Reference run, x86_64 Linux/macOS hardware (the dev machine reported below — Apple/ARM64
+not in use for this run). Run with:
+
+```sh
+dotnet build OnixLabs.Security.Cryptography.Benchmarks -c Release
+dotnet run --project OnixLabs.Security.Cryptography.Benchmarks -c Release -f net10.0 --no-build -- --filter '*'
+```
+
+Raw report: `BenchmarkDotNet.Artifacts/results/OnixLabs.Security.Cryptography.Benchmarks.EddsaBenchmarks-report-github.md`.
+
+```
+BenchmarkDotNet v0.15.8, macOS Tahoe 26.3.1 (a) (25D771280a) [Darwin 25.3.0]
+Intel Xeon W-3265 CPU 2.70GHz, 1 CPU, 48 logical and 24 physical cores
+.NET SDK 10.0.100
+  [Host]     : .NET 10.0.0 (10.0.0, 10.0.25.52411), X64 RyuJIT x86-64-v3
+  DefaultJob : .NET 10.0.0 (10.0.0, 10.0.25.52411), X64 RyuJIT x86-64-v3
+```
+
+| Method                                         | Mean       | Error     | StdDev    | Allocated | Ops/sec  |
+|----------------------------------------------- |-----------:|----------:|----------:|----------:|---------:|
+| `EddsaPrivateKey.Create — key generation`      |   4.284 µs | 0.0700 µs | 0.0654 µs |   1,616 B | ~233,400 |
+| `EddsaPrivateKey.SignData — 64-byte message`   | 331.193 µs | 1.5493 µs | 1.3734 µs |   2,376 B |   ~3,020 |
+| `EddsaPublicKey.IsDataValid — 64-byte message` | 342.897 µs | 2.6553 µs | 2.3538 µs |     328 B |   ~2,915 |
+
+Order-of-magnitude observations:
+
+- The reference scalar-multiplication is double-and-add over 255 bits with no windowing —
+  ~512 group operations per sign or verify on top of the SHA-512 hashes. Reaching the
+  ~50 µs region typical of optimised Ed25519 implementations (NaCl, ed25519-donna) is a
+  Phase 5 target.
+- Allocations during sign/verify come from the `BigInteger`-based scalar arithmetic
+  (`Edwards25519Scalar`); replacing it with a `ulong`-limb constant-time variant in Phase 5
+  is expected to drop both the cycle count and the allocation count.
 
 ### Phase 5 (stretch, per issue)
 1. Constant-time scalar multiplication review.

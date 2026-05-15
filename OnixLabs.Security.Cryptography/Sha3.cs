@@ -18,7 +18,7 @@ using System.Security.Cryptography;
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Computes the FIPS 202 SHA-3 hash for the input data.
+/// Represents the abstract base class for the FIPS 202 SHA-3 family of hash algorithms.
 /// </summary>
 public abstract partial class Sha3 : HashAlgorithm
 {

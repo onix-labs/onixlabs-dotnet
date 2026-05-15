@@ -219,7 +219,7 @@ internal static class Ieee754Converter
     /// Requires that the specified value is a real number.
     /// </summary>
     /// <param name="value">The value to check.</param>
-    /// <typeparam name="T">The underlying type of the &lt;see cref="IBinaryFloatingPointIeee754{TSelf}"/&gt; value.</typeparam>
+    /// <typeparam name="T">The underlying <see cref="IBinaryFloatingPointIeee754{TSelf}"/> type.</typeparam>
     private static void RequireRealNumber<T>(T value) where T : IBinaryFloatingPointIeee754<T>
     {
         Require(!T.IsNaN(value), "Value must not be NaN.", nameof(value));

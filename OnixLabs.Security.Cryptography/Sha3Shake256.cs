@@ -15,7 +15,7 @@
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Computes the FIPS 202 SHA-3 Shake 256-bit hash for the input data.
+/// Represents the FIPS 202 SHAKE256 extendable-output hash algorithm.
 /// </summary>
 public sealed class Sha3Shake256 : Sha3
 {

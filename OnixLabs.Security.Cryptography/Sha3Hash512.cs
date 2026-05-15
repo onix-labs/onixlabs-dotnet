@@ -15,7 +15,7 @@
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Computes the FIPS 202 SHA-3 512-bit hash for the input data.
+/// Represents the FIPS 202 SHA-3 512-bit hash algorithm.
 /// </summary>
 public sealed class Sha3Hash512 : Sha3
 {

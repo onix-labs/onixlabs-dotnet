@@ -25,11 +25,11 @@ public static class TypeExtensions
 {
     /// <summary>
     /// Gets the type declaration for the current <see cref="Type"/> instance.
+    /// </summary>
     /// <remarks>
     /// Depending on the specified <see cref="TypeDeclarationFlags"/>, this method is capable or returning type declarations including
     /// simple type names, namespace qualified types names, aliased types names, nullable shorthand notation, generic arguments, and value tuples.
     /// </remarks>
-    /// </summary>
     /// <param name="type">The current <see cref="Type"/> instance from which to obtain the type declaration.</param>
     /// <param name="flags">The flags that specify how the type declaration should be formatted.</param>
     /// <returns>Returns the type declaration for the current <see cref="Type"/> instance.</returns>

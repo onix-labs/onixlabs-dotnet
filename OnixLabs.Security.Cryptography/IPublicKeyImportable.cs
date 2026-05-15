@@ -12,67 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Core;
-
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Defines a cryptographic public key that can be imported.
+/// Defines a cryptographic public key that can be imported from binary and RFC 7468 PEM-encoded data.
 /// </summary>
-/// <typeparam name="T">The underlying type of <see cref="PrivateKey"/> that the import functions will return.</typeparam>
-public interface IPublicKeyImportable<out T> where T : PublicKey
-{
-    /// <summary>
-    /// Imports the cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The cryptographic public key data to import.</param>
-    /// <returns>Returns a new cryptographic public key from the imported data.</returns>
-    public static abstract T Import(ReadOnlySpan<byte> data);
-
-    /// <summary>
-    /// Imports the cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The cryptographic public key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new cryptographic public key from the imported data.</returns>
-    public static abstract T Import(ReadOnlySpan<byte> data, out int bytesRead);
-
-    /// <summary>
-    /// Imports the cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The cryptographic public key data to import.</param>
-    /// <returns>Returns a new cryptographic public key from the imported data.</returns>
-    public static abstract T Import(IBinaryConvertible data);
-
-    /// <summary>
-    /// Imports the cryptographic public key data.
-    /// </summary>
-    /// <param name="data">The cryptographic public key data to import.</param>
-    /// <param name="bytesRead">The number of bytes read from the input data.</param>
-    /// <returns>Returns a new cryptographic public key from the imported data.</returns>
-    public static abstract T Import(IBinaryConvertible data, out int bytesRead);
-
-    /// <summary>
-    /// Imports the cryptographic public key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The cryptographic public key data to import.</param>
-    /// <returns>Returns a new cryptographic public key from the imported data.</returns>
-    public static abstract T ImportPem(ReadOnlySpan<char> data);
-
-    /// <summary>
-    /// Imports the cryptographic public key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The cryptographic public key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new cryptographic public key from the imported data.</returns>
-    public static abstract T ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password);
-
-    /// <summary>
-    /// Imports the cryptographic public key data in encrypted PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="data">The cryptographic public key data to import.</param>
-    /// <param name="password">The password required for password based decryption.</param>
-    /// <returns>Returns a new cryptographic public key from the imported data.</returns>
-    public static abstract T ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password);
-}
+/// <typeparam name="T">The underlying type of <see cref="PublicKey"/> that the import functions will return.</typeparam>
+public interface IPublicKeyImportable<out T> :
+    IPublicKeyRawImportable<T>,
+    IPublicKeyPemImportable<T>
+    where T : PublicKey;

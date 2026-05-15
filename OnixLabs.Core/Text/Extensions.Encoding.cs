@@ -19,13 +19,13 @@ using System.Text;
 namespace OnixLabs.Core.Text;
 
 /// <summary>
-/// Provides extension methods <see cref="Encoding"/> instances.
+/// Provides extension methods for <see cref="Encoding"/> instances.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class EncodingExtensions
 {
     /// <summary>
-    /// Provides extension methods <see cref="Encoding"/> instances.
+    /// Defines instance-style extensions over an <see cref="Encoding"/>, including the receiving encoding that may be <see langword="null"/>.
     /// </summary>
     /// <param name="receiver">The current <see cref="Encoding"/> instance.</param>
     extension(Encoding? receiver)

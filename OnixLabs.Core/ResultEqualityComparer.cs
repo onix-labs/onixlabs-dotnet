@@ -25,7 +25,7 @@ namespace OnixLabs.Core;
 public sealed class ResultEqualityComparer<T>(EqualityComparer<T>? valueComparer = null) : IEqualityComparer<Result<T>>
 {
     /// <summary>
-    /// Gets the default <see cref="ResultEqualityComparer{T}"/> instance.
+    /// The default <see cref="ResultEqualityComparer{T}"/> instance.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly ResultEqualityComparer<T> Default = new();

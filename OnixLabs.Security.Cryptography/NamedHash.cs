@@ -50,12 +50,14 @@ public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, I
     /// <summary>
     /// Gets the underlying hash value.
     /// </summary>
+    /// <value>The underlying <see cref="Hash"/> value.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public Hash Hash { get; }
 
     /// <summary>
-    /// Gets name of the hash algorithm that was used to produce the associated hash.
+    /// Gets the name of the hash algorithm that was used to produce the associated hash.
     /// </summary>
+    /// <value>The name of the hash algorithm that was used to produce the associated hash.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public string AlgorithmName { get; }
 }

@@ -22,7 +22,7 @@ public readonly partial struct Base32
     public bool Equals(Base32 other) => other.value.SequenceEqualOrNull(value);
 
     /// <inheritdoc/>
-    public override bool Equals(object? obj) => obj is Base16 other && Equals(other);
+    public override bool Equals(object? obj) => obj is Base32 other && Equals(other);
 
     /// <inheritdoc/>
     public override int GetHashCode() => value.GetContentHashCode();

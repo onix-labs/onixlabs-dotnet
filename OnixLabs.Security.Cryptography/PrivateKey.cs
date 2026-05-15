@@ -64,5 +64,6 @@ public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>, IDispos
     /// <summary>
     /// Gets the cryptographic private key data.
     /// </summary>
+    /// <value>The decrypted byte array containing the cryptographic private key data.</value>
     protected byte[] KeyData => protectedData.Decrypt(field);
 }

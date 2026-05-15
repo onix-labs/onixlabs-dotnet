@@ -15,19 +15,8 @@
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Defines a cryptographic public key that can be exported.
+/// Defines a cryptographic public key that can be exported in binary and RFC 7468 PEM forms.
 /// </summary>
-public interface IPublicKeyExportable
-{
-    /// <summary>
-    /// Exports the cryptographic public key data.
-    /// </summary>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic public key data.</returns>
-    byte[] Export();
-
-    /// <summary>
-    /// Exports the cryptographic public key data in RFC 7468 PEM format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="string"/> instance containing the cryptographic public key data in RFC 7468 format.</returns>
-    string ExportPem();
-}
+public interface IPublicKeyExportable :
+    IPublicKeyRawExportable,
+    IPublicKeyPemExportable;

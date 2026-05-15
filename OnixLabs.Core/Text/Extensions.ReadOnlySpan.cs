@@ -18,14 +18,14 @@ using System.ComponentModel;
 namespace OnixLabs.Core.Text;
 
 /// <summary>
-/// Provides extension methods <see cref="ReadOnlySpan{T}"/> instances.
+/// Provides extension methods for <see cref="ReadOnlySpan{T}"/> instances.
 /// </summary>
 // ReSharper disable UnusedMethodReturnValue.Global
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class Extensions
 {
     /// <summary>
-    /// Provides extension methods <see cref="ReadOnlySpan{T}"/> instances.
+    /// Defines instance-style extensions over a <see cref="ReadOnlySpan{T}"/> of <see cref="byte"/>.
     /// </summary>
     /// <param name="receiver">The current <see cref="ReadOnlySpan{T}"/> instance.</param>
     extension(ReadOnlySpan<byte> receiver)

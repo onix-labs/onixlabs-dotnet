@@ -23,6 +23,7 @@ public abstract partial class MerkleTree<T>
     /// <summary>
     /// Obtains a hash-only, non-generic <see cref="MerkleTree"/> instance from the current <see cref="MerkleTree{T}"/> instance.
     /// </summary>
+    /// <param name="algorithm">The hash algorithm that will be used to construct the resulting <see cref="MerkleTree"/>.</param>
     /// <returns>Returns a new hash-only, non-generic <see cref="MerkleTree"/> instance from the current <see cref="MerkleTree{T}"/> instance.</returns>
     public MerkleTree ToMerkleTree(HashAlgorithm algorithm)
     {

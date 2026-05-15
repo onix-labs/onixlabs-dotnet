@@ -24,33 +24,33 @@ public enum TypeDeclarationFlags
 {
     /// <summary>
     /// Specifies that no type name arguments are applied.
-    /// <remarks>Only simple CLR type names will be used, and excludes generic type arguments and tuple syntax.</remarks>
     /// </summary>
+    /// <remarks>Only simple CLR type names will be used, and excludes generic type arguments and tuple syntax.</remarks>
     None = 0,
 
     /// <summary>
     /// Specifies that namespace qualified CLR type names will be used, where applicable.
+    /// </summary>
     /// <remarks>
     /// If the namespace qualified CLR type name is not available, then this will use the type's simple CLR type name instead.
     /// </remarks>
-    /// </summary>
     UseNamespaceQualifiedTypeNames = 1 << 0,
 
     /// <summary>
     /// Specifies that type alias names will be used, where applicable.
+    /// </summary>
     /// <remarks>
     /// This flag supersedes the <see cref="UseNamespaceQualifiedTypeNames"/> flag, therefore if a type alias name is not available, then the namespace
     /// qualified CLR type name will be used if <see cref="UseNamespaceQualifiedTypeNames"/> is set; otherwise, the type's simple CLR type name will be used.
     /// </remarks>
-    /// </summary>
     UseAliasedTypeNames = 1 << 1,
 
     /// <summary>
     /// Specifies that <see cref="Nullable{T}"/> types will be formatted using nullable shorthand syntax.
+    /// </summary>
     /// <remarks>
     /// This flag supersedes the <see cref="UseGenericTypeArguments"/> flag.
     /// </remarks>
-    /// </summary>
     UseNullableShorthandTypeNames = 1 << 2,
 
     /// <summary>
@@ -60,14 +60,14 @@ public enum TypeDeclarationFlags
 
     /// <summary>
     /// Specifies that types of <see cref="ValueTuple"/> will be formatted using tuple syntax.
-    /// <remarks>This flag supersedes the <see cref="UseGenericTypeArguments"/> flag.</remarks>
     /// </summary>
+    /// <remarks>This flag supersedes the <see cref="UseGenericTypeArguments"/> flag.</remarks>
     UseValueTupleSyntax = 1 << 4,
 
     /// <summary>
     /// Specifies that types of <see cref="ValueTuple"/> will be formatted using tuple names, where applicable.
-    /// <remarks>This flag supersedes the <see cref="UseValueTupleSyntax"/> and <see cref="UseGenericTypeArguments"/> flags.</remarks>
     /// </summary>
+    /// <remarks>This flag supersedes the <see cref="UseValueTupleSyntax"/> and <see cref="UseGenericTypeArguments"/> flags.</remarks>
     UseValueTupleNames = 1 << 5,
 
     /// <summary>

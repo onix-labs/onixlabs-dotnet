@@ -21,12 +21,12 @@ namespace OnixLabs.Core.Reflection;
 
 /// <summary>
 /// Represents a formatter for C# type declarations.
+/// </summary>
 /// <remarks>
 /// There are some limitations as to what this formatter is capable of producing; for example, nullability state information
 /// for nullable reference types, and <see cref="ValueTuple"/> custom names are not available within a <see cref="Type"/>
 /// instance, and therefore cannot be produced by this type declaration formatter.
 /// </remarks>
-/// </summary>
 internal static class CSharpTypeDeclarationFormatter
 {
     private const char NullableTypeIdentifier = '?';
@@ -63,11 +63,11 @@ internal static class CSharpTypeDeclarationFormatter
 
     /// <summary>
     /// Gets the type declaration for the current <see cref="Type"/> instance.
+    /// </summary>
     /// <remarks>
     /// Depending on the specified <see cref="TypeDeclarationFlags"/>, this method is capable or returning type declarations including
     /// simple type names, namespace qualified types names, aliased types names, nullable shorthand notation, generic arguments, and value tuples.
     /// </remarks>
-    /// </summary>
     /// <param name="type">The current <see cref="Type"/> instance from which to obtain the type declaration.</param>
     /// <param name="flags">The flags that specify how the type declaration should be formatted.</param>
     /// <returns>Returns the type declaration for the current <see cref="Type"/> instance.</returns>
@@ -113,7 +113,7 @@ internal static class CSharpTypeDeclarationFormatter
     /// </summary>
     /// <param name="type">The type to check is potentially generic.</param>
     /// <param name="flags">The flags that specify how the type declaration should be formatted.</param>
-    /// <returns>Returns true if the specified type is a generic type, and the <see cref="TypeDeclarationFlags.UseGenericTypeArguments"/> flag is set; otherwise, false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified type is a generic type, and the <see cref="TypeDeclarationFlags.UseGenericTypeArguments"/> flag is set; otherwise, <see langword="false"/>.</returns>
     private static bool CanFormatGenericType(Type type, TypeDeclarationFlags flags)
     {
         bool useGenericTypeArguments = (flags & TypeDeclarationFlags.UseGenericTypeArguments) is not 0;
@@ -127,8 +127,8 @@ internal static class CSharpTypeDeclarationFormatter
     /// <param name="type">The type to check is potentially a multi-argument value-tuple type.</param>
     /// <param name="flags">The flags that specify how the type declaration should be formatted.</param>
     /// <returns>
-    /// Returns true if the specified type is a multi-argument value-tuple type, and whether the
-    /// <see cref="TypeDeclarationFlags.UseValueTupleSyntax"/> or <see cref="TypeDeclarationFlags.UseValueTupleNames"/> flag is set; otherwise, false.
+    /// Returns <see langword="true"/> if the specified type is a multi-argument value-tuple type, and whether the
+    /// <see cref="TypeDeclarationFlags.UseValueTupleSyntax"/> or <see cref="TypeDeclarationFlags.UseValueTupleNames"/> flag is set; otherwise, <see langword="false"/>.
     /// </returns>
     private static bool CanFormatValueTupleType(Type type, TypeDeclarationFlags flags)
     {

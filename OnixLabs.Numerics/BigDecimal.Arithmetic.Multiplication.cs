@@ -21,8 +21,8 @@ public readonly partial struct BigDecimal
     /// <summary>
     /// Computes the product of the specified <see cref="BigDecimal"/> values.
     /// </summary>
-    /// <param name="left">The left-hand value to multiply by.</param>
-    /// <param name="right">The right-hand value to multiply.</param>
+    /// <param name="left">The <paramref name="left"/> value to multiply by.</param>
+    /// <param name="right">The <paramref name="right"/> value to multiply.</param>
     /// <returns>Returns the product of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal Multiply(BigDecimal left, BigDecimal right)
     {
@@ -37,8 +37,8 @@ public readonly partial struct BigDecimal
     /// <summary>
     /// Computes the product of the specified <see cref="BigDecimal"/> values.
     /// </summary>
-    /// <param name="left">The left-hand value to multiply by.</param>
-    /// <param name="right">The right-hand value to multiply.</param>
+    /// <param name="left">The <paramref name="left"/> value to multiply by.</param>
+    /// <param name="right">The <paramref name="right"/> value to multiply.</param>
     /// <returns>Returns the product of the specified <see cref="BigDecimal"/> values.</returns>
     public static BigDecimal operator *(BigDecimal left, BigDecimal right) => Multiply(left, right);
 }

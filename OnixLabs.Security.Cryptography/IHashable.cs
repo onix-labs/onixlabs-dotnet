@@ -17,13 +17,14 @@ using System.Security.Cryptography;
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-///  Defines a mechanism for computing the <see cref="Hash"/> of a data structure.
+/// Defines a mechanism for computing the <see cref="Hash"/> of a data structure.
 /// </summary>
 public interface IHashable
 {
     /// <summary>
-    /// Computes the <see cref="Hash"/> hash of the current object.
+    /// Computes the <see cref="Hash"/> of the current object.
     /// </summary>
-    /// <returns>Returns the computed <see cref="Hash"/> hash of the current object.</returns>
+    /// <param name="algorithm">The <see cref="HashAlgorithm"/> which will be used to compute the hash.</param>
+    /// <returns>Returns the computed <see cref="Hash"/> of the current object.</returns>
     Hash ComputeHash(HashAlgorithm algorithm);
 }

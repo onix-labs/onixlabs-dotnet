@@ -25,7 +25,7 @@ namespace OnixLabs.Numerics;
 public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, IComparer
 {
     /// <summary>
-    /// Gets the default ordinal comparer for comparing <see cref="NumberInfo"/> values.
+    /// The default ordinal comparer for comparing <see cref="NumberInfo"/> values.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly NumberInfoOrdinalityComparer Default = new();
@@ -64,42 +64,42 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     }
 
     /// <summary>
-    /// Determines whether the left-hand <see cref="NumberInfo"/> value is equal to the right-hand <see cref="NumberInfo"/> value.
+    /// Determines whether the <paramref name="left"/> <see cref="NumberInfo"/> value is equal to the <paramref name="right"/> <see cref="NumberInfo"/> value.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is equal to the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is equal to the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsEqual(NumberInfo left, NumberInfo right) => Compare(left, right) is 0;
 
     /// <summary>
-    /// Determines whether the left-hand <see cref="NumberInfo"/> value is greater than the right-hand <see cref="NumberInfo"/> value.
+    /// Determines whether the <paramref name="left"/> <see cref="NumberInfo"/> value is greater than the <paramref name="right"/> <see cref="NumberInfo"/> value.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is greater than the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is greater than the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsGreaterThan(NumberInfo left, NumberInfo right) => Compare(left, right) is 1;
 
     /// <summary>
-    /// Determines whether the left-hand <see cref="NumberInfo"/> value is greater than, or equal to the right-hand <see cref="NumberInfo"/> value.
+    /// Determines whether the <paramref name="left"/> <see cref="NumberInfo"/> value is greater than, or equal to the <paramref name="right"/> <see cref="NumberInfo"/> value.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is greater than, or equal to the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is greater than, or equal to the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsGreaterThanOrEqual(NumberInfo left, NumberInfo right) => Compare(left, right) is 0 or 1;
 
     /// <summary>
-    /// Determines whether the left-hand <see cref="NumberInfo"/> value is less than the right-hand <see cref="NumberInfo"/> value.
+    /// Determines whether the <paramref name="left"/> <see cref="NumberInfo"/> value is less than the <paramref name="right"/> <see cref="NumberInfo"/> value.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is less than the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is less than the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsLessThan(NumberInfo left, NumberInfo right) => Compare(left, right) is -1;
 
     /// <summary>
-    /// Determines whether the left-hand <see cref="NumberInfo"/> value is less than, or equal to the right-hand <see cref="NumberInfo"/> value.
+    /// Determines whether the <paramref name="left"/> <see cref="NumberInfo"/> value is less than, or equal to the <paramref name="right"/> <see cref="NumberInfo"/> value.
     /// </summary>
-    /// <param name="left">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <param name="right">The left-hand <see cref="NumberInfo"/> value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand <see cref="NumberInfo"/> value is less than, or equal to the right-hand <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is less than, or equal to the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
     public bool IsLessThanOrEqual(NumberInfo left, NumberInfo right) => Compare(left, right) is -1 or 0;
 }

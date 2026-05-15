@@ -27,10 +27,12 @@ public abstract partial class Enumeration<T>(int value, string name) : IEquatabl
     /// <summary>
     /// Gets the name of the enumeration entry.
     /// </summary>
+    /// <value>The name associated with the current enumeration entry.</value>
     public string Name { get; } = name;
 
     /// <summary>
     /// Gets the value of the enumeration entry.
     /// </summary>
+    /// <value>The integer value associated with the current enumeration entry.</value>
     public int Value { get; } = value;
 }

@@ -36,7 +36,7 @@ public abstract partial class PublicKey : ICryptoPrimitive<PublicKey>
     /// <summary>
     /// Initializes a new instance of the <see cref="PublicKey"/> class.
     /// </summary>
-    /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
+    /// <param name="keyData">The underlying key data of the cryptographic public key.</param>
     protected PublicKey(ReadOnlySpan<byte> keyData) : this(keyData.ToArray())
     {
     }
@@ -44,7 +44,7 @@ public abstract partial class PublicKey : ICryptoPrimitive<PublicKey>
     /// <summary>
     /// Initializes a new instance of the <see cref="PublicKey"/> class.
     /// </summary>
-    /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
+    /// <param name="keyData">The underlying key data of the cryptographic public key.</param>
     protected PublicKey(ReadOnlyMemory<byte> keyData) : this(keyData.ToArray())
     {
     }
@@ -52,7 +52,7 @@ public abstract partial class PublicKey : ICryptoPrimitive<PublicKey>
     /// <summary>
     /// Initializes a new instance of the <see cref="PublicKey"/> class.
     /// </summary>
-    /// <param name="keyData">The underlying key data of the cryptographic private key.</param>
+    /// <param name="keyData">The underlying key data of the cryptographic public key.</param>
     protected PublicKey(ReadOnlySequence<byte> keyData) : this(keyData.ToArray())
     {
     }
@@ -60,5 +60,6 @@ public abstract partial class PublicKey : ICryptoPrimitive<PublicKey>
     /// <summary>
     /// Gets the cryptographic public key data.
     /// </summary>
+    /// <value>The underlying byte array containing the cryptographic public key data.</value>
     protected byte[] KeyData { get; }
 }

@@ -24,7 +24,7 @@ namespace OnixLabs.Numerics;
 public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueComparable<NumberInfo>, ISpanParsable<NumberInfo>, IFormattable
 {
     /// <summary>
-    /// Prevents a default instance of the <see cref="NumberInfo"/> struct from being created.
+    /// Initializes a new instance of the <see cref="NumberInfo"/> struct.
     /// </summary>
     /// <param name="unscaledValue">The unscaled value of the represented number.</param>
     /// <param name="scale">The scale of the represented number.</param>
@@ -35,6 +35,7 @@ public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueC
     /// The unscaled value is represented as a signed value, including any trailing zeros.
     /// If the represented number contains a fractional component, the trailing zeros are considered significant.
     /// </summary>
+    /// <value>The unscaled <see cref="BigInteger"/> value of the represented number, preserving any trailing zeros.</value>
     public BigInteger UnscaledValue { get; }
 
     /// <summary>
@@ -42,6 +43,7 @@ public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueC
     /// The scale is represented as a positive or neutral integer.
     /// The scale indicates how many digits from the right-hand side of the <see cref="UnscaledValue"/> represent the fractional component of the represented number.
     /// </summary>
+    /// <value>The non-negative scale of the represented number.</value>
     public int Scale { get; }
 
     /// <summary>
@@ -49,6 +51,7 @@ public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueC
     /// The significand is represented as a signed value, excluding any trailing zeros.
     /// If the represented number contains a fractional component, the trailing zeros are considered insignificant and must be calculated from the <see cref="Precision"/> of the represented number.
     /// </summary>
+    /// <value>The <see cref="BigInteger"/> significand of the represented number, with trailing zeros removed.</value>
     public BigInteger Significand
     {
         get
@@ -67,6 +70,7 @@ public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueC
     /// Gets the exponent of the represented number.
     /// The exponent is represented as a positive, negative or neutral number.
     /// </summary>
+    /// <value>The exponent of the represented number, expressed as a positive, negative or zero value.</value>
     public int Exponent
     {
         get
@@ -82,26 +86,31 @@ public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueC
     /// The precision is represented as a positive value, indicating how many significant digits the represented number contains.
     /// If the represented number's <see cref="UnscaledValue"/> or <see cref="Significand"/> contain fewer digits that the <see cref="Precision"/>, then trailing zeros are considered significant.
     /// </summary>
+    /// <value>The total number of significant digits in the represented number.</value>
     public int Precision => int.Max(GenericMath.IntegerLength(UnscaledValue), Scale + 1);
 
     /// <summary>
     /// Gets the sign of the represented number.
     /// The sign is represented as negative one for negative numbers, positive one for positive numbers; otherwise, zero.
     /// </summary>
+    /// <value>Negative one if the represented number is negative; positive one if the represented number is positive; otherwise, zero.</value>
     public int Sign => UnscaledValue.Sign;
 
     /// <summary>
     /// Gets the scale factor of the represented number.
     /// </summary>
+    /// <value>The scale factor, computed as ten raised to the power of <see cref="Scale"/>.</value>
     internal BigInteger ScaleFactor => BigInteger.Pow(10, Scale);
 
     /// <summary>
     /// Gets the integral component of the represented number.
     /// </summary>
+    /// <value>The integral part of the represented number.</value>
     internal BigInteger Integer => UnscaledValue / ScaleFactor;
 
     /// <summary>
     /// Gets the fractional component of the represented number.
     /// </summary>
+    /// <value>The non-negative fractional part of the represented number.</value>
     internal BigInteger Fraction => BigInteger.Abs(UnscaledValue - Integer * ScaleFactor);
 }

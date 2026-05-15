@@ -41,8 +41,8 @@ public interface IEcdsaPrivateKey :
     /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
     /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
     /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
@@ -79,8 +79,8 @@ public interface IEcdsaPrivateKey :
     /// Hashes the specified <see cref="ReadOnlySpan{T}"/> data and signs the resulting hash.
     /// </summary>
     /// <param name="data">The input data to hash and sign.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash the input data.</param>
     /// <param name="format">The digital signature format which will be used to generate the cryptographic digital signature.</param>
     /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>

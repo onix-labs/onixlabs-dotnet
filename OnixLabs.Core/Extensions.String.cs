@@ -80,7 +80,7 @@ public static class StringExtensions
         }
 
         /// <summary>
-        /// Obtains the zero-based index of the nth occurrence of the specified character in this instance.
+        /// Obtains the zero-based index of the nth occurrence of the specified substring in this instance.
         /// If the specified occurrence does not exist, returns -1.
         /// </summary>
         /// <param name="seekValue">The substring to seek.</param>
@@ -171,59 +171,59 @@ public static class StringExtensions
         public string SubstringBeforeFirst(char delimiter, string? defaultValue = null) =>
             receiver.SubstringBeforeIndex(receiver.IndexOf(delimiter), defaultValue);
 
-        ///  <summary>
-        ///  Obtains a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  </summary>
-        ///  <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
-        ///  <param name="defaultValue">
-        ///  The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
-        ///  If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
-        ///  </param>
-        ///  <param name="comparison">
-        ///  The culture, case and sort rules that will be applied when searching for the specified delimiter.
-        ///  The default value is <see cref="StringComparison.Ordinal"/>.
-        ///  </param>
-        ///  <returns>
+        /// <summary>
+        /// Obtains a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
+        /// </summary>
+        /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+        /// <param name="defaultValue">
+        /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+        /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+        /// </param>
+        /// <param name="comparison">
+        /// The culture, case and sort rules that will be applied when searching for the specified delimiter.
+        /// The default value is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
         /// Returns a sub-string before the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  If the delimiter is not found, then the default value will be returned.
-        ///  If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
-        ///  </returns>
+        /// If the delimiter is not found, then the default value will be returned.
+        /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+        /// </returns>
         public string SubstringBeforeFirst(string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
             receiver.SubstringBeforeIndex(receiver.IndexOf(delimiter, comparison), defaultValue);
 
-        ///  <summary>
-        ///  Obtains a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  </summary>
-        ///  <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
-        ///  <param name="defaultValue">
-        ///  The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
-        ///  If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
-        ///  </param>
-        ///  <returns>
+        /// <summary>
+        /// Obtains a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
+        /// </summary>
+        /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+        /// <param name="defaultValue">
+        /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+        /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+        /// </param>
+        /// <returns>
         /// Returns a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  If the delimiter is not found, then the default value will be returned.
-        ///  If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
-        ///  </returns>
+        /// If the delimiter is not found, then the default value will be returned.
+        /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+        /// </returns>
         public string SubstringBeforeLast(char delimiter, string? defaultValue = null) =>
             receiver.SubstringBeforeIndex(receiver.LastIndexOf(delimiter), defaultValue);
 
-        ///  <summary>
-        ///  Obtains a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  </summary>
-        ///  <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
-        ///  <param name="defaultValue">
-        ///  The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
-        ///  If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
-        ///  </param>
-        ///  <param name="comparison">
-        ///  The culture, case and sort rules that will be applied when searching for the specified delimiter.
-        ///  The default value is <see cref="StringComparison.Ordinal"/>.
-        ///  </param>
-        ///  <returns>
+        /// <summary>
+        /// Obtains a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
+        /// </summary>
+        /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+        /// <param name="defaultValue">
+        /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+        /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+        /// </param>
+        /// <param name="comparison">
+        /// The culture, case and sort rules that will be applied when searching for the specified delimiter.
+        /// The default value is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
         /// Returns a sub-string before the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  If the delimiter is not found, then the default value will be returned.
-        ///  If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
-        ///  </returns>
+        /// If the delimiter is not found, then the default value will be returned.
+        /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+        /// </returns>
         public string SubstringBeforeLast(string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
             receiver.SubstringBeforeIndex(receiver.LastIndexOf(delimiter, comparison), defaultValue);
 
@@ -243,59 +243,59 @@ public static class StringExtensions
         public string SubstringAfterFirst(char delimiter, string? defaultValue = null) =>
             receiver.SubstringAfterIndex(receiver.IndexOf(delimiter), 1, defaultValue);
 
-        ///  <summary>
-        ///  Obtains a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  </summary>
-        ///  <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
-        ///  <param name="defaultValue">
-        ///  The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
-        ///  If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
-        ///  </param>
-        ///  <param name="comparison">
-        ///  The culture, case and sort rules that will be applied when searching for the specified delimiter.
-        ///  The default value is <see cref="StringComparison.Ordinal"/>.
-        ///  </param>
-        ///  <returns>
+        /// <summary>
+        /// Obtains a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
+        /// </summary>
+        /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+        /// <param name="defaultValue">
+        /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+        /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+        /// </param>
+        /// <param name="comparison">
+        /// The culture, case and sort rules that will be applied when searching for the specified delimiter.
+        /// The default value is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
         /// Returns a sub-string after the first occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  If the delimiter is not found, then the default value will be returned.
-        ///  If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
-        ///  </returns>
+        /// If the delimiter is not found, then the default value will be returned.
+        /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+        /// </returns>
         public string SubstringAfterFirst(string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
             receiver.SubstringAfterIndex(receiver.IndexOf(delimiter, comparison), delimiter.Length, defaultValue);
 
-        ///  <summary>
-        ///  Obtains a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  </summary>
-        ///  <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
-        ///  <param name="defaultValue">
-        ///  The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
-        ///  If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
-        ///  </param>
-        ///  <returns>
+        /// <summary>
+        /// Obtains a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
+        /// </summary>
+        /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+        /// <param name="defaultValue">
+        /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+        /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+        /// </param>
+        /// <returns>
         /// Returns a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  If the delimiter is not found, then the default value will be returned.
-        ///  If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
-        ///  </returns>
+        /// If the delimiter is not found, then the default value will be returned.
+        /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+        /// </returns>
         public string SubstringAfterLast(char delimiter, string? defaultValue = null) =>
             receiver.SubstringAfterIndex(receiver.LastIndexOf(delimiter), 1, defaultValue);
 
-        ///  <summary>
-        ///  Obtains a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  </summary>
-        ///  <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
-        ///  <param name="defaultValue">
-        ///  The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
-        ///  If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
-        ///  </param>
-        ///  <param name="comparison">
-        ///  The culture, case and sort rules that will be applied when searching for the specified delimiter.
-        ///  The default value is <see cref="StringComparison.Ordinal"/>.
-        ///  </param>
-        ///  <returns>
+        /// <summary>
+        /// Obtains a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
+        /// </summary>
+        /// <param name="delimiter">The delimiter to find within the current <see cref="String"/> instance.</param>
+        /// <param name="defaultValue">
+        /// The <see cref="String"/> value to return in the event that the delimiter is not found in the current <see cref="String"/> instance.
+        /// If the default value is <see langword="null"/> then the current <see cref="String"/> instance is returned.
+        /// </param>
+        /// <param name="comparison">
+        /// The culture, case and sort rules that will be applied when searching for the specified delimiter.
+        /// The default value is <see cref="StringComparison.Ordinal"/>.
+        /// </param>
+        /// <returns>
         /// Returns a sub-string after the last occurrence of the specified delimiter within the current <see cref="String"/> instance.
-        ///  If the delimiter is not found, then the default value will be returned.
-        ///  If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
-        ///  </returns>
+        /// If the delimiter is not found, then the default value will be returned.
+        /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
+        /// </returns>
         public string SubstringAfterLast(string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
             receiver.SubstringAfterIndex(receiver.LastIndexOf(delimiter, comparison), 1, defaultValue);
 
@@ -419,7 +419,7 @@ public static class StringExtensions
             TimeOnly.Parse(receiver, provider, styles);
 
         /// <summary>
-        /// Returns a <see cref="string"/> with all escape characters formatted as escape character literals.
+        /// Obtains a <see cref="string"/> with all escape characters formatted as escape character literals.
         /// </summary>
         /// <returns>Returns a <see cref="string"/> with all escape characters formatted as escape character literals.</returns>
         public string ToEscapedString()

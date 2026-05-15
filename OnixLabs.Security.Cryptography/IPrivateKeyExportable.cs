@@ -12,69 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Security.Cryptography;
-
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Defines a cryptographic private key that can be exported.
+/// Defines a cryptographic private key that can be exported in raw binary, raw RFC 7468 PEM,
+/// PKCS #8 binary, and PKCS #8 RFC 7468 PEM forms.
 /// </summary>
-public interface IPrivateKeyExportable
-{
-    /// <summary>
-    /// Exports the cryptographic private key data.
-    /// </summary>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data.</returns>
-    byte[] Export();
-
-    /// <summary>
-    /// Exports the cryptographic private key data in PKCS #8 format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data in PKCS #8 format.</returns>
-    byte[] ExportPkcs8();
-
-    /// <summary>
-    /// Exports the cryptographic private key data in encrypted PKCS #8 format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data in PKCS #8 format.</returns>
-    byte[] ExportPkcs8(ReadOnlySpan<char> password, PbeParameters parameters);
-
-    /// <summary>
-    /// Exports the cryptographic private key data in encrypted PKCS #8 format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic private key data in PKCS #8 format.</returns>
-    byte[] ExportPkcs8(ReadOnlySpan<byte> password, PbeParameters parameters);
-
-    /// <summary>
-    /// Exports the cryptographic private key data in RFC 7468 PEM format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="string"/> instance containing the cryptographic private key data in RFC 7468 format.</returns>
-    string ExportPem();
-
-    /// <summary>
-    /// Exports the cryptographic private key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <returns>Returns a new <see cref="string"/> instance containing the cryptographic private key data in PKCS #8 RFC 7468 format.</returns>
-    string ExportPkcs8Pem();
-
-    /// <summary>
-    /// Exports the cryptographic private key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="string"/> instance containing the cryptographic private key data in PKCS #8 RFC 7468 format.</returns>
-    string ExportPkcs8Pem(ReadOnlySpan<char> password, PbeParameters parameters);
-
-    /// <summary>
-    /// Exports the cryptographic private key data in PKCS #8 RFC 7468 PEM format.
-    /// </summary>
-    /// <param name="password">The password to use for encryption.</param>
-    /// <param name="parameters">The parameters required for password based encryption.</param>
-    /// <returns>Returns a new <see cref="string"/> instance containing the cryptographic private key data in PKCS #8 RFC 7468 format.</returns>
-    string ExportPkcs8Pem(ReadOnlySpan<byte> password, PbeParameters parameters);
-}
+public interface IPrivateKeyExportable :
+    IPrivateKeyRawExportable,
+    IPrivateKeyRawPemExportable,
+    IPrivateKeyPkcs8Exportable,
+    IPrivateKeyPkcs8PemExportable;

@@ -12,15 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Security.Cryptography;
+
 namespace OnixLabs.Security.Cryptography;
 
-/// <summary>
-/// Defines a cryptographic private key that can be imported from raw binary, PKCS #8 binary,
-/// and RFC 7468 PEM-encoded data.
-/// </summary>
-/// <typeparam name="T">The underlying type of <see cref="PrivateKey"/> that the import functions will return.</typeparam>
-public interface IPrivateKeyImportable<out T> :
-    IPrivateKeyRawImportable<T>,
-    IPrivateKeyPkcs8Importable<T>,
-    IPrivateKeyPemImportable<T>
-    where T : PrivateKey;
+public sealed partial class EddsaPublicKey
+{
+    /// <summary>
+    /// The RFC 7468 PEM label used for SubjectPublicKeyInfo-encoded Ed25519 public keys.
+    /// </summary>
+    private const string PublicKeyLabel = "PUBLIC KEY";
+
+    /// <inheritdoc/>
+    public byte[] Export() => KeyData.AsSpan().ToArray();
+
+    /// <inheritdoc/>
+    public string ExportPem() => PemEncoding.WriteString(PublicKeyLabel, Ed25519Pkcs8.EncodePublicKey(KeyData));
+}

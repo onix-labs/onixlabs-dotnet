@@ -14,13 +14,12 @@
 
 namespace OnixLabs.Security.Cryptography;
 
-/// <summary>
-/// Defines a cryptographic private key that can be imported from raw binary, PKCS #8 binary,
-/// and RFC 7468 PEM-encoded data.
-/// </summary>
-/// <typeparam name="T">The underlying type of <see cref="PrivateKey"/> that the import functions will return.</typeparam>
-public interface IPrivateKeyImportable<out T> :
-    IPrivateKeyRawImportable<T>,
-    IPrivateKeyPkcs8Importable<T>,
-    IPrivateKeyPemImportable<T>
-    where T : PrivateKey;
+internal readonly partial struct Ed25519FieldElement
+{
+    /// <summary>
+    /// Computes <paramref name="z"/>^((p - 5) / 8) mod p, used during square-root computation for point decoding.
+    /// </summary>
+    /// <param name="z">The base field element.</param>
+    /// <returns>Returns the field element representing <paramref name="z"/>^((p - 5) / 8) modulo p.</returns>
+    public static Ed25519FieldElement PowP58(in Ed25519FieldElement z) => Pow22523ThenChain(z, multiplyZ11AtEnd: false);
+}

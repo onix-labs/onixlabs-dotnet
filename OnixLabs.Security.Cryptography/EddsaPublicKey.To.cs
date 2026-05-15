@@ -14,13 +14,13 @@
 
 namespace OnixLabs.Security.Cryptography;
 
-/// <summary>
-/// Defines a cryptographic private key that can be imported from raw binary, PKCS #8 binary,
-/// and RFC 7468 PEM-encoded data.
-/// </summary>
-/// <typeparam name="T">The underlying type of <see cref="PrivateKey"/> that the import functions will return.</typeparam>
-public interface IPrivateKeyImportable<out T> :
-    IPrivateKeyRawImportable<T>,
-    IPrivateKeyPkcs8Importable<T>,
-    IPrivateKeyPemImportable<T>
-    where T : PrivateKey;
+public sealed partial class EddsaPublicKey
+{
+    /// <summary>
+    /// The algorithm identifier used when wrapping this key as a <see cref="NamedPublicKey"/>.
+    /// </summary>
+    private const string KeyName = "EDDSA";
+
+    /// <inheritdoc/>
+    public override NamedPublicKey ToNamedPublicKey() => new(this, KeyName);
+}

@@ -15,12 +15,14 @@
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Defines a cryptographic private key that can be imported from raw binary, PKCS #8 binary,
-/// and RFC 7468 PEM-encoded data.
+/// Defines a cryptographic private key that can be exported in its raw RFC 7468 PEM form
+/// (for example, SEC1 <c>EC PRIVATE KEY</c> for ECDSA or PKCS #1 <c>RSA PRIVATE KEY</c> for RSA).
 /// </summary>
-/// <typeparam name="T">The underlying type of <see cref="PrivateKey"/> that the import functions will return.</typeparam>
-public interface IPrivateKeyImportable<out T> :
-    IPrivateKeyRawImportable<T>,
-    IPrivateKeyPkcs8Importable<T>,
-    IPrivateKeyPemImportable<T>
-    where T : PrivateKey;
+public interface IPrivateKeyRawPemExportable
+{
+    /// <summary>
+    /// Exports the cryptographic private key data in RFC 7468 PEM format.
+    /// </summary>
+    /// <returns>Returns a new <see cref="string"/> instance containing the cryptographic private key data in RFC 7468 format.</returns>
+    string ExportPem();
+}

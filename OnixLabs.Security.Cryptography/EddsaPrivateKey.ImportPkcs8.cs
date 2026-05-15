@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
+using System.Security.Cryptography.Pkcs;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -20,38 +22,85 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EddsaPrivateKey
 {
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data) => ImportPkcs8(data, out _);
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<char> password) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, out int bytesRead)
+    {
+        byte[] seed = Edwards25519Pkcs8.DecodePrivateKey(data, out bytesRead);
+        try
+        {
+            return new EddsaPrivateKey(seed);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(seed);
+        }
+    }
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<byte> password) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, ReadOnlySpan<char> password) =>
+        ImportPkcs8(data, password, out _);
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, out int bytesRead) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, ReadOnlySpan<char> password, out int bytesRead)
+    {
+        Pkcs8PrivateKeyInfo info = Pkcs8PrivateKeyInfo.DecryptAndDecode(password, data.ToArray(), out bytesRead);
+        return FromPkcs8Info(info);
+    }
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<char> password, out int bytesRead) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, ReadOnlySpan<byte> password) =>
+        ImportPkcs8(data, password, out _);
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<byte> password, out int bytesRead) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, ReadOnlySpan<byte> password, out int bytesRead)
+    {
+        Pkcs8PrivateKeyInfo info = Pkcs8PrivateKeyInfo.DecryptAndDecode(password, data.ToArray(), out bytesRead);
+        return FromPkcs8Info(info);
+    }
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data) => ImportPkcs8(data.AsReadOnlySpan());
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, ReadOnlySpan<char> password) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, out int bytesRead) =>
+        ImportPkcs8(data.AsReadOnlySpan(), out bytesRead);
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, ReadOnlySpan<byte> password) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<char> password) =>
+        ImportPkcs8(data.AsReadOnlySpan(), password);
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, out int bytesRead) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<char> password, out int bytesRead) =>
+        ImportPkcs8(data.AsReadOnlySpan(), password, out bytesRead);
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, ReadOnlySpan<char> password, out int bytesRead) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<byte> password) =>
+        ImportPkcs8(data.AsReadOnlySpan(), password);
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, ReadOnlySpan<byte> password, out int bytesRead) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<byte> password, out int bytesRead) =>
+        ImportPkcs8(data.AsReadOnlySpan(), password, out bytesRead);
+
+    private static EddsaPrivateKey FromPkcs8Info(Pkcs8PrivateKeyInfo info)
+    {
+        byte[] encoded = info.Encode();
+        try
+        {
+            byte[] seed = Edwards25519Pkcs8.DecodePrivateKey(encoded, out _);
+            try
+            {
+                return new EddsaPrivateKey(seed);
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(seed);
+            }
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(encoded);
+        }
+    }
 }

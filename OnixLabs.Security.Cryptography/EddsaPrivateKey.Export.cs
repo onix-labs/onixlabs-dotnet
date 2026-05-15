@@ -14,29 +14,70 @@
 
 using System;
 using System.Security.Cryptography;
+using System.Security.Cryptography.Pkcs;
 
 namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EddsaPrivateKey
 {
+    private const string Pkcs8Label = "PRIVATE KEY";
+    private const string EncryptedPkcs8Label = "ENCRYPTED PRIVATE KEY";
+
     /// <inheritdoc/>
     public byte[] Export() => KeyData;
 
     /// <inheritdoc/>
-    public byte[] ExportPkcs8() => throw new NotImplementedException();
+    public byte[] ExportPkcs8()
+    {
+        byte[] seed = KeyData;
+        try
+        {
+            return Edwards25519Pkcs8.EncodePrivateKey(seed);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(seed);
+        }
+    }
 
     /// <inheritdoc/>
-    public byte[] ExportPkcs8(ReadOnlySpan<char> password, PbeParameters parameters) => throw new NotImplementedException();
+    public byte[] ExportPkcs8(ReadOnlySpan<char> password, PbeParameters parameters)
+    {
+        byte[] pkcs8 = ExportPkcs8();
+        try
+        {
+            Pkcs8PrivateKeyInfo info = Pkcs8PrivateKeyInfo.Decode(pkcs8, out _, skipCopy: false);
+            return info.Encrypt(password, parameters);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(pkcs8);
+        }
+    }
 
     /// <inheritdoc/>
-    public byte[] ExportPkcs8(ReadOnlySpan<byte> password, PbeParameters parameters) => throw new NotImplementedException();
+    public byte[] ExportPkcs8(ReadOnlySpan<byte> password, PbeParameters parameters)
+    {
+        byte[] pkcs8 = ExportPkcs8();
+        try
+        {
+            Pkcs8PrivateKeyInfo info = Pkcs8PrivateKeyInfo.Decode(pkcs8, out _, skipCopy: false);
+            return info.Encrypt(password, parameters);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(pkcs8);
+        }
+    }
 
     /// <inheritdoc/>
-    public string ExportPkcs8Pem() => throw new NotImplementedException();
+    public string ExportPkcs8Pem() => PemEncoding.WriteString(Pkcs8Label, ExportPkcs8());
 
     /// <inheritdoc/>
-    public string ExportPkcs8Pem(ReadOnlySpan<char> password, PbeParameters parameters) => throw new NotImplementedException();
+    public string ExportPkcs8Pem(ReadOnlySpan<char> password, PbeParameters parameters) =>
+        PemEncoding.WriteString(EncryptedPkcs8Label, ExportPkcs8(password, parameters));
 
     /// <inheritdoc/>
-    public string ExportPkcs8Pem(ReadOnlySpan<byte> password, PbeParameters parameters) => throw new NotImplementedException();
+    public string ExportPkcs8Pem(ReadOnlySpan<byte> password, PbeParameters parameters) =>
+        PemEncoding.WriteString(EncryptedPkcs8Label, ExportPkcs8(password, parameters));
 }

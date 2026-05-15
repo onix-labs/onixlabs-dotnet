@@ -5,6 +5,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
+        <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.0"/>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
     </ItemGroup>
 </Project>

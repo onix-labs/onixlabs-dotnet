@@ -13,17 +13,80 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EddsaPrivateKey
 {
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPem(ReadOnlySpan<char> data) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPem(ReadOnlySpan<char> data)
+    {
+        (string label, byte[] der) = DecodePem(data);
+        try
+        {
+            return label switch
+            {
+                Pkcs8Label => ImportPkcs8(der),
+                EncryptedPkcs8Label => throw new CryptographicException(
+                    "PEM label is ENCRYPTED PRIVATE KEY but no password was supplied."),
+                _ => throw new CryptographicException(
+                    $"Unsupported PEM label for Ed25519 private key: '{label}'."),
+            };
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(der);
+        }
+    }
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
+    {
+        (string label, byte[] der) = DecodePem(data);
+        try
+        {
+            if (label != EncryptedPkcs8Label)
+            {
+                throw new CryptographicException(
+                    $"Expected ENCRYPTED PRIVATE KEY PEM label, got '{label}'.");
+            }
+            return ImportPkcs8(der, password);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(der);
+        }
+    }
 
     /// <inheritdoc/>
-    public static EddsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password) => throw new NotImplementedException();
+    public static EddsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
+    {
+        (string label, byte[] der) = DecodePem(data);
+        try
+        {
+            if (label != EncryptedPkcs8Label)
+            {
+                throw new CryptographicException(
+                    $"Expected ENCRYPTED PRIVATE KEY PEM label, got '{label}'.");
+            }
+            return ImportPkcs8(der, password);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(der);
+        }
+    }
+
+    private static (string Label, byte[] Der) DecodePem(ReadOnlySpan<char> pem)
+    {
+        PemFields fields = PemEncoding.Find(pem);
+        string label = pem[fields.Label].ToString();
+        byte[] der = new byte[fields.DecodedDataLength];
+        if (!Convert.TryFromBase64Chars(pem[fields.Base64Data], der, out int written) || written != der.Length)
+        {
+            throw new CryptographicException("Invalid Base64 content in PEM.");
+        }
+        return (label, der);
+    }
 }

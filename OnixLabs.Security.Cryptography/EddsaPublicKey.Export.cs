@@ -13,14 +13,17 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EddsaPublicKey
 {
+    internal const string PublicKeyLabel = "PUBLIC KEY";
+
     /// <inheritdoc/>
     public byte[] Export() => KeyData.AsSpan().ToArray();
 
     /// <inheritdoc/>
-    public string ExportPem() => throw new NotImplementedException();
+    public string ExportPem() => PemEncoding.WriteString(PublicKeyLabel, Edwards25519Pkcs8.EncodePublicKey(KeyData));
 }

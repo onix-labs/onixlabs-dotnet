@@ -236,8 +236,8 @@ Rough ordering. Probably ~3–5 commits for the core, more for hardening.
 
 4. **Negative tests — DONE.** Added to `EddsaKeyTests.cs`:
    - `EddsaVerificationShouldRejectSignaturesWithNonCanonicalS` — confirms
-     `Edwards25519Scalar.IsCanonical` rejects `S = L`.
-   - `EddsaVerificationShouldRejectNonCanonicalY` — confirms `Edwards25519Point.TryDecode`
+     `Ed25519Scalar.IsCanonical` rejects `S = L`.
+   - `EddsaVerificationShouldRejectNonCanonicalY` — confirms `Ed25519Point.TryDecode`
      rejects a public key whose y-coordinate equals `p`.
    - `EddsaVerificationShouldFailWhenSIsBitFlipped` and
      `EddsaVerificationShouldFailWhenRIsBitFlipped` — malleability.
@@ -286,14 +286,14 @@ Order-of-magnitude observations:
   longer-term target — windowed scalar multiplication and a precomputed base-point table
   are the well-known speed-ups, neither of which is in scope for this issue.
 - Allocations during sign/verify come from the `BigInteger`-based scalar arithmetic
-  (`Edwards25519Scalar`); the constant-time refactor in Phase 5 replaces it with `long`-limb
+  (`Ed25519Scalar`); the constant-time refactor in Phase 5 replaces it with `long`-limb
   code that allocates nothing and drops these numbers significantly (see the Phase 5 table).
 
 ### Phase 5 — Constant-time scalar arithmetic and scalar multiplication — COMPLETE
 
 Phase 4 left two known side-channel hazards. Both have now been removed:
 
-1. **Scalar arithmetic mod L** (`Edwards25519Scalar.cs`) previously used
+1. **Scalar arithmetic mod L** (`Ed25519Scalar.cs`) previously used
    `System.Numerics.BigInteger` for `ReduceFromWideBytes` and `MulAdd`. `BigInteger` is
    allocating and not constant-time (its arithmetic dispatches on operand bit-length, so a
    secret scalar whose high limb happened to be small could time differently from one that
@@ -305,18 +305,18 @@ Phase 4 left two known side-channel hazards. Both have now been removed:
    limb value. `IsCanonical(scalar)` now does the `scalar < L` test as a byte-by-byte
    constant-time subtraction inspecting the final borrow, not an early-return loop.
 
-2. **Scalar multiplication** (`Edwards25519Point.ScalarMultiply`) previously used left-to-right
+2. **Scalar multiplication** (`Ed25519Point.ScalarMultiply`) previously used left-to-right
    double-and-add — `if (bit == 1) result = Add(result, point)` leaks every scalar bit through
    both the branch and the differing per-iteration operation count. Replaced with a
    Joye/Montgomery-style ladder: maintain `R0 = [k']P, R1 = R0 + P` and at each step
    `cswap(R0, R1, bit); R1 = R0 + R1; R0 = 2*R0; cswap(R0, R1, bit)`. Every iteration performs
    exactly one Add and one Double regardless of bit value, and the cswap is implemented as
-   masked `Edwards25519FieldElement.ConditionalSelect` operations over all four projective
+   masked `Ed25519FieldElement.ConditionalSelect` operations over all four projective
    coordinates of both points — same memory writes either way. The HWCD a = -1 formulas were
    already unified (no special cases for `P + Q = identity`), so the ladder is safe even when
    the scalar's leading bits leave R0 at the identity for many iterations.
 
-A skim of `Edwards25519FieldElement.cs` for side-channel hazards turned up nothing worth
+A skim of `Ed25519FieldElement.cs` for side-channel hazards turned up nothing worth
 fixing: `IsZero` accumulates with bitwise OR, `IsNegative` reads a fixed byte position,
 `ConditionalSelect` is mask-based, and the carry chains in `Add` / `Sub` / `Mul` / `Square`
 are straight-line. `ValueEquals` calls `SequenceEqual`, which is variable-time, but its only
@@ -341,7 +341,7 @@ Slowdown is smaller than the rough "2x" upper bound noted in the roadmap because
 double-and-add baseline performs ~1.5 group operations per bit on average (always Double,
 Add only when bit is 1), so the ladder's fixed two-operations-per-bit cost is a 33%
 arithmetic overhead, with the rest accounted for by the per-iteration cswap. Allocations
-dropped because the `BigInteger` boxing inside `Edwards25519Scalar` is gone.
+dropped because the `BigInteger` boxing inside `Ed25519Scalar` is gone.
 
 #### Out of scope (deferred)
 
@@ -351,7 +351,7 @@ dropped because the `BigInteger` boxing inside `Edwards25519Scalar` is gone.
   doing eventually — not part of this phase.
 - **Provider abstraction.** Reshaping the public API so the from-scratch implementation can
   later be swapped for a verified third-party implementation behind the same interface is
-  also deferred. The current internal layout (`Ed25519.cs` plus the three `Edwards25519*`
+  also deferred. The current internal layout (`Ed25519.cs` plus the four `Ed25519*`
   helpers) is already a clean seam if and when that work is taken on.
 
 ## Things to be careful about during implementation

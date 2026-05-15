@@ -29,10 +29,7 @@ public sealed partial class EddsaPublicKey
     public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count) =>
         IsDataValid(signature, data.Slice(offset, count));
 
-    /// <summary>
-    /// Determines whether the specified stream data was signed by the EdDSA cryptographic private
-    /// key corresponding to the current public key.
-    /// </summary>
+    /// <inheritdoc/>
     /// <remarks>
     /// PureEdDSA requires the entire message in memory during verification. This overload therefore
     /// reads the stream to completion into an in-memory buffer before verifying.
@@ -121,9 +118,7 @@ public sealed partial class EddsaPublicKey
     {
         if (condition) return;
 
-        const string message = "The specified digital signature could not be verified. Either the specified data is incorrect, " +
-                               "or the data was not signed with a private key corresponding to the current public key.";
-
-        throw new CryptographicException(message);
+        throw new CryptographicException("The specified digital signature could not be verified. Either the specified data is incorrect, " +
+                                         "or the data was not signed with a private key corresponding to the current public key.");
     }
 }

@@ -27,7 +27,8 @@ public sealed partial class EddsaPrivateKey
     /// <inheritdoc/>
     public static EddsaPrivateKey ImportPkcs8(ReadOnlySpan<byte> data, out int bytesRead)
     {
-        byte[] seed = Edwards25519Pkcs8.DecodePrivateKey(data, out bytesRead);
+        byte[] seed = Ed25519Pkcs8.DecodePrivateKey(data, out bytesRead);
+
         try
         {
             return new EddsaPrivateKey(seed);
@@ -83,12 +84,18 @@ public sealed partial class EddsaPrivateKey
     public static EddsaPrivateKey ImportPkcs8(IBinaryConvertible data, ReadOnlySpan<byte> password, out int bytesRead) =>
         ImportPkcs8(data.AsReadOnlySpan(), password, out bytesRead);
 
+    /// <summary>
+    /// Constructs an <see cref="EddsaPrivateKey"/> from a decoded <see cref="Pkcs8PrivateKeyInfo"/>,
+    /// re-encoding to DER, extracting the Ed25519 seed, and zeroing intermediate buffers.
+    /// </summary>
+    /// <param name="info">The decoded PKCS#8 private-key information from which to construct the key.</param>
+    /// <returns>Returns a new <see cref="EddsaPrivateKey"/> initialized from the seed contained in <paramref name="info"/>.</returns>
     private static EddsaPrivateKey FromPkcs8Info(Pkcs8PrivateKeyInfo info)
     {
         byte[] encoded = info.Encode();
         try
         {
-            byte[] seed = Edwards25519Pkcs8.DecodePrivateKey(encoded, out _);
+            byte[] seed = Ed25519Pkcs8.DecodePrivateKey(encoded, out _);
             try
             {
                 return new EddsaPrivateKey(seed);

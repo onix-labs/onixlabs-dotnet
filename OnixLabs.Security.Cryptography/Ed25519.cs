@@ -18,25 +18,39 @@ using System.Security.Cryptography;
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Pure Ed25519 (RFC 8032) sign, verify, and public-key derivation.
+/// Represents the pure Ed25519 (RFC 8032) sign, verify, and public-key derivation primitives.
 /// </summary>
 internal static class Ed25519
 {
+    /// <summary>
+    /// The length in bytes of an Ed25519 seed.
+    /// </summary>
     public const int SeedLength = 32;
+
+    /// <summary>
+    /// The length in bytes of an Ed25519 public key.
+    /// </summary>
     public const int PublicKeyLength = 32;
+
+    /// <summary>
+    /// The length in bytes of an Ed25519 signature.
+    /// </summary>
     public const int SignatureLength = 64;
 
     /// <summary>
     /// Derives the 32-byte Ed25519 public key from a 32-byte seed.
     /// </summary>
+    /// <param name="seed">The 32-byte Ed25519 seed.</param>
+    /// <param name="publicKey">The 32-byte destination buffer that receives the derived public key.</param>
     public static void DerivePublicKey(ReadOnlySpan<byte> seed, Span<byte> publicKey)
     {
         Span<byte> hash = stackalloc byte[64];
         Span<byte> secretScalar = stackalloc byte[32];
+
         try
         {
             ExpandSeed(seed, hash, secretScalar, prefix: default);
-            Edwards25519Point a = Edwards25519Point.ScalarMultiply(secretScalar, Edwards25519Point.BasePoint);
+            Ed25519Point a = secretScalar * Ed25519Point.BasePoint;
             a.Encode(publicKey);
         }
         finally
@@ -50,6 +64,9 @@ internal static class Ed25519
     /// Computes a 64-byte Ed25519 signature of <paramref name="message"/> under the key derived
     /// from <paramref name="seed"/> per RFC 8032 §5.1.6.
     /// </summary>
+    /// <param name="seed">The 32-byte Ed25519 seed of the signing key.</param>
+    /// <param name="message">The message to sign.</param>
+    /// <param name="signature">The 64-byte destination buffer that receives the resulting signature.</param>
     public static void Sign(ReadOnlySpan<byte> seed, ReadOnlySpan<byte> message, Span<byte> signature)
     {
         Span<byte> hash = stackalloc byte[64];
@@ -65,7 +82,7 @@ internal static class Ed25519
         {
             ExpandSeed(seed, hash, secretScalar, prefix);
 
-            Edwards25519Point a = Edwards25519Point.ScalarMultiply(secretScalar, Edwards25519Point.BasePoint);
+            Ed25519Point a = secretScalar * Ed25519Point.BasePoint;
             a.Encode(publicKey);
 
             // r = SHA512(prefix || message) reduced mod L
@@ -75,10 +92,11 @@ internal static class Ed25519
                 sha.AppendData(message);
                 sha.GetHashAndReset(rBytesWide);
             }
-            Edwards25519Scalar.ReduceFromWideBytes(rBytesWide, rScalar);
+
+            Ed25519Scalar.ReduceFromWideBytes(rBytesWide, rScalar);
 
             // R = [r]B; write its encoding to signature[0..32]
-            Edwards25519Point r = Edwards25519Point.ScalarMultiply(rScalar, Edwards25519Point.BasePoint);
+            Ed25519Point r = rScalar * Ed25519Point.BasePoint;
             r.Encode(signature[..32]);
 
             // k = SHA512(R || A || message) reduced mod L
@@ -89,10 +107,11 @@ internal static class Ed25519
                 sha.AppendData(message);
                 sha.GetHashAndReset(kBytesWide);
             }
-            Edwards25519Scalar.ReduceFromWideBytes(kBytesWide, kScalar);
+
+            Ed25519Scalar.ReduceFromWideBytes(kBytesWide, kScalar);
 
             // S = (k * s + r) mod L; write to signature[32..64]
-            Edwards25519Scalar.MulAdd(kScalar, secretScalar, rScalar, signature[32..]);
+            Ed25519Scalar.MulAdd(kScalar, secretScalar, rScalar, signature[32..]);
         }
         finally
         {
@@ -110,13 +129,17 @@ internal static class Ed25519
     /// Verifies a 64-byte Ed25519 signature over <paramref name="message"/> against
     /// <paramref name="publicKey"/> per RFC 8032 §5.1.7 (cofactored: 8·[S]B = 8·R + 8·[k]A).
     /// </summary>
+    /// <param name="publicKey">The 32-byte Ed25519 public key.</param>
+    /// <param name="message">The message that was signed.</param>
+    /// <param name="signature">The 64-byte signature to verify.</param>
+    /// <returns>Returns <see langword="true"/> if the signature is valid; otherwise, <see langword="false"/>.</returns>
     public static bool Verify(ReadOnlySpan<byte> publicKey, ReadOnlySpan<byte> message, ReadOnlySpan<byte> signature)
     {
         if (publicKey.Length != PublicKeyLength) return false;
         if (signature.Length != SignatureLength) return false;
-        if (!Edwards25519Scalar.IsCanonical(signature[32..])) return false;
-        if (!Edwards25519Point.TryDecode(publicKey, out Edwards25519Point a)) return false;
-        if (!Edwards25519Point.TryDecode(signature[..32], out Edwards25519Point r)) return false;
+        if (!Ed25519Scalar.IsCanonical(signature[32..])) return false;
+        if (!Ed25519Point.TryDecode(publicKey, out Ed25519Point a)) return false;
+        if (!Ed25519Point.TryDecode(signature[..32], out Ed25519Point r)) return false;
 
         Span<byte> kBytesWide = stackalloc byte[64];
         Span<byte> kScalar = stackalloc byte[32];
@@ -128,21 +151,26 @@ internal static class Ed25519
             sha.AppendData(message);
             sha.GetHashAndReset(kBytesWide);
         }
-        Edwards25519Scalar.ReduceFromWideBytes(kBytesWide, kScalar);
 
-        Edwards25519Point left = Edwards25519Point.ScalarMultiply(signature[32..], Edwards25519Point.BasePoint); // [S]B
-        Edwards25519Point right = Edwards25519Point.Add(r, Edwards25519Point.ScalarMultiply(kScalar, a));         // R + [k]A
+        Ed25519Scalar.ReduceFromWideBytes(kBytesWide, kScalar);
+
+        Ed25519Point left = signature[32..] * Ed25519Point.BasePoint; // [S]B
+        Ed25519Point right = r + (kScalar * a);                              // R + [k]A
 
         // Cofactored check: multiply each side by 8 (three doublings).
-        left = Edwards25519Point.Double(Edwards25519Point.Double(Edwards25519Point.Double(left)));
-        right = Edwards25519Point.Double(Edwards25519Point.Double(Edwards25519Point.Double(right)));
+        left = Ed25519Point.Double(Ed25519Point.Double(Ed25519Point.Double(left)));
+        right = Ed25519Point.Double(Ed25519Point.Double(Ed25519Point.Double(right)));
 
-        return left.EncodingEquals(right);
+        return left == right;
     }
 
     /// <summary>
-    /// SHA-512 of the seed and split into clamped secret scalar and prefix per RFC 8032 §5.1.5.
+    /// Computes SHA-512 of the seed and splits it into a clamped secret scalar and prefix per RFC 8032 §5.1.5.
     /// </summary>
+    /// <param name="seed">The 32-byte Ed25519 seed.</param>
+    /// <param name="hash">The 64-byte scratch buffer that receives the SHA-512 digest.</param>
+    /// <param name="secretScalar">The 32-byte destination buffer that receives the clamped secret scalar.</param>
+    /// <param name="prefix">The 32-byte destination buffer that receives the per-signature prefix; if empty, the prefix is not written.</param>
     private static void ExpandSeed(ReadOnlySpan<byte> seed, Span<byte> hash, Span<byte> secretScalar, Span<byte> prefix)
     {
         SHA512.HashData(seed, hash);

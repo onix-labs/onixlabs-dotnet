@@ -16,6 +16,9 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EddsaPublicKey
 {
+    /// <summary>
+    /// The algorithm identifier used when wrapping this key as a <see cref="NamedPublicKey"/>.
+    /// </summary>
     private const string KeyName = "EDDSA";
 
     /// <inheritdoc/>

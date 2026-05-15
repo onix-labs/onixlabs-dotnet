@@ -24,8 +24,8 @@ namespace OnixLabs.Security.Cryptography;
 public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublicKeyExportable, IBinaryConvertible
 {
     /// <summary>
-    /// Determines whether the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> data and raw signature pair was produced
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -36,8 +36,8 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data);
 
     /// <summary>
-    /// Determines whether the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Determines whether the specified range of <see cref="ReadOnlySpan{T}"/> data and raw signature pair was produced
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -50,8 +50,8 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count);
 
     /// <summary>
-    /// Determines whether the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Determines whether the specified <see cref="Stream"/> data and raw signature pair was produced
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -62,8 +62,8 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     bool IsDataValid(ReadOnlySpan<byte> signature, Stream data);
 
     /// <summary>
-    /// Determines whether the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Determines whether the specified <see cref="IBinaryConvertible"/> data and raw signature pair was produced
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -74,8 +74,8 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     bool IsDataValid(ReadOnlySpan<byte> signature, IBinaryConvertible data);
 
     /// <summary>
-    /// Determines whether the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Determines whether the specified <see cref="ReadOnlySpan{T}"/> data and <see cref="DigitalSignature"/> pair was produced
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -86,8 +86,8 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data);
 
     /// <summary>
-    /// Determines whether the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Determines whether the specified range of <see cref="ReadOnlySpan{T}"/> data and <see cref="DigitalSignature"/> pair was produced
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -100,8 +100,8 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count);
 
     /// <summary>
-    /// Determines whether the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Determines whether the specified <see cref="Stream"/> data and <see cref="DigitalSignature"/> pair was produced
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -112,8 +112,8 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     bool IsDataValid(DigitalSignature signature, Stream data);
 
     /// <summary>
-    /// Determines whether the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Determines whether the specified <see cref="IBinaryConvertible"/> data and <see cref="DigitalSignature"/> pair was produced
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -124,16 +124,16 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     bool IsDataValid(DigitalSignature signature, IBinaryConvertible data);
 
     /// <summary>
-    /// Verifies that the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Verifies that the specified <see cref="ReadOnlySpan{T}"/> data was signed with the raw signature by the EdDSA cryptographic
+    /// private key that corresponds to the current EdDSA cryptographic public key, throwing if verification fails.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
     void VerifyData(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data);
 
     /// <summary>
-    /// Verifies that the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Verifies that the specified range of <see cref="ReadOnlySpan{T}"/> data was signed with the raw signature by the EdDSA cryptographic
+    /// private key that corresponds to the current EdDSA cryptographic public key, throwing if verification fails.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -142,32 +142,32 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     void VerifyData(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count);
 
     /// <summary>
-    /// Verifies that the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Verifies that the specified <see cref="Stream"/> data was signed with the raw signature by the EdDSA cryptographic
+    /// private key that corresponds to the current EdDSA cryptographic public key, throwing if verification fails.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
     void VerifyData(ReadOnlySpan<byte> signature, Stream data);
 
     /// <summary>
-    /// Verifies that the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Verifies that the specified <see cref="IBinaryConvertible"/> data was signed with the raw signature by the EdDSA cryptographic
+    /// private key that corresponds to the current EdDSA cryptographic public key, throwing if verification fails.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
     void VerifyData(ReadOnlySpan<byte> signature, IBinaryConvertible data);
 
     /// <summary>
-    /// Verifies that the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Verifies that the specified <see cref="ReadOnlySpan{T}"/> data was signed with the supplied <see cref="DigitalSignature"/>
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key, throwing if verification fails.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
     void VerifyData(DigitalSignature signature, ReadOnlySpan<byte> data);
 
     /// <summary>
-    /// Verifies that the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Verifies that the specified range of <see cref="ReadOnlySpan{T}"/> data was signed with the supplied <see cref="DigitalSignature"/>
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key, throwing if verification fails.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
@@ -176,16 +176,16 @@ public interface IEddsaPublicKey : IPublicKeyImportable<EddsaPublicKey>, IPublic
     void VerifyData(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count);
 
     /// <summary>
-    /// Verifies that the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Verifies that the specified <see cref="Stream"/> data was signed with the supplied <see cref="DigitalSignature"/>
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key, throwing if verification fails.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>
     void VerifyData(DigitalSignature signature, Stream data);
 
     /// <summary>
-    /// Verifies that the specified data was signed by the EdDSA cryptographic private key that corresponds to the current
-    /// EdDSA cryptographic public key, and that the signed data matches the specified cryptographic digital signature.
+    /// Verifies that the specified <see cref="IBinaryConvertible"/> data was signed with the supplied <see cref="DigitalSignature"/>
+    /// by the EdDSA cryptographic private key that corresponds to the current EdDSA cryptographic public key, throwing if verification fails.
     /// </summary>
     /// <param name="signature">The signature to validate against the current EdDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current EdDSA cryptographic public key.</param>

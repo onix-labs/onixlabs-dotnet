@@ -25,6 +25,7 @@ public sealed partial class EddsaPrivateKey
     public byte[] SignData(ReadOnlySpan<byte> data)
     {
         byte[] seed = KeyData;
+
         try
         {
             byte[] signature = new byte[Ed25519.SignatureLength];
@@ -41,16 +42,12 @@ public sealed partial class EddsaPrivateKey
     public byte[] SignData(ReadOnlySpan<byte> data, int offset, int count) =>
         SignData(data.Slice(offset, count));
 
-    /// <summary>
-    /// Signs the specified <see cref="Stream"/> data.
-    /// </summary>
+    /// <inheritdoc/>
     /// <remarks>
     /// PureEdDSA requires the entire message in memory because it is hashed twice during signing
     /// (once to derive the per-signature nonce and once to derive the challenge scalar). This
     /// overload therefore reads the stream to completion into an in-memory buffer before signing.
     /// </remarks>
-    /// <param name="data">The input data to sign.</param>
-    /// <returns>Returns a new <see cref="byte"/> array instance containing the cryptographic digital signature.</returns>
     public byte[] SignData(Stream data)
     {
         using MemoryStream buffer = new();

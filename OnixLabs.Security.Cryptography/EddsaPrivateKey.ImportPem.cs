@@ -23,6 +23,7 @@ public sealed partial class EddsaPrivateKey
     public static EddsaPrivateKey ImportPem(ReadOnlySpan<char> data)
     {
         (string label, byte[] der) = DecodePem(data);
+
         try
         {
             return label switch
@@ -44,14 +45,12 @@ public sealed partial class EddsaPrivateKey
     public static EddsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         (string label, byte[] der) = DecodePem(data);
+
         try
         {
-            if (label != EncryptedPkcs8Label)
-            {
-                throw new CryptographicException(
-                    $"Expected ENCRYPTED PRIVATE KEY PEM label, got '{label}'.");
-            }
-            return ImportPkcs8(der, password);
+            return label != EncryptedPkcs8Label
+                ? throw new CryptographicException($"Expected ENCRYPTED PRIVATE KEY PEM label, got '{label}'.")
+                : ImportPkcs8(der, password);
         }
         finally
         {
@@ -65,12 +64,9 @@ public sealed partial class EddsaPrivateKey
         (string label, byte[] der) = DecodePem(data);
         try
         {
-            if (label != EncryptedPkcs8Label)
-            {
-                throw new CryptographicException(
-                    $"Expected ENCRYPTED PRIVATE KEY PEM label, got '{label}'.");
-            }
-            return ImportPkcs8(der, password);
+            return label != EncryptedPkcs8Label
+                ? throw new CryptographicException($"Expected ENCRYPTED PRIVATE KEY PEM label, got '{label}'.")
+                : ImportPkcs8(der, password);
         }
         finally
         {
@@ -78,15 +74,21 @@ public sealed partial class EddsaPrivateKey
         }
     }
 
+    /// <summary>
+    /// Parses an RFC 7468 PEM document into its label and the raw DER payload it carries.
+    /// </summary>
+    /// <param name="pem">The PEM-encoded text to decode.</param>
+    /// <returns>Returns a tuple containing the PEM label and the decoded DER bytes.</returns>
+    /// <exception cref="CryptographicException">Thrown when the Base64 payload cannot be decoded into the expected number of bytes.</exception>
     private static (string Label, byte[] Der) DecodePem(ReadOnlySpan<char> pem)
     {
         PemFields fields = PemEncoding.Find(pem);
         string label = pem[fields.Label].ToString();
         byte[] der = new byte[fields.DecodedDataLength];
+
         if (!Convert.TryFromBase64Chars(pem[fields.Base64Data], der, out int written) || written != der.Length)
-        {
             throw new CryptographicException("Invalid Base64 content in PEM.");
-        }
+
         return (label, der);
     }
 }

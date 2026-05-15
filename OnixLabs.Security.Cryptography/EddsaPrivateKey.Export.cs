@@ -20,7 +20,14 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EddsaPrivateKey
 {
+    /// <summary>
+    /// The RFC 7468 PEM label used for unencrypted PKCS#8 private keys.
+    /// </summary>
     private const string Pkcs8Label = "PRIVATE KEY";
+
+    /// <summary>
+    /// The RFC 7468 PEM label used for encrypted PKCS#8 private keys.
+    /// </summary>
     private const string EncryptedPkcs8Label = "ENCRYPTED PRIVATE KEY";
 
     /// <inheritdoc/>
@@ -30,9 +37,10 @@ public sealed partial class EddsaPrivateKey
     public byte[] ExportPkcs8()
     {
         byte[] seed = KeyData;
+
         try
         {
-            return Edwards25519Pkcs8.EncodePrivateKey(seed);
+            return Ed25519Pkcs8.EncodePrivateKey(seed);
         }
         finally
         {
@@ -44,6 +52,7 @@ public sealed partial class EddsaPrivateKey
     public byte[] ExportPkcs8(ReadOnlySpan<char> password, PbeParameters parameters)
     {
         byte[] pkcs8 = ExportPkcs8();
+
         try
         {
             Pkcs8PrivateKeyInfo info = Pkcs8PrivateKeyInfo.Decode(pkcs8, out _, skipCopy: false);
@@ -59,6 +68,7 @@ public sealed partial class EddsaPrivateKey
     public byte[] ExportPkcs8(ReadOnlySpan<byte> password, PbeParameters parameters)
     {
         byte[] pkcs8 = ExportPkcs8();
+
         try
         {
             Pkcs8PrivateKeyInfo info = Pkcs8PrivateKeyInfo.Decode(pkcs8, out _, skipCopy: false);

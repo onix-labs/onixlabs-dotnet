@@ -24,16 +24,16 @@ public sealed partial class EddsaPublicKey
     {
         PemFields fields = PemEncoding.Find(data);
         string label = data[fields.Label].ToString();
+
         if (label != PublicKeyLabel)
-        {
             throw new CryptographicException($"Unsupported PEM label for Ed25519 public key: '{label}'.");
-        }
+
         byte[] der = new byte[fields.DecodedDataLength];
+
         if (!Convert.TryFromBase64Chars(data[fields.Base64Data], der, out int written) || written != der.Length)
-        {
             throw new CryptographicException("Invalid Base64 content in PEM.");
-        }
-        byte[] publicKey = Edwards25519Pkcs8.DecodePublicKey(der, out _);
+
+        byte[] publicKey = Ed25519Pkcs8.DecodePublicKey(der, out _);
         return new EddsaPublicKey(publicKey);
     }
 

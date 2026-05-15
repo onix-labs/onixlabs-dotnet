@@ -14,13 +14,12 @@
 
 namespace OnixLabs.Security.Cryptography;
 
-public sealed partial class EddsaPrivateKey
+internal readonly partial struct Ed25519FieldElement
 {
     /// <summary>
-    /// The algorithm identifier used when wrapping this key as a <see cref="NamedPrivateKey"/>.
+    /// Computes <paramref name="z"/>^((p - 5) / 8) mod p, used during square-root computation for point decoding.
     /// </summary>
-    private const string KeyName = "EDDSA";
-
-    /// <inheritdoc/>
-    public override NamedPrivateKey ToNamedPrivateKey() => new(this, KeyName);
+    /// <param name="z">The base field element.</param>
+    /// <returns>Returns the field element representing <paramref name="z"/>^((p - 5) / 8) modulo p.</returns>
+    public static Ed25519FieldElement PowP58(in Ed25519FieldElement z) => Pow22523ThenChain(z, multiplyZ11AtEnd: false);
 }

@@ -19,11 +19,14 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EddsaPublicKey
 {
-    internal const string PublicKeyLabel = "PUBLIC KEY";
+    /// <summary>
+    /// The RFC 7468 PEM label used for SubjectPublicKeyInfo-encoded Ed25519 public keys.
+    /// </summary>
+    private const string PublicKeyLabel = "PUBLIC KEY";
 
     /// <inheritdoc/>
     public byte[] Export() => KeyData.AsSpan().ToArray();
 
     /// <inheritdoc/>
-    public string ExportPem() => PemEncoding.WriteString(PublicKeyLabel, Edwards25519Pkcs8.EncodePublicKey(KeyData));
+    public string ExportPem() => PemEncoding.WriteString(PublicKeyLabel, Ed25519Pkcs8.EncodePublicKey(KeyData));
 }

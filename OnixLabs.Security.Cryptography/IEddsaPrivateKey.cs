@@ -39,7 +39,7 @@ public interface IEddsaPrivateKey :
     byte[] SignData(ReadOnlySpan<byte> data);
 
     /// <summary>
-    /// Signs the specified <see cref="ReadOnlySpan{T}"/> data.
+    /// Signs the specified range of the <see cref="ReadOnlySpan{T}"/> data.
     /// </summary>
     /// <param name="data">The input data to sign.</param>
     /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>

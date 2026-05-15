@@ -15,7 +15,6 @@
     <Project Path="OnixLabs.Numerics/OnixLabs.Numerics.csproj" />
   </Folder>
   <Folder Name="/Security.Cryptography/">
-    <Project Path="OnixLabs.Security.Cryptography.Benchmarks/OnixLabs.Security.Cryptography.Benchmarks.csproj" />
     <Project Path="OnixLabs.Security.Cryptography.UnitTests.Data/OnixLabs.Security.Cryptography.UnitTests.Data.csproj" />
     <Project Path="OnixLabs.Security.Cryptography.UnitTests/OnixLabs.Security.Cryptography.UnitTests.csproj" />
     <Project Path="OnixLabs.Security.Cryptography/OnixLabs.Security.Cryptography.csproj" />

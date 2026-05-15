@@ -51,24 +51,21 @@ internal readonly struct Edwards25519Point
     /// <summary>
     /// The neutral element of the curve group, affine (0, 1).
     /// </summary>
-    public static readonly Edwards25519Point Identity = new(
+    private static readonly Edwards25519Point Identity = new(
         Edwards25519FieldElement.Zero,
         Edwards25519FieldElement.One,
         Edwards25519FieldElement.One,
-        Edwards25519FieldElement.Zero);
+        Edwards25519FieldElement.Zero
+    );
 
     /// <summary>
     /// The standard Ed25519 base point B per RFC 8032 §5.1. Decoded from its 32-byte canonical
-    /// encoding so we do not maintain a duplicate set of 51-bit limb constants. Must be declared
-    /// after D / SqrtMinusOne so those are initialised first.
+    /// encoding, so we do not maintain a duplicate set of 51-bit limb constants. Must be declared
+    /// after D / SqrtMinusOne so those are initialized first.
     /// </summary>
     public static readonly Edwards25519Point BasePoint = DecodeBasePoint();
 
-    private Edwards25519Point(
-        in Edwards25519FieldElement x,
-        in Edwards25519FieldElement y,
-        in Edwards25519FieldElement z,
-        in Edwards25519FieldElement t)
+    private Edwards25519Point(in Edwards25519FieldElement x, in Edwards25519FieldElement y, in Edwards25519FieldElement z, in Edwards25519FieldElement t)
     {
         this.x = x;
         this.y = y;
@@ -78,19 +75,25 @@ internal readonly struct Edwards25519Point
 
     /// <summary>
     /// Adds two Edwards points using the standard twisted-Edwards "add-2008-hwcd" formulas
-    /// specialised for a = -1 (Hisil-Wong-Carter-Dawson).
+    /// specialized for a = -1 (Hisil-Wong-Carter-Dawson).
     /// </summary>
     public static Edwards25519Point Add(in Edwards25519Point p1, in Edwards25519Point p2)
     {
         Edwards25519FieldElement a = Edwards25519FieldElement.Mul(
             Edwards25519FieldElement.Sub(p1.y, p1.x),
-            Edwards25519FieldElement.Sub(p2.y, p2.x));
+            Edwards25519FieldElement.Sub(p2.y, p2.x)
+        );
+
         Edwards25519FieldElement b = Edwards25519FieldElement.Mul(
             Edwards25519FieldElement.Add(p1.y, p1.x),
-            Edwards25519FieldElement.Add(p2.y, p2.x));
+            Edwards25519FieldElement.Add(p2.y, p2.x)
+        );
+
         Edwards25519FieldElement c = Edwards25519FieldElement.Mul(
             Edwards25519FieldElement.Mul(p1.t, TwoD),
-            p2.t);
+            p2.t
+        );
+
         Edwards25519FieldElement zProduct = Edwards25519FieldElement.Mul(p1.z, p2.z);
         Edwards25519FieldElement d = Edwards25519FieldElement.Add(zProduct, zProduct);
 
@@ -103,7 +106,8 @@ internal readonly struct Edwards25519Point
             Edwards25519FieldElement.Mul(e, f),
             Edwards25519FieldElement.Mul(g, h),
             Edwards25519FieldElement.Mul(f, g),
-            Edwards25519FieldElement.Mul(e, h));
+            Edwards25519FieldElement.Mul(e, h)
+        );
     }
 
     /// <summary>
@@ -112,20 +116,20 @@ internal readonly struct Edwards25519Point
     /// </summary>
     public static Edwards25519Point Double(in Edwards25519Point p)
     {
-        Edwards25519FieldElement a = Edwards25519FieldElement.Square(p.x);                       // A = X^2
-        Edwards25519FieldElement b = Edwards25519FieldElement.Square(p.y);                       // B = Y^2
+        Edwards25519FieldElement a = Edwards25519FieldElement.Square(p.x); // A = X^2
+        Edwards25519FieldElement b = Edwards25519FieldElement.Square(p.y); // B = Y^2
         Edwards25519FieldElement zSquared = Edwards25519FieldElement.Square(p.z);
-        Edwards25519FieldElement c = Edwards25519FieldElement.Add(zSquared, zSquared);           // C = 2*Z^2
+        Edwards25519FieldElement c = Edwards25519FieldElement.Add(zSquared, zSquared); // C = 2*Z^2
 
         Edwards25519FieldElement xPlusYSquared = Edwards25519FieldElement.Square(
             Edwards25519FieldElement.Add(p.x, p.y));
 
         Edwards25519FieldElement e = Edwards25519FieldElement.Sub(xPlusYSquared,
-            Edwards25519FieldElement.Add(a, b));                                                  // E = (X+Y)^2 - A - B
-        Edwards25519FieldElement g = Edwards25519FieldElement.Sub(b, a);                          // G = B - A   (a = -1)
-        Edwards25519FieldElement f = Edwards25519FieldElement.Sub(g, c);                          // F = G - C
+            Edwards25519FieldElement.Add(a, b)); // E = (X+Y)^2 - A - B
+        Edwards25519FieldElement g = Edwards25519FieldElement.Sub(b, a); // G = B - A   (a = -1)
+        Edwards25519FieldElement f = Edwards25519FieldElement.Sub(g, c); // F = G - C
         Edwards25519FieldElement h = Edwards25519FieldElement.Negate(
-            Edwards25519FieldElement.Add(a, b));                                                  // H = -(A + B)
+            Edwards25519FieldElement.Add(a, b)); // H = -(A + B)
 
         return new Edwards25519Point(
             Edwards25519FieldElement.Mul(e, f),
@@ -141,23 +145,50 @@ internal readonly struct Edwards25519Point
         new(Edwards25519FieldElement.Negate(p.x), p.y, p.z, Edwards25519FieldElement.Negate(p.t));
 
     /// <summary>
-    /// Variable-time scalar multiplication: result = [scalar] * point.
-    /// Phase 1 reference uses straightforward left-to-right double-and-add scanning the 256-bit
-    /// scalar from most-significant to least-significant. Phase 5 will replace this with a
-    /// constant-time, windowed implementation.
+    /// Branch-free conditional swap. If <paramref name="condition"/> is 1 the inputs are exchanged;
+    /// if 0 they pass through unchanged. The same memory writes happen in both cases, so the
+    /// observable instruction trace does not depend on <paramref name="condition"/>.
+    /// </summary>
+    public static void ConditionalSwap(ref Edwards25519Point a, ref Edwards25519Point b, ulong condition)
+    {
+        Edwards25519FieldElement newAx = Edwards25519FieldElement.ConditionalSelect(a.x, b.x, condition);
+        Edwards25519FieldElement newBx = Edwards25519FieldElement.ConditionalSelect(b.x, a.x, condition);
+        Edwards25519FieldElement newAy = Edwards25519FieldElement.ConditionalSelect(a.y, b.y, condition);
+        Edwards25519FieldElement newBy = Edwards25519FieldElement.ConditionalSelect(b.y, a.y, condition);
+        Edwards25519FieldElement newAz = Edwards25519FieldElement.ConditionalSelect(a.z, b.z, condition);
+        Edwards25519FieldElement newBz = Edwards25519FieldElement.ConditionalSelect(b.z, a.z, condition);
+        Edwards25519FieldElement newAt = Edwards25519FieldElement.ConditionalSelect(a.t, b.t, condition);
+        Edwards25519FieldElement newBt = Edwards25519FieldElement.ConditionalSelect(b.t, a.t, condition);
+        a = new Edwards25519Point(newAx, newAy, newAz, newAt);
+        b = new Edwards25519Point(newBx, newBy, newBz, newBt);
+    }
+
+    /// <summary>
+    /// Constant-time scalar multiplication: result = [scalar] * point. Implemented as a
+    /// Montgomery-style ladder over the 256-bit scalar so that every iteration performs exactly
+    /// one Add and one Double on the same projective representations regardless of bit value.
+    /// Conditional swap is masked, so neither the control flow nor the per-iteration memory
+    /// access pattern reveals any scalar bit. The HWCD Add/Double formulas in this struct are
+    /// unified (no special cases for P + Q = identity), making the ladder safe even when the
+    /// scalar's leading bits put R0 = identity.
     /// </summary>
     public static Edwards25519Point ScalarMultiply(ReadOnlySpan<byte> scalar, in Edwards25519Point point)
     {
-        Edwards25519Point result = Identity;
+        // Joye ladder with cswap. Invariant after each step: R0 = [k']P where k' is the prefix
+        // of scalar processed so far (MSB → LSB), R1 = R0 + P.
+        Edwards25519Point r0 = Identity;
+        Edwards25519Point r1 = point;
+
         for (int i = 255; i >= 0; i--)
         {
-            result = Double(result);
-            int byteIndex = i >> 3;
-            int bitIndex = i & 7;
-            int bit = (scalar[byteIndex] >> bitIndex) & 1;
-            if (bit == 1) result = Add(result, point);
+            ulong bit = (ulong)((scalar[i >> 3] >> (i & 7)) & 1);
+            ConditionalSwap(ref r0, ref r1, bit);
+            r1 = Add(r0, r1);
+            r0 = Double(r0);
+            ConditionalSwap(ref r0, ref r1, bit);
         }
-        return result;
+
+        return r0;
     }
 
     /// <summary>
@@ -263,6 +294,7 @@ internal readonly struct Edwards25519Point
             if (yBytes[i] < 0xFF) return true;
             if (yBytes[i] > 0xFF) return false;
         }
+
         return yBytes[0] < 0xED;
     }
 
@@ -270,7 +302,8 @@ internal readonly struct Edwards25519Point
     {
         // Encoded base point B per RFC 8032 §5.1: y = 4/5 mod p (little-endian 0x58 followed by
         // 31 bytes of 0x66), sign bit 0.
-        ReadOnlySpan<byte> encoded = [
+        ReadOnlySpan<byte> encoded =
+        [
             0x58, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66,
             0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66,
             0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66,
@@ -280,7 +313,7 @@ internal readonly struct Edwards25519Point
         {
             throw new InvalidOperationException("Ed25519 base point failed to decode (implementation bug).");
         }
+
         return b;
     }
-
 }

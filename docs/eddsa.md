@@ -283,15 +283,76 @@ Order-of-magnitude observations:
 - The reference scalar-multiplication is double-and-add over 255 bits with no windowing —
   ~512 group operations per sign or verify on top of the SHA-512 hashes. Reaching the
   ~50 µs region typical of optimised Ed25519 implementations (NaCl, ed25519-donna) is a
-  Phase 5 target.
+  longer-term target — windowed scalar multiplication and a precomputed base-point table
+  are the well-known speed-ups, neither of which is in scope for this issue.
 - Allocations during sign/verify come from the `BigInteger`-based scalar arithmetic
-  (`Edwards25519Scalar`); replacing it with a `ulong`-limb constant-time variant in Phase 5
-  is expected to drop both the cycle count and the allocation count.
+  (`Edwards25519Scalar`); the constant-time refactor in Phase 5 replaces it with `long`-limb
+  code that allocates nothing and drops these numbers significantly (see the Phase 5 table).
 
-### Phase 5 (stretch, per issue)
-1. Constant-time scalar multiplication review.
-2. dudect-style timing analysis.
-3. Public abstraction reshape so the from-scratch impl can later be swapped for a verified third-party impl behind the same interface.
+### Phase 5 — Constant-time scalar arithmetic and scalar multiplication — COMPLETE
+
+Phase 4 left two known side-channel hazards. Both have now been removed:
+
+1. **Scalar arithmetic mod L** (`Edwards25519Scalar.cs`) previously used
+   `System.Numerics.BigInteger` for `ReduceFromWideBytes` and `MulAdd`. `BigInteger` is
+   allocating and not constant-time (its arithmetic dispatches on operand bit-length, so a
+   secret scalar whose high limb happened to be small could time differently from one that
+   used the full 252 bits). Replaced with a direct port of SUPERCOP `ref10`'s `sc_reduce.c`
+   and `sc_muladd.c`: twelve 21-bit signed limbs, the relation L = 2^252 + δ
+   (δ = 27742317777372353535851937790883648493) folds the 24-limb intermediate back into
+   12 limbs with a fixed sequence of multiply-and-add operations, and a final two-pass
+   normalisation guarantees the result is strictly less than L. No branches depend on any
+   limb value. `IsCanonical(scalar)` now does the `scalar < L` test as a byte-by-byte
+   constant-time subtraction inspecting the final borrow, not an early-return loop.
+
+2. **Scalar multiplication** (`Edwards25519Point.ScalarMultiply`) previously used left-to-right
+   double-and-add — `if (bit == 1) result = Add(result, point)` leaks every scalar bit through
+   both the branch and the differing per-iteration operation count. Replaced with a
+   Joye/Montgomery-style ladder: maintain `R0 = [k']P, R1 = R0 + P` and at each step
+   `cswap(R0, R1, bit); R1 = R0 + R1; R0 = 2*R0; cswap(R0, R1, bit)`. Every iteration performs
+   exactly one Add and one Double regardless of bit value, and the cswap is implemented as
+   masked `Edwards25519FieldElement.ConditionalSelect` operations over all four projective
+   coordinates of both points — same memory writes either way. The HWCD a = -1 formulas were
+   already unified (no special cases for `P + Q = identity`), so the ladder is safe even when
+   the scalar's leading bits leave R0 at the identity for many iterations.
+
+A skim of `Edwards25519FieldElement.cs` for side-channel hazards turned up nothing worth
+fixing: `IsZero` accumulates with bitwise OR, `IsNegative` reads a fixed byte position,
+`ConditionalSelect` is mask-based, and the carry chains in `Add` / `Sub` / `Mul` / `Square`
+are straight-line. `ValueEquals` calls `SequenceEqual`, which is variable-time, but its only
+callers (`TryDecode`) operate on public-key bytes, not secret scalars.
+
+#### Phase 5 benchmarks
+
+Same machine as Phase 4 (Intel Xeon W-3265, .NET 10.0.100). Re-run with:
+
+```sh
+dotnet build OnixLabs.Security.Cryptography.Benchmarks -c Release
+dotnet run --project OnixLabs.Security.Cryptography.Benchmarks -c Release -f net10.0 --no-build -- --filter '*'
+```
+
+| Method                                          | Phase 4 (variable-time) | Phase 5 (constant-time) | Δ |
+|-------------------------------------------------|------------------------:|------------------------:|--:|
+| `EddsaPrivateKey.Create — key generation`       |   4.284 µs / 1616 B    |   4.383 µs / 1616 B    | ~ |
+| `EddsaPrivateKey.SignData — 64-byte message`    | 331.193 µs / 2376 B    | 473.077 µs / 1688 B    | +43% / −29% allocations |
+| `EddsaPublicKey.IsDataValid — 64-byte message`  | 342.897 µs / 328 B     | 482.312 µs / 128 B     | +41% / −61% allocations |
+
+Slowdown is smaller than the rough "2x" upper bound noted in the roadmap because the
+double-and-add baseline performs ~1.5 group operations per bit on average (always Double,
+Add only when bit is 1), so the ladder's fixed two-operations-per-bit cost is a 33%
+arithmetic overhead, with the rest accounted for by the per-iteration cswap. Allocations
+dropped because the `BigInteger` boxing inside `Edwards25519Scalar` is gone.
+
+#### Out of scope (deferred)
+
+- **dudect-style timing analysis.** Not done here. The arithmetic and ladder are
+  data-oblivious by construction, but actually demonstrating that on this JIT would mean
+  bringing in a test harness, statistical machinery, and an exclusive-CPU runner. Worth
+  doing eventually — not part of this phase.
+- **Provider abstraction.** Reshaping the public API so the from-scratch implementation can
+  later be swapped for a verified third-party implementation behind the same interface is
+  also deferred. The current internal layout (`Ed25519.cs` plus the three `Edwards25519*`
+  helpers) is already a clean seam if and when that work is taken on.
 
 ## Things to be careful about during implementation
 

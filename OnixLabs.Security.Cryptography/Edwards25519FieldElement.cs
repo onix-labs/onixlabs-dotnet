@@ -22,7 +22,7 @@ namespace OnixLabs.Security.Cryptography;
 /// Values are stored as five 51-bit limbs in little-endian order, that is:
 /// value = h0 + h1 * 2^51 + h2 * 2^102 + h3 * 2^153 + h4 * 2^204 (mod p).
 /// Limbs are allowed to exceed 51 bits between operations; methods that produce
-/// a result normalise the carry chain so that limbs are bounded by ~2^52.
+/// a result normalize the carry chain so that limbs are bounded by ~2^52.
 /// </summary>
 internal readonly struct Edwards25519FieldElement
 {
@@ -43,7 +43,7 @@ internal readonly struct Edwards25519FieldElement
     public static readonly Edwards25519FieldElement Zero = new(0, 0, 0, 0, 0);
     public static readonly Edwards25519FieldElement One = new(1, 0, 0, 0, 0);
 
-    public Edwards25519FieldElement(ulong h0, ulong h1, ulong h2, ulong h3, ulong h4)
+    private Edwards25519FieldElement(ulong h0, ulong h1, ulong h2, ulong h3, ulong h4)
     {
         this.h0 = h0;
         this.h1 = h1;
@@ -101,7 +101,7 @@ internal readonly struct Edwards25519FieldElement
         // Add 8p before subtracting so that intermediate limbs never underflow. To remain
         // safe under chained Subs (e.g. Negate(Sub(...))), propagate the carry chain once so
         // that the output limbs are bounded by Mask51 + small, matching the Mul/Square output
-        // contract. Without this normalisation, an input limb from a prior Sub can exceed
+        // contract. Without this normalization, an input limb from a prior Sub can exceed
         // EightP_limb and the following subtraction underflows.
         ulong h0 = a.h0 + EightP0 - b.h0;
         ulong h1 = a.h1 + EightPRest - b.h1;
@@ -110,11 +110,21 @@ internal readonly struct Edwards25519FieldElement
         ulong h4 = a.h4 + EightPRest - b.h4;
 
         ulong c;
-        c = h0 >> 51; h0 &= Mask51; h1 += c;
-        c = h1 >> 51; h1 &= Mask51; h2 += c;
-        c = h2 >> 51; h2 &= Mask51; h3 += c;
-        c = h3 >> 51; h3 &= Mask51; h4 += c;
-        c = h4 >> 51; h4 &= Mask51; h0 += 19 * c;
+        c = h0 >> 51;
+        h0 &= Mask51;
+        h1 += c;
+        c = h1 >> 51;
+        h1 &= Mask51;
+        h2 += c;
+        c = h2 >> 51;
+        h2 &= Mask51;
+        h3 += c;
+        c = h3 >> 51;
+        h3 &= Mask51;
+        h4 += c;
+        c = h4 >> 51;
+        h4 &= Mask51;
+        h0 += 19 * c;
 
         return new Edwards25519FieldElement(h0, h1, h2, h3, h4);
     }
@@ -128,15 +138,15 @@ internal readonly struct Edwards25519FieldElement
     /// </summary>
     public static Edwards25519FieldElement Mul(in Edwards25519FieldElement a, in Edwards25519FieldElement b)
     {
-        ulong b1_19 = 19 * b.h1;
-        ulong b2_19 = 19 * b.h2;
-        ulong b3_19 = 19 * b.h3;
-        ulong b4_19 = 19 * b.h4;
+        ulong b119 = 19 * b.h1;
+        ulong b219 = 19 * b.h2;
+        ulong b319 = 19 * b.h3;
+        ulong b419 = 19 * b.h4;
 
-        UInt128 c0 = (UInt128)a.h0 * b.h0 + (UInt128)a.h1 * b4_19 + (UInt128)a.h2 * b3_19 + (UInt128)a.h3 * b2_19 + (UInt128)a.h4 * b1_19;
-        UInt128 c1 = (UInt128)a.h0 * b.h1 + (UInt128)a.h1 * b.h0 + (UInt128)a.h2 * b4_19 + (UInt128)a.h3 * b3_19 + (UInt128)a.h4 * b2_19;
-        UInt128 c2 = (UInt128)a.h0 * b.h2 + (UInt128)a.h1 * b.h1 + (UInt128)a.h2 * b.h0 + (UInt128)a.h3 * b4_19 + (UInt128)a.h4 * b3_19;
-        UInt128 c3 = (UInt128)a.h0 * b.h3 + (UInt128)a.h1 * b.h2 + (UInt128)a.h2 * b.h1 + (UInt128)a.h3 * b.h0 + (UInt128)a.h4 * b4_19;
+        UInt128 c0 = (UInt128)a.h0 * b.h0 + (UInt128)a.h1 * b419 + (UInt128)a.h2 * b319 + (UInt128)a.h3 * b219 + (UInt128)a.h4 * b119;
+        UInt128 c1 = (UInt128)a.h0 * b.h1 + (UInt128)a.h1 * b.h0 + (UInt128)a.h2 * b419 + (UInt128)a.h3 * b319 + (UInt128)a.h4 * b219;
+        UInt128 c2 = (UInt128)a.h0 * b.h2 + (UInt128)a.h1 * b.h1 + (UInt128)a.h2 * b.h0 + (UInt128)a.h3 * b419 + (UInt128)a.h4 * b319;
+        UInt128 c3 = (UInt128)a.h0 * b.h3 + (UInt128)a.h1 * b.h2 + (UInt128)a.h2 * b.h1 + (UInt128)a.h3 * b.h0 + (UInt128)a.h4 * b419;
         UInt128 c4 = (UInt128)a.h0 * b.h4 + (UInt128)a.h1 * b.h3 + (UInt128)a.h2 * b.h2 + (UInt128)a.h3 * b.h1 + (UInt128)a.h4 * b.h0;
 
         return CarryReduce(c0, c1, c2, c3, c4);
@@ -151,12 +161,14 @@ internal readonly struct Edwards25519FieldElement
     public static Edwards25519FieldElement ConditionalSelect(in Edwards25519FieldElement a, in Edwards25519FieldElement b, ulong condition)
     {
         ulong mask = (ulong)-(long)(condition & 1UL);
+
         return new Edwards25519FieldElement(
             a.h0 ^ (mask & (a.h0 ^ b.h0)),
             a.h1 ^ (mask & (a.h1 ^ b.h1)),
             a.h2 ^ (mask & (a.h2 ^ b.h2)),
             a.h3 ^ (mask & (a.h3 ^ b.h3)),
-            a.h4 ^ (mask & (a.h4 ^ b.h4)));
+            a.h4 ^ (mask & (a.h4 ^ b.h4))
+        );
     }
 
     /// <summary>
@@ -223,20 +235,36 @@ internal readonly struct Edwards25519FieldElement
         r4 = h4;
 
         ulong c;
-        c = r0 >> 51; r0 &= Mask51; r1 += c;
-        c = r1 >> 51; r1 &= Mask51; r2 += c;
-        c = r2 >> 51; r2 &= Mask51; r3 += c;
-        c = r3 >> 51; r3 &= Mask51; r4 += c;
-        c = r4 >> 51; r4 &= Mask51; r0 += c * 19;
-        c = r0 >> 51; r0 &= Mask51; r1 += c;
+        c = r0 >> 51;
+        r0 &= Mask51;
+        r1 += c;
+        c = r1 >> 51;
+        r1 &= Mask51;
+        r2 += c;
+        c = r2 >> 51;
+        r2 &= Mask51;
+        r3 += c;
+        c = r3 >> 51;
+        r3 &= Mask51;
+        r4 += c;
+        c = r4 >> 51;
+        r4 &= Mask51;
+        r0 += c * 19;
+        c = r0 >> 51;
+        r0 &= Mask51;
+        r1 += c;
 
         // After one full pass the value is in [0, 2p); if it is in [p, 2p) we still need a final subtraction.
         // Test (r + 19) >= 2^255 — if so, r >= p.
         ulong t0 = r0 + 19;
-        ulong t1 = r1 + (t0 >> 51); t0 &= Mask51;
-        ulong t2 = r2 + (t1 >> 51); t1 &= Mask51;
-        ulong t3 = r3 + (t2 >> 51); t2 &= Mask51;
-        ulong t4 = r4 + (t3 >> 51); t3 &= Mask51;
+        ulong t1 = r1 + (t0 >> 51);
+        t0 &= Mask51;
+        ulong t2 = r2 + (t1 >> 51);
+        t1 &= Mask51;
+        ulong t3 = r3 + (t2 >> 51);
+        t2 &= Mask51;
+        ulong t4 = r4 + (t3 >> 51);
+        t3 &= Mask51;
         ulong overflow = t4 >> 51;
         t4 &= Mask51;
 
@@ -257,18 +285,20 @@ internal readonly struct Edwards25519FieldElement
     /// </summary>
     private static Edwards25519FieldElement CarryReduce(UInt128 c0, UInt128 c1, UInt128 c2, UInt128 c3, UInt128 c4)
     {
-        c1 += c0 >> 51; c0 &= Mask51;
-        c2 += c1 >> 51; c1 &= Mask51;
-        c3 += c2 >> 51; c2 &= Mask51;
-        c4 += c3 >> 51; c3 &= Mask51;
-        c0 += 19 * (c4 >> 51); c4 &= Mask51;
-        c1 += c0 >> 51; c0 &= Mask51;
-        return new Edwards25519FieldElement(
-            (ulong)c0,
-            (ulong)c1,
-            (ulong)c2,
-            (ulong)c3,
-            (ulong)c4);
+        c1 += c0 >> 51;
+        c0 &= Mask51;
+        c2 += c1 >> 51;
+        c1 &= Mask51;
+        c3 += c2 >> 51;
+        c2 &= Mask51;
+        c4 += c3 >> 51;
+        c3 &= Mask51;
+        c0 += 19 * (c4 >> 51);
+        c4 &= Mask51;
+        c1 += c0 >> 51;
+        c0 &= Mask51;
+
+        return new Edwards25519FieldElement((ulong)c0, (ulong)c1, (ulong)c2, (ulong)c3, (ulong)c4);
     }
 
     /// <summary>
@@ -279,39 +309,39 @@ internal readonly struct Edwards25519FieldElement
     /// </summary>
     private static Edwards25519FieldElement Pow22523ThenChain(in Edwards25519FieldElement z, bool multiplyZ11AtEnd)
     {
-        Edwards25519FieldElement t0 = Square(z);             // z^2
-        Edwards25519FieldElement t1 = Square(t0);            // z^4
-        t1 = Square(t1);                                     // z^8
-        t1 = Mul(z, t1);                                     // z^9
-        t0 = Mul(t0, t1);                                    // z^11
-        Edwards25519FieldElement t2 = Square(t0);            // z^22
-        t1 = Mul(t1, t2);                                    // z^(2^5 - 1)
+        Edwards25519FieldElement t0 = Square(z); // z^2
+        Edwards25519FieldElement t1 = Square(t0); // z^4
+        t1 = Square(t1); // z^8
+        t1 = Mul(z, t1); // z^9
+        t0 = Mul(t0, t1); // z^11
+        Edwards25519FieldElement t2 = Square(t0); // z^22
+        t1 = Mul(t1, t2); // z^(2^5 - 1)
 
         t2 = Square(t1);
-        for (int i = 1; i < 5; i++) t2 = Square(t2);          // z^(2^10 - 2^5)
-        t1 = Mul(t2, t1);                                    // z^(2^10 - 1)
+        for (int i = 1; i < 5; i++) t2 = Square(t2); // z^(2^10 - 2^5)
+        t1 = Mul(t2, t1); // z^(2^10 - 1)
 
         t2 = Square(t1);
-        for (int i = 1; i < 10; i++) t2 = Square(t2);         // z^(2^20 - 2^10)
-        Edwards25519FieldElement t3 = Mul(t2, t1);           // z^(2^20 - 1)
+        for (int i = 1; i < 10; i++) t2 = Square(t2); // z^(2^20 - 2^10)
+        Edwards25519FieldElement t3 = Mul(t2, t1); // z^(2^20 - 1)
 
         t2 = Square(t3);
-        for (int i = 1; i < 20; i++) t2 = Square(t2);         // z^(2^40 - 2^20)
-        t2 = Mul(t2, t3);                                    // z^(2^40 - 1)
+        for (int i = 1; i < 20; i++) t2 = Square(t2); // z^(2^40 - 2^20)
+        t2 = Mul(t2, t3); // z^(2^40 - 1)
 
-        for (int i = 0; i < 10; i++) t2 = Square(t2);         // z^(2^50 - 2^10)
-        t1 = Mul(t2, t1);                                    // z^(2^50 - 1)
+        for (int i = 0; i < 10; i++) t2 = Square(t2); // z^(2^50 - 2^10)
+        t1 = Mul(t2, t1); // z^(2^50 - 1)
 
         t2 = Square(t1);
-        for (int i = 1; i < 50; i++) t2 = Square(t2);         // z^(2^100 - 2^50)
-        t2 = Mul(t2, t1);                                    // z^(2^100 - 1)
+        for (int i = 1; i < 50; i++) t2 = Square(t2); // z^(2^100 - 2^50)
+        t2 = Mul(t2, t1); // z^(2^100 - 1)
 
         t3 = Square(t2);
-        for (int i = 1; i < 100; i++) t3 = Square(t3);        // z^(2^200 - 2^100)
-        t2 = Mul(t3, t2);                                    // z^(2^200 - 1)
+        for (int i = 1; i < 100; i++) t3 = Square(t3); // z^(2^200 - 2^100)
+        t2 = Mul(t3, t2); // z^(2^200 - 1)
 
-        for (int i = 0; i < 50; i++) t2 = Square(t2);         // z^(2^250 - 2^50)
-        t1 = Mul(t2, t1);                                    // z^(2^250 - 1)
+        for (int i = 0; i < 50; i++) t2 = Square(t2); // z^(2^250 - 2^50)
+        t1 = Mul(t2, t1); // z^(2^250 - 1)
 
         if (!multiplyZ11AtEnd)
         {

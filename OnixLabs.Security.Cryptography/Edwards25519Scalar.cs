@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Numerics;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -22,22 +21,132 @@ namespace OnixLabs.Security.Cryptography;
 /// (L = 2^252 + 27742317777372353535851937790883648493, RFC 8032 §5.1).
 /// </summary>
 /// <remarks>
-/// The Phase 1 reference implementation uses <see cref="BigInteger"/> for arithmetic, which is
-/// neither constant-time nor allocation-free. This is acceptable for the reference phase; the
-/// roadmap (docs/eddsa.md Phase 5) calls for replacing this with constant-time ulong-limb code.
+/// Ported from SUPERCOP ref10 (public domain): scalars are represented as twelve 21-bit limbs
+/// during reduction so that the relation L = 2^252 + δ (δ = 27742317777372353535851937790883648493)
+/// lets us fold high limbs back into low ones with a fixed sequence of multiply-and-add operations.
+/// Every operation is data-oblivious — no branches depend on scalar values, so secret scalars
+/// cannot leak through control flow.
 /// </remarks>
 internal static class Edwards25519Scalar
 {
-    private static readonly BigInteger L = (BigInteger.One << 252)
-        + BigInteger.Parse("27742317777372353535851937790883648493");
-
     /// <summary>
     /// Reduces a 64-byte little-endian integer modulo L and writes the result as 32 little-endian bytes.
     /// </summary>
     public static void ReduceFromWideBytes(ReadOnlySpan<byte> wide, Span<byte> output)
     {
-        BigInteger value = new(wide, isUnsigned: true, isBigEndian: false);
-        WriteLittleEndian32(value % L, output);
+        long s0 = 2097151 & Load3(wide[0..]);
+        long s1 = 2097151 & (Load4(wide[2..]) >> 5);
+        long s2 = 2097151 & (Load3(wide[5..]) >> 2);
+        long s3 = 2097151 & (Load4(wide[7..]) >> 7);
+        long s4 = 2097151 & (Load4(wide[10..]) >> 4);
+        long s5 = 2097151 & (Load3(wide[13..]) >> 1);
+        long s6 = 2097151 & (Load4(wide[15..]) >> 6);
+        long s7 = 2097151 & (Load3(wide[18..]) >> 3);
+        long s8 = 2097151 & Load3(wide[21..]);
+        long s9 = 2097151 & (Load4(wide[23..]) >> 5);
+        long s10 = 2097151 & (Load3(wide[26..]) >> 2);
+        long s11 = 2097151 & (Load4(wide[28..]) >> 7);
+        long s12 = 2097151 & (Load4(wide[31..]) >> 4);
+        long s13 = 2097151 & (Load3(wide[34..]) >> 1);
+        long s14 = 2097151 & (Load4(wide[36..]) >> 6);
+        long s15 = 2097151 & (Load3(wide[39..]) >> 3);
+        long s16 = 2097151 & Load3(wide[42..]);
+        long s17 = 2097151 & (Load4(wide[44..]) >> 5);
+        long s18 = 2097151 & (Load3(wide[47..]) >> 2);
+        long s19 = 2097151 & (Load4(wide[49..]) >> 7);
+        long s20 = 2097151 & (Load4(wide[52..]) >> 4);
+        long s21 = 2097151 & (Load3(wide[55..]) >> 1);
+        long s22 = 2097151 & (Load4(wide[57..]) >> 6);
+        long s23 = Load4(wide[60..]) >> 3;
+
+        s11 += s23 * 666643; s12 += s23 * 470296; s13 += s23 * 654183;
+        s14 -= s23 * 997805; s15 += s23 * 136657; s16 -= s23 * 683901;
+        s10 += s22 * 666643; s11 += s22 * 470296; s12 += s22 * 654183;
+        s13 -= s22 * 997805; s14 += s22 * 136657; s15 -= s22 * 683901;
+        s9 += s21 * 666643; s10 += s21 * 470296; s11 += s21 * 654183;
+        s12 -= s21 * 997805; s13 += s21 * 136657; s14 -= s21 * 683901;
+        s8 += s20 * 666643; s9 += s20 * 470296; s10 += s20 * 654183;
+        s11 -= s20 * 997805; s12 += s20 * 136657; s13 -= s20 * 683901;
+        s7 += s19 * 666643; s8 += s19 * 470296; s9 += s19 * 654183;
+        s10 -= s19 * 997805; s11 += s19 * 136657; s12 -= s19 * 683901;
+        s6 += s18 * 666643; s7 += s18 * 470296; s8 += s18 * 654183;
+        s9 -= s18 * 997805; s10 += s18 * 136657; s11 -= s18 * 683901;
+
+        long c;
+        c = (s6 + (1L << 20)) >> 21; s7 += c; s6 -= c << 21;
+        c = (s8 + (1L << 20)) >> 21; s9 += c; s8 -= c << 21;
+        c = (s10 + (1L << 20)) >> 21; s11 += c; s10 -= c << 21;
+        c = (s12 + (1L << 20)) >> 21; s13 += c; s12 -= c << 21;
+        c = (s14 + (1L << 20)) >> 21; s15 += c; s14 -= c << 21;
+        c = (s16 + (1L << 20)) >> 21; s17 += c; s16 -= c << 21;
+
+        c = (s7 + (1L << 20)) >> 21; s8 += c; s7 -= c << 21;
+        c = (s9 + (1L << 20)) >> 21; s10 += c; s9 -= c << 21;
+        c = (s11 + (1L << 20)) >> 21; s12 += c; s11 -= c << 21;
+        c = (s13 + (1L << 20)) >> 21; s14 += c; s13 -= c << 21;
+        c = (s15 + (1L << 20)) >> 21; s16 += c; s15 -= c << 21;
+
+        s5 += s17 * 666643; s6 += s17 * 470296; s7 += s17 * 654183;
+        s8 -= s17 * 997805; s9 += s17 * 136657; s10 -= s17 * 683901;
+        s4 += s16 * 666643; s5 += s16 * 470296; s6 += s16 * 654183;
+        s7 -= s16 * 997805; s8 += s16 * 136657; s9 -= s16 * 683901;
+        s3 += s15 * 666643; s4 += s15 * 470296; s5 += s15 * 654183;
+        s6 -= s15 * 997805; s7 += s15 * 136657; s8 -= s15 * 683901;
+        s2 += s14 * 666643; s3 += s14 * 470296; s4 += s14 * 654183;
+        s5 -= s14 * 997805; s6 += s14 * 136657; s7 -= s14 * 683901;
+        s1 += s13 * 666643; s2 += s13 * 470296; s3 += s13 * 654183;
+        s4 -= s13 * 997805; s5 += s13 * 136657; s6 -= s13 * 683901;
+        s0 += s12 * 666643; s1 += s12 * 470296; s2 += s12 * 654183;
+        s3 -= s12 * 997805; s4 += s12 * 136657; s5 -= s12 * 683901;
+        s12 = 0;
+
+        c = (s0 + (1L << 20)) >> 21; s1 += c; s0 -= c << 21;
+        c = (s2 + (1L << 20)) >> 21; s3 += c; s2 -= c << 21;
+        c = (s4 + (1L << 20)) >> 21; s5 += c; s4 -= c << 21;
+        c = (s6 + (1L << 20)) >> 21; s7 += c; s6 -= c << 21;
+        c = (s8 + (1L << 20)) >> 21; s9 += c; s8 -= c << 21;
+        c = (s10 + (1L << 20)) >> 21; s11 += c; s10 -= c << 21;
+
+        c = (s1 + (1L << 20)) >> 21; s2 += c; s1 -= c << 21;
+        c = (s3 + (1L << 20)) >> 21; s4 += c; s3 -= c << 21;
+        c = (s5 + (1L << 20)) >> 21; s6 += c; s5 -= c << 21;
+        c = (s7 + (1L << 20)) >> 21; s8 += c; s7 -= c << 21;
+        c = (s9 + (1L << 20)) >> 21; s10 += c; s9 -= c << 21;
+        c = (s11 + (1L << 20)) >> 21; s12 += c; s11 -= c << 21;
+
+        s0 += s12 * 666643; s1 += s12 * 470296; s2 += s12 * 654183;
+        s3 -= s12 * 997805; s4 += s12 * 136657; s5 -= s12 * 683901;
+        s12 = 0;
+
+        c = s0 >> 21; s1 += c; s0 -= c << 21;
+        c = s1 >> 21; s2 += c; s1 -= c << 21;
+        c = s2 >> 21; s3 += c; s2 -= c << 21;
+        c = s3 >> 21; s4 += c; s3 -= c << 21;
+        c = s4 >> 21; s5 += c; s4 -= c << 21;
+        c = s5 >> 21; s6 += c; s5 -= c << 21;
+        c = s6 >> 21; s7 += c; s6 -= c << 21;
+        c = s7 >> 21; s8 += c; s7 -= c << 21;
+        c = s8 >> 21; s9 += c; s8 -= c << 21;
+        c = s9 >> 21; s10 += c; s9 -= c << 21;
+        c = s10 >> 21; s11 += c; s10 -= c << 21;
+        c = s11 >> 21; s12 += c; s11 -= c << 21;
+
+        s0 += s12 * 666643; s1 += s12 * 470296; s2 += s12 * 654183;
+        s3 -= s12 * 997805; s4 += s12 * 136657; s5 -= s12 * 683901;
+
+        c = s0 >> 21; s1 += c; s0 -= c << 21;
+        c = s1 >> 21; s2 += c; s1 -= c << 21;
+        c = s2 >> 21; s3 += c; s2 -= c << 21;
+        c = s3 >> 21; s4 += c; s3 -= c << 21;
+        c = s4 >> 21; s5 += c; s4 -= c << 21;
+        c = s5 >> 21; s6 += c; s5 -= c << 21;
+        c = s6 >> 21; s7 += c; s6 -= c << 21;
+        c = s7 >> 21; s8 += c; s7 -= c << 21;
+        c = s8 >> 21; s9 += c; s8 -= c << 21;
+        c = s9 >> 21; s10 += c; s9 -= c << 21;
+        c = s10 >> 21; s11 += c; s10 -= c << 21;
+
+        StoreCanonical(output, s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11);
     }
 
     /// <summary>
@@ -45,10 +154,183 @@ internal static class Edwards25519Scalar
     /// </summary>
     public static void MulAdd(ReadOnlySpan<byte> a, ReadOnlySpan<byte> b, ReadOnlySpan<byte> c, Span<byte> output)
     {
-        BigInteger aB = new(a, isUnsigned: true, isBigEndian: false);
-        BigInteger bB = new(b, isUnsigned: true, isBigEndian: false);
-        BigInteger cB = new(c, isUnsigned: true, isBigEndian: false);
-        WriteLittleEndian32((aB * bB + cB) % L, output);
+        long a0 = 2097151 & Load3(a[0..]);
+        long a1 = 2097151 & (Load4(a[2..]) >> 5);
+        long a2 = 2097151 & (Load3(a[5..]) >> 2);
+        long a3 = 2097151 & (Load4(a[7..]) >> 7);
+        long a4 = 2097151 & (Load4(a[10..]) >> 4);
+        long a5 = 2097151 & (Load3(a[13..]) >> 1);
+        long a6 = 2097151 & (Load4(a[15..]) >> 6);
+        long a7 = 2097151 & (Load3(a[18..]) >> 3);
+        long a8 = 2097151 & Load3(a[21..]);
+        long a9 = 2097151 & (Load4(a[23..]) >> 5);
+        long a10 = 2097151 & (Load3(a[26..]) >> 2);
+        long a11 = Load4(a[28..]) >> 7;
+
+        long b0 = 2097151 & Load3(b[0..]);
+        long b1 = 2097151 & (Load4(b[2..]) >> 5);
+        long b2 = 2097151 & (Load3(b[5..]) >> 2);
+        long b3 = 2097151 & (Load4(b[7..]) >> 7);
+        long b4 = 2097151 & (Load4(b[10..]) >> 4);
+        long b5 = 2097151 & (Load3(b[13..]) >> 1);
+        long b6 = 2097151 & (Load4(b[15..]) >> 6);
+        long b7 = 2097151 & (Load3(b[18..]) >> 3);
+        long b8 = 2097151 & Load3(b[21..]);
+        long b9 = 2097151 & (Load4(b[23..]) >> 5);
+        long b10 = 2097151 & (Load3(b[26..]) >> 2);
+        long b11 = Load4(b[28..]) >> 7;
+
+        long c0 = 2097151 & Load3(c[0..]);
+        long c1 = 2097151 & (Load4(c[2..]) >> 5);
+        long c2 = 2097151 & (Load3(c[5..]) >> 2);
+        long c3 = 2097151 & (Load4(c[7..]) >> 7);
+        long c4 = 2097151 & (Load4(c[10..]) >> 4);
+        long c5 = 2097151 & (Load3(c[13..]) >> 1);
+        long c6 = 2097151 & (Load4(c[15..]) >> 6);
+        long c7 = 2097151 & (Load3(c[18..]) >> 3);
+        long c8 = 2097151 & Load3(c[21..]);
+        long c9 = 2097151 & (Load4(c[23..]) >> 5);
+        long c10 = 2097151 & (Load3(c[26..]) >> 2);
+        long c11 = Load4(c[28..]) >> 7;
+
+        long s0 = c0 + a0 * b0;
+        long s1 = c1 + a0 * b1 + a1 * b0;
+        long s2 = c2 + a0 * b2 + a1 * b1 + a2 * b0;
+        long s3 = c3 + a0 * b3 + a1 * b2 + a2 * b1 + a3 * b0;
+        long s4 = c4 + a0 * b4 + a1 * b3 + a2 * b2 + a3 * b1 + a4 * b0;
+        long s5 = c5 + a0 * b5 + a1 * b4 + a2 * b3 + a3 * b2 + a4 * b1 + a5 * b0;
+        long s6 = c6 + a0 * b6 + a1 * b5 + a2 * b4 + a3 * b3 + a4 * b2 + a5 * b1 + a6 * b0;
+        long s7 = c7 + a0 * b7 + a1 * b6 + a2 * b5 + a3 * b4 + a4 * b3 + a5 * b2 + a6 * b1 + a7 * b0;
+        long s8 = c8 + a0 * b8 + a1 * b7 + a2 * b6 + a3 * b5 + a4 * b4 + a5 * b3 + a6 * b2 + a7 * b1 + a8 * b0;
+        long s9 = c9 + a0 * b9 + a1 * b8 + a2 * b7 + a3 * b6 + a4 * b5 + a5 * b4 + a6 * b3 + a7 * b2 + a8 * b1 + a9 * b0;
+        long s10 = c10 + a0 * b10 + a1 * b9 + a2 * b8 + a3 * b7 + a4 * b6 + a5 * b5 + a6 * b4 + a7 * b3 + a8 * b2 + a9 * b1 + a10 * b0;
+        long s11 = c11 + a0 * b11 + a1 * b10 + a2 * b9 + a3 * b8 + a4 * b7 + a5 * b6 + a6 * b5 + a7 * b4 + a8 * b3 + a9 * b2 + a10 * b1 + a11 * b0;
+        long s12 = a1 * b11 + a2 * b10 + a3 * b9 + a4 * b8 + a5 * b7 + a6 * b6 + a7 * b5 + a8 * b4 + a9 * b3 + a10 * b2 + a11 * b1;
+        long s13 = a2 * b11 + a3 * b10 + a4 * b9 + a5 * b8 + a6 * b7 + a7 * b6 + a8 * b5 + a9 * b4 + a10 * b3 + a11 * b2;
+        long s14 = a3 * b11 + a4 * b10 + a5 * b9 + a6 * b8 + a7 * b7 + a8 * b6 + a9 * b5 + a10 * b4 + a11 * b3;
+        long s15 = a4 * b11 + a5 * b10 + a6 * b9 + a7 * b8 + a8 * b7 + a9 * b6 + a10 * b5 + a11 * b4;
+        long s16 = a5 * b11 + a6 * b10 + a7 * b9 + a8 * b8 + a9 * b7 + a10 * b6 + a11 * b5;
+        long s17 = a6 * b11 + a7 * b10 + a8 * b9 + a9 * b8 + a10 * b7 + a11 * b6;
+        long s18 = a7 * b11 + a8 * b10 + a9 * b9 + a10 * b8 + a11 * b7;
+        long s19 = a8 * b11 + a9 * b10 + a10 * b9 + a11 * b8;
+        long s20 = a9 * b11 + a10 * b10 + a11 * b9;
+        long s21 = a10 * b11 + a11 * b10;
+        long s22 = a11 * b11;
+        long s23 = 0;
+
+        long cy;
+        cy = (s0 + (1L << 20)) >> 21; s1 += cy; s0 -= cy << 21;
+        cy = (s2 + (1L << 20)) >> 21; s3 += cy; s2 -= cy << 21;
+        cy = (s4 + (1L << 20)) >> 21; s5 += cy; s4 -= cy << 21;
+        cy = (s6 + (1L << 20)) >> 21; s7 += cy; s6 -= cy << 21;
+        cy = (s8 + (1L << 20)) >> 21; s9 += cy; s8 -= cy << 21;
+        cy = (s10 + (1L << 20)) >> 21; s11 += cy; s10 -= cy << 21;
+        cy = (s12 + (1L << 20)) >> 21; s13 += cy; s12 -= cy << 21;
+        cy = (s14 + (1L << 20)) >> 21; s15 += cy; s14 -= cy << 21;
+        cy = (s16 + (1L << 20)) >> 21; s17 += cy; s16 -= cy << 21;
+        cy = (s18 + (1L << 20)) >> 21; s19 += cy; s18 -= cy << 21;
+        cy = (s20 + (1L << 20)) >> 21; s21 += cy; s20 -= cy << 21;
+        cy = (s22 + (1L << 20)) >> 21; s23 += cy; s22 -= cy << 21;
+
+        cy = (s1 + (1L << 20)) >> 21; s2 += cy; s1 -= cy << 21;
+        cy = (s3 + (1L << 20)) >> 21; s4 += cy; s3 -= cy << 21;
+        cy = (s5 + (1L << 20)) >> 21; s6 += cy; s5 -= cy << 21;
+        cy = (s7 + (1L << 20)) >> 21; s8 += cy; s7 -= cy << 21;
+        cy = (s9 + (1L << 20)) >> 21; s10 += cy; s9 -= cy << 21;
+        cy = (s11 + (1L << 20)) >> 21; s12 += cy; s11 -= cy << 21;
+        cy = (s13 + (1L << 20)) >> 21; s14 += cy; s13 -= cy << 21;
+        cy = (s15 + (1L << 20)) >> 21; s16 += cy; s15 -= cy << 21;
+        cy = (s17 + (1L << 20)) >> 21; s18 += cy; s17 -= cy << 21;
+        cy = (s19 + (1L << 20)) >> 21; s20 += cy; s19 -= cy << 21;
+        cy = (s21 + (1L << 20)) >> 21; s22 += cy; s21 -= cy << 21;
+
+        s11 += s23 * 666643; s12 += s23 * 470296; s13 += s23 * 654183;
+        s14 -= s23 * 997805; s15 += s23 * 136657; s16 -= s23 * 683901;
+        s10 += s22 * 666643; s11 += s22 * 470296; s12 += s22 * 654183;
+        s13 -= s22 * 997805; s14 += s22 * 136657; s15 -= s22 * 683901;
+        s9 += s21 * 666643; s10 += s21 * 470296; s11 += s21 * 654183;
+        s12 -= s21 * 997805; s13 += s21 * 136657; s14 -= s21 * 683901;
+        s8 += s20 * 666643; s9 += s20 * 470296; s10 += s20 * 654183;
+        s11 -= s20 * 997805; s12 += s20 * 136657; s13 -= s20 * 683901;
+        s7 += s19 * 666643; s8 += s19 * 470296; s9 += s19 * 654183;
+        s10 -= s19 * 997805; s11 += s19 * 136657; s12 -= s19 * 683901;
+        s6 += s18 * 666643; s7 += s18 * 470296; s8 += s18 * 654183;
+        s9 -= s18 * 997805; s10 += s18 * 136657; s11 -= s18 * 683901;
+
+        cy = (s6 + (1L << 20)) >> 21; s7 += cy; s6 -= cy << 21;
+        cy = (s8 + (1L << 20)) >> 21; s9 += cy; s8 -= cy << 21;
+        cy = (s10 + (1L << 20)) >> 21; s11 += cy; s10 -= cy << 21;
+        cy = (s12 + (1L << 20)) >> 21; s13 += cy; s12 -= cy << 21;
+        cy = (s14 + (1L << 20)) >> 21; s15 += cy; s14 -= cy << 21;
+        cy = (s16 + (1L << 20)) >> 21; s17 += cy; s16 -= cy << 21;
+
+        cy = (s7 + (1L << 20)) >> 21; s8 += cy; s7 -= cy << 21;
+        cy = (s9 + (1L << 20)) >> 21; s10 += cy; s9 -= cy << 21;
+        cy = (s11 + (1L << 20)) >> 21; s12 += cy; s11 -= cy << 21;
+        cy = (s13 + (1L << 20)) >> 21; s14 += cy; s13 -= cy << 21;
+        cy = (s15 + (1L << 20)) >> 21; s16 += cy; s15 -= cy << 21;
+
+        s5 += s17 * 666643; s6 += s17 * 470296; s7 += s17 * 654183;
+        s8 -= s17 * 997805; s9 += s17 * 136657; s10 -= s17 * 683901;
+        s4 += s16 * 666643; s5 += s16 * 470296; s6 += s16 * 654183;
+        s7 -= s16 * 997805; s8 += s16 * 136657; s9 -= s16 * 683901;
+        s3 += s15 * 666643; s4 += s15 * 470296; s5 += s15 * 654183;
+        s6 -= s15 * 997805; s7 += s15 * 136657; s8 -= s15 * 683901;
+        s2 += s14 * 666643; s3 += s14 * 470296; s4 += s14 * 654183;
+        s5 -= s14 * 997805; s6 += s14 * 136657; s7 -= s14 * 683901;
+        s1 += s13 * 666643; s2 += s13 * 470296; s3 += s13 * 654183;
+        s4 -= s13 * 997805; s5 += s13 * 136657; s6 -= s13 * 683901;
+        s0 += s12 * 666643; s1 += s12 * 470296; s2 += s12 * 654183;
+        s3 -= s12 * 997805; s4 += s12 * 136657; s5 -= s12 * 683901;
+        s12 = 0;
+
+        cy = (s0 + (1L << 20)) >> 21; s1 += cy; s0 -= cy << 21;
+        cy = (s2 + (1L << 20)) >> 21; s3 += cy; s2 -= cy << 21;
+        cy = (s4 + (1L << 20)) >> 21; s5 += cy; s4 -= cy << 21;
+        cy = (s6 + (1L << 20)) >> 21; s7 += cy; s6 -= cy << 21;
+        cy = (s8 + (1L << 20)) >> 21; s9 += cy; s8 -= cy << 21;
+        cy = (s10 + (1L << 20)) >> 21; s11 += cy; s10 -= cy << 21;
+
+        cy = (s1 + (1L << 20)) >> 21; s2 += cy; s1 -= cy << 21;
+        cy = (s3 + (1L << 20)) >> 21; s4 += cy; s3 -= cy << 21;
+        cy = (s5 + (1L << 20)) >> 21; s6 += cy; s5 -= cy << 21;
+        cy = (s7 + (1L << 20)) >> 21; s8 += cy; s7 -= cy << 21;
+        cy = (s9 + (1L << 20)) >> 21; s10 += cy; s9 -= cy << 21;
+        cy = (s11 + (1L << 20)) >> 21; s12 += cy; s11 -= cy << 21;
+
+        s0 += s12 * 666643; s1 += s12 * 470296; s2 += s12 * 654183;
+        s3 -= s12 * 997805; s4 += s12 * 136657; s5 -= s12 * 683901;
+        s12 = 0;
+
+        cy = s0 >> 21; s1 += cy; s0 -= cy << 21;
+        cy = s1 >> 21; s2 += cy; s1 -= cy << 21;
+        cy = s2 >> 21; s3 += cy; s2 -= cy << 21;
+        cy = s3 >> 21; s4 += cy; s3 -= cy << 21;
+        cy = s4 >> 21; s5 += cy; s4 -= cy << 21;
+        cy = s5 >> 21; s6 += cy; s5 -= cy << 21;
+        cy = s6 >> 21; s7 += cy; s6 -= cy << 21;
+        cy = s7 >> 21; s8 += cy; s7 -= cy << 21;
+        cy = s8 >> 21; s9 += cy; s8 -= cy << 21;
+        cy = s9 >> 21; s10 += cy; s9 -= cy << 21;
+        cy = s10 >> 21; s11 += cy; s10 -= cy << 21;
+        cy = s11 >> 21; s12 += cy; s11 -= cy << 21;
+
+        s0 += s12 * 666643; s1 += s12 * 470296; s2 += s12 * 654183;
+        s3 -= s12 * 997805; s4 += s12 * 136657; s5 -= s12 * 683901;
+
+        cy = s0 >> 21; s1 += cy; s0 -= cy << 21;
+        cy = s1 >> 21; s2 += cy; s1 -= cy << 21;
+        cy = s2 >> 21; s3 += cy; s2 -= cy << 21;
+        cy = s3 >> 21; s4 += cy; s3 -= cy << 21;
+        cy = s4 >> 21; s5 += cy; s4 -= cy << 21;
+        cy = s5 >> 21; s6 += cy; s5 -= cy << 21;
+        cy = s6 >> 21; s7 += cy; s6 -= cy << 21;
+        cy = s7 >> 21; s8 += cy; s7 -= cy << 21;
+        cy = s8 >> 21; s9 += cy; s8 -= cy << 21;
+        cy = s9 >> 21; s10 += cy; s9 -= cy << 21;
+        cy = s10 >> 21; s11 += cy; s10 -= cy << 21;
+
+        StoreCanonical(output, s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11);
     }
 
     /// <summary>
@@ -56,15 +338,79 @@ internal static class Edwards25519Scalar
     /// RFC 8032 §5.1.7 requires this check on the S component of a signature; signatures with
     /// S ≥ L are malleable and must be rejected.
     /// </summary>
+    /// <remarks>
+    /// Constant-time: scalar - L is computed byte-by-byte and the final borrow tells us whether
+    /// scalar &lt; L. No early return on any per-byte comparison.
+    /// </remarks>
     public static bool IsCanonical(ReadOnlySpan<byte> scalar)
     {
-        BigInteger value = new(scalar, isUnsigned: true, isBigEndian: false);
-        return value < L;
+        if (scalar.Length != 32) return false;
+
+        // L = 2^252 + 27742317777372353535851937790883648493, little-endian.
+        ReadOnlySpan<byte> ell =
+        [
+            0xed, 0xd3, 0xf5, 0x5c, 0x1a, 0x63, 0x12, 0x58,
+            0xd6, 0x9c, 0xf7, 0xa2, 0xde, 0xf9, 0xde, 0x14,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10,
+        ];
+
+        int borrow = 0;
+        for (int i = 0; i < 32; i++)
+        {
+            int diff = scalar[i] - ell[i] - borrow;
+            borrow = (diff >> 31) & 1;
+        }
+
+        return borrow == 1;
     }
 
-    private static void WriteLittleEndian32(BigInteger value, Span<byte> output)
+    /// <summary>
+    /// Packs twelve 21-bit limbs into a 32-byte little-endian buffer. Each limb is in [0, 2^21)
+    /// after a complete reduction, so this is a fixed byte-shuffle pattern with no data-dependent
+    /// branches.
+    /// </summary>
+    private static void StoreCanonical(Span<byte> output,
+        long s0, long s1, long s2, long s3, long s4, long s5,
+        long s6, long s7, long s8, long s9, long s10, long s11)
     {
-        output.Clear();
-        value.TryWriteBytes(output, out _, isUnsigned: true, isBigEndian: false);
+        output[0] = (byte)(s0 >> 0);
+        output[1] = (byte)(s0 >> 8);
+        output[2] = (byte)((s0 >> 16) | (s1 << 5));
+        output[3] = (byte)(s1 >> 3);
+        output[4] = (byte)(s1 >> 11);
+        output[5] = (byte)((s1 >> 19) | (s2 << 2));
+        output[6] = (byte)(s2 >> 6);
+        output[7] = (byte)((s2 >> 14) | (s3 << 7));
+        output[8] = (byte)(s3 >> 1);
+        output[9] = (byte)(s3 >> 9);
+        output[10] = (byte)((s3 >> 17) | (s4 << 4));
+        output[11] = (byte)(s4 >> 4);
+        output[12] = (byte)(s4 >> 12);
+        output[13] = (byte)((s4 >> 20) | (s5 << 1));
+        output[14] = (byte)(s5 >> 7);
+        output[15] = (byte)((s5 >> 15) | (s6 << 6));
+        output[16] = (byte)(s6 >> 2);
+        output[17] = (byte)(s6 >> 10);
+        output[18] = (byte)((s6 >> 18) | (s7 << 3));
+        output[19] = (byte)(s7 >> 5);
+        output[20] = (byte)(s7 >> 13);
+        output[21] = (byte)(s8 >> 0);
+        output[22] = (byte)(s8 >> 8);
+        output[23] = (byte)((s8 >> 16) | (s9 << 5));
+        output[24] = (byte)(s9 >> 3);
+        output[25] = (byte)(s9 >> 11);
+        output[26] = (byte)((s9 >> 19) | (s10 << 2));
+        output[27] = (byte)(s10 >> 6);
+        output[28] = (byte)((s10 >> 14) | (s11 << 7));
+        output[29] = (byte)(s11 >> 1);
+        output[30] = (byte)(s11 >> 9);
+        output[31] = (byte)(s11 >> 17);
     }
+
+    private static long Load3(ReadOnlySpan<byte> bytes) =>
+        bytes[0] | ((long)bytes[1] << 8) | ((long)bytes[2] << 16);
+
+    private static long Load4(ReadOnlySpan<byte> bytes) =>
+        bytes[0] | ((long)bytes[1] << 8) | ((long)bytes[2] << 16) | ((long)bytes[3] << 24);
 }

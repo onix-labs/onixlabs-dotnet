@@ -29,50 +29,8 @@ public readonly partial struct Area<T>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: SquareQuectoMetersSpecifier);
-
-        (T value, string symbol) = specifier switch
-        {
-            SquareQuectoMetersSpecifier => (SquareQuectoMeters, SquareQuectoMetersSymbol),
-            SquareRontoMetersSpecifier => (SquareRontoMeters, SquareRontoMetersSymbol),
-            SquareYoctoMetersSpecifier => (SquareYoctoMeters, SquareYoctoMetersSymbol),
-            SquareZeptoMetersSpecifier => (SquareZeptoMeters, SquareZeptoMetersSymbol),
-            SquareAttoMetersSpecifier => (SquareAttoMeters, SquareAttoMetersSymbol),
-            SquareFemtoMetersSpecifier => (SquareFemtoMeters, SquareFemtoMetersSymbol),
-            SquarePicoMetersSpecifier => (SquarePicoMeters, SquarePicoMetersSymbol),
-            SquareNanoMetersSpecifier => (SquareNanoMeters, SquareNanoMetersSymbol),
-            SquareMicroMetersSpecifier => (SquareMicroMeters, SquareMicroMetersSymbol),
-            SquareMilliMetersSpecifier => (SquareMilliMeters, SquareMilliMetersSymbol),
-            SquareCentiMetersSpecifier => (SquareCentiMeters, SquareCentiMetersSymbol),
-            SquareDeciMetersSpecifier => (SquareDeciMeters, SquareDeciMetersSymbol),
-            SquareMetersSpecifier => (SquareMeters, SquareMetersSymbol),
-            SquareDecaMetersSpecifier => (SquareDecaMeters, SquareDecaMetersSymbol),
-            SquareHectoMetersSpecifier => (SquareHectoMeters, SquareHectoMetersSymbol),
-            SquareKiloMetersSpecifier => (SquareKiloMeters, SquareKiloMetersSymbol),
-            SquareMegaMetersSpecifier => (SquareMegaMeters, SquareMegaMetersSymbol),
-            SquareGigaMetersSpecifier => (SquareGigaMeters, SquareGigaMetersSymbol),
-            SquareTeraMetersSpecifier => (SquareTeraMeters, SquareTeraMetersSymbol),
-            SquarePetaMetersSpecifier => (SquarePetaMeters, SquarePetaMetersSymbol),
-            SquareExaMetersSpecifier => (SquareExaMeters, SquareExaMetersSymbol),
-            SquareZettaMetersSpecifier => (SquareZettaMeters, SquareZettaMetersSymbol),
-            SquareYottaMetersSpecifier => (SquareYottaMeters, SquareYottaMetersSymbol),
-            SquareRonnaMetersSpecifier => (SquareRonnaMeters, SquareRonnaMetersSymbol),
-            SquareQuettaMetersSpecifier => (SquareQuettaMeters, SquareQuettaMetersSymbol),
-            SquareInchesSpecifier => (SquareInches, SquareInchesSymbol),
-            SquareFeetSpecifier => (SquareFeet, SquareFeetSymbol),
-            SquareYardsSpecifier => (SquareYards, SquareYardsSymbol),
-            SquareMilesSpecifier => (SquareMiles, SquareMilesSymbol),
-            SquareNauticalMilesSpecifier => (SquareNauticalMiles, SquareNauticalMilesSymbol),
-            SquareFermisSpecifier => (SquareFermis, SquareFermisSymbol),
-            SquareAngstromsSpecifier => (SquareAngstroms, SquareAngstromsSymbol),
-            SquareAstronomicalUnitsSpecifier => (SquareAstronomicalUnits, SquareAstronomicalUnitsSymbol),
-            SquareLightYearsSpecifier => (SquareLightYears, SquareLightYearsSymbol),
-            SquareParsecsSpecifier => (SquareParsecs, SquareParsecsSymbol),
-            _ => throw ArgumentException.InvalidFormat(format,
-                "sqqm, sqrm, sqym, sqzm, sqam, sqfm, sqpm, sqnm, squm, sqmm, sqcm, sqdm, " +
-                "sqm, sqdam, sqhm, sqkm, sqMm, sqGm, sqTm, sqPm, sqEm, sqZm, sqYm, sqRm, " +
-                "sqQm, sqin, sqft, sqyd, sqmi, sqnmi, sqfmi, sqa, sqau, sqly, and sqpc")
-        };
-
+        T value = ValueOf(specifier);
+        string symbol = SymbolOf(specifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {symbol}";

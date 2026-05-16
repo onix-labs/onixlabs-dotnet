@@ -123,4 +123,9 @@ public readonly partial struct Area<T>
 
     private const string SquareParsecsSpecifier = "sqpc";
     private const string SquareParsecsSymbol = "pc²";
+
+    private const string ValidSpecifiers =
+        "sqqm, sqrm, sqym, sqzm, sqam, sqfm, sqpm, sqnm, squm, sqmm, sqcm, sqdm, " +
+        "sqm, sqdam, sqhm, sqkm, sqMm, sqGm, sqTm, sqPm, sqEm, sqZm, sqYm, sqRm, " +
+        "sqQm, sqin, sqft, sqyd, sqmi, sqnmi, sqfmi, sqa, sqau, sqly, and sqpc";
 }

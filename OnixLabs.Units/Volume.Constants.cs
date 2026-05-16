@@ -121,26 +121,26 @@ public readonly partial struct Volume<T>
     private const string MillilitersSpecifier = "mL";
     private const string MillilitersSymbol = "mL";
 
-    private const string USGallonsSpecifier = "USgal";
-    private const string USGallonsSymbol = "US gal";
+    private const string UsGallonsSpecifier = "USgal";
+    private const string UsGallonsSymbol = "US gal";
 
-    private const string USQuartsSpecifier = "USqt";
-    private const string USQuartsSymbol = "US qt";
+    private const string UsQuartsSpecifier = "USqt";
+    private const string UsQuartsSymbol = "US qt";
 
-    private const string USPintsSpecifier = "USpt";
-    private const string USPintsSymbol = "US pt";
+    private const string UsPintsSpecifier = "USpt";
+    private const string UsPintsSymbol = "US pt";
 
-    private const string USCupsSpecifier = "UScup";
-    private const string USCupsSymbol = "US cup";
+    private const string UsCupsSpecifier = "UScup";
+    private const string UsCupsSymbol = "US cup";
 
-    private const string USFluidOuncesSpecifier = "USfloz";
-    private const string USFluidOuncesSymbol = "US fl oz";
+    private const string UsFluidOuncesSpecifier = "USfloz";
+    private const string UsFluidOuncesSymbol = "US fl oz";
 
-    private const string USTablespoonsSpecifier = "UStbsp";
-    private const string USTablespoonsSymbol = "US tbsp";
+    private const string UsTablespoonsSpecifier = "UStbsp";
+    private const string UsTablespoonsSymbol = "US tbsp";
 
-    private const string USTeaspoonsSpecifier = "UStsp";
-    private const string USTeaspoonsSymbol = "US tsp";
+    private const string UsTeaspoonsSpecifier = "UStsp";
+    private const string UsTeaspoonsSymbol = "US tsp";
 
     private const string ImperialGallonsSpecifier = "impgal";
     private const string ImperialGallonsSymbol = "imp gal";
@@ -156,4 +156,10 @@ public readonly partial struct Volume<T>
 
     private const string OilBarrelsSpecifier = "bbl";
     private const string OilBarrelsSymbol = "bbl";
+
+    private const string ValidSpecifiers =
+        "cuqm, curm, cuym, cuzm, cuam, cufm, cupm, cunm, cuum, cumm, cucm, cudm, " +
+        "cum, cudam, cuhm, cukm, cuMm, cuGm, cuTm, cuPm, cuEm, cuZm, cuYm, cuRm, " +
+        "cuQm, cuin, cuft, cuyd, cumi, cuau, culy, cupc, L, mL, USgal, USqt, USpt, " +
+        "UScup, USfloz, UStbsp, UStsp, impgal, impqt, imppt, impfloz, and bbl";
 }

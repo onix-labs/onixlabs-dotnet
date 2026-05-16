@@ -29,20 +29,8 @@ public readonly partial struct Temperature<T>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: KelvinSpecifier);
-
-        (T value, string symbol) = specifier.ToUpperInvariant() switch
-        {
-            CelsiusSpecifier => (Celsius, CelsiusSymbol),
-            DelisleSpecifier => (Delisle, DelisleSymbol),
-            FahrenheitSpecifier => (Fahrenheit, FahrenheitSymbol),
-            KelvinSpecifier => (Kelvin, KelvinSymbol),
-            NewtonSpecifier => (Newton, NewtonSymbol),
-            RankineSpecifier => (Rankine, RankineSymbol),
-            ReaumurSpecifier => (Reaumur, ReaumurSymbol),
-            RomerSpecifier => (Romer, RomerSymbol),
-            _ => throw ArgumentException.InvalidFormat(format, "C, De, F, K, N, R, Re, and Ro")
-        };
-
+        T value = ValueOf(specifier);
+        string symbol = SymbolOf(specifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {symbol}";

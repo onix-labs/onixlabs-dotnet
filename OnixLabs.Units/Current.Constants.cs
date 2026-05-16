@@ -93,4 +93,8 @@ public readonly partial struct Current<T>
 
     private const string QuettaAmperesSpecifier = "QA";
     private const string QuettaAmperesSymbol = "QA";
+
+    private const string ValidSpecifiers =
+        "qA, rA, yA, zA, aA, fA, pA, nA, uA, mA, cA, dA, " +
+        "A, daA, hA, kA, MA, GA, TA, PA, EA, ZA, YA, RA, and QA";
 }

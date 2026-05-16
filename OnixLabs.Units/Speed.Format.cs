@@ -1,4 +1,4 @@
-// Copyright 2020 ONIXLabs
+// Copyright 2020-2025 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,18 +13,17 @@
 // limitations under the License.
 
 using System;
-using OnixLabs.Units;
+using OnixLabs.Core;
 
-namespace OnixLabs.Playground;
+namespace OnixLabs.Units;
 
-internal static class Program
+public readonly partial struct Speed<T>
 {
-    private static void Main()
-    {
-        Distance<double> distance = Distance<double>.FromMiles(73);
-        Time<double> time = Time<double>.FromHours(1);
-        Speed<double> speed = new(distance, time);
-
-        Console.WriteLine($"Speed = {speed}");
-    }
+    /// <inheritdoc/>
+    public bool TryFormat(
+        Span<char> destination,
+        out int charsWritten,
+        ReadOnlySpan<char> format,
+        IFormatProvider? provider
+    ) => ToString(format, provider).TryCopyTo(destination, out charsWritten);
 }

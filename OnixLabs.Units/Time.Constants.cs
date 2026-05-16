@@ -49,4 +49,9 @@ public readonly partial struct Time<T>
     private const string DaysSpecifier = "d";
     private const string WeeksSpecifier = "wk";
     private const string JulianYearsSpecifier = "yr";
+
+    private const string ValidSpecifiers =
+        "qs, rs, ys, zs, as, fs, ps, ns, us, ms, cs, ds, " +
+        "s, das, hs, ks, Ms, Gs, Ts, Ps, Es, Zs, Ys, Rs, " +
+        "Qs, min, h, d, wk, and yr";
 }

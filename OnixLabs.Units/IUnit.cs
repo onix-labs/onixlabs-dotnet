@@ -17,6 +17,30 @@ using System;
 namespace OnixLabs.Units;
 
 /// <summary>
+/// Defines a composite unit of measurement composed of two underlying units.
+/// </summary>
+/// <typeparam name="TLeft">The underlying type of the left-hand unit of measurement.</typeparam>
+/// <typeparam name="TRight">The underlying type of the right-hand unit of measurement.</typeparam>
+public interface ICompositeUnit<TLeft, TRight> :
+    IEquatable<ICompositeUnit<TLeft, TRight>>,
+    IComparable<ICompositeUnit<TLeft, TRight>>,
+    IComparable,
+    ISpanFormattable
+    where TLeft : struct, IUnit<TLeft>
+    where TRight : struct, IUnit<TRight>
+{
+    /// <summary>
+    /// Gets the left-hand unit of the composite.
+    /// </summary>
+    TLeft Left { get; }
+
+    /// <summary>
+    /// Gets the right-hand unit of the composite.
+    /// </summary>
+    TRight Right { get; }
+}
+
+/// <summary>
 /// Defines a unit of measurement.
 /// </summary>
 /// <typeparam name="TSelf">The underlying type of the unit of measurement.</typeparam>

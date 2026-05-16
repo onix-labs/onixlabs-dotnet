@@ -29,45 +29,8 @@ public readonly partial struct Angle<T>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: QuectoRadiansSpecifier);
-
-        (T value, string symbol) = specifier switch
-        {
-            QuectoRadiansSpecifier => (QuectoRadians, QuectoRadiansSymbol),
-            RontoRadiansSpecifier => (RontoRadians, RontoRadiansSymbol),
-            YoctoRadiansSpecifier => (YoctoRadians, YoctoRadiansSymbol),
-            ZeptoRadiansSpecifier => (ZeptoRadians, ZeptoRadiansSymbol),
-            AttoRadiansSpecifier => (AttoRadians, AttoRadiansSymbol),
-            FemtoRadiansSpecifier => (FemtoRadians, FemtoRadiansSymbol),
-            PicoRadiansSpecifier => (PicoRadians, PicoRadiansSymbol),
-            NanoRadiansSpecifier => (NanoRadians, NanoRadiansSymbol),
-            MicroRadiansSpecifier => (MicroRadians, MicroRadiansSymbol),
-            MilliRadiansSpecifier => (MilliRadians, MilliRadiansSymbol),
-            CentiRadiansSpecifier => (CentiRadians, CentiRadiansSymbol),
-            DeciRadiansSpecifier => (DeciRadians, DeciRadiansSymbol),
-            RadiansSpecifier => (Radians, RadiansSymbol),
-            DecaRadiansSpecifier => (DecaRadians, DecaRadiansSymbol),
-            HectoRadiansSpecifier => (HectoRadians, HectoRadiansSymbol),
-            KiloRadiansSpecifier => (KiloRadians, KiloRadiansSymbol),
-            MegaRadiansSpecifier => (MegaRadians, MegaRadiansSymbol),
-            GigaRadiansSpecifier => (GigaRadians, GigaRadiansSymbol),
-            TeraRadiansSpecifier => (TeraRadians, TeraRadiansSymbol),
-            PetaRadiansSpecifier => (PetaRadians, PetaRadiansSymbol),
-            ExaRadiansSpecifier => (ExaRadians, ExaRadiansSymbol),
-            ZettaRadiansSpecifier => (ZettaRadians, ZettaRadiansSymbol),
-            YottaRadiansSpecifier => (YottaRadians, YottaRadiansSymbol),
-            RonnaRadiansSpecifier => (RonnaRadians, RonnaRadiansSymbol),
-            QuettaRadiansSpecifier => (QuettaRadians, QuettaRadiansSymbol),
-            DegreesSpecifier => (Degrees, DegreesSymbol),
-            ArcminutesSpecifier => (Arcminutes, ArcminutesSymbol),
-            ArcsecondsSpecifier => (Arcseconds, ArcsecondsSymbol),
-            GradiansSpecifier => (Gradians, GradiansSymbol),
-            TurnsSpecifier => (Turns, TurnsSymbol),
-            _ => throw ArgumentException.InvalidFormat(format,
-                "qrad, rrad, yrad, zrad, arad, frad, prad, nrad, urad, mrad, crad, drad, " +
-                "rad, darad, hrad, krad, Mrad, Grad, Trad, Prad, Erad, Zrad, Yrad, Rrad, " +
-                "Qrad, deg, arcmin, arcsec, gon, and tr")
-        };
-
+        T value = ValueOf(specifier);
+        string symbol = SymbolOf(specifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {symbol}";

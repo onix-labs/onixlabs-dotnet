@@ -93,4 +93,8 @@ public readonly partial struct LuminousIntensity<T>
 
     private const string QuettaCandelasSpecifier = "Qcd";
     private const string QuettaCandelasSymbol = "Qcd";
+
+    private const string ValidSpecifiers =
+        "qcd, rcd, ycd, zcd, acd, fcd, pcd, ncd, ucd, mcd, ccd, dcd, " +
+        "cd, dacd, hcd, kcd, Mcd, Gcd, Tcd, Pcd, Ecd, Zcd, Ycd, Rcd, and Qcd";
 }

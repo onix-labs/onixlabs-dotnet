@@ -55,4 +55,9 @@ public readonly partial struct Mass<T>
     private const string DramsSpecifier = "dr";
     private const string SlugsSpecifier = "slug";
     private const string DaltonsSpecifier = "Da";
+
+    private const string ValidSpecifiers =
+        "qg, rg, yg, zg, ag, fg, pg, ng, ug, mg, cg, dg, " +
+        "g, dag, hg, kg, Mg, Gg, Tg, Pg, Eg, Zg, Yg, Rg, " +
+        "Qg, t, oz, lb, st, sht, lt, ct, gr, dr, slug, and Da";
 }

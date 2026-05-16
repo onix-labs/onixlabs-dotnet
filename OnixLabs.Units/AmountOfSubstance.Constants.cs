@@ -93,4 +93,8 @@ public readonly partial struct AmountOfSubstance<T>
 
     private const string QuettaMolesSpecifier = "Qmol";
     private const string QuettaMolesSymbol = "Qmol";
+
+    private const string ValidSpecifiers =
+        "qmol, rmol, ymol, zmol, amol, fmol, pmol, nmol, umol, mmol, cmol, dmol, " +
+        "mol, damol, hmol, kmol, Mmol, Gmol, Tmol, Pmol, Emol, Zmol, Ymol, Rmol, and Qmol";
 }

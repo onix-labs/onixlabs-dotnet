@@ -29,51 +29,7 @@ public readonly partial struct Mass<T>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: QuectoGramsSpecifier);
-
-        T value = specifier switch
-        {
-            QuectoGramsSpecifier => QuectoGrams,
-            RontoGramsSpecifier => RontoGrams,
-            YoctoGramsSpecifier => YoctoGrams,
-            ZeptoGramsSpecifier => ZeptoGrams,
-            AttoGramsSpecifier => AttoGrams,
-            FemtoGramsSpecifier => FemtoGrams,
-            PicoGramsSpecifier => PicoGrams,
-            NanoGramsSpecifier => NanoGrams,
-            MicroGramsSpecifier => MicroGrams,
-            MilliGramsSpecifier => MilliGrams,
-            CentiGramsSpecifier => CentiGrams,
-            DeciGramsSpecifier => DeciGrams,
-            GramsSpecifier => Grams,
-            DecaGramsSpecifier => DecaGrams,
-            HectoGramsSpecifier => HectoGrams,
-            KiloGramsSpecifier => KiloGrams,
-            MegaGramsSpecifier => MegaGrams,
-            GigaGramsSpecifier => GigaGrams,
-            TeraGramsSpecifier => TeraGrams,
-            PetaGramsSpecifier => PetaGrams,
-            ExaGramsSpecifier => ExaGrams,
-            ZettaGramsSpecifier => ZettaGrams,
-            YottaGramsSpecifier => YottaGrams,
-            RonnaGramsSpecifier => RonnaGrams,
-            QuettaGramsSpecifier => QuettaGrams,
-            TonnesSpecifier => Tonnes,
-            OuncesSpecifier => Ounces,
-            PoundsSpecifier => Pounds,
-            StonesSpecifier => Stones,
-            ShortTonsSpecifier => ShortTons,
-            LongTonsSpecifier => LongTons,
-            CaratsSpecifier => Carats,
-            GrainsSpecifier => Grains,
-            DramsSpecifier => Drams,
-            SlugsSpecifier => Slugs,
-            DaltonsSpecifier => Daltons,
-            _ => throw ArgumentException.InvalidFormat(format,
-                "qg, rg, yg, zg, ag, fg, pg, ng, ug, mg, cg, dg, " +
-                "g, dag, hg, kg, Mg, Gg, Tg, Pg, Eg, Zg, Yg, Rg, " +
-                "Qg, t, oz, lb, st, sht, lt, ct, gr, dr, slug, and Da")
-        };
-
+        T value = ValueOf(specifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {specifier}";

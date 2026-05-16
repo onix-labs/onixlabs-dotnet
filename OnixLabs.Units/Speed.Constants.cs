@@ -1,4 +1,4 @@
-// Copyright 2020 ONIXLabs
+// Copyright 2020-2025 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Units;
+namespace OnixLabs.Units;
 
-namespace OnixLabs.Playground;
-
-internal static class Program
+public readonly partial struct Speed<T>
 {
-    private static void Main()
-    {
-        Distance<double> distance = Distance<double>.FromMiles(73);
-        Time<double> time = Time<double>.FromHours(1);
-        Speed<double> speed = new(distance, time);
-
-        Console.WriteLine($"Speed = {speed}");
-    }
+    private const string DefaultFormat = "m/s";
 }

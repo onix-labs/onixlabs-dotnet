@@ -29,45 +29,7 @@ public readonly partial struct Time<T>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: QuectoSecondsSpecifier);
-
-        T value = specifier switch
-        {
-            QuectoSecondsSpecifier => QuectoSeconds,
-            RontoSecondsSpecifier => RontoSeconds,
-            YoctoSecondsSpecifier => YoctoSeconds,
-            ZeptoSecondsSpecifier => ZeptoSeconds,
-            AttoSecondsSpecifier => AttoSeconds,
-            FemtoSecondsSpecifier => FemtoSeconds,
-            PicoSecondsSpecifier => PicoSeconds,
-            NanoSecondsSpecifier => NanoSeconds,
-            MicroSecondsSpecifier => MicroSeconds,
-            MilliSecondsSpecifier => MilliSeconds,
-            CentiSecondsSpecifier => CentiSeconds,
-            DeciSecondsSpecifier => DeciSeconds,
-            SecondsSpecifier => Seconds,
-            DecaSecondsSpecifier => DecaSeconds,
-            HectoSecondsSpecifier => HectoSeconds,
-            KiloSecondsSpecifier => KiloSeconds,
-            MegaSecondsSpecifier => MegaSeconds,
-            GigaSecondsSpecifier => GigaSeconds,
-            TeraSecondsSpecifier => TeraSeconds,
-            PetaSecondsSpecifier => PetaSeconds,
-            ExaSecondsSpecifier => ExaSeconds,
-            ZettaSecondsSpecifier => ZettaSeconds,
-            YottaSecondsSpecifier => YottaSeconds,
-            RonnaSecondsSpecifier => RonnaSeconds,
-            QuettaSecondsSpecifier => QuettaSeconds,
-            MinutesSpecifier => Minutes,
-            HoursSpecifier => Hours,
-            DaysSpecifier => Days,
-            WeeksSpecifier => Weeks,
-            JulianYearsSpecifier => JulianYears,
-            _ => throw ArgumentException.InvalidFormat(format,
-                "qs, rs, ys, zs, as, fs, ps, ns, us, ms, cs, ds, " +
-                "s, das, hs, ks, Ms, Gs, Ts, Ps, Es, Zs, Ys, Rs, " +
-                "Qs, min, h, d, wk, and yr")
-        };
-
+        T value = ValueOf(specifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {specifier}";

@@ -29,64 +29,8 @@ public readonly partial struct Volume<T>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: CubicQuectoMetersSpecifier);
-
-        (T value, string symbol) = specifier switch
-        {
-            CubicQuectoMetersSpecifier => (CubicQuectoMeters, CubicQuectoMetersSymbol),
-            CubicRontoMetersSpecifier => (CubicRontoMeters, CubicRontoMetersSymbol),
-            CubicYoctoMetersSpecifier => (CubicYoctoMeters, CubicYoctoMetersSymbol),
-            CubicZeptoMetersSpecifier => (CubicZeptoMeters, CubicZeptoMetersSymbol),
-            CubicAttoMetersSpecifier => (CubicAttoMeters, CubicAttoMetersSymbol),
-            CubicFemtoMetersSpecifier => (CubicFemtoMeters, CubicFemtoMetersSymbol),
-            CubicPicoMetersSpecifier => (CubicPicoMeters, CubicPicoMetersSymbol),
-            CubicNanoMetersSpecifier => (CubicNanoMeters, CubicNanoMetersSymbol),
-            CubicMicroMetersSpecifier => (CubicMicroMeters, CubicMicroMetersSymbol),
-            CubicMilliMetersSpecifier => (CubicMilliMeters, CubicMilliMetersSymbol),
-            CubicCentiMetersSpecifier => (CubicCentiMeters, CubicCentiMetersSymbol),
-            CubicDeciMetersSpecifier => (CubicDeciMeters, CubicDeciMetersSymbol),
-            CubicMetersSpecifier => (CubicMeters, CubicMetersSymbol),
-            CubicDecaMetersSpecifier => (CubicDecaMeters, CubicDecaMetersSymbol),
-            CubicHectoMetersSpecifier => (CubicHectoMeters, CubicHectoMetersSymbol),
-            CubicKiloMetersSpecifier => (CubicKiloMeters, CubicKiloMetersSymbol),
-            CubicMegaMetersSpecifier => (CubicMegaMeters, CubicMegaMetersSymbol),
-            CubicGigaMetersSpecifier => (CubicGigaMeters, CubicGigaMetersSymbol),
-            CubicTeraMetersSpecifier => (CubicTeraMeters, CubicTeraMetersSymbol),
-            CubicPetaMetersSpecifier => (CubicPetaMeters, CubicPetaMetersSymbol),
-            CubicExaMetersSpecifier => (CubicExaMeters, CubicExaMetersSymbol),
-            CubicZettaMetersSpecifier => (CubicZettaMeters, CubicZettaMetersSymbol),
-            CubicYottaMetersSpecifier => (CubicYottaMeters, CubicYottaMetersSymbol),
-            CubicRonnaMetersSpecifier => (CubicRonnaMeters, CubicRonnaMetersSymbol),
-            CubicQuettaMetersSpecifier => (CubicQuettaMeters, CubicQuettaMetersSymbol),
-            CubicInchesSpecifier => (CubicInches, CubicInchesSymbol),
-            CubicFeetSpecifier => (CubicFeet, CubicFeetSymbol),
-            CubicYardsSpecifier => (CubicYards, CubicYardsSymbol),
-            CubicMilesSpecifier => (CubicMiles, CubicMilesSymbol),
-            CubicAstronomicalUnitsSpecifier => (CubicAstronomicalUnits, CubicAstronomicalUnitsSymbol),
-            CubicLightYearsSpecifier => (CubicLightYears, CubicLightYearsSymbol),
-            CubicParsecsSpecifier => (CubicParsecs, CubicParsecsSymbol),
-            LitersSpecifier => (Liters, LitersSymbol),
-            MillilitersSpecifier => (Milliliters, MillilitersSymbol),
-            USGallonsSpecifier => (USGallons, USGallonsSymbol),
-            USQuartsSpecifier => (USQuarts, USQuartsSymbol),
-            USPintsSpecifier => (USPints, USPintsSymbol),
-            USCupsSpecifier => (USCups, USCupsSymbol),
-            USFluidOuncesSpecifier => (USFluidOunces, USFluidOuncesSymbol),
-            USTablespoonsSpecifier => (USTablespoons, USTablespoonsSymbol),
-            USTeaspoonsSpecifier => (USTeaspoons, USTeaspoonsSymbol),
-            ImperialGallonsSpecifier => (ImperialGallons, ImperialGallonsSymbol),
-            ImperialQuartsSpecifier => (ImperialQuarts, ImperialQuartsSymbol),
-            ImperialPintsSpecifier => (ImperialPints, ImperialPintsSymbol),
-            ImperialFluidOuncesSpecifier => (ImperialFluidOunces, ImperialFluidOuncesSymbol),
-            OilBarrelsSpecifier => (OilBarrels, OilBarrelsSymbol),
-            _ => throw ArgumentException.InvalidFormat(format,
-                "cuqm, curm, cuym, cuzm, cuam, cufm, cupm, cunm, cuum, cumm, cucm, cudm, " +
-                "cum, cudam, cuhm, cukm, cuMm, cuGm, cuTm, cuPm, cuEm, cuZm, cuYm, cuRm, " +
-                "cuQm, cuin, cuft, cuyd, cumi, cuau, culy, cupc, " +
-                "L, mL, " +
-                "USgal, USqt, USpt, UScup, USfloz, UStbsp, UStsp, " +
-                "impgal, impqt, imppt, impfloz, and bbl")
-        };
-
+        T value = ValueOf(specifier);
+        string symbol = SymbolOf(specifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {symbol}";

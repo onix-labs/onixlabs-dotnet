@@ -53,4 +53,9 @@ public readonly partial struct DataSize<T>
     private const string YobiBytesSpecifier = "YiB";
     private const string YottaBitsSpecifier = "Yb";
     private const string YottaBytesSpecifier = "YB";
+
+    private const string ValidSpecifiers =
+        "b, B, Kib, KiB, Kb, KB, Mib, MiB, Mb, MB, Gib, GiB, " +
+        "Gb, GB, Tib, TiB, Tb, TB, Pib, PiB, Pb, PB, Eib, EiB, " +
+        "Eb, EB, Zib, ZiB, Zb, ZB, Yib, YiB, Yb, and YB";
 }

@@ -29,49 +29,7 @@ public readonly partial struct DataSize<T>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: BitsSpecifier);
-
-        T value = specifier switch
-        {
-            BitsSpecifier => Bits,
-            BytesSpecifier => Bytes,
-            KibiBitsSpecifier => KibiBits,
-            KibiBytesSpecifier => KibiBytes,
-            KiloBitsSpecifier => KiloBits,
-            KiloBytesSpecifier => KiloBytes,
-            MebiBitsSpecifier => MebiBits,
-            MebiBytesSpecifier => MebiBytes,
-            MegaBitsSpecifier => MegaBits,
-            MegaBytesSpecifier => MegaBytes,
-            GibiBitsSpecifier => GibiBits,
-            GibiBytesSpecifier => GibiBytes,
-            GigaBitsSpecifier => GigaBits,
-            GigaBytesSpecifier => GigaBytes,
-            TebiBitsSpecifier => TebiBits,
-            TebiBytesSpecifier => TebiBytes,
-            TeraBitsSpecifier => TeraBits,
-            TeraBytesSpecifier => TeraBytes,
-            PebiBitsSpecifier => PebiBits,
-            PebiBytesSpecifier => PebiBytes,
-            PetaBitsSpecifier => PetaBits,
-            PetaBytesSpecifier => PetaBytes,
-            ExbiBitsSpecifier => ExbiBits,
-            ExbiBytesSpecifier => ExbiBytes,
-            ExaBitsSpecifier => ExaBits,
-            ExaBytesSpecifier => ExaBytes,
-            ZebiBitsSpecifier => ZebiBits,
-            ZebiBytesSpecifier => ZebiBytes,
-            ZettaBitsSpecifier => ZettaBits,
-            ZettaBytesSpecifier => ZettaBytes,
-            YobiBitsSpecifier => YobiBits,
-            YobiBytesSpecifier => YobiBytes,
-            YottaBitsSpecifier => YottaBits,
-            YottaBytesSpecifier => YottaBytes,
-            _ => throw ArgumentException.InvalidFormat(format,
-                "b, B, Kib, KiB, Kb, KB, Mib, MiB, Mb, MB, Gib, GiB, " +
-                "Gb, GB, Tib, TiB, Tb, TB, Pib, PiB, Pb, PB, Eib, EiB, " +
-                "Eb, EB, Zib, ZiB, Zb, ZB, Yib, YiB, Yb, and YB")
-        };
-
+        T value = ValueOf(specifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {specifier}";

@@ -54,4 +54,9 @@ public readonly partial struct Distance<T>
     private const string AstronomicalUnitsSpecifier = "au";
     private const string LightYearsSpecifier = "ly";
     private const string ParsecsSpecifier = "pc";
+
+    private const string ValidSpecifiers =
+        "qm, rm, ym, zm, am, fm, pm, nm, um, mm, cm, dm, " +
+        "m, dam, hm, km, Mm, Gm, Tm, Pm, Em, Zm, Ym, Rm, " +
+        "Qm, in, ft, yd, mi, nmi, fmi, a, au, ly, and pc";
 }

@@ -102,4 +102,9 @@ public readonly partial struct Frequency<T>
 
     private const string RadiansPerSecondSpecifier = "radps";
     private const string RadiansPerSecondSymbol = "rad/s";
+
+    private const string ValidSpecifiers =
+        "qHz, rHz, yHz, zHz, aHz, fHz, pHz, nHz, uHz, mHz, cHz, dHz, " +
+        "Hz, daHz, hHz, kHz, MHz, GHz, THz, PHz, EHz, ZHz, YHz, RHz, " +
+        "QHz, rpm, bpm, and radps";
 }

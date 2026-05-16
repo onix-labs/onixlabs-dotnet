@@ -29,39 +29,8 @@ public readonly partial struct AmountOfSubstance<T>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         (string specifier, int scale) = format.GetSpecifierAndScale(defaultSpecifier: QuectoMolesSpecifier);
-
-        (T value, string symbol) = specifier switch
-        {
-            QuectoMolesSpecifier => (QuectoMoles, QuectoMolesSymbol),
-            RontoMolesSpecifier => (RontoMoles, RontoMolesSymbol),
-            YoctoMolesSpecifier => (YoctoMoles, YoctoMolesSymbol),
-            ZeptoMolesSpecifier => (ZeptoMoles, ZeptoMolesSymbol),
-            AttoMolesSpecifier => (AttoMoles, AttoMolesSymbol),
-            FemtoMolesSpecifier => (FemtoMoles, FemtoMolesSymbol),
-            PicoMolesSpecifier => (PicoMoles, PicoMolesSymbol),
-            NanoMolesSpecifier => (NanoMoles, NanoMolesSymbol),
-            MicroMolesSpecifier => (MicroMoles, MicroMolesSymbol),
-            MilliMolesSpecifier => (MilliMoles, MilliMolesSymbol),
-            CentiMolesSpecifier => (CentiMoles, CentiMolesSymbol),
-            DeciMolesSpecifier => (DeciMoles, DeciMolesSymbol),
-            MolesSpecifier => (Moles, MolesSymbol),
-            DecaMolesSpecifier => (DecaMoles, DecaMolesSymbol),
-            HectoMolesSpecifier => (HectoMoles, HectoMolesSymbol),
-            KiloMolesSpecifier => (KiloMoles, KiloMolesSymbol),
-            MegaMolesSpecifier => (MegaMoles, MegaMolesSymbol),
-            GigaMolesSpecifier => (GigaMoles, GigaMolesSymbol),
-            TeraMolesSpecifier => (TeraMoles, TeraMolesSymbol),
-            PetaMolesSpecifier => (PetaMoles, PetaMolesSymbol),
-            ExaMolesSpecifier => (ExaMoles, ExaMolesSymbol),
-            ZettaMolesSpecifier => (ZettaMoles, ZettaMolesSymbol),
-            YottaMolesSpecifier => (YottaMoles, YottaMolesSymbol),
-            RonnaMolesSpecifier => (RonnaMoles, RonnaMolesSymbol),
-            QuettaMolesSpecifier => (QuettaMoles, QuettaMolesSymbol),
-            _ => throw ArgumentException.InvalidFormat(format,
-                "qmol, rmol, ymol, zmol, amol, fmol, pmol, nmol, umol, mmol, cmol, dmol, " +
-                "mol, damol, hmol, kmol, Mmol, Gmol, Tmol, Pmol, Emol, Zmol, Ymol, Rmol, and Qmol")
-        };
-
+        T value = ValueOf(specifier);
+        string symbol = SymbolOf(specifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {symbol}";

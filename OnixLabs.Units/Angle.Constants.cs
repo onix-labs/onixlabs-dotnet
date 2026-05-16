@@ -108,4 +108,9 @@ public readonly partial struct Angle<T>
 
     private const string TurnsSpecifier = "tr";
     private const string TurnsSymbol = "tr";
+
+    private const string ValidSpecifiers =
+        "qrad, rrad, yrad, zrad, arad, frad, prad, nrad, urad, mrad, crad, drad, " +
+        "rad, darad, hrad, krad, Mrad, Grad, Trad, Prad, Erad, Zrad, Yrad, Rrad, " +
+        "Qrad, deg, arcmin, arcsec, gon, and tr";
 }

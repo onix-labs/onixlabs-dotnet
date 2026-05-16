@@ -42,4 +42,6 @@ public readonly partial struct Temperature<T>
 
     private const string RomerSpecifier = "RO";
     private const string RomerSymbol = "°Rø";
+
+    private const string ValidSpecifiers = "C, De, F, K, N, R, Re, and Ro";
 }

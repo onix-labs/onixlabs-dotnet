@@ -17,7 +17,12 @@ namespace OnixLabs.Units;
 public readonly partial struct Speed<T>
 {
     /// <inheritdoc/>
-    public static Speed<T> Zero => new(Distance<T>.Zero, Time<T>.Zero);
+    /// <remarks>
+    /// The denominator is set to <c>1 s</c> rather than <see cref="Time{T}.Zero"/> to avoid a <c>0 / 0</c> magnitude,
+    /// which would yield <c>NaN</c> for floating-point types or throw for integer-shaped types, breaking equality,
+    /// comparison, and formatting. With a non-zero denominator the magnitude is a genuine <c>0</c>.
+    /// </remarks>
+    public static Speed<T> Zero => new(Distance<T>.Zero, Time<T>.FromSeconds(T.One));
 
     private const string DefaultFormat = "m/s";
 }

@@ -22,7 +22,7 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Current<T> : IUnit<Current<T>> where T : IFloatingPoint<T>
+public readonly partial struct Current<T> : IAdditiveUnit<Current<T>>, IMultiplicativeUnit<Current<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>

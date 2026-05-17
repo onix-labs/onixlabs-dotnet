@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Units;
 
 public readonly partial struct Speed<T>
@@ -21,24 +19,14 @@ public readonly partial struct Speed<T>
     /// <inheritdoc/>
     public static Speed<T> Add(Speed<T> left, Speed<T> right)
     {
-        throw new NotImplementedException();
+        T sum = Magnitude(left.Left, left.Right) + Magnitude(right.Left, right.Right);
+        return new Speed<T>(Distance<T>.FromMeters(sum), Time<T>.FromSeconds(T.One));
     }
 
     /// <inheritdoc/>
     public static Speed<T> Subtract(Speed<T> left, Speed<T> right)
     {
-        throw new NotImplementedException();
-    }
-
-    /// <inheritdoc/>
-    public static Speed<T> Multiply(Speed<T> left, Speed<T> right)
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <inheritdoc/>
-    public static Speed<T> Divide(Speed<T> left, Speed<T> right)
-    {
-        throw new NotImplementedException();
+        T difference = Magnitude(left.Left, left.Right) - Magnitude(right.Left, right.Right);
+        return new Speed<T>(Distance<T>.FromMeters(difference), Time<T>.FromSeconds(T.One));
     }
 }

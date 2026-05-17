@@ -25,7 +25,7 @@ namespace OnixLabs.Units;
 public readonly partial struct Speed<T>(
     in Distance<T> left,
     in Time<T> right
-) : IUnit<Speed<T>>, ICompositeUnit<Distance<T>, Time<T>> where T : IFloatingPoint<T>
+) : IAdditiveUnit<Speed<T>>, ICompositeUnit<Distance<T>, Time<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>

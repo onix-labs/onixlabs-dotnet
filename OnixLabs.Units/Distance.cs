@@ -21,7 +21,7 @@ namespace OnixLabs.Units;
 /// </summary>
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
-public readonly partial struct Distance<T> : IUnit<Distance<T>> where T : IFloatingPoint<T>
+public readonly partial struct Distance<T> : IAdditiveUnit<Distance<T>>, IMultiplicativeUnit<Distance<T>> where T : IFloatingPoint<T>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Distance{T}"/> struct.

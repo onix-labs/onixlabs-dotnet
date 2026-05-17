@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -500,5 +501,26 @@ public sealed class TimeTests
 
         // Then
         Assert.Equal("1.234,56 s", formatted);
+    }
+
+    [Fact(DisplayName = "Time.ValueOf should round-trip with ToString specifier")]
+    public void TimeValueOfShouldRoundTripWithToStringSpecifier()
+    {
+        // Given
+        Time<double> time = Time<double>.FromHours(2);
+
+        // Then
+        Assert.Equal(2.0, time.ValueOf("h"), 1e-9);
+        Assert.Equal(7200.0, time.ValueOf("s"), 1e-6);
+    }
+
+    [Fact(DisplayName = "Time.ValueOf should throw on invalid specifier")]
+    public void TimeValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Time<double> time = Time<double>.FromHours(2);
+
+        // Then
+        Assert.Throws<ArgumentException>(() => time.ValueOf("xx"));
     }
 }

@@ -17,12 +17,12 @@ using System.Numerics;
 namespace OnixLabs.Units;
 
 /// <summary>
-/// Represents a unit of amount of substance.
+/// Represents a unit of an amount of substance.
 /// </summary>
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct AmountOfSubstance<T> : IUnit<AmountOfSubstance<T>> where T : IFloatingPoint<T>
+public readonly partial struct AmountOfSubstance<T> : IAdditiveUnit<AmountOfSubstance<T>>, IMultiplicativeUnit<AmountOfSubstance<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>

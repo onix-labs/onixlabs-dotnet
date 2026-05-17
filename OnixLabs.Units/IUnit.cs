@@ -17,24 +17,6 @@ using System;
 namespace OnixLabs.Units;
 
 /// <summary>
-/// Defines a composite unit of measurement composed of two underlying units.
-/// </summary>
-/// <typeparam name="TLeft">The underlying type of the left-hand unit of measurement.</typeparam>
-/// <typeparam name="TRight">The underlying type of the right-hand unit of measurement.</typeparam>
-public interface ICompositeUnit<out TLeft, out TRight> where TLeft : struct, IUnit<TLeft> where TRight : struct, IUnit<TRight>
-{
-    /// <summary>
-    /// Gets the left-hand unit of the composite.
-    /// </summary>
-    TLeft Left { get; }
-
-    /// <summary>
-    /// Gets the right-hand unit of the composite.
-    /// </summary>
-    TRight Right { get; }
-}
-
-/// <summary>
 /// Defines a unit of measurement.
 /// </summary>
 /// <typeparam name="TSelf">The underlying type of the unit of measurement.</typeparam>
@@ -44,46 +26,6 @@ public interface IUnit<TSelf> : IEquatable<TSelf>, IComparable<TSelf>, IComparab
     /// Gets a zero <c>0</c> <typeparamref name="TSelf"/> value.
     /// </summary>
     static abstract TSelf Zero { get; }
-
-    /// <summary>
-    /// Computes the sum of the specified <typeparamref name="TSelf"/> values.
-    /// </summary>
-    /// <param name="left">The left-hand value to add to.</param>
-    /// <param name="right">The right-hand value to add.</param>
-    /// <returns>Returns the sum of the specified <typeparamref name="TSelf"/> values.</returns>
-    static abstract TSelf Add(TSelf left, TSelf right);
-
-    /// <summary>
-    /// Computes the difference between the specified <typeparamref name="TSelf"/> values.
-    /// </summary>
-    /// <param name="left">The left-hand value to subtract from.</param>
-    /// <param name="right">The right-hand value to subtract.</param>
-    /// <returns>Returns the difference between the specified <typeparamref name="TSelf"/> values.</returns>
-    static abstract TSelf Subtract(TSelf left, TSelf right);
-
-    /// <summary>
-    /// Computes the product of the specified <typeparamref name="TSelf"/> values.
-    /// </summary>
-    /// <param name="left">The left-hand value to multiply.</param>
-    /// <param name="right">The right-hand value to multiply by.</param>
-    /// <returns>Returns the product of the specified <typeparamref name="TSelf"/> values.</returns>
-    static abstract TSelf Multiply(TSelf left, TSelf right);
-
-    /// <summary>
-    /// Computes the quotient of the specified <typeparamref name="TSelf"/> values.
-    /// </summary>
-    /// <param name="left">The left-hand value to divide.</param>
-    /// <param name="right">The right-hand value to divide by.</param>
-    /// <returns>Returns the quotient of the specified <typeparamref name="TSelf"/> values.</returns>
-    static abstract TSelf Divide(TSelf left, TSelf right);
-
-    /// <summary>
-    /// Determines whether the specified left-hand and right-hand <typeparamref name="TSelf"/> values are equal.
-    /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the specified left-hand and right-hand <typeparamref name="TSelf"/> values are equal; otherwise <see langword="false"/>.</returns>
-    static abstract bool Equals(TSelf left, TSelf right);
 
     /// <summary>
     /// Compares the specified left-hand and right-hand <typeparamref name="TSelf"/> values and returns an integer
@@ -98,6 +40,14 @@ public interface IUnit<TSelf> : IEquatable<TSelf>, IComparable<TSelf>, IComparab
     /// or greater than zero if <paramref name="left"/> is greater than <paramref name="right"/>.
     /// </returns>
     static abstract int Compare(TSelf left, TSelf right);
+
+    /// <summary>
+    /// Determines whether the specified left-hand and right-hand <typeparamref name="TSelf"/> values are equal.
+    /// </summary>
+    /// <param name="left">The left-hand value to compare.</param>
+    /// <param name="right">The right-hand value to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the specified left-hand and right-hand <typeparamref name="TSelf"/> values are equal; otherwise <see langword="false"/>.</returns>
+    static abstract bool Equals(TSelf left, TSelf right);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.

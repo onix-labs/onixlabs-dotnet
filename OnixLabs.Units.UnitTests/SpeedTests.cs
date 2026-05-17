@@ -35,6 +35,185 @@ public sealed class SpeedTests
         Assert.Equal(time, speed.Right);
     }
 
+    [Fact(DisplayName = "Speed.Zero should produce the expected result")]
+    public void SpeedZeroShouldProduceExpectedResult()
+    {
+        // Given / When
+        Speed<double> zero = Speed<double>.Zero;
+
+        // Then - magnitude must be 0 (avoids 0/0 NaN by using Time.FromSeconds(1) for the denominator).
+        Assert.Equal("0.000 m/s", zero.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.True(zero.Equals(zero));
+    }
+
+    [Fact(DisplayName = "Speed.Add should produce the expected result")]
+    public void SpeedAddShouldProduceExpectedValue()
+    {
+        // Given - 25 m/s + 5 m/s = 30 m/s
+        Speed<double> left = new(Distance<double>.FromMeters(25), Time<double>.FromSeconds(1));
+        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = Speed<double>.Add(left, right);
+
+        // Then
+        Assert.Equal("30.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed.Add should reduce magnitudes across decompositions")]
+    public void SpeedAddShouldReduceMagnitudes()
+    {
+        // Given - integer-ratio decompositions chosen to keep float math exact.
+        // (50 m / 2 s) = 25 m/s, plus (10 m / 1 s) = 10 m/s, total = 35 m/s.
+        Speed<double> twentyFiveMps = new(Distance<double>.FromMeters(50), Time<double>.FromSeconds(2));
+        Speed<double> tenMps = new(Distance<double>.FromMeters(10), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = Speed<double>.Add(twentyFiveMps, tenMps);
+
+        // Then - 25 + 10 = 35 m/s
+        Assert.Equal("35.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed.Add should reduce across mixed distance/time units")]
+    public void SpeedAddShouldReduceAcrossMixedUnits()
+    {
+        // Given - 36 km/h = 10 m/s, plus 5 m/s = 15 m/s
+        Speed<BigDecimal> left = new(Distance<BigDecimal>.FromKilometers(36), Time<BigDecimal>.FromHours(1));
+        Speed<BigDecimal> right = new(Distance<BigDecimal>.FromMeters(5), Time<BigDecimal>.FromSeconds(1));
+
+        // When
+        Speed<BigDecimal> result = Speed<BigDecimal>.Add(left, right);
+
+        // Then
+        Assert.Equal("15.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed.Add with Zero should return an equal-magnitude speed")]
+    public void SpeedAddWithZeroShouldReturnSameMagnitude()
+    {
+        // Given
+        Speed<double> speed = new(Distance<double>.FromMeters(25), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = Speed<double>.Add(speed, Speed<double>.Zero);
+
+        // Then
+        Assert.Equal(speed, result);
+    }
+
+    [Fact(DisplayName = "Speed.Subtract should produce the expected result")]
+    public void SpeedSubtractShouldProduceExpectedValue()
+    {
+        // Given - 30 m/s - 5 m/s = 25 m/s
+        Speed<double> left = new(Distance<double>.FromMeters(30), Time<double>.FromSeconds(1));
+        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = Speed<double>.Subtract(left, right);
+
+        // Then
+        Assert.Equal("25.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed.Subtract should reduce magnitudes across decompositions")]
+    public void SpeedSubtractShouldReduceMagnitudes()
+    {
+        // Given - (60 m / 2 s) = 30 m/s, minus (10 m / 1 s) = 10 m/s, result = 20 m/s.
+        Speed<double> thirtyMps = new(Distance<double>.FromMeters(60), Time<double>.FromSeconds(2));
+        Speed<double> tenMps = new(Distance<double>.FromMeters(10), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = Speed<double>.Subtract(thirtyMps, tenMps);
+
+        // Then
+        Assert.Equal("20.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed.Subtract should produce a negative result when left is less than right")]
+    public void SpeedSubtractShouldProduceNegativeWhenLeftLessThanRight()
+    {
+        // Given - 5 m/s - 20 m/s = -15 m/s
+        Speed<double> left = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+        Speed<double> right = new(Distance<double>.FromMeters(20), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = Speed<double>.Subtract(left, right);
+
+        // Then
+        Assert.Equal("-15.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed + operator should produce the expected result")]
+    public void SpeedAddOperatorShouldProduceExpectedValue()
+    {
+        // Given
+        Speed<double> left = new(Distance<double>.FromMeters(25), Time<double>.FromSeconds(1));
+        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = left + right;
+
+        // Then
+        Assert.Equal("30.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed - operator should produce the expected result")]
+    public void SpeedSubtractOperatorShouldProduceExpectedValue()
+    {
+        // Given
+        Speed<double> left = new(Distance<double>.FromMeters(30), Time<double>.FromSeconds(1));
+        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = left - right;
+
+        // Then
+        Assert.Equal("25.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed instance Add should produce the expected result")]
+    public void SpeedInstanceAddShouldProduceExpectedValue()
+    {
+        // Given
+        Speed<double> left = new(Distance<double>.FromMeters(25), Time<double>.FromSeconds(1));
+        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = left.Add(right);
+
+        // Then
+        Assert.Equal("30.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed instance Subtract should produce the expected result")]
+    public void SpeedInstanceSubtractShouldProduceExpectedValue()
+    {
+        // Given
+        Speed<double> left = new(Distance<double>.FromMeters(30), Time<double>.FromSeconds(1));
+        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+
+        // When
+        Speed<double> result = left.Subtract(right);
+
+        // Then
+        Assert.Equal("25.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Speed Add and Subtract should agree across static / operator / instance forms")]
+    public void SpeedAddAndSubtractShouldAgreeAcrossForms()
+    {
+        // Given
+        Speed<double> left = new(Distance<double>.FromMeters(30), Time<double>.FromSeconds(1));
+        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+
+        // Then
+        Assert.Equal(Speed<double>.Add(left, right), left + right);
+        Assert.Equal(Speed<double>.Add(left, right), left.Add(right));
+        Assert.Equal(Speed<double>.Subtract(left, right), left - right);
+        Assert.Equal(Speed<double>.Subtract(left, right), left.Subtract(right));
+    }
+
     [Fact(DisplayName = "Speed equality should be by magnitude (identical components)")]
     public void SpeedEqualityShouldBeByMagnitudeIdenticalComponents()
     {
@@ -309,37 +488,5 @@ public sealed class SpeedTests
 
         // Then
         Assert.Throws<ArgumentException>(() => speed.ToString("mi/xx:3", CultureInfo.InvariantCulture));
-    }
-
-    [Fact(DisplayName = "Distance.ValueOf should round-trip with ToString specifier")]
-    public void DistanceValueOfShouldRoundTripWithToStringSpecifier()
-    {
-        // Given
-        Distance<double> distance = Distance<double>.FromMiles(25);
-
-        // Then
-        Assert.Equal(25.0, distance.ValueOf("mi"), 1e-9);
-        Assert.Equal(25.0 * 1609.344, distance.ValueOf("m"), 1e-3);
-    }
-
-    [Fact(DisplayName = "Time.ValueOf should round-trip with ToString specifier")]
-    public void TimeValueOfShouldRoundTripWithToStringSpecifier()
-    {
-        // Given
-        Time<double> time = Time<double>.FromHours(2);
-
-        // Then
-        Assert.Equal(2.0, time.ValueOf("h"), 1e-9);
-        Assert.Equal(7200.0, time.ValueOf("s"), 1e-6);
-    }
-
-    [Fact(DisplayName = "Distance.ValueOf should throw on invalid specifier")]
-    public void DistanceValueOfShouldThrowOnInvalidSpecifier()
-    {
-        // Given
-        Distance<double> distance = Distance<double>.FromMiles(25);
-
-        // Then
-        Assert.Throws<ArgumentException>(() => distance.ValueOf("xx"));
     }
 }

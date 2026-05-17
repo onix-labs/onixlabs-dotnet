@@ -12,19 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using OnixLabs.Units;
-
 namespace OnixLabs.Playground;
 
 internal static class Program
 {
     private static void Main()
     {
-        Distance<double> distance = Distance<double>.FromMiles(73);
-        Time<double> time = Time<double>.FromHours(1);
-        Speed<double> speed = new(distance, time);
-
-        Console.WriteLine($"Speed = {speed}");
     }
 }

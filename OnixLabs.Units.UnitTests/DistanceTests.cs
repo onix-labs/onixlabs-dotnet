@@ -663,4 +663,25 @@ public sealed class DistanceTests
         // Then
         Assert.Equal("1.234,56 m", formatted);
     }
+
+    [Fact(DisplayName = "Distance.ValueOf should round-trip with ToString specifier")]
+    public void DistanceValueOfShouldRoundTripWithToStringSpecifier()
+    {
+        // Given
+        Distance<double> distance = Distance<double>.FromMiles(25);
+
+        // Then
+        Assert.Equal(25.0, distance.ValueOf("mi"), 1e-9);
+        Assert.Equal(25.0 * 1609.344, distance.ValueOf("m"), 1e-3);
+    }
+
+    [Fact(DisplayName = "Distance.ValueOf should throw on invalid specifier")]
+    public void DistanceValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Distance<double> distance = Distance<double>.FromMiles(25);
+
+        // Then
+        Assert.Throws<ArgumentException>(() => distance.ValueOf("xx"));
+    }
 }

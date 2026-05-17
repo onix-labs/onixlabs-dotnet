@@ -17,16 +17,10 @@ namespace OnixLabs.Units;
 public readonly partial struct Density<T>
 {
     /// <inheritdoc/>
-    public static Density<T> Add(Density<T> left, Density<T> right)
-    {
-        T sum = Magnitude(left.Left, left.Right) + Magnitude(right.Left, right.Right);
-        return new Density<T>(Mass<T>.FromKilograms(sum), Volume<T>.FromCubicMeters(T.One));
-    }
+    public static Density<T> Add(Density<T> left, Density<T> right) =>
+        new(Mass<T>.FromQuectograms(left.Magnitude + right.Magnitude), Volume<T>.FromCubicQuectometers(T.One));
 
     /// <inheritdoc/>
-    public static Density<T> Subtract(Density<T> left, Density<T> right)
-    {
-        T difference = Magnitude(left.Left, left.Right) - Magnitude(right.Left, right.Right);
-        return new Density<T>(Mass<T>.FromKilograms(difference), Volume<T>.FromCubicMeters(T.One));
-    }
+    public static Density<T> Subtract(Density<T> left, Density<T> right) =>
+        new(Mass<T>.FromQuectograms(left.Magnitude - right.Magnitude), Volume<T>.FromCubicQuectometers(T.One));
 }

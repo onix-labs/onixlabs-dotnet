@@ -22,14 +22,20 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Mass<T> : IAdditiveUnit<Mass<T>>, IMultiplicativeUnit<Mass<T>> where T : IFloatingPoint<T>
+public readonly partial struct Mass<T> :
+    ICanonicalUnit<T>,
+    IAdditiveUnit<Mass<T>>,
+    IMultiplicativeUnit<Mass<T>>
+    where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Mass{T}"/> struct.
     /// </summary>
     /// <param name="value">The mass unit in <see cref="QuectoGrams"/>.</param>
-    private Mass(T value) => QuectoGrams = value;
+    private Mass(T value) => Canonical = value;
+
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the mass in Quectograms (qg).
@@ -37,7 +43,7 @@ public readonly partial struct Mass<T> : IAdditiveUnit<Mass<T>>, IMultiplicative
     /// <remarks>
     /// The format specifier for this value is qg.
     /// </remarks>
-    public T QuectoGrams { get; }
+    public T QuectoGrams => Canonical;
 
     /// <summary>
     /// Gets the mass in Rontograms (rg).

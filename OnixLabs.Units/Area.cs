@@ -22,14 +22,20 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Area<T> : IAdditiveUnit<Area<T>>, IMultiplicativeUnit<Area<T>> where T : IFloatingPoint<T>
+public readonly partial struct Area<T> :
+    ICanonicalUnit<T>,
+    IAdditiveUnit<Area<T>>,
+    IMultiplicativeUnit<Area<T>>
+    where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Area{T}"/> struct.
     /// </summary>
     /// <param name="value">The area unit in <see cref="SquareQuectoMeters"/>.</param>
-    private Area(T value) => SquareQuectoMeters = value;
+    private Area(T value) => Canonical = value;
+
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the area in Square Quectometers (qm²).
@@ -37,7 +43,7 @@ public readonly partial struct Area<T> : IAdditiveUnit<Area<T>>, IMultiplicative
     /// <remarks>
     /// The format specifier for this value is sqqm.
     /// </remarks>
-    public T SquareQuectoMeters { get; }
+    public T SquareQuectoMeters => Canonical;
 
     /// <summary>
     /// Gets the area in Square Rontometers (rm²).

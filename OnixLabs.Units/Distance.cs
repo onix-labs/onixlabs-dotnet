@@ -21,13 +21,18 @@ namespace OnixLabs.Units;
 /// </summary>
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
-public readonly partial struct Distance<T> : IAdditiveUnit<Distance<T>>, IMultiplicativeUnit<Distance<T>> where T : IFloatingPoint<T>
+public readonly partial struct Distance<T> :
+    ICanonicalUnit<T>,
+    IAdditiveUnit<Distance<T>>,
+    IMultiplicativeUnit<Distance<T>> where T : IFloatingPoint<T>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Distance{T}"/> struct.
     /// </summary>
     /// <param name="value">The distance unit in <see cref="QuectoMeters"/>.</param>
-    private Distance(T value) => QuectoMeters = value;
+    private Distance(T value) => Canonical = value;
+
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the distance in Quectometers (qm).
@@ -35,7 +40,7 @@ public readonly partial struct Distance<T> : IAdditiveUnit<Distance<T>>, IMultip
     /// <remarks>
     /// The format specifier for this value is qm.
     /// </remarks>
-    public T QuectoMeters { get; }
+    public T QuectoMeters => Canonical;
 
     /// <summary>
     /// Gets the distance in Rontometers (rm).

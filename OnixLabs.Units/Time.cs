@@ -22,14 +22,20 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Time<T> : IAdditiveUnit<Time<T>>, IMultiplicativeUnit<Time<T>> where T : IFloatingPoint<T>
+public readonly partial struct Time<T> :
+    ICanonicalUnit<T>,
+    IAdditiveUnit<Time<T>>,
+    IMultiplicativeUnit<Time<T>>
+    where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Time{T}"/> struct.
     /// </summary>
     /// <param name="value">The time unit in <see cref="QuectoSeconds"/>.</param>
-    private Time(T value) => QuectoSeconds = value;
+    private Time(T value) => Canonical = value;
+
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the time in Quectoseconds (qs).
@@ -37,7 +43,7 @@ public readonly partial struct Time<T> : IAdditiveUnit<Time<T>>, IMultiplicative
     /// <remarks>
     /// The format specifier for this value is qs.
     /// </remarks>
-    public T QuectoSeconds { get; }
+    public T QuectoSeconds => Canonical;
 
     /// <summary>
     /// Gets the time in Rontoseconds (rs).

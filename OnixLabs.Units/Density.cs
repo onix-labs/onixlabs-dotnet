@@ -25,7 +25,10 @@ namespace OnixLabs.Units;
 public readonly partial struct Density<T>(
     in Mass<T> left,
     in Volume<T> right
-) : IAdditiveUnit<Density<T>>, ICompositeUnit<Mass<T>, Volume<T>> where T : IFloatingPoint<T>
+) : IMagnitudinalUnit<T>,
+    IAdditiveUnit<Density<T>>,
+    ICompositeUnit<Mass<T>, Volume<T>>
+    where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
@@ -38,6 +41,13 @@ public readonly partial struct Density<T>(
     /// </summary>
     public Volume<T> Right { get; } = right;
 
-    private static T Magnitude(in Mass<T> mass, in Volume<T> volume) =>
-        mass.KiloGrams / volume.CubicMeters;
+    /// <summary>
+    /// Gets the magnitude of the current <see cref="Density{T}"/> as the ratio of the canonical mass and volume storage values.
+    /// </summary>
+    /// <remarks>
+    /// The magnitude is an opaque scalar used by <see cref="Equals(Density{T})"/>, <see cref="CompareTo(Density{T})"/>,
+    /// <see cref="GetHashCode"/>, and the arithmetic operators. It is not intended for display — use
+    /// <see cref="ToString(string, System.IFormatProvider)"/> for that.
+    /// </remarks>
+    public T Magnitude => Left.Canonical / Right.Canonical;
 }

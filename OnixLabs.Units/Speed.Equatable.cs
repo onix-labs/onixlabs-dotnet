@@ -20,13 +20,7 @@ namespace OnixLabs.Units;
 public readonly partial struct Speed<T>
 {
     /// <inheritdoc/>
-    public static bool Equals(Speed<T> left, Speed<T> right)
-    {
-        T leftMagnitude = Magnitude(left.Left, left.Right);
-        T rightMagnitude = Magnitude(right.Left, right.Right);
-
-        return leftMagnitude == rightMagnitude;
-    }
+    public static bool Equals(Speed<T> left, Speed<T> right) => left.Magnitude == right.Magnitude;
 
     /// <inheritdoc/>
     public bool Equals(Speed<T> other) => Equals(this, other);
@@ -35,5 +29,5 @@ public readonly partial struct Speed<T>
     public override bool Equals([NotNullWhen(true)] object? obj) => obj is Speed<T> other && Equals(other);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(Magnitude(Left, Right));
+    public override int GetHashCode() => HashCode.Combine(Magnitude);
 }

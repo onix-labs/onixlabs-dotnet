@@ -17,16 +17,10 @@ namespace OnixLabs.Units;
 public readonly partial struct Speed<T>
 {
     /// <inheritdoc/>
-    public static Speed<T> Add(Speed<T> left, Speed<T> right)
-    {
-        T sum = Magnitude(left.Left, left.Right) + Magnitude(right.Left, right.Right);
-        return new Speed<T>(Distance<T>.FromMeters(sum), Time<T>.FromSeconds(T.One));
-    }
+    public static Speed<T> Add(Speed<T> left, Speed<T> right) =>
+        new(Distance<T>.FromMeters(left.Magnitude + right.Magnitude), Time<T>.FromSeconds(T.One));
 
     /// <inheritdoc/>
-    public static Speed<T> Subtract(Speed<T> left, Speed<T> right)
-    {
-        T difference = Magnitude(left.Left, left.Right) - Magnitude(right.Left, right.Right);
-        return new Speed<T>(Distance<T>.FromMeters(difference), Time<T>.FromSeconds(T.One));
-    }
+    public static Speed<T> Subtract(Speed<T> left, Speed<T> right) =>
+        new(Distance<T>.FromMeters(left.Magnitude - right.Magnitude), Time<T>.FromSeconds(T.One));
 }

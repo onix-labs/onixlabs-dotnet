@@ -22,14 +22,20 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Volume<T> : IAdditiveUnit<Volume<T>>, IMultiplicativeUnit<Volume<T>> where T : IFloatingPoint<T>
+public readonly partial struct Volume<T> :
+    ICanonicalUnit<T>,
+    IAdditiveUnit<Volume<T>>,
+    IMultiplicativeUnit<Volume<T>>
+    where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Volume{T}"/> struct.
     /// </summary>
     /// <param name="value">The volume unit in <see cref="CubicQuectoMeters"/>.</param>
-    private Volume(T value) => CubicQuectoMeters = value;
+    private Volume(T value) => Canonical = value;
+
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the volume in Cubic Quectometers (qm³).
@@ -37,7 +43,7 @@ public readonly partial struct Volume<T> : IAdditiveUnit<Volume<T>>, IMultiplica
     /// <remarks>
     /// The format specifier for this value is cuqm.
     /// </remarks>
-    public T CubicQuectoMeters { get; }
+    public T CubicQuectoMeters => Canonical;
 
     /// <summary>
     /// Gets the volume in Cubic Rontometers (rm³).

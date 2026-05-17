@@ -1,4 +1,4 @@
-// Copyright 2020-2025 ONIXLabs
+// Copyright 2020-2026 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace OnixLabs.Units;
 
-public readonly partial struct Density<T>
+public interface IMagnitudinalUnit<out T> where T : IFloatingPoint<T>
 {
-    /// <inheritdoc/>
-    public static bool Equals(Density<T> left, Density<T> right) => left.Magnitude == right.Magnitude;
-
-    /// <inheritdoc/>
-    public bool Equals(Density<T> other) => Equals(this, other);
-
-    /// <inheritdoc/>
-    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Density<T> other && Equals(other);
-
-    /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(Magnitude);
+    T Magnitude { get; }
 }

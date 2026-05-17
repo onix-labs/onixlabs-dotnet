@@ -19,13 +19,7 @@ namespace OnixLabs.Units;
 public readonly partial struct Density<T>
 {
     /// <inheritdoc/>
-    public static int Compare(Density<T> left, Density<T> right)
-    {
-        T leftMagnitude = Magnitude(left.Left, left.Right);
-        T rightMagnitude = Magnitude(right.Left, right.Right);
-
-        return leftMagnitude.CompareTo(rightMagnitude);
-    }
+    public static int Compare(Density<T> left, Density<T> right) => left.Magnitude.CompareTo(right.Magnitude);
 
     /// <inheritdoc/>
     public int CompareTo(Density<T> other) => Compare(this, other);

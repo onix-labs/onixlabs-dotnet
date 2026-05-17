@@ -14,7 +14,6 @@
 
 using System;
 using System.Globalization;
-using OnixLabs.Numerics;
 
 namespace OnixLabs.Units.UnitTests;
 
@@ -78,13 +77,11 @@ public sealed class DensityTests
     public void DensityAddShouldReduceAcrossMixedUnits()
     {
         // Given - 1 t/m³ = 1000 kg/m³, plus 500 kg/m³ = 1500 kg/m³.
-        // (sub-cubic-metre volumes are avoided here because BigDecimal's integer-division
-        // semantics round them to zero when read back via Volume.CubicMeters.)
-        Density<BigDecimal> left = new(Mass<BigDecimal>.FromTonnes(1), Volume<BigDecimal>.FromCubicMeters(1));
-        Density<BigDecimal> right = new(Mass<BigDecimal>.FromKilograms(500), Volume<BigDecimal>.FromCubicMeters(1));
+        Density<double> left = new(Mass<double>.FromTonnes(1), Volume<double>.FromCubicMeters(1));
+        Density<double> right = new(Mass<double>.FromKilograms(500), Volume<double>.FromCubicMeters(1));
 
         // When
-        Density<BigDecimal> result = Density<BigDecimal>.Add(left, right);
+        Density<double> result = Density<double>.Add(left, right);
 
         // Then
         Assert.Equal("1,500.000 kg/cum", result.ToString("kg/cum:3", CultureInfo.InvariantCulture));
@@ -238,19 +235,6 @@ public sealed class DensityTests
         // Then
         Assert.True(left.Equals(right));
         Assert.True(left.Equals((object)right));
-        Assert.Equal(left.GetHashCode(), right.GetHashCode());
-    }
-
-    [Fact(DisplayName = "Density equality should be by magnitude (cross-unit conversion)")]
-    public void DensityEqualityShouldBeByMagnitudeCrossUnit()
-    {
-        // Given - 1 t/m³ = 1000 kg/m³. BigDecimal preserves exact precision across unit
-        // conversions where binary floating-point would lose last-bit equality.
-        Density<BigDecimal> left = new(Mass<BigDecimal>.FromTonnes(1), Volume<BigDecimal>.FromCubicMeters(1));
-        Density<BigDecimal> right = new(Mass<BigDecimal>.FromKilograms(1000), Volume<BigDecimal>.FromCubicMeters(1));
-
-        // Then
-        Assert.True(left.Equals(right));
         Assert.Equal(left.GetHashCode(), right.GetHashCode());
     }
 

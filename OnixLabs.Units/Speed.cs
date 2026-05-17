@@ -25,7 +25,10 @@ namespace OnixLabs.Units;
 public readonly partial struct Speed<T>(
     in Distance<T> left,
     in Time<T> right
-) : IAdditiveUnit<Speed<T>>, ICompositeUnit<Distance<T>, Time<T>> where T : IFloatingPoint<T>
+) : IMagnitudinalUnit<T>,
+    IAdditiveUnit<Speed<T>>,
+    ICompositeUnit<Distance<T>, Time<T>>
+    where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
@@ -38,6 +41,13 @@ public readonly partial struct Speed<T>(
     /// </summary>
     public Time<T> Right { get; } = right;
 
-    private static T Magnitude(in Distance<T> distance, in Time<T> time) =>
-        distance.QuectoMeters / time.QuectoSeconds;
+    /// <summary>
+    /// Gets the magnitude of the current <see cref="Speed{T}"/> as the ratio of the canonical distance and time storage values.
+    /// </summary>
+    /// <remarks>
+    /// The magnitude is an opaque scalar used by <see cref="Equals(Speed{T})"/>, <see cref="CompareTo(Speed{T})"/>,
+    /// <see cref="GetHashCode"/>, and the arithmetic operators. It is not intended for display — use
+    /// <see cref="ToString(string, System.IFormatProvider)"/> for that.
+    /// </remarks>
+    public T Magnitude => Left.Canonical / Right.Canonical;
 }

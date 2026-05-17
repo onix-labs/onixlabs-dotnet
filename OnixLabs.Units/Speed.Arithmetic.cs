@@ -13,27 +13,32 @@
 // limitations under the License.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace OnixLabs.Units;
 
 public readonly partial struct Speed<T>
 {
     /// <inheritdoc/>
-    public static bool Equals(Speed<T> left, Speed<T> right)
+    public static Speed<T> Add(Speed<T> left, Speed<T> right)
     {
-        T leftMagnitude = Magnitude(left.Left, left.Right);
-        T rightMagnitude = Magnitude(right.Left, right.Right);
-
-        return leftMagnitude == rightMagnitude;
+        throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public bool Equals(Speed<T> other) => Equals(this, other);
+    public static Speed<T> Subtract(Speed<T> left, Speed<T> right)
+    {
+        throw new NotImplementedException();
+    }
 
     /// <inheritdoc/>
-    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Speed<T> other && Equals(other);
+    public static Speed<T> Multiply(Speed<T> left, Speed<T> right)
+    {
+        throw new NotImplementedException();
+    }
 
     /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(Magnitude(Left, Right));
+    public static Speed<T> Divide(Speed<T> left, Speed<T> right)
+    {
+        throw new NotImplementedException();
+    }
 }

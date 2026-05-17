@@ -12,32 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using OnixLabs.Core;
 
 namespace OnixLabs.Units;
 
 public readonly partial struct Speed<T>
 {
-    /// <summary>
-    /// Compares the magnitude of the current instance against the magnitude of the specified <see cref="ICompositeUnit{TLeft,TRight}"/>.
-    /// </summary>
-    /// <param name="other">The other <see cref="ICompositeUnit{TLeft,TRight}"/> to compare to the current instance.</param>
-    /// <returns>Returns a signed integer that indicates the relative order of the values being compared.</returns>
-    public int CompareTo(ICompositeUnit<Distance<T>, Time<T>>? other)
+    /// <inheritdoc/>
+    public static int Compare(Speed<T> left, Speed<T> right)
     {
-        if (other is null) return 1;
-
-        T leftMagnitude = Magnitude(Left, Right);
-        T rightMagnitude = Magnitude(other.Left, other.Right);
+        T leftMagnitude = Magnitude(left.Left, left.Right);
+        T rightMagnitude = Magnitude(right.Left, right.Right);
 
         return leftMagnitude.CompareTo(rightMagnitude);
     }
 
     /// <inheritdoc/>
-    public int CompareTo(object? obj) => obj switch
-    {
-        null => 1,
-        Speed<T> other => CompareTo(other),
-        _ => throw new ArgumentException($"Object must be of type {nameof(Speed<T>)}.", nameof(obj))
-    };
+    public int CompareTo(Speed<T> other) => Compare(this, other);
+
+    /// <inheritdoc/>
+    public int CompareTo(object? obj) => this.CompareToObject(obj);
 }

@@ -21,13 +21,7 @@ namespace OnixLabs.Units;
 /// </summary>
 /// <typeparam name="TLeft">The underlying type of the left-hand unit of measurement.</typeparam>
 /// <typeparam name="TRight">The underlying type of the right-hand unit of measurement.</typeparam>
-public interface ICompositeUnit<TLeft, TRight> :
-    IEquatable<ICompositeUnit<TLeft, TRight>>,
-    IComparable<ICompositeUnit<TLeft, TRight>>,
-    IComparable,
-    ISpanFormattable
-    where TLeft : struct, IUnit<TLeft>
-    where TRight : struct, IUnit<TRight>
+public interface ICompositeUnit<out TLeft, out TRight> where TLeft : struct, IUnit<TLeft> where TRight : struct, IUnit<TRight>
 {
     /// <summary>
     /// Gets the left-hand unit of the composite.
@@ -71,7 +65,7 @@ public interface IUnit<TSelf> : IEquatable<TSelf>, IComparable<TSelf>, IComparab
     /// Computes the product of the specified <typeparamref name="TSelf"/> values.
     /// </summary>
     /// <param name="left">The left-hand value to multiply.</param>
-    /// <param name="right">The right-hand value multiply by.</param>
+    /// <param name="right">The right-hand value to multiply by.</param>
     /// <returns>Returns the product of the specified <typeparamref name="TSelf"/> values.</returns>
     static abstract TSelf Multiply(TSelf left, TSelf right);
 

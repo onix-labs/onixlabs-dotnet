@@ -16,5 +16,8 @@ namespace OnixLabs.Units;
 
 public readonly partial struct Speed<T>
 {
+    /// <inheritdoc/>
+    public static Speed<T> Zero => new(Distance<T>.Zero, Time<T>.Zero);
+
     private const string DefaultFormat = "m/s";
 }

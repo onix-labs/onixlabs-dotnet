@@ -34,16 +34,16 @@ public sealed class Float128ArithmeticTruncateTests
     {
         Float128 actual = Float128.Truncate(value);
         Float128 expected = double.Truncate(value);
-        Assert.Equal(expected.RawBits, actual.RawBits);
+        Assert.Equal(expected.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128.Truncate of special values should preserve them")]
     public void Float128TruncateOfSpecialValuesShouldPreserve()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Truncate(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Truncate(Float128.NegativeZero).RawBits);
-        Assert.Equal(Float128.PositiveInfinity.RawBits, Float128.Truncate(Float128.PositiveInfinity).RawBits);
-        Assert.Equal(Float128.NegativeInfinity.RawBits, Float128.Truncate(Float128.NegativeInfinity).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Truncate(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Truncate(Float128.NegativeZero).Bits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, Float128.Truncate(Float128.PositiveInfinity).Bits);
+        Assert.Equal(Float128.NegativeInfinity.Bits, Float128.Truncate(Float128.NegativeInfinity).Bits);
         Assert.True(Float128.IsNaN(Float128.Truncate(Float128.NaN)));
     }
 

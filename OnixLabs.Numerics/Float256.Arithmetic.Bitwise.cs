@@ -20,22 +20,22 @@ public readonly partial struct Float256
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the <see cref="Float256"/> value whose raw bits are <c>left.RawBits &amp; right.RawBits</c>.</returns>
-    public static Float256 operator &(Float256 left, Float256 right) => new(left.RawBits & right.RawBits);
+    public static Float256 operator &(Float256 left, Float256 right) => new(left.Bits & right.Bits);
 
     /// <summary>Computes the bitwise OR of the IEEE 754 binary256 representations.</summary>
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the <see cref="Float256"/> value whose raw bits are <c>left.RawBits | right.RawBits</c>.</returns>
-    public static Float256 operator |(Float256 left, Float256 right) => new(left.RawBits | right.RawBits);
+    public static Float256 operator |(Float256 left, Float256 right) => new(left.Bits | right.Bits);
 
     /// <summary>Computes the bitwise XOR of the IEEE 754 binary256 representations.</summary>
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the <see cref="Float256"/> value whose raw bits are <c>left.RawBits ^ right.RawBits</c>.</returns>
-    public static Float256 operator ^(Float256 left, Float256 right) => new(left.RawBits ^ right.RawBits);
+    public static Float256 operator ^(Float256 left, Float256 right) => new(left.Bits ^ right.Bits);
 
     /// <summary>Computes the bitwise complement of the IEEE 754 binary256 representation.</summary>
     /// <param name="value">The operand.</param>
     /// <returns>Returns the <see cref="Float256"/> value whose raw bits are <c>~value.RawBits</c>.</returns>
-    public static Float256 operator ~(Float256 value) => new(~value.RawBits);
+    public static Float256 operator ~(Float256 value) => new(~value.Bits);
 }

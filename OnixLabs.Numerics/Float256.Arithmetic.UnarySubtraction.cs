@@ -19,5 +19,5 @@ public readonly partial struct Float256
     /// <summary>Returns the negation of the specified <see cref="Float256"/> value.</summary>
     /// <param name="value">The value to negate.</param>
     /// <returns>Returns the negation of <paramref name="value"/>; toggles the sign bit.</returns>
-    public static Float256 operator -(Float256 value) => new(value.RawBits ^ SignMask);
+    public static Float256 operator -(Float256 value) => new(value.Bits ^ SignMask);
 }

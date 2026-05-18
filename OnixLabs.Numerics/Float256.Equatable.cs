@@ -29,9 +29,9 @@ public readonly partial struct Float256
     /// </remarks>
     public static bool Equals(Float256 left, Float256 right)
     {
-        if (IsNaNBits(left.RawBits)) return IsNaNBits(right.RawBits);
-        if (IsZeroBits(left.RawBits) && IsZeroBits(right.RawBits)) return true;
-        return left.RawBits == right.RawBits;
+        if (IsNaNBits(left.Bits)) return IsNaNBits(right.Bits);
+        if (IsZeroBits(left.Bits) && IsZeroBits(right.Bits)) return true;
+        return left.Bits == right.Bits;
     }
 
     /// <summary>
@@ -54,9 +54,9 @@ public readonly partial struct Float256
     /// <returns>A hash code for this instance.</returns>
     public override int GetHashCode()
     {
-        if (IsNaNBits(RawBits)) return NaN.RawBits.GetHashCode();
-        if (IsZeroBits(RawBits)) return UInt256.Zero.GetHashCode();
-        return RawBits.GetHashCode();
+        if (IsNaNBits(Bits)) return NaN.Bits.GetHashCode();
+        if (IsZeroBits(Bits)) return UInt256.Zero.GetHashCode();
+        return Bits.GetHashCode();
     }
 
     /// <summary>
@@ -67,9 +67,9 @@ public readonly partial struct Float256
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal under IEEE 754 semantics; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(Float256 left, Float256 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
-        if (IsZeroBits(left.RawBits) && IsZeroBits(right.RawBits)) return true;
-        return left.RawBits == right.RawBits;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
+        if (IsZeroBits(left.Bits) && IsZeroBits(right.Bits)) return true;
+        return left.Bits == right.Bits;
     }
 
     /// <summary>

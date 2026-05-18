@@ -36,7 +36,7 @@ public readonly partial struct Float128
         if (IsNegative(value)) return NaN;
         if (IsPositiveInfinity(value)) return value;
 
-        DecomposeFinite(value.RawBits, out _, out int unbiasedExponent, out UInt128 significand);
+        DecomposeFinite(value.Bits, out _, out int unbiasedExponent, out UInt128 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         int halvedExponent = unbiasedExponent >> 1;

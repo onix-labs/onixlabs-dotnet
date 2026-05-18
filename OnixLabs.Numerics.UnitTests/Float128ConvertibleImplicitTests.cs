@@ -27,7 +27,7 @@ public sealed class Float128ConvertibleImplicitTests
     public void Float128ImplicitFromSByteShouldProduceExpectedBits(sbyte value, ulong expectedHigh, ulong expectedLow)
     {
         Float128 actual = value;
-        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.RawBits);
+        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.Bits);
     }
 
     [Theory(DisplayName = "Float128 implicit conversion from byte should produce expected bits")]
@@ -37,7 +37,7 @@ public sealed class Float128ConvertibleImplicitTests
     public void Float128ImplicitFromByteShouldProduceExpectedBits(byte value, ulong expectedHigh, ulong expectedLow)
     {
         Float128 actual = value;
-        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.RawBits);
+        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.Bits);
     }
 
     [Theory(DisplayName = "Float128 implicit conversion from int should produce expected bits")]
@@ -51,7 +51,7 @@ public sealed class Float128ConvertibleImplicitTests
     public void Float128ImplicitFromInt32ShouldProduceExpectedBits(int value, ulong expectedHigh, ulong expectedLow)
     {
         Float128 actual = value;
-        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.RawBits);
+        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.Bits);
     }
 
     [Theory(DisplayName = "Float128 implicit conversion from long should produce expected bits")]
@@ -63,7 +63,7 @@ public sealed class Float128ConvertibleImplicitTests
     public void Float128ImplicitFromInt64ShouldProduceExpectedBits(long value, ulong expectedHigh, ulong expectedLow)
     {
         Float128 actual = value;
-        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.RawBits);
+        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.Bits);
     }
 
     [Theory(DisplayName = "Float128 implicit conversion from ulong should produce expected bits")]
@@ -73,7 +73,7 @@ public sealed class Float128ConvertibleImplicitTests
     public void Float128ImplicitFromUInt64ShouldProduceExpectedBits(ulong value, ulong expectedHigh, ulong expectedLow)
     {
         Float128 actual = value;
-        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.RawBits);
+        Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.Bits);
     }
 
     [Theory(DisplayName = "Float128 implicit conversion from double should preserve the double value losslessly")]
@@ -98,7 +98,7 @@ public sealed class Float128ConvertibleImplicitTests
     public void Float128ImplicitFromDoubleShouldProduceExpectedBitsForOne()
     {
         Float128 actual = 1.0;
-        Assert.Equal(Float128.One.RawBits, actual.RawBits);
+        Assert.Equal(Float128.One.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128 implicit conversion from double should preserve infinity")]
@@ -136,7 +136,7 @@ public sealed class Float128ConvertibleImplicitTests
         Float128 actual = 1.5f;
         Assert.True(Float128.IsFinite(actual));
         Float128 doubleWide = 1.5;
-        Assert.Equal(doubleWide.RawBits, actual.RawBits);
+        Assert.Equal(doubleWide.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128 implicit conversion from float should preserve NaN")]
@@ -160,6 +160,6 @@ public sealed class Float128ConvertibleImplicitTests
         Assert.True(Float128.IsFinite(actual));
         Assert.True(Float128.IsNormal(actual));
         Float128 doubleWide = (double)float.Epsilon;
-        Assert.Equal(doubleWide.RawBits, actual.RawBits);
+        Assert.Equal(doubleWide.Bits, actual.Bits);
     }
 }

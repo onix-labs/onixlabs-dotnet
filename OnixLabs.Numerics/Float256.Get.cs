@@ -54,7 +54,7 @@ public readonly partial struct Float256
     /// <returns>Returns the unbiased exponent as a signed 32-bit integer.</returns>
     private int ExtractUnbiasedExponentForSerialization()
     {
-        uint biasedExponent = ExtractBiasedExponent(RawBits);
+        uint biasedExponent = ExtractBiasedExponent(Bits);
         return biasedExponent == 0u
             ? MinNormalUnbiasedExponent
             : (int)biasedExponent - ExponentBias;
@@ -62,8 +62,8 @@ public readonly partial struct Float256
 
     private UInt256 ExtractSignificandWithImplicitBit()
     {
-        UInt256 trailing = ExtractTrailingSignificand(RawBits);
-        uint biasedExponent = ExtractBiasedExponent(RawBits);
+        UInt256 trailing = ExtractTrailingSignificand(Bits);
+        uint biasedExponent = ExtractBiasedExponent(Bits);
         return biasedExponent == 0u ? trailing : (ImplicitSignificandBit | trailing);
     }
 }

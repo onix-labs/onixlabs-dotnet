@@ -27,8 +27,8 @@ public sealed class Float128RootTests
     [Fact(DisplayName = "Float128.Cbrt of zero should preserve sign")]
     public void Float128CbrtOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Cbrt(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Cbrt(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Cbrt(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Cbrt(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Cbrt of infinities should preserve sign")]
@@ -113,8 +113,8 @@ public sealed class Float128RootTests
     [Fact(DisplayName = "Float128.RootN of zero with positive n should return zero with sign for odd n")]
     public void Float128RootNOfZeroWithPositiveNShouldReturnZero()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.RootN(Float128.Zero, 4).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.RootN(Float128.NegativeZero, 5).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.RootN(Float128.Zero, 4).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.RootN(Float128.NegativeZero, 5).Bits);
     }
 
     [Fact(DisplayName = "Float128.Hypot of zero and zero should return zero")]

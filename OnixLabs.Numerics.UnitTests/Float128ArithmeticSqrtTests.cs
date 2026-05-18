@@ -44,8 +44,8 @@ public sealed class Float128ArithmeticSqrtTests
     [Fact(DisplayName = "Float128.Sqrt of zero should return zero with preserved sign")]
     public void Float128SqrtOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Sqrt(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Sqrt(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Sqrt(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Sqrt(Float128.NegativeZero).Bits);
     }
 
     [Theory(DisplayName = "Float128.Sqrt of perfect squares should produce exact integer results")]
@@ -62,7 +62,7 @@ public sealed class Float128ArithmeticSqrtTests
     {
         Float128 actual = Float128.Sqrt(input);
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, actual.RawBits);
+        Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128.Sqrt of 2 should produce a value close to 1.414...")]

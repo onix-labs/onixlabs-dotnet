@@ -36,7 +36,7 @@ public sealed class Float128ArithmeticFloorCeilingTests
     {
         Float128 actual = Float128.Floor(value);
         Float128 expected = double.Floor(value);
-        Assert.Equal(expected.RawBits, actual.RawBits);
+        Assert.Equal(expected.Bits, actual.Bits);
     }
 
     [Theory(DisplayName = "Float128.Ceiling should match double semantics")]
@@ -59,26 +59,26 @@ public sealed class Float128ArithmeticFloorCeilingTests
     {
         Float128 actual = Float128.Ceiling(value);
         Float128 expected = double.Ceiling(value);
-        Assert.Equal(expected.RawBits, actual.RawBits);
+        Assert.Equal(expected.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128.Floor of special values should preserve them")]
     public void Float128FloorOfSpecialValuesShouldPreserve()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Floor(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Floor(Float128.NegativeZero).RawBits);
-        Assert.Equal(Float128.PositiveInfinity.RawBits, Float128.Floor(Float128.PositiveInfinity).RawBits);
-        Assert.Equal(Float128.NegativeInfinity.RawBits, Float128.Floor(Float128.NegativeInfinity).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Floor(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Floor(Float128.NegativeZero).Bits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, Float128.Floor(Float128.PositiveInfinity).Bits);
+        Assert.Equal(Float128.NegativeInfinity.Bits, Float128.Floor(Float128.NegativeInfinity).Bits);
         Assert.True(Float128.IsNaN(Float128.Floor(Float128.NaN)));
     }
 
     [Fact(DisplayName = "Float128.Ceiling of special values should preserve them")]
     public void Float128CeilingOfSpecialValuesShouldPreserve()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Ceiling(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Ceiling(Float128.NegativeZero).RawBits);
-        Assert.Equal(Float128.PositiveInfinity.RawBits, Float128.Ceiling(Float128.PositiveInfinity).RawBits);
-        Assert.Equal(Float128.NegativeInfinity.RawBits, Float128.Ceiling(Float128.NegativeInfinity).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Ceiling(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Ceiling(Float128.NegativeZero).Bits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, Float128.Ceiling(Float128.PositiveInfinity).Bits);
+        Assert.Equal(Float128.NegativeInfinity.Bits, Float128.Ceiling(Float128.NegativeInfinity).Bits);
         Assert.True(Float128.IsNaN(Float128.Ceiling(Float128.NaN)));
     }
 
@@ -86,12 +86,12 @@ public sealed class Float128ArithmeticFloorCeilingTests
     public void Float128FloorOfNegativeSubnormalShouldProduceNegativeOne()
     {
         Float128 negativeEpsilon = -Float128.Epsilon;
-        Assert.Equal(Float128.NegativeOne.RawBits, Float128.Floor(negativeEpsilon).RawBits);
+        Assert.Equal(Float128.NegativeOne.Bits, Float128.Floor(negativeEpsilon).Bits);
     }
 
     [Fact(DisplayName = "Float128.Ceiling of a positive subnormal should produce 1")]
     public void Float128CeilingOfPositiveSubnormalShouldProduceOne()
     {
-        Assert.Equal(Float128.One.RawBits, Float128.Ceiling(Float128.Epsilon).RawBits);
+        Assert.Equal(Float128.One.Bits, Float128.Ceiling(Float128.Epsilon).Bits);
     }
 }

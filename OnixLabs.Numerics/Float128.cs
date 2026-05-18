@@ -35,12 +35,12 @@ public readonly partial struct Float128 :
     /// <summary>
     /// Initializes a new instance of the <see cref="Float128"/> struct from the specified raw IEEE 754 binary128 bit pattern.
     /// </summary>
-    /// <param name="rawBits">The raw IEEE 754 binary128 bit pattern from which to construct the <see cref="Float128"/> value.</param>
-    public Float128(UInt128 rawBits) => RawBits = rawBits;
+    /// <param name="bits">The raw IEEE 754 binary128 bit pattern from which to construct the <see cref="Float128"/> value.</param>
+    public Float128(UInt128 bits) => Bits = bits;
 
     /// <summary>
     /// Gets the raw IEEE 754 binary128 bit pattern that represents the current <see cref="Float128"/> value.
     /// </summary>
     /// <value>The raw 128-bit IEEE 754 binary128 representation of the current value.</value>
-    public UInt128 RawBits { get; }
+    public UInt128 Bits { get; }
 }

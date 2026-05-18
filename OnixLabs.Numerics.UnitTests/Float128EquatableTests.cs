@@ -82,7 +82,7 @@ public sealed class Float128EquatableTests
     [Fact(DisplayName = "Float128.GetHashCode should collapse all NaN bit patterns to a single hash")]
     public void Float128GetHashCodeShouldCollapseNaN()
     {
-        Float128 alternativeNaN = new(Float128.NaN.RawBits | UInt128.One);
+        Float128 alternativeNaN = new(Float128.NaN.Bits | UInt128.One);
         Assert.Equal(Float128.NaN.GetHashCode(), alternativeNaN.GetHashCode());
     }
 }

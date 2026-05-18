@@ -27,8 +27,8 @@ public sealed class Float128InverseTrigonometryTests
     [Fact(DisplayName = "Float128.Atan of zero should preserve sign of zero")]
     public void Float128AtanOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Atan(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Atan(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Atan(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Atan(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Atan of positive infinity should return π/2")]
@@ -73,8 +73,8 @@ public sealed class Float128InverseTrigonometryTests
     [Fact(DisplayName = "Float128.Asin of zero should preserve sign of zero")]
     public void Float128AsinOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Asin(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Asin(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Asin(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Asin(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Asin of one should return π/2")]

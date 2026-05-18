@@ -31,8 +31,8 @@ public readonly partial struct Float128
         if (IsZero(value)) return Epsilon;
 
         return IsNegative(value)
-            ? new Float128(value.RawBits - UInt128.One)
-            : new Float128(value.RawBits + UInt128.One);
+            ? new Float128(value.Bits - UInt128.One)
+            : new Float128(value.Bits + UInt128.One);
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ public readonly partial struct Float128
         if (IsZero(value)) return new Float128(SignMask | UInt128.One);
 
         return IsNegative(value)
-            ? new Float128(value.RawBits + UInt128.One)
-            : new Float128(value.RawBits - UInt128.One);
+            ? new Float128(value.Bits + UInt128.One)
+            : new Float128(value.Bits - UInt128.One);
     }
 }

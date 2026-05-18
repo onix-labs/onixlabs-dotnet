@@ -128,7 +128,7 @@ public readonly partial struct Float256
         ulong magnitude = value >= 0L ? (ulong)value : ((ulong)~value) + 1UL;
         Float256 positive = FromUInt64(magnitude);
 
-        return value < 0L ? new Float256(positive.RawBits | SignMask) : positive;
+        return value < 0L ? new Float256(positive.Bits | SignMask) : positive;
     }
 
     /// <summary>
@@ -163,7 +163,7 @@ public readonly partial struct Float256
         UInt128 magnitude = sign ? UInt128.Zero - (UInt128)value : (UInt128)value;
         Float256 positive = FromUInt128(magnitude);
 
-        return sign ? new Float256(positive.RawBits | SignMask) : positive;
+        return sign ? new Float256(positive.Bits | SignMask) : positive;
     }
 
     /// <summary>
@@ -286,7 +286,7 @@ public readonly partial struct Float256
         UInt128 sourceQuietNaNBit = UInt128.One << (sourceSignificandBits - 1);
         UInt128 sourceSignificandMask = (UInt128.One << sourceSignificandBits) - UInt128.One;
 
-        UInt128 sourceBits = value.RawBits;
+        UInt128 sourceBits = value.Bits;
         UInt256 sign = (UInt256)(uint)(sourceBits >> Float128.SignShift) << SignShift;
         uint biasedExponent = (uint)(uint)((sourceBits >> sourceSignificandBits) & sourceMaxBiasedExponent);
         UInt128 trailingSignificand = sourceBits & sourceSignificandMask;
@@ -363,7 +363,7 @@ public readonly partial struct Float256
         UInt128 magnitude = ((UInt128)high << 64) | ((UInt128)mid << 32) | low;
         Float256 magnitudeFloat = FromUInt128(magnitude);
         Float256 result = scale == 0 ? magnitudeFloat : magnitudeFloat / PowersOfTen[scale];
-        return sign ? new Float256(result.RawBits | SignMask) : result;
+        return sign ? new Float256(result.Bits | SignMask) : result;
     }
 
     /// <summary>

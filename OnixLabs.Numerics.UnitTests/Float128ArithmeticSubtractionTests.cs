@@ -50,7 +50,7 @@ public sealed class Float128ArithmeticSubtractionTests
     {
         Float128 actual = (Float128)left - (Float128)right;
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, actual.RawBits);
+        Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128.Subtract of value from itself should produce positive zero")]
@@ -58,15 +58,15 @@ public sealed class Float128ArithmeticSubtractionTests
     {
         Float128 value = 3.14;
         Float128 result = value - value;
-        Assert.Equal(Float128.Zero.RawBits, result.RawBits);
+        Assert.Equal(Float128.Zero.Bits, result.Bits);
     }
 
     [Fact(DisplayName = "Float128.Subtract zero from a value should return the value")]
     public void Float128SubtractZeroShouldReturnValue()
     {
         Float128 value = 7.5;
-        Assert.Equal(value.RawBits, (value - Float128.Zero).RawBits);
-        Assert.Equal(value.RawBits, (value - Float128.NegativeZero).RawBits);
+        Assert.Equal(value.Bits, (value - Float128.Zero).Bits);
+        Assert.Equal(value.Bits, (value - Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128 increment should add one")]
@@ -74,7 +74,7 @@ public sealed class Float128ArithmeticSubtractionTests
     {
         Float128 value = 5.0;
         value++;
-        Assert.Equal(((Float128)6.0).RawBits, value.RawBits);
+        Assert.Equal(((Float128)6.0).Bits, value.Bits);
     }
 
     [Fact(DisplayName = "Float128 decrement should subtract one")]
@@ -82,6 +82,6 @@ public sealed class Float128ArithmeticSubtractionTests
     {
         Float128 value = 5.0;
         value--;
-        Assert.Equal(((Float128)4.0).RawBits, value.RawBits);
+        Assert.Equal(((Float128)4.0).Bits, value.Bits);
     }
 }

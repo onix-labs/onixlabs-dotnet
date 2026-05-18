@@ -43,14 +43,14 @@ public sealed class Float256ArithmeticMultiplicationTests
     [Fact(DisplayName = "Float256.Multiply zero by non-zero should return signed zero")]
     public void Float256MultiplyZeroByNonZeroShouldReturnSignedZero()
     {
-        Assert.Equal(Float256.Zero.RawBits.Upper, (Float256.Zero * Float256.One).RawBits.Upper);
-        Assert.Equal(Float256.Zero.RawBits.Lower, (Float256.Zero * Float256.One).RawBits.Lower);
-        Assert.Equal(Float256.NegativeZero.RawBits.Upper, (Float256.NegativeZero * Float256.One).RawBits.Upper);
-        Assert.Equal(Float256.NegativeZero.RawBits.Lower, (Float256.NegativeZero * Float256.One).RawBits.Lower);
-        Assert.Equal(Float256.NegativeZero.RawBits.Upper, (Float256.Zero * Float256.NegativeOne).RawBits.Upper);
-        Assert.Equal(Float256.NegativeZero.RawBits.Lower, (Float256.Zero * Float256.NegativeOne).RawBits.Lower);
-        Assert.Equal(Float256.Zero.RawBits.Upper, (Float256.NegativeZero * Float256.NegativeOne).RawBits.Upper);
-        Assert.Equal(Float256.Zero.RawBits.Lower, (Float256.NegativeZero * Float256.NegativeOne).RawBits.Lower);
+        Assert.Equal(Float256.Zero.Bits.Upper, (Float256.Zero * Float256.One).Bits.Upper);
+        Assert.Equal(Float256.Zero.Bits.Lower, (Float256.Zero * Float256.One).Bits.Lower);
+        Assert.Equal(Float256.NegativeZero.Bits.Upper, (Float256.NegativeZero * Float256.One).Bits.Upper);
+        Assert.Equal(Float256.NegativeZero.Bits.Lower, (Float256.NegativeZero * Float256.One).Bits.Lower);
+        Assert.Equal(Float256.NegativeZero.Bits.Upper, (Float256.Zero * Float256.NegativeOne).Bits.Upper);
+        Assert.Equal(Float256.NegativeZero.Bits.Lower, (Float256.Zero * Float256.NegativeOne).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.Upper, (Float256.NegativeZero * Float256.NegativeOne).Bits.Upper);
+        Assert.Equal(Float256.Zero.Bits.Lower, (Float256.NegativeZero * Float256.NegativeOne).Bits.Lower);
     }
 
     // These data rows use only values that are exactly representable in IEEE 754 binary64 (and therefore
@@ -71,18 +71,18 @@ public sealed class Float256ArithmeticMultiplicationTests
     {
         Float256 actual = (Float256)left * (Float256)right;
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits.Upper, actual.RawBits.Upper);
-        Assert.Equal(expectedFloat.RawBits.Lower, actual.RawBits.Lower);
+        Assert.Equal(expectedFloat.Bits.Upper, actual.Bits.Upper);
+        Assert.Equal(expectedFloat.Bits.Lower, actual.Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Multiply by one should return the value")]
     public void Float256MultiplyByOneShouldReturnValue()
     {
         Float256 value = 3.14;
-        Assert.Equal(value.RawBits.Upper, (value * Float256.One).RawBits.Upper);
-        Assert.Equal(value.RawBits.Lower, (value * Float256.One).RawBits.Lower);
-        Assert.Equal(value.RawBits.Upper, (Float256.One * value).RawBits.Upper);
-        Assert.Equal(value.RawBits.Lower, (Float256.One * value).RawBits.Lower);
+        Assert.Equal(value.Bits.Upper, (value * Float256.One).Bits.Upper);
+        Assert.Equal(value.Bits.Lower, (value * Float256.One).Bits.Lower);
+        Assert.Equal(value.Bits.Upper, (Float256.One * value).Bits.Upper);
+        Assert.Equal(value.Bits.Lower, (Float256.One * value).Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Multiply by two should double the value")]
@@ -90,8 +90,8 @@ public sealed class Float256ArithmeticMultiplicationTests
     {
         Float256 value = 5.0;
         Float256 doubled = value * Float256.Two;
-        Assert.Equal(((Float256)10.0).RawBits.Upper, doubled.RawBits.Upper);
-        Assert.Equal(((Float256)10.0).RawBits.Lower, doubled.RawBits.Lower);
+        Assert.Equal(((Float256)10.0).Bits.Upper, doubled.Bits.Upper);
+        Assert.Equal(((Float256)10.0).Bits.Lower, doubled.Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Multiply MaxValue by Two should overflow to infinity")]

@@ -43,10 +43,10 @@ public sealed class Float128ArithmeticMultiplicationTests
     [Fact(DisplayName = "Float128.Multiply zero by non-zero should return signed zero")]
     public void Float128MultiplyZeroByNonZeroShouldReturnSignedZero()
     {
-        Assert.Equal(Float128.Zero.RawBits, (Float128.Zero * Float128.One).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, (Float128.NegativeZero * Float128.One).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, (Float128.Zero * Float128.NegativeOne).RawBits);
-        Assert.Equal(Float128.Zero.RawBits, (Float128.NegativeZero * Float128.NegativeOne).RawBits);
+        Assert.Equal(Float128.Zero.Bits, (Float128.Zero * Float128.One).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, (Float128.NegativeZero * Float128.One).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, (Float128.Zero * Float128.NegativeOne).Bits);
+        Assert.Equal(Float128.Zero.Bits, (Float128.NegativeZero * Float128.NegativeOne).Bits);
     }
 
     // These data rows use only values that are exactly representable in IEEE 754 binary64 (and therefore
@@ -67,15 +67,15 @@ public sealed class Float128ArithmeticMultiplicationTests
     {
         Float128 actual = (Float128)left * (Float128)right;
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, actual.RawBits);
+        Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128.Multiply by one should return the value")]
     public void Float128MultiplyByOneShouldReturnValue()
     {
         Float128 value = 3.14;
-        Assert.Equal(value.RawBits, (value * Float128.One).RawBits);
-        Assert.Equal(value.RawBits, (Float128.One * value).RawBits);
+        Assert.Equal(value.Bits, (value * Float128.One).Bits);
+        Assert.Equal(value.Bits, (Float128.One * value).Bits);
     }
 
     [Fact(DisplayName = "Float128.Multiply by two should double the value")]
@@ -83,7 +83,7 @@ public sealed class Float128ArithmeticMultiplicationTests
     {
         Float128 value = 5.0;
         Float128 doubled = value * Float128.Two;
-        Assert.Equal(((Float128)10.0).RawBits, doubled.RawBits);
+        Assert.Equal(((Float128)10.0).Bits, doubled.Bits);
     }
 
     [Fact(DisplayName = "Float128.Multiply MaxValue by Two should overflow to infinity")]

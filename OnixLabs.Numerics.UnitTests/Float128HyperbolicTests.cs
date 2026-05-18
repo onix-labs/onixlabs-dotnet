@@ -21,8 +21,8 @@ public sealed class Float128HyperbolicTests
     [Fact(DisplayName = "Float128.Sinh of zero should preserve sign")]
     public void Float128SinhOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Sinh(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Sinh(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Sinh(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Sinh(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Sinh of infinities should preserve sign")]
@@ -83,8 +83,8 @@ public sealed class Float128HyperbolicTests
     [Fact(DisplayName = "Float128.Tanh of zero should preserve sign")]
     public void Float128TanhOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Tanh(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Tanh(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Tanh(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Tanh(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Tanh of infinity should saturate to ±1")]
@@ -127,8 +127,8 @@ public sealed class Float128HyperbolicTests
     [Fact(DisplayName = "Float128.Asinh of zero should preserve sign")]
     public void Float128AsinhOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Asinh(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Asinh(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Asinh(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Asinh(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Asinh of infinities should preserve sign")]
@@ -181,8 +181,8 @@ public sealed class Float128HyperbolicTests
     [Fact(DisplayName = "Float128.Atanh of zero should preserve sign")]
     public void Float128AtanhOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Atanh(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Atanh(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Atanh(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Atanh(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Atanh of ±1 should return ±infinity")]

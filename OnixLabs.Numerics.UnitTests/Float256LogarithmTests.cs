@@ -134,10 +134,10 @@ public sealed class Float256LogarithmTests
     [Fact(DisplayName = "Float256.LogP1 of zero should return zero with preserved sign")]
     public void Float256LogP1OfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.RawBits.Upper, Float256.LogP1(Float256.Zero).RawBits.Upper);
-        Assert.Equal(Float256.Zero.RawBits.Lower, Float256.LogP1(Float256.Zero).RawBits.Lower);
-        Assert.Equal(Float256.NegativeZero.RawBits.Upper, Float256.LogP1(Float256.NegativeZero).RawBits.Upper);
-        Assert.Equal(Float256.NegativeZero.RawBits.Lower, Float256.LogP1(Float256.NegativeZero).RawBits.Lower);
+        Assert.Equal(Float256.Zero.Bits.Upper, Float256.LogP1(Float256.Zero).Bits.Upper);
+        Assert.Equal(Float256.Zero.Bits.Lower, Float256.LogP1(Float256.Zero).Bits.Lower);
+        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.LogP1(Float256.NegativeZero).Bits.Upper);
+        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.LogP1(Float256.NegativeZero).Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.LogP1 of negative one should return negative infinity")]

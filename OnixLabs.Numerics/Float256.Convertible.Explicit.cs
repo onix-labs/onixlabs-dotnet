@@ -254,7 +254,7 @@ public readonly partial struct Float256
         Float256 truncated = Truncate(value);
         if (IsZero(truncated)) return BigInteger.Zero;
 
-        DecomposeFinite(truncated.RawBits, out bool sign, out int unbiasedExponent, out UInt256 significand);
+        DecomposeFinite(truncated.Bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         BigInteger significandBig = (BigInteger)significand;
@@ -342,7 +342,7 @@ public readonly partial struct Float256
         Float256 truncated = Truncate(value);
         if (IsZero(truncated)) return ExtractionStatus.Ok;
 
-        DecomposeFinite(truncated.RawBits, out _, out int unbiasedExponent, out UInt256 significand);
+        DecomposeFinite(truncated.Bits, out _, out int unbiasedExponent, out UInt256 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         if (unbiasedExponent >= 128) return ExtractionStatus.Overflow;
@@ -459,7 +459,7 @@ public readonly partial struct Float256
         if (IsNegativeInfinity(value)) return double.NegativeInfinity;
         if (IsZero(value)) return IsNegative(value) ? -0.0 : 0.0;
 
-        DecomposeFinite(value.RawBits, out bool sign, out int unbiasedExponent, out UInt256 significand);
+        DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         const int doubleBias = 1023;
@@ -553,7 +553,7 @@ public readonly partial struct Float256
         if (IsNegativeInfinity(value)) return Float128.NegativeInfinity;
         if (IsZero(value)) return IsNegative(value) ? Float128.NegativeZero : Float128.Zero;
 
-        DecomposeFinite(value.RawBits, out bool sign, out int unbiasedExponent, out UInt256 significand);
+        DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         const int targetSignificandBits = Float128.TrailingSignificandBits;

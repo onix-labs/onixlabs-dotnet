@@ -21,57 +21,57 @@ public sealed class Float128ArithmeticBitIncrementTests
     [Fact(DisplayName = "Float128.BitIncrement of positive zero should return Epsilon")]
     public void Float128BitIncrementOfPositiveZeroShouldReturnEpsilon()
     {
-        Assert.Equal(Float128.Epsilon.RawBits, Float128.BitIncrement(Float128.Zero).RawBits);
+        Assert.Equal(Float128.Epsilon.Bits, Float128.BitIncrement(Float128.Zero).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitIncrement of negative zero should return Epsilon")]
     public void Float128BitIncrementOfNegativeZeroShouldReturnEpsilon()
     {
-        Assert.Equal(Float128.Epsilon.RawBits, Float128.BitIncrement(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Epsilon.Bits, Float128.BitIncrement(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitIncrement of MaxValue should return PositiveInfinity")]
     public void Float128BitIncrementOfMaxValueShouldReturnPositiveInfinity()
     {
-        Assert.Equal(Float128.PositiveInfinity.RawBits, Float128.BitIncrement(Float128.MaxValue).RawBits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, Float128.BitIncrement(Float128.MaxValue).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitIncrement of PositiveInfinity should return PositiveInfinity")]
     public void Float128BitIncrementOfPositiveInfinityShouldReturnPositiveInfinity()
     {
-        Assert.Equal(Float128.PositiveInfinity.RawBits, Float128.BitIncrement(Float128.PositiveInfinity).RawBits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, Float128.BitIncrement(Float128.PositiveInfinity).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitIncrement of NegativeInfinity should return MinValue")]
     public void Float128BitIncrementOfNegativeInfinityShouldReturnMinValue()
     {
-        Assert.Equal(Float128.MinValue.RawBits, Float128.BitIncrement(Float128.NegativeInfinity).RawBits);
+        Assert.Equal(Float128.MinValue.Bits, Float128.BitIncrement(Float128.NegativeInfinity).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitIncrement of -Epsilon should return NegativeZero")]
     public void Float128BitIncrementOfNegativeEpsilonShouldReturnNegativeZero()
     {
         Float128 negativeEpsilon = new(UInt128.One | (UInt128.One << 127));
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.BitIncrement(negativeEpsilon).RawBits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.BitIncrement(negativeEpsilon).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitDecrement of positive zero should return -Epsilon")]
     public void Float128BitDecrementOfPositiveZeroShouldReturnNegativeEpsilon()
     {
         UInt128 expectedNegativeEpsilon = UInt128.One | (UInt128.One << 127);
-        Assert.Equal(expectedNegativeEpsilon, Float128.BitDecrement(Float128.Zero).RawBits);
+        Assert.Equal(expectedNegativeEpsilon, Float128.BitDecrement(Float128.Zero).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitDecrement of MinValue should return NegativeInfinity")]
     public void Float128BitDecrementOfMinValueShouldReturnNegativeInfinity()
     {
-        Assert.Equal(Float128.NegativeInfinity.RawBits, Float128.BitDecrement(Float128.MinValue).RawBits);
+        Assert.Equal(Float128.NegativeInfinity.Bits, Float128.BitDecrement(Float128.MinValue).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitDecrement of PositiveInfinity should return MaxValue")]
     public void Float128BitDecrementOfPositiveInfinityShouldReturnMaxValue()
     {
-        Assert.Equal(Float128.MaxValue.RawBits, Float128.BitDecrement(Float128.PositiveInfinity).RawBits);
+        Assert.Equal(Float128.MaxValue.Bits, Float128.BitDecrement(Float128.PositiveInfinity).Bits);
     }
 
     [Fact(DisplayName = "Float128.BitIncrement and BitDecrement of NaN should remain NaN")]
@@ -84,7 +84,7 @@ public sealed class Float128ArithmeticBitIncrementTests
     [Fact(DisplayName = "Float128.BitIncrement followed by BitDecrement should be a no-op for finite values")]
     public void Float128BitIncrementBitDecrementShouldBeNoOpForFinite()
     {
-        Assert.Equal(Float128.One.RawBits, Float128.BitDecrement(Float128.BitIncrement(Float128.One)).RawBits);
-        Assert.Equal(Float128.NegativeOne.RawBits, Float128.BitDecrement(Float128.BitIncrement(Float128.NegativeOne)).RawBits);
+        Assert.Equal(Float128.One.Bits, Float128.BitDecrement(Float128.BitIncrement(Float128.One)).Bits);
+        Assert.Equal(Float128.NegativeOne.Bits, Float128.BitDecrement(Float128.BitIncrement(Float128.NegativeOne)).Bits);
     }
 }

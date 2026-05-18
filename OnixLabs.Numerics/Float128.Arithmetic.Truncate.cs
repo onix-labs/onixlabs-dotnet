@@ -25,7 +25,7 @@ public readonly partial struct Float128
     /// <returns>Returns the integral component of <paramref name="value"/>; NaN, ±infinity and ±zero are returned unchanged.</returns>
     public static Float128 Truncate(Float128 value)
     {
-        UInt128 bits = value.RawBits;
+        UInt128 bits = value.Bits;
 
         if (!IsFinite(value)) return value;
         if (IsZero(value)) return value;

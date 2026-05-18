@@ -132,7 +132,7 @@ public readonly partial struct Float128
         ulong magnitude = value >= 0L ? (ulong)value : ((ulong)~value) + 1UL;
         Float128 positive = FromUInt64(magnitude);
 
-        return value < 0L ? new Float128(positive.RawBits | SignMask) : positive;
+        return value < 0L ? new Float128(positive.Bits | SignMask) : positive;
     }
 
     /// <summary>
@@ -298,7 +298,7 @@ public readonly partial struct Float128
         UInt128 magnitude = sign ? UInt128.Zero - (UInt128)value : (UInt128)value;
         Float128 positive = FromUInt128(magnitude);
 
-        return sign ? new Float128(positive.RawBits | SignMask) : positive;
+        return sign ? new Float128(positive.Bits | SignMask) : positive;
     }
 
     /// <summary>
@@ -385,7 +385,7 @@ public readonly partial struct Float128
         UInt128 magnitude = ((UInt128)high << 64) | ((UInt128)mid << 32) | low;
         Float128 magnitudeFloat = FromUInt128(magnitude);
         Float128 result = scale == 0 ? magnitudeFloat : magnitudeFloat / PowersOfTen[scale];
-        return sign ? new Float128(result.RawBits | SignMask) : result;
+        return sign ? new Float128(result.Bits | SignMask) : result;
     }
 
     /// <summary>

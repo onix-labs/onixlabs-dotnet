@@ -21,7 +21,7 @@ public readonly partial struct Float256
     /// <summary>Returns the absolute value of the specified <see cref="Float256"/> value.</summary>
     /// <param name="value">The value whose absolute value is to be computed.</param>
     /// <returns>Returns the absolute value of <paramref name="value"/>.</returns>
-    public static Float256 Abs(Float256 value) => new(value.RawBits & ~SignMask);
+    public static Float256 Abs(Float256 value) => new(value.Bits & ~SignMask);
 
     /// <summary>Returns the unary negation of the specified <see cref="Float256"/> value.</summary>
     /// <param name="value">The value to negate.</param>

@@ -56,8 +56,8 @@ public sealed class Float128ArithmeticDivisionTests
     [Fact(DisplayName = "Float128.Divide finite by infinity should return signed zero")]
     public void Float128DivideFiniteByInfinityShouldReturnSignedZero()
     {
-        Assert.Equal(Float128.Zero.RawBits, (Float128.One / Float128.PositiveInfinity).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, (Float128.NegativeOne / Float128.PositiveInfinity).RawBits);
+        Assert.Equal(Float128.Zero.Bits, (Float128.One / Float128.PositiveInfinity).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, (Float128.NegativeOne / Float128.PositiveInfinity).Bits);
     }
 
     [Theory(DisplayName = "Float128.Divide should match double division for exact double values")]
@@ -74,7 +74,7 @@ public sealed class Float128ArithmeticDivisionTests
     {
         Float128 actual = (Float128)left / (Float128)right;
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, actual.RawBits);
+        Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128.Divide by self should return one")]
@@ -82,14 +82,14 @@ public sealed class Float128ArithmeticDivisionTests
     {
         Float128 value = 7.5;
         Float128 result = value / value;
-        Assert.Equal(Float128.One.RawBits, result.RawBits);
+        Assert.Equal(Float128.One.Bits, result.Bits);
     }
 
     [Fact(DisplayName = "Float128.Divide by one should return the value")]
     public void Float128DivideByOneShouldReturnValue()
     {
         Float128 value = 3.14;
-        Assert.Equal(value.RawBits, (value / Float128.One).RawBits);
+        Assert.Equal(value.Bits, (value / Float128.One).Bits);
     }
 
     [Fact(DisplayName = "Float128.Divide a value by its double should produce 0.5")]
@@ -97,6 +97,6 @@ public sealed class Float128ArithmeticDivisionTests
     {
         Float128 value = 5.0;
         Float128 result = value / (value + value);
-        Assert.Equal(((Float128)0.5).RawBits, result.RawBits);
+        Assert.Equal(((Float128)0.5).Bits, result.Bits);
     }
 }

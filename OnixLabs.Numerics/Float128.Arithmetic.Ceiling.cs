@@ -27,13 +27,13 @@ public readonly partial struct Float128
     {
         Float128 truncated = Truncate(value);
 
-        if (truncated.RawBits == value.RawBits)
+        if (truncated.Bits == value.Bits)
             return truncated;
 
         if (IsNegative(value))
             return truncated;
 
-        UInt128 absoluteTruncatedBits = truncated.RawBits & ~SignMask;
+        UInt128 absoluteTruncatedBits = truncated.Bits & ~SignMask;
         if (absoluteTruncatedBits == UInt128.Zero) return One;
 
         UInt128 incrementedAbsolute = IncrementIntegerMagnitudeBits(absoluteTruncatedBits);

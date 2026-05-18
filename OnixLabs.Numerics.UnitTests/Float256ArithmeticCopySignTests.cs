@@ -19,30 +19,30 @@ public sealed class Float256ArithmeticCopySignTests
     [Fact(DisplayName = "Float256.CopySign should copy sign of positive sign argument")]
     public void Float256CopySignShouldCopyPositiveSign()
     {
-        Assert.Equal(Float256.One.RawBits.Upper, Float256.CopySign(Float256.NegativeOne, Float256.One).RawBits.Upper);
-        Assert.Equal(Float256.One.RawBits.Lower, Float256.CopySign(Float256.NegativeOne, Float256.One).RawBits.Lower);
-        Assert.Equal(Float256.One.RawBits.Upper, Float256.CopySign(Float256.One, Float256.One).RawBits.Upper);
-        Assert.Equal(Float256.One.RawBits.Lower, Float256.CopySign(Float256.One, Float256.One).RawBits.Lower);
-        Assert.Equal(Float256.MaxValue.RawBits.Upper, Float256.CopySign(Float256.MinValue, Float256.MaxValue).RawBits.Upper);
-        Assert.Equal(Float256.MaxValue.RawBits.Lower, Float256.CopySign(Float256.MinValue, Float256.MaxValue).RawBits.Lower);
+        Assert.Equal(Float256.One.Bits.Upper, Float256.CopySign(Float256.NegativeOne, Float256.One).Bits.Upper);
+        Assert.Equal(Float256.One.Bits.Lower, Float256.CopySign(Float256.NegativeOne, Float256.One).Bits.Lower);
+        Assert.Equal(Float256.One.Bits.Upper, Float256.CopySign(Float256.One, Float256.One).Bits.Upper);
+        Assert.Equal(Float256.One.Bits.Lower, Float256.CopySign(Float256.One, Float256.One).Bits.Lower);
+        Assert.Equal(Float256.MaxValue.Bits.Upper, Float256.CopySign(Float256.MinValue, Float256.MaxValue).Bits.Upper);
+        Assert.Equal(Float256.MaxValue.Bits.Lower, Float256.CopySign(Float256.MinValue, Float256.MaxValue).Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.CopySign should copy sign of negative sign argument")]
     public void Float256CopySignShouldCopyNegativeSign()
     {
-        Assert.Equal(Float256.NegativeOne.RawBits.Upper, Float256.CopySign(Float256.One, Float256.NegativeOne).RawBits.Upper);
-        Assert.Equal(Float256.NegativeOne.RawBits.Lower, Float256.CopySign(Float256.One, Float256.NegativeOne).RawBits.Lower);
-        Assert.Equal(Float256.NegativeOne.RawBits.Upper, Float256.CopySign(Float256.NegativeOne, Float256.NegativeOne).RawBits.Upper);
-        Assert.Equal(Float256.NegativeOne.RawBits.Lower, Float256.CopySign(Float256.NegativeOne, Float256.NegativeOne).RawBits.Lower);
-        Assert.Equal(Float256.MinValue.RawBits.Upper, Float256.CopySign(Float256.MaxValue, Float256.MinValue).RawBits.Upper);
-        Assert.Equal(Float256.MinValue.RawBits.Lower, Float256.CopySign(Float256.MaxValue, Float256.MinValue).RawBits.Lower);
+        Assert.Equal(Float256.NegativeOne.Bits.Upper, Float256.CopySign(Float256.One, Float256.NegativeOne).Bits.Upper);
+        Assert.Equal(Float256.NegativeOne.Bits.Lower, Float256.CopySign(Float256.One, Float256.NegativeOne).Bits.Lower);
+        Assert.Equal(Float256.NegativeOne.Bits.Upper, Float256.CopySign(Float256.NegativeOne, Float256.NegativeOne).Bits.Upper);
+        Assert.Equal(Float256.NegativeOne.Bits.Lower, Float256.CopySign(Float256.NegativeOne, Float256.NegativeOne).Bits.Lower);
+        Assert.Equal(Float256.MinValue.Bits.Upper, Float256.CopySign(Float256.MaxValue, Float256.MinValue).Bits.Upper);
+        Assert.Equal(Float256.MinValue.Bits.Lower, Float256.CopySign(Float256.MaxValue, Float256.MinValue).Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.CopySign with negative zero sign should produce negative result")]
     public void Float256CopySignWithNegativeZeroSign()
     {
-        Assert.Equal(Float256.NegativeOne.RawBits.Upper, Float256.CopySign(Float256.One, Float256.NegativeZero).RawBits.Upper);
-        Assert.Equal(Float256.NegativeOne.RawBits.Lower, Float256.CopySign(Float256.One, Float256.NegativeZero).RawBits.Lower);
+        Assert.Equal(Float256.NegativeOne.Bits.Upper, Float256.CopySign(Float256.One, Float256.NegativeZero).Bits.Upper);
+        Assert.Equal(Float256.NegativeOne.Bits.Lower, Float256.CopySign(Float256.One, Float256.NegativeZero).Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.CopySign should preserve NaN magnitude")]

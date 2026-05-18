@@ -24,8 +24,8 @@ public readonly partial struct Float256
     /// <returns>Returns a <see cref="Float256"/> with the magnitude of <paramref name="value"/> and the sign of <paramref name="sign"/>.</returns>
     public static Float256 CopySign(Float256 value, Float256 sign)
     {
-        UInt256 magnitude = value.RawBits & ~SignMask;
-        UInt256 signBit = sign.RawBits & SignMask;
+        UInt256 magnitude = value.Bits & ~SignMask;
+        UInt256 signBit = sign.Bits & SignMask;
         return new Float256(magnitude | signBit);
     }
 }

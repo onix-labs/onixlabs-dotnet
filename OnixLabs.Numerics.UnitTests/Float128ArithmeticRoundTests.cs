@@ -39,7 +39,7 @@ public sealed class Float128ArithmeticRoundTests
     {
         Float128 actual = Float128.Round(value);
         Float128 expected = double.Round(value);
-        Assert.Equal(expected.RawBits, actual.RawBits);
+        Assert.Equal(expected.Bits, actual.Bits);
     }
 
     [Theory(DisplayName = "Float128.Round with AwayFromZero should match double.Round")]
@@ -53,7 +53,7 @@ public sealed class Float128ArithmeticRoundTests
     {
         Float128 actual = Float128.Round(value, MidpointRounding.AwayFromZero);
         Float128 expected = double.Round(value, MidpointRounding.AwayFromZero);
-        Assert.Equal(expected.RawBits, actual.RawBits);
+        Assert.Equal(expected.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128.Round with ToZero should match Truncate")]
@@ -63,7 +63,7 @@ public sealed class Float128ArithmeticRoundTests
         {
             Float128 actual = Float128.Round(value, MidpointRounding.ToZero);
             Float128 expected = Float128.Truncate(value);
-            Assert.Equal(expected.RawBits, actual.RawBits);
+            Assert.Equal(expected.Bits, actual.Bits);
         }
     }
 
@@ -74,7 +74,7 @@ public sealed class Float128ArithmeticRoundTests
         {
             Float128 actual = Float128.Round(value, MidpointRounding.ToNegativeInfinity);
             Float128 expected = Float128.Floor(value);
-            Assert.Equal(expected.RawBits, actual.RawBits);
+            Assert.Equal(expected.Bits, actual.Bits);
         }
     }
 
@@ -85,7 +85,7 @@ public sealed class Float128ArithmeticRoundTests
         {
             Float128 actual = Float128.Round(value, MidpointRounding.ToPositiveInfinity);
             Float128 expected = Float128.Ceiling(value);
-            Assert.Equal(expected.RawBits, actual.RawBits);
+            Assert.Equal(expected.Bits, actual.Bits);
         }
     }
 
@@ -98,10 +98,10 @@ public sealed class Float128ArithmeticRoundTests
     [Fact(DisplayName = "Float128.Round of special values should preserve them")]
     public void Float128RoundOfSpecialValuesShouldPreserve()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Round(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Round(Float128.NegativeZero).RawBits);
-        Assert.Equal(Float128.PositiveInfinity.RawBits, Float128.Round(Float128.PositiveInfinity).RawBits);
-        Assert.Equal(Float128.NegativeInfinity.RawBits, Float128.Round(Float128.NegativeInfinity).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Round(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Round(Float128.NegativeZero).Bits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, Float128.Round(Float128.PositiveInfinity).Bits);
+        Assert.Equal(Float128.NegativeInfinity.Bits, Float128.Round(Float128.NegativeInfinity).Bits);
         Assert.True(Float128.IsNaN(Float128.Round(Float128.NaN)));
     }
 

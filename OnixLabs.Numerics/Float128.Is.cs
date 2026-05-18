@@ -24,56 +24,56 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is NaN; otherwise, <see langword="false"/>.</returns>
-    public static bool IsNaN(Float128 value) => IsNaNBits(value.RawBits);
+    public static bool IsNaN(Float128 value) => IsNaNBits(value.Bits);
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value represents positive or negative infinity.
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is infinite; otherwise, <see langword="false"/>.</returns>
-    public static bool IsInfinity(Float128 value) => IsInfinityBits(value.RawBits);
+    public static bool IsInfinity(Float128 value) => IsInfinityBits(value.Bits);
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value represents positive infinity.
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is positive infinity; otherwise, <see langword="false"/>.</returns>
-    public static bool IsPositiveInfinity(Float128 value) => value.RawBits == PositiveInfinity.RawBits;
+    public static bool IsPositiveInfinity(Float128 value) => value.Bits == PositiveInfinity.Bits;
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value represents negative infinity.
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is negative infinity; otherwise, <see langword="false"/>.</returns>
-    public static bool IsNegativeInfinity(Float128 value) => value.RawBits == NegativeInfinity.RawBits;
+    public static bool IsNegativeInfinity(Float128 value) => value.Bits == NegativeInfinity.Bits;
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value represents a finite value.
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is finite; otherwise, <see langword="false"/>.</returns>
-    public static bool IsFinite(Float128 value) => IsFiniteBits(value.RawBits);
+    public static bool IsFinite(Float128 value) => IsFiniteBits(value.Bits);
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value represents a normal value.
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is a normal value; otherwise, <see langword="false"/>.</returns>
-    public static bool IsNormal(Float128 value) => IsNormalBits(value.RawBits);
+    public static bool IsNormal(Float128 value) => IsNormalBits(value.Bits);
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value represents a subnormal, non-zero value.
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is a subnormal, non-zero value; otherwise, <see langword="false"/>.</returns>
-    public static bool IsSubnormal(Float128 value) => IsSubnormalBits(value.RawBits);
+    public static bool IsSubnormal(Float128 value) => IsSubnormalBits(value.Bits);
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value represents a zero (positive or negative).
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is zero; otherwise, <see langword="false"/>.</returns>
-    public static bool IsZero(Float128 value) => IsZeroBits(value.RawBits);
+    public static bool IsZero(Float128 value) => IsZeroBits(value.Bits);
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value has its sign bit set.
@@ -84,7 +84,7 @@ public readonly partial struct Float128
     /// This predicate inspects only the sign bit; it returns <see langword="true"/> for negative zero
     /// and for negative NaN bit patterns, matching the behaviour of <see cref="double.IsNegative(double)"/>.
     /// </remarks>
-    public static bool IsNegative(Float128 value) => ExtractSignBit(value.RawBits);
+    public static bool IsNegative(Float128 value) => ExtractSignBit(value.Bits);
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value has its sign bit cleared.
@@ -95,7 +95,7 @@ public readonly partial struct Float128
     /// This predicate inspects only the sign bit; it returns <see langword="true"/> for positive zero
     /// and for canonical NaN bit patterns, matching the behaviour of <see cref="double.IsPositive(double)"/>.
     /// </remarks>
-    public static bool IsPositive(Float128 value) => !ExtractSignBit(value.RawBits);
+    public static bool IsPositive(Float128 value) => !ExtractSignBit(value.Bits);
 
     /// <summary>
     /// Determines whether the specified <see cref="Float128"/> value represents an integral value.
@@ -104,7 +104,7 @@ public readonly partial struct Float128
     /// <returns>Returns <see langword="true"/> if the specified value is an integral value; otherwise, <see langword="false"/>.</returns>
     public static bool IsInteger(Float128 value)
     {
-        UInt128 bits = value.RawBits;
+        UInt128 bits = value.Bits;
         uint biased = ExtractBiasedExponent(bits);
 
         if (biased == MaxBiasedExponent) return false;
@@ -128,15 +128,15 @@ public readonly partial struct Float128
     public static bool IsEvenInteger(Float128 value)
     {
         if (!IsInteger(value)) return false;
-        if (IsZeroBits(value.RawBits)) return true;
+        if (IsZeroBits(value.Bits)) return true;
 
-        int unbiased = (int)ExtractBiasedExponent(value.RawBits) - ExponentBias;
+        int unbiased = (int)ExtractBiasedExponent(value.Bits) - ExponentBias;
 
         if (unbiased > TrailingSignificandBits) return true;
         if (unbiased == 0) return false;
 
         int unitBitPosition = TrailingSignificandBits - unbiased;
-        return (ExtractTrailingSignificand(value.RawBits) & (UInt128.One << unitBitPosition)) == UInt128.Zero;
+        return (ExtractTrailingSignificand(value.Bits) & (UInt128.One << unitBitPosition)) == UInt128.Zero;
     }
 
     /// <summary>
@@ -147,15 +147,15 @@ public readonly partial struct Float128
     public static bool IsOddInteger(Float128 value)
     {
         if (!IsInteger(value)) return false;
-        if (IsZeroBits(value.RawBits)) return false;
+        if (IsZeroBits(value.Bits)) return false;
 
-        int unbiased = (int)ExtractBiasedExponent(value.RawBits) - ExponentBias;
+        int unbiased = (int)ExtractBiasedExponent(value.Bits) - ExponentBias;
 
         if (unbiased > TrailingSignificandBits) return false;
         if (unbiased == 0) return true;
 
         int unitBitPosition = TrailingSignificandBits - unbiased;
-        return (ExtractTrailingSignificand(value.RawBits) & (UInt128.One << unitBitPosition)) != UInt128.Zero;
+        return (ExtractTrailingSignificand(value.Bits) & (UInt128.One << unitBitPosition)) != UInt128.Zero;
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public readonly partial struct Float128
         if (IsNegative(value)) return false;
         if (IsZero(value)) return false;
 
-        UInt128 bits = value.RawBits;
+        UInt128 bits = value.Bits;
         uint biased = ExtractBiasedExponent(bits);
         UInt128 trailing = ExtractTrailingSignificand(bits);
 

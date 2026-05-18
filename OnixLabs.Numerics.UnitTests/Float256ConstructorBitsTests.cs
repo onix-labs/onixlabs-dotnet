@@ -41,7 +41,7 @@ public sealed class Float256ConstructorBitsTests
         UInt256 expected = new(expectedHigh, expectedLow);
 
         // When
-        UInt256 actual = new Float256(expected).RawBits;
+        UInt256 actual = new Float256(expected).Bits;
 
         // Then
         Assert.Equal(expected, actual);

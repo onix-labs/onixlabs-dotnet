@@ -39,7 +39,7 @@ public sealed class Float128ConstructorBitsTests
         UInt128 expected = new(high, low);
 
         // When
-        UInt128 actual = new Float128(expected).RawBits;
+        UInt128 actual = new Float128(expected).Bits;
 
         // Then
         Assert.Equal(expected, actual);

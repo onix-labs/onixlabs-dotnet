@@ -48,8 +48,8 @@ public sealed class Float256ParseTests
     {
         Float256 parsed = Float256.Parse(input, CultureInfo.InvariantCulture);
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits.Upper, parsed.RawBits.Upper);
-        Assert.Equal(expectedFloat.RawBits.Lower, parsed.RawBits.Lower);
+        Assert.Equal(expectedFloat.Bits.Upper, parsed.Bits.Upper);
+        Assert.Equal(expectedFloat.Bits.Lower, parsed.Bits.Lower);
     }
 
     [Theory(DisplayName = "Float256.Parse of half-precision decimals should produce exact values")]
@@ -63,8 +63,8 @@ public sealed class Float256ParseTests
     {
         Float256 parsed = Float256.Parse(input, CultureInfo.InvariantCulture);
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits.Upper, parsed.RawBits.Upper);
-        Assert.Equal(expectedFloat.RawBits.Lower, parsed.RawBits.Lower);
+        Assert.Equal(expectedFloat.Bits.Upper, parsed.Bits.Upper);
+        Assert.Equal(expectedFloat.Bits.Lower, parsed.Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Parse of scientific notation should work")]
@@ -72,16 +72,16 @@ public sealed class Float256ParseTests
     {
         Float256 parsed = Float256.Parse("1.5E+10", CultureInfo.InvariantCulture);
         Float256 expected = 15000000000.0;
-        Assert.Equal(expected.RawBits.Upper, parsed.RawBits.Upper);
-        Assert.Equal(expected.RawBits.Lower, parsed.RawBits.Lower);
+        Assert.Equal(expected.Bits.Upper, parsed.Bits.Upper);
+        Assert.Equal(expected.Bits.Lower, parsed.Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.TryParse should return true for valid input")]
     public void Float256TryParseShouldReturnTrueForValidInput()
     {
         Assert.True(Float256.TryParse("1.5", CultureInfo.InvariantCulture, out Float256 result));
-        Assert.Equal(((Float256)1.5).RawBits.Upper, result.RawBits.Upper);
-        Assert.Equal(((Float256)1.5).RawBits.Lower, result.RawBits.Lower);
+        Assert.Equal(((Float256)1.5).Bits.Upper, result.Bits.Upper);
+        Assert.Equal(((Float256)1.5).Bits.Lower, result.Bits.Lower);
     }
 
     [Fact(DisplayName = "Float256.TryParse should return false for invalid input")]
@@ -106,7 +106,7 @@ public sealed class Float256ParseTests
             CultureInfo.InvariantCulture);
         Assert.True(Float256.IsFinite(pi));
         Assert.True(Float256.IsPositive(pi));
-        Assert.Equal(Float256.Pi.RawBits.Upper, pi.RawBits.Upper);
-        Assert.Equal(Float256.Pi.RawBits.Lower, pi.RawBits.Lower);
+        Assert.Equal(Float256.Pi.Bits.Upper, pi.Bits.Upper);
+        Assert.Equal(Float256.Pi.Bits.Lower, pi.Bits.Lower);
     }
 }

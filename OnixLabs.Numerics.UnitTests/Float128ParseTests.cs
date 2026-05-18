@@ -48,7 +48,7 @@ public sealed class Float128ParseTests
     {
         Float128 parsed = Float128.Parse(input, CultureInfo.InvariantCulture);
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, parsed.RawBits);
+        Assert.Equal(expectedFloat.Bits, parsed.Bits);
     }
 
     [Theory(DisplayName = "Float128.Parse of half-precision decimals should produce exact values")]
@@ -62,7 +62,7 @@ public sealed class Float128ParseTests
     {
         Float128 parsed = Float128.Parse(input, CultureInfo.InvariantCulture);
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, parsed.RawBits);
+        Assert.Equal(expectedFloat.Bits, parsed.Bits);
     }
 
     [Fact(DisplayName = "Float128.Parse of scientific notation should work")]
@@ -70,14 +70,14 @@ public sealed class Float128ParseTests
     {
         Float128 parsed = Float128.Parse("1.5E+10", CultureInfo.InvariantCulture);
         Float128 expected = 15000000000.0;
-        Assert.Equal(expected.RawBits, parsed.RawBits);
+        Assert.Equal(expected.Bits, parsed.Bits);
     }
 
     [Fact(DisplayName = "Float128.TryParse should return true for valid input")]
     public void Float128TryParseShouldReturnTrueForValidInput()
     {
         Assert.True(Float128.TryParse("1.5", CultureInfo.InvariantCulture, out Float128 result));
-        Assert.Equal(((Float128)1.5).RawBits, result.RawBits);
+        Assert.Equal(((Float128)1.5).Bits, result.Bits);
     }
 
     [Fact(DisplayName = "Float128.TryParse should return false for invalid input")]
@@ -98,6 +98,6 @@ public sealed class Float128ParseTests
         Float128 pi = Float128.Parse("3.1415926535897932384626433832795028841972", CultureInfo.InvariantCulture);
         Assert.True(Float128.IsFinite(pi));
         Assert.True(Float128.IsPositive(pi));
-        Assert.Equal(Float128.Pi.RawBits, pi.RawBits);
+        Assert.Equal(Float128.Pi.Bits, pi.Bits);
     }
 }

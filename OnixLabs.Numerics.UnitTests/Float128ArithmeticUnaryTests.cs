@@ -19,22 +19,22 @@ public sealed class Float128ArithmeticUnaryTests
     [Fact(DisplayName = "Float128 unary plus should return the original value")]
     public void Float128UnaryPlusShouldReturnOriginalValue()
     {
-        Assert.Equal(Float128.One.RawBits, (+Float128.One).RawBits);
-        Assert.Equal(Float128.NegativeOne.RawBits, (+Float128.NegativeOne).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, (+Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.One.Bits, (+Float128.One).Bits);
+        Assert.Equal(Float128.NegativeOne.Bits, (+Float128.NegativeOne).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, (+Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128 unary minus should flip the sign bit")]
     public void Float128UnaryMinusShouldFlipSignBit()
     {
-        Assert.Equal(Float128.NegativeOne.RawBits, (-Float128.One).RawBits);
-        Assert.Equal(Float128.One.RawBits, (-Float128.NegativeOne).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, (-Float128.Zero).RawBits);
-        Assert.Equal(Float128.Zero.RawBits, (-Float128.NegativeZero).RawBits);
-        Assert.Equal(Float128.NegativeInfinity.RawBits, (-Float128.PositiveInfinity).RawBits);
-        Assert.Equal(Float128.PositiveInfinity.RawBits, (-Float128.NegativeInfinity).RawBits);
-        Assert.Equal(Float128.MinValue.RawBits, (-Float128.MaxValue).RawBits);
-        Assert.Equal(Float128.MaxValue.RawBits, (-Float128.MinValue).RawBits);
+        Assert.Equal(Float128.NegativeOne.Bits, (-Float128.One).Bits);
+        Assert.Equal(Float128.One.Bits, (-Float128.NegativeOne).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, (-Float128.Zero).Bits);
+        Assert.Equal(Float128.Zero.Bits, (-Float128.NegativeZero).Bits);
+        Assert.Equal(Float128.NegativeInfinity.Bits, (-Float128.PositiveInfinity).Bits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, (-Float128.NegativeInfinity).Bits);
+        Assert.Equal(Float128.MinValue.Bits, (-Float128.MaxValue).Bits);
+        Assert.Equal(Float128.MaxValue.Bits, (-Float128.MinValue).Bits);
     }
 
     [Fact(DisplayName = "Float128 unary minus of NaN should remain NaN")]
@@ -46,7 +46,7 @@ public sealed class Float128ArithmeticUnaryTests
     [Fact(DisplayName = "Float128.UnaryAdd and UnarySubtract should mirror the operators")]
     public void Float128UnaryNamedMethodsShouldMirrorOperators()
     {
-        Assert.Equal((+Float128.One).RawBits, Float128.UnaryAdd(Float128.One).RawBits);
-        Assert.Equal((-Float128.One).RawBits, Float128.UnarySubtract(Float128.One).RawBits);
+        Assert.Equal((+Float128.One).Bits, Float128.UnaryAdd(Float128.One).Bits);
+        Assert.Equal((-Float128.One).Bits, Float128.UnarySubtract(Float128.One).Bits);
     }
 }

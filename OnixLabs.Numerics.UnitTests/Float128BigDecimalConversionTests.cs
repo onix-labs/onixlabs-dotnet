@@ -58,7 +58,7 @@ public sealed class Float128BigDecimalConversionTests
     [Fact(DisplayName = "BigDecimal to Float128 of zero should produce Float128.Zero")]
     public void BigDecimalToFloat128OfZeroShouldProduceZero()
     {
-        Assert.Equal(Float128.Zero.RawBits, ((Float128)BigDecimal.Zero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, ((Float128)BigDecimal.Zero).Bits);
     }
 
     [Theory(DisplayName = "BigDecimal to Float128 of small integers should be exact")]
@@ -74,7 +74,7 @@ public sealed class Float128BigDecimalConversionTests
         BigDecimal bd = value;
         Float128 wide = (Float128)bd;
         Float128 expected = value;
-        Assert.Equal(expected.RawBits, wide.RawBits);
+        Assert.Equal(expected.Bits, wide.Bits);
     }
 
     [Theory(DisplayName = "Float128 round-trips through BigDecimal preserve representable values")]
@@ -92,6 +92,6 @@ public sealed class Float128BigDecimalConversionTests
         Float128 original = value;
         BigDecimal bd = (BigDecimal)original;
         Float128 roundTripped = (Float128)bd;
-        Assert.Equal(original.RawBits, roundTripped.RawBits);
+        Assert.Equal(original.Bits, roundTripped.Bits);
     }
 }

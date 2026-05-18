@@ -103,7 +103,7 @@ public sealed class Float128Ieee754Tests
     [Fact(DisplayName = "Float128.AllBitsSet should have every bit of the raw representation set")]
     public void Float128AllBitsSetShouldEqualUInt128MaxValue()
     {
-        Assert.Equal(System.UInt128.MaxValue, Float128.AllBitsSet.RawBits);
+        Assert.Equal(System.UInt128.MaxValue, Float128.AllBitsSet.Bits);
     }
 
     [Fact(DisplayName = "Float128 bitwise AND should AND the raw bits")]
@@ -112,7 +112,7 @@ public sealed class Float128Ieee754Tests
         Float128 left = new(new System.UInt128(0xFF00FF00_FF00FF00UL, 0xFF00FF00_FF00FF00UL));
         Float128 right = new(new System.UInt128(0xFFFF0000_FFFF0000UL, 0xFFFF0000_FFFF0000UL));
         Float128 result = left & right;
-        Assert.Equal(left.RawBits & right.RawBits, result.RawBits);
+        Assert.Equal(left.Bits & right.Bits, result.Bits);
     }
 
     [Fact(DisplayName = "Float128 bitwise OR should OR the raw bits")]
@@ -121,7 +121,7 @@ public sealed class Float128Ieee754Tests
         Float128 left = new(new System.UInt128(0x0000FFFF_0000FFFFUL, 0x0000FFFF_0000FFFFUL));
         Float128 right = new(new System.UInt128(0xFFFF0000_FFFF0000UL, 0xFFFF0000_FFFF0000UL));
         Float128 result = left | right;
-        Assert.Equal(left.RawBits | right.RawBits, result.RawBits);
+        Assert.Equal(left.Bits | right.Bits, result.Bits);
     }
 
     [Fact(DisplayName = "Float128 bitwise XOR should XOR the raw bits")]
@@ -130,13 +130,13 @@ public sealed class Float128Ieee754Tests
         Float128 left = new(new System.UInt128(0xAAAAAAAA_AAAAAAAAUL, 0xAAAAAAAA_AAAAAAAAUL));
         Float128 right = new(new System.UInt128(0x55555555_55555555UL, 0x55555555_55555555UL));
         Float128 result = left ^ right;
-        Assert.Equal(System.UInt128.MaxValue, result.RawBits);
+        Assert.Equal(System.UInt128.MaxValue, result.Bits);
     }
 
     [Fact(DisplayName = "Float128 bitwise complement should invert the raw bits")]
     public void Float128BitwiseComplementShouldInvertTheRawBits()
     {
         Float128 value = Float128.Zero;
-        Assert.Equal(System.UInt128.MaxValue, (~value).RawBits);
+        Assert.Equal(System.UInt128.MaxValue, (~value).Bits);
     }
 }

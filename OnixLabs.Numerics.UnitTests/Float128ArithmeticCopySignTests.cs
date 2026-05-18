@@ -19,23 +19,23 @@ public sealed class Float128ArithmeticCopySignTests
     [Fact(DisplayName = "Float128.CopySign should copy sign of positive sign argument")]
     public void Float128CopySignShouldCopyPositiveSign()
     {
-        Assert.Equal(Float128.One.RawBits, Float128.CopySign(Float128.NegativeOne, Float128.One).RawBits);
-        Assert.Equal(Float128.One.RawBits, Float128.CopySign(Float128.One, Float128.One).RawBits);
-        Assert.Equal(Float128.MaxValue.RawBits, Float128.CopySign(Float128.MinValue, Float128.MaxValue).RawBits);
+        Assert.Equal(Float128.One.Bits, Float128.CopySign(Float128.NegativeOne, Float128.One).Bits);
+        Assert.Equal(Float128.One.Bits, Float128.CopySign(Float128.One, Float128.One).Bits);
+        Assert.Equal(Float128.MaxValue.Bits, Float128.CopySign(Float128.MinValue, Float128.MaxValue).Bits);
     }
 
     [Fact(DisplayName = "Float128.CopySign should copy sign of negative sign argument")]
     public void Float128CopySignShouldCopyNegativeSign()
     {
-        Assert.Equal(Float128.NegativeOne.RawBits, Float128.CopySign(Float128.One, Float128.NegativeOne).RawBits);
-        Assert.Equal(Float128.NegativeOne.RawBits, Float128.CopySign(Float128.NegativeOne, Float128.NegativeOne).RawBits);
-        Assert.Equal(Float128.MinValue.RawBits, Float128.CopySign(Float128.MaxValue, Float128.MinValue).RawBits);
+        Assert.Equal(Float128.NegativeOne.Bits, Float128.CopySign(Float128.One, Float128.NegativeOne).Bits);
+        Assert.Equal(Float128.NegativeOne.Bits, Float128.CopySign(Float128.NegativeOne, Float128.NegativeOne).Bits);
+        Assert.Equal(Float128.MinValue.Bits, Float128.CopySign(Float128.MaxValue, Float128.MinValue).Bits);
     }
 
     [Fact(DisplayName = "Float128.CopySign with negative zero sign should produce negative result")]
     public void Float128CopySignWithNegativeZeroSign()
     {
-        Assert.Equal(Float128.NegativeOne.RawBits, Float128.CopySign(Float128.One, Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.NegativeOne.Bits, Float128.CopySign(Float128.One, Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.CopySign should preserve NaN magnitude")]

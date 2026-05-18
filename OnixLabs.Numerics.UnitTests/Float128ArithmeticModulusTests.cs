@@ -40,8 +40,8 @@ public sealed class Float128ArithmeticModulusTests
     [Fact(DisplayName = "Float128.Remainder of finite by infinity should return the finite value")]
     public void Float128RemainderByInfinityShouldReturnValue()
     {
-        Assert.Equal(Float128.One.RawBits, (Float128.One % Float128.PositiveInfinity).RawBits);
-        Assert.Equal(Float128.NegativeOne.RawBits, (Float128.NegativeOne % Float128.PositiveInfinity).RawBits);
+        Assert.Equal(Float128.One.Bits, (Float128.One % Float128.PositiveInfinity).Bits);
+        Assert.Equal(Float128.NegativeOne.Bits, (Float128.NegativeOne % Float128.PositiveInfinity).Bits);
     }
 
     [Theory(DisplayName = "Float128.Remainder should match double remainder for exact double values")]
@@ -56,6 +56,6 @@ public sealed class Float128ArithmeticModulusTests
     {
         Float128 actual = (Float128)left % (Float128)right;
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, actual.RawBits);
+        Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
 }

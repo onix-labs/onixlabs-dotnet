@@ -27,7 +27,7 @@ public sealed class Float128ArithmeticScaleBTests
     {
         Float128 actual = Float128.ScaleB(value, n);
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, actual.RawBits);
+        Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
 
     [Theory(DisplayName = "Float128.ScaleB by negative n should divide by 2^n exactly for normal values")]
@@ -40,7 +40,7 @@ public sealed class Float128ArithmeticScaleBTests
     {
         Float128 actual = Float128.ScaleB(value, n);
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, actual.RawBits);
+        Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
 
     [Fact(DisplayName = "Float128.ScaleB of NaN should return NaN")]
@@ -59,8 +59,8 @@ public sealed class Float128ArithmeticScaleBTests
     [Fact(DisplayName = "Float128.ScaleB of zero should preserve sign")]
     public void Float128ScaleBOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.ScaleB(Float128.Zero, 50).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.ScaleB(Float128.NegativeZero, 50).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.ScaleB(Float128.Zero, 50).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.ScaleB(Float128.NegativeZero, 50).Bits);
     }
 
     [Fact(DisplayName = "Float128.ScaleB by huge positive n should overflow to infinity")]

@@ -32,15 +32,15 @@ public readonly partial struct Float128
     /// </remarks>
     public static int Compare(Float128 left, Float128 right)
     {
-        bool leftNaN = IsNaNBits(left.RawBits);
-        bool rightNaN = IsNaNBits(right.RawBits);
+        bool leftNaN = IsNaNBits(left.Bits);
+        bool rightNaN = IsNaNBits(right.Bits);
 
         if (leftNaN) return rightNaN ? 0 : -1;
         if (rightNaN) return 1;
-        if (IsZeroBits(left.RawBits) && IsZeroBits(right.RawBits)) return 0;
+        if (IsZeroBits(left.Bits) && IsZeroBits(right.Bits)) return 0;
 
-        UInt128 leftKey = ExtractSignBit(left.RawBits) ? ~left.RawBits : left.RawBits | SignMask;
-        UInt128 rightKey = ExtractSignBit(right.RawBits) ? ~right.RawBits : right.RawBits | SignMask;
+        UInt128 leftKey = ExtractSignBit(left.Bits) ? ~left.Bits : left.Bits | SignMask;
+        UInt128 rightKey = ExtractSignBit(right.Bits) ? ~right.Bits : right.Bits | SignMask;
 
         return leftKey.CompareTo(rightKey);
     }
@@ -78,7 +78,7 @@ public readonly partial struct Float128
     /// <remarks>If either operand is NaN this comparison returns <see langword="false"/>, matching IEEE 754 ordering semantics.</remarks>
     public static bool operator <(Float128 left, Float128 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
         return Compare(left, right) < 0;
     }
 
@@ -91,7 +91,7 @@ public readonly partial struct Float128
     /// <remarks>If either operand is NaN this comparison returns <see langword="false"/>, matching IEEE 754 ordering semantics.</remarks>
     public static bool operator <=(Float128 left, Float128 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
         return Compare(left, right) <= 0;
     }
 
@@ -104,7 +104,7 @@ public readonly partial struct Float128
     /// <remarks>If either operand is NaN this comparison returns <see langword="false"/>, matching IEEE 754 ordering semantics.</remarks>
     public static bool operator >(Float128 left, Float128 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
         return Compare(left, right) > 0;
     }
 
@@ -117,7 +117,7 @@ public readonly partial struct Float128
     /// <remarks>If either operand is NaN this comparison returns <see langword="false"/>, matching IEEE 754 ordering semantics.</remarks>
     public static bool operator >=(Float128 left, Float128 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
         return Compare(left, right) >= 0;
     }
 }

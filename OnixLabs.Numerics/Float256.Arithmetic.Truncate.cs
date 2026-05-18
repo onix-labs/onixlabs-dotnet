@@ -23,7 +23,7 @@ public readonly partial struct Float256
     /// <returns>Returns the integral part of <paramref name="value"/>.</returns>
     public static Float256 Truncate(Float256 value)
     {
-        UInt256 bits = value.RawBits;
+        UInt256 bits = value.Bits;
 
         if (!IsFinite(value)) return value;
         if (IsZero(value)) return value;

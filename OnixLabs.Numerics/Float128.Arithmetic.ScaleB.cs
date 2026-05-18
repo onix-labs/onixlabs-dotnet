@@ -31,10 +31,10 @@ public readonly partial struct Float128
         if (IsInfinity(value)) return int.MaxValue;
         if (IsZero(value)) return int.MinValue;
 
-        uint biasedExponent = ExtractBiasedExponent(value.RawBits);
+        uint biasedExponent = ExtractBiasedExponent(value.Bits);
         if (biasedExponent != 0u) return (int)biasedExponent - ExponentBias;
 
-        UInt128 trailingSignificand = ExtractTrailingSignificand(value.RawBits);
+        UInt128 trailingSignificand = ExtractTrailingSignificand(value.Bits);
         int leadingBitPosition = 127 - (int)UInt128.LeadingZeroCount(trailingSignificand);
         return leadingBitPosition + MinNormalUnbiasedExponent - TrailingSignificandBits;
     }
@@ -49,7 +49,7 @@ public readonly partial struct Float128
     {
         if (IsNaN(value) || IsInfinity(value) || IsZero(value)) return value;
 
-        DecomposeFinite(value.RawBits, out bool sign, out int unbiasedExponent, out UInt128 significand);
+        DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt128 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         long scaledExponentWide = (long)unbiasedExponent + n;

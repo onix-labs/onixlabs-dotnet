@@ -254,7 +254,7 @@ public readonly partial struct Float128
         Float128 truncated = Truncate(value);
         if (IsZero(truncated)) return BigInteger.Zero;
 
-        DecomposeFinite(truncated.RawBits, out bool sign, out int unbiasedExponent, out UInt128 significand);
+        DecomposeFinite(truncated.Bits, out bool sign, out int unbiasedExponent, out UInt128 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         ulong significandHigh = (ulong)(significand >> 64);
@@ -347,7 +347,7 @@ public readonly partial struct Float128
         Float128 truncated = Truncate(value);
         if (IsZero(truncated)) return ExtractionStatus.Ok;
 
-        DecomposeFinite(truncated.RawBits, out _, out int unbiasedExponent, out UInt128 significand);
+        DecomposeFinite(truncated.Bits, out _, out int unbiasedExponent, out UInt128 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         if (unbiasedExponent >= 128) return ExtractionStatus.Overflow;
@@ -463,7 +463,7 @@ public readonly partial struct Float128
         if (IsNegativeInfinity(value)) return double.NegativeInfinity;
         if (IsZero(value)) return IsNegative(value) ? -0.0 : 0.0;
 
-        DecomposeFinite(value.RawBits, out bool sign, out int unbiasedExponent, out UInt128 significand);
+        DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt128 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         const int doubleBias = 1023;

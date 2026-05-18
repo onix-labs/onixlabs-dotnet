@@ -27,15 +27,15 @@ public readonly partial struct Float256
     /// <remarks>This method imposes a total order on <see cref="Float256"/> values: NaN sorts before all numeric values; ±zero compare equal.</remarks>
     public static int Compare(Float256 left, Float256 right)
     {
-        bool leftNaN = IsNaNBits(left.RawBits);
-        bool rightNaN = IsNaNBits(right.RawBits);
+        bool leftNaN = IsNaNBits(left.Bits);
+        bool rightNaN = IsNaNBits(right.Bits);
 
         if (leftNaN) return rightNaN ? 0 : -1;
         if (rightNaN) return 1;
-        if (IsZeroBits(left.RawBits) && IsZeroBits(right.RawBits)) return 0;
+        if (IsZeroBits(left.Bits) && IsZeroBits(right.Bits)) return 0;
 
-        UInt256 leftKey = ExtractSignBit(left.RawBits) ? ~left.RawBits : left.RawBits | SignMask;
-        UInt256 rightKey = ExtractSignBit(right.RawBits) ? ~right.RawBits : right.RawBits | SignMask;
+        UInt256 leftKey = ExtractSignBit(left.Bits) ? ~left.Bits : left.Bits | SignMask;
+        UInt256 rightKey = ExtractSignBit(right.Bits) ? ~right.Bits : right.Bits | SignMask;
 
         if (leftKey < rightKey) return -1;
         if (leftKey > rightKey) return 1;
@@ -68,7 +68,7 @@ public readonly partial struct Float256
     /// <returns>Returns <see langword="true"/> if <paramref name="left"/> is strictly less than <paramref name="right"/>; <see langword="false"/> if either operand is NaN.</returns>
     public static bool operator <(Float256 left, Float256 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
         return Compare(left, right) < 0;
     }
 
@@ -78,7 +78,7 @@ public readonly partial struct Float256
     /// <returns>Returns <see langword="true"/> if <paramref name="left"/> is less than or equal to <paramref name="right"/>; <see langword="false"/> if either operand is NaN.</returns>
     public static bool operator <=(Float256 left, Float256 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
         return Compare(left, right) <= 0;
     }
 
@@ -88,7 +88,7 @@ public readonly partial struct Float256
     /// <returns>Returns <see langword="true"/> if <paramref name="left"/> is strictly greater than <paramref name="right"/>; <see langword="false"/> if either operand is NaN.</returns>
     public static bool operator >(Float256 left, Float256 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
         return Compare(left, right) > 0;
     }
 
@@ -98,7 +98,7 @@ public readonly partial struct Float256
     /// <returns>Returns <see langword="true"/> if <paramref name="left"/> is greater than or equal to <paramref name="right"/>; <see langword="false"/> if either operand is NaN.</returns>
     public static bool operator >=(Float256 left, Float256 right)
     {
-        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsNaNBits(left.Bits) || IsNaNBits(right.Bits)) return false;
         return Compare(left, right) >= 0;
     }
 }

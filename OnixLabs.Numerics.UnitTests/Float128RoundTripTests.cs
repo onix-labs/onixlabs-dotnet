@@ -37,15 +37,15 @@ public sealed class Float128RoundTripTests
         Float128 original = value;
         string text = original.ToString(null, CultureInfo.InvariantCulture);
         Float128 parsed = Float128.Parse(text, CultureInfo.InvariantCulture);
-        Assert.Equal(original.RawBits, parsed.RawBits);
+        Assert.Equal(original.Bits, parsed.Bits);
     }
 
     [Fact(DisplayName = "Float128 parse(ToString(value)) should preserve constants E, Pi, and Tau")]
     public void Float128RoundTripShouldPreserveConstants()
     {
-        Assert.Equal(Float128.E.RawBits, Float128.Parse(Float128.E.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).RawBits);
-        Assert.Equal(Float128.Pi.RawBits, Float128.Parse(Float128.Pi.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).RawBits);
-        Assert.Equal(Float128.Tau.RawBits, Float128.Parse(Float128.Tau.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).RawBits);
+        Assert.Equal(Float128.E.Bits, Float128.Parse(Float128.E.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits);
+        Assert.Equal(Float128.Pi.Bits, Float128.Parse(Float128.Pi.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits);
+        Assert.Equal(Float128.Tau.Bits, Float128.Parse(Float128.Tau.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits);
     }
 
     [Fact(DisplayName = "Float128 parse(ToString(NaN)) should produce NaN")]

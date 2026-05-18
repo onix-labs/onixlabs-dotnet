@@ -19,23 +19,23 @@ public sealed class Float128ArithmeticAbsTests
     [Fact(DisplayName = "Float128.Abs of a positive value should return the original value")]
     public void Float128AbsShouldReturnOriginalForPositive()
     {
-        Assert.Equal(Float128.One.RawBits, Float128.Abs(Float128.One).RawBits);
-        Assert.Equal(Float128.MaxValue.RawBits, Float128.Abs(Float128.MaxValue).RawBits);
-        Assert.Equal(Float128.PositiveInfinity.RawBits, Float128.Abs(Float128.PositiveInfinity).RawBits);
+        Assert.Equal(Float128.One.Bits, Float128.Abs(Float128.One).Bits);
+        Assert.Equal(Float128.MaxValue.Bits, Float128.Abs(Float128.MaxValue).Bits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, Float128.Abs(Float128.PositiveInfinity).Bits);
     }
 
     [Fact(DisplayName = "Float128.Abs of a negative value should clear the sign bit")]
     public void Float128AbsShouldClearSignBitForNegative()
     {
-        Assert.Equal(Float128.One.RawBits, Float128.Abs(Float128.NegativeOne).RawBits);
-        Assert.Equal(Float128.MaxValue.RawBits, Float128.Abs(Float128.MinValue).RawBits);
-        Assert.Equal(Float128.PositiveInfinity.RawBits, Float128.Abs(Float128.NegativeInfinity).RawBits);
+        Assert.Equal(Float128.One.Bits, Float128.Abs(Float128.NegativeOne).Bits);
+        Assert.Equal(Float128.MaxValue.Bits, Float128.Abs(Float128.MinValue).Bits);
+        Assert.Equal(Float128.PositiveInfinity.Bits, Float128.Abs(Float128.NegativeInfinity).Bits);
     }
 
     [Fact(DisplayName = "Float128.Abs of negative zero should produce positive zero")]
     public void Float128AbsShouldProducePositiveZeroForNegativeZero()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Abs(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Abs(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Abs of NaN should return a NaN value")]

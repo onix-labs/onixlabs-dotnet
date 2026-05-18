@@ -34,8 +34,8 @@ public sealed class Float128TrigonometryTests
     [Fact(DisplayName = "Float128.Sin of zero should preserve sign of zero")]
     public void Float128SinOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Sin(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Sin(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Sin(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Sin(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Sin of π/6 should return approximately one half")]
@@ -84,8 +84,8 @@ public sealed class Float128TrigonometryTests
     [Fact(DisplayName = "Float128.Tan of zero should preserve sign of zero")]
     public void Float128TanOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.Tan(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.Tan(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.Tan(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.Tan(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Tan of π/4 should return one")]
@@ -140,7 +140,7 @@ public sealed class Float128TrigonometryTests
     [Fact(DisplayName = "Float128.SinPi of integer should return zero with sign")]
     public void Float128SinPiOfIntegerShouldReturnZero()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.SinPi(Float128.Zero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.SinPi(Float128.Zero).Bits);
         Assert.True(Float128.IsZero(Float128.SinPi(Float128.One)));
         Assert.True(Float128.IsZero(Float128.SinPi(Float128.Two)));
     }

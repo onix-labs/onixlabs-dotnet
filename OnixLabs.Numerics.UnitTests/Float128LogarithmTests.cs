@@ -130,8 +130,8 @@ public sealed class Float128LogarithmTests
     [Fact(DisplayName = "Float128.LogP1 of zero should return zero with preserved sign")]
     public void Float128LogP1OfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.LogP1(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.LogP1(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.LogP1(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.LogP1(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.LogP1 of negative one should return negative infinity")]

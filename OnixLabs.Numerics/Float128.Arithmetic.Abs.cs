@@ -25,5 +25,5 @@ public readonly partial struct Float128
     /// The result preserves NaN payloads; for any NaN input, the result is also a NaN.
     /// Negative zero becomes positive zero, and negative infinity becomes positive infinity.
     /// </remarks>
-    public static Float128 Abs(Float128 value) => new(value.RawBits & ~SignMask);
+    public static Float128 Abs(Float128 value) => new(value.Bits & ~SignMask);
 }

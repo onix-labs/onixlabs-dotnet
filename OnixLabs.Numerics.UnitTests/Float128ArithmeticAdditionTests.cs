@@ -49,15 +49,15 @@ public sealed class Float128ArithmeticAdditionTests
     [Fact(DisplayName = "Float128.Add zeros with same signs should preserve sign")]
     public void Float128AddZerosWithSameSignShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, (Float128.Zero + Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, (Float128.NegativeZero + Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, (Float128.Zero + Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, (Float128.NegativeZero + Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.Add zeros with opposite signs should return positive zero")]
     public void Float128AddZerosWithOppositeSignsShouldReturnPositiveZero()
     {
-        Assert.Equal(Float128.Zero.RawBits, (Float128.Zero + Float128.NegativeZero).RawBits);
-        Assert.Equal(Float128.Zero.RawBits, (Float128.NegativeZero + Float128.Zero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, (Float128.Zero + Float128.NegativeZero).Bits);
+        Assert.Equal(Float128.Zero.Bits, (Float128.NegativeZero + Float128.Zero).Bits);
     }
 
     [Theory(DisplayName = "Float128.Add should produce the same result as double addition for exact double values")]
@@ -75,7 +75,7 @@ public sealed class Float128ArithmeticAdditionTests
     {
         Float128 actual = (Float128)left + (Float128)right;
         Float128 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawBits, actual.RawBits);
+        Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
 
     [Theory(DisplayName = "Float128.Add of value to itself should produce 2*value")]
@@ -92,7 +92,7 @@ public sealed class Float128ArithmeticAdditionTests
         Float128 a = value;
         Float128 sum = a + a;
         Float128 expectedFromDouble = value + value;
-        Assert.Equal(expectedFromDouble.RawBits, sum.RawBits);
+        Assert.Equal(expectedFromDouble.Bits, sum.Bits);
     }
 
     [Fact(DisplayName = "Float128.Add catastrophic cancellation should return zero")]

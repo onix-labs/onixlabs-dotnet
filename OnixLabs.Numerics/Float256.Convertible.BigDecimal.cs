@@ -31,7 +31,7 @@ public readonly partial struct Float256
         if (IsInfinity(value)) throw new OverflowException($"Cannot convert infinity to {nameof(BigDecimal)}.");
         if (IsZero(value)) return BigDecimal.Zero;
 
-        DecomposeFinite(value.RawBits, out bool sign, out int unbiasedExponent, out UInt256 significand);
+        DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         int binaryExponent = unbiasedExponent - TrailingSignificandBits;

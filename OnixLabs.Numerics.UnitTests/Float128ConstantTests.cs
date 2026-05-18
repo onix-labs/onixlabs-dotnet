@@ -25,7 +25,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = UInt128.Zero;
 
         // When
-        UInt128 actual = Float128.Zero.RawBits;
+        UInt128 actual = Float128.Zero.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -38,7 +38,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0x8000_0000_0000_0000UL, 0UL);
 
         // When
-        UInt128 actual = Float128.NegativeZero.RawBits;
+        UInt128 actual = Float128.NegativeZero.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -51,7 +51,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0x3FFF_0000_0000_0000UL, 0UL);
 
         // When
-        UInt128 actual = Float128.One.RawBits;
+        UInt128 actual = Float128.One.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -64,7 +64,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0xBFFF_0000_0000_0000UL, 0UL);
 
         // When
-        UInt128 actual = Float128.NegativeOne.RawBits;
+        UInt128 actual = Float128.NegativeOne.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -77,7 +77,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0x4000_0000_0000_0000UL, 0UL);
 
         // When
-        UInt128 actual = Float128.Two.RawBits;
+        UInt128 actual = Float128.Two.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -90,7 +90,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0x4002_4000_0000_0000UL, 0UL);
 
         // When
-        UInt128 actual = Float128.Ten.RawBits;
+        UInt128 actual = Float128.Ten.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -103,7 +103,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0x7FFE_FFFF_FFFF_FFFFUL, 0xFFFF_FFFF_FFFF_FFFFUL);
 
         // When
-        UInt128 actual = Float128.MaxValue.RawBits;
+        UInt128 actual = Float128.MaxValue.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -116,7 +116,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0xFFFE_FFFF_FFFF_FFFFUL, 0xFFFF_FFFF_FFFF_FFFFUL);
 
         // When
-        UInt128 actual = Float128.MinValue.RawBits;
+        UInt128 actual = Float128.MinValue.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -129,7 +129,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = UInt128.One;
 
         // When
-        UInt128 actual = Float128.Epsilon.RawBits;
+        UInt128 actual = Float128.Epsilon.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -142,7 +142,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0x7FFF_0000_0000_0000UL, 0UL);
 
         // When
-        UInt128 actual = Float128.PositiveInfinity.RawBits;
+        UInt128 actual = Float128.PositiveInfinity.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -155,7 +155,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0xFFFF_0000_0000_0000UL, 0UL);
 
         // When
-        UInt128 actual = Float128.NegativeInfinity.RawBits;
+        UInt128 actual = Float128.NegativeInfinity.Bits;
 
         // Then
         Assert.Equal(expected, actual);
@@ -168,7 +168,7 @@ public sealed class Float128ConstantTests
         UInt128 expected = new(0x7FFF_8000_0000_0000UL, 0UL);
 
         // When
-        UInt128 actual = Float128.NaN.RawBits;
+        UInt128 actual = Float128.NaN.Bits;
 
         // Then
         Assert.Equal(expected, actual);

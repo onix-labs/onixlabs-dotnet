@@ -131,8 +131,8 @@ public sealed class Float128ExponentialTests
     [Fact(DisplayName = "Float128.ExpM1 of zero should return zero with preserved sign")]
     public void Float128ExpM1OfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float128.Zero.RawBits, Float128.ExpM1(Float128.Zero).RawBits);
-        Assert.Equal(Float128.NegativeZero.RawBits, Float128.ExpM1(Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.Zero.Bits, Float128.ExpM1(Float128.Zero).Bits);
+        Assert.Equal(Float128.NegativeZero.Bits, Float128.ExpM1(Float128.NegativeZero).Bits);
     }
 
     [Fact(DisplayName = "Float128.ExpM1 should preserve precision for small inputs")]

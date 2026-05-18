@@ -44,7 +44,19 @@ public readonly partial struct UInt256
     /// Serves as the hash code function for this instance.
     /// </summary>
     /// <returns>A hash code for this instance.</returns>
-    public override int GetHashCode() => HashCode.Combine(upper, lower);
+    /// <remarks>
+    /// Hashes every byte of the 256-bit representation rather than combining the upper and lower
+    /// <see cref="UInt128"/> hashes: <see cref="ulong.GetHashCode"/> XORs its two 32-bit halves, which
+    /// causes pairs like <c>2^k</c> and <c>2^(k+32)</c> to collide.
+    /// </remarks>
+    public override int GetHashCode()
+    {
+        Span<byte> buffer = stackalloc byte[32];
+        TryWriteLittleEndian(buffer, out _);
+        HashCode hash = new();
+        hash.AddBytes(buffer);
+        return hash.ToHashCode();
+    }
 
     /// <summary>Determines whether the two values are equal.</summary>
     /// <param name="left">The <paramref name="left"/> value to compare.</param>

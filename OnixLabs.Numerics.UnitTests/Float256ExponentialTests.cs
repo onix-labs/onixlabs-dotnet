@@ -60,18 +60,40 @@ public sealed class Float256ExponentialTests
         AssertCloseToReference(expected, result, ulpTolerance: 16);
     }
 
-    [Fact(DisplayName = "Float256.Exp of negative one should approximate the reciprocal of E")]
+    [Fact(DisplayName = "Float256.Exp of negative one should equal the correctly-rounded reciprocal of E")]
     public void Float256ExpOfNegativeOneShouldReturnReciprocalOfE()
     {
-        // Note: Float256.Exp loses precision for negative inputs (its internal series only converges
-        // to roughly double precision for x < 0). Use a tolerance proportional to that loss rather
-        // than a binary256-precision reference.
+        // Reference: e^(-1) to 100 decimal digits, then rounded to nearest Float256.
+        // Float256.Exp(-1) is correctly-rounded so it must match this reference exactly.
+        Float256 reference = Float256.Parse(
+            "0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374",
+            System.Globalization.CultureInfo.InvariantCulture);
         Float256 result = Float256.Exp(Float256.NegativeOne);
-        Assert.True(Float256.IsFinite(result));
-        Assert.True(Float256.IsPositive(result));
-        Float256 reference = Float256.One / Float256.E;
-        Float256 difference = Float256.Abs(result - reference);
-        Assert.True(difference < Float256.Parse("1E-15"), $"Expected close to 1/E, got difference {difference}");
+        Assert.Equal(reference, result);
+    }
+
+    [Theory(DisplayName = "Float256.Exp of negative arguments should equal 1 / Exp(|x|) within a few ULPs (regression for the negative-input precision concern)")]
+    [InlineData("-1")]
+    [InlineData("-2")]
+    [InlineData("-5")]
+    [InlineData("-10")]
+    [InlineData("-50")]
+    [InlineData("-100")]
+    [InlineData("-0.5")]
+    [InlineData("-0.347")]
+    [InlineData("-0.001")]
+    public void Float256ExpOfNegativeShouldMatchReciprocalOfPositiveToFullPrecision(string xLiteral)
+    {
+        // Regression: a previous test comment claimed Exp(negative) only converged to ~17 digits.
+        // The Taylor-series reduction in ExpCore actually achieves correctly-rounded precision; the
+        // only entropy lost between Exp(-x) and 1/Exp(x) is the one ULP introduced by the division.
+        Float256 x = Float256.Parse(xLiteral, System.Globalization.CultureInfo.InvariantCulture);
+        Float256 forward = Float256.Exp(x);
+        Float256 viaReciprocal = Float256.One / Float256.Exp(-x);
+        Float256 difference = Float256.Abs(forward - viaReciprocal);
+        // Tolerance: 8 relative ULPs at the value's magnitude. Binary256's relative ULP is 2^-236 ≈ 9.05e-72.
+        Float256 tolerance = Float256.Abs(forward) * Float256.Parse("8E-71", System.Globalization.CultureInfo.InvariantCulture);
+        Assert.True(difference <= tolerance, $"Exp({x}) = {forward}, 1/Exp(-x) = {viaReciprocal}, diff = {difference}, tolerance = {tolerance}");
     }
 
     [Fact(DisplayName = "Float256.Exp of large positive should saturate to positive infinity")]

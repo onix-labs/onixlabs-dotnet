@@ -158,11 +158,44 @@ public sealed class UInt512ArithmeticDivisionTests
     [Fact(DisplayName = "UInt512.DivRemBy256 should match BigInteger for moderate divisors satisfying the quotient-fits precondition")]
     public void UInt512DivRemBy256ShouldMatchBigInteger()
     {
-        // The precondition is dividend.Upper < divisor so the quotient fits in 256 bits.
-        // Use a comfortably-sized divisor (well below 2^256) to avoid the internal carry edge.
         UInt512 dividend = UInt512.Parse("99999999999999999999999999999999999999999999999999999999999999999999999999999");
         UInt256 divisor = (UInt256)(UInt128.MaxValue);
         Assert.True(dividend.Upper < divisor);
+        UInt256 quotient = UInt512.DivRemBy256(dividend, divisor, out UInt256 remainder);
+        Assert.Equal((BigInteger)dividend / (BigInteger)divisor, (BigInteger)quotient);
+        Assert.Equal((BigInteger)dividend % (BigInteger)divisor, (BigInteger)remainder);
+    }
+
+    [Fact(DisplayName = "UInt512.DivRemBy256 should match BigInteger when the divisor is close to 2^256 (carry edge)")]
+    public void UInt512DivRemBy256NearTopBitDivisorShouldMatchBigInteger()
+    {
+        // Regression: a previous version of DivRemBy256 lost the overflow bit of `working` when shifting
+        // left, so for divisors close to 2^256 the comparison `working >= divisor` missed cases where the
+        // true value (2^256 + working) exceeded the divisor and we silently kept an inflated remainder.
+        UInt256 divisor = UInt256.MaxValue;
+        UInt512 dividend = new(divisor - UInt256.One, UInt256.MaxValue);
+        UInt256 quotient = UInt512.DivRemBy256(dividend, divisor, out UInt256 remainder);
+        Assert.Equal((BigInteger)dividend / (BigInteger)divisor, (BigInteger)quotient);
+        Assert.Equal((BigInteger)dividend % (BigInteger)divisor, (BigInteger)remainder);
+    }
+
+    public static TheoryData<UInt256, UInt256> DivRemBy256LargeOperandData =>
+        new()
+        {
+            // Divisor is MaxValue (all 1s). Upper is divisor - 16.
+            { UInt256.MaxValue - (UInt256)16U, UInt256.MaxValue },
+            // Divisor and upper both have the sign bit set (>= 2^255) — exercises the carry edge each iteration.
+            { new(UInt128.One << 127, UInt128.One), new(UInt128.One << 127, (UInt128)3U) },
+            // Mid-range pattern; upper < divisor by construction.
+            { (UInt256.MaxValue >> 2) - (UInt256)5U, UInt256.MaxValue >> 1 }
+        };
+
+    [Theory(DisplayName = "UInt512.DivRemBy256 should match BigInteger across a range of large-divisor and large-dividend combinations")]
+    [MemberData(nameof(DivRemBy256LargeOperandData))]
+    public void UInt512DivRemBy256AcrossLargeOperandsShouldMatchBigInteger(UInt256 upper, UInt256 divisor)
+    {
+        Assert.True(upper < divisor);
+        UInt512 dividend = new(upper, UInt256.MaxValue);
         UInt256 quotient = UInt512.DivRemBy256(dividend, divisor, out UInt256 remainder);
         Assert.Equal((BigInteger)dividend / (BigInteger)divisor, (BigInteger)quotient);
         Assert.Equal((BigInteger)dividend % (BigInteger)divisor, (BigInteger)remainder);

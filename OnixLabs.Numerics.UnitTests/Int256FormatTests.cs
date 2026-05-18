@@ -104,4 +104,60 @@ public sealed class Int256FormatTests
     {
         Assert.Equal("0", Int256.Zero.ToString(null, CultureInfo.InvariantCulture));
     }
+
+    [Fact(DisplayName = "Int256.ToString with X format for positive value should produce hex without sign-disambiguation padding")]
+    public void Int256ToStringWithXFormatForPositiveShouldProduceHex()
+    {
+        Int256 value = (Int256)0xCAFEBABEu;
+        Assert.Equal("CAFEBABE", value.ToString("X", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Int256.ToString with X format for NegativeOne should produce 64 'F' hex digits (two's complement)")]
+    public void Int256ToStringWithXFormatForNegativeOneShouldProduceAllFs()
+    {
+        string actual = Int256.NegativeOne.ToString("X", CultureInfo.InvariantCulture);
+        Assert.Equal(new string('F', 64), actual);
+    }
+
+    [Fact(DisplayName = "Int256.ToString with X format for MinValue should produce 80...0 (sign bit set, rest clear)")]
+    public void Int256ToStringWithXFormatForMinValueShouldProduceSignBit()
+    {
+        string actual = Int256.MinValue.ToString("X", CultureInfo.InvariantCulture);
+        Assert.Equal("8" + new string('0', 63), actual);
+    }
+
+    [Fact(DisplayName = "Int256.ToString with X format for MaxValue should produce 7FFF...F")]
+    public void Int256ToStringWithXFormatForMaxValueShouldProduceSignClearAllOnes()
+    {
+        string actual = Int256.MaxValue.ToString("X", CultureInfo.InvariantCulture);
+        Assert.Equal("7" + new string('F', 63), actual);
+    }
+
+    [Fact(DisplayName = "Int256.ToString with x format should produce lowercase hex")]
+    public void Int256ToStringWithLowercaseXFormatShouldProduceLowercase()
+    {
+        Int256 value = (Int256)0xCAFE;
+        Assert.Equal("cafe", value.ToString("x", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Int256.ToString with X8 format should pad to at least 8 hex digits")]
+    public void Int256ToStringWithX8FormatShouldPadToEightDigits()
+    {
+        Int256 value = (Int256)0xAB;
+        Assert.Equal("000000AB", value.ToString("X8", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Int256.ToString with R format for positive value should produce signed decimal")]
+    public void Int256ToStringWithRFormatForPositiveShouldProduceSignedDecimal()
+    {
+        Int256 value = (Int256)1234567;
+        Assert.Equal("1234567", value.ToString("R", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Int256.ToString with R format for negative value should produce signed decimal")]
+    public void Int256ToStringWithRFormatForNegativeShouldProduceSignedDecimal()
+    {
+        Int256 value = (Int256)(-1234567);
+        Assert.Equal("-1234567", value.ToString("R", CultureInfo.InvariantCulture));
+    }
 }

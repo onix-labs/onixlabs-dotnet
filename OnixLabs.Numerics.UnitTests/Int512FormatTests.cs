@@ -106,4 +106,60 @@ public sealed class Int512FormatTests
         Assert.False(value.TryFormat(buffer, out int written, default, CultureInfo.InvariantCulture));
         Assert.Equal(0, written);
     }
+
+    [Fact(DisplayName = "Int512.ToString with X format for positive value should produce hex without sign-disambiguation padding")]
+    public void Int512ToStringWithXFormatForPositiveShouldProduceHex()
+    {
+        Int512 value = (Int512)0xCAFEBABEu;
+        Assert.Equal("CAFEBABE", value.ToString("X", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Int512.ToString with X format for NegativeOne should produce 128 'F' hex digits (two's complement)")]
+    public void Int512ToStringWithXFormatForNegativeOneShouldProduceAllFs()
+    {
+        string actual = Int512.NegativeOne.ToString("X", CultureInfo.InvariantCulture);
+        Assert.Equal(new string('F', 128), actual);
+    }
+
+    [Fact(DisplayName = "Int512.ToString with X format for MinValue should produce 80...0 (sign bit set, rest clear)")]
+    public void Int512ToStringWithXFormatForMinValueShouldProduceSignBit()
+    {
+        string actual = Int512.MinValue.ToString("X", CultureInfo.InvariantCulture);
+        Assert.Equal("8" + new string('0', 127), actual);
+    }
+
+    [Fact(DisplayName = "Int512.ToString with X format for MaxValue should produce 7FFF...F")]
+    public void Int512ToStringWithXFormatForMaxValueShouldProduceSignClearAllOnes()
+    {
+        string actual = Int512.MaxValue.ToString("X", CultureInfo.InvariantCulture);
+        Assert.Equal("7" + new string('F', 127), actual);
+    }
+
+    [Fact(DisplayName = "Int512.ToString with x format should produce lowercase hex")]
+    public void Int512ToStringWithLowercaseXFormatShouldProduceLowercase()
+    {
+        Int512 value = (Int512)0xCAFE;
+        Assert.Equal("cafe", value.ToString("x", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Int512.ToString with X16 format should pad to at least 16 hex digits")]
+    public void Int512ToStringWithX16FormatShouldPadToSixteenDigits()
+    {
+        Int512 value = (Int512)0xAB;
+        Assert.Equal("00000000000000AB", value.ToString("X16", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Int512.ToString with R format for positive value should produce signed decimal")]
+    public void Int512ToStringWithRFormatForPositiveShouldProduceSignedDecimal()
+    {
+        Int512 value = (Int512)1234567;
+        Assert.Equal("1234567", value.ToString("R", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Int512.ToString with R format for negative value should produce signed decimal")]
+    public void Int512ToStringWithRFormatForNegativeShouldProduceSignedDecimal()
+    {
+        Int512 value = (Int512)(-1234567);
+        Assert.Equal("-1234567", value.ToString("R", CultureInfo.InvariantCulture));
+    }
 }

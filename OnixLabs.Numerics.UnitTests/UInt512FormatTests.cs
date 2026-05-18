@@ -41,12 +41,39 @@ public sealed class UInt512FormatTests
         Assert.Equal("0000000123", value.ToString("D10", CultureInfo.InvariantCulture));
     }
 
-    [Fact(DisplayName = "UInt512.ToString with 'X' format should produce hexadecimal representation (leading 0 for positive disambiguation matches BigInteger)")]
+    [Fact(DisplayName = "UInt512.ToString with 'X' format should produce hexadecimal representation without sign-disambiguation padding")]
     public void UInt512ToStringXShouldProduceHex()
     {
         UInt512 value = (UInt512)0xABCDEFUL;
-        // BigInteger.ToString("X") prefixes a 0 to keep the value distinct from a negative two's-complement form.
-        Assert.Equal("0ABCDEF", value.ToString("X", CultureInfo.InvariantCulture));
+        Assert.Equal("ABCDEF", value.ToString("X", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "UInt512.ToString with 'x' format should produce lowercase hexadecimal representation")]
+    public void UInt512ToStringLowercaseXShouldProduceLowercaseHex()
+    {
+        UInt512 value = (UInt512)0xABCDEFUL;
+        Assert.Equal("abcdef", value.ToString("x", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "UInt512.ToString with 'X16' format should pad to at least 16 hex digits")]
+    public void UInt512ToStringX16ShouldPadToSixteenDigits()
+    {
+        UInt512 value = (UInt512)0xABCDUL;
+        Assert.Equal("000000000000ABCD", value.ToString("X16", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "UInt512.ToString with 'X' format for MaxValue should produce 128 hex digits")]
+    public void UInt512ToStringXForMaxValueShouldProduce128HexDigits()
+    {
+        string actual = UInt512.MaxValue.ToString("X", CultureInfo.InvariantCulture);
+        Assert.Equal(new string('F', 128), actual);
+    }
+
+    [Fact(DisplayName = "UInt512.ToString with 'R' format should produce the decimal representation")]
+    public void UInt512ToStringRFormatShouldProduceDecimal()
+    {
+        UInt512 value = (UInt512)98765UL;
+        Assert.Equal("98765", value.ToString("R", CultureInfo.InvariantCulture));
     }
 
     [Fact(DisplayName = "UInt512.ToString with 'X' format for Zero should produce 0")]
@@ -96,8 +123,7 @@ public sealed class UInt512FormatTests
         UInt512 value = (UInt512)0xABCDUL;
         Span<char> buffer = stackalloc char[16];
         Assert.True(value.TryFormat(buffer, out int written, "X", CultureInfo.InvariantCulture));
-        // BigInteger.ToString("X") prefixes a 0 for positive values to disambiguate from negative two's-complement form.
-        Assert.Equal("0ABCD", buffer[..written].ToString());
+        Assert.Equal("ABCD", buffer[..written].ToString());
     }
 
     [Fact(DisplayName = "UInt512.TryFormat into a UTF-8 span should produce the expected bytes")]

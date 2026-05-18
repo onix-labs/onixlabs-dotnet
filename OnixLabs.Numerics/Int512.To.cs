@@ -35,7 +35,19 @@ public readonly partial struct Int512
     /// <returns>The string representation.</returns>
     public string ToString(string? format, IFormatProvider? formatProvider)
     {
-        BigInteger big = (BigInteger)this;
-        return big.ToString(format, formatProvider);
+        ReadOnlySpan<char> formatSpan = (format ?? string.Empty).AsSpan();
+        char specifier = formatSpan.IsEmpty || formatSpan.IsWhiteSpace() ? NumberInfoFormatter.DefaultFormat : formatSpan[0];
+        char upperSpecifier = char.ToUpperInvariant(specifier);
+
+        if (upperSpecifier is not ('X' or 'R'))
+            return this.ToBigInteger().ToString(format, formatProvider);
+
+        // Route X (hex) and R (round-trip) through NumberInfoFormatter so the output matches .NET integer
+        // conventions. X uses the unsigned bit pattern so negative values render as two's-complement hex
+        // (e.g. -1 → "FFFF...FF"), matching how System.Int32 and friends format X.
+        BigInteger unscaled = upperSpecifier == 'X' ? ReinterpretAsUnsigned(this) : this;
+        // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
+        NumberInfoFormatter formatter = new(new NumberInfo(unscaled, 0), formatProvider ?? CultureInfo.CurrentCulture, ['R', 'X']);
+        return formatter.Format(formatSpan);
     }
 }

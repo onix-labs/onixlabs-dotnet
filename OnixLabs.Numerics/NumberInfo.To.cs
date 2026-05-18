@@ -44,7 +44,7 @@ public readonly partial struct NumberInfo
     {
         CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
         // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-        NumberInfoFormatter formatter = new(this, info, ['E', 'G']);
+        NumberInfoFormatter formatter = new(this, info, ['E', 'G', 'R', 'X']);
         return formatter.Format(format);
     }
 }

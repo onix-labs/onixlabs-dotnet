@@ -14,7 +14,6 @@
 
 using System;
 using System.Globalization;
-using System.Numerics;
 
 namespace OnixLabs.Numerics;
 
@@ -35,7 +34,17 @@ public readonly partial struct UInt512
     /// <returns>The string representation.</returns>
     public string ToString(string? format, IFormatProvider? formatProvider)
     {
-        BigInteger big = (BigInteger)this;
-        return big.ToString(format, formatProvider);
+        ReadOnlySpan<char> formatSpan = (format ?? string.Empty).AsSpan();
+        char specifier = formatSpan.IsEmpty || formatSpan.IsWhiteSpace() ? NumberInfoFormatter.DefaultFormat : formatSpan[0];
+        char upperSpecifier = char.ToUpperInvariant(specifier);
+
+        if (upperSpecifier is not ('X' or 'R'))
+            return this.ToBigInteger().ToString(format, formatProvider);
+
+        // Route X (hex) and R (round-trip) through NumberInfoFormatter so the output matches .NET integer
+        // conventions and avoids BigInteger's positive-sign-disambiguation leading '0' on top-bit-set values.
+        // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
+        NumberInfoFormatter formatter = new(new NumberInfo(this, 0), formatProvider ?? CultureInfo.CurrentCulture, ['R', 'X']);
+        return formatter.Format(formatSpan);
     }
 }

@@ -40,13 +40,39 @@ public sealed class UInt256FormatTests
         Assert.Equal("42", value.ToString("D", CultureInfo.InvariantCulture));
     }
 
-    [Fact(DisplayName = "UInt256.ToString with X format should produce the hex representation with BigInteger sign-padding")]
+    [Fact(DisplayName = "UInt256.ToString with X format should produce the hex representation without sign-disambiguation padding")]
     public void UInt256ToStringWithXFormatShouldProduceHex()
     {
-        // BigInteger's "X" format prepends a leading '0' when the high nibble has its top bit set so
-        // the output is unambiguously positive when re-parsed.
         UInt256 value = (UInt256)0xCAFEBABEu;
-        Assert.Equal("0CAFEBABE", value.ToString("X", CultureInfo.InvariantCulture));
+        Assert.Equal("CAFEBABE", value.ToString("X", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "UInt256.ToString with x format should produce the lowercase hex representation")]
+    public void UInt256ToStringWithLowercaseXFormatShouldProduceLowercaseHex()
+    {
+        UInt256 value = (UInt256)0xCAFEBABEu;
+        Assert.Equal("cafebabe", value.ToString("x", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "UInt256.ToString with X8 format should pad to at least 8 hex digits")]
+    public void UInt256ToStringWithX8FormatShouldPadToEightDigits()
+    {
+        UInt256 value = (UInt256)0xABu;
+        Assert.Equal("000000AB", value.ToString("X8", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "UInt256.ToString with X format for MaxValue should produce 64 hex digits")]
+    public void UInt256ToStringWithXFormatForMaxValueShouldProduce64HexDigits()
+    {
+        string actual = UInt256.MaxValue.ToString("X", CultureInfo.InvariantCulture);
+        Assert.Equal(new string('F', 64), actual);
+    }
+
+    [Fact(DisplayName = "UInt256.ToString with R format should produce the decimal representation")]
+    public void UInt256ToStringWithRFormatShouldProduceDecimal()
+    {
+        UInt256 value = (UInt256)1234567UL;
+        Assert.Equal("1234567", value.ToString("R", CultureInfo.InvariantCulture));
     }
 
     [Fact(DisplayName = "UInt256.ToString with N0 format should produce grouped representation")]
@@ -85,15 +111,14 @@ public sealed class UInt256FormatTests
         Assert.Equal(0, charsWritten);
     }
 
-    [Fact(DisplayName = "UInt256.TryFormat with X format into a span should write hex characters with BigInteger sign-padding")]
+    [Fact(DisplayName = "UInt256.TryFormat with X format into a span should write hex characters without sign-disambiguation padding")]
     public void UInt256TryFormatWithXFormatShouldWriteHexCharacters()
     {
         UInt256 value = (UInt256)0xABCD;
         Span<char> buffer = stackalloc char[16];
         bool result = value.TryFormat(buffer, out int charsWritten, "X".AsSpan(), CultureInfo.InvariantCulture);
         Assert.True(result);
-        // BigInteger's X format adds a leading '0' when the high nibble has its top bit set.
-        Assert.Equal("0ABCD", buffer.Slice(0, charsWritten).ToString());
+        Assert.Equal("ABCD", buffer.Slice(0, charsWritten).ToString());
     }
 
     [Fact(DisplayName = "UInt256.TryFormat into a UTF-8 span should write UTF-8 bytes")]

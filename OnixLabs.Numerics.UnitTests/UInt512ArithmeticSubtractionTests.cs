@@ -39,8 +39,8 @@ public sealed class UInt512ArithmeticSubtractionTests
         UInt512 a = new(UInt256.One, UInt256.Zero);
         UInt512 b = new(UInt256.Zero, UInt256.One);
         UInt512 diff = a - b;
-        Assert.Equal(UInt256.Zero, diff.Upper);
-        Assert.Equal(UInt256.MaxValue, diff.Lower);
+        Assert.Equal(UInt256.Zero, diff.UpperBits);
+        Assert.Equal(UInt256.MaxValue, diff.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512 subtraction should not borrow when lower is sufficient")]
@@ -49,8 +49,8 @@ public sealed class UInt512ArithmeticSubtractionTests
         UInt512 a = new((UInt256)5UL, (UInt256)100UL);
         UInt512 b = new((UInt256)1UL, (UInt256)50UL);
         UInt512 diff = a - b;
-        Assert.Equal((UInt256)4UL, diff.Upper);
-        Assert.Equal((UInt256)50UL, diff.Lower);
+        Assert.Equal((UInt256)4UL, diff.UpperBits);
+        Assert.Equal((UInt256)50UL, diff.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512 unchecked subtraction should wrap on underflow")]

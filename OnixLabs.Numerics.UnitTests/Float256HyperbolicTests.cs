@@ -21,10 +21,10 @@ public sealed class Float256HyperbolicTests
     [Fact(DisplayName = "Float256.Sinh of zero should preserve sign")]
     public void Float256SinhOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Sinh(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Sinh(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Sinh(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Sinh(Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Sinh(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Sinh(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Sinh(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Sinh(Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Sinh of infinities should preserve sign")]
@@ -85,10 +85,10 @@ public sealed class Float256HyperbolicTests
     [Fact(DisplayName = "Float256.Tanh of zero should preserve sign")]
     public void Float256TanhOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Tanh(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Tanh(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Tanh(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Tanh(Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Tanh(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Tanh(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Tanh(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Tanh(Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Tanh of infinity should saturate to ±1")]
@@ -131,10 +131,10 @@ public sealed class Float256HyperbolicTests
     [Fact(DisplayName = "Float256.Asinh of zero should preserve sign")]
     public void Float256AsinhOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Asinh(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Asinh(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Asinh(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Asinh(Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Asinh(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Asinh(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Asinh(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Asinh(Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Asinh of infinities should preserve sign")]
@@ -187,10 +187,10 @@ public sealed class Float256HyperbolicTests
     [Fact(DisplayName = "Float256.Atanh of zero should preserve sign")]
     public void Float256AtanhOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Atanh(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Atanh(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Atanh(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Atanh(Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Atanh(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Atanh(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Atanh(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Atanh(Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Atanh of ±1 should return ±infinity")]

@@ -86,8 +86,8 @@ public sealed class UInt256ArithmeticShiftTests
     {
         UInt256 value = new(UInt128.Zero, UInt128.MaxValue);
         UInt256 shifted = value << 128;
-        Assert.Equal(UInt128.MaxValue, shifted.Upper);
-        Assert.Equal(UInt128.Zero, shifted.Lower);
+        Assert.Equal(UInt128.MaxValue, shifted.UpperBits);
+        Assert.Equal(UInt128.Zero, shifted.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 right shift by 128 should move upper into lower")]
@@ -95,8 +95,8 @@ public sealed class UInt256ArithmeticShiftTests
     {
         UInt256 value = new(UInt128.MaxValue, UInt128.Zero);
         UInt256 shifted = value >> 128;
-        Assert.Equal(UInt128.Zero, shifted.Upper);
-        Assert.Equal(UInt128.MaxValue, shifted.Lower);
+        Assert.Equal(UInt128.Zero, shifted.UpperBits);
+        Assert.Equal(UInt128.MaxValue, shifted.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 left shift by 1 across half-boundary should carry the high bit of lower into upper")]
@@ -104,8 +104,8 @@ public sealed class UInt256ArithmeticShiftTests
     {
         UInt256 value = new(UInt128.Zero, UInt128.One << 127);
         UInt256 shifted = value << 1;
-        Assert.Equal(UInt128.One, shifted.Upper);
-        Assert.Equal(UInt128.Zero, shifted.Lower);
+        Assert.Equal(UInt128.One, shifted.UpperBits);
+        Assert.Equal(UInt128.Zero, shifted.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 right shift by 1 across half-boundary should carry the low bit of upper into lower")]
@@ -113,8 +113,8 @@ public sealed class UInt256ArithmeticShiftTests
     {
         UInt256 value = new(UInt128.One, UInt128.Zero);
         UInt256 shifted = value >> 1;
-        Assert.Equal(UInt128.Zero, shifted.Upper);
-        Assert.Equal(UInt128.One << 127, shifted.Lower);
+        Assert.Equal(UInt128.Zero, shifted.UpperBits);
+        Assert.Equal(UInt128.One << 127, shifted.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 left shift by full BitWidth should wrap to zero shift (return value unchanged)")]

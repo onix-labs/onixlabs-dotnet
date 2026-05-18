@@ -40,10 +40,10 @@ public sealed class Float256ArithmeticModulusTests
     [Fact(DisplayName = "Float256.Remainder of finite by infinity should return the finite value")]
     public void Float256RemainderByInfinityShouldReturnValue()
     {
-        Assert.Equal(Float256.One.Bits.Upper, (Float256.One % Float256.PositiveInfinity).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, (Float256.One % Float256.PositiveInfinity).Bits.Lower);
-        Assert.Equal(Float256.NegativeOne.Bits.Upper, (Float256.NegativeOne % Float256.PositiveInfinity).Bits.Upper);
-        Assert.Equal(Float256.NegativeOne.Bits.Lower, (Float256.NegativeOne % Float256.PositiveInfinity).Bits.Lower);
+        Assert.Equal(Float256.One.Bits.UpperBits, (Float256.One % Float256.PositiveInfinity).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, (Float256.One % Float256.PositiveInfinity).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeOne.Bits.UpperBits, (Float256.NegativeOne % Float256.PositiveInfinity).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeOne.Bits.LowerBits, (Float256.NegativeOne % Float256.PositiveInfinity).Bits.LowerBits);
     }
 
     [Theory(DisplayName = "Float256.Remainder should match double remainder for exact double values")]
@@ -58,7 +58,7 @@ public sealed class Float256ArithmeticModulusTests
     {
         Float256 actual = (Float256)left % (Float256)right;
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.Bits.Upper, actual.Bits.Upper);
-        Assert.Equal(expectedFloat.Bits.Lower, actual.Bits.Lower);
+        Assert.Equal(expectedFloat.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expectedFloat.Bits.LowerBits, actual.Bits.LowerBits);
     }
 }

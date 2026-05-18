@@ -118,8 +118,8 @@ public sealed class UInt256ArithmeticBinaryIntegerTests
     {
         UInt256 value = new(UInt128.Zero, UInt128.MaxValue);
         UInt256 rotated = UInt256.RotateLeft(value, 128);
-        Assert.Equal(UInt128.MaxValue, rotated.Upper);
-        Assert.Equal(UInt128.Zero, rotated.Lower);
+        Assert.Equal(UInt128.MaxValue, rotated.UpperBits);
+        Assert.Equal(UInt128.Zero, rotated.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256.RotateRight by 128 should swap halves")]
@@ -127,8 +127,8 @@ public sealed class UInt256ArithmeticBinaryIntegerTests
     {
         UInt256 value = new(UInt128.MaxValue, UInt128.Zero);
         UInt256 rotated = UInt256.RotateRight(value, 128);
-        Assert.Equal(UInt128.Zero, rotated.Upper);
-        Assert.Equal(UInt128.MaxValue, rotated.Lower);
+        Assert.Equal(UInt128.Zero, rotated.UpperBits);
+        Assert.Equal(UInt128.MaxValue, rotated.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256.RotateLeft followed by RotateRight by same amount should be identity")]

@@ -36,17 +36,17 @@ public readonly partial struct Int256 :
     /// </summary>
     /// <param name="upper">The upper 128 bits of the new <see cref="Int256"/> value (whose high bit is interpreted as the sign).</param>
     /// <param name="lower">The lower 128 bits of the new <see cref="Int256"/> value.</param>
-    public Int256(UInt128 upper, UInt128 lower) => (Upper, Lower) = (upper, lower);
+    public Int256(UInt128 upper, UInt128 lower) => (UpperBits, LowerBits) = (upper, lower);
 
     /// <summary>
     /// Gets the upper 128 bits of the current <see cref="Int256"/> value.
     /// </summary>
     /// <value>The upper 128 bits; the high bit encodes the sign.</value>
-    public UInt128 Upper { get; }
+    public UInt128 UpperBits { get; }
 
     /// <summary>
     /// Gets the lower 128 bits of the current <see cref="Int256"/> value.
     /// </summary>
     /// <value>The lower 128 bits.</value>
-    public UInt128 Lower { get; }
+    public UInt128 LowerBits { get; }
 }

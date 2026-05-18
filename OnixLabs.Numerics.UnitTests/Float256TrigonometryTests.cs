@@ -34,10 +34,10 @@ public sealed class Float256TrigonometryTests
     [Fact(DisplayName = "Float256.Sin of zero should preserve sign of zero")]
     public void Float256SinOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Sin(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Sin(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Sin(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Sin(Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Sin(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Sin(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Sin(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Sin(Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Sin of π/6 should return approximately one half")]
@@ -86,10 +86,10 @@ public sealed class Float256TrigonometryTests
     [Fact(DisplayName = "Float256.Tan of zero should preserve sign of zero")]
     public void Float256TanOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Tan(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Tan(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Tan(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Tan(Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Tan(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Tan(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Tan(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Tan(Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Tan of π/4 should return one")]
@@ -144,8 +144,8 @@ public sealed class Float256TrigonometryTests
     [Fact(DisplayName = "Float256.SinPi of integer should return zero with sign")]
     public void Float256SinPiOfIntegerShouldReturnZero()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.SinPi(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.SinPi(Float256.Zero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.SinPi(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.SinPi(Float256.Zero).Bits.LowerBits);
         Assert.True(Float256.IsZero(Float256.SinPi(Float256.One)));
         Assert.True(Float256.IsZero(Float256.SinPi(Float256.Two)));
     }

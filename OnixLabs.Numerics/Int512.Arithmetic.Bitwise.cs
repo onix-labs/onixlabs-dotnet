@@ -22,22 +22,22 @@ public readonly partial struct Int512
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the bitwise AND of the operands.</returns>
-    public static Int512 operator &(Int512 left, Int512 right) => new(left.Upper & right.Upper, left.Lower & right.Lower);
+    public static Int512 operator &(Int512 left, Int512 right) => new(left.UpperBits & right.UpperBits, left.LowerBits & right.LowerBits);
 
     /// <summary>Computes the bitwise OR of two <see cref="Int512"/> values.</summary>
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the bitwise OR of the operands.</returns>
-    public static Int512 operator |(Int512 left, Int512 right) => new(left.Upper | right.Upper, left.Lower | right.Lower);
+    public static Int512 operator |(Int512 left, Int512 right) => new(left.UpperBits | right.UpperBits, left.LowerBits | right.LowerBits);
 
     /// <summary>Computes the bitwise XOR of two <see cref="Int512"/> values.</summary>
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the bitwise XOR of the operands.</returns>
-    public static Int512 operator ^(Int512 left, Int512 right) => new(left.Upper ^ right.Upper, left.Lower ^ right.Lower);
+    public static Int512 operator ^(Int512 left, Int512 right) => new(left.UpperBits ^ right.UpperBits, left.LowerBits ^ right.LowerBits);
 
     /// <summary>Computes the bitwise complement of an <see cref="Int512"/> value.</summary>
     /// <param name="value">The operand.</param>
     /// <returns>Returns the bitwise complement of <paramref name="value"/>.</returns>
-    public static Int512 operator ~(Int512 value) => new(~value.Upper, ~value.Lower);
+    public static Int512 operator ~(Int512 value) => new(~value.UpperBits, ~value.LowerBits);
 }

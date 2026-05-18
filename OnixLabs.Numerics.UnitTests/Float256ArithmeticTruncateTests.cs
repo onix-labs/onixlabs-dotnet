@@ -34,21 +34,21 @@ public sealed class Float256ArithmeticTruncateTests
     {
         Float256 actual = Float256.Truncate(value);
         Float256 expected = double.Truncate(value);
-        Assert.Equal(expected.Bits.Upper, actual.Bits.Upper);
-        Assert.Equal(expected.Bits.Lower, actual.Bits.Lower);
+        Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Truncate of special values should preserve them")]
     public void Float256TruncateOfSpecialValuesShouldPreserve()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Truncate(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Truncate(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Truncate(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Truncate(Float256.NegativeZero).Bits.Lower);
-        Assert.Equal(Float256.PositiveInfinity.Bits.Upper, Float256.Truncate(Float256.PositiveInfinity).Bits.Upper);
-        Assert.Equal(Float256.PositiveInfinity.Bits.Lower, Float256.Truncate(Float256.PositiveInfinity).Bits.Lower);
-        Assert.Equal(Float256.NegativeInfinity.Bits.Upper, Float256.Truncate(Float256.NegativeInfinity).Bits.Upper);
-        Assert.Equal(Float256.NegativeInfinity.Bits.Lower, Float256.Truncate(Float256.NegativeInfinity).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Truncate(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Truncate(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Truncate(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Truncate(Float256.NegativeZero).Bits.LowerBits);
+        Assert.Equal(Float256.PositiveInfinity.Bits.UpperBits, Float256.Truncate(Float256.PositiveInfinity).Bits.UpperBits);
+        Assert.Equal(Float256.PositiveInfinity.Bits.LowerBits, Float256.Truncate(Float256.PositiveInfinity).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeInfinity.Bits.UpperBits, Float256.Truncate(Float256.NegativeInfinity).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeInfinity.Bits.LowerBits, Float256.Truncate(Float256.NegativeInfinity).Bits.LowerBits);
         Assert.True(Float256.IsNaN(Float256.Truncate(Float256.NaN)));
     }
 

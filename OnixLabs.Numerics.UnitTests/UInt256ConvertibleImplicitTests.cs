@@ -27,8 +27,8 @@ public sealed class UInt256ConvertibleImplicitTests
     public void UInt256ImplicitFromByteShouldPreserveValue(byte value)
     {
         UInt256 converted = value;
-        Assert.Equal(UInt128.Zero, converted.Upper);
-        Assert.Equal((UInt128)value, converted.Lower);
+        Assert.Equal(UInt128.Zero, converted.UpperBits);
+        Assert.Equal((UInt128)value, converted.LowerBits);
         Assert.Equal((BigInteger)value, (BigInteger)converted);
     }
 
@@ -40,8 +40,8 @@ public sealed class UInt256ConvertibleImplicitTests
     public void UInt256ImplicitFromUshortShouldPreserveValue(ushort value)
     {
         UInt256 converted = value;
-        Assert.Equal(UInt128.Zero, converted.Upper);
-        Assert.Equal((UInt128)value, converted.Lower);
+        Assert.Equal(UInt128.Zero, converted.UpperBits);
+        Assert.Equal((UInt128)value, converted.LowerBits);
     }
 
     [Theory(DisplayName = "UInt256 implicit conversion from uint should preserve value")]
@@ -51,8 +51,8 @@ public sealed class UInt256ConvertibleImplicitTests
     public void UInt256ImplicitFromUintShouldPreserveValue(uint value)
     {
         UInt256 converted = value;
-        Assert.Equal(UInt128.Zero, converted.Upper);
-        Assert.Equal((UInt128)value, converted.Lower);
+        Assert.Equal(UInt128.Zero, converted.UpperBits);
+        Assert.Equal((UInt128)value, converted.LowerBits);
     }
 
     [Theory(DisplayName = "UInt256 implicit conversion from ulong should preserve value")]
@@ -62,8 +62,8 @@ public sealed class UInt256ConvertibleImplicitTests
     public void UInt256ImplicitFromUlongShouldPreserveValue(ulong value)
     {
         UInt256 converted = value;
-        Assert.Equal(UInt128.Zero, converted.Upper);
-        Assert.Equal((UInt128)value, converted.Lower);
+        Assert.Equal(UInt128.Zero, converted.UpperBits);
+        Assert.Equal((UInt128)value, converted.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 implicit conversion from UInt128 should preserve value and zero upper half")]
@@ -71,8 +71,8 @@ public sealed class UInt256ConvertibleImplicitTests
     {
         UInt128 value = UInt128.MaxValue;
         UInt256 converted = value;
-        Assert.Equal(UInt128.Zero, converted.Upper);
-        Assert.Equal(value, converted.Lower);
+        Assert.Equal(UInt128.Zero, converted.UpperBits);
+        Assert.Equal(value, converted.LowerBits);
         Assert.Equal((BigInteger)value, (BigInteger)converted);
     }
 
@@ -83,8 +83,8 @@ public sealed class UInt256ConvertibleImplicitTests
     public void UInt256ImplicitFromCharShouldPreserveValue(char value)
     {
         UInt256 converted = value;
-        Assert.Equal(UInt128.Zero, converted.Upper);
-        Assert.Equal((UInt128)value, converted.Lower);
+        Assert.Equal(UInt128.Zero, converted.UpperBits);
+        Assert.Equal((UInt128)value, converted.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 implicit conversion from char should round-trip back to char via explicit cast")]

@@ -138,7 +138,7 @@ public readonly partial struct UInt512
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="byte"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 8 bits of <paramref name="value"/>.</returns>
-    public static explicit operator byte(UInt512 value) => (byte)value.Lower;
+    public static explicit operator byte(UInt512 value) => (byte)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="byte"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -147,13 +147,13 @@ public readonly partial struct UInt512
     public static explicit operator checked byte(UInt512 value)
     {
         if (value > byte.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Byte)}.");
-        return (byte)value.Lower;
+        return (byte)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to an <see cref="sbyte"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 8 bits of <paramref name="value"/> as a signed byte.</returns>
-    public static explicit operator sbyte(UInt512 value) => (sbyte)value.Lower;
+    public static explicit operator sbyte(UInt512 value) => (sbyte)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to an <see cref="sbyte"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -162,13 +162,13 @@ public readonly partial struct UInt512
     public static explicit operator checked sbyte(UInt512 value)
     {
         if (value > (UInt512)(byte)sbyte.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(SByte)}.");
-        return (sbyte)value.Lower;
+        return (sbyte)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="short"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 16 bits of <paramref name="value"/> as a signed short.</returns>
-    public static explicit operator short(UInt512 value) => (short)value.Lower;
+    public static explicit operator short(UInt512 value) => (short)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="short"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -177,13 +177,13 @@ public readonly partial struct UInt512
     public static explicit operator checked short(UInt512 value)
     {
         if (value > (UInt512)(ushort)short.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Int16)}.");
-        return (short)value.Lower;
+        return (short)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="ushort"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 16 bits of <paramref name="value"/>.</returns>
-    public static explicit operator ushort(UInt512 value) => (ushort)value.Lower;
+    public static explicit operator ushort(UInt512 value) => (ushort)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="ushort"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -192,13 +192,13 @@ public readonly partial struct UInt512
     public static explicit operator checked ushort(UInt512 value)
     {
         if (value > ushort.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(UInt16)}.");
-        return (ushort)value.Lower;
+        return (ushort)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to an <see cref="int"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 32 bits of <paramref name="value"/> as a signed int.</returns>
-    public static explicit operator int(UInt512 value) => (int)value.Lower;
+    public static explicit operator int(UInt512 value) => (int)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to an <see cref="int"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -207,13 +207,13 @@ public readonly partial struct UInt512
     public static explicit operator checked int(UInt512 value)
     {
         if (value > (UInt512)(uint)int.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Int32)}.");
-        return (int)value.Lower;
+        return (int)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="uint"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 32 bits of <paramref name="value"/>.</returns>
-    public static explicit operator uint(UInt512 value) => (uint)value.Lower;
+    public static explicit operator uint(UInt512 value) => (uint)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="uint"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -222,13 +222,13 @@ public readonly partial struct UInt512
     public static explicit operator checked uint(UInt512 value)
     {
         if (value > uint.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(UInt32)}.");
-        return (uint)value.Lower;
+        return (uint)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="long"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 64 bits of <paramref name="value"/> as a signed long.</returns>
-    public static explicit operator long(UInt512 value) => (long)value.Lower;
+    public static explicit operator long(UInt512 value) => (long)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="long"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -237,13 +237,13 @@ public readonly partial struct UInt512
     public static explicit operator checked long(UInt512 value)
     {
         if (value > (UInt512)(ulong)long.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Int64)}.");
-        return (long)value.Lower;
+        return (long)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="ulong"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 64 bits of <paramref name="value"/>.</returns>
-    public static explicit operator ulong(UInt512 value) => (ulong)value.Lower;
+    public static explicit operator ulong(UInt512 value) => (ulong)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="ulong"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -252,13 +252,13 @@ public readonly partial struct UInt512
     public static explicit operator checked ulong(UInt512 value)
     {
         if (value > ulong.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(UInt64)}.");
-        return (ulong)value.Lower;
+        return (ulong)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="UInt128"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 128 bits of <paramref name="value"/>.</returns>
-    public static explicit operator UInt128(UInt512 value) => (UInt128)value.Lower;
+    public static explicit operator UInt128(UInt512 value) => (UInt128)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="UInt128"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -266,14 +266,14 @@ public readonly partial struct UInt512
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> exceeds <see cref="UInt128.MaxValue"/>.</exception>
     public static explicit operator checked UInt128(UInt512 value)
     {
-        if (!UInt256.IsZero(value.Upper) || value.Lower > (UInt256)UInt128.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(UInt128)}.");
-        return (UInt128)value.Lower;
+        if (!UInt256.IsZero(value.UpperBits) || value.LowerBits > (UInt256)UInt128.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(UInt128)}.");
+        return (UInt128)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to an <see cref="Int128"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 128 bits of <paramref name="value"/> as a signed <see cref="Int128"/>.</returns>
-    public static explicit operator Int128(UInt512 value) => (Int128)(UInt128)value.Lower;
+    public static explicit operator Int128(UInt512 value) => (Int128)(UInt128)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to an <see cref="Int128"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -281,14 +281,14 @@ public readonly partial struct UInt512
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> exceeds <see cref="Int128.MaxValue"/>.</exception>
     public static explicit operator checked Int128(UInt512 value)
     {
-        if (!UInt256.IsZero(value.Upper) || value.Lower > (UInt256)(UInt128)Int128.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Int128)}.");
-        return (Int128)(UInt128)value.Lower;
+        if (!UInt256.IsZero(value.UpperBits) || value.LowerBits > (UInt256)(UInt128)Int128.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Int128)}.");
+        return (Int128)(UInt128)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="UInt256"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 256 bits of <paramref name="value"/>.</returns>
-    public static explicit operator UInt256(UInt512 value) => value.Lower;
+    public static explicit operator UInt256(UInt512 value) => value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="UInt256"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -296,14 +296,14 @@ public readonly partial struct UInt512
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> exceeds <see cref="UInt256.MaxValue"/>.</exception>
     public static explicit operator checked UInt256(UInt512 value)
     {
-        if (!UInt256.IsZero(value.Upper)) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(UInt256)}.");
-        return value.Lower;
+        if (!UInt256.IsZero(value.UpperBits)) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(UInt256)}.");
+        return value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="char"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the low 16 bits of <paramref name="value"/> as a <see cref="char"/>.</returns>
-    public static explicit operator char(UInt512 value) => (char)value.Lower;
+    public static explicit operator char(UInt512 value) => (char)value.LowerBits;
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="char"/>, throwing on overflow.</summary>
     /// <param name="value">The value to convert.</param>
@@ -312,7 +312,7 @@ public readonly partial struct UInt512
     public static explicit operator checked char(UInt512 value)
     {
         if (value > char.MaxValue) throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Char)}.");
-        return (char)value.Lower;
+        return (char)value.LowerBits;
     }
 
     /// <summary>Implicitly converts a <see cref="UInt512"/> value to a <see cref="BigInteger"/>.</summary>
@@ -330,8 +330,8 @@ public readonly partial struct UInt512
     /// <returns>Returns the <see cref="double"/> closest to <paramref name="value"/>.</returns>
     public static explicit operator double(UInt512 value)
     {
-        if (UInt256.IsZero(value.Upper)) return (double)value.Lower;
-        return (double)value.Upper * 115792089237316195423570985008687907853269984665640564039457584007913129639936.0 + (double)value.Lower;
+        if (UInt256.IsZero(value.UpperBits)) return (double)value.LowerBits;
+        return (double)value.UpperBits * 115792089237316195423570985008687907853269984665640564039457584007913129639936.0 + (double)value.LowerBits;
     }
 
     /// <summary>Explicitly converts a <see cref="UInt512"/> value to a <see cref="Half"/>.</summary>
@@ -430,8 +430,8 @@ public readonly partial struct UInt512
     /// <returns>Returns the <see cref="BigInteger"/> representation of <paramref name="value"/>.</returns>
     internal static BigInteger UInt512ToBigInteger(UInt512 value)
     {
-        BigInteger high = (BigInteger)value.Upper;
-        BigInteger low = (BigInteger)value.Lower;
+        BigInteger high = (BigInteger)value.UpperBits;
+        BigInteger low = (BigInteger)value.LowerBits;
         return (high << HalfBitWidth) | low;
     }
 }

@@ -79,8 +79,8 @@ public readonly partial struct Float256
         }
 
         UInt256 significand = ExtractSignificandWithImplicitBit();
-        WriteUInt128BigEndian(destination, significand.Upper);
-        WriteUInt128BigEndian(destination[16..], significand.Lower);
+        WriteUInt128BigEndian(destination, significand.UpperBits);
+        WriteUInt128BigEndian(destination[16..], significand.LowerBits);
         bytesWritten = SignificandByteCount;
         return true;
     }
@@ -100,8 +100,8 @@ public readonly partial struct Float256
         }
 
         UInt256 significand = ExtractSignificandWithImplicitBit();
-        WriteUInt128LittleEndian(destination, significand.Lower);
-        WriteUInt128LittleEndian(destination[16..], significand.Upper);
+        WriteUInt128LittleEndian(destination, significand.LowerBits);
+        WriteUInt128LittleEndian(destination[16..], significand.UpperBits);
         bytesWritten = SignificandByteCount;
         return true;
     }

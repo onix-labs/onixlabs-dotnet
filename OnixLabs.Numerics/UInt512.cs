@@ -36,17 +36,17 @@ public readonly partial struct UInt512 :
     /// </summary>
     /// <param name="upper">The upper 256 bits of the new <see cref="UInt512"/> value.</param>
     /// <param name="lower">The lower 256 bits of the new <see cref="UInt512"/> value.</param>
-    public UInt512(UInt256 upper, UInt256 lower) => (Upper, Lower) = (upper, lower);
+    public UInt512(UInt256 upper, UInt256 lower) => (UpperBits, LowerBits) = (upper, lower);
 
     /// <summary>
     /// Gets the upper 256 bits of the current <see cref="UInt512"/> value.
     /// </summary>
     /// <value>The upper 256 bits.</value>
-    public UInt256 Upper { get; }
+    public UInt256 UpperBits { get; }
 
     /// <summary>
     /// Gets the lower 256 bits of the current <see cref="UInt512"/> value.
     /// </summary>
     /// <value>The lower 256 bits.</value>
-    public UInt256 Lower { get; }
+    public UInt256 LowerBits { get; }
 }

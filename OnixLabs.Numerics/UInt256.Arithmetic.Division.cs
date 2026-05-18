@@ -41,18 +41,18 @@ public readonly partial struct UInt256
         if (left < right) return (Zero, left);
         if (left == right) return (One, Zero);
 
-        if (right.Upper == UInt128.Zero)
+        if (right.UpperBits == UInt128.Zero)
         {
-            UInt128 divisor = right.Lower;
-            if (left.Upper == UInt128.Zero)
+            UInt128 divisor = right.LowerBits;
+            if (left.UpperBits == UInt128.Zero)
             {
-                UInt128 quotientSmall = left.Lower / divisor;
-                UInt128 remainderSmall = left.Lower % divisor;
+                UInt128 quotientSmall = left.LowerBits / divisor;
+                UInt128 remainderSmall = left.LowerBits % divisor;
                 return (new UInt256(UInt128.Zero, quotientSmall), new UInt256(UInt128.Zero, remainderSmall));
             }
 
             UInt128 quotientLow = DivRemBy128(left, divisor, out UInt128 remainder128);
-            UInt128 quotientHigh = left.Upper / divisor;
+            UInt128 quotientHigh = left.UpperBits / divisor;
             return (new UInt256(quotientHigh, quotientLow), new UInt256(UInt128.Zero, remainder128));
         }
 
@@ -87,8 +87,8 @@ public readonly partial struct UInt256
 
         UInt128 quotientLow = UInt128.Zero;
         UInt128 working = UInt128.Zero;
-        UInt128 numHigh = dividend.Upper;
-        UInt128 numLow = dividend.Lower;
+        UInt128 numHigh = dividend.UpperBits;
+        UInt128 numLow = dividend.LowerBits;
 
         for (int bitIndex = HalfBitWidth - 1; bitIndex >= 0; bitIndex--)
         {

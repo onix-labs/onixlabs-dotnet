@@ -49,19 +49,19 @@ public sealed class Float256ArithmeticAdditionTests
     [Fact(DisplayName = "Float256.Add zeros with same signs should preserve sign")]
     public void Float256AddZerosWithSameSignShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, (Float256.Zero + Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, (Float256.Zero + Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, (Float256.NegativeZero + Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, (Float256.NegativeZero + Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, (Float256.Zero + Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, (Float256.Zero + Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, (Float256.NegativeZero + Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, (Float256.NegativeZero + Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Add zeros with opposite signs should return positive zero")]
     public void Float256AddZerosWithOppositeSignsShouldReturnPositiveZero()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, (Float256.Zero + Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, (Float256.Zero + Float256.NegativeZero).Bits.Lower);
-        Assert.Equal(Float256.Zero.Bits.Upper, (Float256.NegativeZero + Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, (Float256.NegativeZero + Float256.Zero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, (Float256.Zero + Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, (Float256.Zero + Float256.NegativeZero).Bits.LowerBits);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, (Float256.NegativeZero + Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, (Float256.NegativeZero + Float256.Zero).Bits.LowerBits);
     }
 
     [Theory(DisplayName = "Float256.Add should produce the same result as double addition for exact double values")]
@@ -79,8 +79,8 @@ public sealed class Float256ArithmeticAdditionTests
     {
         Float256 actual = (Float256)left + (Float256)right;
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.Bits.Upper, actual.Bits.Upper);
-        Assert.Equal(expectedFloat.Bits.Lower, actual.Bits.Lower);
+        Assert.Equal(expectedFloat.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expectedFloat.Bits.LowerBits, actual.Bits.LowerBits);
     }
 
     [Theory(DisplayName = "Float256.Add of value to itself should produce 2*value")]
@@ -97,8 +97,8 @@ public sealed class Float256ArithmeticAdditionTests
         Float256 a = value;
         Float256 sum = a + a;
         Float256 expectedFromDouble = value + value;
-        Assert.Equal(expectedFromDouble.Bits.Upper, sum.Bits.Upper);
-        Assert.Equal(expectedFromDouble.Bits.Lower, sum.Bits.Lower);
+        Assert.Equal(expectedFromDouble.Bits.UpperBits, sum.Bits.UpperBits);
+        Assert.Equal(expectedFromDouble.Bits.LowerBits, sum.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Add catastrophic cancellation should return zero")]

@@ -39,8 +39,8 @@ public sealed class Float256ArithmeticRoundTests
     {
         Float256 actual = Float256.Round(value);
         Float256 expected = double.Round(value);
-        Assert.Equal(expected.Bits.Upper, actual.Bits.Upper);
-        Assert.Equal(expected.Bits.Lower, actual.Bits.Lower);
+        Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
     }
 
     [Theory(DisplayName = "Float256.Round with AwayFromZero should match double.Round")]
@@ -54,8 +54,8 @@ public sealed class Float256ArithmeticRoundTests
     {
         Float256 actual = Float256.Round(value, MidpointRounding.AwayFromZero);
         Float256 expected = double.Round(value, MidpointRounding.AwayFromZero);
-        Assert.Equal(expected.Bits.Upper, actual.Bits.Upper);
-        Assert.Equal(expected.Bits.Lower, actual.Bits.Lower);
+        Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Round with ToZero should match Truncate")]
@@ -65,8 +65,8 @@ public sealed class Float256ArithmeticRoundTests
         {
             Float256 actual = Float256.Round(value, MidpointRounding.ToZero);
             Float256 expected = Float256.Truncate(value);
-            Assert.Equal(expected.Bits.Upper, actual.Bits.Upper);
-            Assert.Equal(expected.Bits.Lower, actual.Bits.Lower);
+            Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+            Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
         }
     }
 
@@ -77,8 +77,8 @@ public sealed class Float256ArithmeticRoundTests
         {
             Float256 actual = Float256.Round(value, MidpointRounding.ToNegativeInfinity);
             Float256 expected = Float256.Floor(value);
-            Assert.Equal(expected.Bits.Upper, actual.Bits.Upper);
-            Assert.Equal(expected.Bits.Lower, actual.Bits.Lower);
+            Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+            Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
         }
     }
 
@@ -89,8 +89,8 @@ public sealed class Float256ArithmeticRoundTests
         {
             Float256 actual = Float256.Round(value, MidpointRounding.ToPositiveInfinity);
             Float256 expected = Float256.Ceiling(value);
-            Assert.Equal(expected.Bits.Upper, actual.Bits.Upper);
-            Assert.Equal(expected.Bits.Lower, actual.Bits.Lower);
+            Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+            Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
         }
     }
 
@@ -103,14 +103,14 @@ public sealed class Float256ArithmeticRoundTests
     [Fact(DisplayName = "Float256.Round of special values should preserve them")]
     public void Float256RoundOfSpecialValuesShouldPreserve()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Round(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Round(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Round(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Round(Float256.NegativeZero).Bits.Lower);
-        Assert.Equal(Float256.PositiveInfinity.Bits.Upper, Float256.Round(Float256.PositiveInfinity).Bits.Upper);
-        Assert.Equal(Float256.PositiveInfinity.Bits.Lower, Float256.Round(Float256.PositiveInfinity).Bits.Lower);
-        Assert.Equal(Float256.NegativeInfinity.Bits.Upper, Float256.Round(Float256.NegativeInfinity).Bits.Upper);
-        Assert.Equal(Float256.NegativeInfinity.Bits.Lower, Float256.Round(Float256.NegativeInfinity).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Round(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Round(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Round(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Round(Float256.NegativeZero).Bits.LowerBits);
+        Assert.Equal(Float256.PositiveInfinity.Bits.UpperBits, Float256.Round(Float256.PositiveInfinity).Bits.UpperBits);
+        Assert.Equal(Float256.PositiveInfinity.Bits.LowerBits, Float256.Round(Float256.PositiveInfinity).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeInfinity.Bits.UpperBits, Float256.Round(Float256.NegativeInfinity).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeInfinity.Bits.LowerBits, Float256.Round(Float256.NegativeInfinity).Bits.LowerBits);
         Assert.True(Float256.IsNaN(Float256.Round(Float256.NaN)));
     }
 

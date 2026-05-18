@@ -40,8 +40,8 @@ public sealed class UInt256ArithmeticSubtractionTests
         UInt256 left = new((UInt128)10, (UInt128)20);
         UInt256 right = new((UInt128)3, (UInt128)4);
         UInt256 result = left - right;
-        Assert.Equal((UInt128)7, result.Upper);
-        Assert.Equal((UInt128)16, result.Lower);
+        Assert.Equal((UInt128)7, result.UpperBits);
+        Assert.Equal((UInt128)16, result.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 subtraction with borrow should decrement the upper half")]
@@ -50,8 +50,8 @@ public sealed class UInt256ArithmeticSubtractionTests
         UInt256 left = new((UInt128)5, UInt128.Zero);
         UInt256 right = new(UInt128.Zero, UInt128.One);
         UInt256 result = left - right;
-        Assert.Equal((UInt128)4, result.Upper);
-        Assert.Equal(UInt128.MaxValue, result.Lower);
+        Assert.Equal((UInt128)4, result.UpperBits);
+        Assert.Equal(UInt128.MaxValue, result.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 subtraction underflow should wrap to MaxValue when zero minus one")]
@@ -99,7 +99,7 @@ public sealed class UInt256ArithmeticSubtractionTests
         UInt256 left = new(UInt128.Zero, UInt128.Zero);
         UInt256 right = new(UInt128.Zero, UInt128.One);
         UInt256 result = left - right;
-        Assert.Equal(UInt128.MaxValue, result.Upper);
-        Assert.Equal(UInt128.MaxValue, result.Lower);
+        Assert.Equal(UInt128.MaxValue, result.UpperBits);
+        Assert.Equal(UInt128.MaxValue, result.LowerBits);
     }
 }

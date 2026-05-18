@@ -237,7 +237,7 @@ public readonly partial struct Float256
     /// <returns>Returns the bit pattern of the incremented value. Carries propagate naturally through the trailing significand into the biased exponent, automatically promoting powers of two.</returns>
     private static UInt256 IncrementIntegerMagnitudeBits(UInt256 absoluteIntegerBits)
     {
-        uint biasedExponent = (uint)((absoluteIntegerBits & BiasedExponentMask) >> BiasedExponentShift).Lower;
+        uint biasedExponent = (uint)((absoluteIntegerBits & BiasedExponentMask) >> BiasedExponentShift).LowerBits;
 
         if (biasedExponent == 0u) return One.Bits;
 

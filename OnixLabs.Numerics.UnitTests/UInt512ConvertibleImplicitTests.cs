@@ -27,8 +27,8 @@ public sealed class UInt512ConvertibleImplicitTests
     public void UInt512ImplicitFromByteShouldPreserveValue(byte value)
     {
         UInt512 wide = value;
-        Assert.Equal(UInt256.Zero, wide.Upper);
-        Assert.Equal((UInt256)value, wide.Lower);
+        Assert.Equal(UInt256.Zero, wide.UpperBits);
+        Assert.Equal((UInt256)value, wide.LowerBits);
     }
 
     [Theory(DisplayName = "UInt512 implicit conversion from ushort should preserve value")]
@@ -39,8 +39,8 @@ public sealed class UInt512ConvertibleImplicitTests
     public void UInt512ImplicitFromUShortShouldPreserveValue(ushort value)
     {
         UInt512 wide = value;
-        Assert.Equal(UInt256.Zero, wide.Upper);
-        Assert.Equal((UInt256)value, wide.Lower);
+        Assert.Equal(UInt256.Zero, wide.UpperBits);
+        Assert.Equal((UInt256)value, wide.LowerBits);
     }
 
     [Theory(DisplayName = "UInt512 implicit conversion from uint should preserve value")]
@@ -51,8 +51,8 @@ public sealed class UInt512ConvertibleImplicitTests
     public void UInt512ImplicitFromUIntShouldPreserveValue(uint value)
     {
         UInt512 wide = value;
-        Assert.Equal(UInt256.Zero, wide.Upper);
-        Assert.Equal((UInt256)value, wide.Lower);
+        Assert.Equal(UInt256.Zero, wide.UpperBits);
+        Assert.Equal((UInt256)value, wide.LowerBits);
     }
 
     [Theory(DisplayName = "UInt512 implicit conversion from ulong should preserve value")]
@@ -63,8 +63,8 @@ public sealed class UInt512ConvertibleImplicitTests
     public void UInt512ImplicitFromULongShouldPreserveValue(ulong value)
     {
         UInt512 wide = value;
-        Assert.Equal(UInt256.Zero, wide.Upper);
-        Assert.Equal((UInt256)value, wide.Lower);
+        Assert.Equal(UInt256.Zero, wide.UpperBits);
+        Assert.Equal((UInt256)value, wide.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512 implicit conversion from UInt128 MaxValue should preserve value")]
@@ -72,8 +72,8 @@ public sealed class UInt512ConvertibleImplicitTests
     {
         UInt128 source = UInt128.MaxValue;
         UInt512 wide = source;
-        Assert.Equal(UInt256.Zero, wide.Upper);
-        Assert.Equal((UInt256)source, wide.Lower);
+        Assert.Equal(UInt256.Zero, wide.UpperBits);
+        Assert.Equal((UInt256)source, wide.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512 implicit conversion from UInt256 MaxValue should preserve value")]
@@ -81,8 +81,8 @@ public sealed class UInt512ConvertibleImplicitTests
     {
         UInt256 source = UInt256.MaxValue;
         UInt512 wide = source;
-        Assert.Equal(UInt256.Zero, wide.Upper);
-        Assert.Equal(source, wide.Lower);
+        Assert.Equal(UInt256.Zero, wide.UpperBits);
+        Assert.Equal(source, wide.LowerBits);
     }
 
     [Theory(DisplayName = "UInt512 implicit conversion from char should preserve numeric value")]
@@ -93,8 +93,8 @@ public sealed class UInt512ConvertibleImplicitTests
     public void UInt512ImplicitFromCharShouldPreserveValue(char value)
     {
         UInt512 wide = value;
-        Assert.Equal(UInt256.Zero, wide.Upper);
-        Assert.Equal((UInt256)value, wide.Lower);
+        Assert.Equal(UInt256.Zero, wide.UpperBits);
+        Assert.Equal((UInt256)value, wide.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512 implicit conversion round-trips through BigInteger for ulong")]

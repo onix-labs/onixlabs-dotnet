@@ -191,7 +191,7 @@ public readonly partial struct UInt256
         if (typeof(TOther) == typeof(long)) { result = (TOther)(object)(value > (UInt256)(ulong)long.MaxValue ? long.MaxValue : (long)value); return true; }
         if (typeof(TOther) == typeof(ulong)) { result = (TOther)(object)(value > ulong.MaxValue ? ulong.MaxValue : (ulong)value); return true; }
         if (typeof(TOther) == typeof(Int128)) { result = (TOther)(object)(value > (UInt256)(UInt128)Int128.MaxValue ? Int128.MaxValue : (Int128)value); return true; }
-        if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(value.Upper != UInt128.Zero ? UInt128.MaxValue : value.Lower); return true; }
+        if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(value.UpperBits != UInt128.Zero ? UInt128.MaxValue : value.LowerBits); return true; }
         if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
         if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(value > char.MaxValue ? char.MaxValue : (char)value); return true; }
         if (typeof(TOther) == typeof(float)) { result = (TOther)(object)(float)value; return true; }

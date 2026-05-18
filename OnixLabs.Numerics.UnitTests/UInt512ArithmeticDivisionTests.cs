@@ -160,7 +160,7 @@ public sealed class UInt512ArithmeticDivisionTests
     {
         UInt512 dividend = UInt512.Parse("99999999999999999999999999999999999999999999999999999999999999999999999999999");
         UInt256 divisor = (UInt256)(UInt128.MaxValue);
-        Assert.True(dividend.Upper < divisor);
+        Assert.True(dividend.UpperBits < divisor);
         UInt256 quotient = UInt512.DivRemBy256(dividend, divisor, out UInt256 remainder);
         Assert.Equal((BigInteger)dividend / (BigInteger)divisor, (BigInteger)quotient);
         Assert.Equal((BigInteger)dividend % (BigInteger)divisor, (BigInteger)remainder);

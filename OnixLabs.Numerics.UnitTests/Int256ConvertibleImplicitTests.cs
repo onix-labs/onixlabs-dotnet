@@ -44,7 +44,7 @@ public sealed class Int256ConvertibleImplicitTests
     {
         Int256 converted = value;
         Assert.Equal((BigInteger)value, (BigInteger)converted);
-        Assert.Equal(UInt128.Zero, converted.Upper);
+        Assert.Equal(UInt128.Zero, converted.UpperBits);
     }
 
     [Theory(DisplayName = "Int256 implicit conversion from short should sign-extend for negatives")]
@@ -88,11 +88,11 @@ public sealed class Int256ConvertibleImplicitTests
         Int256 fromMin = Int128.MinValue;
         Assert.Equal((BigInteger)Int128.MinValue, (BigInteger)fromMin);
         Assert.True(Int256.IsNegative(fromMin));
-        Assert.Equal(UInt128.MaxValue, fromMin.Upper);
+        Assert.Equal(UInt128.MaxValue, fromMin.UpperBits);
 
         Int256 fromPositive = (Int128)42;
-        Assert.Equal(UInt128.Zero, fromPositive.Upper);
-        Assert.Equal((UInt128)42, fromPositive.Lower);
+        Assert.Equal(UInt128.Zero, fromPositive.UpperBits);
+        Assert.Equal((UInt128)42, fromPositive.LowerBits);
     }
 
     [Fact(DisplayName = "Int256 implicit conversion from UInt128 should produce non-negative value with zero upper")]
@@ -100,8 +100,8 @@ public sealed class Int256ConvertibleImplicitTests
     {
         Int256 converted = UInt128.MaxValue;
         Assert.False(Int256.IsNegative(converted));
-        Assert.Equal(UInt128.Zero, converted.Upper);
-        Assert.Equal(UInt128.MaxValue, converted.Lower);
+        Assert.Equal(UInt128.Zero, converted.UpperBits);
+        Assert.Equal(UInt128.MaxValue, converted.LowerBits);
     }
 
     [Theory(DisplayName = "Int256 implicit conversion from ulong should produce non-negative value with zero upper")]

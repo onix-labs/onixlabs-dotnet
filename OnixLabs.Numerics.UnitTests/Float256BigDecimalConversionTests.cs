@@ -58,8 +58,8 @@ public sealed class Float256BigDecimalConversionTests
     [Fact(DisplayName = "BigDecimal to Float256 of zero should produce Float256.Zero")]
     public void BigDecimalToFloat256OfZeroShouldProduceZero()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, ((Float256)BigDecimal.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, ((Float256)BigDecimal.Zero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, ((Float256)BigDecimal.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, ((Float256)BigDecimal.Zero).Bits.LowerBits);
     }
 
     [Theory(DisplayName = "BigDecimal to Float256 of small integers should be exact")]
@@ -75,8 +75,8 @@ public sealed class Float256BigDecimalConversionTests
         BigDecimal bd = value;
         Float256 wide = (Float256)bd;
         Float256 expected = value;
-        Assert.Equal(expected.Bits.Upper, wide.Bits.Upper);
-        Assert.Equal(expected.Bits.Lower, wide.Bits.Lower);
+        Assert.Equal(expected.Bits.UpperBits, wide.Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, wide.Bits.LowerBits);
     }
 
     [Theory(DisplayName = "Float256 round-trips through BigDecimal preserve representable values")]
@@ -94,7 +94,7 @@ public sealed class Float256BigDecimalConversionTests
         Float256 original = value;
         BigDecimal bd = (BigDecimal)original;
         Float256 roundTripped = (Float256)bd;
-        Assert.Equal(original.Bits.Upper, roundTripped.Bits.Upper);
-        Assert.Equal(original.Bits.Lower, roundTripped.Bits.Lower);
+        Assert.Equal(original.Bits.UpperBits, roundTripped.Bits.UpperBits);
+        Assert.Equal(original.Bits.LowerBits, roundTripped.Bits.LowerBits);
     }
 }

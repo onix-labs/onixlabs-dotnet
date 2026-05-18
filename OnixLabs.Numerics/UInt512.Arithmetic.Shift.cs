@@ -28,11 +28,11 @@ public readonly partial struct UInt512
         if (shiftAmount == 0) return value;
         if (shiftAmount >= HalfBitWidth)
         {
-            return new UInt512(value.Lower << (shiftAmount - HalfBitWidth), UInt256.Zero);
+            return new UInt512(value.LowerBits << (shiftAmount - HalfBitWidth), UInt256.Zero);
         }
 
-        UInt256 newUpper = (value.Upper << shiftAmount) | (value.Lower >> (HalfBitWidth - shiftAmount));
-        UInt256 newLower = value.Lower << shiftAmount;
+        UInt256 newUpper = (value.UpperBits << shiftAmount) | (value.LowerBits >> (HalfBitWidth - shiftAmount));
+        UInt256 newLower = value.LowerBits << shiftAmount;
         return new UInt512(newUpper, newLower);
     }
 
@@ -52,11 +52,11 @@ public readonly partial struct UInt512
         if (shiftAmount == 0) return value;
         if (shiftAmount >= HalfBitWidth)
         {
-            return new UInt512(UInt256.Zero, value.Upper >> (shiftAmount - HalfBitWidth));
+            return new UInt512(UInt256.Zero, value.UpperBits >> (shiftAmount - HalfBitWidth));
         }
 
-        UInt256 newUpper = value.Upper >> shiftAmount;
-        UInt256 newLower = (value.Lower >> shiftAmount) | (value.Upper << (HalfBitWidth - shiftAmount));
+        UInt256 newUpper = value.UpperBits >> shiftAmount;
+        UInt256 newLower = (value.LowerBits >> shiftAmount) | (value.UpperBits << (HalfBitWidth - shiftAmount));
         return new UInt512(newUpper, newLower);
     }
 }

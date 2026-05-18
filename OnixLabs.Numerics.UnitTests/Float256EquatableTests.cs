@@ -82,7 +82,7 @@ public sealed class Float256EquatableTests
     [Fact(DisplayName = "Float256.GetHashCode should collapse all NaN bit patterns to a single hash")]
     public void Float256GetHashCodeShouldCollapseNaN()
     {
-        Float256 alternativeNaN = new(new UInt256(Float256.NaN.Bits.Upper, Float256.NaN.Bits.Lower | UInt128.One));
+        Float256 alternativeNaN = new(new UInt256(Float256.NaN.Bits.UpperBits, Float256.NaN.Bits.LowerBits | UInt128.One));
         Assert.Equal(Float256.NaN.GetHashCode(), alternativeNaN.GetHashCode());
     }
 }

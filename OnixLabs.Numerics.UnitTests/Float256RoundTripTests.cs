@@ -37,19 +37,19 @@ public sealed class Float256RoundTripTests
         Float256 original = value;
         string text = original.ToString(null, CultureInfo.InvariantCulture);
         Float256 parsed = Float256.Parse(text, CultureInfo.InvariantCulture);
-        Assert.Equal(original.Bits.Upper, parsed.Bits.Upper);
-        Assert.Equal(original.Bits.Lower, parsed.Bits.Lower);
+        Assert.Equal(original.Bits.UpperBits, parsed.Bits.UpperBits);
+        Assert.Equal(original.Bits.LowerBits, parsed.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256 parse(ToString(value)) should preserve constants E, Pi, and Tau")]
     public void Float256RoundTripShouldPreserveConstants()
     {
-        Assert.Equal(Float256.E.Bits.Upper, Float256.Parse(Float256.E.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.Upper);
-        Assert.Equal(Float256.E.Bits.Lower, Float256.Parse(Float256.E.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.Lower);
-        Assert.Equal(Float256.Pi.Bits.Upper, Float256.Parse(Float256.Pi.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.Upper);
-        Assert.Equal(Float256.Pi.Bits.Lower, Float256.Parse(Float256.Pi.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.Lower);
-        Assert.Equal(Float256.Tau.Bits.Upper, Float256.Parse(Float256.Tau.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.Upper);
-        Assert.Equal(Float256.Tau.Bits.Lower, Float256.Parse(Float256.Tau.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.Lower);
+        Assert.Equal(Float256.E.Bits.UpperBits, Float256.Parse(Float256.E.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.UpperBits);
+        Assert.Equal(Float256.E.Bits.LowerBits, Float256.Parse(Float256.E.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.LowerBits);
+        Assert.Equal(Float256.Pi.Bits.UpperBits, Float256.Parse(Float256.Pi.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.UpperBits);
+        Assert.Equal(Float256.Pi.Bits.LowerBits, Float256.Parse(Float256.Pi.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.LowerBits);
+        Assert.Equal(Float256.Tau.Bits.UpperBits, Float256.Parse(Float256.Tau.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.UpperBits);
+        Assert.Equal(Float256.Tau.Bits.LowerBits, Float256.Parse(Float256.Tau.ToString(null, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256 parse(ToString(NaN)) should produce NaN")]

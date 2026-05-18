@@ -30,7 +30,7 @@ public readonly partial struct Float256
     /// </summary>
     /// <param name="bits">The IEEE 754 binary256 bit pattern from which to extract the biased exponent.</param>
     /// <returns>Returns the 19-bit biased exponent as an unsigned integer in the range [0, 524287].</returns>
-    internal static uint ExtractBiasedExponent(UInt256 bits) => (uint)((bits & BiasedExponentMask) >> BiasedExponentShift).Lower;
+    internal static uint ExtractBiasedExponent(UInt256 bits) => (uint)((bits & BiasedExponentMask) >> BiasedExponentShift).LowerBits;
 
     /// <summary>
     /// Gets the trailing significand of the specified IEEE 754 binary256 bit pattern.

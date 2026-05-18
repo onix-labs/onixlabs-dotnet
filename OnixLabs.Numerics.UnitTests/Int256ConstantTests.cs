@@ -29,16 +29,16 @@ public sealed class Int256ConstantTests
     [Fact(DisplayName = "Int256.One bit pattern should have only the lowest bit set")]
     public void Int256OneBitPatternShouldHaveOnlyLowestBitSet()
     {
-        Assert.Equal(UInt128.Zero, Int256.One.Upper);
-        Assert.Equal(UInt128.One, Int256.One.Lower);
+        Assert.Equal(UInt128.Zero, Int256.One.UpperBits);
+        Assert.Equal(UInt128.One, Int256.One.LowerBits);
         Assert.Equal(BigInteger.One, (BigInteger)Int256.One);
     }
 
     [Fact(DisplayName = "Int256.NegativeOne should have all bits set (two's-complement representation)")]
     public void Int256NegativeOneShouldHaveAllBitsSet()
     {
-        Assert.Equal(UInt128.MaxValue, Int256.NegativeOne.Upper);
-        Assert.Equal(UInt128.MaxValue, Int256.NegativeOne.Lower);
+        Assert.Equal(UInt128.MaxValue, Int256.NegativeOne.UpperBits);
+        Assert.Equal(UInt128.MaxValue, Int256.NegativeOne.LowerBits);
         Assert.Equal(BigInteger.MinusOne, (BigInteger)Int256.NegativeOne);
     }
 
@@ -48,8 +48,8 @@ public sealed class Int256ConstantTests
         BigInteger expected = -(BigInteger.One << 255);
         Assert.Equal(expected, (BigInteger)Int256.MinValue);
         // Sign bit set, all other bits zero.
-        Assert.Equal(UInt128.One << 127, Int256.MinValue.Upper);
-        Assert.Equal(UInt128.Zero, Int256.MinValue.Lower);
+        Assert.Equal(UInt128.One << 127, Int256.MinValue.UpperBits);
+        Assert.Equal(UInt128.Zero, Int256.MinValue.LowerBits);
     }
 
     [Fact(DisplayName = "Int256.MaxValue should equal 2 to the 255 minus one")]
@@ -58,8 +58,8 @@ public sealed class Int256ConstantTests
         BigInteger expected = (BigInteger.One << 255) - BigInteger.One;
         Assert.Equal(expected, (BigInteger)Int256.MaxValue);
         // Sign bit clear, all other bits set.
-        Assert.Equal(UInt128.MaxValue >> 1, Int256.MaxValue.Upper);
-        Assert.Equal(UInt128.MaxValue, Int256.MaxValue.Lower);
+        Assert.Equal(UInt128.MaxValue >> 1, Int256.MaxValue.UpperBits);
+        Assert.Equal(UInt128.MaxValue, Int256.MaxValue.LowerBits);
     }
 
     [Fact(DisplayName = "Int256.AllBitsSet should equal Int256.NegativeOne")]

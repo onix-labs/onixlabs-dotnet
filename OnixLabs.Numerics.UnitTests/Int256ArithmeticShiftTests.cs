@@ -91,8 +91,8 @@ public sealed class Int256ArithmeticShiftTests
     {
         Int256 value = new(UInt128.Zero, UInt128.MaxValue);
         Int256 shifted = value << 128;
-        Assert.Equal(UInt128.MaxValue, shifted.Upper);
-        Assert.Equal(UInt128.Zero, shifted.Lower);
+        Assert.Equal(UInt128.MaxValue, shifted.UpperBits);
+        Assert.Equal(UInt128.Zero, shifted.LowerBits);
     }
 
     [Fact(DisplayName = "Int256 arithmetic right shift by 128 of a negative should fill upper with all-ones and move upper to lower")]
@@ -100,8 +100,8 @@ public sealed class Int256ArithmeticShiftTests
     {
         Int256 negative = new(UInt128.MaxValue, UInt128.Zero);  // negative with all-ones upper
         Int256 shifted = negative >> 128;
-        Assert.Equal(UInt128.MaxValue, shifted.Upper);
-        Assert.Equal(UInt128.MaxValue, shifted.Lower);
+        Assert.Equal(UInt128.MaxValue, shifted.UpperBits);
+        Assert.Equal(UInt128.MaxValue, shifted.LowerBits);
     }
 
     [Fact(DisplayName = "Int256 logical right shift by 128 of a negative should fill upper with zeros")]
@@ -109,8 +109,8 @@ public sealed class Int256ArithmeticShiftTests
     {
         Int256 negative = new(UInt128.MaxValue, UInt128.Zero);
         Int256 shifted = negative >>> 128;
-        Assert.Equal(UInt128.Zero, shifted.Upper);
-        Assert.Equal(UInt128.MaxValue, shifted.Lower);
+        Assert.Equal(UInt128.Zero, shifted.UpperBits);
+        Assert.Equal(UInt128.MaxValue, shifted.LowerBits);
     }
 
     [Fact(DisplayName = "Int256 shift by zero should return the value unchanged")]

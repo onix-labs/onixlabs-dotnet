@@ -28,11 +28,11 @@ public readonly partial struct Int256
         if (shiftAmount == 0) return value;
         if (shiftAmount >= HalfBitWidth)
         {
-            return new Int256(value.Lower << (shiftAmount - HalfBitWidth), UInt128.Zero);
+            return new Int256(value.LowerBits << (shiftAmount - HalfBitWidth), UInt128.Zero);
         }
 
-        UInt128 newUpper = (value.Upper << shiftAmount) | (value.Lower >> (HalfBitWidth - shiftAmount));
-        UInt128 newLower = value.Lower << shiftAmount;
+        UInt128 newUpper = (value.UpperBits << shiftAmount) | (value.LowerBits >> (HalfBitWidth - shiftAmount));
+        UInt128 newLower = value.LowerBits << shiftAmount;
         return new Int256(newUpper, newLower);
     }
 
@@ -51,13 +51,13 @@ public readonly partial struct Int256
         {
             int extraShift = shiftAmount - HalfBitWidth;
             UInt128 newLower = extraShift == 0
-                ? value.Upper
-                : (value.Upper >> extraShift) | (signFill << (HalfBitWidth - extraShift));
+                ? value.UpperBits
+                : (value.UpperBits >> extraShift) | (signFill << (HalfBitWidth - extraShift));
             return new Int256(signFill, newLower);
         }
 
-        UInt128 newUpperArith = (value.Upper >> shiftAmount) | (signFill << (HalfBitWidth - shiftAmount));
-        UInt128 newLowerArith = (value.Lower >> shiftAmount) | (value.Upper << (HalfBitWidth - shiftAmount));
+        UInt128 newUpperArith = (value.UpperBits >> shiftAmount) | (signFill << (HalfBitWidth - shiftAmount));
+        UInt128 newLowerArith = (value.LowerBits >> shiftAmount) | (value.UpperBits << (HalfBitWidth - shiftAmount));
         return new Int256(newUpperArith, newLowerArith);
     }
 
@@ -71,11 +71,11 @@ public readonly partial struct Int256
         if (shiftAmount == 0) return value;
         if (shiftAmount >= HalfBitWidth)
         {
-            return new Int256(UInt128.Zero, value.Upper >> (shiftAmount - HalfBitWidth));
+            return new Int256(UInt128.Zero, value.UpperBits >> (shiftAmount - HalfBitWidth));
         }
 
-        UInt128 newUpper = value.Upper >> shiftAmount;
-        UInt128 newLower = (value.Lower >> shiftAmount) | (value.Upper << (HalfBitWidth - shiftAmount));
+        UInt128 newUpper = value.UpperBits >> shiftAmount;
+        UInt128 newLower = (value.LowerBits >> shiftAmount) | (value.UpperBits << (HalfBitWidth - shiftAmount));
         return new Int256(newUpper, newLower);
     }
 }

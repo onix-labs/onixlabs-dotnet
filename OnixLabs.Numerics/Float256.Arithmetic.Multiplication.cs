@@ -53,18 +53,18 @@ public readonly partial struct Float256
 
         UInt512 product = UInt512.BigMul(sigLeft, sigRight);
 
-        bool leadingAt473 = (product.Upper & (UInt256.One << 217)) != UInt256.Zero;
+        bool leadingAt473 = (product.UpperBits & (UInt256.One << 217)) != UInt256.Zero;
         int shift = leadingAt473 ? 237 : 236;
         int resultExponent = expLeft + expRight + (leadingAt473 ? 1 : 0);
 
         UInt256 newSignificand = leadingAt473
-            ? (product.Upper << 19) | (product.Lower >> 237)
-            : (product.Upper << 20) | (product.Lower >> 236);
+            ? (product.UpperBits << 19) | (product.LowerBits >> 237)
+            : (product.UpperBits << 20) | (product.LowerBits >> 236);
 
         UInt256 roundMask = UInt256.One << (shift - 1);
         UInt256 stickyMask = roundMask - UInt256.One;
-        bool roundBit = (product.Lower & roundMask) != UInt256.Zero;
-        bool stickyBit = (product.Lower & stickyMask) != UInt256.Zero;
+        bool roundBit = (product.LowerBits & roundMask) != UInt256.Zero;
+        bool stickyBit = (product.LowerBits & stickyMask) != UInt256.Zero;
 
         return RoundToNearestEven(resultSign, resultExponent, newSignificand, roundBit, stickyBit);
     }

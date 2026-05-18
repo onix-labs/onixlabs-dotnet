@@ -21,14 +21,14 @@ public sealed class Float256Tests
     [Fact(DisplayName = "Float256.Zero should have raw bits equal to zero")]
     public void Float256ZeroShouldHaveRawBitsEqualToZero()
     {
-        Assert.Equal(UInt128.Zero, Float256.Zero.Bits.Upper);
-        Assert.Equal(UInt128.Zero, Float256.Zero.Bits.Lower);
+        Assert.Equal(UInt128.Zero, Float256.Zero.Bits.UpperBits);
+        Assert.Equal(UInt128.Zero, Float256.Zero.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.NegativeZero should differ from Zero only in the sign bit")]
     public void Float256NegativeZeroShouldDifferOnlyInSignBit()
     {
-        Assert.NotEqual(Float256.Zero.Bits.Upper, Float256.NegativeZero.Bits.Upper);
+        Assert.NotEqual(Float256.Zero.Bits.UpperBits, Float256.NegativeZero.Bits.UpperBits);
         Assert.True(Float256.IsZero(Float256.NegativeZero));
         Assert.True(Float256.IsNegative(Float256.NegativeZero));
     }

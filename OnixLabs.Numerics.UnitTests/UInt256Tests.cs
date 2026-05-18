@@ -22,22 +22,22 @@ public sealed class UInt256Tests
     [Fact(DisplayName = "UInt256.Zero should have both halves equal to zero")]
     public void Float256ZeroShouldHaveBothHalvesEqualToZero()
     {
-        Assert.Equal(UInt128.Zero, UInt256.Zero.Upper);
-        Assert.Equal(UInt128.Zero, UInt256.Zero.Lower);
+        Assert.Equal(UInt128.Zero, UInt256.Zero.UpperBits);
+        Assert.Equal(UInt128.Zero, UInt256.Zero.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256.One should have lower equal to one and upper equal to zero")]
     public void UInt256OneShouldHaveLowerEqualToOneAndUpperEqualToZero()
     {
-        Assert.Equal(UInt128.Zero, UInt256.One.Upper);
-        Assert.Equal(UInt128.One, UInt256.One.Lower);
+        Assert.Equal(UInt128.Zero, UInt256.One.UpperBits);
+        Assert.Equal(UInt128.One, UInt256.One.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256.MaxValue should have both halves set to UInt128.MaxValue")]
     public void UInt256MaxValueShouldHaveBothHalvesSetToUInt128MaxValue()
     {
-        Assert.Equal(UInt128.MaxValue, UInt256.MaxValue.Upper);
-        Assert.Equal(UInt128.MaxValue, UInt256.MaxValue.Lower);
+        Assert.Equal(UInt128.MaxValue, UInt256.MaxValue.UpperBits);
+        Assert.Equal(UInt128.MaxValue, UInt256.MaxValue.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256.MinValue should equal Zero")]
@@ -58,8 +58,8 @@ public sealed class UInt256Tests
         UInt128 upper = (UInt128)123;
         UInt128 lower = (UInt128)456;
         UInt256 value = new(upper, lower);
-        Assert.Equal(upper, value.Upper);
-        Assert.Equal(lower, value.Lower);
+        Assert.Equal(upper, value.UpperBits);
+        Assert.Equal(lower, value.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 addition should carry into the upper half")]
@@ -68,8 +68,8 @@ public sealed class UInt256Tests
         UInt256 left = new(UInt128.Zero, UInt128.MaxValue);
         UInt256 right = new(UInt128.Zero, UInt128.One);
         UInt256 result = left + right;
-        Assert.Equal(UInt128.One, result.Upper);
-        Assert.Equal(UInt128.Zero, result.Lower);
+        Assert.Equal(UInt128.One, result.UpperBits);
+        Assert.Equal(UInt128.Zero, result.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 subtraction should borrow from the upper half")]
@@ -78,8 +78,8 @@ public sealed class UInt256Tests
         UInt256 left = new(UInt128.One, UInt128.Zero);
         UInt256 right = new(UInt128.Zero, UInt128.One);
         UInt256 result = left - right;
-        Assert.Equal(UInt128.Zero, result.Upper);
-        Assert.Equal(UInt128.MaxValue, result.Lower);
+        Assert.Equal(UInt128.Zero, result.UpperBits);
+        Assert.Equal(UInt128.MaxValue, result.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 multiplication should match BigInteger")]

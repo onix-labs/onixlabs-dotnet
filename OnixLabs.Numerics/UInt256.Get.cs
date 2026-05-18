@@ -31,8 +31,8 @@ public readonly partial struct UInt256
     /// <returns>Returns the shortest bit length of the current value.</returns>
     public int GetShortestBitLength()
     {
-        if (Upper != UInt128.Zero) return 128 + (128 - (int)UInt128.LeadingZeroCount(Upper));
-        if (Lower != UInt128.Zero) return 128 - (int)UInt128.LeadingZeroCount(Lower);
+        if (UpperBits != UInt128.Zero) return 128 + (128 - (int)UInt128.LeadingZeroCount(UpperBits));
+        if (LowerBits != UInt128.Zero) return 128 - (int)UInt128.LeadingZeroCount(LowerBits);
         return 0;
     }
 

@@ -45,8 +45,8 @@ public sealed class UInt256ConstantTests
     {
         BigInteger expected = (BigInteger.One << 256) - BigInteger.One;
         Assert.Equal(expected, (BigInteger)UInt256.MaxValue);
-        Assert.Equal(UInt128.MaxValue, UInt256.MaxValue.Upper);
-        Assert.Equal(UInt128.MaxValue, UInt256.MaxValue.Lower);
+        Assert.Equal(UInt128.MaxValue, UInt256.MaxValue.UpperBits);
+        Assert.Equal(UInt128.MaxValue, UInt256.MaxValue.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256.AllBitsSet should equal UInt256.MaxValue and have every bit one")]
@@ -75,15 +75,15 @@ public sealed class UInt256ConstantTests
     [Fact(DisplayName = "UInt256.Zero bit pattern should be all zero halves")]
     public void UInt256ZeroBitPatternShouldBeAllZeroHalves()
     {
-        Assert.Equal(UInt128.Zero, UInt256.Zero.Upper);
-        Assert.Equal(UInt128.Zero, UInt256.Zero.Lower);
+        Assert.Equal(UInt128.Zero, UInt256.Zero.UpperBits);
+        Assert.Equal(UInt128.Zero, UInt256.Zero.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256.One bit pattern should have only the lowest bit set")]
     public void UInt256OneBitPatternShouldHaveOnlyTheLowestBitSet()
     {
-        Assert.Equal(UInt128.Zero, UInt256.One.Upper);
-        Assert.Equal(UInt128.One, UInt256.One.Lower);
+        Assert.Equal(UInt128.Zero, UInt256.One.UpperBits);
+        Assert.Equal(UInt128.One, UInt256.One.LowerBits);
         Assert.Equal((UInt256)1, UInt256.PopCount(UInt256.One));
     }
 }

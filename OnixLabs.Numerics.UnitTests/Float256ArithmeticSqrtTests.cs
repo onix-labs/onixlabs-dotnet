@@ -44,10 +44,10 @@ public sealed class Float256ArithmeticSqrtTests
     [Fact(DisplayName = "Float256.Sqrt of zero should return zero with preserved sign")]
     public void Float256SqrtOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Sqrt(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Sqrt(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Sqrt(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Sqrt(Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Sqrt(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Sqrt(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Sqrt(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Sqrt(Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Theory(DisplayName = "Float256.Sqrt of perfect squares should produce exact integer results")]
@@ -64,8 +64,8 @@ public sealed class Float256ArithmeticSqrtTests
     {
         Float256 actual = Float256.Sqrt(input);
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.Bits.Upper, actual.Bits.Upper);
-        Assert.Equal(expectedFloat.Bits.Lower, actual.Bits.Lower);
+        Assert.Equal(expectedFloat.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expectedFloat.Bits.LowerBits, actual.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Sqrt of 2 should produce a value close to 1.414...")]

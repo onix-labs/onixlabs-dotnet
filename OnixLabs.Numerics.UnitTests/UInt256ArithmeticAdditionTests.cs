@@ -33,8 +33,8 @@ public sealed class UInt256ArithmeticAdditionTests
         UInt256 left = new((UInt128)1, (UInt128)2);
         UInt256 right = new((UInt128)3, (UInt128)4);
         UInt256 result = left + right;
-        Assert.Equal((UInt128)4, result.Upper);
-        Assert.Equal((UInt128)6, result.Lower);
+        Assert.Equal((UInt128)4, result.UpperBits);
+        Assert.Equal((UInt128)6, result.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 addition with carry exactly at the half-boundary should produce upper = 1")]
@@ -43,8 +43,8 @@ public sealed class UInt256ArithmeticAdditionTests
         UInt256 left = new(UInt128.Zero, UInt128.MaxValue);
         UInt256 right = new(UInt128.Zero, UInt128.One);
         UInt256 result = left + right;
-        Assert.Equal(UInt128.One, result.Upper);
-        Assert.Equal(UInt128.Zero, result.Lower);
+        Assert.Equal(UInt128.One, result.UpperBits);
+        Assert.Equal(UInt128.Zero, result.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 addition with carry and upper sum should add the carry to the upper sum")]
@@ -53,8 +53,8 @@ public sealed class UInt256ArithmeticAdditionTests
         UInt256 left = new((UInt128)5, UInt128.MaxValue);
         UInt256 right = new((UInt128)7, UInt128.One);
         UInt256 result = left + right;
-        Assert.Equal((UInt128)13, result.Upper);
-        Assert.Equal(UInt128.Zero, result.Lower);
+        Assert.Equal((UInt128)13, result.UpperBits);
+        Assert.Equal(UInt128.Zero, result.LowerBits);
     }
 
     [Fact(DisplayName = "UInt256 addition should wrap when sum exceeds MaxValue")]

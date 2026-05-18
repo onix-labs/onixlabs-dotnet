@@ -22,15 +22,15 @@ public sealed class Int512Tests
     [Fact(DisplayName = "Int512.Zero should have both halves equal to zero")]
     public void Int512ZeroShouldHaveBothHalvesEqualToZero()
     {
-        Assert.Equal(UInt256.Zero, Int512.Zero.Upper);
-        Assert.Equal(UInt256.Zero, Int512.Zero.Lower);
+        Assert.Equal(UInt256.Zero, Int512.Zero.UpperBits);
+        Assert.Equal(UInt256.Zero, Int512.Zero.LowerBits);
     }
 
     [Fact(DisplayName = "Int512.NegativeOne should have all bits set")]
     public void Int512NegativeOneShouldHaveAllBitsSet()
     {
-        Assert.Equal(UInt256.MaxValue, Int512.NegativeOne.Upper);
-        Assert.Equal(UInt256.MaxValue, Int512.NegativeOne.Lower);
+        Assert.Equal(UInt256.MaxValue, Int512.NegativeOne.UpperBits);
+        Assert.Equal(UInt256.MaxValue, Int512.NegativeOne.LowerBits);
         Assert.True(Int512.IsNegative(Int512.NegativeOne));
     }
 

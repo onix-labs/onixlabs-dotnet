@@ -56,10 +56,10 @@ public sealed class Float256ArithmeticDivisionTests
     [Fact(DisplayName = "Float256.Divide finite by infinity should return signed zero")]
     public void Float256DivideFiniteByInfinityShouldReturnSignedZero()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, (Float256.One / Float256.PositiveInfinity).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, (Float256.One / Float256.PositiveInfinity).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, (Float256.NegativeOne / Float256.PositiveInfinity).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, (Float256.NegativeOne / Float256.PositiveInfinity).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, (Float256.One / Float256.PositiveInfinity).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, (Float256.One / Float256.PositiveInfinity).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, (Float256.NegativeOne / Float256.PositiveInfinity).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, (Float256.NegativeOne / Float256.PositiveInfinity).Bits.LowerBits);
     }
 
     [Theory(DisplayName = "Float256.Divide should match double division for exact double values")]
@@ -76,8 +76,8 @@ public sealed class Float256ArithmeticDivisionTests
     {
         Float256 actual = (Float256)left / (Float256)right;
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.Bits.Upper, actual.Bits.Upper);
-        Assert.Equal(expectedFloat.Bits.Lower, actual.Bits.Lower);
+        Assert.Equal(expectedFloat.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expectedFloat.Bits.LowerBits, actual.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Divide by self should return one")]
@@ -85,16 +85,16 @@ public sealed class Float256ArithmeticDivisionTests
     {
         Float256 value = 7.5;
         Float256 result = value / value;
-        Assert.Equal(Float256.One.Bits.Upper, result.Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, result.Bits.Lower);
+        Assert.Equal(Float256.One.Bits.UpperBits, result.Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, result.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Divide by one should return the value")]
     public void Float256DivideByOneShouldReturnValue()
     {
         Float256 value = 3.14;
-        Assert.Equal(value.Bits.Upper, (value / Float256.One).Bits.Upper);
-        Assert.Equal(value.Bits.Lower, (value / Float256.One).Bits.Lower);
+        Assert.Equal(value.Bits.UpperBits, (value / Float256.One).Bits.UpperBits);
+        Assert.Equal(value.Bits.LowerBits, (value / Float256.One).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Divide a value by its double should produce 0.5")]
@@ -102,7 +102,7 @@ public sealed class Float256ArithmeticDivisionTests
     {
         Float256 value = 5.0;
         Float256 result = value / (value + value);
-        Assert.Equal(((Float256)0.5).Bits.Upper, result.Bits.Upper);
-        Assert.Equal(((Float256)0.5).Bits.Lower, result.Bits.Lower);
+        Assert.Equal(((Float256)0.5).Bits.UpperBits, result.Bits.UpperBits);
+        Assert.Equal(((Float256)0.5).Bits.LowerBits, result.Bits.LowerBits);
     }
 }

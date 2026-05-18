@@ -22,7 +22,7 @@ public readonly partial struct Int512
     /// <param name="left">The <paramref name="left"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool Equals(Int512 left, Int512 right) => left.Upper == right.Upper && left.Lower == right.Lower;
+    public static bool Equals(Int512 left, Int512 right) => left.UpperBits == right.UpperBits && left.LowerBits == right.LowerBits;
 
     /// <summary>Compares the current instance of <see cref="Int512"/> with the specified other instance of <see cref="Int512"/>.</summary>
     /// <param name="other">The other instance of <see cref="Int512"/> to compare with the current instance.</param>

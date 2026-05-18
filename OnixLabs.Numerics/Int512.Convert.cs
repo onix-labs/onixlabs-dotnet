@@ -181,7 +181,7 @@ public readonly partial struct Int512
         if (typeof(TOther) == typeof(UInt512))
         {
             if (IsNegative(value)) { result = default; throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(UInt512)}."); }
-            result = (TOther)(object)new UInt512(value.Upper, value.Lower);
+            result = (TOther)(object)new UInt512(value.UpperBits, value.LowerBits);
             return true;
         }
         if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
@@ -218,8 +218,8 @@ public readonly partial struct Int512
         if (typeof(TOther) == typeof(Int128)) { result = (TOther)(object)(value < (Int512)Int128.MinValue ? Int128.MinValue : value > (Int512)Int128.MaxValue ? Int128.MaxValue : (Int128)value); return true; }
         if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(IsNegative(value) ? UInt128.Zero : value > (Int512)UInt128.MaxValue ? UInt128.MaxValue : (UInt128)value); return true; }
         if (typeof(TOther) == typeof(Int256)) { result = (TOther)(object)(value < (Int512)Int256.MinValue ? Int256.MinValue : value > (Int512)Int256.MaxValue ? Int256.MaxValue : (Int256)value); return true; }
-        if (typeof(TOther) == typeof(UInt256)) { result = (TOther)(object)(IsNegative(value) ? UInt256.Zero : !UInt256.IsZero(value.Upper) ? UInt256.MaxValue : value.Lower); return true; }
-        if (typeof(TOther) == typeof(UInt512)) { result = (TOther)(object)(IsNegative(value) ? UInt512.Zero : new UInt512(value.Upper, value.Lower)); return true; }
+        if (typeof(TOther) == typeof(UInt256)) { result = (TOther)(object)(IsNegative(value) ? UInt256.Zero : !UInt256.IsZero(value.UpperBits) ? UInt256.MaxValue : value.LowerBits); return true; }
+        if (typeof(TOther) == typeof(UInt512)) { result = (TOther)(object)(IsNegative(value) ? UInt512.Zero : new UInt512(value.UpperBits, value.LowerBits)); return true; }
         if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
         if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(IsNegative(value) ? (char)0 : value > (Int512)char.MaxValue ? char.MaxValue : (char)value); return true; }
         if (typeof(TOther) == typeof(float)) { result = (TOther)(object)(float)value; return true; }
@@ -255,7 +255,7 @@ public readonly partial struct Int512
         if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(UInt128)value; return true; }
         if (typeof(TOther) == typeof(Int256)) { result = (TOther)(object)(Int256)value; return true; }
         if (typeof(TOther) == typeof(UInt256)) { result = (TOther)(object)(UInt256)value; return true; }
-        if (typeof(TOther) == typeof(UInt512)) { result = (TOther)(object)new UInt512(value.Upper, value.Lower); return true; }
+        if (typeof(TOther) == typeof(UInt512)) { result = (TOther)(object)new UInt512(value.UpperBits, value.LowerBits); return true; }
         if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
         if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(char)value; return true; }
         if (typeof(TOther) == typeof(float)) { result = (TOther)(object)(float)value; return true; }

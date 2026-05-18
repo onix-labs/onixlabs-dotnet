@@ -25,9 +25,9 @@ public readonly partial struct UInt256
     /// <returns>Returns the wrapping difference of <paramref name="left"/> and <paramref name="right"/>.</returns>
     public static UInt256 operator -(UInt256 left, UInt256 right)
     {
-        UInt128 newLower = left.Lower - right.Lower;
-        UInt128 borrow = left.Lower < right.Lower ? UInt128.One : UInt128.Zero;
-        UInt128 newUpper = left.Upper - right.Upper - borrow;
+        UInt128 newLower = left.LowerBits - right.LowerBits;
+        UInt128 borrow = left.LowerBits < right.LowerBits ? UInt128.One : UInt128.Zero;
+        UInt128 newUpper = left.UpperBits - right.UpperBits - borrow;
         return new UInt256(newUpper, newLower);
     }
 

@@ -39,8 +39,8 @@ public sealed class UInt512ArithmeticAdditionTests
         UInt512 a = new(UInt256.Zero, UInt256.MaxValue);
         UInt512 b = new(UInt256.Zero, UInt256.One);
         UInt512 sum = a + b;
-        Assert.Equal(UInt256.One, sum.Upper);
-        Assert.Equal(UInt256.Zero, sum.Lower);
+        Assert.Equal(UInt256.One, sum.UpperBits);
+        Assert.Equal(UInt256.Zero, sum.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512 addition should not carry when lower does not overflow")]
@@ -49,8 +49,8 @@ public sealed class UInt512ArithmeticAdditionTests
         UInt512 a = new(UInt256.Zero, (UInt256)100UL);
         UInt512 b = new(UInt256.Zero, (UInt256)200UL);
         UInt512 sum = a + b;
-        Assert.Equal(UInt256.Zero, sum.Upper);
-        Assert.Equal((UInt256)300UL, sum.Lower);
+        Assert.Equal(UInt256.Zero, sum.UpperBits);
+        Assert.Equal((UInt256)300UL, sum.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512 addition should wrap at MaxValue")]

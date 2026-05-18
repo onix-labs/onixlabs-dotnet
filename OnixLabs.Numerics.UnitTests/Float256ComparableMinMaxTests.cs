@@ -19,12 +19,12 @@ public sealed class Float256ComparableMinMaxTests
     [Fact(DisplayName = "Float256.Min should return the smaller of two finite values")]
     public void Float256MinShouldReturnSmaller()
     {
-        Assert.Equal(Float256.One.Bits.Upper, Float256.Min(Float256.One, Float256.Two).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.Min(Float256.One, Float256.Two).Bits.Lower);
-        Assert.Equal(Float256.NegativeOne.Bits.Upper, Float256.Min(Float256.NegativeOne, Float256.One).Bits.Upper);
-        Assert.Equal(Float256.NegativeOne.Bits.Lower, Float256.Min(Float256.NegativeOne, Float256.One).Bits.Lower);
-        Assert.Equal(Float256.MinValue.Bits.Upper, Float256.Min(Float256.MinValue, Float256.MaxValue).Bits.Upper);
-        Assert.Equal(Float256.MinValue.Bits.Lower, Float256.Min(Float256.MinValue, Float256.MaxValue).Bits.Lower);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.Min(Float256.One, Float256.Two).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.Min(Float256.One, Float256.Two).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeOne.Bits.UpperBits, Float256.Min(Float256.NegativeOne, Float256.One).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeOne.Bits.LowerBits, Float256.Min(Float256.NegativeOne, Float256.One).Bits.LowerBits);
+        Assert.Equal(Float256.MinValue.Bits.UpperBits, Float256.Min(Float256.MinValue, Float256.MaxValue).Bits.UpperBits);
+        Assert.Equal(Float256.MinValue.Bits.LowerBits, Float256.Min(Float256.MinValue, Float256.MaxValue).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Min should propagate NaN")]
@@ -38,21 +38,21 @@ public sealed class Float256ComparableMinMaxTests
     [Fact(DisplayName = "Float256.Min should prefer negative zero over positive zero")]
     public void Float256MinShouldPreferNegativeZero()
     {
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Min(Float256.Zero, Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Min(Float256.Zero, Float256.NegativeZero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Min(Float256.NegativeZero, Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Min(Float256.NegativeZero, Float256.Zero).Bits.Lower);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Min(Float256.Zero, Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Min(Float256.Zero, Float256.NegativeZero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Min(Float256.NegativeZero, Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Min(Float256.NegativeZero, Float256.Zero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Max should return the larger of two finite values")]
     public void Float256MaxShouldReturnLarger()
     {
-        Assert.Equal(Float256.Two.Bits.Upper, Float256.Max(Float256.One, Float256.Two).Bits.Upper);
-        Assert.Equal(Float256.Two.Bits.Lower, Float256.Max(Float256.One, Float256.Two).Bits.Lower);
-        Assert.Equal(Float256.One.Bits.Upper, Float256.Max(Float256.NegativeOne, Float256.One).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.Max(Float256.NegativeOne, Float256.One).Bits.Lower);
-        Assert.Equal(Float256.MaxValue.Bits.Upper, Float256.Max(Float256.MinValue, Float256.MaxValue).Bits.Upper);
-        Assert.Equal(Float256.MaxValue.Bits.Lower, Float256.Max(Float256.MinValue, Float256.MaxValue).Bits.Lower);
+        Assert.Equal(Float256.Two.Bits.UpperBits, Float256.Max(Float256.One, Float256.Two).Bits.UpperBits);
+        Assert.Equal(Float256.Two.Bits.LowerBits, Float256.Max(Float256.One, Float256.Two).Bits.LowerBits);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.Max(Float256.NegativeOne, Float256.One).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.Max(Float256.NegativeOne, Float256.One).Bits.LowerBits);
+        Assert.Equal(Float256.MaxValue.Bits.UpperBits, Float256.Max(Float256.MinValue, Float256.MaxValue).Bits.UpperBits);
+        Assert.Equal(Float256.MaxValue.Bits.LowerBits, Float256.Max(Float256.MinValue, Float256.MaxValue).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Max should propagate NaN")]
@@ -65,56 +65,56 @@ public sealed class Float256ComparableMinMaxTests
     [Fact(DisplayName = "Float256.Max should prefer positive zero over negative zero")]
     public void Float256MaxShouldPreferPositiveZero()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Max(Float256.Zero, Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Max(Float256.Zero, Float256.NegativeZero).Bits.Lower);
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Max(Float256.NegativeZero, Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Max(Float256.NegativeZero, Float256.Zero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Max(Float256.Zero, Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Max(Float256.Zero, Float256.NegativeZero).Bits.LowerBits);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Max(Float256.NegativeZero, Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Max(Float256.NegativeZero, Float256.Zero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.MinNumber should treat NaN as missing")]
     public void Float256MinNumberShouldTreatNaNAsMissing()
     {
-        Assert.Equal(Float256.One.Bits.Upper, Float256.MinNumber(Float256.NaN, Float256.One).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.MinNumber(Float256.NaN, Float256.One).Bits.Lower);
-        Assert.Equal(Float256.One.Bits.Upper, Float256.MinNumber(Float256.One, Float256.NaN).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.MinNumber(Float256.One, Float256.NaN).Bits.Lower);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.MinNumber(Float256.NaN, Float256.One).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.MinNumber(Float256.NaN, Float256.One).Bits.LowerBits);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.MinNumber(Float256.One, Float256.NaN).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.MinNumber(Float256.One, Float256.NaN).Bits.LowerBits);
         Assert.True(Float256.IsNaN(Float256.MinNumber(Float256.NaN, Float256.NaN)));
     }
 
     [Fact(DisplayName = "Float256.MaxNumber should treat NaN as missing")]
     public void Float256MaxNumberShouldTreatNaNAsMissing()
     {
-        Assert.Equal(Float256.One.Bits.Upper, Float256.MaxNumber(Float256.NaN, Float256.One).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.MaxNumber(Float256.NaN, Float256.One).Bits.Lower);
-        Assert.Equal(Float256.One.Bits.Upper, Float256.MaxNumber(Float256.One, Float256.NaN).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.MaxNumber(Float256.One, Float256.NaN).Bits.Lower);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.MaxNumber(Float256.NaN, Float256.One).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.MaxNumber(Float256.NaN, Float256.One).Bits.LowerBits);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.MaxNumber(Float256.One, Float256.NaN).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.MaxNumber(Float256.One, Float256.NaN).Bits.LowerBits);
         Assert.True(Float256.IsNaN(Float256.MaxNumber(Float256.NaN, Float256.NaN)));
     }
 
     [Fact(DisplayName = "Float256.MinMagnitude should pick the operand with smaller absolute value")]
     public void Float256MinMagnitudeShouldPickSmallerAbsolute()
     {
-        Assert.Equal(Float256.One.Bits.Upper, Float256.MinMagnitude(Float256.One, -Float256.Two).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.MinMagnitude(Float256.One, -Float256.Two).Bits.Lower);
-        Assert.Equal(Float256.NegativeOne.Bits.Upper, Float256.MinMagnitude(Float256.NegativeOne, Float256.Two).Bits.Upper);
-        Assert.Equal(Float256.NegativeOne.Bits.Lower, Float256.MinMagnitude(Float256.NegativeOne, Float256.Two).Bits.Lower);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.MinMagnitude(Float256.One, -Float256.Two).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.MinMagnitude(Float256.One, -Float256.Two).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeOne.Bits.UpperBits, Float256.MinMagnitude(Float256.NegativeOne, Float256.Two).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeOne.Bits.LowerBits, Float256.MinMagnitude(Float256.NegativeOne, Float256.Two).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.MaxMagnitude should pick the operand with larger absolute value")]
     public void Float256MaxMagnitudeShouldPickLargerAbsolute()
     {
-        Assert.Equal((-Float256.Two).Bits.Upper, Float256.MaxMagnitude(Float256.One, -Float256.Two).Bits.Upper);
-        Assert.Equal((-Float256.Two).Bits.Lower, Float256.MaxMagnitude(Float256.One, -Float256.Two).Bits.Lower);
-        Assert.Equal(Float256.Two.Bits.Upper, Float256.MaxMagnitude(Float256.NegativeOne, Float256.Two).Bits.Upper);
-        Assert.Equal(Float256.Two.Bits.Lower, Float256.MaxMagnitude(Float256.NegativeOne, Float256.Two).Bits.Lower);
+        Assert.Equal((-Float256.Two).Bits.UpperBits, Float256.MaxMagnitude(Float256.One, -Float256.Two).Bits.UpperBits);
+        Assert.Equal((-Float256.Two).Bits.LowerBits, Float256.MaxMagnitude(Float256.One, -Float256.Two).Bits.LowerBits);
+        Assert.Equal(Float256.Two.Bits.UpperBits, Float256.MaxMagnitude(Float256.NegativeOne, Float256.Two).Bits.UpperBits);
+        Assert.Equal(Float256.Two.Bits.LowerBits, Float256.MaxMagnitude(Float256.NegativeOne, Float256.Two).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.MinMagnitudeNumber and MaxMagnitudeNumber should treat NaN as missing")]
     public void Float256MagnitudeNumberShouldTreatNaNAsMissing()
     {
-        Assert.Equal(Float256.One.Bits.Upper, Float256.MinMagnitudeNumber(Float256.NaN, Float256.One).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.MinMagnitudeNumber(Float256.NaN, Float256.One).Bits.Lower);
-        Assert.Equal(Float256.One.Bits.Upper, Float256.MaxMagnitudeNumber(Float256.NaN, Float256.One).Bits.Upper);
-        Assert.Equal(Float256.One.Bits.Lower, Float256.MaxMagnitudeNumber(Float256.NaN, Float256.One).Bits.Lower);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.MinMagnitudeNumber(Float256.NaN, Float256.One).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.MinMagnitudeNumber(Float256.NaN, Float256.One).Bits.LowerBits);
+        Assert.Equal(Float256.One.Bits.UpperBits, Float256.MaxMagnitudeNumber(Float256.NaN, Float256.One).Bits.UpperBits);
+        Assert.Equal(Float256.One.Bits.LowerBits, Float256.MaxMagnitudeNumber(Float256.NaN, Float256.One).Bits.LowerBits);
     }
 }

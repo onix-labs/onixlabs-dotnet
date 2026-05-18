@@ -27,8 +27,8 @@ public readonly partial struct UInt512
     /// <returns>The shortest bit length.</returns>
     public int GetShortestBitLength()
     {
-        if (!UInt256.IsZero(Upper)) return HalfBitWidth + Upper.GetShortestBitLength();
-        if (!UInt256.IsZero(Lower)) return Lower.GetShortestBitLength();
+        if (!UInt256.IsZero(UpperBits)) return HalfBitWidth + UpperBits.GetShortestBitLength();
+        if (!UInt256.IsZero(LowerBits)) return LowerBits.GetShortestBitLength();
         return 0;
     }
 

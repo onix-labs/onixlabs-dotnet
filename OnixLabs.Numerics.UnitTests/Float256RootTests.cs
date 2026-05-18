@@ -27,10 +27,10 @@ public sealed class Float256RootTests
     [Fact(DisplayName = "Float256.Cbrt of zero should preserve sign")]
     public void Float256CbrtOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.Cbrt(Float256.Zero).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.Cbrt(Float256.Zero).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.Cbrt(Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.Cbrt(Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.Cbrt(Float256.Zero).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.Cbrt(Float256.Zero).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.Cbrt(Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.Cbrt(Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Cbrt of infinities should preserve sign")]
@@ -114,10 +114,10 @@ public sealed class Float256RootTests
     [Fact(DisplayName = "Float256.RootN of zero with positive n should return zero with sign for odd n")]
     public void Float256RootNOfZeroWithPositiveNShouldReturnZero()
     {
-        Assert.Equal(Float256.Zero.Bits.Upper, Float256.RootN(Float256.Zero, 4).Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, Float256.RootN(Float256.Zero, 4).Bits.Lower);
-        Assert.Equal(Float256.NegativeZero.Bits.Upper, Float256.RootN(Float256.NegativeZero, 5).Bits.Upper);
-        Assert.Equal(Float256.NegativeZero.Bits.Lower, Float256.RootN(Float256.NegativeZero, 5).Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, Float256.RootN(Float256.Zero, 4).Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, Float256.RootN(Float256.Zero, 4).Bits.LowerBits);
+        Assert.Equal(Float256.NegativeZero.Bits.UpperBits, Float256.RootN(Float256.NegativeZero, 5).Bits.UpperBits);
+        Assert.Equal(Float256.NegativeZero.Bits.LowerBits, Float256.RootN(Float256.NegativeZero, 5).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Hypot of zero and zero should return zero")]

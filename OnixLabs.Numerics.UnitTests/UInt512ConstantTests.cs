@@ -22,8 +22,8 @@ public sealed class UInt512ConstantTests
     [Fact(DisplayName = "UInt512.Zero should have both halves equal to UInt256.Zero")]
     public void UInt512ZeroShouldHaveBothHalvesEqualToUInt256Zero()
     {
-        Assert.Equal(UInt256.Zero, UInt512.Zero.Upper);
-        Assert.Equal(UInt256.Zero, UInt512.Zero.Lower);
+        Assert.Equal(UInt256.Zero, UInt512.Zero.UpperBits);
+        Assert.Equal(UInt256.Zero, UInt512.Zero.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512.Zero should equal default(UInt512)")]
@@ -35,8 +35,8 @@ public sealed class UInt512ConstantTests
     [Fact(DisplayName = "UInt512.One should have upper half equal to UInt256.Zero and lower half equal to UInt256.One")]
     public void UInt512OneShouldHaveUpperZeroAndLowerOne()
     {
-        Assert.Equal(UInt256.Zero, UInt512.One.Upper);
-        Assert.Equal(UInt256.One, UInt512.One.Lower);
+        Assert.Equal(UInt256.Zero, UInt512.One.UpperBits);
+        Assert.Equal(UInt256.One, UInt512.One.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512.One should equal BigInteger.One")]
@@ -60,8 +60,8 @@ public sealed class UInt512ConstantTests
     [Fact(DisplayName = "UInt512.MaxValue should have both halves equal to UInt256.MaxValue")]
     public void UInt512MaxValueShouldHaveBothHalvesMax()
     {
-        Assert.Equal(UInt256.MaxValue, UInt512.MaxValue.Upper);
-        Assert.Equal(UInt256.MaxValue, UInt512.MaxValue.Lower);
+        Assert.Equal(UInt256.MaxValue, UInt512.MaxValue.UpperBits);
+        Assert.Equal(UInt256.MaxValue, UInt512.MaxValue.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512.MaxValue should equal 2^512 - 1")]
@@ -101,8 +101,8 @@ public sealed class UInt512ConstantTests
         UInt256 upper = (UInt256)0x1234_5678_9ABC_DEF0UL;
         UInt256 lower = (UInt256)0xFEDC_BA98_7654_3210UL;
         UInt512 value = new(upper, lower);
-        Assert.Equal(upper, value.Upper);
-        Assert.Equal(lower, value.Lower);
+        Assert.Equal(upper, value.UpperBits);
+        Assert.Equal(lower, value.LowerBits);
     }
 
     [Fact(DisplayName = "UInt512 constructed with upper UInt256.MaxValue and lower UInt256.Zero should equal MaxValue minus low UInt256")]

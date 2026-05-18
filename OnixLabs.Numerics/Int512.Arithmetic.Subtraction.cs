@@ -24,9 +24,9 @@ public readonly partial struct Int512
     /// <returns>Returns the wrapping difference.</returns>
     public static Int512 operator -(Int512 left, Int512 right)
     {
-        UInt256 newLower = left.Lower - right.Lower;
-        UInt256 borrow = left.Lower < right.Lower ? UInt256.One : UInt256.Zero;
-        UInt256 newUpper = left.Upper - right.Upper - borrow;
+        UInt256 newLower = left.LowerBits - right.LowerBits;
+        UInt256 borrow = left.LowerBits < right.LowerBits ? UInt256.One : UInt256.Zero;
+        UInt256 newUpper = left.UpperBits - right.UpperBits - borrow;
         return new Int512(newUpper, newLower);
     }
 

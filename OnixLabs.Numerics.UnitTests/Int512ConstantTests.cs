@@ -22,8 +22,8 @@ public sealed class Int512ConstantTests
     [Fact(DisplayName = "Int512.Zero should have both halves equal to UInt256.Zero")]
     public void Int512ZeroShouldHaveBothHalvesEqualToUInt256Zero()
     {
-        Assert.Equal(UInt256.Zero, Int512.Zero.Upper);
-        Assert.Equal(UInt256.Zero, Int512.Zero.Lower);
+        Assert.Equal(UInt256.Zero, Int512.Zero.UpperBits);
+        Assert.Equal(UInt256.Zero, Int512.Zero.LowerBits);
     }
 
     [Fact(DisplayName = "Int512.Zero should equal default(Int512)")]
@@ -35,15 +35,15 @@ public sealed class Int512ConstantTests
     [Fact(DisplayName = "Int512.One should have upper half equal to UInt256.Zero and lower equal to UInt256.One")]
     public void Int512OneShouldHaveUpperZeroAndLowerOne()
     {
-        Assert.Equal(UInt256.Zero, Int512.One.Upper);
-        Assert.Equal(UInt256.One, Int512.One.Lower);
+        Assert.Equal(UInt256.Zero, Int512.One.UpperBits);
+        Assert.Equal(UInt256.One, Int512.One.LowerBits);
     }
 
     [Fact(DisplayName = "Int512.NegativeOne should have all bits set in both halves")]
     public void Int512NegativeOneShouldHaveAllBitsSet()
     {
-        Assert.Equal(UInt256.MaxValue, Int512.NegativeOne.Upper);
-        Assert.Equal(UInt256.MaxValue, Int512.NegativeOne.Lower);
+        Assert.Equal(UInt256.MaxValue, Int512.NegativeOne.UpperBits);
+        Assert.Equal(UInt256.MaxValue, Int512.NegativeOne.LowerBits);
     }
 
     [Fact(DisplayName = "Int512.NegativeOne should be detected as negative")]
@@ -67,8 +67,8 @@ public sealed class Int512ConstantTests
     [Fact(DisplayName = "Int512.MinValue upper half should have only the sign bit set")]
     public void Int512MinValueUpperShouldHaveOnlySignBitSet()
     {
-        Assert.Equal(UInt256.One << 255, Int512.MinValue.Upper);
-        Assert.Equal(UInt256.Zero, Int512.MinValue.Lower);
+        Assert.Equal(UInt256.One << 255, Int512.MinValue.UpperBits);
+        Assert.Equal(UInt256.Zero, Int512.MinValue.LowerBits);
     }
 
     [Fact(DisplayName = "Int512.MaxValue should equal 2^511 - 1")]
@@ -81,8 +81,8 @@ public sealed class Int512ConstantTests
     public void Int512MaxValueUpperShouldHaveAllBitsButSignSet()
     {
         UInt256 expectedUpper = ~(UInt256.One << 255);
-        Assert.Equal(expectedUpper, Int512.MaxValue.Upper);
-        Assert.Equal(UInt256.MaxValue, Int512.MaxValue.Lower);
+        Assert.Equal(expectedUpper, Int512.MaxValue.UpperBits);
+        Assert.Equal(UInt256.MaxValue, Int512.MaxValue.LowerBits);
     }
 
     [Fact(DisplayName = "Int512.AllBitsSet should equal Int512.NegativeOne")]
@@ -115,7 +115,7 @@ public sealed class Int512ConstantTests
         UInt256 upper = (UInt256)0xDEADBEEFCAFEBABEUL;
         UInt256 lower = (UInt256)0x1234567890ABCDEFUL;
         Int512 value = new(upper, lower);
-        Assert.Equal(upper, value.Upper);
-        Assert.Equal(lower, value.Lower);
+        Assert.Equal(upper, value.UpperBits);
+        Assert.Equal(lower, value.LowerBits);
     }
 }

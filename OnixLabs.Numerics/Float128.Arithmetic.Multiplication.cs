@@ -55,18 +55,18 @@ public readonly partial struct Float128
 
         UInt256 product = UInt256.BigMul(sigLeft, sigRight);
 
-        bool leadingAt225 = (product.Upper & (UInt128.One << 97)) != UInt128.Zero;
+        bool leadingAt225 = (product.UpperBits & (UInt128.One << 97)) != UInt128.Zero;
         int shift = leadingAt225 ? 113 : 112;
         int resultExponent = expLeft + expRight + (leadingAt225 ? 1 : 0);
 
         UInt128 newSignificand = leadingAt225
-            ? (product.Upper << 15) | (product.Lower >> 113)
-            : (product.Upper << 16) | (product.Lower >> 112);
+            ? (product.UpperBits << 15) | (product.LowerBits >> 113)
+            : (product.UpperBits << 16) | (product.LowerBits >> 112);
 
         UInt128 roundMask = UInt128.One << (shift - 1);
         UInt128 stickyMask = roundMask - UInt128.One;
-        bool roundBit = (product.Lower & roundMask) != UInt128.Zero;
-        bool stickyBit = (product.Lower & stickyMask) != UInt128.Zero;
+        bool roundBit = (product.LowerBits & roundMask) != UInt128.Zero;
+        bool stickyBit = (product.LowerBits & stickyMask) != UInt128.Zero;
 
         return RoundToNearestEven(resultSign, resultExponent, newSignificand, roundBit, stickyBit);
     }

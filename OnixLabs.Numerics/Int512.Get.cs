@@ -29,15 +29,15 @@ public readonly partial struct Int512
     {
         if (IsNegative(this))
         {
-            UInt256 invertedUpper = ~Upper;
-            UInt256 invertedLower = ~Lower;
+            UInt256 invertedUpper = ~UpperBits;
+            UInt256 invertedLower = ~LowerBits;
             if (!UInt256.IsZero(invertedUpper)) return HalfBitWidth + invertedUpper.GetShortestBitLength() + 1;
             if (!UInt256.IsZero(invertedLower)) return invertedLower.GetShortestBitLength() + 1;
             return 1;
         }
 
-        if (!UInt256.IsZero(Upper)) return HalfBitWidth + Upper.GetShortestBitLength() + 1;
-        if (!UInt256.IsZero(Lower)) return Lower.GetShortestBitLength() + 1;
+        if (!UInt256.IsZero(UpperBits)) return HalfBitWidth + UpperBits.GetShortestBitLength() + 1;
+        if (!UInt256.IsZero(LowerBits)) return LowerBits.GetShortestBitLength() + 1;
         return 0;
     }
 

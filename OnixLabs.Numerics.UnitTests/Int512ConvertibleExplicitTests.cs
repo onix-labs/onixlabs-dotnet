@@ -46,7 +46,7 @@ public sealed class Int512ConvertibleExplicitTests
     {
         Assert.Equal(UInt512.Zero, checked((UInt512)Int512.Zero));
         Assert.Equal(UInt512.One, checked((UInt512)Int512.One));
-        UInt512 expected = new UInt512(Int512.MaxValue.Upper, Int512.MaxValue.Lower);
+        UInt512 expected = new UInt512(Int512.MaxValue.UpperBits, Int512.MaxValue.LowerBits);
         Assert.Equal(expected, checked((UInt512)Int512.MaxValue));
     }
 
@@ -60,7 +60,7 @@ public sealed class Int512ConvertibleExplicitTests
     [Fact(DisplayName = "UInt512 to Int512 checked should succeed when value fits in the signed range")]
     public void UInt512ToInt512CheckedShouldSucceedWhenInRange()
     {
-        UInt512 source = new(Int512.MaxValue.Upper, Int512.MaxValue.Lower);
+        UInt512 source = new(Int512.MaxValue.UpperBits, Int512.MaxValue.LowerBits);
         Assert.Equal(Int512.MaxValue, checked((Int512)source));
     }
 

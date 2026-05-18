@@ -50,8 +50,8 @@ public sealed class Float256ArithmeticSubtractionTests
     {
         Float256 actual = (Float256)left - (Float256)right;
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.Bits.Upper, actual.Bits.Upper);
-        Assert.Equal(expectedFloat.Bits.Lower, actual.Bits.Lower);
+        Assert.Equal(expectedFloat.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expectedFloat.Bits.LowerBits, actual.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Subtract of value from itself should produce positive zero")]
@@ -59,18 +59,18 @@ public sealed class Float256ArithmeticSubtractionTests
     {
         Float256 value = 3.14;
         Float256 result = value - value;
-        Assert.Equal(Float256.Zero.Bits.Upper, result.Bits.Upper);
-        Assert.Equal(Float256.Zero.Bits.Lower, result.Bits.Lower);
+        Assert.Equal(Float256.Zero.Bits.UpperBits, result.Bits.UpperBits);
+        Assert.Equal(Float256.Zero.Bits.LowerBits, result.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Subtract zero from a value should return the value")]
     public void Float256SubtractZeroShouldReturnValue()
     {
         Float256 value = 7.5;
-        Assert.Equal(value.Bits.Upper, (value - Float256.Zero).Bits.Upper);
-        Assert.Equal(value.Bits.Lower, (value - Float256.Zero).Bits.Lower);
-        Assert.Equal(value.Bits.Upper, (value - Float256.NegativeZero).Bits.Upper);
-        Assert.Equal(value.Bits.Lower, (value - Float256.NegativeZero).Bits.Lower);
+        Assert.Equal(value.Bits.UpperBits, (value - Float256.Zero).Bits.UpperBits);
+        Assert.Equal(value.Bits.LowerBits, (value - Float256.Zero).Bits.LowerBits);
+        Assert.Equal(value.Bits.UpperBits, (value - Float256.NegativeZero).Bits.UpperBits);
+        Assert.Equal(value.Bits.LowerBits, (value - Float256.NegativeZero).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256 increment should add one")]
@@ -78,8 +78,8 @@ public sealed class Float256ArithmeticSubtractionTests
     {
         Float256 value = 5.0;
         value++;
-        Assert.Equal(((Float256)6.0).Bits.Upper, value.Bits.Upper);
-        Assert.Equal(((Float256)6.0).Bits.Lower, value.Bits.Lower);
+        Assert.Equal(((Float256)6.0).Bits.UpperBits, value.Bits.UpperBits);
+        Assert.Equal(((Float256)6.0).Bits.LowerBits, value.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256 decrement should subtract one")]
@@ -87,7 +87,7 @@ public sealed class Float256ArithmeticSubtractionTests
     {
         Float256 value = 5.0;
         value--;
-        Assert.Equal(((Float256)4.0).Bits.Upper, value.Bits.Upper);
-        Assert.Equal(((Float256)4.0).Bits.Lower, value.Bits.Lower);
+        Assert.Equal(((Float256)4.0).Bits.UpperBits, value.Bits.UpperBits);
+        Assert.Equal(((Float256)4.0).Bits.LowerBits, value.Bits.LowerBits);
     }
 }

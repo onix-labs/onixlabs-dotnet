@@ -107,7 +107,7 @@ public sealed class UInt256ArithmeticDivisionTests
         UInt256 dividend = new((UInt128)5, UInt128.MaxValue);
         UInt128 divisor = (UInt128)12345;
         UInt128 quotientLow = UInt256.DivRemBy128(dividend, divisor, out UInt128 remainder);
-        UInt128 quotientHigh = dividend.Upper / divisor;
+        UInt128 quotientHigh = dividend.UpperBits / divisor;
         BigInteger combined = ((BigInteger)quotientHigh << 128) | (BigInteger)quotientLow;
         BigInteger expected = (BigInteger)dividend / (BigInteger)divisor;
         Assert.Equal(expected, combined);

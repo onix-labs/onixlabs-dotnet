@@ -28,7 +28,6 @@ public readonly partial struct Int256 :
     IMinMaxValue<Int256>,
     IBinaryInteger<Int256>,
     ISignedNumber<Int256>,
-    IUtf8SpanFormattable,
     IValueEquatable<Int256>,
     IValueComparable<Int256>
 {

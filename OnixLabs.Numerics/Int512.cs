@@ -28,7 +28,6 @@ public readonly partial struct Int512 :
     IMinMaxValue<Int512>,
     IBinaryInteger<Int512>,
     ISignedNumber<Int512>,
-    IUtf8SpanFormattable,
     IValueEquatable<Int512>,
     IValueComparable<Int512>
 {

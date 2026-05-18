@@ -22,7 +22,6 @@ namespace OnixLabs.Numerics;
 /// <summary>
 /// Represents a 256-bit unsigned integer.
 /// </summary>
-[CLSCompliant(false)]
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct UInt256 :
     IConvertible,

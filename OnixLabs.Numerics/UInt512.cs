@@ -22,14 +22,12 @@ namespace OnixLabs.Numerics;
 /// <summary>
 /// Represents a 512-bit unsigned integer.
 /// </summary>
-[CLSCompliant(false)]
 [StructLayout(LayoutKind.Sequential)]
 public readonly partial struct UInt512 :
     IConvertible,
     IMinMaxValue<UInt512>,
     IBinaryInteger<UInt512>,
     IUnsignedNumber<UInt512>,
-    IUtf8SpanFormattable,
     IValueEquatable<UInt512>,
     IValueComparable<UInt512>
 {

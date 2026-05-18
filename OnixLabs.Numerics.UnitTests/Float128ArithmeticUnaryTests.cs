@@ -1,0 +1,52 @@
+// Copyright © 2020 ONIXLabs
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class Float128ArithmeticUnaryTests
+{
+    [Fact(DisplayName = "Float128 unary plus should return the original value")]
+    public void Float128UnaryPlusShouldReturnOriginalValue()
+    {
+        Assert.Equal(Float128.One.RawBits, (+Float128.One).RawBits);
+        Assert.Equal(Float128.NegativeOne.RawBits, (+Float128.NegativeOne).RawBits);
+        Assert.Equal(Float128.NegativeZero.RawBits, (+Float128.NegativeZero).RawBits);
+    }
+
+    [Fact(DisplayName = "Float128 unary minus should flip the sign bit")]
+    public void Float128UnaryMinusShouldFlipSignBit()
+    {
+        Assert.Equal(Float128.NegativeOne.RawBits, (-Float128.One).RawBits);
+        Assert.Equal(Float128.One.RawBits, (-Float128.NegativeOne).RawBits);
+        Assert.Equal(Float128.NegativeZero.RawBits, (-Float128.Zero).RawBits);
+        Assert.Equal(Float128.Zero.RawBits, (-Float128.NegativeZero).RawBits);
+        Assert.Equal(Float128.NegativeInfinity.RawBits, (-Float128.PositiveInfinity).RawBits);
+        Assert.Equal(Float128.PositiveInfinity.RawBits, (-Float128.NegativeInfinity).RawBits);
+        Assert.Equal(Float128.MinValue.RawBits, (-Float128.MaxValue).RawBits);
+        Assert.Equal(Float128.MaxValue.RawBits, (-Float128.MinValue).RawBits);
+    }
+
+    [Fact(DisplayName = "Float128 unary minus of NaN should remain NaN")]
+    public void Float128UnaryMinusShouldPreserveNaN()
+    {
+        Assert.True(Float128.IsNaN(-Float128.NaN));
+    }
+
+    [Fact(DisplayName = "Float128.UnaryAdd and UnarySubtract should mirror the operators")]
+    public void Float128UnaryNamedMethodsShouldMirrorOperators()
+    {
+        Assert.Equal((+Float128.One).RawBits, Float128.UnaryAdd(Float128.One).RawBits);
+        Assert.Equal((-Float128.One).RawBits, Float128.UnarySubtract(Float128.One).RawBits);
+    }
+}

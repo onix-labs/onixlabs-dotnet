@@ -104,4 +104,58 @@ public sealed class Float128ArithmeticRoundTests
         Assert.Equal(Float128.NegativeInfinity.RawBits, Float128.Round(Float128.NegativeInfinity).RawBits);
         Assert.True(Float128.IsNaN(Float128.Round(Float128.NaN)));
     }
+
+    [Theory(DisplayName = "Float128.Round(value, digits) should produce the correctly-rounded decimal result")]
+    [InlineData("3.14159", 2, "3.14")]
+    [InlineData("-3.14159", 2, "-3.14")]
+    [InlineData("3.14159", 4, "3.1416")]
+    [InlineData("1.2345", 3, "1.234")]
+    [InlineData("1234567.89", 1, "1234567.9")]
+    [InlineData("0.000123456", 6, "0.000123")]
+    public void Float128RoundWithDigitsShouldProduceCorrectlyRoundedResult(string valueLiteral, int digits, string expectedLiteral)
+    {
+        Float128 value = Float128.Parse(valueLiteral, System.Globalization.CultureInfo.InvariantCulture);
+        Float128 expected = Float128.Parse(expectedLiteral, System.Globalization.CultureInfo.InvariantCulture);
+        Float128 actual = Float128.Round(value, digits);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Float128.Round with positive digits and AwayFromZero should round halves away from zero")]
+    public void Float128RoundWithDigitsAwayFromZeroShouldRoundHalvesAway()
+    {
+        Float128 value = Float128.Parse("1.25", System.Globalization.CultureInfo.InvariantCulture);
+        Float128 expected = Float128.Parse("1.3", System.Globalization.CultureInfo.InvariantCulture);
+        Float128 result = Float128.Round(value, 1, MidpointRounding.AwayFromZero);
+        Assert.Equal(expected, result);
+    }
+
+    [Fact(DisplayName = "Float128.Round with negative digits should round to the nearest power of ten multiple")]
+    public void Float128RoundWithNegativeDigitsShouldRoundToPowerOfTenMultiple()
+    {
+        Float128 result = Float128.Round((Float128)1234567, -3);
+        Assert.Equal((Float128)1235000, result);
+    }
+
+    [Fact(DisplayName = "Float128.Round with digits beyond precision should return the value unchanged")]
+    public void Float128RoundWithDigitsBeyondPrecisionShouldReturnValue()
+    {
+        Float128 value = Float128.Parse("3.14159265358979323846", System.Globalization.CultureInfo.InvariantCulture);
+        Float128 result = Float128.Round(value, 1000);
+        Assert.Equal(value, result);
+    }
+
+    [Fact(DisplayName = "Float128.Round with negative digits exceeding Float128 range should round small values to zero")]
+    public void Float128RoundWithExtremeNegativeDigitsShouldRoundSmallValuesToZero()
+    {
+        Float128 value = (Float128)42;
+        Float128 result = Float128.Round(value, -100000);
+        Assert.Equal(Float128.Zero, result);
+    }
+
+    [Fact(DisplayName = "Float128.Round with digits == int.MinValue should round to zero")]
+    public void Float128RoundWithIntMinValueDigitsShouldReturnZero()
+    {
+        Assert.Equal(Float128.Zero, Float128.Round((Float128)1, int.MinValue));
+        Assert.Equal(Float128.NegativeZero, Float128.Round((Float128)(-1), int.MinValue));
+    }
 }

@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Numerics;
 
 namespace OnixLabs.Numerics;
 
@@ -47,31 +46,59 @@ public readonly partial struct Float256
 
     /// <summary>Rounds the specified <see cref="Float256"/> value to the specified number of fractional digits using the specified rounding mode.</summary>
     /// <param name="value">The value to round.</param>
-    /// <param name="digits">The number of fractional digits to retain.</param>
+    /// <param name="digits">The number of fractional digits to retain when positive, or the negative number of integer digits to clear when negative.</param>
     /// <param name="mode">The rounding mode.</param>
     /// <returns>Returns the value rounded to the specified number of digits.</returns>
+    /// <remarks>
+    /// Rounds natively via the identity <c>round(value * 10^d) / 10^d</c> using the precomputed exact
+    /// <see cref="PowersOfTen"/> table for <c>|d| ≤ 71</c>. Decimal scaling adds up to two round-to-nearest
+    /// steps (the multiply and the divide-back), so the result can differ from the mathematically-exact
+    /// decimal-rounded value by at most ~2 ULPs — a tighter bound than is typical for binary float rounding.
+    /// </remarks>
     public static Float256 Round(Float256 value, int digits, MidpointRounding mode)
     {
         if (!IsFinite(value) || IsZero(value)) return value;
         if (digits == 0) return Round(value, mode);
+        if (digits == int.MinValue) return IsNegative(value) ? NegativeZero : Zero;
 
-        // Decimal rounding is performed via BigDecimal to guarantee mathematically correct
-        // decimal-digit semantics. A native pow10-based approach would introduce double-rounding
-        // (once when scaling by 10^digits, once when dividing back) and disagree with the
-        // exact decimal answer on edge cases. Integer-valued rounding (digits == 0) above stays native.
-        BigDecimal exact = (BigDecimal)value;
+        bool negative = digits < 0;
+        int magnitude = negative ? -digits : digits;
 
-        if (digits > 0)
+        Float256 scale = PowerOfTenForRound(magnitude);
+
+        if (IsPositiveInfinity(scale))
         {
-            BigDecimal rounded = exact.Scale > digits ? exact.SetScale(digits, mode) : exact;
-            return (Float256)rounded;
+            // Scale exceeds Float256's range. For positive digits the precision is long exhausted
+            // (the value cannot resolve a 10^-digits step) so rounding is a no-op. For negative digits
+            // the granularity exceeds every finite Float256 magnitude, so every value rounds to zero.
+            return negative ? (IsNegative(value) ? NegativeZero : Zero) : value;
         }
 
-        int absoluteDigits = -digits;
-        BigDecimal shifted = new(exact.UnscaledValue, exact.Scale + absoluteDigits);
-        BigDecimal roundedShifted = shifted.SetScale(0, mode);
-        BigInteger paddedUnscaledValue = roundedShifted.UnscaledValue * BigInteger.Pow(10, absoluteDigits);
-        return (Float256)new BigDecimal(paddedUnscaledValue, 0);
+        if (negative)
+        {
+            Float256 reduced = value / scale;
+            Float256 rounded = Round(reduced, mode);
+            return rounded * scale;
+        }
+
+        Float256 scaled = value * scale;
+        // If the multiplication overflows then the value is already coarser than the requested
+        // rounding step, so return the input unchanged.
+        if (!IsFinite(scaled)) return value;
+        Float256 roundedScaled = Round(scaled, mode);
+        return roundedScaled / scale;
+    }
+
+    /// <summary>
+    /// Returns <c>10^magnitude</c> as a <see cref="Float256"/>, using the exact precomputed table when <paramref name="magnitude"/> fits,
+    /// otherwise falling back to <see cref="Pow(Float256,Float256)"/>.
+    /// </summary>
+    /// <param name="magnitude">The non-negative power of ten to compute.</param>
+    /// <returns>Returns <c>10^magnitude</c>, which can be <see cref="PositiveInfinity"/> when the result overflows the Float256 range.</returns>
+    private static Float256 PowerOfTenForRound(int magnitude)
+    {
+        if (magnitude < PowersOfTen.Length) return PowersOfTen[magnitude];
+        return Pow(PowersOfTen[1], (Float256)magnitude);
     }
 
     /// <summary>

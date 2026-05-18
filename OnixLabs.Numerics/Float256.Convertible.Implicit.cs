@@ -367,27 +367,43 @@ public readonly partial struct Float256
     }
 
     /// <summary>
-    /// The first 29 non-negative powers of ten as <see cref="Float256"/> values, indexed by exponent.
+    /// The first 72 non-negative powers of ten as <see cref="Float256"/> values, indexed by exponent.
     /// </summary>
     /// <remarks>
-    /// Used by <see cref="FromDecimal"/> as exact-divisor lookups. <c>10^28</c> is the largest decimal scale,
-    /// and every entry fits losslessly in Float256's 237-bit significand (10^28 occupies ~94 bits).
+    /// Used by <see cref="FromDecimal"/> as exact-divisor lookups and by <see cref="Round(Float256,int,MidpointRounding)"/>
+    /// as scale factors. The table extends to <c>10^71</c> because that is the largest power of ten whose binary expansion
+    /// fits in Float256's 237-bit significand (10^71 occupies ~236 bits); every entry is therefore stored exactly.
     /// </remarks>
-    private static readonly Float256[] PowersOfTen = ComputePowersOfTen();
+    internal static readonly Float256[] PowersOfTen = ComputePowersOfTen();
 
     /// <summary>
-    /// Computes the lookup table of <c>10^k</c> as <see cref="Float256"/> values for <c>k</c> in the range [0, 28].
+    /// Computes the lookup table of <c>10^k</c> as <see cref="Float256"/> values for <c>k</c> in the range [0, 71].
     /// </summary>
     /// <returns>Returns an array indexed by exponent, where entry <c>k</c> equals <c>10^k</c> as a <see cref="Float256"/>.</returns>
+    /// <remarks>
+    /// Entries 0..38 are built via exact <see cref="UInt128"/> multiplication and <see cref="FromUInt128"/>.
+    /// Entries 39..71 extend the table by Float256 multiplication: each step <c>10^k * 10</c> is exact while
+    /// the product still fits in 237 bits, which holds through <c>10^71</c>.
+    /// </remarks>
     private static Float256[] ComputePowersOfTen()
     {
-        Float256[] result = new Float256[29];
-        UInt128 power = UInt128.One;
-        for (int i = 0; i < result.Length; i++)
+        const int tableSize = 72;
+        const int uint128LimitExponent = 38;
+
+        Float256[] result = new Float256[tableSize];
+        UInt128 powerU128 = UInt128.One;
+        for (int i = 0; i <= uint128LimitExponent; i++)
         {
-            result[i] = FromUInt128(power);
-            if (i < result.Length - 1) power *= 10U;
+            result[i] = FromUInt128(powerU128);
+            if (i < uint128LimitExponent) powerU128 *= 10U;
         }
+
+        Float256 ten = FromUInt128((UInt128)10U);
+        for (int i = uint128LimitExponent + 1; i < tableSize; i++)
+        {
+            result[i] = result[i - 1] * ten;
+        }
+
         return result;
     }
 

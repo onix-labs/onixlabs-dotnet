@@ -113,4 +113,62 @@ public sealed class Float256ArithmeticRoundTests
         Assert.Equal(Float256.NegativeInfinity.RawLowBits, Float256.Round(Float256.NegativeInfinity).RawLowBits);
         Assert.True(Float256.IsNaN(Float256.Round(Float256.NaN)));
     }
+
+    [Theory(DisplayName = "Float256.Round(value, digits) should produce the correctly-rounded decimal result")]
+    // Note: inputs are parsed as Float256 so the test exercises the actual decimal rounding rather than
+    // binary-double pre-rounding; outputs are checked against an explicitly-parsed Float256 reference.
+    [InlineData("3.14159", 2, "3.14")]
+    [InlineData("-3.14159", 2, "-3.14")]
+    [InlineData("3.14159", 4, "3.1416")]
+    [InlineData("1.2345", 3, "1.234")]
+    [InlineData("1234567.89", 1, "1234567.9")]
+    [InlineData("0.000123456", 6, "0.000123")]
+    public void Float256RoundWithDigitsShouldProduceCorrectlyRoundedResult(string valueLiteral, int digits, string expectedLiteral)
+    {
+        Float256 value = Float256.Parse(valueLiteral, System.Globalization.CultureInfo.InvariantCulture);
+        Float256 expected = Float256.Parse(expectedLiteral, System.Globalization.CultureInfo.InvariantCulture);
+        Float256 actual = Float256.Round(value, digits);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Float256.Round with positive digits and AwayFromZero should round halves away from zero")]
+    public void Float256RoundWithDigitsAwayFromZeroShouldRoundHalvesAway()
+    {
+        // 1.25 is exactly representable in binary; round to 1 fractional digit away from zero → 1.3.
+        Float256 value = Float256.Parse("1.25", System.Globalization.CultureInfo.InvariantCulture);
+        Float256 expected = Float256.Parse("1.3", System.Globalization.CultureInfo.InvariantCulture);
+        Float256 result = Float256.Round(value, 1, MidpointRounding.AwayFromZero);
+        Assert.Equal(expected, result);
+    }
+
+    [Fact(DisplayName = "Float256.Round with negative digits should round to the nearest power of ten multiple")]
+    public void Float256RoundWithNegativeDigitsShouldRoundToPowerOfTenMultiple()
+    {
+        // Round 1234567 to nearest 1000 (digits = -3) with ToEven → 1235000.
+        Float256 result = Float256.Round((Float256)1234567, -3);
+        Assert.Equal((Float256)1235000, result);
+    }
+
+    [Fact(DisplayName = "Float256.Round with digits beyond precision should return the value unchanged")]
+    public void Float256RoundWithDigitsBeyondPrecisionShouldReturnValue()
+    {
+        Float256 value = Float256.Parse("3.14159265358979323846", System.Globalization.CultureInfo.InvariantCulture);
+        Float256 result = Float256.Round(value, 1000);
+        Assert.Equal(value, result);
+    }
+
+    [Fact(DisplayName = "Float256.Round with negative digits exceeding Float256 range should round small values to zero")]
+    public void Float256RoundWithExtremeNegativeDigitsShouldRoundSmallValuesToZero()
+    {
+        Float256 value = (Float256)42;
+        Float256 result = Float256.Round(value, -100000);
+        Assert.Equal(Float256.Zero, result);
+    }
+
+    [Fact(DisplayName = "Float256.Round with digits == int.MinValue should round to zero")]
+    public void Float256RoundWithIntMinValueDigitsShouldReturnZero()
+    {
+        Assert.Equal(Float256.Zero, Float256.Round((Float256)1, int.MinValue));
+        Assert.Equal(Float256.NegativeZero, Float256.Round((Float256)(-1), int.MinValue));
+    }
 }

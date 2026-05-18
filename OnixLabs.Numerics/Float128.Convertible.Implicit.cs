@@ -389,21 +389,26 @@ public readonly partial struct Float128
     }
 
     /// <summary>
-    /// The first 29 non-negative powers of ten as <see cref="Float128"/> values, indexed by exponent.
+    /// The first 34 non-negative powers of ten as <see cref="Float128"/> values, indexed by exponent.
     /// </summary>
     /// <remarks>
-    /// Used by <see cref="FromDecimal"/> as exact-divisor lookups. <c>10^28</c> is the largest decimal scale,
-    /// and every entry fits losslessly in Float128's 113-bit significand (10^28 occupies ~94 bits).
+    /// Used by <see cref="FromDecimal"/> as exact-divisor lookups and by <see cref="Round(Float128,int,MidpointRounding)"/>
+    /// as scale factors. The table extends to <c>10^33</c> because that is the largest power of ten whose binary expansion
+    /// fits in Float128's 113-bit significand (10^33 occupies ~110 bits); every entry is therefore stored exactly.
     /// </remarks>
-    private static readonly Float128[] PowersOfTen = ComputePowersOfTen();
+    internal static readonly Float128[] PowersOfTen = ComputePowersOfTen();
 
     /// <summary>
-    /// Computes the lookup table of <c>10^k</c> as <see cref="Float128"/> values for <c>k</c> in the range [0, 28].
+    /// Computes the lookup table of <c>10^k</c> as <see cref="Float128"/> values for <c>k</c> in the range [0, 33].
     /// </summary>
     /// <returns>Returns an array indexed by exponent, where entry <c>k</c> equals <c>10^k</c> as a <see cref="Float128"/>.</returns>
+    /// <remarks>
+    /// Every entry is built via exact <see cref="UInt128"/> multiplication and <see cref="FromUInt128"/>, since
+    /// <c>10^33</c> fits in 110 bits — well within UInt128's 128-bit range.
+    /// </remarks>
     private static Float128[] ComputePowersOfTen()
     {
-        Float128[] result = new Float128[29];
+        Float128[] result = new Float128[34];
         UInt128 power = UInt128.One;
         for (int i = 0; i < result.Length; i++)
         {

@@ -77,37 +77,9 @@ public readonly partial struct Float256
         if (IsNegativeInfinity(this)) return NegativeInfinitySymbol;
         if (IsZero(this)) return IsNegative(this) ? NegativeZeroSymbol : PositiveZeroSymbol;
 
-        BigDecimal exactValue = (BigDecimal)this;
-        int digitsForFormat = ResolveSignificantDigits(format);
-        BigDecimal rounded = RoundToSignificantDigits(exactValue, digitsForFormat);
-        BigDecimal trimmed = TrimFractionalTrailingZeros(rounded);
-
-        return trimmed.ToString(format.ToString(), formatProvider);
-    }
-
-    /// <summary>
-    /// Removes any redundant trailing zero decimal places from the specified <see cref="BigDecimal"/> while keeping the scale non-negative.
-    /// </summary>
-    /// <param name="value">The value whose scale should be minimised.</param>
-    /// <returns>Returns a <see cref="BigDecimal"/> equal to <paramref name="value"/> but with the smallest non-negative scale that still represents it exactly.</returns>
-    private static BigDecimal TrimFractionalTrailingZeros(BigDecimal value)
-    {
-        if (BigDecimal.IsZero(value)) return value;
-        if (value.Scale == 0) return value;
-
-        BigInteger remainingUnscaledValue = value.UnscaledValue;
-        int currentScale = value.Scale;
-        BigInteger ten = (BigInteger)10;
-
-        while (currentScale > 0)
-        {
-            BigInteger quotient = BigInteger.DivRem(remainingUnscaledValue, ten, out BigInteger remainder);
-            if (!remainder.IsZero) break;
-            remainingUnscaledValue = quotient;
-            currentScale--;
-        }
-
-        return new BigDecimal(remainingUnscaledValue, currentScale);
+        int significantDigits = ResolveSignificantDigits(format);
+        NumberInfo numberInfo = ToDecimalNumberInfo(this, significantDigits);
+        return numberInfo.ToString(format.ToString(), formatProvider);
     }
 
     /// <summary>
@@ -134,47 +106,90 @@ public readonly partial struct Float256
     }
 
     /// <summary>
-    /// Rounds the specified <see cref="BigDecimal"/> to at most <paramref name="maxDigits"/> significant decimal digits using round-half-to-even.
+    /// Converts the specified finite, non-zero <see cref="Float256"/> value to a <see cref="NumberInfo"/> with at most <paramref name="significantDigits"/> significant decimal digits, rounded to nearest, ties-to-even.
     /// </summary>
-    /// <param name="value">The value to round.</param>
-    /// <param name="maxDigits">The maximum number of significant decimal digits to retain.</param>
-    /// <returns>Returns <paramref name="value"/> rounded to <paramref name="maxDigits"/> significant digits.</returns>
-    private static BigDecimal RoundToSignificantDigits(BigDecimal value, int maxDigits)
+    /// <param name="value">The finite, non-zero value to convert.</param>
+    /// <param name="significantDigits">The maximum number of significant decimal digits to retain in the result.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> whose unscaled value contains the rounded decimal digits and whose scale positions the decimal point.</returns>
+    /// <remarks>
+    /// The conversion goes binary → decimal natively: it estimates the decimal exponent via <see cref="Log10(Float256)"/>,
+    /// scales the value by chunked exact <see cref="PowersOfTen"/> entries so the result lands in <c>[10^(N-1), 10^N)</c>, then
+    /// rounds to an integer that fits losslessly in Float256's 237-bit significand. The intermediate
+    /// multiplications introduce at most ~1 ULP of binary error per chunk, so the last decimal digit can
+    /// occasionally disagree with the mathematically-exact rounded value at the very edges of the precision range.
+    /// </remarks>
+    internal static NumberInfo ToDecimalNumberInfo(Float256 value, int significantDigits)
     {
-        if (BigDecimal.IsZero(value)) return value;
+        bool sign = IsNegative(value);
+        Float256 absValue = Abs(value);
 
-        BigInteger absoluteUnscaledValue = BigInteger.Abs(value.UnscaledValue);
-        int currentDigits = CountDecimalDigits(absoluteUnscaledValue);
+        // Estimate the decimal exponent D such that 10^D ≤ |value| < 10^(D+1).
+        int decimalExponent = (int)Floor(Log10(absValue));
+        int decimalScale = significantDigits - 1 - decimalExponent;
 
-        if (currentDigits <= maxDigits) return value;
+        Float256 scaled = ScaleByPowerOfTen(absValue, decimalScale);
+        Float256 rounded = Round(scaled, MidpointRounding.ToEven);
+        BigInteger unscaledValue = (BigInteger)rounded;
 
-        int excessDigits = currentDigits - maxDigits;
-        int newScale = value.Scale - excessDigits;
+        // Post-check: the rounded integer should have exactly `significantDigits` decimal digits
+        // (i.e. lie in [10^(N-1), 10^N)). The Log10 estimate can be off by 1 — adjust here.
+        BigInteger lowerLimit = BigInteger.Pow(10, significantDigits - 1);
+        BigInteger upperLimit = lowerLimit * 10;
 
-        if (newScale >= 0) return value.SetScale(newScale, MidpointRounding.ToEven);
-
-        BigInteger divisor = BigInteger.Pow(10, excessDigits);
-        BigInteger quotient = BigInteger.DivRem(value.UnscaledValue, divisor, out BigInteger remainder);
-        BigInteger halfDivisor = divisor >> 1;
-        BigInteger absoluteRemainder = BigInteger.Abs(remainder);
-
-        if (absoluteRemainder > halfDivisor || (absoluteRemainder == halfDivisor && !quotient.IsEven))
+        while (unscaledValue >= upperLimit)
         {
-            quotient += value.UnscaledValue.Sign;
+            BigInteger remainder = unscaledValue % 10;
+            unscaledValue /= 10;
+            if (remainder > 5 || (remainder == 5 && !unscaledValue.IsEven)) unscaledValue += BigInteger.One;
+            decimalScale--;
         }
 
-        BigInteger paddedUnscaledValue = quotient * divisor;
-        return new BigDecimal(paddedUnscaledValue, 0);
+        while (!unscaledValue.IsZero && unscaledValue < lowerLimit)
+        {
+            unscaledValue *= 10;
+            decimalScale++;
+        }
+
+        if (sign) unscaledValue = -unscaledValue;
+
+        // Trim trailing zeros so the output reads naturally (e.g. "1.5" rather than "1.50000…").
+        while (decimalScale > 0 && !unscaledValue.IsZero && (unscaledValue % 10).IsZero)
+        {
+            unscaledValue /= 10;
+            decimalScale--;
+        }
+
+        return new NumberInfo(unscaledValue, decimalScale);
     }
 
     /// <summary>
-    /// Counts the number of decimal digits in the absolute value of the specified <see cref="BigInteger"/>.
+    /// Multiplies the specified non-negative value by <c>10^decimalScale</c>, supporting any integer scale by chunking through the precomputed <see cref="PowersOfTen"/> table.
     /// </summary>
-    /// <param name="value">The value whose decimal digits should be counted.</param>
-    /// <returns>Returns the number of decimal digits; returns <c>1</c> when <paramref name="value"/> is zero.</returns>
-    private static int CountDecimalDigits(BigInteger value)
+    /// <param name="value">The non-negative finite value to scale.</param>
+    /// <param name="decimalScale">The decimal exponent to apply; positive multiplies, negative divides, zero is a no-op.</param>
+    /// <returns>Returns <paramref name="value"/> scaled by <c>10^decimalScale</c>, possibly with up to ~1 ULP of accumulated multiplicative error per chunk.</returns>
+    private static Float256 ScaleByPowerOfTen(Float256 value, int decimalScale)
     {
-        if (value.IsZero) return 1;
-        return value.ToString().Length;
+        if (decimalScale == 0) return value;
+
+        bool divide = decimalScale < 0;
+        int remaining = decimalScale < 0 ? -decimalScale : decimalScale;
+        int maxChunk = PowersOfTen.Length - 1; // 71 — the largest exact 10^k that Float256 can hold
+
+        Float256 result = value;
+        while (remaining > maxChunk)
+        {
+            Float256 chunk = PowersOfTen[maxChunk];
+            result = divide ? result / chunk : result * chunk;
+            remaining -= maxChunk;
+        }
+
+        if (remaining > 0)
+        {
+            Float256 chunk = PowersOfTen[remaining];
+            result = divide ? result / chunk : result * chunk;
+        }
+
+        return result;
     }
 }

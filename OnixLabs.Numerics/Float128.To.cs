@@ -83,37 +83,9 @@ public readonly partial struct Float128
         if (IsNegativeInfinity(this)) return NegativeInfinitySymbol;
         if (IsZero(this)) return IsNegative(this) ? NegativeZeroSymbol : PositiveZeroSymbol;
 
-        BigDecimal exactValue = (BigDecimal)this;
-        int digitsForFormat = ResolveSignificantDigits(format);
-        BigDecimal rounded = RoundToSignificantDigits(exactValue, digitsForFormat);
-        BigDecimal trimmed = TrimFractionalTrailingZeros(rounded);
-
-        return trimmed.ToString(format.ToString(), formatProvider);
-    }
-
-    /// <summary>
-    /// Removes redundant trailing zeros from the fractional portion of the specified <see cref="BigDecimal"/>.
-    /// </summary>
-    /// <param name="value">The <see cref="BigDecimal"/> value to normalize.</param>
-    /// <returns>An equivalent <see cref="BigDecimal"/> with redundant fractional trailing zeros trimmed.</returns>
-    private static BigDecimal TrimFractionalTrailingZeros(BigDecimal value)
-    {
-        if (BigDecimal.IsZero(value)) return value;
-        if (value.Scale == 0) return value;
-
-        BigInteger remainingUnscaledValue = value.UnscaledValue;
-        int currentScale = value.Scale;
-        BigInteger ten = (BigInteger)10;
-
-        while (currentScale > 0)
-        {
-            BigInteger quotient = BigInteger.DivRem(remainingUnscaledValue, ten, out BigInteger remainder);
-            if (!remainder.IsZero) break;
-            remainingUnscaledValue = quotient;
-            currentScale--;
-        }
-
-        return new BigDecimal(remainingUnscaledValue, currentScale);
+        int significantDigits = ResolveSignificantDigits(format);
+        NumberInfo numberInfo = ToDecimalNumberInfo(this, significantDigits);
+        return numberInfo.ToString(format.ToString(), formatProvider);
     }
 
     /// <summary>
@@ -140,47 +112,20 @@ public readonly partial struct Float128
     }
 
     /// <summary>
-    /// Rounds the specified <see cref="BigDecimal"/> to at most the requested number of significant digits using banker's rounding.
+    /// Converts the specified finite, non-zero <see cref="Float128"/> value to a <see cref="NumberInfo"/> with at most <paramref name="significantDigits"/> significant decimal digits, rounded to nearest, ties-to-even.
     /// </summary>
-    /// <param name="value">The <see cref="BigDecimal"/> value to round.</param>
-    /// <param name="maxDigits">The maximum number of significant decimal digits permitted in the result.</param>
-    /// <returns>A <see cref="BigDecimal"/> rounded to the requested significant digit count.</returns>
-    private static BigDecimal RoundToSignificantDigits(BigDecimal value, int maxDigits)
+    /// <param name="value">The finite, non-zero value to convert.</param>
+    /// <param name="significantDigits">The maximum number of significant decimal digits to retain in the result.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> whose unscaled value contains the rounded decimal digits and whose scale positions the decimal point.</returns>
+    /// <remarks>
+    /// Routes the conversion through a lossless widening to <see cref="Float256"/> so the intermediate
+    /// power-of-ten multiplications retain full binary128 precision. Float128 alone cannot hold
+    /// <c>value × 10^(N-1-D)</c> for typical N=36 requests (the product can exceed 113 bits), but Float256's
+    /// 237-bit significand has plenty of headroom — keeping the binary→decimal round-trip exact.
+    /// </remarks>
+    private static NumberInfo ToDecimalNumberInfo(Float128 value, int significantDigits)
     {
-        if (BigDecimal.IsZero(value)) return value;
-
-        BigInteger absoluteUnscaledValue = BigInteger.Abs(value.UnscaledValue);
-        int currentDigits = CountDecimalDigits(absoluteUnscaledValue);
-
-        if (currentDigits <= maxDigits) return value;
-
-        int excessDigits = currentDigits - maxDigits;
-        int newScale = value.Scale - excessDigits;
-
-        if (newScale >= 0) return value.SetScale(newScale, MidpointRounding.ToEven);
-
-        BigInteger divisor = BigInteger.Pow(10, excessDigits);
-        BigInteger quotient = BigInteger.DivRem(value.UnscaledValue, divisor, out BigInteger remainder);
-        BigInteger halfDivisor = divisor >> 1;
-        BigInteger absoluteRemainder = BigInteger.Abs(remainder);
-
-        if (absoluteRemainder > halfDivisor || (absoluteRemainder == halfDivisor && !quotient.IsEven))
-        {
-            quotient += value.UnscaledValue.Sign;
-        }
-
-        BigInteger paddedUnscaledValue = quotient * divisor;
-        return new BigDecimal(paddedUnscaledValue, 0);
-    }
-
-    /// <summary>
-    /// Counts the number of decimal digits required to represent the specified <see cref="BigInteger"/> magnitude.
-    /// </summary>
-    /// <param name="value">The <see cref="BigInteger"/> whose digit count is required.</param>
-    /// <returns>The number of decimal digits in the absolute value of <paramref name="value"/>, with at least one digit returned for zero.</returns>
-    private static int CountDecimalDigits(BigInteger value)
-    {
-        if (value.IsZero) return 1;
-        return value.ToString().Length;
+        Float256 widened = (Float256)value;
+        return Float256.ToDecimalNumberInfo(widened, significantDigits);
     }
 }

@@ -26,7 +26,7 @@ public readonly partial struct Float128
     /// <remarks>
     /// Negation toggles the sign bit only; NaN bit patterns are preserved (with their sign bit flipped).
     /// </remarks>
-    public static Float128 UnarySubtract(Float128 value) => new(value.bits ^ SignMask);
+    public static Float128 UnarySubtract(Float128 value) => new(value.RawBits ^ SignMask);
 
     /// <summary>
     /// Computes the unary subtraction of the specified <see cref="Float128"/> value.

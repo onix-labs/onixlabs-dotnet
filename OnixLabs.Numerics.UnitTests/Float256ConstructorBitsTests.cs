@@ -32,18 +32,18 @@ public sealed class Float256ConstructorBitsTests
     };
 
     [MemberData(nameof(BitPatterns))]
-    [Theory(DisplayName = "Float256(UInt128, UInt128) constructor should preserve the specified bit pattern")]
+    [Theory(DisplayName = "Float256(UInt256) constructor should preserve the specified bit pattern")]
     public void Float256ConstructorShouldPreserveBitPattern(ulong highHigh, ulong highLow, ulong lowHigh, ulong lowLow)
     {
         // Given
         UInt128 expectedHigh = new(highHigh, highLow);
         UInt128 expectedLow = new(lowHigh, lowLow);
+        UInt256 expected = new(expectedHigh, expectedLow);
 
         // When
-        Float256 value = new(expectedHigh, expectedLow);
+        UInt256 actual = new Float256(expected).RawBits;
 
         // Then
-        Assert.Equal(expectedHigh, value.RawHighBits);
-        Assert.Equal(expectedLow, value.RawLowBits);
+        Assert.Equal(expected, actual);
     }
 }

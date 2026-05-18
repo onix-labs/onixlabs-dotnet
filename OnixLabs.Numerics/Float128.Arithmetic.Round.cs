@@ -143,7 +143,7 @@ public readonly partial struct Float128
     private static bool TryStartRound(Float128 value, out RoundingContext context)
     {
         context = default;
-        UInt128 bits = value.bits;
+        UInt128 bits = value.RawBits;
 
         if (!IsFinite(value))
         {
@@ -230,10 +230,10 @@ public readonly partial struct Float128
     {
         if (!roundUp) return context.Truncated;
 
-        if (context.IsUnitOnIncrement) return new Float128(context.Sign | One.bits);
+        if (context.IsUnitOnIncrement) return new Float128(context.Sign | One.RawBits);
 
-        UInt128 absoluteTruncatedBits = context.Truncated.bits & ~SignMask;
-        if (absoluteTruncatedBits == UInt128.Zero) return new Float128(context.Sign | One.bits);
+        UInt128 absoluteTruncatedBits = context.Truncated.RawBits & ~SignMask;
+        if (absoluteTruncatedBits == UInt128.Zero) return new Float128(context.Sign | One.RawBits);
 
         UInt128 incrementedAbsolute = IncrementIntegerMagnitudeBits(absoluteTruncatedBits);
         return new Float128(incrementedAbsolute | context.Sign);

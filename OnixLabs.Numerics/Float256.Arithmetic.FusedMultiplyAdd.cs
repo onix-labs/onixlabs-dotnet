@@ -55,9 +55,9 @@ public readonly partial struct Float256
 
         if (addendZero) return Multiply(left, right);
 
-        DecomposeFinite(left.bits, out _, out int expLeft, out UInt256 sigLeft);
-        DecomposeFinite(right.bits, out _, out int expRight, out UInt256 sigRight);
-        DecomposeFinite(addend.bits, out bool signC, out int expC, out UInt256 sigC);
+        DecomposeFinite(left.RawBits, out _, out int expLeft, out UInt256 sigLeft);
+        DecomposeFinite(right.RawBits, out _, out int expRight, out UInt256 sigRight);
+        DecomposeFinite(addend.RawBits, out bool signC, out int expC, out UInt256 sigC);
 
         NormalizeSubnormal(ref sigLeft, ref expLeft);
         NormalizeSubnormal(ref sigRight, ref expRight);

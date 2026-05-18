@@ -31,9 +31,9 @@ public readonly partial struct Float128
     /// </remarks>
     public static bool Equals(Float128 left, Float128 right)
     {
-        if (IsNaNBits(left.bits)) return IsNaNBits(right.bits);
-        if (IsZeroBits(left.bits) && IsZeroBits(right.bits)) return true;
-        return left.bits == right.bits;
+        if (IsNaNBits(left.RawBits)) return IsNaNBits(right.RawBits);
+        if (IsZeroBits(left.RawBits) && IsZeroBits(right.RawBits)) return true;
+        return left.RawBits == right.RawBits;
     }
 
     /// <summary>
@@ -61,9 +61,9 @@ public readonly partial struct Float128
     /// </remarks>
     public override int GetHashCode()
     {
-        if (IsNaNBits(bits)) return NaN.bits.GetHashCode();
-        if (IsZeroBits(bits)) return UInt128.Zero.GetHashCode();
-        return bits.GetHashCode();
+        if (IsNaNBits(RawBits)) return NaN.RawBits.GetHashCode();
+        if (IsZeroBits(RawBits)) return UInt128.Zero.GetHashCode();
+        return RawBits.GetHashCode();
     }
 
     /// <summary>
@@ -79,9 +79,9 @@ public readonly partial struct Float128
     /// </remarks>
     public static bool operator ==(Float128 left, Float128 right)
     {
-        if (IsNaNBits(left.bits) || IsNaNBits(right.bits)) return false;
-        if (IsZeroBits(left.bits) && IsZeroBits(right.bits)) return true;
-        return left.bits == right.bits;
+        if (IsNaNBits(left.RawBits) || IsNaNBits(right.RawBits)) return false;
+        if (IsZeroBits(left.RawBits) && IsZeroBits(right.RawBits)) return true;
+        return left.RawBits == right.RawBits;
     }
 
     /// <summary>

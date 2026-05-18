@@ -29,9 +29,9 @@ public readonly partial struct Float256
         if (IsNegative(value))
         {
             if (IsZero(value)) return Epsilon;
-            return new Float256(value.bits - UInt256.One);
+            return new Float256(value.RawBits - UInt256.One);
         }
-        return new Float256(value.bits + UInt256.One);
+        return new Float256(value.RawBits + UInt256.One);
     }
 
     /// <summary>Returns the largest <see cref="Float256"/> value strictly less than <paramref name="value"/>.</summary>
@@ -44,9 +44,9 @@ public readonly partial struct Float256
         if (IsPositiveInfinity(value)) return MaxValue;
         if (IsNegative(value))
         {
-            return new Float256(value.bits + UInt256.One);
+            return new Float256(value.RawBits + UInt256.One);
         }
         if (IsZero(value)) return new Float256(SignMask | UInt256.One);
-        return new Float256(value.bits - UInt256.One);
+        return new Float256(value.RawBits - UInt256.One);
     }
 }

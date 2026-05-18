@@ -19,30 +19,30 @@ public sealed class Float256ArithmeticCopySignTests
     [Fact(DisplayName = "Float256.CopySign should copy sign of positive sign argument")]
     public void Float256CopySignShouldCopyPositiveSign()
     {
-        Assert.Equal(Float256.One.RawHighBits, Float256.CopySign(Float256.NegativeOne, Float256.One).RawHighBits);
-        Assert.Equal(Float256.One.RawLowBits, Float256.CopySign(Float256.NegativeOne, Float256.One).RawLowBits);
-        Assert.Equal(Float256.One.RawHighBits, Float256.CopySign(Float256.One, Float256.One).RawHighBits);
-        Assert.Equal(Float256.One.RawLowBits, Float256.CopySign(Float256.One, Float256.One).RawLowBits);
-        Assert.Equal(Float256.MaxValue.RawHighBits, Float256.CopySign(Float256.MinValue, Float256.MaxValue).RawHighBits);
-        Assert.Equal(Float256.MaxValue.RawLowBits, Float256.CopySign(Float256.MinValue, Float256.MaxValue).RawLowBits);
+        Assert.Equal(Float256.One.RawBits.Upper, Float256.CopySign(Float256.NegativeOne, Float256.One).RawBits.Upper);
+        Assert.Equal(Float256.One.RawBits.Lower, Float256.CopySign(Float256.NegativeOne, Float256.One).RawBits.Lower);
+        Assert.Equal(Float256.One.RawBits.Upper, Float256.CopySign(Float256.One, Float256.One).RawBits.Upper);
+        Assert.Equal(Float256.One.RawBits.Lower, Float256.CopySign(Float256.One, Float256.One).RawBits.Lower);
+        Assert.Equal(Float256.MaxValue.RawBits.Upper, Float256.CopySign(Float256.MinValue, Float256.MaxValue).RawBits.Upper);
+        Assert.Equal(Float256.MaxValue.RawBits.Lower, Float256.CopySign(Float256.MinValue, Float256.MaxValue).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.CopySign should copy sign of negative sign argument")]
     public void Float256CopySignShouldCopyNegativeSign()
     {
-        Assert.Equal(Float256.NegativeOne.RawHighBits, Float256.CopySign(Float256.One, Float256.NegativeOne).RawHighBits);
-        Assert.Equal(Float256.NegativeOne.RawLowBits, Float256.CopySign(Float256.One, Float256.NegativeOne).RawLowBits);
-        Assert.Equal(Float256.NegativeOne.RawHighBits, Float256.CopySign(Float256.NegativeOne, Float256.NegativeOne).RawHighBits);
-        Assert.Equal(Float256.NegativeOne.RawLowBits, Float256.CopySign(Float256.NegativeOne, Float256.NegativeOne).RawLowBits);
-        Assert.Equal(Float256.MinValue.RawHighBits, Float256.CopySign(Float256.MaxValue, Float256.MinValue).RawHighBits);
-        Assert.Equal(Float256.MinValue.RawLowBits, Float256.CopySign(Float256.MaxValue, Float256.MinValue).RawLowBits);
+        Assert.Equal(Float256.NegativeOne.RawBits.Upper, Float256.CopySign(Float256.One, Float256.NegativeOne).RawBits.Upper);
+        Assert.Equal(Float256.NegativeOne.RawBits.Lower, Float256.CopySign(Float256.One, Float256.NegativeOne).RawBits.Lower);
+        Assert.Equal(Float256.NegativeOne.RawBits.Upper, Float256.CopySign(Float256.NegativeOne, Float256.NegativeOne).RawBits.Upper);
+        Assert.Equal(Float256.NegativeOne.RawBits.Lower, Float256.CopySign(Float256.NegativeOne, Float256.NegativeOne).RawBits.Lower);
+        Assert.Equal(Float256.MinValue.RawBits.Upper, Float256.CopySign(Float256.MaxValue, Float256.MinValue).RawBits.Upper);
+        Assert.Equal(Float256.MinValue.RawBits.Lower, Float256.CopySign(Float256.MaxValue, Float256.MinValue).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.CopySign with negative zero sign should produce negative result")]
     public void Float256CopySignWithNegativeZeroSign()
     {
-        Assert.Equal(Float256.NegativeOne.RawHighBits, Float256.CopySign(Float256.One, Float256.NegativeZero).RawHighBits);
-        Assert.Equal(Float256.NegativeOne.RawLowBits, Float256.CopySign(Float256.One, Float256.NegativeZero).RawLowBits);
+        Assert.Equal(Float256.NegativeOne.RawBits.Upper, Float256.CopySign(Float256.One, Float256.NegativeZero).RawBits.Upper);
+        Assert.Equal(Float256.NegativeOne.RawBits.Lower, Float256.CopySign(Float256.One, Float256.NegativeZero).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.CopySign should preserve NaN magnitude")]

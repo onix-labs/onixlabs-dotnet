@@ -27,10 +27,10 @@ public readonly partial struct Float256
         if (IsInfinity(value)) return int.MaxValue;
         if (IsZero(value)) return int.MinValue;
 
-        uint biasedExponent = ExtractBiasedExponent(value.bits);
+        uint biasedExponent = ExtractBiasedExponent(value.RawBits);
         if (biasedExponent != 0u) return (int)biasedExponent - ExponentBias;
 
-        UInt256 trailing = ExtractTrailingSignificand(value.bits);
+        UInt256 trailing = ExtractTrailingSignificand(value.RawBits);
         int leadingBitPosition = 255 - (int)UInt256.LeadingZeroCount(trailing);
         return leadingBitPosition + MinNormalUnbiasedExponent - TrailingSignificandBits;
     }
@@ -43,7 +43,7 @@ public readonly partial struct Float256
     {
         if (IsNaN(value) || IsInfinity(value) || IsZero(value)) return value;
 
-        DecomposeFinite(value.bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
+        DecomposeFinite(value.RawBits, out bool sign, out int unbiasedExponent, out UInt256 significand);
         NormalizeSubnormal(ref significand, ref unbiasedExponent);
 
         long scaledExponentWide = (long)unbiasedExponent + n;

@@ -65,28 +65,14 @@ public readonly partial struct Float256 :
     IValueComparable<Float256>
 {
     /// <summary>
-    /// The raw IEEE 754 binary256 bit pattern that represents the current <see cref="Float256"/> value.
-    /// </summary>
-    private readonly UInt256 bits;
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="Float256"/> struct from the specified raw IEEE 754 binary256 bit pattern.
     /// </summary>
-    /// <param name="highBits">The high 128 bits of the IEEE 754 binary256 representation.</param>
-    /// <param name="lowBits">The low 128 bits of the IEEE 754 binary256 representation.</param>
-    public Float256(UInt128 highBits, UInt128 lowBits) => bits = new UInt256(highBits, lowBits);
-
-    internal Float256(UInt256 bits) => this.bits = bits;
+    /// <param name="rawBits">The raw IEEE 754 binary256 bit pattern from which to construct the <see cref="Float256"/> value.</param>
+    public Float256(UInt256 rawBits) => RawBits = rawBits;
 
     /// <summary>
-    /// Gets the high 128 bits of the IEEE 754 binary256 representation of the current <see cref="Float256"/> value.
+    /// Gets the raw IEEE 754 binary256 bit pattern that represents the current <see cref="Float256"/> value.
     /// </summary>
-    /// <value>The high half of the raw 256-bit IEEE 754 binary256 representation.</value>
-    public UInt128 RawHighBits => bits.Upper;
-
-    /// <summary>
-    /// Gets the low 128 bits of the IEEE 754 binary256 representation of the current <see cref="Float256"/> value.
-    /// </summary>
-    /// <value>The low half of the raw 256-bit IEEE 754 binary256 representation.</value>
-    public UInt128 RawLowBits => bits.Lower;
+    /// <value>The raw 256-bit IEEE 754 binary256 representation of the current value.</value>
+    public UInt256 RawBits { get; }
 }

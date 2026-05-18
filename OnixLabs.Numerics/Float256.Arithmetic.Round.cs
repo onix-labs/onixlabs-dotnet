@@ -134,7 +134,7 @@ public readonly partial struct Float256
     private static bool TryStartRound(Float256 value, out RoundingContext context)
     {
         context = default;
-        UInt256 bits = value.bits;
+        UInt256 bits = value.RawBits;
 
         if (!IsFinite(value))
         {
@@ -221,10 +221,10 @@ public readonly partial struct Float256
     {
         if (!roundUp) return context.Truncated;
 
-        if (context.IsUnitOnIncrement) return new Float256(context.Sign | One.bits);
+        if (context.IsUnitOnIncrement) return new Float256(context.Sign | One.RawBits);
 
-        UInt256 absoluteTruncatedBits = context.Truncated.bits & ~SignMask;
-        if (UInt256.IsZero(absoluteTruncatedBits)) return new Float256(context.Sign | One.bits);
+        UInt256 absoluteTruncatedBits = context.Truncated.RawBits & ~SignMask;
+        if (UInt256.IsZero(absoluteTruncatedBits)) return new Float256(context.Sign | One.RawBits);
 
         UInt256 incrementedAbsolute = IncrementIntegerMagnitudeBits(absoluteTruncatedBits);
         return new Float256(incrementedAbsolute | context.Sign);
@@ -239,7 +239,7 @@ public readonly partial struct Float256
     {
         uint biasedExponent = (uint)((absoluteIntegerBits & BiasedExponentMask) >> BiasedExponentShift).Lower;
 
-        if (biasedExponent == 0u) return One.bits;
+        if (biasedExponent == 0u) return One.RawBits;
 
         int unbiasedExponent = (int)biasedExponent - ExponentBias;
 

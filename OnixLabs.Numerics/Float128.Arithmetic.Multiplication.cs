@@ -47,8 +47,8 @@ public readonly partial struct Float128
             return resultSign ? NegativeZero : Zero;
         }
 
-        DecomposeFinite(left.bits, out _, out int expLeft, out UInt128 sigLeft);
-        DecomposeFinite(right.bits, out _, out int expRight, out UInt128 sigRight);
+        DecomposeFinite(left.RawBits, out _, out int expLeft, out UInt128 sigLeft);
+        DecomposeFinite(right.RawBits, out _, out int expRight, out UInt128 sigRight);
 
         NormalizeSubnormal(ref sigLeft, ref expLeft);
         NormalizeSubnormal(ref sigRight, ref expRight);

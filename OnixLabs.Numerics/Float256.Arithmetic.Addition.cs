@@ -42,8 +42,8 @@ public readonly partial struct Float256
 
         if (IsZero(right)) return left;
 
-        DecomposeFinite(left.bits, out bool signLeft, out int expLeft, out UInt256 sigLeft);
-        DecomposeFinite(right.bits, out bool signRight, out int expRight, out UInt256 sigRight);
+        DecomposeFinite(left.RawBits, out bool signLeft, out int expLeft, out UInt256 sigLeft);
+        DecomposeFinite(right.RawBits, out bool signRight, out int expRight, out UInt256 sigRight);
 
         return signLeft == signRight
             ? AddMagnitudes(signLeft, expLeft, sigLeft, expRight, sigRight)

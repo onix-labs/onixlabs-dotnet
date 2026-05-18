@@ -26,10 +26,10 @@ public readonly partial struct Float128
     public static Float128 Floor(Float128 value)
     {
         Float128 truncated = Truncate(value);
-        if (truncated.bits == value.bits) return truncated;
+        if (truncated.RawBits == value.RawBits) return truncated;
         if (!IsNegative(value)) return truncated;
 
-        UInt128 absoluteTruncatedBits = truncated.bits & ~SignMask;
+        UInt128 absoluteTruncatedBits = truncated.RawBits & ~SignMask;
         if (absoluteTruncatedBits == UInt128.Zero) return NegativeOne;
 
         UInt128 incrementedAbsolute = IncrementIntegerMagnitudeBits(absoluteTruncatedBits);

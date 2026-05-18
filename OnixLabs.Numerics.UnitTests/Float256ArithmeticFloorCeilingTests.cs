@@ -36,8 +36,8 @@ public sealed class Float256ArithmeticFloorCeilingTests
     {
         Float256 actual = Float256.Floor(value);
         Float256 expected = double.Floor(value);
-        Assert.Equal(expected.RawHighBits, actual.RawHighBits);
-        Assert.Equal(expected.RawLowBits, actual.RawLowBits);
+        Assert.Equal(expected.RawBits.Upper, actual.RawBits.Upper);
+        Assert.Equal(expected.RawBits.Lower, actual.RawBits.Lower);
     }
 
     [Theory(DisplayName = "Float256.Ceiling should match double semantics")]
@@ -60,35 +60,35 @@ public sealed class Float256ArithmeticFloorCeilingTests
     {
         Float256 actual = Float256.Ceiling(value);
         Float256 expected = double.Ceiling(value);
-        Assert.Equal(expected.RawHighBits, actual.RawHighBits);
-        Assert.Equal(expected.RawLowBits, actual.RawLowBits);
+        Assert.Equal(expected.RawBits.Upper, actual.RawBits.Upper);
+        Assert.Equal(expected.RawBits.Lower, actual.RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Floor of special values should preserve them")]
     public void Float256FloorOfSpecialValuesShouldPreserve()
     {
-        Assert.Equal(Float256.Zero.RawHighBits, Float256.Floor(Float256.Zero).RawHighBits);
-        Assert.Equal(Float256.Zero.RawLowBits, Float256.Floor(Float256.Zero).RawLowBits);
-        Assert.Equal(Float256.NegativeZero.RawHighBits, Float256.Floor(Float256.NegativeZero).RawHighBits);
-        Assert.Equal(Float256.NegativeZero.RawLowBits, Float256.Floor(Float256.NegativeZero).RawLowBits);
-        Assert.Equal(Float256.PositiveInfinity.RawHighBits, Float256.Floor(Float256.PositiveInfinity).RawHighBits);
-        Assert.Equal(Float256.PositiveInfinity.RawLowBits, Float256.Floor(Float256.PositiveInfinity).RawLowBits);
-        Assert.Equal(Float256.NegativeInfinity.RawHighBits, Float256.Floor(Float256.NegativeInfinity).RawHighBits);
-        Assert.Equal(Float256.NegativeInfinity.RawLowBits, Float256.Floor(Float256.NegativeInfinity).RawLowBits);
+        Assert.Equal(Float256.Zero.RawBits.Upper, Float256.Floor(Float256.Zero).RawBits.Upper);
+        Assert.Equal(Float256.Zero.RawBits.Lower, Float256.Floor(Float256.Zero).RawBits.Lower);
+        Assert.Equal(Float256.NegativeZero.RawBits.Upper, Float256.Floor(Float256.NegativeZero).RawBits.Upper);
+        Assert.Equal(Float256.NegativeZero.RawBits.Lower, Float256.Floor(Float256.NegativeZero).RawBits.Lower);
+        Assert.Equal(Float256.PositiveInfinity.RawBits.Upper, Float256.Floor(Float256.PositiveInfinity).RawBits.Upper);
+        Assert.Equal(Float256.PositiveInfinity.RawBits.Lower, Float256.Floor(Float256.PositiveInfinity).RawBits.Lower);
+        Assert.Equal(Float256.NegativeInfinity.RawBits.Upper, Float256.Floor(Float256.NegativeInfinity).RawBits.Upper);
+        Assert.Equal(Float256.NegativeInfinity.RawBits.Lower, Float256.Floor(Float256.NegativeInfinity).RawBits.Lower);
         Assert.True(Float256.IsNaN(Float256.Floor(Float256.NaN)));
     }
 
     [Fact(DisplayName = "Float256.Ceiling of special values should preserve them")]
     public void Float256CeilingOfSpecialValuesShouldPreserve()
     {
-        Assert.Equal(Float256.Zero.RawHighBits, Float256.Ceiling(Float256.Zero).RawHighBits);
-        Assert.Equal(Float256.Zero.RawLowBits, Float256.Ceiling(Float256.Zero).RawLowBits);
-        Assert.Equal(Float256.NegativeZero.RawHighBits, Float256.Ceiling(Float256.NegativeZero).RawHighBits);
-        Assert.Equal(Float256.NegativeZero.RawLowBits, Float256.Ceiling(Float256.NegativeZero).RawLowBits);
-        Assert.Equal(Float256.PositiveInfinity.RawHighBits, Float256.Ceiling(Float256.PositiveInfinity).RawHighBits);
-        Assert.Equal(Float256.PositiveInfinity.RawLowBits, Float256.Ceiling(Float256.PositiveInfinity).RawLowBits);
-        Assert.Equal(Float256.NegativeInfinity.RawHighBits, Float256.Ceiling(Float256.NegativeInfinity).RawHighBits);
-        Assert.Equal(Float256.NegativeInfinity.RawLowBits, Float256.Ceiling(Float256.NegativeInfinity).RawLowBits);
+        Assert.Equal(Float256.Zero.RawBits.Upper, Float256.Ceiling(Float256.Zero).RawBits.Upper);
+        Assert.Equal(Float256.Zero.RawBits.Lower, Float256.Ceiling(Float256.Zero).RawBits.Lower);
+        Assert.Equal(Float256.NegativeZero.RawBits.Upper, Float256.Ceiling(Float256.NegativeZero).RawBits.Upper);
+        Assert.Equal(Float256.NegativeZero.RawBits.Lower, Float256.Ceiling(Float256.NegativeZero).RawBits.Lower);
+        Assert.Equal(Float256.PositiveInfinity.RawBits.Upper, Float256.Ceiling(Float256.PositiveInfinity).RawBits.Upper);
+        Assert.Equal(Float256.PositiveInfinity.RawBits.Lower, Float256.Ceiling(Float256.PositiveInfinity).RawBits.Lower);
+        Assert.Equal(Float256.NegativeInfinity.RawBits.Upper, Float256.Ceiling(Float256.NegativeInfinity).RawBits.Upper);
+        Assert.Equal(Float256.NegativeInfinity.RawBits.Lower, Float256.Ceiling(Float256.NegativeInfinity).RawBits.Lower);
         Assert.True(Float256.IsNaN(Float256.Ceiling(Float256.NaN)));
     }
 
@@ -96,14 +96,14 @@ public sealed class Float256ArithmeticFloorCeilingTests
     public void Float256FloorOfNegativeSubnormalShouldProduceNegativeOne()
     {
         Float256 negativeEpsilon = -Float256.Epsilon;
-        Assert.Equal(Float256.NegativeOne.RawHighBits, Float256.Floor(negativeEpsilon).RawHighBits);
-        Assert.Equal(Float256.NegativeOne.RawLowBits, Float256.Floor(negativeEpsilon).RawLowBits);
+        Assert.Equal(Float256.NegativeOne.RawBits.Upper, Float256.Floor(negativeEpsilon).RawBits.Upper);
+        Assert.Equal(Float256.NegativeOne.RawBits.Lower, Float256.Floor(negativeEpsilon).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Ceiling of a positive subnormal should produce 1")]
     public void Float256CeilingOfPositiveSubnormalShouldProduceOne()
     {
-        Assert.Equal(Float256.One.RawHighBits, Float256.Ceiling(Float256.Epsilon).RawHighBits);
-        Assert.Equal(Float256.One.RawLowBits, Float256.Ceiling(Float256.Epsilon).RawLowBits);
+        Assert.Equal(Float256.One.RawBits.Upper, Float256.Ceiling(Float256.Epsilon).RawBits.Upper);
+        Assert.Equal(Float256.One.RawBits.Lower, Float256.Ceiling(Float256.Epsilon).RawBits.Lower);
     }
 }

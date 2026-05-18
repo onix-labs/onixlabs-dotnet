@@ -27,10 +27,10 @@ public sealed class Float256InverseTrigonometryTests
     [Fact(DisplayName = "Float256.Atan of zero should preserve sign of zero")]
     public void Float256AtanOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.RawHighBits, Float256.Atan(Float256.Zero).RawHighBits);
-        Assert.Equal(Float256.Zero.RawLowBits, Float256.Atan(Float256.Zero).RawLowBits);
-        Assert.Equal(Float256.NegativeZero.RawHighBits, Float256.Atan(Float256.NegativeZero).RawHighBits);
-        Assert.Equal(Float256.NegativeZero.RawLowBits, Float256.Atan(Float256.NegativeZero).RawLowBits);
+        Assert.Equal(Float256.Zero.RawBits.Upper, Float256.Atan(Float256.Zero).RawBits.Upper);
+        Assert.Equal(Float256.Zero.RawBits.Lower, Float256.Atan(Float256.Zero).RawBits.Lower);
+        Assert.Equal(Float256.NegativeZero.RawBits.Upper, Float256.Atan(Float256.NegativeZero).RawBits.Upper);
+        Assert.Equal(Float256.NegativeZero.RawBits.Lower, Float256.Atan(Float256.NegativeZero).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Atan of positive infinity should return π/2")]
@@ -74,10 +74,10 @@ public sealed class Float256InverseTrigonometryTests
     [Fact(DisplayName = "Float256.Asin of zero should preserve sign of zero")]
     public void Float256AsinOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.RawHighBits, Float256.Asin(Float256.Zero).RawHighBits);
-        Assert.Equal(Float256.Zero.RawLowBits, Float256.Asin(Float256.Zero).RawLowBits);
-        Assert.Equal(Float256.NegativeZero.RawHighBits, Float256.Asin(Float256.NegativeZero).RawHighBits);
-        Assert.Equal(Float256.NegativeZero.RawLowBits, Float256.Asin(Float256.NegativeZero).RawLowBits);
+        Assert.Equal(Float256.Zero.RawBits.Upper, Float256.Asin(Float256.Zero).RawBits.Upper);
+        Assert.Equal(Float256.Zero.RawBits.Lower, Float256.Asin(Float256.Zero).RawBits.Lower);
+        Assert.Equal(Float256.NegativeZero.RawBits.Upper, Float256.Asin(Float256.NegativeZero).RawBits.Upper);
+        Assert.Equal(Float256.NegativeZero.RawBits.Lower, Float256.Asin(Float256.NegativeZero).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Asin of one should return π/2")]

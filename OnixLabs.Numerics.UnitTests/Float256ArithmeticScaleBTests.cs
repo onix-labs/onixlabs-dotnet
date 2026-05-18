@@ -27,8 +27,8 @@ public sealed class Float256ArithmeticScaleBTests
     {
         Float256 actual = Float256.ScaleB(value, n);
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawHighBits, actual.RawHighBits);
-        Assert.Equal(expectedFloat.RawLowBits, actual.RawLowBits);
+        Assert.Equal(expectedFloat.RawBits.Upper, actual.RawBits.Upper);
+        Assert.Equal(expectedFloat.RawBits.Lower, actual.RawBits.Lower);
     }
 
     [Theory(DisplayName = "Float256.ScaleB by negative n should divide by 2^n exactly for normal values")]
@@ -41,8 +41,8 @@ public sealed class Float256ArithmeticScaleBTests
     {
         Float256 actual = Float256.ScaleB(value, n);
         Float256 expectedFloat = expected;
-        Assert.Equal(expectedFloat.RawHighBits, actual.RawHighBits);
-        Assert.Equal(expectedFloat.RawLowBits, actual.RawLowBits);
+        Assert.Equal(expectedFloat.RawBits.Upper, actual.RawBits.Upper);
+        Assert.Equal(expectedFloat.RawBits.Lower, actual.RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.ScaleB of NaN should return NaN")]
@@ -61,10 +61,10 @@ public sealed class Float256ArithmeticScaleBTests
     [Fact(DisplayName = "Float256.ScaleB of zero should preserve sign")]
     public void Float256ScaleBOfZeroShouldPreserveSign()
     {
-        Assert.Equal(Float256.Zero.RawHighBits, Float256.ScaleB(Float256.Zero, 50).RawHighBits);
-        Assert.Equal(Float256.Zero.RawLowBits, Float256.ScaleB(Float256.Zero, 50).RawLowBits);
-        Assert.Equal(Float256.NegativeZero.RawHighBits, Float256.ScaleB(Float256.NegativeZero, 50).RawHighBits);
-        Assert.Equal(Float256.NegativeZero.RawLowBits, Float256.ScaleB(Float256.NegativeZero, 50).RawLowBits);
+        Assert.Equal(Float256.Zero.RawBits.Upper, Float256.ScaleB(Float256.Zero, 50).RawBits.Upper);
+        Assert.Equal(Float256.Zero.RawBits.Lower, Float256.ScaleB(Float256.Zero, 50).RawBits.Lower);
+        Assert.Equal(Float256.NegativeZero.RawBits.Upper, Float256.ScaleB(Float256.NegativeZero, 50).RawBits.Upper);
+        Assert.Equal(Float256.NegativeZero.RawBits.Lower, Float256.ScaleB(Float256.NegativeZero, 50).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.ScaleB by huge positive n should overflow to infinity")]

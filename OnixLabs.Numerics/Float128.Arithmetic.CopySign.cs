@@ -24,5 +24,5 @@ public readonly partial struct Float128
     /// <param name="magnitude">The value whose magnitude is used for the result.</param>
     /// <param name="sign">The value whose sign bit is used for the result.</param>
     /// <returns>Returns a <see cref="Float128"/> value with the magnitude of <paramref name="magnitude"/> and the sign bit of <paramref name="sign"/>.</returns>
-    public static Float128 CopySign(Float128 magnitude, Float128 sign) => new((magnitude.bits & ~SignMask) | (sign.bits & SignMask));
+    public static Float128 CopySign(Float128 magnitude, Float128 sign) => new((magnitude.RawBits & ~SignMask) | (sign.RawBits & SignMask));
 }

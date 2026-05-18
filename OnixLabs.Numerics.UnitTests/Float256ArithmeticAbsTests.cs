@@ -19,30 +19,30 @@ public sealed class Float256ArithmeticAbsTests
     [Fact(DisplayName = "Float256.Abs of a positive value should return the original value")]
     public void Float256AbsShouldReturnOriginalForPositive()
     {
-        Assert.Equal(Float256.One.RawHighBits, Float256.Abs(Float256.One).RawHighBits);
-        Assert.Equal(Float256.One.RawLowBits, Float256.Abs(Float256.One).RawLowBits);
-        Assert.Equal(Float256.MaxValue.RawHighBits, Float256.Abs(Float256.MaxValue).RawHighBits);
-        Assert.Equal(Float256.MaxValue.RawLowBits, Float256.Abs(Float256.MaxValue).RawLowBits);
-        Assert.Equal(Float256.PositiveInfinity.RawHighBits, Float256.Abs(Float256.PositiveInfinity).RawHighBits);
-        Assert.Equal(Float256.PositiveInfinity.RawLowBits, Float256.Abs(Float256.PositiveInfinity).RawLowBits);
+        Assert.Equal(Float256.One.RawBits.Upper, Float256.Abs(Float256.One).RawBits.Upper);
+        Assert.Equal(Float256.One.RawBits.Lower, Float256.Abs(Float256.One).RawBits.Lower);
+        Assert.Equal(Float256.MaxValue.RawBits.Upper, Float256.Abs(Float256.MaxValue).RawBits.Upper);
+        Assert.Equal(Float256.MaxValue.RawBits.Lower, Float256.Abs(Float256.MaxValue).RawBits.Lower);
+        Assert.Equal(Float256.PositiveInfinity.RawBits.Upper, Float256.Abs(Float256.PositiveInfinity).RawBits.Upper);
+        Assert.Equal(Float256.PositiveInfinity.RawBits.Lower, Float256.Abs(Float256.PositiveInfinity).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Abs of a negative value should clear the sign bit")]
     public void Float256AbsShouldClearSignBitForNegative()
     {
-        Assert.Equal(Float256.One.RawHighBits, Float256.Abs(Float256.NegativeOne).RawHighBits);
-        Assert.Equal(Float256.One.RawLowBits, Float256.Abs(Float256.NegativeOne).RawLowBits);
-        Assert.Equal(Float256.MaxValue.RawHighBits, Float256.Abs(Float256.MinValue).RawHighBits);
-        Assert.Equal(Float256.MaxValue.RawLowBits, Float256.Abs(Float256.MinValue).RawLowBits);
-        Assert.Equal(Float256.PositiveInfinity.RawHighBits, Float256.Abs(Float256.NegativeInfinity).RawHighBits);
-        Assert.Equal(Float256.PositiveInfinity.RawLowBits, Float256.Abs(Float256.NegativeInfinity).RawLowBits);
+        Assert.Equal(Float256.One.RawBits.Upper, Float256.Abs(Float256.NegativeOne).RawBits.Upper);
+        Assert.Equal(Float256.One.RawBits.Lower, Float256.Abs(Float256.NegativeOne).RawBits.Lower);
+        Assert.Equal(Float256.MaxValue.RawBits.Upper, Float256.Abs(Float256.MinValue).RawBits.Upper);
+        Assert.Equal(Float256.MaxValue.RawBits.Lower, Float256.Abs(Float256.MinValue).RawBits.Lower);
+        Assert.Equal(Float256.PositiveInfinity.RawBits.Upper, Float256.Abs(Float256.NegativeInfinity).RawBits.Upper);
+        Assert.Equal(Float256.PositiveInfinity.RawBits.Lower, Float256.Abs(Float256.NegativeInfinity).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Abs of negative zero should produce positive zero")]
     public void Float256AbsShouldProducePositiveZeroForNegativeZero()
     {
-        Assert.Equal(Float256.Zero.RawHighBits, Float256.Abs(Float256.NegativeZero).RawHighBits);
-        Assert.Equal(Float256.Zero.RawLowBits, Float256.Abs(Float256.NegativeZero).RawLowBits);
+        Assert.Equal(Float256.Zero.RawBits.Upper, Float256.Abs(Float256.NegativeZero).RawBits.Upper);
+        Assert.Equal(Float256.Zero.RawBits.Lower, Float256.Abs(Float256.NegativeZero).RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256.Abs of NaN should return a NaN value")]

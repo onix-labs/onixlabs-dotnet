@@ -22,7 +22,7 @@ public readonly partial struct Float128
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the <see cref="Float128"/> value whose raw bits are <c>left.RawBits &amp; right.RawBits</c>.</returns>
-    public static Float128 operator &(Float128 left, Float128 right) => new(left.bits & right.bits);
+    public static Float128 operator &(Float128 left, Float128 right) => new(left.RawBits & right.RawBits);
 
     /// <summary>
     /// Computes the bitwise OR of the IEEE 754 binary128 representations of the specified <see cref="Float128"/> values.
@@ -30,7 +30,7 @@ public readonly partial struct Float128
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the <see cref="Float128"/> value whose raw bits are <c>left.RawBits | right.RawBits</c>.</returns>
-    public static Float128 operator |(Float128 left, Float128 right) => new(left.bits | right.bits);
+    public static Float128 operator |(Float128 left, Float128 right) => new(left.RawBits | right.RawBits);
 
     /// <summary>
     /// Computes the bitwise XOR of the IEEE 754 binary128 representations of the specified <see cref="Float128"/> values.
@@ -38,12 +38,12 @@ public readonly partial struct Float128
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the <see cref="Float128"/> value whose raw bits are <c>left.RawBits ^ right.RawBits</c>.</returns>
-    public static Float128 operator ^(Float128 left, Float128 right) => new(left.bits ^ right.bits);
+    public static Float128 operator ^(Float128 left, Float128 right) => new(left.RawBits ^ right.RawBits);
 
     /// <summary>
     /// Computes the bitwise complement of the IEEE 754 binary128 representation of the specified <see cref="Float128"/> value.
     /// </summary>
     /// <param name="value">The operand.</param>
     /// <returns>Returns the <see cref="Float128"/> value whose raw bits are <c>~value.RawBits</c>.</returns>
-    public static Float128 operator ~(Float128 value) => new(~value.bits);
+    public static Float128 operator ~(Float128 value) => new(~value.RawBits);
 }

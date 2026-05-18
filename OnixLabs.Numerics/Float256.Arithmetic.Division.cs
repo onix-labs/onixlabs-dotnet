@@ -49,8 +49,8 @@ public readonly partial struct Float256
             return resultSign ? NegativeInfinity : PositiveInfinity;
         }
 
-        DecomposeFinite(left.bits, out _, out int expLeft, out UInt256 sigLeft);
-        DecomposeFinite(right.bits, out _, out int expRight, out UInt256 sigRight);
+        DecomposeFinite(left.RawBits, out _, out int expLeft, out UInt256 sigLeft);
+        DecomposeFinite(right.RawBits, out _, out int expRight, out UInt256 sigRight);
 
         NormalizeSubnormal(ref sigLeft, ref expLeft);
         NormalizeSubnormal(ref sigRight, ref expRight);

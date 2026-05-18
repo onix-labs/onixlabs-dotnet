@@ -98,7 +98,7 @@ public readonly partial struct Float128
     {
         uint biasedExponent = (uint)((absoluteIntegerBits & BiasedExponentMask) >> BiasedExponentShift);
 
-        if (biasedExponent == 0u) return One.bits;
+        if (biasedExponent == 0u) return One.RawBits;
 
         int unbiasedExponent = (int)biasedExponent - ExponentBias;
 

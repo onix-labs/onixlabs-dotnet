@@ -104,8 +104,8 @@ public sealed class Float256ConvertibleImplicitTests
     public void Float256ImplicitFromDoubleShouldProduceExpectedBitsForOne()
     {
         Float256 actual = 1.0;
-        Assert.Equal(Float256.One.RawHighBits, actual.RawHighBits);
-        Assert.Equal(Float256.One.RawLowBits, actual.RawLowBits);
+        Assert.Equal(Float256.One.RawBits.Upper, actual.RawBits.Upper);
+        Assert.Equal(Float256.One.RawBits.Lower, actual.RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256 implicit conversion from double should preserve infinity")]
@@ -143,8 +143,8 @@ public sealed class Float256ConvertibleImplicitTests
         Float256 actual = 1.5f;
         Assert.True(Float256.IsFinite(actual));
         Float256 doubleWide = 1.5;
-        Assert.Equal(doubleWide.RawHighBits, actual.RawHighBits);
-        Assert.Equal(doubleWide.RawLowBits, actual.RawLowBits);
+        Assert.Equal(doubleWide.RawBits.Upper, actual.RawBits.Upper);
+        Assert.Equal(doubleWide.RawBits.Lower, actual.RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256 implicit conversion from float should preserve NaN")]
@@ -168,7 +168,7 @@ public sealed class Float256ConvertibleImplicitTests
         Assert.True(Float256.IsFinite(actual));
         Assert.True(Float256.IsNormal(actual));
         Float256 doubleWide = (double)float.Epsilon;
-        Assert.Equal(doubleWide.RawHighBits, actual.RawHighBits);
-        Assert.Equal(doubleWide.RawLowBits, actual.RawLowBits);
+        Assert.Equal(doubleWide.RawBits.Upper, actual.RawBits.Upper);
+        Assert.Equal(doubleWide.RawBits.Lower, actual.RawBits.Lower);
     }
 }

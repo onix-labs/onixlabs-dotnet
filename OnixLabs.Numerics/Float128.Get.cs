@@ -54,7 +54,7 @@ public readonly partial struct Float128
     /// <returns>The unbiased exponent value used when serializing the significand and exponent pair.</returns>
     private short ExtractUnbiasedExponentForSerialization()
     {
-        uint biasedExponent = ExtractBiasedExponent(bits);
+        uint biasedExponent = ExtractBiasedExponent(RawBits);
         return biasedExponent == 0u
             ? (short)MinNormalUnbiasedExponent
             : (short)((int)biasedExponent - ExponentBias);
@@ -62,8 +62,8 @@ public readonly partial struct Float128
 
     private UInt128 ExtractSignificandWithImplicitBit()
     {
-        UInt128 trailing = ExtractTrailingSignificand(bits);
-        uint biasedExponent = ExtractBiasedExponent(bits);
+        UInt128 trailing = ExtractTrailingSignificand(RawBits);
+        uint biasedExponent = ExtractBiasedExponent(RawBits);
         return biasedExponent == 0u ? trailing : (ImplicitSignificandBit | trailing);
     }
 }

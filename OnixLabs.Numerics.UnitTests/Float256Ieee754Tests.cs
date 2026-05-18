@@ -103,8 +103,8 @@ public sealed class Float256Ieee754Tests
     [Fact(DisplayName = "Float256.AllBitsSet should have every bit of the raw representation set")]
     public void Float256AllBitsSetShouldEqualUInt128MaxValue()
     {
-        Assert.Equal(System.UInt128.MaxValue, Float256.AllBitsSet.RawHighBits);
-        Assert.Equal(System.UInt128.MaxValue, Float256.AllBitsSet.RawLowBits);
+        Assert.Equal(System.UInt128.MaxValue, Float256.AllBitsSet.RawBits.Upper);
+        Assert.Equal(System.UInt128.MaxValue, Float256.AllBitsSet.RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256 bitwise AND should AND the raw bits")]
@@ -114,11 +114,11 @@ public sealed class Float256Ieee754Tests
         UInt128 leftLow = new(0xFF00FF00_FF00FF00UL, 0xFF00FF00_FF00FF00UL);
         UInt128 rightHigh = new(0xFFFF0000_FFFF0000UL, 0xFFFF0000_FFFF0000UL);
         UInt128 rightLow = new(0xFFFF0000_FFFF0000UL, 0xFFFF0000_FFFF0000UL);
-        Float256 left = new(leftHigh, leftLow);
-        Float256 right = new(rightHigh, rightLow);
+        Float256 left = new(new UInt256(leftHigh, leftLow));
+        Float256 right = new(new UInt256(rightHigh, rightLow));
         Float256 result = left & right;
-        Assert.Equal(leftHigh & rightHigh, result.RawHighBits);
-        Assert.Equal(leftLow & rightLow, result.RawLowBits);
+        Assert.Equal(leftHigh & rightHigh, result.RawBits.Upper);
+        Assert.Equal(leftLow & rightLow, result.RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256 bitwise OR should OR the raw bits")]
@@ -128,11 +128,11 @@ public sealed class Float256Ieee754Tests
         UInt128 leftLow = new(0x0000FFFF_0000FFFFUL, 0x0000FFFF_0000FFFFUL);
         UInt128 rightHigh = new(0xFFFF0000_FFFF0000UL, 0xFFFF0000_FFFF0000UL);
         UInt128 rightLow = new(0xFFFF0000_FFFF0000UL, 0xFFFF0000_FFFF0000UL);
-        Float256 left = new(leftHigh, leftLow);
-        Float256 right = new(rightHigh, rightLow);
+        Float256 left = new(new UInt256(leftHigh, leftLow));
+        Float256 right = new(new UInt256(rightHigh, rightLow));
         Float256 result = left | right;
-        Assert.Equal(leftHigh | rightHigh, result.RawHighBits);
-        Assert.Equal(leftLow | rightLow, result.RawLowBits);
+        Assert.Equal(leftHigh | rightHigh, result.RawBits.Upper);
+        Assert.Equal(leftLow | rightLow, result.RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256 bitwise XOR should XOR the raw bits")]
@@ -142,18 +142,18 @@ public sealed class Float256Ieee754Tests
         UInt128 leftLow = new(0xAAAAAAAA_AAAAAAAAUL, 0xAAAAAAAA_AAAAAAAAUL);
         UInt128 rightHigh = new(0x55555555_55555555UL, 0x55555555_55555555UL);
         UInt128 rightLow = new(0x55555555_55555555UL, 0x55555555_55555555UL);
-        Float256 left = new(leftHigh, leftLow);
-        Float256 right = new(rightHigh, rightLow);
+        Float256 left = new(new UInt256(leftHigh, leftLow));
+        Float256 right = new(new UInt256(rightHigh, rightLow));
         Float256 result = left ^ right;
-        Assert.Equal(System.UInt128.MaxValue, result.RawHighBits);
-        Assert.Equal(System.UInt128.MaxValue, result.RawLowBits);
+        Assert.Equal(System.UInt128.MaxValue, result.RawBits.Upper);
+        Assert.Equal(System.UInt128.MaxValue, result.RawBits.Lower);
     }
 
     [Fact(DisplayName = "Float256 bitwise complement should invert the raw bits")]
     public void Float256BitwiseComplementShouldInvertTheRawBits()
     {
         Float256 value = Float256.Zero;
-        Assert.Equal(System.UInt128.MaxValue, (~value).RawHighBits);
-        Assert.Equal(System.UInt128.MaxValue, (~value).RawLowBits);
+        Assert.Equal(System.UInt128.MaxValue, (~value).RawBits.Upper);
+        Assert.Equal(System.UInt128.MaxValue, (~value).RawBits.Lower);
     }
 }

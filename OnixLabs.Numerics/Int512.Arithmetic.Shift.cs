@@ -28,11 +28,11 @@ public readonly partial struct Int512
         if (shiftAmount == 0) return value;
         if (shiftAmount >= HalfBitWidth)
         {
-            return new Int512(value.lower << (shiftAmount - HalfBitWidth), UInt256.Zero);
+            return new Int512(value.Lower << (shiftAmount - HalfBitWidth), UInt256.Zero);
         }
 
-        UInt256 newUpper = (value.upper << shiftAmount) | (value.lower >> (HalfBitWidth - shiftAmount));
-        UInt256 newLower = value.lower << shiftAmount;
+        UInt256 newUpper = (value.Upper << shiftAmount) | (value.Lower >> (HalfBitWidth - shiftAmount));
+        UInt256 newLower = value.Lower << shiftAmount;
         return new Int512(newUpper, newLower);
     }
 
@@ -51,13 +51,13 @@ public readonly partial struct Int512
         {
             int extraShift = shiftAmount - HalfBitWidth;
             UInt256 newLower = extraShift == 0
-                ? value.upper
-                : (value.upper >> extraShift) | (signFill << (HalfBitWidth - extraShift));
+                ? value.Upper
+                : (value.Upper >> extraShift) | (signFill << (HalfBitWidth - extraShift));
             return new Int512(signFill, newLower);
         }
 
-        UInt256 newUpperArith = (value.upper >> shiftAmount) | (signFill << (HalfBitWidth - shiftAmount));
-        UInt256 newLowerArith = (value.lower >> shiftAmount) | (value.upper << (HalfBitWidth - shiftAmount));
+        UInt256 newUpperArith = (value.Upper >> shiftAmount) | (signFill << (HalfBitWidth - shiftAmount));
+        UInt256 newLowerArith = (value.Lower >> shiftAmount) | (value.Upper << (HalfBitWidth - shiftAmount));
         return new Int512(newUpperArith, newLowerArith);
     }
 
@@ -71,11 +71,11 @@ public readonly partial struct Int512
         if (shiftAmount == 0) return value;
         if (shiftAmount >= HalfBitWidth)
         {
-            return new Int512(UInt256.Zero, value.upper >> (shiftAmount - HalfBitWidth));
+            return new Int512(UInt256.Zero, value.Upper >> (shiftAmount - HalfBitWidth));
         }
 
-        UInt256 newUpper = value.upper >> shiftAmount;
-        UInt256 newLower = (value.lower >> shiftAmount) | (value.upper << (HalfBitWidth - shiftAmount));
+        UInt256 newUpper = value.Upper >> shiftAmount;
+        UInt256 newLower = (value.Lower >> shiftAmount) | (value.Upper << (HalfBitWidth - shiftAmount));
         return new Int512(newUpper, newLower);
     }
 }

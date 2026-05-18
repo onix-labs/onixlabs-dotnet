@@ -24,21 +24,21 @@ public readonly partial struct UInt256
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is zero; otherwise, <see langword="false"/>.</returns>
-    public static bool IsZero(UInt256 value) => value.upper == UInt128.Zero && value.lower == UInt128.Zero;
+    public static bool IsZero(UInt256 value) => value.Upper == UInt128.Zero && value.Lower == UInt128.Zero;
 
     /// <summary>
     /// Determines whether the specified <see cref="UInt256"/> value is even.
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is even; otherwise, <see langword="false"/>.</returns>
-    public static bool IsEvenInteger(UInt256 value) => (value.lower & UInt128.One) == UInt128.Zero;
+    public static bool IsEvenInteger(UInt256 value) => (value.Lower & UInt128.One) == UInt128.Zero;
 
     /// <summary>
     /// Determines whether the specified <see cref="UInt256"/> value is odd.
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is odd; otherwise, <see langword="false"/>.</returns>
-    public static bool IsOddInteger(UInt256 value) => (value.lower & UInt128.One) != UInt128.Zero;
+    public static bool IsOddInteger(UInt256 value) => (value.Lower & UInt128.One) != UInt128.Zero;
 
     /// <summary>
     /// Determines whether the specified <see cref="UInt256"/> value is a positive integer power of two.

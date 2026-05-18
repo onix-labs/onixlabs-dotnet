@@ -37,8 +37,8 @@ public readonly partial struct Int256
             return false;
         }
 
-        WriteUInt128BigEndian(destination, upper);
-        WriteUInt128BigEndian(destination[16..], lower);
+        WriteUInt128BigEndian(destination, Upper);
+        WriteUInt128BigEndian(destination[16..], Lower);
         bytesWritten = ByteCount;
         return true;
     }
@@ -55,8 +55,8 @@ public readonly partial struct Int256
             return false;
         }
 
-        WriteUInt128LittleEndian(destination, lower);
-        WriteUInt128LittleEndian(destination[16..], upper);
+        WriteUInt128LittleEndian(destination, Lower);
+        WriteUInt128LittleEndian(destination[16..], Upper);
         bytesWritten = ByteCount;
         return true;
     }

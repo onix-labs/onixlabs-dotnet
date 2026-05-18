@@ -24,7 +24,7 @@ public readonly partial struct UInt256
     /// <param name="left">The <paramref name="left"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool Equals(UInt256 left, UInt256 right) => left.upper == right.upper && left.lower == right.lower;
+    public static bool Equals(UInt256 left, UInt256 right) => left.Upper == right.Upper && left.Lower == right.Lower;
 
     /// <summary>
     /// Compares the current instance of <see cref="UInt256"/> with the specified other instance of <see cref="UInt256"/>.

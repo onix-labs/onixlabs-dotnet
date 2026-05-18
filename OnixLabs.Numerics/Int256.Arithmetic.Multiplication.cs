@@ -62,7 +62,7 @@ public readonly partial struct Int256
     /// </summary>
     /// <param name="value">The <see cref="Int256"/> value to reinterpret.</param>
     /// <returns>Returns the <see cref="UInt256"/> value sharing the same bit pattern as <paramref name="value"/>.</returns>
-    internal static UInt256 ReinterpretAsUnsigned(Int256 value) => new(value.upper, value.lower);
+    internal static UInt256 ReinterpretAsUnsigned(Int256 value) => new(value.Upper, value.Lower);
 
     /// <summary>
     /// Reinterprets the bit pattern of the specified <see cref="UInt256"/> value as an <see cref="Int256"/> value without changing the underlying bytes.

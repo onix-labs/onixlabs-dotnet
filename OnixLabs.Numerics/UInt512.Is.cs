@@ -22,17 +22,17 @@ public readonly partial struct UInt512
     /// <summary>Determines whether the specified <see cref="UInt512"/> value represents zero.</summary>
     /// <param name="value">The value.</param>
     /// <returns>True if zero; otherwise false.</returns>
-    public static bool IsZero(UInt512 value) => UInt256.IsZero(value.upper) && UInt256.IsZero(value.lower);
+    public static bool IsZero(UInt512 value) => UInt256.IsZero(value.Upper) && UInt256.IsZero(value.Lower);
 
     /// <summary>Determines whether the specified <see cref="UInt512"/> value is even.</summary>
     /// <param name="value">The value.</param>
     /// <returns>True if even; otherwise false.</returns>
-    public static bool IsEvenInteger(UInt512 value) => UInt256.IsEvenInteger(value.lower);
+    public static bool IsEvenInteger(UInt512 value) => UInt256.IsEvenInteger(value.Lower);
 
     /// <summary>Determines whether the specified <see cref="UInt512"/> value is odd.</summary>
     /// <param name="value">The value.</param>
     /// <returns>True if odd; otherwise false.</returns>
-    public static bool IsOddInteger(UInt512 value) => UInt256.IsOddInteger(value.lower);
+    public static bool IsOddInteger(UInt512 value) => UInt256.IsOddInteger(value.Lower);
 
     /// <summary>Determines whether the specified <see cref="UInt512"/> value is a positive integer power of two.</summary>
     /// <param name="value">The value.</param>

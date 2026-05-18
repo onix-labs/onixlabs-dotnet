@@ -62,7 +62,7 @@ public readonly partial struct Int512
     /// </summary>
     /// <param name="value">The signed value whose bits should be reinterpreted.</param>
     /// <returns>Returns the <see cref="UInt512"/> value with the same bit pattern as <paramref name="value"/>.</returns>
-    internal static UInt512 ReinterpretAsUnsigned(Int512 value) => new(value.upper, value.lower);
+    internal static UInt512 ReinterpretAsUnsigned(Int512 value) => new(value.Upper, value.Lower);
 
     /// <summary>
     /// Reinterprets the bit pattern of a <see cref="UInt512"/> value as an <see cref="Int512"/> value.

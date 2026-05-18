@@ -22,27 +22,27 @@ public readonly partial struct Int256
     /// <summary>Determines whether the specified <see cref="Int256"/> value represents zero.</summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is zero; otherwise, <see langword="false"/>.</returns>
-    public static bool IsZero(Int256 value) => value.upper == UInt128.Zero && value.lower == UInt128.Zero;
+    public static bool IsZero(Int256 value) => value.Upper == UInt128.Zero && value.Lower == UInt128.Zero;
 
     /// <summary>Determines whether the specified <see cref="Int256"/> value is negative.</summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the sign bit is set; otherwise, <see langword="false"/>.</returns>
-    public static bool IsNegative(Int256 value) => (value.upper & SignBitMask) != UInt128.Zero;
+    public static bool IsNegative(Int256 value) => (value.Upper & SignBitMask) != UInt128.Zero;
 
     /// <summary>Determines whether the specified <see cref="Int256"/> value is positive (non-negative).</summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the sign bit is not set; otherwise, <see langword="false"/>.</returns>
-    public static bool IsPositive(Int256 value) => (value.upper & SignBitMask) == UInt128.Zero;
+    public static bool IsPositive(Int256 value) => (value.Upper & SignBitMask) == UInt128.Zero;
 
     /// <summary>Determines whether the specified <see cref="Int256"/> value is even.</summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is even; otherwise, <see langword="false"/>.</returns>
-    public static bool IsEvenInteger(Int256 value) => (value.lower & UInt128.One) == UInt128.Zero;
+    public static bool IsEvenInteger(Int256 value) => (value.Lower & UInt128.One) == UInt128.Zero;
 
     /// <summary>Determines whether the specified <see cref="Int256"/> value is odd.</summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if the specified value is odd; otherwise, <see langword="false"/>.</returns>
-    public static bool IsOddInteger(Int256 value) => (value.lower & UInt128.One) != UInt128.Zero;
+    public static bool IsOddInteger(Int256 value) => (value.Lower & UInt128.One) != UInt128.Zero;
 
     /// <summary>Determines whether the specified <see cref="Int256"/> value is a positive integer power of two.</summary>
     /// <param name="value">The value to be checked.</param>

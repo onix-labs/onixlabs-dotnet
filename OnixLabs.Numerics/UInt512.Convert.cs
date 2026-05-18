@@ -193,7 +193,7 @@ public readonly partial struct UInt512
         if (typeof(TOther) == typeof(ulong)) { result = (TOther)(object)(value > ulong.MaxValue ? ulong.MaxValue : (ulong)value); return true; }
         if (typeof(TOther) == typeof(Int128)) { result = (TOther)(object)(value > (UInt512)(UInt128)Int128.MaxValue ? Int128.MaxValue : (Int128)value); return true; }
         if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(value > (UInt512)UInt128.MaxValue ? UInt128.MaxValue : (UInt128)value); return true; }
-        if (typeof(TOther) == typeof(UInt256)) { result = (TOther)(object)(!UInt256.IsZero(value.upper) ? UInt256.MaxValue : value.lower); return true; }
+        if (typeof(TOther) == typeof(UInt256)) { result = (TOther)(object)(!UInt256.IsZero(value.Upper) ? UInt256.MaxValue : value.Lower); return true; }
         if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
         if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(value > char.MaxValue ? char.MaxValue : (char)value); return true; }
         if (typeof(TOther) == typeof(float)) { result = (TOther)(object)(float)value; return true; }

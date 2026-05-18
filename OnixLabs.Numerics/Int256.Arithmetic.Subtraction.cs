@@ -24,9 +24,9 @@ public readonly partial struct Int256
     /// <returns>Returns the wrapping difference.</returns>
     public static Int256 operator -(Int256 left, Int256 right)
     {
-        UInt128 newLower = left.lower - right.lower;
-        UInt128 borrow = left.lower < right.lower ? UInt128.One : UInt128.Zero;
-        UInt128 newUpper = left.upper - right.upper - borrow;
+        UInt128 newLower = left.Lower - right.Lower;
+        UInt128 borrow = left.Lower < right.Lower ? UInt128.One : UInt128.Zero;
+        UInt128 newUpper = left.Upper - right.Upper - borrow;
         return new Int256(newUpper, newLower);
     }
 

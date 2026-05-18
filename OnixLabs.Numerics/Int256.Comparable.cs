@@ -30,10 +30,10 @@ public readonly partial struct Int256
         if (leftNegative && !rightNegative) return -1;
         if (!leftNegative && rightNegative) return 1;
 
-        if (left.upper < right.upper) return -1;
-        if (left.upper > right.upper) return 1;
-        if (left.lower < right.lower) return -1;
-        if (left.lower > right.lower) return 1;
+        if (left.Upper < right.Upper) return -1;
+        if (left.Upper > right.Upper) return 1;
+        if (left.Lower < right.Lower) return -1;
+        if (left.Lower > right.Lower) return 1;
         return 0;
     }
 

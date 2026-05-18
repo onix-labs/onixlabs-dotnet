@@ -23,8 +23,8 @@ public readonly partial struct Int256
     /// <returns>Returns the number of leading zero bits.</returns>
     public static Int256 LeadingZeroCount(Int256 value)
     {
-        if (value.upper != UInt128.Zero) return new Int256(UInt128.Zero, UInt128.LeadingZeroCount(value.upper));
-        return new Int256(UInt128.Zero, (UInt128)HalfBitWidth + UInt128.LeadingZeroCount(value.lower));
+        if (value.Upper != UInt128.Zero) return new Int256(UInt128.Zero, UInt128.LeadingZeroCount(value.Upper));
+        return new Int256(UInt128.Zero, (UInt128)HalfBitWidth + UInt128.LeadingZeroCount(value.Lower));
     }
 
     /// <summary>Returns the number of trailing zero bits in the specified <see cref="Int256"/> value.</summary>
@@ -32,15 +32,15 @@ public readonly partial struct Int256
     /// <returns>Returns the number of trailing zero bits.</returns>
     public static Int256 TrailingZeroCount(Int256 value)
     {
-        if (value.lower != UInt128.Zero) return new Int256(UInt128.Zero, UInt128.TrailingZeroCount(value.lower));
-        if (value.upper != UInt128.Zero) return new Int256(UInt128.Zero, (UInt128)HalfBitWidth + UInt128.TrailingZeroCount(value.upper));
+        if (value.Lower != UInt128.Zero) return new Int256(UInt128.Zero, UInt128.TrailingZeroCount(value.Lower));
+        if (value.Upper != UInt128.Zero) return new Int256(UInt128.Zero, (UInt128)HalfBitWidth + UInt128.TrailingZeroCount(value.Upper));
         return new Int256(UInt128.Zero, (UInt128)BitWidth);
     }
 
     /// <summary>Returns the number of bits set to one in the specified <see cref="Int256"/> value.</summary>
     /// <param name="value">The value whose population count is to be computed.</param>
     /// <returns>Returns the number of bits set to one.</returns>
-    public static Int256 PopCount(Int256 value) => new(UInt128.Zero, UInt128.PopCount(value.upper) + UInt128.PopCount(value.lower));
+    public static Int256 PopCount(Int256 value) => new(UInt128.Zero, UInt128.PopCount(value.Upper) + UInt128.PopCount(value.Lower));
 
     /// <summary>Returns the base-2 logarithm of the specified <see cref="Int256"/> value, truncated to an integer.</summary>
     /// <param name="value">The value whose base-2 logarithm is to be computed.</param>
@@ -50,8 +50,8 @@ public readonly partial struct Int256
     {
         if (IsNegative(value)) throw new ArgumentOutOfRangeException(nameof(value), "Log2 is undefined for negative values.");
         if (IsZero(value)) return Zero;
-        if (value.upper != UInt128.Zero) return new Int256(UInt128.Zero, (UInt128)HalfBitWidth + UInt128.Log2(value.upper));
-        return new Int256(UInt128.Zero, UInt128.Log2(value.lower));
+        if (value.Upper != UInt128.Zero) return new Int256(UInt128.Zero, (UInt128)HalfBitWidth + UInt128.Log2(value.Upper));
+        return new Int256(UInt128.Zero, UInt128.Log2(value.Lower));
     }
 
     /// <summary>Rotates the specified <see cref="Int256"/> value left by the specified number of bits.</summary>

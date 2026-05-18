@@ -26,10 +26,10 @@ public readonly partial struct UInt512
     /// <returns>Returns a negative value when <paramref name="left"/> precedes, zero when equal, and a positive value when <paramref name="left"/> follows.</returns>
     public static int Compare(UInt512 left, UInt512 right)
     {
-        if (left.upper < right.upper) return -1;
-        if (left.upper > right.upper) return 1;
-        if (left.lower < right.lower) return -1;
-        if (left.lower > right.lower) return 1;
+        if (left.Upper < right.Upper) return -1;
+        if (left.Upper > right.Upper) return 1;
+        if (left.Lower < right.Lower) return -1;
+        if (left.Lower > right.Lower) return 1;
         return 0;
     }
 

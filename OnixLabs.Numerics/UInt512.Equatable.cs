@@ -24,7 +24,7 @@ public readonly partial struct UInt512
     /// <param name="left">The <paramref name="left"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool Equals(UInt512 left, UInt512 right) => left.upper == right.upper && left.lower == right.lower;
+    public static bool Equals(UInt512 left, UInt512 right) => left.Upper == right.Upper && left.Lower == right.Lower;
 
     /// <summary>
     /// Compares the current instance of <see cref="UInt512"/> with the specified other instance of <see cref="UInt512"/>.

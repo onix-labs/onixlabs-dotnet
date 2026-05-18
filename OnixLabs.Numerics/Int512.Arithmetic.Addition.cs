@@ -24,9 +24,9 @@ public readonly partial struct Int512
     /// <returns>Returns the wrapping sum of <paramref name="left"/> and <paramref name="right"/>.</returns>
     public static Int512 operator +(Int512 left, Int512 right)
     {
-        UInt256 newLower = left.lower + right.lower;
-        UInt256 carry = newLower < left.lower ? UInt256.One : UInt256.Zero;
-        UInt256 newUpper = left.upper + right.upper + carry;
+        UInt256 newLower = left.Lower + right.Lower;
+        UInt256 carry = newLower < left.Lower ? UInt256.One : UInt256.Zero;
+        UInt256 newUpper = left.Upper + right.Upper + carry;
         return new Int512(newUpper, newLower);
     }
 

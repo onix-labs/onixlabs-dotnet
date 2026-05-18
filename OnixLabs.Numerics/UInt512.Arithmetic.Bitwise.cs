@@ -22,22 +22,22 @@ public readonly partial struct UInt512
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the bitwise AND of the operands.</returns>
-    public static UInt512 operator &(UInt512 left, UInt512 right) => new(left.upper & right.upper, left.lower & right.lower);
+    public static UInt512 operator &(UInt512 left, UInt512 right) => new(left.Upper & right.Upper, left.Lower & right.Lower);
 
     /// <summary>Computes the bitwise OR of two <see cref="UInt512"/> values.</summary>
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the bitwise OR of the operands.</returns>
-    public static UInt512 operator |(UInt512 left, UInt512 right) => new(left.upper | right.upper, left.lower | right.lower);
+    public static UInt512 operator |(UInt512 left, UInt512 right) => new(left.Upper | right.Upper, left.Lower | right.Lower);
 
     /// <summary>Computes the bitwise XOR of two <see cref="UInt512"/> values.</summary>
     /// <param name="left">The first operand.</param>
     /// <param name="right">The second operand.</param>
     /// <returns>Returns the bitwise XOR of the operands.</returns>
-    public static UInt512 operator ^(UInt512 left, UInt512 right) => new(left.upper ^ right.upper, left.lower ^ right.lower);
+    public static UInt512 operator ^(UInt512 left, UInt512 right) => new(left.Upper ^ right.Upper, left.Lower ^ right.Lower);
 
     /// <summary>Computes the bitwise complement of a <see cref="UInt512"/> value.</summary>
     /// <param name="value">The operand.</param>
     /// <returns>Returns the bitwise complement of <paramref name="value"/>.</returns>
-    public static UInt512 operator ~(UInt512 value) => new(~value.upper, ~value.lower);
+    public static UInt512 operator ~(UInt512 value) => new(~value.Upper, ~value.Lower);
 }

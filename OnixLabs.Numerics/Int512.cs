@@ -32,35 +32,21 @@ public readonly partial struct Int512 :
     IValueComparable<Int512>
 {
     /// <summary>
-    /// The lower 256 bits of the current <see cref="Int512"/> value.
-    /// </summary>
-    private readonly UInt256 lower;
-
-    /// <summary>
-    /// The upper 256 bits of the current <see cref="Int512"/> value (whose high bit holds the sign).
-    /// </summary>
-    private readonly UInt256 upper;
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="Int512"/> struct from the specified upper and lower halves.
     /// </summary>
     /// <param name="upper">The upper 256 bits of the new <see cref="Int512"/> value (whose high bit is interpreted as the sign).</param>
     /// <param name="lower">The lower 256 bits of the new <see cref="Int512"/> value.</param>
-    public Int512(UInt256 upper, UInt256 lower)
-    {
-        this.upper = upper;
-        this.lower = lower;
-    }
+    public Int512(UInt256 upper, UInt256 lower) => (Upper, Lower) = (upper, lower);
 
     /// <summary>
     /// Gets the upper 256 bits of the current <see cref="Int512"/> value.
     /// </summary>
     /// <value>The upper 256 bits; the high bit encodes the sign.</value>
-    public UInt256 Upper => upper;
+    public UInt256 Upper { get; }
 
     /// <summary>
     /// Gets the lower 256 bits of the current <see cref="Int512"/> value.
     /// </summary>
     /// <value>The lower 256 bits.</value>
-    public UInt256 Lower => lower;
+    public UInt256 Lower { get; }
 }

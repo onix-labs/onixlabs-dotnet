@@ -29,12 +29,12 @@ public readonly partial struct UInt512
         //   + (a_upper·b_lower + a_lower·b_upper)·2^256
         //   + a_lower·b_lower
 
-        UInt512 lowerProduct = BigMul(left.lower, right.lower);
-        UInt256 crossProductUpperByLower = left.upper * right.lower;
-        UInt256 crossProductLowerByUpper = left.lower * right.upper;
+        UInt512 lowerProduct = BigMul(left.Lower, right.Lower);
+        UInt256 crossProductUpperByLower = left.Upper * right.Lower;
+        UInt256 crossProductLowerByUpper = left.Lower * right.Upper;
         UInt256 crossSum = crossProductUpperByLower + crossProductLowerByUpper;
-        UInt256 newUpper = lowerProduct.upper + crossSum;
-        return new UInt512(newUpper, lowerProduct.lower);
+        UInt256 newUpper = lowerProduct.Upper + crossSum;
+        return new UInt512(newUpper, lowerProduct.Lower);
     }
 
     /// <summary>Computes the product of two <see cref="UInt512"/> values, throwing on overflow.</summary>
@@ -66,34 +66,34 @@ public readonly partial struct UInt512
     /// <returns>Returns the high 512 bits of the product.</returns>
     public static UInt512 BigMul(UInt512 left, UInt512 right, out UInt512 low)
     {
-        UInt512 lowerProduct = BigMul(left.lower, right.lower);
-        UInt512 crossProductA = BigMul(left.upper, right.lower);
-        UInt512 crossProductB = BigMul(left.lower, right.upper);
-        UInt512 upperProduct = BigMul(left.upper, right.upper);
+        UInt512 lowerProduct = BigMul(left.Lower, right.Lower);
+        UInt512 crossProductA = BigMul(left.Upper, right.Lower);
+        UInt512 crossProductB = BigMul(left.Lower, right.Upper);
+        UInt512 upperProduct = BigMul(left.Upper, right.Upper);
 
-        UInt256 word0 = lowerProduct.lower;
+        UInt256 word0 = lowerProduct.Lower;
 
-        UInt256 sumMiddle = lowerProduct.upper;
+        UInt256 sumMiddle = lowerProduct.Upper;
         UInt256 carryToHigh = UInt256.Zero;
 
-        UInt256 temp = sumMiddle + crossProductA.lower;
+        UInt256 temp = sumMiddle + crossProductA.Lower;
         if (temp < sumMiddle) carryToHigh += UInt256.One;
         sumMiddle = temp;
 
-        temp = sumMiddle + crossProductB.lower;
+        temp = sumMiddle + crossProductB.Lower;
         if (temp < sumMiddle) carryToHigh += UInt256.One;
         sumMiddle = temp;
 
         UInt256 word1 = sumMiddle;
 
-        UInt256 sumUpper = upperProduct.lower;
+        UInt256 sumUpper = upperProduct.Lower;
         UInt256 carryHighest = UInt256.Zero;
 
-        temp = sumUpper + crossProductA.upper;
+        temp = sumUpper + crossProductA.Upper;
         if (temp < sumUpper) carryHighest += UInt256.One;
         sumUpper = temp;
 
-        temp = sumUpper + crossProductB.upper;
+        temp = sumUpper + crossProductB.Upper;
         if (temp < sumUpper) carryHighest += UInt256.One;
         sumUpper = temp;
 
@@ -102,7 +102,7 @@ public readonly partial struct UInt512
         sumUpper = temp;
 
         UInt256 word2 = sumUpper;
-        UInt256 word3 = upperProduct.upper + carryHighest;
+        UInt256 word3 = upperProduct.Upper + carryHighest;
 
         low = new UInt512(word1, word0);
         return new UInt512(word3, word2);

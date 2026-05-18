@@ -25,9 +25,9 @@ public readonly partial struct UInt256
     /// <returns>Returns the wrapping sum of <paramref name="left"/> and <paramref name="right"/>.</returns>
     public static UInt256 operator +(UInt256 left, UInt256 right)
     {
-        UInt128 newLower = left.lower + right.lower;
-        UInt128 carry = newLower < left.lower ? UInt128.One : UInt128.Zero;
-        UInt128 newUpper = left.upper + right.upper + carry;
+        UInt128 newLower = left.Lower + right.Lower;
+        UInt128 carry = newLower < left.Lower ? UInt128.One : UInt128.Zero;
+        UInt128 newUpper = left.Upper + right.Upper + carry;
         return new UInt256(newUpper, newLower);
     }
 
@@ -38,9 +38,9 @@ public readonly partial struct UInt256
     /// <exception cref="OverflowException">Thrown when the sum exceeds <see cref="MaxValue"/>.</exception>
     public static UInt256 operator checked +(UInt256 left, UInt256 right)
     {
-        UInt128 newLower = left.lower + right.lower;
-        UInt128 lowerCarry = newLower < left.lower ? UInt128.One : UInt128.Zero;
-        UInt128 upperSum = checked(left.upper + right.upper);
+        UInt128 newLower = left.Lower + right.Lower;
+        UInt128 lowerCarry = newLower < left.Lower ? UInt128.One : UInt128.Zero;
+        UInt128 upperSum = checked(left.Upper + right.Upper);
         UInt128 newUpper = checked(upperSum + lowerCarry);
         return new UInt256(newUpper, newLower);
     }

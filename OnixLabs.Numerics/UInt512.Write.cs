@@ -43,8 +43,8 @@ public readonly partial struct UInt512
             return false;
         }
 
-        upper.TryWriteBigEndian(destination, out _);
-        lower.TryWriteBigEndian(destination[HalfByteCount..], out _);
+        Upper.TryWriteBigEndian(destination, out _);
+        Lower.TryWriteBigEndian(destination[HalfByteCount..], out _);
         bytesWritten = ByteCount;
         return true;
     }
@@ -63,8 +63,8 @@ public readonly partial struct UInt512
             return false;
         }
 
-        lower.TryWriteLittleEndian(destination, out _);
-        upper.TryWriteLittleEndian(destination[HalfByteCount..], out _);
+        Lower.TryWriteLittleEndian(destination, out _);
+        Upper.TryWriteLittleEndian(destination[HalfByteCount..], out _);
         bytesWritten = ByteCount;
         return true;
     }

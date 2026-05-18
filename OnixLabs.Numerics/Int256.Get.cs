@@ -29,15 +29,15 @@ public readonly partial struct Int256
     {
         if (IsNegative(this))
         {
-            UInt128 invertedUpper = ~upper;
-            UInt128 invertedLower = ~lower;
+            UInt128 invertedUpper = ~Upper;
+            UInt128 invertedLower = ~Lower;
             if (invertedUpper != UInt128.Zero) return 128 + (128 - (int)UInt128.LeadingZeroCount(invertedUpper)) + 1;
             if (invertedLower != UInt128.Zero) return 128 - (int)UInt128.LeadingZeroCount(invertedLower) + 1;
             return 1;
         }
 
-        if (upper != UInt128.Zero) return 128 + (128 - (int)UInt128.LeadingZeroCount(upper)) + 1;
-        if (lower != UInt128.Zero) return 128 - (int)UInt128.LeadingZeroCount(lower) + 1;
+        if (Upper != UInt128.Zero) return 128 + (128 - (int)UInt128.LeadingZeroCount(Upper)) + 1;
+        if (Lower != UInt128.Zero) return 128 - (int)UInt128.LeadingZeroCount(Lower) + 1;
         return 0;
     }
 

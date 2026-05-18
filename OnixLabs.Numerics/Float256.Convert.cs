@@ -46,7 +46,7 @@ public readonly partial struct Float256
         if (typeof(TOther) == typeof(ulong)) { result = (ulong)(object)value!; return true; }
         if (typeof(TOther) == typeof(Int128)) { result = (Int128)(object)value!; return true; }
         if (typeof(TOther) == typeof(UInt128)) { result = (UInt128)(object)value!; return true; }
-        if (typeof(TOther) == typeof(BigInteger)) { result = (Float256)(BigDecimal)(BigInteger)(object)value!; return true; }
+        if (typeof(TOther) == typeof(BigInteger)) { result = FromBigInteger((BigInteger)(object)value!); return true; }
         if (typeof(TOther) == typeof(char)) { result = (char)(object)value!; return true; }
         if (typeof(TOther) == typeof(Half)) { result = (Half)(object)value!; return true; }
         if (typeof(TOther) == typeof(float)) { result = (float)(object)value!; return true; }

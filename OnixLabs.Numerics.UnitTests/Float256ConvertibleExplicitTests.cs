@@ -103,10 +103,10 @@ public sealed class Float256ConvertibleExplicitTests
     [InlineData(0.0, 0L)]
     [InlineData(1.0, 1L)]
     [InlineData(-1.0, -1L)]
-    // Float256 implicit-from-double routes through BigDecimal, which captures the literal's
-    // decimal representation rather than the rounded binary64 value, so the round-trip through
-    // Float256 -> long recovers the literal exactly.
-    [InlineData(9223372036854775000.0, 9223372036854775000L)]
+    // The double literal 9223372036854775000.0 snaps to the nearest binary64 value, 9223372036854774784.
+    // Float256 now preserves that exact bit pattern (rather than rebuilding from the decimal text),
+    // so the round-trip recovers the binary value of the literal, not its decimal expansion.
+    [InlineData(9223372036854775000.0, 9223372036854774784L)]
     public void Float256ToInt64ShouldMatchExpected(double value, long expected)
     {
         Assert.Equal(expected, (long)(Float256)value);
@@ -153,24 +153,43 @@ public sealed class Float256ConvertibleExplicitTests
         Assert.Equal((BigInteger)(-3), (BigInteger)negValue);
     }
 
-    [Theory(DisplayName = "Float256 to double cast should round-trip representable values that avoid the BigDecimal-to-double rounding path")]
+    [Theory(DisplayName = "Float256 to double cast should round-trip every finite double value (native binary256→binary64 conversion)")]
     [InlineData(0.0)]
     [InlineData(100.0)]
     [InlineData(-100.0)]
     [InlineData(1000.0)]
     [InlineData(-1000.0)]
+    [InlineData(0.1)]
+    [InlineData(-0.1)]
+    [InlineData(3.141592653589793)]
+    [InlineData(2.718281828459045)]
+    [InlineData(1.7976931348623157e+308)]
+    [InlineData(-1.7976931348623157e+308)]
+    [InlineData(2.2250738585072014e-308)]
+    [InlineData(4.9406564584124654e-324)]
+    [InlineData(1e+200)]
+    [InlineData(1e-200)]
     public void Float256ToDoubleShouldRoundTrip(double value)
     {
         Float256 wide = value;
         double back = (double)wide;
-        if (double.IsNaN(value))
-        {
-            Assert.True(double.IsNaN(back));
-        }
-        else
-        {
-            Assert.Equal(value, back);
-        }
+        Assert.Equal(value, back);
+    }
+
+    [Fact(DisplayName = "Float256 to double of values larger than double.MaxValue should saturate to ±infinity")]
+    public void Float256ToDoubleOverflowShouldSaturateToInfinity()
+    {
+        Float256 large = Float256.Parse("1e500", System.Globalization.CultureInfo.InvariantCulture);
+        Assert.True(double.IsPositiveInfinity((double)large));
+        Float256 largeNegative = Float256.Parse("-1e500", System.Globalization.CultureInfo.InvariantCulture);
+        Assert.True(double.IsNegativeInfinity((double)largeNegative));
+    }
+
+    [Fact(DisplayName = "Float256 to double of values smaller than double's smallest subnormal should underflow to zero")]
+    public void Float256ToDoubleUnderflowShouldReturnZeroForExtremelySmall()
+    {
+        Float256 tiny = Float256.Parse("1e-400", System.Globalization.CultureInfo.InvariantCulture);
+        Assert.Equal(0.0, (double)tiny);
     }
 
     [Fact(DisplayName = "Float256 to double should preserve NaN, infinity and signed zero")]

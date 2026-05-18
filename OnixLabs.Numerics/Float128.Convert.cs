@@ -44,14 +44,14 @@ public readonly partial struct Float128
         if (typeof(TOther) == typeof(uint)) { result = (uint)(object)value!; return true; }
         if (typeof(TOther) == typeof(long)) { result = (long)(object)value!; return true; }
         if (typeof(TOther) == typeof(ulong)) { result = (ulong)(object)value!; return true; }
-        if (typeof(TOther) == typeof(Int128)) { result = (Float128)(BigDecimal)(BigInteger)(Int128)(object)value!; return true; }
-        if (typeof(TOther) == typeof(UInt128)) { result = (Float128)(BigDecimal)(BigInteger)(UInt128)(object)value!; return true; }
-        if (typeof(TOther) == typeof(BigInteger)) { result = (Float128)(BigDecimal)(BigInteger)(object)value!; return true; }
+        if (typeof(TOther) == typeof(Int128)) { result = FromInt128((Int128)(object)value!); return true; }
+        if (typeof(TOther) == typeof(UInt128)) { result = FromUInt128((UInt128)(object)value!); return true; }
+        if (typeof(TOther) == typeof(BigInteger)) { result = FromBigInteger((BigInteger)(object)value!); return true; }
         if (typeof(TOther) == typeof(char)) { result = (char)(object)value!; return true; }
         if (typeof(TOther) == typeof(Half)) { result = (Half)(object)value!; return true; }
         if (typeof(TOther) == typeof(float)) { result = (float)(object)value!; return true; }
         if (typeof(TOther) == typeof(double)) { result = (double)(object)value!; return true; }
-        if (typeof(TOther) == typeof(decimal)) { result = (Float128)(BigDecimal)(decimal)(object)value!; return true; }
+        if (typeof(TOther) == typeof(decimal)) { result = FromDecimal((decimal)(object)value!); return true; }
         if (typeof(TOther) == typeof(BigDecimal)) { result = (Float128)(BigDecimal)(object)value!; return true; }
         if (typeof(TOther) == typeof(Float128)) { result = (Float128)(object)value!; return true; }
 

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Numerics;
 
 namespace OnixLabs.Numerics;
 
@@ -235,5 +236,180 @@ public readonly partial struct Float128
         UInt128 biasedExponent = (UInt128)(uint)(unbiasedExponent + ExponentBias) << BiasedExponentShift;
 
         return new Float128(sign | biasedExponent | trailingSignificand);
+    }
+
+    /// <summary>
+    /// Converts the specified <see cref="UInt128"/> value to a correctly-rounded <see cref="Float128"/>, rounding values whose magnitudes exceed 113 bits.
+    /// </summary>
+    /// <param name="value">The unsigned 128-bit integer value to convert.</param>
+    /// <returns>Returns the <see cref="Float128"/> closest to <paramref name="value"/>.</returns>
+    /// <remarks>
+    /// Integers whose bit length is at most 113 round-trip exactly; larger integers are rounded to nearest, ties-to-even
+    /// using guard and sticky bits accumulated from the bits shifted off the bottom of the 113-bit significand.
+    /// </remarks>
+    internal static Float128 FromUInt128(UInt128 value)
+    {
+        if (value == UInt128.Zero) return Zero;
+
+        int leadingBitPosition = 127 - (int)UInt128.LeadingZeroCount(value);
+        int unbiasedExponent = leadingBitPosition;
+
+        UInt128 significand;
+        bool roundBit;
+        bool stickyBit;
+
+        int shift = leadingBitPosition - TrailingSignificandBits;
+        if (shift > 0)
+        {
+            significand = value >> shift;
+            UInt128 roundBitMask = UInt128.One << (shift - 1);
+            roundBit = (value & roundBitMask) != UInt128.Zero;
+            UInt128 stickyMask = roundBitMask - UInt128.One;
+            stickyBit = (value & stickyMask) != UInt128.Zero;
+        }
+        else if (shift == 0)
+        {
+            significand = value;
+            roundBit = false;
+            stickyBit = false;
+        }
+        else
+        {
+            significand = value << -shift;
+            roundBit = false;
+            stickyBit = false;
+        }
+
+        return RoundToNearestEven(sign: false, unbiasedExponent, significand, roundBit, stickyBit);
+    }
+
+    /// <summary>
+    /// Converts the specified <see cref="Int128"/> value to a correctly-rounded <see cref="Float128"/>, preserving sign.
+    /// </summary>
+    /// <param name="value">The signed 128-bit integer value to convert.</param>
+    /// <returns>Returns the <see cref="Float128"/> closest to <paramref name="value"/>.</returns>
+    internal static Float128 FromInt128(Int128 value)
+    {
+        if (value == Int128.Zero) return Zero;
+
+        bool sign = value < Int128.Zero;
+        // Two's-complement negation in unsigned space handles Int128.MinValue correctly:
+        // (UInt128.Zero - (UInt128)Int128.MinValue) wraps to 2^127, the true magnitude.
+        UInt128 magnitude = sign ? UInt128.Zero - (UInt128)value : (UInt128)value;
+        Float128 positive = FromUInt128(magnitude);
+
+        return sign ? new Float128(positive.bits | SignMask) : positive;
+    }
+
+    /// <summary>
+    /// Converts the specified <see cref="BigInteger"/> value to a correctly-rounded <see cref="Float128"/>, saturating to ±infinity for magnitudes that exceed the binary128 range.
+    /// </summary>
+    /// <param name="value">The <see cref="BigInteger"/> value to convert.</param>
+    /// <returns>Returns the <see cref="Float128"/> closest to <paramref name="value"/>.</returns>
+    /// <remarks>
+    /// Integers with at most 113 significant bits round-trip exactly. Larger integers are rounded to nearest, ties-to-even
+    /// using guard and sticky bits accumulated from the bits shifted off the bottom of the 113-bit significand.
+    /// </remarks>
+    internal static Float128 FromBigInteger(BigInteger value)
+    {
+        if (value.IsZero) return Zero;
+
+        bool sign = value.Sign < 0;
+        BigInteger magnitude = sign ? -value : value;
+
+        int bitLength = (int)magnitude.GetBitLength();
+        int unbiasedExponent = bitLength - 1;
+
+        if (unbiasedExponent > MaxFiniteUnbiasedExponent)
+        {
+            return sign ? NegativeInfinity : PositiveInfinity;
+        }
+
+        UInt128 significand;
+        bool roundBit;
+        bool stickyBit;
+
+        int shift = bitLength - SignificandPrecision;
+        if (shift > 0)
+        {
+            BigInteger shifted = magnitude >> shift;
+            significand = (UInt128)shifted;
+
+            BigInteger roundBitMask = BigInteger.One << (shift - 1);
+            roundBit = !(magnitude & roundBitMask).IsZero;
+
+            BigInteger stickyMask = roundBitMask - BigInteger.One;
+            stickyBit = !(magnitude & stickyMask).IsZero;
+        }
+        else if (shift == 0)
+        {
+            significand = (UInt128)magnitude;
+            roundBit = false;
+            stickyBit = false;
+        }
+        else
+        {
+            significand = (UInt128)magnitude << -shift;
+            roundBit = false;
+            stickyBit = false;
+        }
+
+        return RoundToNearestEven(sign, unbiasedExponent, significand, roundBit, stickyBit);
+    }
+
+    /// <summary>
+    /// Converts the specified <see cref="decimal"/> value to a correctly-rounded <see cref="Float128"/> via the exact relationship
+    /// <c>value = (low | (mid &lt;&lt; 32) | ((UInt128)high &lt;&lt; 64)) / 10^scale</c>, with sign preserved.
+    /// </summary>
+    /// <param name="value">The <see cref="decimal"/> value to convert.</param>
+    /// <returns>Returns the <see cref="Float128"/> closest to <paramref name="value"/>.</returns>
+    /// <remarks>
+    /// <see cref="decimal"/>'s 96-bit significand fits losslessly in Float128's 113-bit significand, and every
+    /// <c>10^scale</c> for the allowed scale range [0, 28] fits in a UInt128. Dividing two exactly-represented
+    /// Float128 values produces a correctly-rounded result per IEEE 754.
+    /// </remarks>
+    internal static Float128 FromDecimal(decimal value)
+    {
+        if (value == 0m) return Zero;
+
+        Span<int> bits = stackalloc int[4];
+        decimal.GetBits(value, bits);
+        uint low = (uint)bits[0];
+        uint mid = (uint)bits[1];
+        uint high = (uint)bits[2];
+        uint flags = (uint)bits[3];
+
+        bool sign = (flags & 0x80000000u) != 0u;
+        int scale = (int)((flags >> 16) & 0xFFu);
+
+        UInt128 magnitude = ((UInt128)high << 64) | ((UInt128)mid << 32) | low;
+        Float128 magnitudeFloat = FromUInt128(magnitude);
+        Float128 result = scale == 0 ? magnitudeFloat : magnitudeFloat / PowersOfTen[scale];
+        return sign ? new Float128(result.bits | SignMask) : result;
+    }
+
+    /// <summary>
+    /// The first 29 non-negative powers of ten as <see cref="Float128"/> values, indexed by exponent.
+    /// </summary>
+    /// <remarks>
+    /// Used by <see cref="FromDecimal"/> as exact-divisor lookups. <c>10^28</c> is the largest decimal scale,
+    /// and every entry fits losslessly in Float128's 113-bit significand (10^28 occupies ~94 bits).
+    /// </remarks>
+    private static readonly Float128[] PowersOfTen = ComputePowersOfTen();
+
+    /// <summary>
+    /// Computes the lookup table of <c>10^k</c> as <see cref="Float128"/> values for <c>k</c> in the range [0, 28].
+    /// </summary>
+    /// <returns>Returns an array indexed by exponent, where entry <c>k</c> equals <c>10^k</c> as a <see cref="Float128"/>.</returns>
+    private static Float128[] ComputePowersOfTen()
+    {
+        Float128[] result = new Float128[29];
+        UInt128 power = UInt128.One;
+        for (int i = 0; i < result.Length; i++)
+        {
+            result[i] = FromUInt128(power);
+            if (i < result.Length - 1) power *= 10U;
+        }
+        return result;
     }
 }

@@ -196,33 +196,33 @@ public readonly partial struct Angle<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Angle{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Angle{T}"/> instance from the specified value.</returns>
-    public static Angle<T> FromDegrees(T value) => new(value * T.CreateChecked(1.7453292519943295e28));
+    public static Angle<T> FromDegrees(T value) => new(value * QuectoRadiansPerDegree);
 
     /// <summary>
     /// Creates a new <see cref="Angle{T}"/> instance from the specified Arcminutes value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Angle{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Angle{T}"/> instance from the specified value.</returns>
-    public static Angle<T> FromArcminutes(T value) => new(value * T.CreateChecked(2.908882086657216e26));
+    public static Angle<T> FromArcminutes(T value) => new(value * QuectoRadiansPerArcminute);
 
     /// <summary>
     /// Creates a new <see cref="Angle{T}"/> instance from the specified Arcseconds value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Angle{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Angle{T}"/> instance from the specified value.</returns>
-    public static Angle<T> FromArcseconds(T value) => new(value * T.CreateChecked(4.84813681109536e24));
+    public static Angle<T> FromArcseconds(T value) => new(value * QuectoRadiansPerArcsecond);
 
     /// <summary>
     /// Creates a new <see cref="Angle{T}"/> instance from the specified Gradians value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Angle{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Angle{T}"/> instance from the specified value.</returns>
-    public static Angle<T> FromGradians(T value) => new(value * T.CreateChecked(1.5707963267948966e28));
+    public static Angle<T> FromGradians(T value) => new(value * QuectoRadiansPerGradian);
 
     /// <summary>
     /// Creates a new <see cref="Angle{T}"/> instance from the specified Turns value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Angle{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Angle{T}"/> instance from the specified value.</returns>
-    public static Angle<T> FromTurns(T value) => new(value * T.CreateChecked(6.283185307179586e30));
+    public static Angle<T> FromTurns(T value) => new(value * QuectoRadiansPerTurn);
 }

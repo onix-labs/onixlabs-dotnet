@@ -12,12 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Numerics;
+
 namespace OnixLabs.Units;
 
 public readonly partial struct Time<T>
 {
     /// <inheritdoc/>
     public static Time<T> Zero => new(T.Zero);
+
+    // T-precision conversion factors for non-SI time scales. Each constant is
+    // "QuectoSeconds in one X", written as `<seconds-per-unit> × 10^30 qs/s`. Stored as
+    // static readonly per closed T so they're computed once and reused at the target type's
+    // precision; `T.CreateChecked(6.048e35)` would pre-round through double's ~15-17 digit
+    // precision before reaching T.
+    private static readonly T QuectosecondsPerMinute     = T.CreateChecked(60)       * GenericMath.Pow10<T>(30); // 60 s
+    private static readonly T QuectosecondsPerHour       = T.CreateChecked(3600)     * GenericMath.Pow10<T>(30); // 3 600 s
+    private static readonly T QuectosecondsPerDay        = T.CreateChecked(86400)    * GenericMath.Pow10<T>(30); // 86 400 s
+    private static readonly T QuectosecondsPerWeek       = T.CreateChecked(604800)   * GenericMath.Pow10<T>(30); // 604 800 s
+    private static readonly T QuectosecondsPerJulianYear = T.CreateChecked(31557600) * GenericMath.Pow10<T>(30); // 365.25 × 86 400 s
 
     private const string QuectoSecondsSpecifier = "qs";
     private const string RontoSecondsSpecifier = "rs";

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -20,548 +19,456 @@ namespace OnixLabs.Units.UnitTests;
 
 public sealed class AreaTests
 {
-    // IEEE-754 binary floating-point arithmetic causes small discrepancies in calculation, therefore we need a tolerance.
-    private const double Tolerance = 1e+106;
-
     [Fact(DisplayName = "Area.Zero should produce the expected result")]
     public void AreaZeroShouldProduceExpectedResult()
     {
         // Given / When
-        Area<double> area = Area<double>.Zero;
+        Area<Float256> area = Area<Float256>.Zero;
 
         // Then
-        Assert.Equal(0.0, area.SquareQuectoMeters, Tolerance);
+        Assert.Equal(Float256.Zero, area.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareQuectometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1.0)]
-    [InlineData(2.5, 2.5)]
-    public void AreaFromSquareQuectometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1")]
+    [InlineData("2.5", "2.5")]
+    public void AreaFromSquareQuectometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareQuectometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareQuectometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareRontometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e6)]
-    [InlineData(2.5, 2.5e6)]
-    public void AreaFromSquareRontometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e6")]
+    [InlineData("2.5", "2.5e6")]
+    public void AreaFromSquareRontometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareRontometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareRontometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareYoctometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e12)]
-    [InlineData(2.5, 2.5e12)]
-    public void AreaFromSquareYoctometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e12")]
+    [InlineData("2.5", "2.5e12")]
+    public void AreaFromSquareYoctometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareYoctometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareYoctometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareZeptometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e18)]
-    [InlineData(2.5, 2.5e18)]
-    public void AreaFromSquareZeptometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e18")]
+    [InlineData("2.5", "2.5e18")]
+    public void AreaFromSquareZeptometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareZeptometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareZeptometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareAttometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e24)]
-    [InlineData(2.5, 2.5e24)]
-    public void AreaFromSquareAttometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e24")]
+    [InlineData("2.5", "2.5e24")]
+    public void AreaFromSquareAttometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareAttometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareAttometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareFemtometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e30)]
-    [InlineData(2.5, 2.5e30)]
-    public void AreaFromSquareFemtometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e30")]
+    [InlineData("2.5", "2.5e30")]
+    public void AreaFromSquareFemtometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareFemtometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareFemtometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquarePicometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e36)]
-    [InlineData(2.5, 2.5e36)]
-    public void AreaFromSquarePicometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e36")]
+    [InlineData("2.5", "2.5e36")]
+    public void AreaFromSquarePicometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquarePicometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquarePicometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareNanometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e42)]
-    [InlineData(2.5, 2.5e42)]
-    public void AreaFromSquareNanometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e42")]
+    [InlineData("2.5", "2.5e42")]
+    public void AreaFromSquareNanometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareNanometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareNanometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareMicrometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e48)]
-    [InlineData(2.5, 2.5e48)]
-    public void AreaFromSquareMicrometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e48")]
+    [InlineData("2.5", "2.5e48")]
+    public void AreaFromSquareMicrometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareMicrometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareMicrometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareMillimeters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e54)]
-    [InlineData(2.5, 2.5e54)]
-    public void AreaFromSquareMillimetersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e54")]
+    [InlineData("2.5", "2.5e54")]
+    public void AreaFromSquareMillimetersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareMillimeters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareMillimeters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareCentimeters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e56)]
-    [InlineData(2.5, 2.5e56)]
-    public void AreaFromSquareCentimetersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e56")]
+    [InlineData("2.5", "2.5e56")]
+    public void AreaFromSquareCentimetersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareCentimeters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareCentimeters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareDecimeters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e58)]
-    [InlineData(2.5, 2.5e58)]
-    public void AreaFromSquareDecimetersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e58")]
+    [InlineData("2.5", "2.5e58")]
+    public void AreaFromSquareDecimetersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareDecimeters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareDecimeters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareMeters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e60)]
-    [InlineData(2.5, 2.5e60)]
-    public void AreaFromSquareMetersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e60")]
+    [InlineData("2.5", "2.5e60")]
+    public void AreaFromSquareMetersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareMeters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareDecameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e62)]
-    [InlineData(2.5, 2.5e62)]
-    public void AreaFromSquareDecametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e62")]
+    [InlineData("2.5", "2.5e62")]
+    public void AreaFromSquareDecametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareDecameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareDecameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareHectometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e64)]
-    [InlineData(2.5, 2.5e64)]
-    public void AreaFromSquareHectometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e64")]
+    [InlineData("2.5", "2.5e64")]
+    public void AreaFromSquareHectometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareHectometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareHectometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareKilometers should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e66)]
-    [InlineData(2.5, 2.5e66)]
-    public void AreaFromSquareKilometersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e66")]
+    [InlineData("2.5", "2.5e66")]
+    public void AreaFromSquareKilometersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareKilometers(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareKilometers(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareMegameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e72)]
-    [InlineData(2.5, 2.5e72)]
-    public void AreaFromSquareMegametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e72")]
+    [InlineData("2.5", "2.5e72")]
+    public void AreaFromSquareMegametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareMegameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareMegameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareGigameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e78)]
-    [InlineData(2.5, 2.5e78)]
-    public void AreaFromSquareGigametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e78")]
+    [InlineData("2.5", "2.5e78")]
+    public void AreaFromSquareGigametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareGigameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareGigameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareTerameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e84)]
-    [InlineData(2.5, 2.5e84)]
-    public void AreaFromSquareTerametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e84")]
+    [InlineData("2.5", "2.5e84")]
+    public void AreaFromSquareTerametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareTerameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareTerameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquarePetameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e90)]
-    [InlineData(2.5, 2.5e90)]
-    public void AreaFromSquarePetametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e90")]
+    [InlineData("2.5", "2.5e90")]
+    public void AreaFromSquarePetametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquarePetameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquarePetameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareExameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e96)]
-    [InlineData(2.5, 2.5e96)]
-    public void AreaFromSquareExametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e96")]
+    [InlineData("2.5", "2.5e96")]
+    public void AreaFromSquareExametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareExameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareExameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareZettameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e102)]
-    [InlineData(2.5, 2.5e102)]
-    public void AreaFromSquareZettametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e102")]
+    [InlineData("2.5", "2.5e102")]
+    public void AreaFromSquareZettametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareZettameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareZettameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareYottameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e108)]
-    [InlineData(2.5, 2.5e108)]
-    public void AreaFromSquareYottametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e108")]
+    [InlineData("2.5", "2.5e108")]
+    public void AreaFromSquareYottametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareYottameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareYottameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareRonnameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e114)]
-    [InlineData(2.5, 2.5e114)]
-    public void AreaFromSquareRonnametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e114")]
+    [InlineData("2.5", "2.5e114")]
+    public void AreaFromSquareRonnametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareRonnameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareRonnameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareQuettameters should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e120)]
-    [InlineData(2.5, 2.5e120)]
-    public void AreaFromSquareQuettametersShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e120")]
+    [InlineData("2.5", "2.5e120")]
+    public void AreaFromSquareQuettametersShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareQuettameters(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareQuettameters(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareInches should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 6.4516e56)]
-    [InlineData(2.5, 1.6129e57)]
-    public void AreaFromSquareInchesShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "6.4516e56")]
+    [InlineData("2.5", "1.6129e57")]
+    public void AreaFromSquareInchesShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareInches(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareInches(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareFeet should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 9.290304e58)]
-    [InlineData(2.5, 2.322576e59)]
-    public void AreaFromSquareFeetShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "9.290304e58")]
+    [InlineData("2.5", "2.322576e59")]
+    public void AreaFromSquareFeetShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareFeet(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareFeet(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareYards should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 8.3612736e59)]
-    [InlineData(2.5, 2.0903184e60)]
-    public void AreaFromSquareYardsShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "8.3612736e59")]
+    [InlineData("2.5", "2.0903184e60")]
+    public void AreaFromSquareYardsShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareYards(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareYards(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareMiles should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 2.589988110336e66)]
-    [InlineData(2.5, 6.47497027584e66)]
-    public void AreaFromSquareMilesShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "2.589988110336e66")]
+    [InlineData("2.5", "6.47497027584e66")]
+    public void AreaFromSquareMilesShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareMiles(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareMiles(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareNauticalMiles should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 3.4299040000e66)]
-    [InlineData(2.5, 8.5747600000e66)]
-    public void AreaFromSquareNauticalMilesShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "3.429904e66")]
+    [InlineData("2.5", "8.57476e66")]
+    public void AreaFromSquareNauticalMilesShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareNauticalMiles(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareNauticalMiles(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareFermis should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e30)]
-    [InlineData(2.5, 2.5e30)]
-    public void AreaFromSquareFermisShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e30")]
+    [InlineData("2.5", "2.5e30")]
+    public void AreaFromSquareFermisShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareFermis(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareFermis(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareAngstroms should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e40)]
-    [InlineData(2.5, 2.5e40)]
-    public void AreaFromSquareAngstromsShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e40")]
+    [InlineData("2.5", "2.5e40")]
+    public void AreaFromSquareAngstromsShouldProduceExpectedSquareQuectoMeters(string value, string expected)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareAngstroms(value);
-
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareAngstroms(Float256.Parse(value));
+        Assert.Equal(Float256.Parse(expected), a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareAstronomicalUnits should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 2.2379522821e82)]
-    [InlineData(2.5, 5.59488070525e82)]
-    public void AreaFromSquareAstronomicalUnitsShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("2.5")]
+    public void AreaFromSquareAstronomicalUnitsShouldProduceExpectedSquareQuectoMeters(string value)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareAstronomicalUnits(value);
+        // Compute expected at Float256 precision via the same chain as the unit: AU² × 10^60.
+        Float256 input = Float256.Parse(value);
+        Float256 auMeters = 149_597_870_700L;
+        Float256 expected = input * auMeters * auMeters * GenericMath.Pow10<Float256>(60);
 
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareAstronomicalUnits(input);
+
+        Assert.Equal(expected, a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareLightYears should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 8.9505421074819e91)]
-    [InlineData(2.5, 2.237635526870475e92)]
-    public void AreaFromSquareLightYearsShouldProduceExpectedSquareQuectoMeters(double value, double expectedSquareQuectoMeters)
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("2.5")]
+    public void AreaFromSquareLightYearsShouldProduceExpectedSquareQuectoMeters(string value)
     {
-        // Given / When
-        Area<double> a = Area<double>.FromSquareLightYears(value);
+        // Compute expected at Float256 precision via the same chain as the unit: LY² × 10^60.
+        Float256 input = Float256.Parse(value);
+        Float256 lyMeters = 9_460_730_472_580_800L;
+        Float256 expected = input * lyMeters * lyMeters * GenericMath.Pow10<Float256>(60);
 
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Area<Float256> a = Area<Float256>.FromSquareLightYears(input);
+
+        Assert.Equal(expected, a.SquareQuectoMeters);
     }
 
     [Theory(DisplayName = "Area.FromSquareParsecs should produce the expected SquareQuectoMeters")]
-    [InlineData(0.0)]
-    [InlineData(1.0)]
-    [InlineData(2.5)]
-    public void AreaFromSquareParsecsShouldProduceExpectedSquareQuectoMeters(double value)
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("2.5")]
+    public void AreaFromSquareParsecsShouldProduceExpectedSquareQuectoMeters(string value)
     {
-        // Given
-        const double metersPerParsec = 1.495978707e11 * 648000.0 / Math.PI;
-        const double sqMetersPerSqParsec = metersPerParsec * metersPerParsec;
-        const double sqQmPerSqParsec = sqMetersPerSqParsec * 1e60;
-        double expectedSquareQuectoMeters = value * sqQmPerSqParsec;
+        // Compute expected via the IAU definition: 1 pc = (648000 / π) AU. Match the unit's
+        // associativity exactly — group as `(metersPerParsec × metersPerParsec × Pow10(60))`
+        // first (matching the cached SqQuectometersPerSquareParsec constant), then multiply by
+        // input. π is irrational, so the division rounds and grouping changes the LSB.
+        Float256 input = Float256.Parse(value);
+        Float256 metersPerParsec = (Float256)149_597_870_700L * 648000 / Float256.Pi;
+        Float256 sqQmPerSqParsec = metersPerParsec * metersPerParsec * GenericMath.Pow10<Float256>(60);
+        Float256 expected = input * sqQmPerSqParsec;
 
-        // When
-        Area<double> a = Area<double>.FromSquareParsecs(value);
+        Area<Float256> a = Area<Float256>.FromSquareParsecs(input);
 
-        // Then
-        Assert.Equal(expectedSquareQuectoMeters, a.SquareQuectoMeters, Tolerance);
+        Assert.Equal(expected, a.SquareQuectoMeters);
     }
 
     [Fact(DisplayName = "Area.Add should produce the expected result")]
     public void AreaAddShouldProduceExpectedValue()
     {
         // Given
-        Area<double> left = Area<double>.FromSquareMeters(1500.0);
-        Area<double> right = Area<double>.FromSquareMeters(500.0);
+        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("1500"));
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("500"));
 
         // When
-        Area<double> result = left.Add(right);
+        Area<Float256> result = left.Add(right);
 
         // Then
-        Assert.Equal(2000.0, result.SquareMeters, Tolerance);
+        Assert.Equal(Float256.Parse("2000"), result.SquareMeters);
     }
 
     [Fact(DisplayName = "Area.Subtract should produce the expected result")]
     public void AreaSubtractShouldProduceExpectedValue()
     {
         // Given
-        Area<double> left = Area<double>.FromSquareMeters(1500.0);
-        Area<double> right = Area<double>.FromSquareMeters(400.0);
+        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("1500"));
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("400"));
 
         // When
-        Area<double> result = left.Subtract(right);
+        Area<Float256> result = left.Subtract(right);
 
         // Then
-        Assert.Equal(1100.0, result.SquareMeters, Tolerance);
+        Assert.Equal(Float256.Parse("1100"), result.SquareMeters);
     }
 
     [Fact(DisplayName = "Area.Multiply should produce the expected result")]
     public void AreaMultiplyShouldProduceExpectedValue()
     {
         // Given
-        Area<double> left = Area<double>.FromSquareMeters(10.0); // 1e61 sqQm
-        Area<double> right = Area<double>.FromSquareMeters(3.0); // 3e60 sqQm
+        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("10")); // 1e61 sqQm
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("3")); // 3e60 sqQm
 
         // When
-        Area<double> result = left.Multiply(right); // 1e61 * 3e60 = 3e121 sqQm
+        Area<Float256> result = left.Multiply(right); // 1e61 * 3e60 = 3e121 sqQm
 
         // Then
-        Assert.Equal(1e61, left.SquareQuectoMeters, Tolerance);
-        Assert.Equal(3e60, right.SquareQuectoMeters, Tolerance);
-        Assert.Equal(3e121, result.SquareQuectoMeters, Tolerance);
+        Assert.Equal(Float256.Parse("1e61"), left.SquareQuectoMeters);
+        Assert.Equal(Float256.Parse("3e60"), right.SquareQuectoMeters);
+        Assert.Equal(Float256.Parse("3e121"), result.SquareQuectoMeters);
     }
 
     [Fact(DisplayName = "Area.Divide should produce the expected result")]
     public void AreaDivideShouldProduceExpectedValue()
     {
         // Given
-        Area<double> left = Area<double>.FromSquareMeters(100.0); // 1e62 sqQm
-        Area<double> right = Area<double>.FromSquareMeters(20.0); // 2e61 sqQm
+        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("100")); // 1e62 sqQm
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("20")); // 2e61 sqQm
 
         // When
-        Area<double> result = left.Divide(right); // 1e62 / 2e61 = 5 sqQm
+        Area<Float256> result = left.Divide(right); // 1e62 / 2e61 = 5 sqQm
 
         // Then
-        Assert.Equal(5.0, result.SquareQuectoMeters, Tolerance);
-        Assert.Equal(5e-60, result.SquareMeters, Tolerance);
+        Assert.Equal(Float256.Parse("5"), result.SquareQuectoMeters);
+        Assert.Equal(Float256.Parse("5e-60"), result.SquareMeters);
     }
 
     [Fact(DisplayName = "Area comparison should produce the expected result (left equal to right)")]
     public void AreaComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Area<double> left = Area<double>.FromSquareMeters(1234.0);
-        Area<double> right = Area<double>.FromSquareMeters(1234.0);
+        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("1234"));
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("1234"));
 
         // When / Then
-        Assert.Equal(0, Area<double>.Compare(left, right));
+        Assert.Equal(0, Area<Float256>.Compare(left, right));
         Assert.Equal(0, left.CompareTo(right));
         Assert.Equal(0, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -574,11 +481,11 @@ public sealed class AreaTests
     public void AreaComparisonShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        Area<double> left = Area<double>.FromSquareMeters(4567.0);
-        Area<double> right = Area<double>.FromSquareMeters(1234.0);
+        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("4567"));
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("1234"));
 
         // When / Then
-        Assert.Equal(1, Area<double>.Compare(left, right));
+        Assert.Equal(1, Area<Float256>.Compare(left, right));
         Assert.Equal(1, left.CompareTo(right));
         Assert.Equal(1, left.CompareTo((object)right));
         Assert.True(left > right);
@@ -591,11 +498,11 @@ public sealed class AreaTests
     public void AreaComparisonShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        Area<double> left = Area<double>.FromSquareMeters(1234.0);
-        Area<double> right = Area<double>.FromSquareMeters(4567.0);
+        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("1234"));
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("4567"));
 
         // When / Then
-        Assert.Equal(-1, Area<double>.Compare(left, right));
+        Assert.Equal(-1, Area<Float256>.Compare(left, right));
         Assert.Equal(-1, left.CompareTo(right));
         Assert.Equal(-1, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -607,12 +514,12 @@ public sealed class AreaTests
     [Fact(DisplayName = "Area equality should produce the expected result (left equal to right)")]
     public void AreaEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
-        // Given
-        Area<BigDecimal> left = Area<BigDecimal>.FromSquareKilometers(2.0);
-        Area<BigDecimal> right = Area<BigDecimal>.FromSquareMeters(2000000.0);
+        // Given — 2 km² and 2 000 000 m² reduce to the same canonical at Float256.
+        Area<Float256> left = Area<Float256>.FromSquareKilometers(Float256.Parse("2"));
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("2000000"));
 
         // When / Then
-        Assert.True(Area<BigDecimal>.Equals(left, right));
+        Assert.True(Area<Float256>.Equals(left, right));
         Assert.True(left.Equals(right));
         Assert.True(left.Equals((object)right));
         Assert.True(left == right);
@@ -623,11 +530,11 @@ public sealed class AreaTests
     public void AreaEqualityShouldProduceExpectedResultLeftNotEqualToRight()
     {
         // Given
-        Area<double> left = Area<double>.FromSquareKilometers(2.0);
-        Area<double> right = Area<double>.FromSquareMeters(2500000.0);
+        Area<Float256> left = Area<Float256>.FromSquareKilometers(Float256.Parse("2"));
+        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("2500000"));
 
         // When / Then
-        Assert.False(Area<double>.Equals(left, right));
+        Assert.False(Area<Float256>.Equals(left, right));
         Assert.False(left.Equals(right));
         Assert.False(left.Equals((object)right));
         Assert.False(left == right);
@@ -638,7 +545,7 @@ public sealed class AreaTests
     public void AreaToStringShouldProduceExpectedResult()
     {
         // Given
-        Area<double> a = Area<double>.FromSquareMeters(1000000.0);
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse("1000000"));
 
         // When / Then
         Assert.Equal("1,000,000.000 m²", $"{a:sqm3}");
@@ -656,7 +563,7 @@ public sealed class AreaTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        Area<double> a = Area<double>.FromSquareMeters(1234.56);
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse("1234.56"));
 
         // When
         string formatted = a.ToString("sqm2", customCulture);
@@ -669,68 +576,70 @@ public sealed class AreaTests
     public void AreaPropertyConversionsShouldBeConsistent()
     {
         // Given
-        Area<double> a = Area<double>.FromSquareMeters(1.0);
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse("1"));
 
-        // Then - verify SI unit conversions are consistent
-        Assert.Equal(1.0, a.SquareMeters, Tolerance);
-        Assert.Equal(1e60, a.SquareQuectoMeters, Tolerance);
-        Assert.Equal(1e-6, a.SquareKiloMeters, Tolerance);
-        Assert.Equal(100.0, a.SquareDeciMeters, Tolerance);
-        Assert.Equal(10000.0, a.SquareCentiMeters, Tolerance);
-        Assert.Equal(1000000.0, a.SquareMilliMeters, Tolerance);
+        // Then — verify SI unit conversions are consistent
+        Assert.Equal(Float256.Parse("1"), a.SquareMeters);
+        Assert.Equal(Float256.Parse("1e60"), a.SquareQuectoMeters);
+        Assert.Equal(Float256.Parse("1e-6"), a.SquareKiloMeters);
+        Assert.Equal(Float256.Parse("100"), a.SquareDeciMeters);
+        Assert.Equal(Float256.Parse("10000"), a.SquareCentiMeters);
+        Assert.Equal(Float256.Parse("1000000"), a.SquareMilliMeters);
     }
 
     [Fact(DisplayName = "Area imperial unit conversions should be accurate")]
     public void AreaImperialUnitConversionsShouldBeAccurate()
     {
-        // Given - 1 square meter
-        Area<double> a = Area<double>.FromSquareMeters(1.0);
+        // Given — 1 square meter
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse("1"));
 
-        // Then - verify imperial conversions
-        Assert.Equal(1550.0031000062, a.SquareInches, 1e-6);
-        Assert.Equal(10.76391041671, a.SquareFeet, 1e-6);
-        Assert.Equal(1.1959900463011, a.SquareYards, 1e-6);
+        // Then — 1 m² in imperial units; compute expected via Float256 (same chain as the unit).
+        // 1 m² = 10^60 sqqm. m²/in² = 10^60 / (64516 × 10^52) = 10^8 / 64516.
+        Float256 sqQm = GenericMath.Pow10<Float256>(60);
+        Assert.Equal(sqQm / ((Float256)64516 * GenericMath.Pow10<Float256>(52)), a.SquareInches);
+        Assert.Equal(sqQm / ((Float256)9290304 * GenericMath.Pow10<Float256>(52)), a.SquareFeet);
+        Assert.Equal(sqQm / ((Float256)83612736 * GenericMath.Pow10<Float256>(52)), a.SquareYards);
     }
 
     [Fact(DisplayName = "Area round-trip conversions should be accurate")]
     public void AreaRoundTripConversionsShouldBeAccurate()
     {
         // Given
-        double originalValue = 123.456;
+        Float256 originalValue = Float256.Parse("123.456");
 
-        // When - convert from square meters and back
-        Area<double> a = Area<double>.FromSquareMeters(originalValue);
+        // When — convert from square meters and back
+        Area<Float256> a = Area<Float256>.FromSquareMeters(originalValue);
 
         // Then
-        Assert.Equal(originalValue, a.SquareMeters, 1e-10);
+        Assert.Equal(originalValue, a.SquareMeters);
     }
 
     [Fact(DisplayName = "Area from square kilometers to square meters should be accurate")]
     public void AreaFromSquareKilometersToSquareMetersShouldBeAccurate()
     {
         // Given
-        Area<double> a = Area<double>.FromSquareKilometers(1.0);
+        Area<Float256> a = Area<Float256>.FromSquareKilometers(Float256.Parse("1"));
 
         // Then
-        Assert.Equal(1000000.0, a.SquareMeters, Tolerance);
+        Assert.Equal(Float256.Parse("1000000"), a.SquareMeters);
     }
 
     [Fact(DisplayName = "Area from square miles to square kilometers should be accurate")]
     public void AreaFromSquareMilesToSquareKilometersShouldBeAccurate()
     {
         // Given
-        Area<double> a = Area<double>.FromSquareMiles(1.0);
+        Area<Float256> a = Area<Float256>.FromSquareMiles(Float256.Parse("1"));
 
-        // Then - 1 square mile = 2.589988110336 square kilometers
-        Assert.Equal(2.589988110336, a.SquareKiloMeters, 1e-6);
+        // Then — 1 square mile = exactly 2.589988110336 square kilometers
+        Assert.Equal(Float256.Parse("2.589988110336"), a.SquareKiloMeters);
     }
 
     [Fact(DisplayName = "Area GetHashCode should be consistent for equal values")]
     public void AreaGetHashCodeShouldBeConsistentForEqualValues()
     {
         // Given
-        Area<double> a1 = Area<double>.FromSquareMeters(100.0);
-        Area<double> a2 = Area<double>.FromSquareMeters(100.0);
+        Area<Float256> a1 = Area<Float256>.FromSquareMeters(Float256.Parse("100"));
+        Area<Float256> a2 = Area<Float256>.FromSquareMeters(Float256.Parse("100"));
 
         // Then
         Assert.Equal(a1.GetHashCode(), a2.GetHashCode());
@@ -740,7 +649,7 @@ public sealed class AreaTests
     public void AreaEqualsWithNullObjectShouldReturnFalse()
     {
         // Given
-        Area<double> a = Area<double>.FromSquareMeters(100.0);
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse("100"));
 
         // Then
         Assert.False(a.Equals(null));
@@ -750,7 +659,7 @@ public sealed class AreaTests
     public void AreaEqualsWithDifferentTypeShouldReturnFalse()
     {
         // Given
-        Area<double> a = Area<double>.FromSquareMeters(100.0);
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse("100"));
 
         // Then
         Assert.False(a.Equals("not an area"));
@@ -760,7 +669,7 @@ public sealed class AreaTests
     public void AreaDefaultToStringShouldUseSquareQuectoMeters()
     {
         // Given
-        Area<double> a = Area<double>.FromSquareQuectometers(123.0);
+        Area<Float256> a = Area<Float256>.FromSquareQuectometers(Float256.Parse("123"));
 
         // When
         string result = a.ToString();

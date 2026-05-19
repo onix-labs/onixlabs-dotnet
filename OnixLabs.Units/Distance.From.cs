@@ -196,73 +196,68 @@ public readonly partial struct Distance<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromInches(T value) => new(value * T.CreateChecked(2.54e28));
+    public static Distance<T> FromInches(T value) => new(value * QuectometersPerInch);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Feet value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromFeet(T value) => new(value * T.CreateChecked(3.048e29));
+    public static Distance<T> FromFeet(T value) => new(value * QuectometersPerFoot);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Yards value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromYards(T value) => new(value * T.CreateChecked(9.144e29));
+    public static Distance<T> FromYards(T value) => new(value * QuectometersPerYard);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Miles value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromMiles(T value) => new(value * T.CreateChecked(1.609344e33));
+    public static Distance<T> FromMiles(T value) => new(value * QuectometersPerMile);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Nautical Miles value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromNauticalMiles(T value) => new(value * T.CreateChecked(1.852e33));
+    public static Distance<T> FromNauticalMiles(T value) => new(value * QuectometersPerNauticalMile);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Fermis value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromFermis(T value) => new(value * T.CreateChecked(1e15));
+    public static Distance<T> FromFermis(T value) => new(value * QuectometersPerFermi);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Angstroms value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromAngstroms(T value) => new(value * T.CreateChecked(1e20));
+    public static Distance<T> FromAngstroms(T value) => new(value * QuectometersPerAngstrom);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Astronomical Units value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromAstronomicalUnits(T value) => new(value * T.CreateChecked(1.495978707e41));
+    public static Distance<T> FromAstronomicalUnits(T value) => new(value * QuectometersPerAstronomicalUnit);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Light Years value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromLightYears(T value) => new(value * T.CreateChecked(9.4607304725808e45));
+    public static Distance<T> FromLightYears(T value) => new(value * QuectometersPerLightYear);
 
     /// <summary>
     /// Creates a new <see cref="Distance{T}"/> instance from the specified Parsecs value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Distance{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Distance{T}"/> instance from the specified value.</returns>
-    public static Distance<T> FromParsecs(T value)
-    {
-        T metersPerParsec = T.CreateChecked(1.495978707e11) * T.CreateChecked(648000) / T.Pi;
-        T qmPerParsec = metersPerParsec * T.CreateChecked(1e30);
-        return new Distance<T>(value * qmPerParsec);
-    }
+    public static Distance<T> FromParsecs(T value) => new(value * QuectometersPerParsec);
 }

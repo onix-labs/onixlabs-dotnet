@@ -240,7 +240,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is in.
     /// </remarks>
-    public T Inches => QuectoMeters / T.CreateChecked(0.0254e30);
+    public T Inches => QuectoMeters / QuectometersPerInch;
 
     /// <summary>
     /// Gets the distance in Feet (ft).
@@ -248,7 +248,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is ft.
     /// </remarks>
-    public T Feet => QuectoMeters / T.CreateChecked(0.3048e30);
+    public T Feet => QuectoMeters / QuectometersPerFoot;
 
     /// <summary>
     /// Gets the distance in Yards (yd).
@@ -256,7 +256,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is yd.
     /// </remarks>
-    public T Yards => QuectoMeters / T.CreateChecked(0.9144e30);
+    public T Yards => QuectoMeters / QuectometersPerYard;
 
     // ReSharper disable once GrammarMistakeInComment
     /// <summary>
@@ -265,7 +265,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is mi.
     /// </remarks>
-    public T Miles => QuectoMeters / T.CreateChecked(1609.344e30);
+    public T Miles => QuectoMeters / QuectometersPerMile;
 
     /// <summary>
     /// Gets the distance in Nautical Miles (nmi).
@@ -273,7 +273,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is nmi.
     /// </remarks>
-    public T NauticalMiles => QuectoMeters / T.CreateChecked(1852e30);
+    public T NauticalMiles => QuectoMeters / QuectometersPerNauticalMile;
 
     /// <summary>
     /// Gets the distance in Fermis (fm).
@@ -281,7 +281,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is fmi.
     /// </remarks>
-    public T Fermis => QuectoMeters / T.CreateChecked(1e15);
+    public T Fermis => QuectoMeters / QuectometersPerFermi;
 
     /// <summary>
     /// Gets the distance in Angstroms (Å).
@@ -289,7 +289,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is a.
     /// </remarks>
-    public T Angstroms => QuectoMeters / T.CreateChecked(1e20);
+    public T Angstroms => QuectoMeters / QuectometersPerAngstrom;
 
     /// <summary>
     /// Gets the distance in Astronomical Units (au).
@@ -297,7 +297,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is au.
     /// </remarks>
-    public T AstronomicalUnits => QuectoMeters / T.CreateChecked(149_597_870_700L * 1e30);
+    public T AstronomicalUnits => QuectoMeters / QuectometersPerAstronomicalUnit;
 
     /// <summary>
     /// Gets the distance in Light Years (ly).
@@ -305,7 +305,7 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is ly.
     /// </remarks>
-    public T LightYears => QuectoMeters / T.CreateChecked(9_460_730_472_580_800L * 1e30);
+    public T LightYears => QuectoMeters / QuectometersPerLightYear;
 
     /// <summary>
     /// Gets the distance in Parsecs (pc).
@@ -313,13 +313,5 @@ public readonly partial struct Distance<T> :
     /// <remarks>
     /// The format specifier for this value is pc.
     /// </remarks>
-    public T Parsecs
-    {
-        get
-        {
-            T metersPerParsec = T.CreateChecked(149_597_870_700L) * T.CreateChecked(648000) / T.Pi;
-            T qmPerParsec = metersPerParsec * T.CreateChecked(1e30);
-            return QuectoMeters / qmPerParsec;
-        }
-    }
+    public T Parsecs => QuectoMeters / QuectometersPerParsec;
 }

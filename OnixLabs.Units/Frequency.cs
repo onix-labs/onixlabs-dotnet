@@ -237,7 +237,7 @@ public readonly partial struct Frequency<T> : IAdditiveUnit<Frequency<T>>, IMult
     /// <remarks>
     /// The format specifier for this value is rpm.
     /// </remarks>
-    public T RevolutionsPerMinute => QuectoHertz.ToBaseUnits() * T.CreateChecked(60);
+    public T RevolutionsPerMinute => QuectoHertz / QuectoHertzPerRevolutionPerMinute;
 
     /// <summary>
     /// Gets the frequency in Beats Per Minute (bpm).
@@ -245,7 +245,7 @@ public readonly partial struct Frequency<T> : IAdditiveUnit<Frequency<T>>, IMult
     /// <remarks>
     /// The format specifier for this value is bpm.
     /// </remarks>
-    public T BeatsPerMinute => QuectoHertz.ToBaseUnits() * T.CreateChecked(60);
+    public T BeatsPerMinute => QuectoHertz / QuectoHertzPerBeatPerMinute;
 
     /// <summary>
     /// Gets the frequency in Radians Per Second (rad/s).
@@ -253,5 +253,5 @@ public readonly partial struct Frequency<T> : IAdditiveUnit<Frequency<T>>, IMult
     /// <remarks>
     /// The format specifier for this value is radps.
     /// </remarks>
-    public T RadiansPerSecond => QuectoHertz.ToBaseUnits() * T.CreateChecked(2) * T.Pi;
+    public T RadiansPerSecond => QuectoHertz / QuectoHertzPerRadianPerSecond;
 }

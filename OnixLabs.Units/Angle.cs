@@ -237,7 +237,7 @@ public readonly partial struct Angle<T> : IAdditiveUnit<Angle<T>>, IMultiplicati
     /// <remarks>
     /// The format specifier for this value is deg.
     /// </remarks>
-    public T Degrees => QuectoRadians / T.CreateChecked(1.7453292519943295e28);
+    public T Degrees => QuectoRadians / QuectoRadiansPerDegree;
 
     /// <summary>
     /// Gets the angle in Arcminutes (′).
@@ -245,7 +245,7 @@ public readonly partial struct Angle<T> : IAdditiveUnit<Angle<T>>, IMultiplicati
     /// <remarks>
     /// The format specifier for this value is arcmin.
     /// </remarks>
-    public T Arcminutes => QuectoRadians / T.CreateChecked(2.908882086657216e26);
+    public T Arcminutes => QuectoRadians / QuectoRadiansPerArcminute;
 
     /// <summary>
     /// Gets the angle in Arcseconds (″).
@@ -253,7 +253,7 @@ public readonly partial struct Angle<T> : IAdditiveUnit<Angle<T>>, IMultiplicati
     /// <remarks>
     /// The format specifier for this value is arcsec.
     /// </remarks>
-    public T Arcseconds => QuectoRadians / T.CreateChecked(4.84813681109536e24);
+    public T Arcseconds => QuectoRadians / QuectoRadiansPerArcsecond;
 
     /// <summary>
     /// Gets the angle in Gradians (gon).
@@ -261,7 +261,7 @@ public readonly partial struct Angle<T> : IAdditiveUnit<Angle<T>>, IMultiplicati
     /// <remarks>
     /// The format specifier for this value is gon.
     /// </remarks>
-    public T Gradians => QuectoRadians / T.CreateChecked(1.5707963267948966e28);
+    public T Gradians => QuectoRadians / QuectoRadiansPerGradian;
 
     /// <summary>
     /// Gets the angle in Turns (tr).
@@ -269,5 +269,5 @@ public readonly partial struct Angle<T> : IAdditiveUnit<Angle<T>>, IMultiplicati
     /// <remarks>
     /// The format specifier for this value is tr.
     /// </remarks>
-    public T Turns => QuectoRadians / T.CreateChecked(6.283185307179586e30);
+    public T Turns => QuectoRadians / QuectoRadiansPerTurn;
 }

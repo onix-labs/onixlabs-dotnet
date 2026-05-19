@@ -196,33 +196,33 @@ public readonly partial struct Time<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Time{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Time{T}"/> instance from the specified value.</returns>
-    public static Time<T> FromMinutes(T value) => new(value * T.CreateChecked(6e31));
+    public static Time<T> FromMinutes(T value) => new(value * QuectosecondsPerMinute);
 
     /// <summary>
     /// Creates a new <see cref="Time{T}"/> instance from the specified Hours value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Time{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Time{T}"/> instance from the specified value.</returns>
-    public static Time<T> FromHours(T value) => new(value * T.CreateChecked(3.6e33));
+    public static Time<T> FromHours(T value) => new(value * QuectosecondsPerHour);
 
     /// <summary>
     /// Creates a new <see cref="Time{T}"/> instance from the specified Days value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Time{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Time{T}"/> instance from the specified value.</returns>
-    public static Time<T> FromDays(T value) => new(value * T.CreateChecked(8.64e34));
+    public static Time<T> FromDays(T value) => new(value * QuectosecondsPerDay);
 
     /// <summary>
     /// Creates a new <see cref="Time{T}"/> instance from the specified Weeks value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Time{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Time{T}"/> instance from the specified value.</returns>
-    public static Time<T> FromWeeks(T value) => new(value * T.CreateChecked(6.048e35));
+    public static Time<T> FromWeeks(T value) => new(value * QuectosecondsPerWeek);
 
     /// <summary>
     /// Creates a new <see cref="Time{T}"/> instance from the specified Julian Years value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Time{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Time{T}"/> instance from the specified value.</returns>
-    public static Time<T> FromJulianYears(T value) => new(value * T.CreateChecked(3.15576e37));
+    public static Time<T> FromJulianYears(T value) => new(value * QuectosecondsPerJulianYear);
 }

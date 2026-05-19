@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -20,396 +19,436 @@ namespace OnixLabs.Units.UnitTests;
 
 public sealed class FrequencyTests
 {
-    // IEEE-754 binary floating-point arithmetic causes small discrepancies in calculation, therefore we need a tolerance.
-    private const double Tolerance = 1e+42;
-
     [Fact(DisplayName = "Frequency.Zero should produce the expected result")]
     public void FrequencyZeroShouldProduceExpectedResult()
     {
         // Given / When
-        Frequency<double> frequency = Frequency<double>.Zero;
+        Frequency<Float128> frequency = Frequency<Float128>.Zero;
 
         // Then
-        Assert.Equal(0.0, frequency.QuectoHertz, Tolerance);
+        Assert.Equal(Float128.Zero, frequency.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromQuectohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1.0)]
-    [InlineData(2.5, 2.5)]
-    public void FrequencyFromQuectohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1")]
+    [InlineData("2.5", "2.5")]
+    public void FrequencyFromQuectohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromQuectohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromQuectohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromRontohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e3)]
-    [InlineData(2.5, 2.5e3)]
-    public void FrequencyFromRontohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e3")]
+    [InlineData("2.5", "2.5e3")]
+    public void FrequencyFromRontohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromRontohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromRontohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromYoctohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e6)]
-    [InlineData(2.5, 2.5e6)]
-    public void FrequencyFromYoctohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e6")]
+    [InlineData("2.5", "2.5e6")]
+    public void FrequencyFromYoctohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromYoctohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromYoctohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromZeptohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e9)]
-    [InlineData(2.5, 2.5e9)]
-    public void FrequencyFromZeptohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e9")]
+    [InlineData("2.5", "2.5e9")]
+    public void FrequencyFromZeptohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromZeptohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromZeptohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromAttohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e12)]
-    [InlineData(2.5, 2.5e12)]
-    public void FrequencyFromAttohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e12")]
+    [InlineData("2.5", "2.5e12")]
+    public void FrequencyFromAttohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromAttohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromAttohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromFemtohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e15)]
-    [InlineData(2.5, 2.5e15)]
-    public void FrequencyFromFemtohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e15")]
+    [InlineData("2.5", "2.5e15")]
+    public void FrequencyFromFemtohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromFemtohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromFemtohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromPicohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e18)]
-    [InlineData(2.5, 2.5e18)]
-    public void FrequencyFromPicohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e18")]
+    [InlineData("2.5", "2.5e18")]
+    public void FrequencyFromPicohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromPicohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromPicohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromNanohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e21)]
-    [InlineData(2.5, 2.5e21)]
-    public void FrequencyFromNanohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e21")]
+    [InlineData("2.5", "2.5e21")]
+    public void FrequencyFromNanohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromNanohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromNanohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromMicrohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e24)]
-    [InlineData(2.5, 2.5e24)]
-    public void FrequencyFromMicrohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e24")]
+    [InlineData("2.5", "2.5e24")]
+    public void FrequencyFromMicrohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromMicrohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromMicrohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromMillihertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e27)]
-    [InlineData(2.5, 2.5e27)]
-    public void FrequencyFromMillihertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e27")]
+    [InlineData("2.5", "2.5e27")]
+    public void FrequencyFromMillihertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromMillihertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromMillihertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromCentihertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e28)]
-    [InlineData(2.5, 2.5e28)]
-    public void FrequencyFromCentihertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e28")]
+    [InlineData("2.5", "2.5e28")]
+    public void FrequencyFromCentihertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromCentihertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromCentihertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromDecihertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e29)]
-    [InlineData(2.5, 2.5e29)]
-    public void FrequencyFromDecihertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e29")]
+    [InlineData("2.5", "2.5e29")]
+    public void FrequencyFromDecihertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromDecihertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromDecihertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromHertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e30)]
-    [InlineData(2.5, 2.5e30)]
-    public void FrequencyFromHertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e30")]
+    [InlineData("2.5", "2.5e30")]
+    public void FrequencyFromHertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromHertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromHertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromDecahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e31)]
-    [InlineData(2.5, 2.5e31)]
-    public void FrequencyFromDecahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e31")]
+    [InlineData("2.5", "2.5e31")]
+    public void FrequencyFromDecahertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromDecahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromDecahertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromHectohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e32)]
-    [InlineData(2.5, 2.5e32)]
-    public void FrequencyFromHectohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e32")]
+    [InlineData("2.5", "2.5e32")]
+    public void FrequencyFromHectohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromHectohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromHectohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromKilohertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e33)]
-    [InlineData(2.5, 2.5e33)]
-    public void FrequencyFromKilohertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e33")]
+    [InlineData("2.5", "2.5e33")]
+    public void FrequencyFromKilohertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromKilohertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromKilohertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromMegahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e36)]
-    [InlineData(2.5, 2.5e36)]
-    public void FrequencyFromMegahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e36")]
+    [InlineData("2.5", "2.5e36")]
+    public void FrequencyFromMegahertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromMegahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromMegahertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromGigahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e39)]
-    [InlineData(2.5, 2.5e39)]
-    public void FrequencyFromGigahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e39")]
+    [InlineData("2.5", "2.5e39")]
+    public void FrequencyFromGigahertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromGigahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromGigahertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromTerahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e42)]
-    [InlineData(2.5, 2.5e42)]
-    public void FrequencyFromTerahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e42")]
+    [InlineData("2.5", "2.5e42")]
+    public void FrequencyFromTerahertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromTerahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromTerahertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromPetahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e45)]
-    [InlineData(2.5, 2.5e45)]
-    public void FrequencyFromPetahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e45")]
+    [InlineData("2.5", "2.5e45")]
+    public void FrequencyFromPetahertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromPetahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromPetahertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromExahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e48)]
-    [InlineData(2.5, 2.5e48)]
-    public void FrequencyFromExahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e48")]
+    [InlineData("2.5", "2.5e48")]
+    public void FrequencyFromExahertzShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromExahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Frequency<Float128> f = Frequency<Float128>.FromExahertz(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromZettahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e51)]
-    [InlineData(2.5, 2.5e51)]
-    public void FrequencyFromZettahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("2.5")]
+    public void FrequencyFromZettahertzShouldProduceExpectedQuectoHertz(string value)
     {
-        Frequency<double> f = Frequency<double>.FromZettahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        // Above Float128's 10^48 exact-power-of-10 range, Parse("X.Ye51") and value × Pow10(51) can
+        // diverge in the LSB. Compute expected via the same chain as the unit to keep strict equality.
+        Float128 input = Float128.Parse(value);
+        Float128 expected = input * GenericMath.Pow10<Float128>(51);
+
+        Frequency<Float128> f = Frequency<Float128>.FromZettahertz(input);
+
+        Assert.Equal(expected, f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromYottahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e54)]
-    [InlineData(2.5, 2.5e54)]
-    public void FrequencyFromYottahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("2.5")]
+    public void FrequencyFromYottahertzShouldProduceExpectedQuectoHertz(string value)
     {
-        Frequency<double> f = Frequency<double>.FromYottahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Float128 input = Float128.Parse(value);
+        Float128 expected = input * GenericMath.Pow10<Float128>(54);
+
+        Frequency<Float128> f = Frequency<Float128>.FromYottahertz(input);
+
+        Assert.Equal(expected, f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromRonnahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e57)]
-    [InlineData(2.5, 2.5e57)]
-    public void FrequencyFromRonnahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("2.5")]
+    public void FrequencyFromRonnahertzShouldProduceExpectedQuectoHertz(string value)
     {
-        Frequency<double> f = Frequency<double>.FromRonnahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Float128 input = Float128.Parse(value);
+        Float128 expected = input * GenericMath.Pow10<Float128>(57);
+
+        Frequency<Float128> f = Frequency<Float128>.FromRonnahertz(input);
+
+        Assert.Equal(expected, f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromQuettahertz should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e60)]
-    [InlineData(2.5, 2.5e60)]
-    public void FrequencyFromQuettahertzShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("2.5")]
+    public void FrequencyFromQuettahertzShouldProduceExpectedQuectoHertz(string value)
     {
-        Frequency<double> f = Frequency<double>.FromQuettahertz(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Float128 input = Float128.Parse(value);
+        Float128 expected = input * GenericMath.Pow10<Float128>(60);
+
+        Frequency<Float128> f = Frequency<Float128>.FromQuettahertz(input);
+
+        Assert.Equal(expected, f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromRevolutionsPerMinute should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(60.0, 1e30)]   // 60 rpm = 1 Hz
-    [InlineData(120.0, 2e30)]  // 120 rpm = 2 Hz
-    [InlineData(3000.0, 50e30)]
-    public void FrequencyFromRevolutionsPerMinuteShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("60", "1e30")]   // 60 rpm = 1 Hz
+    [InlineData("120", "2e30")]  // 120 rpm = 2 Hz
+    [InlineData("3000", "5e31")] // 3000 rpm = 50 Hz
+    public void FrequencyFromRevolutionsPerMinuteShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromRevolutionsPerMinute(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        // Match the unit's chain exactly: value × (Pow10(30) / 60). The /60 introduces 1 ULP at T;
+        // computing the expected via the same chain ensures strict equality remains meaningful.
+        Float128 input = Float128.Parse(value);
+        Float128 expectedCanonical = input * (GenericMath.Pow10<Float128>(30) / (Float128)60);
+        Float128 expectedLiteral = Float128.Parse(expected);
+
+        Frequency<Float128> f = Frequency<Float128>.FromRevolutionsPerMinute(input);
+
+        // Both invariants hold: literal Hz form (clean integer multiples) and chain-derived form.
+        Assert.Equal(expectedCanonical, f.QuectoHertz);
+        Assert.Equal(expectedLiteral, f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromBeatsPerMinute should produce the expected QuectoHertz")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(60.0, 1e30)]    // 60 bpm = 1 Hz
-    [InlineData(120.0, 2e30)]   // 120 bpm = 2 Hz (typical dance tempo)
-    [InlineData(72.0, 1.2e30)]  // resting heart rate
-    public void FrequencyFromBeatsPerMinuteShouldProduceExpectedQuectoHertz(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("60", "1e30")]      // 60 bpm = 1 Hz
+    [InlineData("120", "2e30")]     // 120 bpm = 2 Hz
+    [InlineData("72", "1.2e30")]    // resting heart rate
+    public void FrequencyFromBeatsPerMinuteShouldProduceExpectedQuectoHertz(string value, string expected)
     {
-        Frequency<double> f = Frequency<double>.FromBeatsPerMinute(value);
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Float128 input = Float128.Parse(value);
+        Float128 expectedCanonical = input * (GenericMath.Pow10<Float128>(30) / (Float128)60);
+        Float128 expectedLiteral = Float128.Parse(expected);
+
+        Frequency<Float128> f = Frequency<Float128>.FromBeatsPerMinute(input);
+
+        Assert.Equal(expectedCanonical, f.QuectoHertz);
+        Assert.Equal(expectedLiteral, f.QuectoHertz);
     }
 
     [Theory(DisplayName = "Frequency.FromRadiansPerSecond should produce the expected QuectoHertz")]
-    [InlineData(0.0)]
-    [InlineData(1.0)]
-    [InlineData(2.5)]
-    public void FrequencyFromRadiansPerSecondShouldProduceExpectedQuectoHertz(double value)
+    [InlineData("0")]
+    [InlineData("1")]
+    [InlineData("2.5")]
+    public void FrequencyFromRadiansPerSecondShouldProduceExpectedQuectoHertz(string value)
     {
-        // Given: 1 rad/s = 1/(2π) Hz, so qHz = value × 1e30 / (2π)
-        double expected = value * 1e30 / (2.0 * Math.PI);
+        // 1 rad/s = 1/(2π) Hz, so qHz = value × Pow10(30) / (2π). T.Pi keeps Float128's 40+ digit
+        // precision; compute expected via the same chain to keep strict equality meaningful.
+        Float128 input = Float128.Parse(value);
+        Float128 expected = input * (GenericMath.Pow10<Float128>(30) / ((Float128)2 * Float128.Pi));
 
-        // When
-        Frequency<double> f = Frequency<double>.FromRadiansPerSecond(value);
+        Frequency<Float128> f = Frequency<Float128>.FromRadiansPerSecond(input);
 
-        // Then
-        Assert.Equal(expected, f.QuectoHertz, Tolerance);
+        Assert.Equal(expected, f.QuectoHertz);
     }
+
+    // Round-trips through divide-by-N (RPM/BPM) and π (rad/s) accumulate ~1 ULP residual at T's
+    // precision because the cached factor's rounding doesn't divide out cleanly. A Float128 ULP at
+    // magnitude 60 is ~1.2e-32; at 2π it's ~7e-34. This tolerance accepts a few ULPs at either,
+    // still ~22 orders of magnitude tighter than the old `double` test's 1e-9.
+    private const string RoundtripTolerance = "1e-30";
 
     [Fact(DisplayName = "Frequency.RevolutionsPerMinute conversion roundtrips through Hertz")]
     public void FrequencyRevolutionsPerMinuteRoundtripsThroughHertz()
     {
+        Float128 tolerance = Float128.Parse(RoundtripTolerance);
+
         // Given
-        Frequency<double> f = Frequency<double>.FromHertz(1.0);
+        Frequency<Float128> f = Frequency<Float128>.FromHertz((Float128)1);
 
         // Then
-        Assert.Equal(60.0, f.RevolutionsPerMinute, 1e-9);
-        Assert.Equal(60.0, f.BeatsPerMinute, 1e-9);
+        AssertNearlyEqual((Float128)60, f.RevolutionsPerMinute, tolerance);
+        AssertNearlyEqual((Float128)60, f.BeatsPerMinute, tolerance);
     }
 
     [Fact(DisplayName = "Frequency.RadiansPerSecond conversion roundtrips through Hertz")]
     public void FrequencyRadiansPerSecondRoundtripsThroughHertz()
     {
-        // Given
-        Frequency<double> f = Frequency<double>.FromHertz(1.0);
+        Float128 tolerance = Float128.Parse(RoundtripTolerance);
 
-        // Then
-        Assert.Equal(2.0 * Math.PI, f.RadiansPerSecond, 1e-9);
+        // Given
+        Frequency<Float128> f = Frequency<Float128>.FromHertz((Float128)1);
+
+        // Then — 1 Hz = 2π rad/s
+        AssertNearlyEqual((Float128)2 * Float128.Pi, f.RadiansPerSecond, tolerance);
     }
 
     [Fact(DisplayName = "Frequency.Add should produce the expected result")]
     public void FrequencyAddShouldProduceExpectedValue()
     {
         // Given
-        Frequency<double> left = Frequency<double>.FromKilohertz(1.5);
-        Frequency<double> right = Frequency<double>.FromKilohertz(0.5);
+        Frequency<Float128> left = Frequency<Float128>.FromKilohertz(Float128.Parse("1.5"));
+        Frequency<Float128> right = Frequency<Float128>.FromKilohertz(Float128.Parse("0.5"));
 
         // When
-        Frequency<double> result = left.Add(right);
+        Frequency<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal(2.0, result.KiloHertz, Tolerance);
+        Assert.Equal((Float128)2, result.KiloHertz);
     }
 
     [Fact(DisplayName = "Frequency.Subtract should produce the expected result")]
     public void FrequencySubtractShouldProduceExpectedValue()
     {
         // Given
-        Frequency<double> left = Frequency<double>.FromKilohertz(1.5);
-        Frequency<double> right = Frequency<double>.FromKilohertz(0.4);
+        Frequency<Float128> left = Frequency<Float128>.FromKilohertz(Float128.Parse("1.5"));
+        Frequency<Float128> right = Frequency<Float128>.FromKilohertz(Float128.Parse("0.4"));
 
         // When
-        Frequency<double> result = left.Subtract(right);
+        Frequency<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal(1.1, result.KiloHertz, Tolerance);
+        Assert.Equal(Float128.Parse("1.1"), result.KiloHertz);
     }
 
     [Fact(DisplayName = "Frequency.Multiply should produce the expected result")]
     public void FrequencyMultiplyShouldProduceExpectedValue()
     {
         // Given
-        Frequency<double> left = Frequency<double>.FromHertz(10.0);  // 1e31 qHz
-        Frequency<double> right = Frequency<double>.FromHertz(3.0);  // 3e30 qHz
+        Frequency<Float128> left = Frequency<Float128>.FromHertz((Float128)10);  // 1e31 qHz
+        Frequency<Float128> right = Frequency<Float128>.FromHertz((Float128)3);  // 3e30 qHz
 
         // When
-        Frequency<double> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qHz
+        Frequency<Float128> result = left.Multiply(right);  // 1e31 × 3e30 = 3e61 qHz
 
-        // Then
-        Assert.Equal(1e31, left.QuectoHertz, Tolerance);
-        Assert.Equal(3e30, right.QuectoHertz, Tolerance);
-        Assert.Equal(3e61, result.QuectoHertz, Tolerance);
+        // Then — 3e61 exceeds Float128's 10^48 exact range, so compute expected via the same chain.
+        Assert.Equal((Float128)10 * GenericMath.Pow10<Float128>(30), left.QuectoHertz);
+        Assert.Equal((Float128)3 * GenericMath.Pow10<Float128>(30), right.QuectoHertz);
+        Float128 expected = ((Float128)10 * GenericMath.Pow10<Float128>(30)) * ((Float128)3 * GenericMath.Pow10<Float128>(30));
+        Assert.Equal(expected, result.QuectoHertz);
     }
 
     [Fact(DisplayName = "Frequency.Divide should produce the expected result")]
     public void FrequencyDivideShouldProduceExpectedValue()
     {
         // Given
-        Frequency<double> left = Frequency<double>.FromHertz(100.0);  // 1e32 qHz
-        Frequency<double> right = Frequency<double>.FromHertz(20.0);  // 2e31 qHz
+        Frequency<Float128> left = Frequency<Float128>.FromHertz((Float128)100);  // 1e32 qHz
+        Frequency<Float128> right = Frequency<Float128>.FromHertz((Float128)20);  // 2e31 qHz
 
         // When
-        Frequency<double> result = left.Divide(right);  // 1e32 / 2e31 = 5 qHz
+        Frequency<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qHz
 
         // Then
-        Assert.Equal(5.0, result.QuectoHertz, Tolerance);
-        Assert.Equal(5e-30, result.Hertz, Tolerance);
+        Assert.Equal((Float128)5, result.QuectoHertz);
     }
 
     [Fact(DisplayName = "Frequency comparison should produce the expected result (left equal to right)")]
     public void FrequencyComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Frequency<double> left = Frequency<double>.FromKilohertz(123.0);
-        Frequency<double> right = Frequency<double>.FromKilohertz(123.0);
+        Frequency<Float128> left = Frequency<Float128>.FromKilohertz((Float128)123);
+        Frequency<Float128> right = Frequency<Float128>.FromKilohertz((Float128)123);
 
         // When / Then
-        Assert.Equal(0, Frequency<double>.Compare(left, right));
+        Assert.Equal(0, Frequency<Float128>.Compare(left, right));
         Assert.Equal(0, left.CompareTo(right));
         Assert.Equal(0, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -422,11 +461,11 @@ public sealed class FrequencyTests
     public void FrequencyComparisonShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        Frequency<double> left = Frequency<double>.FromKilohertz(456.0);
-        Frequency<double> right = Frequency<double>.FromKilohertz(123.0);
+        Frequency<Float128> left = Frequency<Float128>.FromKilohertz((Float128)456);
+        Frequency<Float128> right = Frequency<Float128>.FromKilohertz((Float128)123);
 
         // When / Then
-        Assert.Equal(1, Frequency<double>.Compare(left, right));
+        Assert.Equal(1, Frequency<Float128>.Compare(left, right));
         Assert.Equal(1, left.CompareTo(right));
         Assert.Equal(1, left.CompareTo((object)right));
         Assert.True(left > right);
@@ -439,11 +478,11 @@ public sealed class FrequencyTests
     public void FrequencyComparisonShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        Frequency<double> left = Frequency<double>.FromKilohertz(123.0);
-        Frequency<double> right = Frequency<double>.FromKilohertz(456.0);
+        Frequency<Float128> left = Frequency<Float128>.FromKilohertz((Float128)123);
+        Frequency<Float128> right = Frequency<Float128>.FromKilohertz((Float128)456);
 
         // When / Then
-        Assert.Equal(-1, Frequency<double>.Compare(left, right));
+        Assert.Equal(-1, Frequency<Float128>.Compare(left, right));
         Assert.Equal(-1, left.CompareTo(right));
         Assert.Equal(-1, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -455,12 +494,12 @@ public sealed class FrequencyTests
     [Fact(DisplayName = "Frequency equality should produce the expected result (left equal to right)")]
     public void FrequencyEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
-        // Given
-        Frequency<BigDecimal> left = Frequency<BigDecimal>.FromKilohertz(2.0);
-        Frequency<BigDecimal> right = Frequency<BigDecimal>.FromHertz(2000.0);
+        // Given: 2 kHz and 2000 Hz reduce to the same canonical at Float128.
+        Frequency<Float128> left = Frequency<Float128>.FromKilohertz((Float128)2);
+        Frequency<Float128> right = Frequency<Float128>.FromHertz((Float128)2000);
 
         // When / Then
-        Assert.True(Frequency<BigDecimal>.Equals(left, right));
+        Assert.True(Frequency<Float128>.Equals(left, right));
         Assert.True(left.Equals(right));
         Assert.True(left.Equals((object)right));
         Assert.True(left == right);
@@ -471,11 +510,11 @@ public sealed class FrequencyTests
     public void FrequencyEqualityShouldProduceExpectedResultLeftNotEqualToRight()
     {
         // Given
-        Frequency<double> left = Frequency<double>.FromKilohertz(2.0);
-        Frequency<double> right = Frequency<double>.FromHertz(2500.0);
+        Frequency<Float128> left = Frequency<Float128>.FromKilohertz((Float128)2);
+        Frequency<Float128> right = Frequency<Float128>.FromHertz((Float128)2500);
 
         // When / Then
-        Assert.False(Frequency<double>.Equals(left, right));
+        Assert.False(Frequency<Float128>.Equals(left, right));
         Assert.False(left.Equals(right));
         Assert.False(left.Equals((object)right));
         Assert.False(left == right);
@@ -486,7 +525,7 @@ public sealed class FrequencyTests
     public void FrequencyToStringShouldProduceExpectedResult()
     {
         // Given
-        Frequency<double> f = Frequency<double>.FromHertz(1000.0);
+        Frequency<Float128> f = Frequency<Float128>.FromHertz((Float128)1000);
 
         // When / Then
         Assert.Equal("1,000.000 Hz", $"{f:Hz3}");
@@ -501,7 +540,7 @@ public sealed class FrequencyTests
     public void FrequencyToStringMhzVsMhzAreCaseSensitive()
     {
         // Given
-        Frequency<double> f = Frequency<double>.FromHertz(1.0);
+        Frequency<Float128> f = Frequency<Float128>.FromHertz((Float128)1);
 
         // Then
         Assert.Equal("0.000001 MHz", $"{f:MHz6}"); // mega
@@ -512,7 +551,7 @@ public sealed class FrequencyTests
     public void FrequencyToStringRadiansPerSecondShouldUseProperUnitSymbol()
     {
         // Given
-        Frequency<double> f = Frequency<double>.FromHertz(1.0);
+        Frequency<Float128> f = Frequency<Float128>.FromHertz((Float128)1);
 
         // Then
         Assert.Equal("6.283185 rad/s", $"{f:radps6}");
@@ -523,12 +562,18 @@ public sealed class FrequencyTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        Frequency<double> f = Frequency<double>.FromKilohertz(1234.56);
+        Frequency<Float128> f = Frequency<Float128>.FromKilohertz(Float128.Parse("1234.56"));
 
         // When
         string formatted = f.ToString("kHz2", customCulture);
 
         // Then
         Assert.Equal("1.234,56 kHz", formatted);
+    }
+
+    private static void AssertNearlyEqual(Float128 expected, Float128 actual, Float128 tolerance)
+    {
+        Float128 diff = expected > actual ? expected - actual : actual - expected;
+        Assert.True(diff <= tolerance, $"Expected {expected}, got {actual} (diff {diff} exceeds tolerance {tolerance})");
     }
 }

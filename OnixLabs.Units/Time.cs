@@ -243,7 +243,7 @@ public readonly partial struct Time<T> :
     /// <remarks>
     /// The format specifier for this value is min.
     /// </remarks>
-    public T Minutes => QuectoSeconds / T.CreateChecked(6e31);
+    public T Minutes => QuectoSeconds / QuectosecondsPerMinute;
 
     /// <summary>
     /// Gets the time in Hours (h).
@@ -251,7 +251,7 @@ public readonly partial struct Time<T> :
     /// <remarks>
     /// The format specifier for this value is h.
     /// </remarks>
-    public T Hours => QuectoSeconds / T.CreateChecked(3.6e33);
+    public T Hours => QuectoSeconds / QuectosecondsPerHour;
 
     /// <summary>
     /// Gets the time in Days (d).
@@ -259,7 +259,7 @@ public readonly partial struct Time<T> :
     /// <remarks>
     /// The format specifier for this value is d.
     /// </remarks>
-    public T Days => QuectoSeconds / T.CreateChecked(8.64e34);
+    public T Days => QuectoSeconds / QuectosecondsPerDay;
 
     /// <summary>
     /// Gets the time in Weeks (wk).
@@ -267,7 +267,7 @@ public readonly partial struct Time<T> :
     /// <remarks>
     /// The format specifier for this value is wk.
     /// </remarks>
-    public T Weeks => QuectoSeconds / T.CreateChecked(6.048e35);
+    public T Weeks => QuectoSeconds / QuectosecondsPerWeek;
 
     /// <summary>
     /// Gets the time in Julian Years (yr), defined as 365.25 days.
@@ -275,5 +275,5 @@ public readonly partial struct Time<T> :
     /// <remarks>
     /// The format specifier for this value is yr.
     /// </remarks>
-    public T JulianYears => QuectoSeconds / T.CreateChecked(3.15576e37);
+    public T JulianYears => QuectoSeconds / QuectosecondsPerJulianYear;
 }

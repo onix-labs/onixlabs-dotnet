@@ -24,202 +24,205 @@ public sealed class SpeedTests
     public void SpeedShouldPreserveUnderlyingComponents()
     {
         // Given
-        Distance<double> distance = Distance<double>.FromMiles(25);
-        Time<double> time = Time<double>.FromHours(1);
+        Distance<Float128> distance = Distance<Float128>.FromMiles((Float128)25);
+        Time<Float128> time = Time<Float128>.FromHours((Float128)1);
 
         // When
-        Speed<double> speed = new(distance, time);
+        Speed<Float128> speed = new(distance, time);
 
         // Then
         Assert.Equal(distance, speed.Left);
         Assert.Equal(time, speed.Right);
     }
 
-    [Fact(DisplayName = "Speed.Zero should produce the expected result")]
-    public void SpeedZeroShouldProduceExpectedResult()
+    [Fact(DisplayName = "Speed.Zero should produce zero magnitude (avoids 0/0 NaN)")]
+    public void SpeedZeroShouldProduceZeroMagnitude()
     {
-        // Given / When
-        Speed<double> zero = Speed<double>.Zero;
+        // Given / When — Zero stores Distance.Zero over Time.FromSeconds(1), so the magnitude is
+        // a genuine 0 and not NaN from a 0/0 ratio.
+        Speed<Float128> zero = Speed<Float128>.Zero;
 
-        // Then - magnitude must be 0 (avoids 0/0 NaN by using Time.FromSeconds(1) for the denominator).
-        Assert.Equal("0.000 m/s", zero.ToString("m/s:3", CultureInfo.InvariantCulture));
+        // Then
+        Assert.Equal(Float128.Zero, zero.Magnitude);
         Assert.True(zero.Equals(zero));
     }
 
-    [Fact(DisplayName = "Speed.Add should produce the expected result")]
+    [Fact(DisplayName = "Speed.Add should produce the expected magnitude")]
     public void SpeedAddShouldProduceExpectedValue()
     {
-        // Given - 25 m/s + 5 m/s = 30 m/s
-        Speed<double> left = new(Distance<double>.FromMeters(25), Time<double>.FromSeconds(1));
-        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+        // Given — 25 m/s + 5 m/s = 30 m/s
+        Speed<Float128> left = new(Distance<Float128>.FromMeters((Float128)25), Time<Float128>.FromSeconds((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = Speed<double>.Add(left, right);
+        Speed<Float128> result = Speed<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal("30.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal((Float128)30, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed.Add should reduce magnitudes across decompositions")]
     public void SpeedAddShouldReduceMagnitudes()
     {
-        // Given - integer-ratio decompositions chosen to keep float math exact.
-        // (50 m / 2 s) = 25 m/s, plus (10 m / 1 s) = 10 m/s, total = 35 m/s.
-        Speed<double> twentyFiveMps = new(Distance<double>.FromMeters(50), Time<double>.FromSeconds(2));
-        Speed<double> tenMps = new(Distance<double>.FromMeters(10), Time<double>.FromSeconds(1));
+        // Given — (50 m / 2 s) = 25 m/s, plus (10 m / 1 s) = 10 m/s, total = 35 m/s.
+        // Both decompositions reduce exactly at Float128 (integer ratios within mantissa range).
+        Speed<Float128> twentyFiveMps = new(Distance<Float128>.FromMeters((Float128)50), Time<Float128>.FromSeconds((Float128)2));
+        Speed<Float128> tenMps = new(Distance<Float128>.FromMeters((Float128)10), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = Speed<double>.Add(twentyFiveMps, tenMps);
+        Speed<Float128> result = Speed<Float128>.Add(twentyFiveMps, tenMps);
 
-        // Then - 25 + 10 = 35 m/s
-        Assert.Equal("35.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        // Then
+        Assert.Equal((Float128)35, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed.Add should reduce across mixed distance/time units")]
     public void SpeedAddShouldReduceAcrossMixedUnits()
     {
-        // Given - 36 km/h = 10 m/s, plus 5 m/s = 15 m/s
-        Speed<BigDecimal> left = new(Distance<BigDecimal>.FromKilometers(36), Time<BigDecimal>.FromHours(1));
-        Speed<BigDecimal> right = new(Distance<BigDecimal>.FromMeters(5), Time<BigDecimal>.FromSeconds(1));
+        // Given — 36 km/h = 10 m/s exactly at Float128 (36 × 10^33 / (3600 × 10^30) = 10 with no
+        // residual rounding), plus 5 m/s = 15 m/s total. Replaces the original BigDecimal test
+        // with Float128 strict equality.
+        Speed<Float128> left = new(Distance<Float128>.FromKilometers((Float128)36), Time<Float128>.FromHours((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<BigDecimal> result = Speed<BigDecimal>.Add(left, right);
+        Speed<Float128> result = Speed<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal("15.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal((Float128)15, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed.Add with Zero should return an equal-magnitude speed")]
     public void SpeedAddWithZeroShouldReturnSameMagnitude()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMeters(25), Time<double>.FromSeconds(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMeters((Float128)25), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = Speed<double>.Add(speed, Speed<double>.Zero);
+        Speed<Float128> result = Speed<Float128>.Add(speed, Speed<Float128>.Zero);
 
         // Then
         Assert.Equal(speed, result);
     }
 
-    [Fact(DisplayName = "Speed.Subtract should produce the expected result")]
+    [Fact(DisplayName = "Speed.Subtract should produce the expected magnitude")]
     public void SpeedSubtractShouldProduceExpectedValue()
     {
-        // Given - 30 m/s - 5 m/s = 25 m/s
-        Speed<double> left = new(Distance<double>.FromMeters(30), Time<double>.FromSeconds(1));
-        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+        // Given — 30 m/s - 5 m/s = 25 m/s
+        Speed<Float128> left = new(Distance<Float128>.FromMeters((Float128)30), Time<Float128>.FromSeconds((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = Speed<double>.Subtract(left, right);
+        Speed<Float128> result = Speed<Float128>.Subtract(left, right);
 
         // Then
-        Assert.Equal("25.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal((Float128)25, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed.Subtract should reduce magnitudes across decompositions")]
     public void SpeedSubtractShouldReduceMagnitudes()
     {
-        // Given - (60 m / 2 s) = 30 m/s, minus (10 m / 1 s) = 10 m/s, result = 20 m/s.
-        Speed<double> thirtyMps = new(Distance<double>.FromMeters(60), Time<double>.FromSeconds(2));
-        Speed<double> tenMps = new(Distance<double>.FromMeters(10), Time<double>.FromSeconds(1));
+        // Given — (60 m / 2 s) = 30 m/s, minus (10 m / 1 s) = 10 m/s, result = 20 m/s.
+        Speed<Float128> thirtyMps = new(Distance<Float128>.FromMeters((Float128)60), Time<Float128>.FromSeconds((Float128)2));
+        Speed<Float128> tenMps = new(Distance<Float128>.FromMeters((Float128)10), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = Speed<double>.Subtract(thirtyMps, tenMps);
+        Speed<Float128> result = Speed<Float128>.Subtract(thirtyMps, tenMps);
 
         // Then
-        Assert.Equal("20.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal((Float128)20, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed.Subtract should produce a negative result when left is less than right")]
     public void SpeedSubtractShouldProduceNegativeWhenLeftLessThanRight()
     {
-        // Given - 5 m/s - 20 m/s = -15 m/s
-        Speed<double> left = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
-        Speed<double> right = new(Distance<double>.FromMeters(20), Time<double>.FromSeconds(1));
+        // Given — 5 m/s - 20 m/s = -15 m/s
+        Speed<Float128> left = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)20), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = Speed<double>.Subtract(left, right);
+        Speed<Float128> result = Speed<Float128>.Subtract(left, right);
 
         // Then
-        Assert.Equal("-15.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal(-(Float128)15, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed + operator should produce the expected result")]
     public void SpeedAddOperatorShouldProduceExpectedValue()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMeters(25), Time<double>.FromSeconds(1));
-        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMeters((Float128)25), Time<Float128>.FromSeconds((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = left + right;
+        Speed<Float128> result = left + right;
 
         // Then
-        Assert.Equal("30.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal((Float128)30, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed - operator should produce the expected result")]
     public void SpeedSubtractOperatorShouldProduceExpectedValue()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMeters(30), Time<double>.FromSeconds(1));
-        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMeters((Float128)30), Time<Float128>.FromSeconds((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = left - right;
+        Speed<Float128> result = left - right;
 
         // Then
-        Assert.Equal("25.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal((Float128)25, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed instance Add should produce the expected result")]
     public void SpeedInstanceAddShouldProduceExpectedValue()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMeters(25), Time<double>.FromSeconds(1));
-        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMeters((Float128)25), Time<Float128>.FromSeconds((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = left.Add(right);
+        Speed<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal("30.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal((Float128)30, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed instance Subtract should produce the expected result")]
     public void SpeedInstanceSubtractShouldProduceExpectedValue()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMeters(30), Time<double>.FromSeconds(1));
-        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMeters((Float128)30), Time<Float128>.FromSeconds((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
 
         // When
-        Speed<double> result = left.Subtract(right);
+        Speed<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal("25.000 m/s", result.ToString("m/s:3", CultureInfo.InvariantCulture));
+        Assert.Equal((Float128)25, result.Magnitude);
     }
 
     [Fact(DisplayName = "Speed Add and Subtract should agree across static / operator / instance forms")]
     public void SpeedAddAndSubtractShouldAgreeAcrossForms()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMeters(30), Time<double>.FromSeconds(1));
-        Speed<double> right = new(Distance<double>.FromMeters(5), Time<double>.FromSeconds(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMeters((Float128)30), Time<Float128>.FromSeconds((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)5), Time<Float128>.FromSeconds((Float128)1));
 
         // Then
-        Assert.Equal(Speed<double>.Add(left, right), left + right);
-        Assert.Equal(Speed<double>.Add(left, right), left.Add(right));
-        Assert.Equal(Speed<double>.Subtract(left, right), left - right);
-        Assert.Equal(Speed<double>.Subtract(left, right), left.Subtract(right));
+        Assert.Equal(Speed<Float128>.Add(left, right), left + right);
+        Assert.Equal(Speed<Float128>.Add(left, right), left.Add(right));
+        Assert.Equal(Speed<Float128>.Subtract(left, right), left - right);
+        Assert.Equal(Speed<Float128>.Subtract(left, right), left.Subtract(right));
     }
 
     [Fact(DisplayName = "Speed equality should be by magnitude (identical components)")]
     public void SpeedEqualityShouldBeByMagnitudeIdenticalComponents()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
-        Speed<double> right = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.True(left.Equals(right));
@@ -230,9 +233,9 @@ public sealed class SpeedTests
     [Fact(DisplayName = "Speed equality should be by magnitude (proportional components)")]
     public void SpeedEqualityShouldBeByMagnitudeProportionalComponents()
     {
-        // Given - 25 mph in two different decompositions
-        Speed<double> left = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
-        Speed<double> right = new(Distance<double>.FromMiles(50), Time<double>.FromHours(2));
+        // Given — 25 mph in two different decompositions
+        Speed<Float128> left = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMiles((Float128)50), Time<Float128>.FromHours((Float128)2));
 
         // Then
         Assert.True(left.Equals(right));
@@ -243,10 +246,11 @@ public sealed class SpeedTests
     [Fact(DisplayName = "Speed equality should be by magnitude (cross-unit conversion)")]
     public void SpeedEqualityShouldBeByMagnitudeCrossUnit()
     {
-        // Given - 1 km/h, expressed via 1000 m over 1 h. BigDecimal preserves exact precision
-        // across unit conversions where binary floating-point would lose last-bit equality.
-        Speed<BigDecimal> left = new(Distance<BigDecimal>.FromKilometers(1), Time<BigDecimal>.FromHours(1));
-        Speed<BigDecimal> right = new(Distance<BigDecimal>.FromMeters(1000), Time<BigDecimal>.FromHours(1));
+        // Given — 1 km/h vs 1000 m/h reduce to the same Float128 canonical because the conversion
+        // factors are integer powers of ten exactly representable in Float128's 113-bit mantissa.
+        // Replaces the original BigDecimal-based test with Float128 strict equality.
+        Speed<Float128> left = new(Distance<Float128>.FromKilometers((Float128)1), Time<Float128>.FromHours((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMeters((Float128)1000), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.True(left.Equals(right));
@@ -257,8 +261,8 @@ public sealed class SpeedTests
     public void SpeedInequalityShouldHoldForDifferentMagnitudes()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
-        Speed<double> right = new(Distance<double>.FromMiles(25), Time<double>.FromHours(2));
+        Speed<Float128> left = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)2));
 
         // Then
         Assert.False(left.Equals(right));
@@ -269,7 +273,7 @@ public sealed class SpeedTests
     public void SpeedEqualsNullShouldReturnFalse()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.False(speed.Equals(null));
@@ -280,7 +284,7 @@ public sealed class SpeedTests
     public void SpeedEqualsWithDifferentTypeShouldReturnFalse()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.False(speed.Equals("not a speed"));
@@ -290,8 +294,8 @@ public sealed class SpeedTests
     public void SpeedCompareToShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMiles(50), Time<double>.FromHours(2));
-        Speed<double> right = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMiles((Float128)50), Time<Float128>.FromHours((Float128)2));
+        Speed<Float128> right = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Equal(0, left.CompareTo(right));
@@ -302,8 +306,8 @@ public sealed class SpeedTests
     public void SpeedCompareToShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMiles(50), Time<double>.FromHours(1));
-        Speed<double> right = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMiles((Float128)50), Time<Float128>.FromHours((Float128)1));
+        Speed<Float128> right = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Equal(1, left.CompareTo(right));
@@ -314,8 +318,8 @@ public sealed class SpeedTests
     public void SpeedCompareToShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        Speed<double> left = new(Distance<double>.FromMiles(25), Time<double>.FromHours(2));
-        Speed<double> right = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> left = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)2));
+        Speed<Float128> right = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Equal(-1, left.CompareTo(right));
@@ -326,7 +330,7 @@ public sealed class SpeedTests
     public void SpeedCompareToNullShouldReturnOne()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Equal(1, speed.CompareTo(null));
@@ -337,7 +341,7 @@ public sealed class SpeedTests
     public void SpeedCompareToWithIncompatibleTypeShouldThrow()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Throws<ArgumentException>(() => speed.CompareTo("not a speed"));
@@ -347,7 +351,7 @@ public sealed class SpeedTests
     public void SpeedToStringWithMilesPerHourScale3ShouldProduceExpectedResult()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Equal("25.000 mi/h", speed.ToString("mi/h:3", CultureInfo.InvariantCulture));
@@ -357,7 +361,7 @@ public sealed class SpeedTests
     public void SpeedToStringShouldReduceMagnitude()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(50), Time<double>.FromHours(2));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)50), Time<Float128>.FromHours((Float128)2));
 
         // Then
         Assert.Equal("25.000 mi/h", speed.ToString("mi/h:3", CultureInfo.InvariantCulture));
@@ -367,7 +371,7 @@ public sealed class SpeedTests
     public void SpeedToStringWithMilesPerHourScale0ShouldProduceExpectedResult()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Equal("25 mi/h", speed.ToString("mi/h:0", CultureInfo.InvariantCulture));
@@ -376,8 +380,8 @@ public sealed class SpeedTests
     [Fact(DisplayName = "Speed.ToString with km/s should produce the expected result")]
     public void SpeedToStringWithKmPerSecondShouldProduceExpectedResult()
     {
-        // Given - 1000 km in 1 hour = 1000 km / 3600 s ≈ 0.278 km/s
-        Speed<double> speed = new(Distance<double>.FromKilometers(1000), Time<double>.FromHours(1));
+        // Given — 1000 km in 1 hour = 1000 km / 3600 s ≈ 0.278 km/s
+        Speed<Float128> speed = new(Distance<Float128>.FromKilometers((Float128)1000), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Equal("0.278 km/s", speed.ToString("km/s:3", CultureInfo.InvariantCulture));
@@ -386,8 +390,8 @@ public sealed class SpeedTests
     [Fact(DisplayName = "Speed.ToString with m/s should produce the expected result")]
     public void SpeedToStringWithMetersPerSecondShouldProduceExpectedResult()
     {
-        // Given - 100 m in 10 s = 10 m/s
-        Speed<double> speed = new(Distance<double>.FromMeters(100), Time<double>.FromSeconds(10));
+        // Given — 100 m in 10 s = 10 m/s
+        Speed<Float128> speed = new(Distance<Float128>.FromMeters((Float128)100), Time<Float128>.FromSeconds((Float128)10));
 
         // Then
         Assert.Equal("10.000 m/s", speed.ToString("m/s:3", CultureInfo.InvariantCulture));
@@ -396,8 +400,8 @@ public sealed class SpeedTests
     [Fact(DisplayName = "Speed default ToString should use m/s")]
     public void SpeedDefaultToStringShouldUseMetersPerSecond()
     {
-        // Given - 36 km/h = 10 m/s
-        Speed<double> speed = new(Distance<double>.FromKilometers(36), Time<double>.FromHours(1));
+        // Given — 36 km/h = 10 m/s
+        Speed<Float128> speed = new(Distance<Float128>.FromKilometers((Float128)36), Time<Float128>.FromHours((Float128)1));
 
         // When
         string result = speed.ToString();
@@ -411,7 +415,7 @@ public sealed class SpeedTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        Speed<double> speed = new(Distance<double>.FromMiles(1234.56), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles(Float128.Parse("1234.56")), Time<Float128>.FromHours((Float128)1));
 
         // When
         string formatted = speed.ToString("mi/h:2", customCulture);
@@ -424,17 +428,17 @@ public sealed class SpeedTests
     public void SpeedToStringShouldSupportSpanInterpolation()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
-        // Then - same expectation as the user's Playground example (current culture default scale).
-        Assert.Equal($"{25.0.ToString("N", CultureInfo.CurrentCulture)} mi/h", $"{speed:mi/h}");
+        // Then — magnitude formatted via current culture's default scale, then unit suffix.
+        Assert.Equal($"{((Float128)25).ToString("N", CultureInfo.CurrentCulture)} mi/h", $"{speed:mi/h}");
     }
 
     [Fact(DisplayName = "Speed.ToString should throw when format has no slash separator")]
     public void SpeedToStringShouldThrowWhenFormatHasNoSlash()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Throws<FormatException>(() => speed.ToString("mph", CultureInfo.InvariantCulture));
@@ -444,7 +448,7 @@ public sealed class SpeedTests
     public void SpeedToStringShouldThrowWhenDistanceSpecifierIsEmpty()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Throws<FormatException>(() => speed.ToString("/h", CultureInfo.InvariantCulture));
@@ -454,7 +458,7 @@ public sealed class SpeedTests
     public void SpeedToStringShouldThrowWhenTimeSpecifierIsEmpty()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Throws<FormatException>(() => speed.ToString("mi/", CultureInfo.InvariantCulture));
@@ -464,7 +468,7 @@ public sealed class SpeedTests
     public void SpeedToStringShouldThrowWhenScaleNotNumeric()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Throws<FormatException>(() => speed.ToString("mi/h:abc", CultureInfo.InvariantCulture));
@@ -474,7 +478,7 @@ public sealed class SpeedTests
     public void SpeedToStringShouldThrowWhenDistanceSpecifierIsInvalid()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Throws<ArgumentException>(() => speed.ToString("xx/h:3", CultureInfo.InvariantCulture));
@@ -484,7 +488,7 @@ public sealed class SpeedTests
     public void SpeedToStringShouldThrowWhenTimeSpecifierIsInvalid()
     {
         // Given
-        Speed<double> speed = new(Distance<double>.FromMiles(25), Time<double>.FromHours(1));
+        Speed<Float128> speed = new(Distance<Float128>.FromMiles((Float128)25), Time<Float128>.FromHours((Float128)1));
 
         // Then
         Assert.Throws<ArgumentException>(() => speed.ToString("mi/xx:3", CultureInfo.InvariantCulture));

@@ -196,19 +196,19 @@ public readonly partial struct Frequency<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Frequency{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Frequency{T}"/> instance from the specified value.</returns>
-    public static Frequency<T> FromRevolutionsPerMinute(T value) => new((value / T.CreateChecked(60)).FromBaseUnits());
+    public static Frequency<T> FromRevolutionsPerMinute(T value) => new(value * QuectoHertzPerRevolutionPerMinute);
 
     /// <summary>
     /// Creates a new <see cref="Frequency{T}"/> instance from the specified Beats Per Minute value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Frequency{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Frequency{T}"/> instance from the specified value.</returns>
-    public static Frequency<T> FromBeatsPerMinute(T value) => new((value / T.CreateChecked(60)).FromBaseUnits());
+    public static Frequency<T> FromBeatsPerMinute(T value) => new(value * QuectoHertzPerBeatPerMinute);
 
     /// <summary>
     /// Creates a new <see cref="Frequency{T}"/> instance from the specified Radians Per Second value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Frequency{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Frequency{T}"/> instance from the specified value.</returns>
-    public static Frequency<T> FromRadiansPerSecond(T value) => new((value / (T.CreateChecked(2) * T.Pi)).FromBaseUnits());
+    public static Frequency<T> FromRadiansPerSecond(T value) => new(value * QuectoHertzPerRadianPerSecond);
 }

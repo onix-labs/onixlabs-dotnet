@@ -19,337 +19,334 @@ namespace OnixLabs.Units.UnitTests;
 
 public sealed class AmountOfSubstanceTests
 {
-    // IEEE-754 binary floating-point arithmetic causes small discrepancies in calculation, therefore we need a tolerance.
-    private const double Tolerance = 1e+42;
-
     [Fact(DisplayName = "AmountOfSubstance.Zero should produce the expected result")]
     public void AmountOfSubstanceZeroShouldProduceExpectedResult()
     {
         // Given / When
-        AmountOfSubstance<double> amount = AmountOfSubstance<double>.Zero;
+        AmountOfSubstance<Float128> amount = AmountOfSubstance<Float128>.Zero;
 
         // Then
-        Assert.Equal(0.0, amount.QuectoMoles, Tolerance);
+        Assert.Equal(Float128.Zero, amount.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromQuectomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1.0)]
-    [InlineData(2.5, 2.5)]
-    public void AmountOfSubstanceFromQuectomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1")]
+    [InlineData("2.5", "2.5")]
+    public void AmountOfSubstanceFromQuectomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromQuectomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromQuectomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromRontomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e3)]
-    [InlineData(2.5, 2.5e3)]
-    public void AmountOfSubstanceFromRontomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e3")]
+    [InlineData("2.5", "2.5e3")]
+    public void AmountOfSubstanceFromRontomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromRontomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromRontomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromYoctomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e6)]
-    [InlineData(2.5, 2.5e6)]
-    public void AmountOfSubstanceFromYoctomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e6")]
+    [InlineData("2.5", "2.5e6")]
+    public void AmountOfSubstanceFromYoctomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromYoctomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromYoctomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromZeptomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e9)]
-    [InlineData(2.5, 2.5e9)]
-    public void AmountOfSubstanceFromZeptomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e9")]
+    [InlineData("2.5", "2.5e9")]
+    public void AmountOfSubstanceFromZeptomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromZeptomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromZeptomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromAttomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e12)]
-    [InlineData(2.5, 2.5e12)]
-    public void AmountOfSubstanceFromAttomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e12")]
+    [InlineData("2.5", "2.5e12")]
+    public void AmountOfSubstanceFromAttomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromAttomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromAttomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromFemtomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e15)]
-    [InlineData(2.5, 2.5e15)]
-    public void AmountOfSubstanceFromFemtomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e15")]
+    [InlineData("2.5", "2.5e15")]
+    public void AmountOfSubstanceFromFemtomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromFemtomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromFemtomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromPicomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e18)]
-    [InlineData(2.5, 2.5e18)]
-    public void AmountOfSubstanceFromPicomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e18")]
+    [InlineData("2.5", "2.5e18")]
+    public void AmountOfSubstanceFromPicomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromPicomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromPicomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromNanomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e21)]
-    [InlineData(2.5, 2.5e21)]
-    public void AmountOfSubstanceFromNanomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e21")]
+    [InlineData("2.5", "2.5e21")]
+    public void AmountOfSubstanceFromNanomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromNanomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromNanomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromMicromoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e24)]
-    [InlineData(2.5, 2.5e24)]
-    public void AmountOfSubstanceFromMicromolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e24")]
+    [InlineData("2.5", "2.5e24")]
+    public void AmountOfSubstanceFromMicromolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMicromoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMicromoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromMillimoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e27)]
-    [InlineData(2.5, 2.5e27)]
-    public void AmountOfSubstanceFromMillimolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e27")]
+    [InlineData("2.5", "2.5e27")]
+    public void AmountOfSubstanceFromMillimolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMillimoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMillimoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromCentimoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e28)]
-    [InlineData(2.5, 2.5e28)]
-    public void AmountOfSubstanceFromCentimolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e28")]
+    [InlineData("2.5", "2.5e28")]
+    public void AmountOfSubstanceFromCentimolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromCentimoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromCentimoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromDecimoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e29)]
-    [InlineData(2.5, 2.5e29)]
-    public void AmountOfSubstanceFromDecimolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e29")]
+    [InlineData("2.5", "2.5e29")]
+    public void AmountOfSubstanceFromDecimolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromDecimoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromDecimoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromMoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e30)]
-    [InlineData(2.5, 2.5e30)]
-    public void AmountOfSubstanceFromMolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e30")]
+    [InlineData("2.5", "2.5e30")]
+    public void AmountOfSubstanceFromMolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromDecamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e31)]
-    [InlineData(2.5, 2.5e31)]
-    public void AmountOfSubstanceFromDecamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e31")]
+    [InlineData("2.5", "2.5e31")]
+    public void AmountOfSubstanceFromDecamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromDecamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromDecamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromHectomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e32)]
-    [InlineData(2.5, 2.5e32)]
-    public void AmountOfSubstanceFromHectomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e32")]
+    [InlineData("2.5", "2.5e32")]
+    public void AmountOfSubstanceFromHectomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromHectomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromHectomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromKilomoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e33)]
-    [InlineData(2.5, 2.5e33)]
-    public void AmountOfSubstanceFromKilomolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e33")]
+    [InlineData("2.5", "2.5e33")]
+    public void AmountOfSubstanceFromKilomolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromKilomoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromKilomoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromMegamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e36)]
-    [InlineData(2.5, 2.5e36)]
-    public void AmountOfSubstanceFromMegamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e36")]
+    [InlineData("2.5", "2.5e36")]
+    public void AmountOfSubstanceFromMegamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMegamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMegamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromGigamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e39)]
-    [InlineData(2.5, 2.5e39)]
-    public void AmountOfSubstanceFromGigamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e39")]
+    [InlineData("2.5", "2.5e39")]
+    public void AmountOfSubstanceFromGigamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromGigamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromGigamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromTeramoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e42)]
-    [InlineData(2.5, 2.5e42)]
-    public void AmountOfSubstanceFromTeramolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e42")]
+    [InlineData("2.5", "2.5e42")]
+    public void AmountOfSubstanceFromTeramolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromTeramoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromTeramoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromPetamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e45)]
-    [InlineData(2.5, 2.5e45)]
-    public void AmountOfSubstanceFromPetamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e45")]
+    [InlineData("2.5", "2.5e45")]
+    public void AmountOfSubstanceFromPetamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromPetamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromPetamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromExamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e48)]
-    [InlineData(2.5, 2.5e48)]
-    public void AmountOfSubstanceFromExamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e48")]
+    [InlineData("2.5", "2.5e48")]
+    public void AmountOfSubstanceFromExamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromExamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromExamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromZettamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e51)]
-    [InlineData(2.5, 2.5e51)]
-    public void AmountOfSubstanceFromZettamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e51")]
+    [InlineData("2.5", "2.5e51")]
+    public void AmountOfSubstanceFromZettamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromZettamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromZettamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromYottamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e54)]
-    [InlineData(2.5, 2.5e54)]
-    public void AmountOfSubstanceFromYottamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e54")]
+    [InlineData("2.5", "2.5e54")]
+    public void AmountOfSubstanceFromYottamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromYottamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromYottamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromRonnamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e57)]
-    [InlineData(2.5, 2.5e57)]
-    public void AmountOfSubstanceFromRonnamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e57")]
+    [InlineData("2.5", "2.5e57")]
+    public void AmountOfSubstanceFromRonnamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromRonnamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromRonnamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Theory(DisplayName = "AmountOfSubstance.FromQuettamoles should produce the expected QuectoMoles")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e60)]
-    [InlineData(2.5, 2.5e60)]
-    public void AmountOfSubstanceFromQuettamolesShouldProduceExpectedQuectoMoles(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e60")]
+    [InlineData("2.5", "2.5e60")]
+    public void AmountOfSubstanceFromQuettamolesShouldProduceExpectedQuectoMoles(string value, string expected)
     {
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromQuettamoles(value);
-        Assert.Equal(expected, a.QuectoMoles, Tolerance);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromQuettamoles(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoMoles);
     }
 
     [Fact(DisplayName = "AmountOfSubstance.Add should produce the expected result")]
     public void AmountOfSubstanceAddShouldProduceExpectedValue()
     {
         // Given
-        AmountOfSubstance<double> left = AmountOfSubstance<double>.FromMoles(1.5);
-        AmountOfSubstance<double> right = AmountOfSubstance<double>.FromMoles(0.5);
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1.5"));
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("0.5"));
 
         // When
-        AmountOfSubstance<double> result = left.Add(right);
+        AmountOfSubstance<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal(2.0, result.Moles, Tolerance);
+        Assert.Equal(Float128.Parse("2"), result.Moles);
     }
 
     [Fact(DisplayName = "AmountOfSubstance.Subtract should produce the expected result")]
     public void AmountOfSubstanceSubtractShouldProduceExpectedValue()
     {
         // Given
-        AmountOfSubstance<double> left = AmountOfSubstance<double>.FromMoles(1.5);
-        AmountOfSubstance<double> right = AmountOfSubstance<double>.FromMoles(0.4);
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1.5"));
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("0.4"));
 
         // When
-        AmountOfSubstance<double> result = left.Subtract(right);
+        AmountOfSubstance<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal(1.1, result.Moles, Tolerance);
+        Assert.Equal(Float128.Parse("1.1"), result.Moles);
     }
 
     [Fact(DisplayName = "AmountOfSubstance.Multiply should produce the expected result")]
     public void AmountOfSubstanceMultiplyShouldProduceExpectedValue()
     {
         // Given
-        AmountOfSubstance<double> left = AmountOfSubstance<double>.FromMoles(10.0);  // 1e31 qmol
-        AmountOfSubstance<double> right = AmountOfSubstance<double>.FromMoles(3.0);  // 3e30 qmol
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("10"));  // 1e31 qmol
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("3"));  // 3e30 qmol
 
         // When
-        AmountOfSubstance<double> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qmol
+        AmountOfSubstance<Float128> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qmol
 
         // Then
-        Assert.Equal(1e31, left.QuectoMoles, Tolerance);
-        Assert.Equal(3e30, right.QuectoMoles, Tolerance);
-        Assert.Equal(3e61, result.QuectoMoles, Tolerance);
+        Assert.Equal(Float128.Parse("1e31"), left.QuectoMoles);
+        Assert.Equal(Float128.Parse("3e30"), right.QuectoMoles);
+        Assert.Equal(Float128.Parse("3e61"), result.QuectoMoles);
     }
 
     [Fact(DisplayName = "AmountOfSubstance.Divide should produce the expected result")]
     public void AmountOfSubstanceDivideShouldProduceExpectedValue()
     {
         // Given
-        AmountOfSubstance<double> left = AmountOfSubstance<double>.FromMoles(100.0);  // 1e32 qmol
-        AmountOfSubstance<double> right = AmountOfSubstance<double>.FromMoles(20.0);  // 2e31 qmol
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("100"));  // 1e32 qmol
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("20"));  // 2e31 qmol
 
         // When
-        AmountOfSubstance<double> result = left.Divide(right);  // 1e32 / 2e31 = 5 qmol
+        AmountOfSubstance<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qmol
 
         // Then
-        Assert.Equal(5.0, result.QuectoMoles, Tolerance);
-        Assert.Equal(5e-30, result.Moles, Tolerance);
+        Assert.Equal(Float128.Parse("5"), result.QuectoMoles);
+        Assert.Equal(Float128.Parse("5e-30"), result.Moles);
     }
 
     [Fact(DisplayName = "AmountOfSubstance comparison should produce the expected result (left equal to right)")]
     public void AmountOfSubstanceComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        AmountOfSubstance<double> left = AmountOfSubstance<double>.FromMoles(123.0);
-        AmountOfSubstance<double> right = AmountOfSubstance<double>.FromMoles(123.0);
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("123"));
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(0, AmountOfSubstance<double>.Compare(left, right));
+        Assert.Equal(0, AmountOfSubstance<Float128>.Compare(left, right));
         Assert.Equal(0, left.CompareTo(right));
         Assert.Equal(0, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -362,11 +359,11 @@ public sealed class AmountOfSubstanceTests
     public void AmountOfSubstanceComparisonShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        AmountOfSubstance<double> left = AmountOfSubstance<double>.FromMoles(456.0);
-        AmountOfSubstance<double> right = AmountOfSubstance<double>.FromMoles(123.0);
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("456"));
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(1, AmountOfSubstance<double>.Compare(left, right));
+        Assert.Equal(1, AmountOfSubstance<Float128>.Compare(left, right));
         Assert.Equal(1, left.CompareTo(right));
         Assert.Equal(1, left.CompareTo((object)right));
         Assert.True(left > right);
@@ -379,11 +376,11 @@ public sealed class AmountOfSubstanceTests
     public void AmountOfSubstanceComparisonShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        AmountOfSubstance<double> left = AmountOfSubstance<double>.FromMoles(123.0);
-        AmountOfSubstance<double> right = AmountOfSubstance<double>.FromMoles(456.0);
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("123"));
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("456"));
 
         // When / Then
-        Assert.Equal(-1, AmountOfSubstance<double>.Compare(left, right));
+        Assert.Equal(-1, AmountOfSubstance<Float128>.Compare(left, right));
         Assert.Equal(-1, left.CompareTo(right));
         Assert.Equal(-1, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -395,12 +392,12 @@ public sealed class AmountOfSubstanceTests
     [Fact(DisplayName = "AmountOfSubstance equality should produce the expected result (left equal to right)")]
     public void AmountOfSubstanceEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
-        // Given: 2 mol = 2000 mmol
-        AmountOfSubstance<BigDecimal> left = AmountOfSubstance<BigDecimal>.FromMoles(2.0);
-        AmountOfSubstance<BigDecimal> right = AmountOfSubstance<BigDecimal>.FromMillimoles(2000.0);
+        // Given — 2 mol and 2000 mmol are the same canonical amount; equality should hold at Float128.
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("2"));
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMillimoles(Float128.Parse("2000"));
 
         // When / Then
-        Assert.True(AmountOfSubstance<BigDecimal>.Equals(left, right));
+        Assert.True(AmountOfSubstance<Float128>.Equals(left, right));
         Assert.True(left.Equals(right));
         Assert.True(left.Equals((object)right));
         Assert.True(left == right);
@@ -411,11 +408,11 @@ public sealed class AmountOfSubstanceTests
     public void AmountOfSubstanceEqualityShouldProduceExpectedResultLeftNotEqualToRight()
     {
         // Given
-        AmountOfSubstance<double> left = AmountOfSubstance<double>.FromMoles(2.0);
-        AmountOfSubstance<double> right = AmountOfSubstance<double>.FromMillimoles(2500.0);
+        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("2"));
+        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMillimoles(Float128.Parse("2500"));
 
         // When / Then
-        Assert.False(AmountOfSubstance<double>.Equals(left, right));
+        Assert.False(AmountOfSubstance<Float128>.Equals(left, right));
         Assert.False(left.Equals(right));
         Assert.False(left.Equals((object)right));
         Assert.False(left == right);
@@ -426,7 +423,7 @@ public sealed class AmountOfSubstanceTests
     public void AmountOfSubstanceToStringShouldProduceExpectedResult()
     {
         // Given
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMoles(1000.0);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1000"));
 
         // When / Then
         Assert.Equal("1,000.000 mol", $"{a:mol3}");
@@ -439,7 +436,7 @@ public sealed class AmountOfSubstanceTests
     public void AmountOfSubstanceToStringMmolVsMmolAreCaseSensitive()
     {
         // Given
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMoles(1.0);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1"));
 
         // Then
         Assert.Equal("0.000001 Mmol", $"{a:Mmol6}"); // mega
@@ -450,7 +447,7 @@ public sealed class AmountOfSubstanceTests
     public void AmountOfSubstanceToStringPmolVsPmolAreCaseSensitive()
     {
         // Given
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMoles(1.0);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1"));
 
         // Then
         Assert.Equal("0.000000000000001 Pmol", $"{a:Pmol15}"); // peta
@@ -461,7 +458,7 @@ public sealed class AmountOfSubstanceTests
     public void AmountOfSubstanceToStringMicromolesSymbolShouldDifferFromFormatSpecifier()
     {
         // Given
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMoles(1.0);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1"));
 
         // Then: specifier is umol, but symbol rendered is µmol
         Assert.Equal("1,000,000.000 µmol", $"{a:umol3}");
@@ -472,7 +469,7 @@ public sealed class AmountOfSubstanceTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        AmountOfSubstance<double> a = AmountOfSubstance<double>.FromMoles(1234.56);
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1234.56"));
 
         // When
         string formatted = a.ToString("mol2", customCulture);

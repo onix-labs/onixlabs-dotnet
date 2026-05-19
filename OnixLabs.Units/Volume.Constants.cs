@@ -12,12 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Numerics;
+
 namespace OnixLabs.Units;
 
 public readonly partial struct Volume<T>
 {
     /// <inheritdoc/>
     public static Volume<T> Zero => new(T.Zero);
+
+    // T-precision conversion factors for non-power-of-10 volume scales (imperial, astronomical, customary).
+    // Each is "CubicQuectoMeters in one X³", written so the entire factor stays at T's precision.
+    // Stored as static readonly per closed T so they're computed once and reused. `T.CreateChecked(<decimal>)`
+    // would silently pre-round through double's ~15-17 digit precision before reaching T.
+    private static readonly T CuQuectometersPerCubicInch             = T.CreateChecked(16387064)             * GenericMath.Pow10<T>(78); // 0.0254³ m³
+    private static readonly T CuQuectometersPerCubicFoot             = T.CreateChecked(28316846592L)         * GenericMath.Pow10<T>(78); // 0.3048³ m³
+    private static readonly T CuQuectometersPerCubicYard             = T.CreateChecked(764554857984L)        * GenericMath.Pow10<T>(78); // 0.9144³ m³
+    private static readonly T CuQuectometersPerCubicMile             = T.CreateChecked(4168181825440579584L) * GenericMath.Pow10<T>(81); // 1 609.344³ m³
+
+    // AU³ and LY³ are computed at T precision. Both 149_597_870_700 (AU m) and 9_460_730_472_580_800 (LY m) fit
+    // in long and are exact at any IFloatingPoint<T> with ≥64-bit mantissa. Cubing stays at T precision.
+    private static readonly T CuQuectometersPerCubicAstronomicalUnit =
+        T.CreateChecked(149_597_870_700L) * T.CreateChecked(149_597_870_700L) * T.CreateChecked(149_597_870_700L) * GenericMath.Pow10<T>(90); // AU³ m³
+    private static readonly T CuQuectometersPerCubicLightYear =
+        T.CreateChecked(9_460_730_472_580_800L) * T.CreateChecked(9_460_730_472_580_800L) * T.CreateChecked(9_460_730_472_580_800L) * GenericMath.Pow10<T>(90); // (365.25 d × c)³ m³
+
+    // Parsec³ is ((648000 / π) AU)³. π is irrational; the division rounds to 1 ULP and is cubed.
+    private static readonly T MetersPerParsec = T.CreateChecked(149_597_870_700L) * T.CreateChecked(648000) / T.Pi;
+    private static readonly T CuQuectometersPerCubicParsec = MetersPerParsec * MetersPerParsec * MetersPerParsec * GenericMath.Pow10<T>(90);
+
+    private static readonly T CuQuectometersPerUSGallon            = T.CreateChecked(3785411784L)          * GenericMath.Pow10<T>(78); // 3.785411784e-3 m³
+    private static readonly T CuQuectometersPerUSQuart             = T.CreateChecked(946352946L)           * GenericMath.Pow10<T>(78); // gal / 4
+    private static readonly T CuQuectometersPerUSPint              = T.CreateChecked(473176473L)           * GenericMath.Pow10<T>(78); // qt / 2
+    private static readonly T CuQuectometersPerUSCup               = T.CreateChecked(2365882365L)          * GenericMath.Pow10<T>(77); // pt / 2
+    private static readonly T CuQuectometersPerUSFluidOunce        = T.CreateChecked(295735295625L)        * GenericMath.Pow10<T>(74); // cup / 8
+    private static readonly T CuQuectometersPerUSTablespoon        = T.CreateChecked(1478676478125L)       * GenericMath.Pow10<T>(73); // fl oz / 2
+    private static readonly T CuQuectometersPerUSTeaspoon          = T.CreateChecked(492892159375L)        * GenericMath.Pow10<T>(73); // tbsp / 3
+    private static readonly T CuQuectometersPerImperialGallon      = T.CreateChecked(454609)               * GenericMath.Pow10<T>(82); // 4.54609e-3 m³
+    private static readonly T CuQuectometersPerImperialQuart       = T.CreateChecked(11365225)             * GenericMath.Pow10<T>(80); // imp gal / 4
+    private static readonly T CuQuectometersPerImperialPint        = T.CreateChecked(56826125)             * GenericMath.Pow10<T>(79); // imp qt / 2
+    private static readonly T CuQuectometersPerImperialFluidOunce  = T.CreateChecked(284130625)            * GenericMath.Pow10<T>(77); // imp pt / 20
+    private static readonly T CuQuectometersPerOilBarrel           = T.CreateChecked(158987294928L)        * GenericMath.Pow10<T>(78); // 42 US gal
 
     private const string CubicQuectoMetersSpecifier = "cuqm";
     private const string CubicQuectoMetersSymbol = "qm³";

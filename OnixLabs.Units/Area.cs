@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Numerics;
+using OnixLabs.Numerics;
 
 namespace OnixLabs.Units;
 
@@ -51,7 +52,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqrm.
     /// </remarks>
-    public T SquareRontoMeters => SquareQuectoMeters / T.CreateChecked(1e6);
+    public T SquareRontoMeters => SquareQuectoMeters / GenericMath.Pow10<T>(6);
 
     /// <summary>
     /// Gets the area in Square Yoctometers (ym²).
@@ -59,7 +60,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqym.
     /// </remarks>
-    public T SquareYoctoMeters => SquareQuectoMeters / T.CreateChecked(1e12);
+    public T SquareYoctoMeters => SquareQuectoMeters / GenericMath.Pow10<T>(12);
 
     /// <summary>
     /// Gets the area in Square Zeptometers (zm²).
@@ -67,7 +68,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqzm.
     /// </remarks>
-    public T SquareZeptoMeters => SquareQuectoMeters / T.CreateChecked(1e18);
+    public T SquareZeptoMeters => SquareQuectoMeters / GenericMath.Pow10<T>(18);
 
     /// <summary>
     /// Gets the area in Square Attometers (am²).
@@ -75,7 +76,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqam.
     /// </remarks>
-    public T SquareAttoMeters => SquareQuectoMeters / T.CreateChecked(1e24);
+    public T SquareAttoMeters => SquareQuectoMeters / GenericMath.Pow10<T>(24);
 
     /// <summary>
     /// Gets the area in Square Femtometers (fm²).
@@ -83,7 +84,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqfm.
     /// </remarks>
-    public T SquareFemtoMeters => SquareQuectoMeters / T.CreateChecked(1e30);
+    public T SquareFemtoMeters => SquareQuectoMeters / GenericMath.Pow10<T>(30);
 
     /// <summary>
     /// Gets the area in Square Picometers (pm²).
@@ -91,7 +92,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqpm.
     /// </remarks>
-    public T SquarePicoMeters => SquareQuectoMeters / T.CreateChecked(1e36);
+    public T SquarePicoMeters => SquareQuectoMeters / GenericMath.Pow10<T>(36);
 
     /// <summary>
     /// Gets the area in Square Nanometers (nm²).
@@ -99,7 +100,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqnm.
     /// </remarks>
-    public T SquareNanoMeters => SquareQuectoMeters / T.CreateChecked(1e42);
+    public T SquareNanoMeters => SquareQuectoMeters / GenericMath.Pow10<T>(42);
 
     /// <summary>
     /// Gets the area in Square Micrometers (µm²).
@@ -107,7 +108,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is squm.
     /// </remarks>
-    public T SquareMicroMeters => SquareQuectoMeters / T.CreateChecked(1e48);
+    public T SquareMicroMeters => SquareQuectoMeters / GenericMath.Pow10<T>(48);
 
     /// <summary>
     /// Gets the area in Square Millimeters (mm²).
@@ -115,7 +116,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqmm.
     /// </remarks>
-    public T SquareMilliMeters => SquareQuectoMeters / T.CreateChecked(1e54);
+    public T SquareMilliMeters => SquareQuectoMeters / GenericMath.Pow10<T>(54);
 
     /// <summary>
     /// Gets the area in Square Centimeters (cm²).
@@ -123,7 +124,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqcm.
     /// </remarks>
-    public T SquareCentiMeters => SquareQuectoMeters / T.CreateChecked(1e56);
+    public T SquareCentiMeters => SquareQuectoMeters / GenericMath.Pow10<T>(56);
 
     /// <summary>
     /// Gets the area in Square Decimeters (dm²).
@@ -131,7 +132,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqdm.
     /// </remarks>
-    public T SquareDeciMeters => SquareQuectoMeters / T.CreateChecked(1e58);
+    public T SquareDeciMeters => SquareQuectoMeters / GenericMath.Pow10<T>(58);
 
     /// <summary>
     /// Gets the area in Square Meters (m²).
@@ -139,7 +140,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqm.
     /// </remarks>
-    public T SquareMeters => SquareQuectoMeters / T.CreateChecked(1e60);
+    public T SquareMeters => SquareQuectoMeters / GenericMath.Pow10<T>(60);
 
     /// <summary>
     /// Gets the area in Square Decameters (dam²).
@@ -147,7 +148,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqdam.
     /// </remarks>
-    public T SquareDecaMeters => SquareQuectoMeters / T.CreateChecked(1e62);
+    public T SquareDecaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(62);
 
     /// <summary>
     /// Gets the area in Square Hectometers (hm²).
@@ -155,7 +156,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqhm.
     /// </remarks>
-    public T SquareHectoMeters => SquareQuectoMeters / T.CreateChecked(1e64);
+    public T SquareHectoMeters => SquareQuectoMeters / GenericMath.Pow10<T>(64);
 
     /// <summary>
     /// Gets the area in Square Kilometers (km²).
@@ -163,7 +164,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqkm.
     /// </remarks>
-    public T SquareKiloMeters => SquareQuectoMeters / T.CreateChecked(1e66);
+    public T SquareKiloMeters => SquareQuectoMeters / GenericMath.Pow10<T>(66);
 
     /// <summary>
     /// Gets the area in Square Megameters (Mm²).
@@ -171,7 +172,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqMm.
     /// </remarks>
-    public T SquareMegaMeters => SquareQuectoMeters / T.CreateChecked(1e72);
+    public T SquareMegaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(72);
 
     /// <summary>
     /// Gets the area in Square Gigameters (Gm²).
@@ -179,7 +180,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqGm.
     /// </remarks>
-    public T SquareGigaMeters => SquareQuectoMeters / T.CreateChecked(1e78);
+    public T SquareGigaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(78);
 
     /// <summary>
     /// Gets the area in Square Terameters (Tm²).
@@ -187,7 +188,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqTm.
     /// </remarks>
-    public T SquareTeraMeters => SquareQuectoMeters / T.CreateChecked(1e84);
+    public T SquareTeraMeters => SquareQuectoMeters / GenericMath.Pow10<T>(84);
 
     /// <summary>
     /// Gets the area in Square Petameters (Pm²).
@@ -195,7 +196,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqPm.
     /// </remarks>
-    public T SquarePetaMeters => SquareQuectoMeters / T.CreateChecked(1e90);
+    public T SquarePetaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(90);
 
     /// <summary>
     /// Gets the area in Square Exameters (Em²).
@@ -203,7 +204,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqEm.
     /// </remarks>
-    public T SquareExaMeters => SquareQuectoMeters / T.CreateChecked(1e96);
+    public T SquareExaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(96);
 
     /// <summary>
     /// Gets the area in Square Zettameters (Zm²).
@@ -211,7 +212,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqZm.
     /// </remarks>
-    public T SquareZettaMeters => SquareQuectoMeters / T.CreateChecked(1e102);
+    public T SquareZettaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(102);
 
     /// <summary>
     /// Gets the area in Square Yottameters (Ym²).
@@ -219,7 +220,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqYm.
     /// </remarks>
-    public T SquareYottaMeters => SquareQuectoMeters / T.CreateChecked(1e108);
+    public T SquareYottaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(108);
 
     /// <summary>
     /// Gets the area in Square Ronnameters (Rm²).
@@ -227,7 +228,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqRm.
     /// </remarks>
-    public T SquareRonnaMeters => SquareQuectoMeters / T.CreateChecked(1e114);
+    public T SquareRonnaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(114);
 
     /// <summary>
     /// Gets the area in Square Quettameters (Qm²).
@@ -235,7 +236,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqQm.
     /// </remarks>
-    public T SquareQuettaMeters => SquareQuectoMeters / T.CreateChecked(1e120);
+    public T SquareQuettaMeters => SquareQuectoMeters / GenericMath.Pow10<T>(120);
 
     /// <summary>
     /// Gets the area in Square Inches (in²).
@@ -243,7 +244,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqin.
     /// </remarks>
-    public T SquareInches => SquareQuectoMeters / T.CreateChecked(6.4516e56);
+    public T SquareInches => SquareQuectoMeters / SqQuectometersPerSquareInch;
 
     /// <summary>
     /// Gets the area in Square Feet (ft²).
@@ -251,7 +252,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqft.
     /// </remarks>
-    public T SquareFeet => SquareQuectoMeters / T.CreateChecked(9.290304e58);
+    public T SquareFeet => SquareQuectoMeters / SqQuectometersPerSquareFoot;
 
     /// <summary>
     /// Gets the area in Square Yards (yd²).
@@ -259,7 +260,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqyd.
     /// </remarks>
-    public T SquareYards => SquareQuectoMeters / T.CreateChecked(8.3612736e59);
+    public T SquareYards => SquareQuectoMeters / SqQuectometersPerSquareYard;
 
     /// <summary>
     /// Gets the area in Square Miles (mi²).
@@ -267,7 +268,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqmi.
     /// </remarks>
-    public T SquareMiles => SquareQuectoMeters / T.CreateChecked(2.589988110336e66);
+    public T SquareMiles => SquareQuectoMeters / SqQuectometersPerSquareMile;
 
     /// <summary>
     /// Gets the area in Square Nautical Miles (nmi²).
@@ -275,7 +276,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqnmi.
     /// </remarks>
-    public T SquareNauticalMiles => SquareQuectoMeters / T.CreateChecked(3.4299040000e66);
+    public T SquareNauticalMiles => SquareQuectoMeters / SqQuectometersPerSquareNauticalMile;
 
     /// <summary>
     /// Gets the area in Square Fermis (fm²).
@@ -283,7 +284,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqfmi.
     /// </remarks>
-    public T SquareFermis => SquareQuectoMeters / T.CreateChecked(1e30);
+    public T SquareFermis => SquareQuectoMeters / SqQuectometersPerSquareFermi;
 
     /// <summary>
     /// Gets the area in Square Angstroms (Å²).
@@ -291,7 +292,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqa.
     /// </remarks>
-    public T SquareAngstroms => SquareQuectoMeters / T.CreateChecked(1e40);
+    public T SquareAngstroms => SquareQuectoMeters / SqQuectometersPerSquareAngstrom;
 
     /// <summary>
     /// Gets the area in Square Astronomical Units (au²).
@@ -299,7 +300,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqau.
     /// </remarks>
-    public T SquareAstronomicalUnits => SquareQuectoMeters / T.CreateChecked(2.2379522821e82);
+    public T SquareAstronomicalUnits => SquareQuectoMeters / SqQuectometersPerSquareAstronomicalUnit;
 
     /// <summary>
     /// Gets the area in Square Light Years (ly²).
@@ -307,7 +308,7 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqly.
     /// </remarks>
-    public T SquareLightYears => SquareQuectoMeters / T.CreateChecked(8.9505421074819e91);
+    public T SquareLightYears => SquareQuectoMeters / SqQuectometersPerSquareLightYear;
 
     /// <summary>
     /// Gets the area in Square Parsecs (pc²).
@@ -315,14 +316,5 @@ public readonly partial struct Area<T> :
     /// <remarks>
     /// The format specifier for this value is sqpc.
     /// </remarks>
-    public T SquareParsecs
-    {
-        get
-        {
-            T metersPerParsec = T.CreateChecked(149_597_870_700L) * T.CreateChecked(648000) / T.Pi;
-            T sqMetersPerSqParsec = metersPerParsec * metersPerParsec;
-            T sqQmPerSqParsec = sqMetersPerSqParsec * T.CreateChecked(1e60);
-            return SquareQuectoMeters / sqQmPerSqParsec;
-        }
-    }
+    public T SquareParsecs => SquareQuectoMeters / SqQuectometersPerSquareParsec;
 }

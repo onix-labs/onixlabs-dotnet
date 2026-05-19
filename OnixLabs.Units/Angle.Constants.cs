@@ -12,12 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using OnixLabs.Numerics;
+
 namespace OnixLabs.Units;
 
 public readonly partial struct Angle<T>
 {
     /// <inheritdoc/>
     public static Angle<T> Zero => new(T.Zero);
+
+    // T-precision π-based conversion factors for non-radian angle scales. Each is "QuectoRadians in one X",
+    // computed at T's precision so π keeps its full T.Pi precision (40+ digits at Float128). The
+    // `T.CreateChecked(<double-literal>)` form would silently pre-round π through double's 15-17 digits.
+    private static readonly T QuectoRadiansPerDegree    = T.Pi * GenericMath.Pow10<T>(30) / T.CreateChecked(180);    // π/180 rad
+    private static readonly T QuectoRadiansPerArcminute = T.Pi * GenericMath.Pow10<T>(30) / T.CreateChecked(10800);  // π/(180×60) rad
+    private static readonly T QuectoRadiansPerArcsecond = T.Pi * GenericMath.Pow10<T>(30) / T.CreateChecked(648000); // π/(180×3600) rad
+    private static readonly T QuectoRadiansPerGradian   = T.Pi * GenericMath.Pow10<T>(30) / T.CreateChecked(200);    // π/200 rad
+    private static readonly T QuectoRadiansPerTurn      = T.Pi * GenericMath.Pow10<T>(30) * T.CreateChecked(2);      // 2π rad
 
     private const string QuectoRadiansSpecifier = "qrad";
     private const string QuectoRadiansSymbol = "qrad";

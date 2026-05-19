@@ -21,21 +21,21 @@ public readonly partial struct Temperature<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Temperature{T}"/> instance from the specified value.</returns>
-    public static Temperature<T> FromCelsius(T value) => new(value + T.CreateChecked(273.15));
+    public static Temperature<T> FromCelsius(T value) => new(value + CelsiusKelvinOffset);
 
     /// <summary>
     /// Creates a new <see cref="Temperature{T}"/> instance from the specified Delisle value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Temperature{T}"/> instance from the specified value.</returns>
-    public static Temperature<T> FromDelisle(T value) => new(T.CreateChecked(373.15) - value * (T.CreateChecked(2.00) / T.CreateChecked(3.00)));
+    public static Temperature<T> FromDelisle(T value) => new(DelisleKelvinReference - value * T.CreateChecked(2) / T.CreateChecked(3));
 
     /// <summary>
     /// Creates a new <see cref="Temperature{T}"/> instance from the specified Fahrenheit value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Temperature{T}"/> instance from the specified value.</returns>
-    public static Temperature<T> FromFahrenheit(T value) => new((value + T.CreateChecked(459.67)) / T.CreateChecked(1.80));
+    public static Temperature<T> FromFahrenheit(T value) => new((value + FahrenheitKelvinOffset) / NineFifths);
 
     /// <summary>
     /// Creates a new <see cref="Temperature{T}"/> instance from the specified Kelvin value.
@@ -49,26 +49,26 @@ public readonly partial struct Temperature<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Temperature{T}"/> instance from the specified value.</returns>
-    public static Temperature<T> FromNewton(T value) => new(value * (T.CreateChecked(100.00) / T.CreateChecked(33.00)) + T.CreateChecked(273.15));
+    public static Temperature<T> FromNewton(T value) => new(value * T.CreateChecked(100) / T.CreateChecked(33) + CelsiusKelvinOffset);
 
     /// <summary>
     /// Creates a new <see cref="Temperature{T}"/> instance from the specified Rankine value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Temperature{T}"/> instance from the specified value.</returns>
-    public static Temperature<T> FromRankine(T value) => new(value / T.CreateChecked(1.8));
+    public static Temperature<T> FromRankine(T value) => new(value / NineFifths);
 
     /// <summary>
     /// Creates a new <see cref="Temperature{T}"/> instance from the specified Réaumur value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Temperature{T}"/> instance from the specified value.</returns>
-    public static Temperature<T> FromReaumur(T value) => new(value * T.CreateChecked(1.25) + T.CreateChecked(273.15));
+    public static Temperature<T> FromReaumur(T value) => new(value * T.CreateChecked(1.25) + CelsiusKelvinOffset);
 
     /// <summary>
     /// Creates a new <see cref="Temperature{T}"/> instance from the specified Rømer value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Temperature{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Temperature{T}"/> instance from the specified value.</returns>
-    public static Temperature<T> FromRomer(T value) => new((value - T.CreateChecked(7.5)) * T.CreateChecked(40.0 / 21.0) + T.CreateChecked(273.15));
+    public static Temperature<T> FromRomer(T value) => new((value - T.CreateChecked(7.5)) * FortyTwentyFirsts + CelsiusKelvinOffset);
 }

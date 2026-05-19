@@ -45,7 +45,7 @@ public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>>, I
     /// <remarks>
     /// The format specifier for this value is C.
     /// </remarks>
-    public T Celsius => Kelvin - T.CreateChecked(273.15);
+    public T Celsius => Kelvin - CelsiusKelvinOffset;
 
     /// <summary>
     /// Gets the temperature in Delisle (°De).
@@ -53,7 +53,7 @@ public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>>, I
     /// <remarks>
     /// The format specifier for this value is DE.
     /// </remarks>
-    public T Delisle => (T.CreateChecked(373.15) - Kelvin) * T.CreateChecked(1.50);
+    public T Delisle => (DelisleKelvinReference - Kelvin) * T.CreateChecked(1.5);
 
     /// <summary>
     /// Gets the temperature in Fahrenheit (°F).
@@ -61,7 +61,7 @@ public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>>, I
     /// <remarks>
     /// The format specifier for this value is F.
     /// </remarks>
-    public T Fahrenheit => Kelvin * T.CreateChecked(1.80) - T.CreateChecked(459.67);
+    public T Fahrenheit => Kelvin * NineFifths - FahrenheitKelvinOffset;
 
     /// <summary>
     /// Gets the temperature in Newton (°N).
@@ -69,7 +69,7 @@ public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>>, I
     /// <remarks>
     /// The format specifier for this value is N.
     /// </remarks>
-    public T Newton => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(33.00) / T.CreateChecked(100.00);
+    public T Newton => (Kelvin - CelsiusKelvinOffset) * T.CreateChecked(33) / T.CreateChecked(100);
 
     /// <summary>
     /// Gets the temperature in Rankine (°R).
@@ -77,7 +77,7 @@ public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>>, I
     /// <remarks>
     /// The format specifier for this value is R.
     /// </remarks>
-    public T Rankine => Kelvin * T.CreateChecked(1.8);
+    public T Rankine => Kelvin * NineFifths;
 
     /// <summary>
     /// Gets the temperature in Réaumur (°Ré).
@@ -85,7 +85,7 @@ public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>>, I
     /// <remarks>
     /// The format specifier for this value is RE.
     /// </remarks>
-    public T Reaumur => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(0.80);
+    public T Reaumur => (Kelvin - CelsiusKelvinOffset) * FourFifths;
 
     /// <summary>
     /// Gets the temperature in Rømer (°Rø).
@@ -93,5 +93,5 @@ public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>>, I
     /// <remarks>
     /// The format specifier for this value is RO.
     /// </remarks>
-    public T Romer => (Kelvin - T.CreateChecked(273.15)) * T.CreateChecked(21.0 / 40.0) + T.CreateChecked(7.5);
+    public T Romer => (Kelvin - CelsiusKelvinOffset) * TwentyOneFortieths + T.CreateChecked(7.5);
 }

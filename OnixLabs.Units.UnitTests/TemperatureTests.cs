@@ -13,332 +13,347 @@
 // limitations under the License.
 
 using System.Globalization;
+using OnixLabs.Numerics;
 
 namespace OnixLabs.Units.UnitTests;
 
 public sealed class TemperatureTests
 {
-    // IEEE-754 binary floating-point arithmetic causes small discrepancies in calculation, therefore we need a tolerance.
-    private const double Tolerance = 1e-12;
+    // Temperature conversion math (e.g. Fahrenheit = Kelvin * 9/5 - 459.67) accumulates a small number
+    // of round-to-nearest steps in T's precision. For Float128 (~33-34 decimal digits), the per-step
+    // ULP at the magnitudes used here (~10^2 to 10^3) is around 1e-30. Strict bitwise equality between
+    // (closest-Float128 to "X.YZ" via Parse) and (the result of the unit's arithmetic chain) would
+    // require both paths to round identically at every intermediate step — which they don't. The
+    // tolerance below sits a couple of orders of magnitude above one ULP at these scales, so it
+    // catches genuine bugs but accepts the inherent 1–2 ULP drift of IEEE-754 binary arithmetic.
+    private static readonly Float128 Tolerance = Float128.Parse("1e-28");
+
+    private static void AssertNearlyEqual(Float128 expected, Float128 actual)
+    {
+        Float128 diff = Float128.Abs(expected - actual);
+        Assert.True(
+            diff <= Tolerance,
+            $"Expected: {expected}\nActual:   {actual}\nDiff:     {diff} exceeds tolerance {Tolerance}");
+    }
 
     [Fact(DisplayName = "Temperature.Zero should produce the expected result")]
     public void TemperatureZeroShouldProduceExpectedResult()
     {
         // Given / When
-        Temperature<double> temperature = Temperature<double>.Zero;
+        Temperature<Float128> temperature = Temperature<Float128>.Zero;
 
         // Then
-        Assert.Equal(-273.15, temperature.Celsius, Tolerance);
-        Assert.Equal(0.0, temperature.Kelvin, Tolerance);
-        Assert.Equal(-459.67, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(559.725, temperature.Delisle, Tolerance);
-        Assert.Equal(-90.1395, temperature.Newton, Tolerance);
-        Assert.Equal(0.0, temperature.Rankine, Tolerance);
-        Assert.Equal(-218.52, temperature.Reaumur, Tolerance);
-        Assert.Equal(-135.90375, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse("-273.15"), temperature.Celsius);
+        Assert.Equal(Float128.Zero, temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse("-459.67"), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse("559.725"), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse("-90.1395"), temperature.Newton);
+        Assert.Equal(Float128.Zero, temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse("-218.52"), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse("-135.90375"), temperature.Romer);
     }
 
     [Theory(DisplayName = "Temperature.FromCelsius should produce the expected result")]
-    [InlineData(-273.15, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
-    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
-    [InlineData(100.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
-    [InlineData(-40.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
-    [InlineData(20.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    [InlineData("-273.15", "-273.15", "0", "-459.67", "559.725", "-90.1395", "0", "-218.52", "-135.90375")]
+    [InlineData("0", "0", "273.15", "32", "150", "0", "491.67", "0", "7.5")]
+    [InlineData("100", "100", "373.15", "212", "0", "33", "671.67", "80", "60")]
+    [InlineData("-40", "-40", "233.15", "-40", "210", "-13.2", "419.67", "-32", "-13.5")]
+    [InlineData("20", "20", "293.15", "68", "120", "6.6", "527.67", "16", "18")]
     public void TemperatureFromCelsiusShouldProduceExpectedResult(
-        double celsius,
-        double expectedCelsius,
-        double expectedKelvin,
-        double expectedFahrenheit,
-        double expectedDelisle,
-        double expectedNewton,
-        double expectedRankine,
-        double expectedReaumur,
-        double expectedRomer)
+        string celsius,
+        string expectedCelsius,
+        string expectedKelvin,
+        string expectedFahrenheit,
+        string expectedDelisle,
+        string expectedNewton,
+        string expectedRankine,
+        string expectedReaumur,
+        string expectedRomer)
     {
         // When
-        Temperature<double> temperature = Temperature<double>.FromCelsius(celsius);
+        Temperature<Float128> temperature = Temperature<Float128>.FromCelsius(Float128.Parse(celsius));
 
         // Then
-        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
-        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
-        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
-        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
-        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
-        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
-        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse(expectedCelsius), temperature.Celsius);
+        AssertNearlyEqual(Float128.Parse(expectedKelvin), temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse(expectedFahrenheit), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse(expectedDelisle), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse(expectedNewton), temperature.Newton);
+        AssertNearlyEqual(Float128.Parse(expectedRankine), temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse(expectedReaumur), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
     [Theory(DisplayName = "Temperature.FromDelisle should produce the expected result")]
-    [InlineData(559.725, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
-    [InlineData(150.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
-    [InlineData(0.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
-    [InlineData(210.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
-    [InlineData(120.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    [InlineData("559.725", "-273.15", "0", "-459.67", "559.725", "-90.1395", "0", "-218.52", "-135.90375")]
+    [InlineData("150", "0", "273.15", "32", "150", "0", "491.67", "0", "7.5")]
+    [InlineData("0", "100", "373.15", "212", "0", "33", "671.67", "80", "60")]
+    [InlineData("210", "-40", "233.15", "-40", "210", "-13.2", "419.67", "-32", "-13.5")]
+    [InlineData("120", "20", "293.15", "68", "120", "6.6", "527.67", "16", "18")]
     public void TemperatureFromDelisleShouldProduceExpectedResult(
-        double delisle,
-        double expectedCelsius,
-        double expectedKelvin,
-        double expectedFahrenheit,
-        double expectedDelisle,
-        double expectedNewton,
-        double expectedRankine,
-        double expectedReaumur,
-        double expectedRomer)
+        string delisle,
+        string expectedCelsius,
+        string expectedKelvin,
+        string expectedFahrenheit,
+        string expectedDelisle,
+        string expectedNewton,
+        string expectedRankine,
+        string expectedReaumur,
+        string expectedRomer)
     {
         // When
-        Temperature<double> temperature = Temperature<double>.FromDelisle(delisle);
+        Temperature<Float128> temperature = Temperature<Float128>.FromDelisle(Float128.Parse(delisle));
 
         // Then
-        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
-        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
-        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
-        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
-        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
-        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
-        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse(expectedCelsius), temperature.Celsius);
+        AssertNearlyEqual(Float128.Parse(expectedKelvin), temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse(expectedFahrenheit), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse(expectedDelisle), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse(expectedNewton), temperature.Newton);
+        AssertNearlyEqual(Float128.Parse(expectedRankine), temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse(expectedReaumur), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
     [Theory(DisplayName = "Temperature.FromFahrenheit should produce the expected result")]
-    [InlineData(-459.67, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
-    [InlineData(32.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
-    [InlineData(212.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
-    [InlineData(-40.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
-    [InlineData(68.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    [InlineData("-459.67", "-273.15", "0", "-459.67", "559.725", "-90.1395", "0", "-218.52", "-135.90375")]
+    [InlineData("32", "0", "273.15", "32", "150", "0", "491.67", "0", "7.5")]
+    [InlineData("212", "100", "373.15", "212", "0", "33", "671.67", "80", "60")]
+    [InlineData("-40", "-40", "233.15", "-40", "210", "-13.2", "419.67", "-32", "-13.5")]
+    [InlineData("68", "20", "293.15", "68", "120", "6.6", "527.67", "16", "18")]
     public void TemperatureFromFahrenheitShouldProduceExpectedResult(
-        double fahrenheit,
-        double expectedCelsius,
-        double expectedKelvin,
-        double expectedFahrenheit,
-        double expectedDelisle,
-        double expectedNewton,
-        double expectedRankine,
-        double expectedReaumur,
-        double expectedRomer)
+        string fahrenheit,
+        string expectedCelsius,
+        string expectedKelvin,
+        string expectedFahrenheit,
+        string expectedDelisle,
+        string expectedNewton,
+        string expectedRankine,
+        string expectedReaumur,
+        string expectedRomer)
     {
-        Temperature<double> temperature = Temperature<double>.FromFahrenheit(fahrenheit);
+        Temperature<Float128> temperature = Temperature<Float128>.FromFahrenheit(Float128.Parse(fahrenheit));
 
-        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
-        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
-        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
-        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
-        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
-        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
-        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse(expectedCelsius), temperature.Celsius);
+        AssertNearlyEqual(Float128.Parse(expectedKelvin), temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse(expectedFahrenheit), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse(expectedDelisle), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse(expectedNewton), temperature.Newton);
+        AssertNearlyEqual(Float128.Parse(expectedRankine), temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse(expectedReaumur), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
     [Theory(DisplayName = "Temperature.FromKelvin should produce the expected result")]
-    [InlineData(0.0, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
-    [InlineData(273.15, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
-    [InlineData(373.15, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
-    [InlineData(233.15, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
-    [InlineData(293.15, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    [InlineData("0", "-273.15", "0", "-459.67", "559.725", "-90.1395", "0", "-218.52", "-135.90375")]
+    [InlineData("273.15", "0", "273.15", "32", "150", "0", "491.67", "0", "7.5")]
+    [InlineData("373.15", "100", "373.15", "212", "0", "33", "671.67", "80", "60")]
+    [InlineData("233.15", "-40", "233.15", "-40", "210", "-13.2", "419.67", "-32", "-13.5")]
+    [InlineData("293.15", "20", "293.15", "68", "120", "6.6", "527.67", "16", "18")]
     public void TemperatureFromKelvinShouldProduceExpectedResult(
-        double kelvin,
-        double expectedCelsius,
-        double expectedKelvin,
-        double expectedFahrenheit,
-        double expectedDelisle,
-        double expectedNewton,
-        double expectedRankine,
-        double expectedReaumur,
-        double expectedRomer)
+        string kelvin,
+        string expectedCelsius,
+        string expectedKelvin,
+        string expectedFahrenheit,
+        string expectedDelisle,
+        string expectedNewton,
+        string expectedRankine,
+        string expectedReaumur,
+        string expectedRomer)
     {
-        Temperature<double> temperature = Temperature<double>.FromKelvin(kelvin);
+        Temperature<Float128> temperature = Temperature<Float128>.FromKelvin(Float128.Parse(kelvin));
 
-        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
-        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
-        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
-        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
-        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
-        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
-        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse(expectedCelsius), temperature.Celsius);
+        AssertNearlyEqual(Float128.Parse(expectedKelvin), temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse(expectedFahrenheit), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse(expectedDelisle), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse(expectedNewton), temperature.Newton);
+        AssertNearlyEqual(Float128.Parse(expectedRankine), temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse(expectedReaumur), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
     [Theory(DisplayName = "Temperature.FromNewton should produce the expected result")]
-    [InlineData(-90.1395, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
-    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
-    [InlineData(33.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
-    [InlineData(-13.2, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
-    [InlineData(6.6, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    [InlineData("-90.1395", "-273.15", "0", "-459.67", "559.725", "-90.1395", "0", "-218.52", "-135.90375")]
+    [InlineData("0", "0", "273.15", "32", "150", "0", "491.67", "0", "7.5")]
+    [InlineData("33", "100", "373.15", "212", "0", "33", "671.67", "80", "60")]
+    [InlineData("-13.2", "-40", "233.15", "-40", "210", "-13.2", "419.67", "-32", "-13.5")]
+    [InlineData("6.6", "20", "293.15", "68", "120", "6.6", "527.67", "16", "18")]
     public void TemperatureFromNewtonShouldProduceExpectedResult(
-        double newton,
-        double expectedCelsius,
-        double expectedKelvin,
-        double expectedFahrenheit,
-        double expectedDelisle,
-        double expectedNewton,
-        double expectedRankine,
-        double expectedReaumur,
-        double expectedRomer)
+        string newton,
+        string expectedCelsius,
+        string expectedKelvin,
+        string expectedFahrenheit,
+        string expectedDelisle,
+        string expectedNewton,
+        string expectedRankine,
+        string expectedReaumur,
+        string expectedRomer)
     {
-        Temperature<double> temperature = Temperature<double>.FromNewton(newton);
+        Temperature<Float128> temperature = Temperature<Float128>.FromNewton(Float128.Parse(newton));
 
-        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
-        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
-        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
-        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
-        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
-        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
-        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse(expectedCelsius), temperature.Celsius);
+        AssertNearlyEqual(Float128.Parse(expectedKelvin), temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse(expectedFahrenheit), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse(expectedDelisle), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse(expectedNewton), temperature.Newton);
+        AssertNearlyEqual(Float128.Parse(expectedRankine), temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse(expectedReaumur), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
     [Theory(DisplayName = "Temperature.FromRankine should produce the expected result")]
-    [InlineData(0.0, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
-    [InlineData(491.67, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
-    [InlineData(671.67, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
-    [InlineData(419.67, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
-    [InlineData(527.67, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    [InlineData("0", "-273.15", "0", "-459.67", "559.725", "-90.1395", "0", "-218.52", "-135.90375")]
+    [InlineData("491.67", "0", "273.15", "32", "150", "0", "491.67", "0", "7.5")]
+    [InlineData("671.67", "100", "373.15", "212", "0", "33", "671.67", "80", "60")]
+    [InlineData("419.67", "-40", "233.15", "-40", "210", "-13.2", "419.67", "-32", "-13.5")]
+    [InlineData("527.67", "20", "293.15", "68", "120", "6.6", "527.67", "16", "18")]
     public void TemperatureFromRankineShouldProduceExpectedResult(
-        double rankine,
-        double expectedCelsius,
-        double expectedKelvin,
-        double expectedFahrenheit,
-        double expectedDelisle,
-        double expectedNewton,
-        double expectedRankine,
-        double expectedReaumur,
-        double expectedRomer)
+        string rankine,
+        string expectedCelsius,
+        string expectedKelvin,
+        string expectedFahrenheit,
+        string expectedDelisle,
+        string expectedNewton,
+        string expectedRankine,
+        string expectedReaumur,
+        string expectedRomer)
     {
-        Temperature<double> temperature = Temperature<double>.FromRankine(rankine);
+        Temperature<Float128> temperature = Temperature<Float128>.FromRankine(Float128.Parse(rankine));
 
-        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
-        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
-        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
-        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
-        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
-        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
-        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse(expectedCelsius), temperature.Celsius);
+        AssertNearlyEqual(Float128.Parse(expectedKelvin), temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse(expectedFahrenheit), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse(expectedDelisle), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse(expectedNewton), temperature.Newton);
+        AssertNearlyEqual(Float128.Parse(expectedRankine), temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse(expectedReaumur), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
     [Theory(DisplayName = "Temperature.FromReaumur should produce the expected result")]
-    [InlineData(-218.52, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
-    [InlineData(0.0, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
-    [InlineData(80.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
-    [InlineData(-32.0, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
-    [InlineData(16.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    [InlineData("-218.52", "-273.15", "0", "-459.67", "559.725", "-90.1395", "0", "-218.52", "-135.90375")]
+    [InlineData("0", "0", "273.15", "32", "150", "0", "491.67", "0", "7.5")]
+    [InlineData("80", "100", "373.15", "212", "0", "33", "671.67", "80", "60")]
+    [InlineData("-32", "-40", "233.15", "-40", "210", "-13.2", "419.67", "-32", "-13.5")]
+    [InlineData("16", "20", "293.15", "68", "120", "6.6", "527.67", "16", "18")]
     public void TemperatureFromReaumurShouldProduceExpectedResult(
-        double reaumur,
-        double expectedCelsius,
-        double expectedKelvin,
-        double expectedFahrenheit,
-        double expectedDelisle,
-        double expectedNewton,
-        double expectedRankine,
-        double expectedReaumur,
-        double expectedRomer)
+        string reaumur,
+        string expectedCelsius,
+        string expectedKelvin,
+        string expectedFahrenheit,
+        string expectedDelisle,
+        string expectedNewton,
+        string expectedRankine,
+        string expectedReaumur,
+        string expectedRomer)
     {
-        Temperature<double> temperature = Temperature<double>.FromReaumur(reaumur);
+        Temperature<Float128> temperature = Temperature<Float128>.FromReaumur(Float128.Parse(reaumur));
 
-        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
-        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
-        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
-        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
-        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
-        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
-        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse(expectedCelsius), temperature.Celsius);
+        AssertNearlyEqual(Float128.Parse(expectedKelvin), temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse(expectedFahrenheit), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse(expectedDelisle), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse(expectedNewton), temperature.Newton);
+        AssertNearlyEqual(Float128.Parse(expectedRankine), temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse(expectedReaumur), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
     [Theory(DisplayName = "Temperature.FromRomer should produce the expected result")]
-    [InlineData(-135.90375, -273.15, 0.0, -459.67, 559.725, -90.1395, 0.0, -218.52, -135.90375)]
-    [InlineData(7.5, 0.0, 273.15, 32.0, 150.0, 0.0, 491.67, 0.0, 7.5)]
-    [InlineData(60.0, 100.0, 373.15, 212.0, 0.0, 33.0, 671.67, 80.0, 60.0)]
-    [InlineData(-13.5, -40.0, 233.15, -40.0, 210.0, -13.2, 419.67, -32.0, -13.5)]
-    [InlineData(18.0, 20.0, 293.15, 68.0, 120.0, 6.6, 527.67, 16.0, 18.0)]
+    [InlineData("-135.90375", "-273.15", "0", "-459.67", "559.725", "-90.1395", "0", "-218.52", "-135.90375")]
+    [InlineData("7.5", "0", "273.15", "32", "150", "0", "491.67", "0", "7.5")]
+    [InlineData("60", "100", "373.15", "212", "0", "33", "671.67", "80", "60")]
+    [InlineData("-13.5", "-40", "233.15", "-40", "210", "-13.2", "419.67", "-32", "-13.5")]
+    [InlineData("18", "20", "293.15", "68", "120", "6.6", "527.67", "16", "18")]
     public void TemperatureFromRomerShouldProduceExpectedResult(
-        double romer,
-        double expectedCelsius,
-        double expectedKelvin,
-        double expectedFahrenheit,
-        double expectedDelisle,
-        double expectedNewton,
-        double expectedRankine,
-        double expectedReaumur,
-        double expectedRomer)
+        string romer,
+        string expectedCelsius,
+        string expectedKelvin,
+        string expectedFahrenheit,
+        string expectedDelisle,
+        string expectedNewton,
+        string expectedRankine,
+        string expectedReaumur,
+        string expectedRomer)
     {
-        Temperature<double> temperature = Temperature<double>.FromRomer(romer);
+        Temperature<Float128> temperature = Temperature<Float128>.FromRomer(Float128.Parse(romer));
 
-        Assert.Equal(expectedCelsius, temperature.Celsius, Tolerance);
-        Assert.Equal(expectedKelvin, temperature.Kelvin, Tolerance);
-        Assert.Equal(expectedFahrenheit, temperature.Fahrenheit, Tolerance);
-        Assert.Equal(expectedDelisle, temperature.Delisle, Tolerance);
-        Assert.Equal(expectedNewton, temperature.Newton, Tolerance);
-        Assert.Equal(expectedRankine, temperature.Rankine, Tolerance);
-        Assert.Equal(expectedReaumur, temperature.Reaumur, Tolerance);
-        Assert.Equal(expectedRomer, temperature.Romer, Tolerance);
+        AssertNearlyEqual(Float128.Parse(expectedCelsius), temperature.Celsius);
+        AssertNearlyEqual(Float128.Parse(expectedKelvin), temperature.Kelvin);
+        AssertNearlyEqual(Float128.Parse(expectedFahrenheit), temperature.Fahrenheit);
+        AssertNearlyEqual(Float128.Parse(expectedDelisle), temperature.Delisle);
+        AssertNearlyEqual(Float128.Parse(expectedNewton), temperature.Newton);
+        AssertNearlyEqual(Float128.Parse(expectedRankine), temperature.Rankine);
+        AssertNearlyEqual(Float128.Parse(expectedReaumur), temperature.Reaumur);
+        AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
     [Fact(DisplayName = "Temperature.Add should produce the expected result")]
     public void TemperatureAddShouldProduceExpectedValue()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(100.0);
-        Temperature<double> right = Temperature<double>.FromKelvin(50.0);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("100"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("50"));
 
         // When
-        Temperature<double> result = left.Add(right);
+        Temperature<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal(150.0, result.Kelvin, Tolerance);
+        Assert.Equal(Float128.Parse("150"), result.Kelvin);
     }
 
     [Fact(DisplayName = "Temperature.Subtract should produce the expected result")]
     public void TemperatureSubtractShouldProduceExpectedValue()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(100.0);
-        Temperature<double> right = Temperature<double>.FromKelvin(40.0);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("100"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("40"));
 
         // When
-        Temperature<double> result = left.Subtract(right);
+        Temperature<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal(60.0, result.Kelvin, Tolerance);
+        Assert.Equal(Float128.Parse("60"), result.Kelvin);
     }
 
     [Fact(DisplayName = "Temperature.Multiply should produce the expected result")]
     public void TemperatureMultiplyShouldProduceExpectedValue()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(10.0);
-        Temperature<double> right = Temperature<double>.FromKelvin(3.0);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("10"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("3"));
 
         // When
-        Temperature<double> result = left.Multiply(right);
+        Temperature<Float128> result = left.Multiply(right);
 
         // Then
-        Assert.Equal(30.0, result.Kelvin, Tolerance);
+        Assert.Equal(Float128.Parse("30"), result.Kelvin);
     }
 
     [Fact(DisplayName = "Temperature.Divide should produce the expected result")]
     public void TemperatureDivideShouldProduceExpectedValue()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(100.0);
-        Temperature<double> right = Temperature<double>.FromKelvin(20.0);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("100"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("20"));
 
         // When
-        Temperature<double> result = left.Divide(right);
+        Temperature<Float128> result = left.Divide(right);
 
         // Then
-        Assert.Equal(5.0, result.Kelvin, Tolerance);
+        Assert.Equal(Float128.Parse("5"), result.Kelvin);
     }
 
     [Fact(DisplayName = "Temperature comparison should produce the expected result (left equal to right)")]
     public void TemperatureComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(123);
-        Temperature<double> right = Temperature<double>.FromKelvin(123);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(0, Temperature<double>.Compare(left, right));
+        Assert.Equal(0, Temperature<Float128>.Compare(left, right));
         Assert.Equal(0, left.CompareTo(right));
         Assert.Equal(0, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -351,11 +366,11 @@ public sealed class TemperatureTests
     public void TemperatureComparisonShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(456);
-        Temperature<double> right = Temperature<double>.FromKelvin(123);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("456"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(1, Temperature<double>.Compare(left, right));
+        Assert.Equal(1, Temperature<Float128>.Compare(left, right));
         Assert.Equal(1, left.CompareTo(right));
         Assert.Equal(1, left.CompareTo((object)right));
         Assert.True(left > right);
@@ -368,11 +383,11 @@ public sealed class TemperatureTests
     public void TemperatureComparisonShouldProduceExpectedLeftGreaterThanOrEqualToRight()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(456);
-        Temperature<double> right = Temperature<double>.FromKelvin(123);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("456"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(1, Temperature<double>.Compare(left, right));
+        Assert.Equal(1, Temperature<Float128>.Compare(left, right));
         Assert.Equal(1, left.CompareTo(right));
         Assert.Equal(1, left.CompareTo((object)right));
         Assert.True(left > right);
@@ -385,11 +400,11 @@ public sealed class TemperatureTests
     public void TemperatureComparisonShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(123);
-        Temperature<double> right = Temperature<double>.FromKelvin(456);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("456"));
 
         // When / Then
-        Assert.Equal(-1, Temperature<double>.Compare(left, right));
+        Assert.Equal(-1, Temperature<Float128>.Compare(left, right));
         Assert.Equal(-1, left.CompareTo(right));
         Assert.Equal(-1, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -402,11 +417,11 @@ public sealed class TemperatureTests
     public void TemperatureComparisonShouldProduceExpectedLeftLessThanOrEqualToRight()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(123);
-        Temperature<double> right = Temperature<double>.FromKelvin(456);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("456"));
 
         // When / Then
-        Assert.Equal(-1, Temperature<double>.Compare(left, right));
+        Assert.Equal(-1, Temperature<Float128>.Compare(left, right));
         Assert.Equal(-1, left.CompareTo(right));
         Assert.Equal(-1, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -419,11 +434,11 @@ public sealed class TemperatureTests
     public void TemperatureEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(123);
-        Temperature<double> right = Temperature<double>.FromKelvin(123);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
 
         // When / Then
-        Assert.True(Temperature<double>.Equals(left, right));
+        Assert.True(Temperature<Float128>.Equals(left, right));
         Assert.True(left.Equals(right));
         Assert.True(left.Equals((object)right));
         Assert.True(left == right);
@@ -434,11 +449,11 @@ public sealed class TemperatureTests
     public void TemperatureEqualityShouldProduceExpectedResultLeftNotEqualToRight()
     {
         // Given
-        Temperature<double> left = Temperature<double>.FromKelvin(123);
-        Temperature<double> right = Temperature<double>.FromKelvin(456);
+        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("123"));
+        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("456"));
 
         // When / Then
-        Assert.False(Temperature<double>.Equals(left, right));
+        Assert.False(Temperature<Float128>.Equals(left, right));
         Assert.False(left.Equals(right));
         Assert.False(left.Equals((object)right));
         Assert.False(left == right);
@@ -449,7 +464,7 @@ public sealed class TemperatureTests
     public void TemperatureToStringShouldProduceExpectedResult()
     {
         // Given / When
-        Temperature<double> temperature = Temperature<double>.FromCelsius(100.0);
+        Temperature<Float128> temperature = Temperature<Float128>.FromCelsius(Float128.Parse("100"));
 
         // Then
         Assert.Equal("373.150 K", $"{temperature:K3}");
@@ -467,7 +482,7 @@ public sealed class TemperatureTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        Temperature<double> temperature = Temperature<double>.FromKelvin(1234.56);
+        Temperature<Float128> temperature = Temperature<Float128>.FromKelvin(Float128.Parse("1234.56"));
 
         // When
         string formatted = temperature.ToString("K2", customCulture);

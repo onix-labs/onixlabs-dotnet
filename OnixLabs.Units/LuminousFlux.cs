@@ -1,0 +1,61 @@
+// Copyright 2020-2025 ONIXLabs
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System.Numerics;
+
+namespace OnixLabs.Units;
+
+/// <summary>
+/// Represents a unit of luminous flux — the product of luminous intensity and solid angle
+/// (<c>Φᵥ = Iᵥ · Ω</c>). The SI unit of luminous flux is the lumen (1 lm = 1 cd·sr). Here the <see cref="Angle{T}"/>
+/// component represents the solid angle (steradian) over which the luminous intensity is emitted.
+/// </summary>
+/// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
+// ReSharper disable MemberCanBePrivate.Global
+#pragma warning disable CA2231
+public readonly partial struct LuminousFlux<T>(
+    in LuminousIntensity<T> left,
+    in Angle<T> right
+) : IMagnitudinalUnit<T>,
+    IAdditiveUnit<LuminousFlux<T>>,
+    ICompositeUnit<LuminousIntensity<T>, Angle<T>>
+    where T : IFloatingPoint<T>
+#pragma warning restore CA2231
+{
+    /// <summary>
+    /// Gets the <see cref="LuminousIntensity{T}"/> component of the luminous flux.
+    /// </summary>
+    public LuminousIntensity<T> Left { get; } = left;
+
+    /// <summary>
+    /// Gets the <see cref="Angle{T}"/> component of the luminous flux — the solid angle (steradian) over which the
+    /// luminous intensity is emitted.
+    /// </summary>
+    public Angle<T> Right { get; } = right;
+
+    /// <summary>
+    /// Gets the magnitude of the current <see cref="LuminousFlux{T}"/> as the product of the luminous intensity (in
+    /// candelas) and the solid angle (in radians/steradians), yielding the luminous flux in lumens (cd·sr).
+    /// </summary>
+    /// <remarks>
+    /// The magnitude is an opaque scalar used by <see cref="Equals(LuminousFlux{T})"/>,
+    /// <see cref="CompareTo(LuminousFlux{T})"/>, <see cref="GetHashCode"/>, and the arithmetic operators. It is not
+    /// intended for display — use <see cref="ToString(string, System.IFormatProvider)"/> for that.
+    ///
+    /// Both components are read at their SI base scale (LuminousIntensity at candelas via
+    /// <see cref="LuminousIntensity{T}.Candelas"/>, Angle at radians via <see cref="Angle{T}.Radians"/>) so the
+    /// resulting magnitude lands at the human-readable lumen scale and round-trips cleanly through arithmetic.
+    /// </remarks>
+    public T Magnitude => Left.Candelas * Right.Radians;
+}

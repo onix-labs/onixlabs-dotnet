@@ -13,500 +13,498 @@
 // limitations under the License.
 
 using System.Globalization;
+using OnixLabs.Numerics;
 
 namespace OnixLabs.Units.UnitTests;
 
 public sealed class DataSizeTests
 {
-    // IEEE-754 binary floating-point arithmetic causes small discrepancies in calculation, therefore we need a tolerance.
-    private const double Tolerance = 1e-12;
-
     [Fact(DisplayName = "DataSize.Zero should produce the expected result")]
     public void DataSizeZeroShouldProduceExpectedResult()
     {
         // Given / When
-        DataSize<double> size = DataSize<double>.Zero;
+        DataSize<Float128> size = DataSize<Float128>.Zero;
 
         // Then
-        Assert.Equal(0.0, size.Bits, Tolerance);
+        Assert.Equal(Float128.Zero, size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(8.0, 8.0)]
-    [InlineData(1000.0, 1000.0)]
-    [InlineData(1024.0, 1024.0)]
-    [InlineData(8192.0, 8192.0)]
-    public void DataSizeFromBitsShouldProduceExpectedBits(double bits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("8", "8")]
+    [InlineData("1000", "1000")]
+    [InlineData("1024", "1024")]
+    [InlineData("8192", "8192")]
+    public void DataSizeFromBitsShouldProduceExpectedBits(string bits, string expectedBits)
     {
         // When
-        DataSize<double> size = DataSize<double>.FromBits(bits);
+        DataSize<Float128> size = DataSize<Float128>.FromBits(Float128.Parse(bits));
 
         // Then
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 8.0)]
-    [InlineData(1000.0, 8000.0)]
-    [InlineData(1024.0, 8192.0)]
-    [InlineData(2048.0, 16384.0)]
-    public void DataSizeFromBytesShouldProduceExpectedBits(double bytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8")]
+    [InlineData("1000", "8000")]
+    [InlineData("1024", "8192")]
+    [InlineData("2048", "16384")]
+    public void DataSizeFromBytesShouldProduceExpectedBits(string bytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromBytes(bytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromBytes(Float128.Parse(bytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromKibiBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0)]
-    [InlineData(2.0, 2048.0)]
-    [InlineData(8.0, 8192.0)]
-    [InlineData(10.0, 10240.0)]
-    public void DataSizeFromKibiBitsShouldProduceExpectedBits(double kibibits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1024")]
+    [InlineData("2", "2048")]
+    [InlineData("8", "8192")]
+    [InlineData("10", "10240")]
+    public void DataSizeFromKibiBitsShouldProduceExpectedBits(string kibibits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromKibiBits(kibibits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromKibiBits(Float128.Parse(kibibits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromKibiBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 8192.0)]
-    [InlineData(2.0, 16384.0)]
-    [InlineData(10.0, 81920.0)]
-    [InlineData(0.5, 4096.0)]
-    public void DataSizeFromKibiBytesShouldProduceExpectedBits(double kibibytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8192")]
+    [InlineData("2", "16384")]
+    [InlineData("10", "81920")]
+    [InlineData("0.5", "4096")]
+    public void DataSizeFromKibiBytesShouldProduceExpectedBits(string kibibytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromKibiBytes(kibibytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromKibiBytes(Float128.Parse(kibibytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromKiloBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0)]
-    [InlineData(8.0, 8000.0)]
-    [InlineData(10.0, 10000.0)]
-    [InlineData(0.5, 500.0)]
-    public void DataSizeFromKiloBitsShouldProduceExpectedBits(double kilobits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1000")]
+    [InlineData("8", "8000")]
+    [InlineData("10", "10000")]
+    [InlineData("0.5", "500")]
+    public void DataSizeFromKiloBitsShouldProduceExpectedBits(string kilobits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromKiloBits(kilobits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromKiloBits(Float128.Parse(kilobits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromKiloBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 8000.0)]
-    [InlineData(2.0, 16000.0)]
-    [InlineData(0.5, 4000.0)]
-    [InlineData(10.0, 80000.0)]
-    public void DataSizeFromKiloBytesShouldProduceExpectedBits(double kilobytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8000")]
+    [InlineData("2", "16000")]
+    [InlineData("0.5", "4000")]
+    [InlineData("10", "80000")]
+    public void DataSizeFromKiloBytesShouldProduceExpectedBits(string kilobytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromKiloBytes(kilobytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromKiloBytes(Float128.Parse(kilobytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromMebiBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0)]
-    public void DataSizeFromMebiBitsShouldProduceExpectedBits(double mebibits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1048576")]
+    [InlineData("0.5", "524288")]
+    [InlineData("2", "2097152")]
+    [InlineData("10", "10485760")]
+    public void DataSizeFromMebiBitsShouldProduceExpectedBits(string mebibits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromMebiBits(mebibits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromMebiBits(Float128.Parse(mebibits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromMebiBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 8.0)]
-    public void DataSizeFromMebiBytesShouldProduceExpectedBits(double mebibytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8388608")]
+    [InlineData("0.5", "4194304")]
+    [InlineData("2", "16777216")]
+    [InlineData("10", "83886080")]
+    public void DataSizeFromMebiBytesShouldProduceExpectedBits(string mebibytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromMebiBytes(mebibytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromMebiBytes(Float128.Parse(mebibytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromMegaBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0)]
-    public void DataSizeFromMegaBitsShouldProduceExpectedBits(double megabits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1000000")]
+    [InlineData("0.5", "500000")]
+    [InlineData("2", "2000000")]
+    [InlineData("10", "10000000")]
+    public void DataSizeFromMegaBitsShouldProduceExpectedBits(string megabits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromMegaBits(megabits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromMegaBits(Float128.Parse(megabits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromMegaBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 8.0)]
-    public void DataSizeFromMegaBytesShouldProduceExpectedBits(double megabytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8000000")]
+    [InlineData("0.5", "4000000")]
+    [InlineData("2", "16000000")]
+    [InlineData("10", "80000000")]
+    public void DataSizeFromMegaBytesShouldProduceExpectedBits(string megabytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromMegaBytes(megabytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromMegaBytes(Float128.Parse(megabytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromGibiBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0)]
-    public void DataSizeFromGibiBitsShouldProduceExpectedBits(double gibibits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1073741824")]
+    [InlineData("0.5", "536870912")]
+    [InlineData("2", "2147483648")]
+    [InlineData("10", "10737418240")]
+    public void DataSizeFromGibiBitsShouldProduceExpectedBits(string gibibits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromGibiBits(gibibits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromGibiBits(Float128.Parse(gibibits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromGibiBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    public void DataSizeFromGibiBytesShouldProduceExpectedBits(double gibibytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8589934592")]
+    [InlineData("0.5", "4294967296")]
+    [InlineData("2", "17179869184")]
+    [InlineData("10", "85899345920")]
+    public void DataSizeFromGibiBytesShouldProduceExpectedBits(string gibibytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromGibiBytes(gibibytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromGibiBytes(Float128.Parse(gibibytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromGigaBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0)]
-    public void DataSizeFromGigaBitsShouldProduceExpectedBits(double gigabits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1000000000")]
+    [InlineData("0.5", "500000000")]
+    [InlineData("2", "2000000000")]
+    [InlineData("10", "10000000000")]
+    public void DataSizeFromGigaBitsShouldProduceExpectedBits(string gigabits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromGigaBits(gigabits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromGigaBits(Float128.Parse(gigabits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromGigaBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    public void DataSizeFromGigaBytesShouldProduceExpectedBits(double gigabytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8000000000")]
+    [InlineData("0.5", "4000000000")]
+    [InlineData("2", "16000000000")]
+    [InlineData("10", "80000000000")]
+    public void DataSizeFromGigaBytesShouldProduceExpectedBits(string gigabytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromGigaBytes(gigabytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromGigaBytes(Float128.Parse(gigabytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromTebiBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    public void DataSizeFromTebiBitsShouldProduceExpectedBits(double tebibits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1099511627776")]
+    [InlineData("0.5", "549755813888")]
+    [InlineData("2", "2199023255552")]
+    [InlineData("10", "10995116277760")]
+    public void DataSizeFromTebiBitsShouldProduceExpectedBits(string tebibits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromTebiBits(tebibits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromTebiBits(Float128.Parse(tebibits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromTebiBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    public void DataSizeFromTebiBytesShouldProduceExpectedBits(double tebibytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8796093022208")]
+    [InlineData("0.5", "4398046511104")]
+    [InlineData("2", "17592186044416")]
+    [InlineData("10", "87960930222080")]
+    public void DataSizeFromTebiBytesShouldProduceExpectedBits(string tebibytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromTebiBytes(tebibytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromTebiBytes(Float128.Parse(tebibytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromTeraBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    public void DataSizeFromTeraBitsShouldProduceExpectedBits(double terabits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1000000000000")]
+    [InlineData("0.5", "500000000000")]
+    [InlineData("2", "2000000000000")]
+    [InlineData("10", "10000000000000")]
+    public void DataSizeFromTeraBitsShouldProduceExpectedBits(string terabits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromTeraBits(terabits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromTeraBits(Float128.Parse(terabits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromTeraBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    public void DataSizeFromTeraBytesShouldProduceExpectedBits(double terabytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8000000000000")]
+    [InlineData("0.5", "4000000000000")]
+    [InlineData("2", "16000000000000")]
+    [InlineData("10", "80000000000000")]
+    public void DataSizeFromTeraBytesShouldProduceExpectedBits(string terabytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromTeraBytes(terabytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromTeraBytes(Float128.Parse(terabytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromPebiBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    public void DataSizeFromPebiBitsShouldProduceExpectedBits(double pebibits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1125899906842624")]
+    [InlineData("0.5", "562949953421312")]
+    [InlineData("2", "2251799813685248")]
+    [InlineData("10", "11258999068426240")]
+    public void DataSizeFromPebiBitsShouldProduceExpectedBits(string pebibits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromPebiBits(pebibits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromPebiBits(Float128.Parse(pebibits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromPebiBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    public void DataSizeFromPebiBytesShouldProduceExpectedBits(double pebibytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "9007199254740992")]
+    [InlineData("0.5", "4503599627370496")]
+    [InlineData("2", "18014398509481984")]
+    [InlineData("10", "90071992547409920")]
+    public void DataSizeFromPebiBytesShouldProduceExpectedBits(string pebibytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromPebiBytes(pebibytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromPebiBytes(Float128.Parse(pebibytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromPetaBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    public void DataSizeFromPetaBitsShouldProduceExpectedBits(double petabits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1000000000000000")]
+    [InlineData("0.5", "500000000000000")]
+    [InlineData("2", "2000000000000000")]
+    [InlineData("10", "10000000000000000")]
+    public void DataSizeFromPetaBitsShouldProduceExpectedBits(string petabits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromPetaBits(petabits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromPetaBits(Float128.Parse(petabits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromPetaBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    public void DataSizeFromPetaBytesShouldProduceExpectedBits(double petabytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8000000000000000")]
+    [InlineData("0.5", "4000000000000000")]
+    [InlineData("2", "16000000000000000")]
+    [InlineData("10", "80000000000000000")]
+    public void DataSizeFromPetaBytesShouldProduceExpectedBits(string petabytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromPetaBytes(petabytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromPetaBytes(Float128.Parse(petabytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromExbiBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    public void DataSizeFromExbiBitsShouldProduceExpectedBits(double exbibits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1152921504606846976")]
+    [InlineData("0.5", "576460752303423488")]
+    [InlineData("2", "2305843009213693952")]
+    [InlineData("10", "11529215046068469760")]
+    public void DataSizeFromExbiBitsShouldProduceExpectedBits(string exbibits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromExbiBits(exbibits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromExbiBits(Float128.Parse(exbibits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromExbiBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    public void DataSizeFromExbiBytesShouldProduceExpectedBits(double exbibytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "9223372036854775808")]
+    [InlineData("0.5", "4611686018427387904")]
+    [InlineData("2", "18446744073709551616")]
+    [InlineData("10", "92233720368547758080")]
+    public void DataSizeFromExbiBytesShouldProduceExpectedBits(string exbibytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromExbiBytes(exbibytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromExbiBytes(Float128.Parse(exbibytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromExaBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    public void DataSizeFromExaBitsShouldProduceExpectedBits(double exabits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1000000000000000000")]
+    [InlineData("0.5", "500000000000000000")]
+    [InlineData("2", "2000000000000000000")]
+    [InlineData("10", "10000000000000000000")]
+    public void DataSizeFromExaBitsShouldProduceExpectedBits(string exabits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromExaBits(exabits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromExaBits(Float128.Parse(exabits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromExaBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    public void DataSizeFromExaBytesShouldProduceExpectedBits(double exabytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8000000000000000000")]
+    [InlineData("0.5", "4000000000000000000")]
+    [InlineData("2", "16000000000000000000")]
+    [InlineData("10", "80000000000000000000")]
+    public void DataSizeFromExaBytesShouldProduceExpectedBits(string exabytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromExaBytes(exabytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromExaBytes(Float128.Parse(exabytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromZebiBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    public void DataSizeFromZebiBitsShouldProduceExpectedBits(double zebibits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1180591620717411303424")]
+    [InlineData("0.5", "590295810358705651712")]
+    [InlineData("2", "2361183241434822606848")]
+    [InlineData("10", "11805916207174113034240")]
+    public void DataSizeFromZebiBitsShouldProduceExpectedBits(string zebibits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromZebiBits(zebibits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromZebiBits(Float128.Parse(zebibits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromZebiBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    public void DataSizeFromZebiBytesShouldProduceExpectedBits(double zebibytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "9444732965739290427392")]
+    [InlineData("0.5", "4722366482869645213696")]
+    [InlineData("2", "18889465931478580854784")]
+    [InlineData("10", "94447329657392904273920")]
+    public void DataSizeFromZebiBytesShouldProduceExpectedBits(string zebibytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromZebiBytes(zebibytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromZebiBytes(Float128.Parse(zebibytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromZettaBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    public void DataSizeFromZettaBitsShouldProduceExpectedBits(double zettabits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1000000000000000000000")]
+    [InlineData("0.5", "500000000000000000000")]
+    [InlineData("2", "2000000000000000000000")]
+    [InlineData("10", "10000000000000000000000")]
+    public void DataSizeFromZettaBitsShouldProduceExpectedBits(string zettabits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromZettaBits(zettabits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromZettaBits(Float128.Parse(zettabits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromZettaBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    public void DataSizeFromZettaBytesShouldProduceExpectedBits(double zettabytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8000000000000000000000")]
+    [InlineData("0.5", "4000000000000000000000")]
+    [InlineData("2", "16000000000000000000000")]
+    [InlineData("10", "80000000000000000000000")]
+    public void DataSizeFromZettaBytesShouldProduceExpectedBits(string zettabytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromZettaBytes(zettabytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromZettaBytes(Float128.Parse(zettabytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromYobiBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0)]
-    public void DataSizeFromYobiBitsShouldProduceExpectedBits(double yobibits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1208925819614629174706176")]
+    [InlineData("0.5", "604462909807314587353088")]
+    [InlineData("2", "2417851639229258349412352")]
+    [InlineData("10", "12089258196146291747061760")]
+    public void DataSizeFromYobiBitsShouldProduceExpectedBits(string yobibits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromYobiBits(yobibits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromYobiBits(Float128.Parse(yobibits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromYobiBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    [InlineData(10.0, 10.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 1024.0 * 8.0)]
-    public void DataSizeFromYobiBytesShouldProduceExpectedBits(double yobibytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "9671406556917033397649408")]
+    [InlineData("0.5", "4835703278458516698824704")]
+    [InlineData("2", "19342813113834066795298816")]
+    [InlineData("10", "96714065569170333976494080")]
+    public void DataSizeFromYobiBytesShouldProduceExpectedBits(string yobibytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromYobiBytes(yobibytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromYobiBytes(Float128.Parse(yobibytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromYottaBits should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0)]
-    public void DataSizeFromYottaBitsShouldProduceExpectedBits(double yottabits, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "1000000000000000000000000")]
+    [InlineData("0.5", "500000000000000000000000")]
+    [InlineData("2", "2000000000000000000000000")]
+    public void DataSizeFromYottaBitsShouldProduceExpectedBits(string yottabits, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromYottaBits(yottabits);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromYottaBits(Float128.Parse(yottabits));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Theory(DisplayName = "DataSize.FromYottaBytes should produce the expected Bits")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(0.5, 0.5 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    [InlineData(2.0, 2.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 8.0)]
-    public void DataSizeFromYottaBytesShouldProduceExpectedBits(double yottabytes, double expectedBits)
+    [InlineData("0", "0")]
+    [InlineData("1", "8000000000000000000000000")]
+    [InlineData("0.5", "4000000000000000000000000")]
+    [InlineData("2", "16000000000000000000000000")]
+    public void DataSizeFromYottaBytesShouldProduceExpectedBits(string yottabytes, string expectedBits)
     {
-        DataSize<double> size = DataSize<double>.FromYottaBytes(yottabytes);
-        Assert.Equal(expectedBits, size.Bits, Tolerance);
+        DataSize<Float128> size = DataSize<Float128>.FromYottaBytes(Float128.Parse(yottabytes));
+        Assert.Equal(Float128.Parse(expectedBits), size.Bits);
     }
 
     [Fact(DisplayName = "DataSize.Add should produce the expected result")]
     public void DataSizeAddShouldProduceExpectedValue()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(1500.0);
-        DataSize<double> right = DataSize<double>.FromBytes(500.0);
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("1500"));
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("500"));
 
         // When
-        DataSize<double> result = left.Add(right);
+        DataSize<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal(2000.0, result.Bytes, Tolerance);
+        Assert.Equal(Float128.Parse("2000"), result.Bytes);
     }
 
     [Fact(DisplayName = "DataSize.Subtract should produce the expected result")]
     public void DataSizeSubtractShouldProduceExpectedValue()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(1500.0);
-        DataSize<double> right = DataSize<double>.FromBytes(400.0);
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("1500"));
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("400"));
 
         // When
-        DataSize<double> result = left.Subtract(right);
+        DataSize<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal(1100.0, result.Bytes, Tolerance);
+        Assert.Equal(Float128.Parse("1100"), result.Bytes);
     }
 
     [Fact(DisplayName = "DataSize.Multiply should produce the expected result")]
     public void DataSizeMultiplyShouldProduceExpectedValue()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(10.0); // 80 bits
-        DataSize<double> right = DataSize<double>.FromBytes(3.0); // 24 bits
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("10")); // 80 bits
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("3")); // 24 bits
 
         // When
-        DataSize<double> result = left.Multiply(right); // 80 * 24 = 1920 bits
+        DataSize<Float128> result = left.Multiply(right); // 80 * 24 = 1920 bits
 
         // Then
-        Assert.Equal(1920.0, result.Bits, Tolerance);
-        Assert.Equal(240.0, result.Bytes, Tolerance);
+        Assert.Equal(Float128.Parse("1920"), result.Bits);
+        Assert.Equal(Float128.Parse("240"), result.Bytes);
     }
 
     [Fact(DisplayName = "DataSize.Divide should produce the expected result")]
     public void DataSizeDivideShouldProduceExpectedValue()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(100.0); // 800 bits
-        DataSize<double> right = DataSize<double>.FromBytes(20.0); // 160 bits
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("100")); // 800 bits
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("20")); // 160 bits
 
         // When
-        DataSize<double> result = left.Divide(right); // 800 / 160 = 5 bits
+        DataSize<Float128> result = left.Divide(right); // 800 / 160 = 5 bits
 
         // Then
-        Assert.Equal(5.0, result.Bits, Tolerance);
-        Assert.Equal(0.625, result.Bytes, Tolerance);
+        Assert.Equal(Float128.Parse("5"), result.Bits);
+        Assert.Equal(Float128.Parse("0.625"), result.Bytes);
     }
 
     [Fact(DisplayName = "DataSize comparison should produce the expected result (left equal to right)")]
     public void DataSizeComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(1234.0);
-        DataSize<double> right = DataSize<double>.FromBytes(1234.0);
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("1234"));
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("1234"));
 
         // When / Then
-        Assert.Equal(0, DataSize<double>.Compare(left, right));
+        Assert.Equal(0, DataSize<Float128>.Compare(left, right));
         Assert.Equal(0, left.CompareTo(right));
         Assert.Equal(0, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -519,11 +517,11 @@ public sealed class DataSizeTests
     public void DataSizeComparisonShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(4567.0);
-        DataSize<double> right = DataSize<double>.FromBytes(1234.0);
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("4567"));
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("1234"));
 
         // When / Then
-        Assert.Equal(1, DataSize<double>.Compare(left, right));
+        Assert.Equal(1, DataSize<Float128>.Compare(left, right));
         Assert.Equal(1, left.CompareTo(right));
         Assert.Equal(1, left.CompareTo((object)right));
         Assert.True(left > right);
@@ -536,11 +534,11 @@ public sealed class DataSizeTests
     public void DataSizeComparisonShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(1234.0);
-        DataSize<double> right = DataSize<double>.FromBytes(4567.0);
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("1234"));
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("4567"));
 
         // When / Then
-        Assert.Equal(-1, DataSize<double>.Compare(left, right));
+        Assert.Equal(-1, DataSize<Float128>.Compare(left, right));
         Assert.Equal(-1, left.CompareTo(right));
         Assert.Equal(-1, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -553,11 +551,11 @@ public sealed class DataSizeTests
     public void DataSizeEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(2048.0);
-        DataSize<double> right = DataSize<double>.FromBytes(2048.0);
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("2048"));
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("2048"));
 
         // When / Then
-        Assert.True(DataSize<double>.Equals(left, right));
+        Assert.True(DataSize<Float128>.Equals(left, right));
         Assert.True(left.Equals(right));
         Assert.True(left.Equals((object)right));
         Assert.True(left == right);
@@ -568,11 +566,11 @@ public sealed class DataSizeTests
     public void DataSizeEqualityShouldProduceExpectedResultLeftNotEqualToRight()
     {
         // Given
-        DataSize<double> left = DataSize<double>.FromBytes(2048.0);
-        DataSize<double> right = DataSize<double>.FromBytes(4096.0);
+        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("2048"));
+        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("4096"));
 
         // When / Then
-        Assert.False(DataSize<double>.Equals(left, right));
+        Assert.False(DataSize<Float128>.Equals(left, right));
         Assert.False(left.Equals(right));
         Assert.False(left.Equals((object)right));
         Assert.False(left == right);
@@ -584,7 +582,7 @@ public sealed class DataSizeTests
     {
         // Given / When
         // Use values that render nicely across several specifiers.
-        DataSize<double> size = DataSize<double>.FromBytes(1_048_576.0); // 1 MiB
+        DataSize<Float128> size = DataSize<Float128>.FromBytes(Float128.Parse("1048576")); // 1 MiB
 
         // Then (explicit formatting + scale)
         Assert.Equal("8,388,608.000 b", $"{size:b3}");
@@ -602,7 +600,7 @@ public sealed class DataSizeTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        DataSize<double> size = DataSize<double>.FromKiloBytes(1234.56); // 1,234.56 KB
+        DataSize<Float128> size = DataSize<Float128>.FromKiloBytes(Float128.Parse("1234.56")); // 1,234.56 KB
 
         // When
         string formatted = size.ToString("KB2", customCulture);

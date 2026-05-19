@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Numerics;
+using OnixLabs.Numerics;
 
 namespace OnixLabs.Units;
 
@@ -313,7 +313,7 @@ public readonly partial struct DataSize<T> : IAdditiveUnit<DataSize<T>>, IMultip
     /// <returns>Returns the size converted to the requested unit.</returns>
     private T GetBinaryValue(int power, bool isByteValue)
     {
-        T divisor = T.CreateChecked(Math.Pow(1024, power));
+        T divisor = GenericMath.Pow(T.CreateChecked(1024), power);
         return Bits / (isByteValue ? divisor * T.CreateChecked(8) : divisor);
     }
 
@@ -326,7 +326,7 @@ public readonly partial struct DataSize<T> : IAdditiveUnit<DataSize<T>>, IMultip
     /// <returns>Returns the size converted to the requested unit.</returns>
     private T GetMetricValue(int power, bool isByteValue)
     {
-        T divisor = T.CreateChecked(Math.Pow(1000, power));
+        T divisor = GenericMath.Pow(T.CreateChecked(1000), power);
         return Bits / (isByteValue ? divisor * T.CreateChecked(8) : divisor);
     }
 }

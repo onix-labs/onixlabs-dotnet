@@ -14,6 +14,7 @@
 
 using System.ComponentModel;
 using System.Numerics;
+using OnixLabs.Numerics;
 
 namespace OnixLabs.Units;
 
@@ -25,54 +26,54 @@ internal static class IFloatingPointExtensions
 {
     extension<T>(T receiver) where T : IFloatingPoint<T>
     {
-        public T FromRontoUnits() => receiver * T.CreateChecked(1e3);
-        public T FromYoctoUnits() => receiver * T.CreateChecked(1e6);
-        public T FromZeptoUnits() => receiver * T.CreateChecked(1e9);
-        public T FromAttoUnits() => receiver * T.CreateChecked(1e12);
-        public T FromFemtoUnits() => receiver * T.CreateChecked(1e15);
-        public T FromPicoUnits() => receiver * T.CreateChecked(1e18);
-        public T FromNanoUnits() => receiver * T.CreateChecked(1e21);
-        public T FromMicroUnits() => receiver * T.CreateChecked(1e24);
-        public T FromMilliUnits() => receiver * T.CreateChecked(1e27);
-        public T FromCentiUnits() => receiver * T.CreateChecked(1e28);
-        public T FromDeciUnits() => receiver * T.CreateChecked(1e29);
-        public T FromBaseUnits() => receiver * T.CreateChecked(1e30);
-        public T FromDecaUnits() => receiver * T.CreateChecked(1e31);
-        public T FromHectoUnits() => receiver * T.CreateChecked(1e32);
-        public T FromKiloUnits() => receiver * T.CreateChecked(1e33);
-        public T FromMegaUnits() => receiver * T.CreateChecked(1e36);
-        public T FromGigaUnits() => receiver * T.CreateChecked(1e39);
-        public T FromTeraUnits() => receiver * T.CreateChecked(1e42);
-        public T FromPetaUnits() => receiver * T.CreateChecked(1e45);
-        public T FromExaUnits() => receiver * T.CreateChecked(1e48);
-        public T FromZettaUnits() => receiver * T.CreateChecked(1e51);
-        public T FromYottaUnits() => receiver * T.CreateChecked(1e54);
-        public T FromRonnaUnits() => receiver * T.CreateChecked(1e57);
-        public T FromQuettaUnits() => receiver * T.CreateChecked(1e60);
+        public T FromRontoUnits() => receiver * GenericMath.Pow10<T>(3);
+        public T FromYoctoUnits() => receiver * GenericMath.Pow10<T>(6);
+        public T FromZeptoUnits() => receiver * GenericMath.Pow10<T>(9);
+        public T FromAttoUnits() => receiver * GenericMath.Pow10<T>(12);
+        public T FromFemtoUnits() => receiver * GenericMath.Pow10<T>(15);
+        public T FromPicoUnits() => receiver * GenericMath.Pow10<T>(18);
+        public T FromNanoUnits() => receiver * GenericMath.Pow10<T>(21);
+        public T FromMicroUnits() => receiver * GenericMath.Pow10<T>(24);
+        public T FromMilliUnits() => receiver * GenericMath.Pow10<T>(27);
+        public T FromCentiUnits() => receiver * GenericMath.Pow10<T>(28);
+        public T FromDeciUnits() => receiver * GenericMath.Pow10<T>(29);
+        public T FromBaseUnits() => receiver * GenericMath.Pow10<T>(30);
+        public T FromDecaUnits() => receiver * GenericMath.Pow10<T>(31);
+        public T FromHectoUnits() => receiver * GenericMath.Pow10<T>(32);
+        public T FromKiloUnits() => receiver * GenericMath.Pow10<T>(33);
+        public T FromMegaUnits() => receiver * GenericMath.Pow10<T>(36);
+        public T FromGigaUnits() => receiver * GenericMath.Pow10<T>(39);
+        public T FromTeraUnits() => receiver * GenericMath.Pow10<T>(42);
+        public T FromPetaUnits() => receiver * GenericMath.Pow10<T>(45);
+        public T FromExaUnits() => receiver * GenericMath.Pow10<T>(48);
+        public T FromZettaUnits() => receiver * GenericMath.Pow10<T>(51);
+        public T FromYottaUnits() => receiver * GenericMath.Pow10<T>(54);
+        public T FromRonnaUnits() => receiver * GenericMath.Pow10<T>(57);
+        public T FromQuettaUnits() => receiver * GenericMath.Pow10<T>(60);
 
-        public T ToRontoUnits() => receiver / T.CreateChecked(1e3);
-        public T ToYoctoUnits() => receiver / T.CreateChecked(1e6);
-        public T ToZeptoUnits() => receiver / T.CreateChecked(1e9);
-        public T ToAttoUnits() => receiver / T.CreateChecked(1e12);
-        public T ToFemtoUnits() => receiver / T.CreateChecked(1e15);
-        public T ToPicoUnits() => receiver / T.CreateChecked(1e18);
-        public T ToNanoUnits() => receiver / T.CreateChecked(1e21);
-        public T ToMicroUnits() => receiver / T.CreateChecked(1e24);
-        public T ToMilliUnits() => receiver / T.CreateChecked(1e27);
-        public T ToCentiUnits() => receiver / T.CreateChecked(1e28);
-        public T ToDeciUnits() => receiver / T.CreateChecked(1e29);
-        public T ToBaseUnits() => receiver / T.CreateChecked(1e30);
-        public T ToDecaUnits() => receiver / T.CreateChecked(1e31);
-        public T ToHectoUnits() => receiver / T.CreateChecked(1e32);
-        public T ToKiloUnits() => receiver / T.CreateChecked(1e33);
-        public T ToMegaUnits() => receiver / T.CreateChecked(1e36);
-        public T ToGigaUnits() => receiver / T.CreateChecked(1e39);
-        public T ToTeraUnits() => receiver / T.CreateChecked(1e42);
-        public T ToPetaUnits() => receiver / T.CreateChecked(1e45);
-        public T ToExaUnits() => receiver / T.CreateChecked(1e48);
-        public T ToZettaUnits() => receiver / T.CreateChecked(1e51);
-        public T ToYottaUnits() => receiver / T.CreateChecked(1e54);
-        public T ToRonnaUnits() => receiver / T.CreateChecked(1e57);
-        public T ToQuettaUnits() => receiver / T.CreateChecked(1e60);
+        public T ToRontoUnits() => receiver / GenericMath.Pow10<T>(3);
+        public T ToYoctoUnits() => receiver / GenericMath.Pow10<T>(6);
+        public T ToZeptoUnits() => receiver / GenericMath.Pow10<T>(9);
+        public T ToAttoUnits() => receiver / GenericMath.Pow10<T>(12);
+        public T ToFemtoUnits() => receiver / GenericMath.Pow10<T>(15);
+        public T ToPicoUnits() => receiver / GenericMath.Pow10<T>(18);
+        public T ToNanoUnits() => receiver / GenericMath.Pow10<T>(21);
+        public T ToMicroUnits() => receiver / GenericMath.Pow10<T>(24);
+        public T ToMilliUnits() => receiver / GenericMath.Pow10<T>(27);
+        public T ToCentiUnits() => receiver / GenericMath.Pow10<T>(28);
+        public T ToDeciUnits() => receiver / GenericMath.Pow10<T>(29);
+        public T ToBaseUnits() => receiver / GenericMath.Pow10<T>(30);
+        public T ToDecaUnits() => receiver / GenericMath.Pow10<T>(31);
+        public T ToHectoUnits() => receiver / GenericMath.Pow10<T>(32);
+        public T ToKiloUnits() => receiver / GenericMath.Pow10<T>(33);
+        public T ToMegaUnits() => receiver / GenericMath.Pow10<T>(36);
+        public T ToGigaUnits() => receiver / GenericMath.Pow10<T>(39);
+        public T ToTeraUnits() => receiver / GenericMath.Pow10<T>(42);
+        public T ToPetaUnits() => receiver / GenericMath.Pow10<T>(45);
+        public T ToExaUnits() => receiver / GenericMath.Pow10<T>(48);
+        public T ToZettaUnits() => receiver / GenericMath.Pow10<T>(51);
+        public T ToYottaUnits() => receiver / GenericMath.Pow10<T>(54);
+        public T ToRonnaUnits() => receiver / GenericMath.Pow10<T>(57);
+        public T ToQuettaUnits() => receiver / GenericMath.Pow10<T>(60);
     }
 }

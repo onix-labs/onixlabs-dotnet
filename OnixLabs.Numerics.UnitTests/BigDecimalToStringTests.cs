@@ -94,4 +94,39 @@ public sealed class BigDecimalToStringTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "BigDecimal.ToString with R format should produce the round-trip representation")]
+    public void BigDecimalToStringWithRFormatShouldProduceRoundTrip()
+    {
+        BigDecimal value = BigDecimal.Parse("3.14159265358979323846", CultureInfo.InvariantCulture);
+        Assert.Equal("3.14159265358979323846", value.ToString("R", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "BigDecimal.ToString with R format for integer-valued BigDecimal should produce decimal digits")]
+    public void BigDecimalToStringWithRFormatForIntegerShouldProduceDecimalDigits()
+    {
+        BigDecimal value = BigDecimal.Parse("1234567", CultureInfo.InvariantCulture);
+        Assert.Equal("1234567", value.ToString("R", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "BigDecimal.ToString with X format for integer-valued BigDecimal should produce hex digits")]
+    public void BigDecimalToStringWithXFormatForIntegerShouldProduceHex()
+    {
+        BigDecimal value = BigDecimal.Parse("255", CultureInfo.InvariantCulture);
+        Assert.Equal("FF", value.ToString("X", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "BigDecimal.ToString with X4 format for integer-valued BigDecimal should pad to four hex digits")]
+    public void BigDecimalToStringWithX4FormatForIntegerShouldPad()
+    {
+        BigDecimal value = BigDecimal.Parse("255", CultureInfo.InvariantCulture);
+        Assert.Equal("00FF", value.ToString("X4", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "BigDecimal.ToString with X format for fractional BigDecimal should echo the format unchanged")]
+    public void BigDecimalToStringWithXFormatForFractionalShouldEchoFormat()
+    {
+        BigDecimal value = BigDecimal.Parse("3.14", CultureInfo.InvariantCulture);
+        Assert.Equal("X", value.ToString("X", CultureInfo.InvariantCulture));
+    }
 }

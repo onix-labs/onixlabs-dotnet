@@ -1,0 +1,40 @@
+// Copyright © 2020 ONIXLabs
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Numerics;
+
+namespace OnixLabs.Numerics;
+
+public readonly partial struct UInt512
+{
+    /// <summary>Gets the number of bytes that will be written by <see cref="TryWriteBigEndian"/> or <see cref="TryWriteLittleEndian"/>.</summary>
+    /// <returns>64.</returns>
+    public int GetByteCount() => 64;
+
+    /// <summary>Gets the length, in bits, of the shortest two's-complement representation of the current value.</summary>
+    /// <returns>The shortest bit length.</returns>
+    public int GetShortestBitLength()
+    {
+        if (!UInt256.IsZero(UpperBits)) return HalfBitWidth + UpperBits.GetShortestBitLength();
+        if (!UInt256.IsZero(LowerBits)) return LowerBits.GetShortestBitLength();
+        return 0;
+    }
+
+    /// <inheritdoc cref="IBinaryInteger{TSelf}.GetByteCount"/>
+    int IBinaryInteger<UInt512>.GetByteCount() => GetByteCount();
+
+    /// <inheritdoc cref="IBinaryInteger{TSelf}.GetShortestBitLength"/>
+    int IBinaryInteger<UInt512>.GetShortestBitLength() => GetShortestBitLength();
+}

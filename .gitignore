@@ -364,6 +364,10 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+.idea/
+
+# Local docs / notes
+docs/
 
 #nuget
 nuget.config

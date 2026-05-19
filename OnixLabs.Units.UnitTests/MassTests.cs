@@ -19,447 +19,459 @@ namespace OnixLabs.Units.UnitTests;
 
 public sealed class MassTests
 {
-    // IEEE-754 binary floating-point arithmetic causes small discrepancies in calculation, therefore we need a tolerance.
-    private const double Tolerance = 1e+42;
+    // The Dalton conversion factor (1660539.0666 qg) is not exactly representable in binary FP. Constructing it as
+    // (16605390666 / 10000) gives the closest-Float128 to the rational, but a subsequent multiplication by a value
+    // like 2.5 chains a second rounding, producing a result one ULP off from the closest-Float128 of the true product.
+    // The tolerance below sits comfortably above one ULP at the magnitudes used (~10^6) but well below anything that
+    // would mask a genuine factor bug.
+    private static readonly Float128 DaltonTolerance = Float128.Parse("1e-25");
+
+    private static void AssertNearlyEqual(Float128 expected, Float128 actual, Float128 tolerance)
+    {
+        Float128 diff = Float128.Abs(expected - actual);
+        Assert.True(
+            diff <= tolerance,
+            $"Expected: {expected}\nActual:   {actual}\nDiff:     {diff} exceeds tolerance {tolerance}");
+    }
 
     [Fact(DisplayName = "Mass.Zero should produce the expected result")]
     public void MassZeroShouldProduceExpectedResult()
     {
         // Given / When
-        Mass<double> mass = Mass<double>.Zero;
+        Mass<Float128> mass = Mass<Float128>.Zero;
 
         // Then
-        Assert.Equal(0.0, mass.QuectoGrams, Tolerance);
+        Assert.Equal(Float128.Zero, mass.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromQuectograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1.0)]
-    [InlineData(2.5, 2.5)]
-    public void MassFromQuectogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1")]
+    [InlineData("2.5", "2.5")]
+    public void MassFromQuectogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromQuectograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromQuectograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromRontograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e3)]
-    [InlineData(2.5, 2.5e3)]
-    public void MassFromRontogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e3")]
+    [InlineData("2.5", "2.5e3")]
+    public void MassFromRontogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromRontograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromRontograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromYoctograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e6)]
-    [InlineData(2.5, 2.5e6)]
-    public void MassFromYoctogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e6")]
+    [InlineData("2.5", "2.5e6")]
+    public void MassFromYoctogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromYoctograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromYoctograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromZeptograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e9)]
-    [InlineData(2.5, 2.5e9)]
-    public void MassFromZeptogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e9")]
+    [InlineData("2.5", "2.5e9")]
+    public void MassFromZeptogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromZeptograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromZeptograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromAttograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e12)]
-    [InlineData(2.5, 2.5e12)]
-    public void MassFromAttogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e12")]
+    [InlineData("2.5", "2.5e12")]
+    public void MassFromAttogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromAttograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromAttograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromFemtograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e15)]
-    [InlineData(2.5, 2.5e15)]
-    public void MassFromFemtogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e15")]
+    [InlineData("2.5", "2.5e15")]
+    public void MassFromFemtogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromFemtograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromFemtograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromPicograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e18)]
-    [InlineData(2.5, 2.5e18)]
-    public void MassFromPicogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e18")]
+    [InlineData("2.5", "2.5e18")]
+    public void MassFromPicogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromPicograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromPicograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromNanograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e21)]
-    [InlineData(2.5, 2.5e21)]
-    public void MassFromNanogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e21")]
+    [InlineData("2.5", "2.5e21")]
+    public void MassFromNanogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromNanograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromNanograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromMicrograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e24)]
-    [InlineData(2.5, 2.5e24)]
-    public void MassFromMicrogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e24")]
+    [InlineData("2.5", "2.5e24")]
+    public void MassFromMicrogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromMicrograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromMicrograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromMilligrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e27)]
-    [InlineData(2.5, 2.5e27)]
-    public void MassFromMilligramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e27")]
+    [InlineData("2.5", "2.5e27")]
+    public void MassFromMilligramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromMilligrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromMilligrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromCentigrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e28)]
-    [InlineData(2.5, 2.5e28)]
-    public void MassFromCentigramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e28")]
+    [InlineData("2.5", "2.5e28")]
+    public void MassFromCentigramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromCentigrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromCentigrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromDecigrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e29)]
-    [InlineData(2.5, 2.5e29)]
-    public void MassFromDecigramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e29")]
+    [InlineData("2.5", "2.5e29")]
+    public void MassFromDecigramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromDecigrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromDecigrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromGrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e30)]
-    [InlineData(2.5, 2.5e30)]
-    public void MassFromGramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e30")]
+    [InlineData("2.5", "2.5e30")]
+    public void MassFromGramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromGrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromGrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromDecagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e31)]
-    [InlineData(2.5, 2.5e31)]
-    public void MassFromDecagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e31")]
+    [InlineData("2.5", "2.5e31")]
+    public void MassFromDecagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromDecagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromDecagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromHectograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e32)]
-    [InlineData(2.5, 2.5e32)]
-    public void MassFromHectogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e32")]
+    [InlineData("2.5", "2.5e32")]
+    public void MassFromHectogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromHectograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromHectograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromKilograms should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e33)]
-    [InlineData(2.5, 2.5e33)]
-    public void MassFromKilogramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e33")]
+    [InlineData("2.5", "2.5e33")]
+    public void MassFromKilogramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromKilograms(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromKilograms(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromMegagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e36)]
-    [InlineData(2.5, 2.5e36)]
-    public void MassFromMegagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e36")]
+    [InlineData("2.5", "2.5e36")]
+    public void MassFromMegagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromMegagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromMegagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromGigagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e39)]
-    [InlineData(2.5, 2.5e39)]
-    public void MassFromGigagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e39")]
+    [InlineData("2.5", "2.5e39")]
+    public void MassFromGigagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromGigagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromGigagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromTeragrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e42)]
-    [InlineData(2.5, 2.5e42)]
-    public void MassFromTeragramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e42")]
+    [InlineData("2.5", "2.5e42")]
+    public void MassFromTeragramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromTeragrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromTeragrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromPetagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e45)]
-    [InlineData(2.5, 2.5e45)]
-    public void MassFromPetagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e45")]
+    [InlineData("2.5", "2.5e45")]
+    public void MassFromPetagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromPetagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromPetagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromExagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e48)]
-    [InlineData(2.5, 2.5e48)]
-    public void MassFromExagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e48")]
+    [InlineData("2.5", "2.5e48")]
+    public void MassFromExagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromExagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromExagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromZettagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e51)]
-    [InlineData(2.5, 2.5e51)]
-    public void MassFromZettagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e51")]
+    [InlineData("2.5", "2.5e51")]
+    public void MassFromZettagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromZettagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromZettagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromYottagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e54)]
-    [InlineData(2.5, 2.5e54)]
-    public void MassFromYottagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e54")]
+    [InlineData("2.5", "2.5e54")]
+    public void MassFromYottagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromYottagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromYottagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromRonnagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e57)]
-    [InlineData(2.5, 2.5e57)]
-    public void MassFromRonnagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e57")]
+    [InlineData("2.5", "2.5e57")]
+    public void MassFromRonnagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromRonnagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromRonnagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromQuettagrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e60)]
-    [InlineData(2.5, 2.5e60)]
-    public void MassFromQuettagramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e60")]
+    [InlineData("2.5", "2.5e60")]
+    public void MassFromQuettagramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromQuettagrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromQuettagrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromTonnes should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e36)]
-    [InlineData(2.5, 2.5e36)]
-    public void MassFromTonnesShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e36")]
+    [InlineData("2.5", "2.5e36")]
+    public void MassFromTonnesShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromTonnes(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromTonnes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromOunces should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 28.349523125e30)]
-    [InlineData(16.0, 453.59237e30)] // 16 oz = 1 lb
-    public void MassFromOuncesShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "28.349523125e30")]
+    [InlineData("16", "453.59237e30")] // 16 oz = 1 lb
+    public void MassFromOuncesShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromOunces(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromOunces(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromPounds should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 453.59237e30)]
-    [InlineData(2.5, 1133.980925e30)]
-    public void MassFromPoundsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "453.59237e30")]
+    [InlineData("2.5", "1133.980925e30")]
+    public void MassFromPoundsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromPounds(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromPounds(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromStones should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 6350.29318e30)]
-    [InlineData(2.0, 12700.58636e30)]
-    public void MassFromStonesShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "6350.29318e30")]
+    [InlineData("2", "12700.58636e30")]
+    public void MassFromStonesShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromStones(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromStones(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromShortTons should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 907184.74e30)]
-    [InlineData(2.5, 2267961.85e30)]
-    public void MassFromShortTonsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "907184.74e30")]
+    [InlineData("2.5", "2267961.85e30")]
+    public void MassFromShortTonsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromShortTons(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromShortTons(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromLongTons should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1016046.9088e30)]
-    [InlineData(2.0, 2032093.8176e30)]
-    public void MassFromLongTonsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1016046.9088e30")]
+    [InlineData("2", "2032093.8176e30")]
+    public void MassFromLongTonsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromLongTons(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromLongTons(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromCarats should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 0.2e30)]
-    [InlineData(5.0, 1.0e30)] // 5 ct = 1 g
-    public void MassFromCaratsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "0.2e30")]
+    [InlineData("5", "1.0e30")] // 5 ct = 1 g
+    public void MassFromCaratsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromCarats(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromCarats(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromGrains should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 0.06479891e30)]
-    [InlineData(7000.0, 453.59237e30)] // 7000 gr = 1 lb
-    public void MassFromGrainsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "0.06479891e30")]
+    [InlineData("7000", "453.59237e30")] // 7000 gr = 1 lb
+    public void MassFromGrainsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromGrains(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromGrains(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromDrams should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1.7718451953125e30)]
-    [InlineData(16.0, 28.349523125e30)] // 16 dr = 1 oz
-    public void MassFromDramsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1.7718451953125e30")]
+    [InlineData("16", "28.349523125e30")] // 16 dr = 1 oz
+    public void MassFromDramsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromDrams(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromDrams(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromSlugs should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 14593.90293720636e30)]
-    [InlineData(2.0, 29187.80587441272e30)]
-    public void MassFromSlugsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "14593.90293720636e30")]
+    [InlineData("2", "29187.80587441272e30")]
+    public void MassFromSlugsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromSlugs(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromSlugs(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), m.QuectoGrams);
     }
 
     [Theory(DisplayName = "Mass.FromDaltons should produce the expected QuectoGrams")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1.66053906660e6)]
-    [InlineData(2.5, 4.15134766650e6)]
-    public void MassFromDaltonsShouldProduceExpectedQuectoGrams(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1.66053906660e6")]
+    [InlineData("2.5", "4.15134766650e6")]
+    public void MassFromDaltonsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
-        Mass<double> m = Mass<double>.FromDaltons(value);
-        Assert.Equal(expected, m.QuectoGrams, Tolerance);
+        Mass<Float128> m = Mass<Float128>.FromDaltons(Float128.Parse(value));
+        AssertNearlyEqual(Float128.Parse(expected), m.QuectoGrams, DaltonTolerance);
     }
 
     [Fact(DisplayName = "Mass.Add should produce the expected result")]
     public void MassAddShouldProduceExpectedValue()
     {
         // Given
-        Mass<double> left = Mass<double>.FromKilograms(1.5);
-        Mass<double> right = Mass<double>.FromKilograms(0.5);
+        Mass<Float128> left = Mass<Float128>.FromKilograms(Float128.Parse("1.5"));
+        Mass<Float128> right = Mass<Float128>.FromKilograms(Float128.Parse("0.5"));
 
         // When
-        Mass<double> result = left.Add(right);
+        Mass<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal(2.0, result.KiloGrams, Tolerance);
+        Assert.Equal(Float128.Parse("2"), result.KiloGrams);
     }
 
     [Fact(DisplayName = "Mass.Subtract should produce the expected result")]
     public void MassSubtractShouldProduceExpectedValue()
     {
         // Given
-        Mass<double> left = Mass<double>.FromKilograms(1.5);
-        Mass<double> right = Mass<double>.FromKilograms(0.4);
+        Mass<Float128> left = Mass<Float128>.FromKilograms(Float128.Parse("1.5"));
+        Mass<Float128> right = Mass<Float128>.FromKilograms(Float128.Parse("0.4"));
 
         // When
-        Mass<double> result = left.Subtract(right);
+        Mass<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal(1.1, result.KiloGrams, Tolerance);
+        Assert.Equal(Float128.Parse("1.1"), result.KiloGrams);
     }
 
     [Fact(DisplayName = "Mass.Multiply should produce the expected result")]
     public void MassMultiplyShouldProduceExpectedValue()
     {
         // Given
-        Mass<double> left = Mass<double>.FromGrams(10.0);  // 1e31 qg
-        Mass<double> right = Mass<double>.FromGrams(3.0);  // 3e30 qg
+        Mass<Float128> left = Mass<Float128>.FromGrams(Float128.Parse("10"));  // 1e31 qg
+        Mass<Float128> right = Mass<Float128>.FromGrams(Float128.Parse("3"));  // 3e30 qg
 
         // When
-        Mass<double> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qg
+        Mass<Float128> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qg
 
         // Then
-        Assert.Equal(1e31, left.QuectoGrams, Tolerance);
-        Assert.Equal(3e30, right.QuectoGrams, Tolerance);
-        Assert.Equal(3e61, result.QuectoGrams, Tolerance);
+        Assert.Equal(Float128.Parse("1e31"), left.QuectoGrams);
+        Assert.Equal(Float128.Parse("3e30"), right.QuectoGrams);
+        Assert.Equal(Float128.Parse("3e61"), result.QuectoGrams);
     }
 
     [Fact(DisplayName = "Mass.Divide should produce the expected result")]
     public void MassDivideShouldProduceExpectedValue()
     {
         // Given
-        Mass<double> left = Mass<double>.FromGrams(100.0);  // 1e32 qg
-        Mass<double> right = Mass<double>.FromGrams(20.0);  // 2e31 qg
+        Mass<Float128> left = Mass<Float128>.FromGrams(Float128.Parse("100"));  // 1e32 qg
+        Mass<Float128> right = Mass<Float128>.FromGrams(Float128.Parse("20"));  // 2e31 qg
 
         // When
-        Mass<double> result = left.Divide(right);  // 1e32 / 2e31 = 5 qg
+        Mass<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qg
 
         // Then
-        Assert.Equal(5.0, result.QuectoGrams, Tolerance);
-        Assert.Equal(5e-30, result.Grams, Tolerance);
+        Assert.Equal(Float128.Parse("5"), result.QuectoGrams);
+        Assert.Equal(Float128.Parse("5e-30"), result.Grams);
     }
 
     [Fact(DisplayName = "Mass comparison should produce the expected result (left equal to right)")]
     public void MassComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Mass<double> left = Mass<double>.FromKilograms(123.0);
-        Mass<double> right = Mass<double>.FromKilograms(123.0);
+        Mass<Float128> left = Mass<Float128>.FromKilograms(Float128.Parse("123"));
+        Mass<Float128> right = Mass<Float128>.FromKilograms(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(0, Mass<double>.Compare(left, right));
+        Assert.Equal(0, Mass<Float128>.Compare(left, right));
         Assert.Equal(0, left.CompareTo(right));
         Assert.Equal(0, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -472,11 +484,11 @@ public sealed class MassTests
     public void MassComparisonShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        Mass<double> left = Mass<double>.FromKilograms(456.0);
-        Mass<double> right = Mass<double>.FromKilograms(123.0);
+        Mass<Float128> left = Mass<Float128>.FromKilograms(Float128.Parse("456"));
+        Mass<Float128> right = Mass<Float128>.FromKilograms(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(1, Mass<double>.Compare(left, right));
+        Assert.Equal(1, Mass<Float128>.Compare(left, right));
         Assert.Equal(1, left.CompareTo(right));
         Assert.Equal(1, left.CompareTo((object)right));
         Assert.True(left > right);
@@ -489,11 +501,11 @@ public sealed class MassTests
     public void MassComparisonShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        Mass<double> left = Mass<double>.FromKilograms(123.0);
-        Mass<double> right = Mass<double>.FromKilograms(456.0);
+        Mass<Float128> left = Mass<Float128>.FromKilograms(Float128.Parse("123"));
+        Mass<Float128> right = Mass<Float128>.FromKilograms(Float128.Parse("456"));
 
         // When / Then
-        Assert.Equal(-1, Mass<double>.Compare(left, right));
+        Assert.Equal(-1, Mass<Float128>.Compare(left, right));
         Assert.Equal(-1, left.CompareTo(right));
         Assert.Equal(-1, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -505,12 +517,12 @@ public sealed class MassTests
     [Fact(DisplayName = "Mass equality should produce the expected result (left equal to right)")]
     public void MassEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
-        // Given
-        Mass<BigDecimal> left = Mass<BigDecimal>.FromKilograms(2.0);
-        Mass<BigDecimal> right = Mass<BigDecimal>.FromGrams(2000.0);
+        // Given — 2 kg and 2000 g are the same canonical mass; equality should hold at Float128.
+        Mass<Float128> left = Mass<Float128>.FromKilograms(Float128.Parse("2"));
+        Mass<Float128> right = Mass<Float128>.FromGrams(Float128.Parse("2000"));
 
         // When / Then
-        Assert.True(Mass<BigDecimal>.Equals(left, right));
+        Assert.True(Mass<Float128>.Equals(left, right));
         Assert.True(left.Equals(right));
         Assert.True(left.Equals((object)right));
         Assert.True(left == right);
@@ -521,11 +533,11 @@ public sealed class MassTests
     public void MassEqualityShouldProduceExpectedResultLeftNotEqualToRight()
     {
         // Given
-        Mass<double> left = Mass<double>.FromKilograms(2.0);
-        Mass<double> right = Mass<double>.FromGrams(2500.0);
+        Mass<Float128> left = Mass<Float128>.FromKilograms(Float128.Parse("2"));
+        Mass<Float128> right = Mass<Float128>.FromGrams(Float128.Parse("2500"));
 
         // When / Then
-        Assert.False(Mass<double>.Equals(left, right));
+        Assert.False(Mass<Float128>.Equals(left, right));
         Assert.False(left.Equals(right));
         Assert.False(left.Equals((object)right));
         Assert.False(left == right);
@@ -536,7 +548,7 @@ public sealed class MassTests
     public void MassToStringShouldProduceExpectedResult()
     {
         // Given
-        Mass<double> m = Mass<double>.FromKilograms(1.0);
+        Mass<Float128> m = Mass<Float128>.FromKilograms(Float128.Parse("1"));
 
         // When / Then
         Assert.Equal("1,000.000 g", $"{m:g3}");
@@ -555,7 +567,7 @@ public sealed class MassTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        Mass<double> m = Mass<double>.FromKilograms(1234.56);
+        Mass<Float128> m = Mass<Float128>.FromKilograms(Float128.Parse("1234.56"));
 
         // When
         string formatted = m.ToString("kg2", customCulture);

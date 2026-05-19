@@ -196,75 +196,75 @@ public readonly partial struct Mass<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromTonnes(T value) => new(value * T.CreateChecked(1e36));
+    public static Mass<T> FromTonnes(T value) => new(value * QuectogramsPerTonne);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Ounces value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromOunces(T value) => new(value * T.CreateChecked(28.349523125e30));
+    public static Mass<T> FromOunces(T value) => new(value * QuectogramsPerOunce);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Pounds value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromPounds(T value) => new(value * T.CreateChecked(453.59237e30));
+    public static Mass<T> FromPounds(T value) => new(value * QuectogramsPerPound);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Stones value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromStones(T value) => new(value * T.CreateChecked(6350.29318e30));
+    public static Mass<T> FromStones(T value) => new(value * QuectogramsPerStone);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Short Tons value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromShortTons(T value) => new(value * T.CreateChecked(907184.74e30));
+    public static Mass<T> FromShortTons(T value) => new(value * QuectogramsPerShortTon);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Long Tons value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromLongTons(T value) => new(value * T.CreateChecked(1016046.9088e30));
+    public static Mass<T> FromLongTons(T value) => new(value * QuectogramsPerLongTon);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Carats value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromCarats(T value) => new(value * T.CreateChecked(0.2e30));
+    public static Mass<T> FromCarats(T value) => new(value * QuectogramsPerCarat);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Grains value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromGrains(T value) => new(value * T.CreateChecked(0.06479891e30));
+    public static Mass<T> FromGrains(T value) => new(value * QuectogramsPerGrain);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Drams value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromDrams(T value) => new(value * T.CreateChecked(1.7718451953125e30));
+    public static Mass<T> FromDrams(T value) => new(value * QuectogramsPerDram);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Slugs value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromSlugs(T value) => new(value * T.CreateChecked(14593.90293720636e30));
+    public static Mass<T> FromSlugs(T value) => new(value * QuectogramsPerSlug);
 
     /// <summary>
     /// Creates a new <see cref="Mass{T}"/> instance from the specified Daltons value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Mass{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Mass{T}"/> instance from the specified value.</returns>
-    public static Mass<T> FromDaltons(T value) => new(value * T.CreateChecked(1.66053906660e6));
+    public static Mass<T> FromDaltons(T value) => new(value * QuectogramsPerDalton);
 }

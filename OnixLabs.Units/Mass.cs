@@ -243,7 +243,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is t.
     /// </remarks>
-    public T Tonnes => QuectoGrams / T.CreateChecked(1e36);
+    public T Tonnes => QuectoGrams / QuectogramsPerTonne;
 
     /// <summary>
     /// Gets the mass in Ounces (oz).
@@ -251,7 +251,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is oz.
     /// </remarks>
-    public T Ounces => QuectoGrams / T.CreateChecked(28.349523125e30);
+    public T Ounces => QuectoGrams / QuectogramsPerOunce;
 
     /// <summary>
     /// Gets the mass in Pounds (lb).
@@ -259,7 +259,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is lb.
     /// </remarks>
-    public T Pounds => QuectoGrams / T.CreateChecked(453.59237e30);
+    public T Pounds => QuectoGrams / QuectogramsPerPound;
 
     /// <summary>
     /// Gets the mass in Stones (st).
@@ -267,7 +267,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is st.
     /// </remarks>
-    public T Stones => QuectoGrams / T.CreateChecked(6350.29318e30);
+    public T Stones => QuectoGrams / QuectogramsPerStone;
 
     /// <summary>
     /// Gets the mass in Short Tons (sht).
@@ -275,7 +275,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is sht.
     /// </remarks>
-    public T ShortTons => QuectoGrams / T.CreateChecked(907184.74e30);
+    public T ShortTons => QuectoGrams / QuectogramsPerShortTon;
 
     /// <summary>
     /// Gets the mass in Long Tons (lt).
@@ -283,7 +283,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is lt.
     /// </remarks>
-    public T LongTons => QuectoGrams / T.CreateChecked(1016046.9088e30);
+    public T LongTons => QuectoGrams / QuectogramsPerLongTon;
 
     /// <summary>
     /// Gets the mass in Carats (ct).
@@ -291,7 +291,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is ct.
     /// </remarks>
-    public T Carats => QuectoGrams / T.CreateChecked(0.2e30);
+    public T Carats => QuectoGrams / QuectogramsPerCarat;
 
     /// <summary>
     /// Gets the mass in Grains (gr).
@@ -299,7 +299,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is gr.
     /// </remarks>
-    public T Grains => QuectoGrams / T.CreateChecked(0.06479891e30);
+    public T Grains => QuectoGrams / QuectogramsPerGrain;
 
     /// <summary>
     /// Gets the mass in Drams (dr).
@@ -307,7 +307,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is dr.
     /// </remarks>
-    public T Drams => QuectoGrams / T.CreateChecked(1.7718451953125e30);
+    public T Drams => QuectoGrams / QuectogramsPerDram;
 
     /// <summary>
     /// Gets the mass in Slugs (slug).
@@ -315,7 +315,7 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is slug.
     /// </remarks>
-    public T Slugs => QuectoGrams / T.CreateChecked(14593.90293720636e30);
+    public T Slugs => QuectoGrams / QuectogramsPerSlug;
 
     /// <summary>
     /// Gets the mass in Daltons (Da).
@@ -323,5 +323,5 @@ public readonly partial struct Mass<T> :
     /// <remarks>
     /// The format specifier for this value is Da.
     /// </remarks>
-    public T Daltons => QuectoGrams / T.CreateChecked(1.66053906660e6);
+    public T Daltons => QuectoGrams / QuectogramsPerDalton;
 }

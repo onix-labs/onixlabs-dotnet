@@ -93,17 +93,21 @@ public readonly partial struct UInt256
         for (int bitIndex = HalfBitWidth - 1; bitIndex >= 0; bitIndex--)
         {
             UInt128 nextBit = (numHigh >> bitIndex) & UInt128.One;
+            // Capture the top bit before shifting so values whose true magnitude is in [2^128, 2*divisor)
+            // — which can happen when divisor is close to 2^128 — are still recognised as >= divisor.
+            bool workingOverflow = (working >> (HalfBitWidth - 1)) != UInt128.Zero;
             working = (working << 1) | nextBit;
 
-            if (working >= divisor) working -= divisor;
+            if (workingOverflow || working >= divisor) working -= divisor;
         }
 
         for (int bitIndex = HalfBitWidth - 1; bitIndex >= 0; bitIndex--)
         {
             UInt128 nextBit = (numLow >> bitIndex) & UInt128.One;
+            bool workingOverflow = (working >> (HalfBitWidth - 1)) != UInt128.Zero;
             working = (working << 1) | nextBit;
 
-            if (working >= divisor)
+            if (workingOverflow || working >= divisor)
             {
                 working -= divisor;
                 quotientLow |= UInt128.One << bitIndex;

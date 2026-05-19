@@ -19,337 +19,334 @@ namespace OnixLabs.Units.UnitTests;
 
 public sealed class CurrentTests
 {
-    // IEEE-754 binary floating-point arithmetic causes small discrepancies in calculation, therefore we need a tolerance.
-    private const double Tolerance = 1e+42;
-
     [Fact(DisplayName = "Current.Zero should produce the expected result")]
     public void CurrentZeroShouldProduceExpectedResult()
     {
         // Given / When
-        Current<double> current = Current<double>.Zero;
+        Current<Float128> current = Current<Float128>.Zero;
 
         // Then
-        Assert.Equal(0.0, current.QuectoAmperes, Tolerance);
+        Assert.Equal(Float128.Zero, current.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromQuectoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1.0)]
-    [InlineData(2.5, 2.5)]
-    public void CurrentFromQuectoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1")]
+    [InlineData("2.5", "2.5")]
+    public void CurrentFromQuectoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromQuectoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromQuectoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromRontoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e3)]
-    [InlineData(2.5, 2.5e3)]
-    public void CurrentFromRontoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e3")]
+    [InlineData("2.5", "2.5e3")]
+    public void CurrentFromRontoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromRontoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromRontoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromYoctoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e6)]
-    [InlineData(2.5, 2.5e6)]
-    public void CurrentFromYoctoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e6")]
+    [InlineData("2.5", "2.5e6")]
+    public void CurrentFromYoctoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromYoctoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromYoctoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromZeptoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e9)]
-    [InlineData(2.5, 2.5e9)]
-    public void CurrentFromZeptoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e9")]
+    [InlineData("2.5", "2.5e9")]
+    public void CurrentFromZeptoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromZeptoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromZeptoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromAttoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e12)]
-    [InlineData(2.5, 2.5e12)]
-    public void CurrentFromAttoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e12")]
+    [InlineData("2.5", "2.5e12")]
+    public void CurrentFromAttoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromAttoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromAttoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromFemtoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e15)]
-    [InlineData(2.5, 2.5e15)]
-    public void CurrentFromFemtoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e15")]
+    [InlineData("2.5", "2.5e15")]
+    public void CurrentFromFemtoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromFemtoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromFemtoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromPicoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e18)]
-    [InlineData(2.5, 2.5e18)]
-    public void CurrentFromPicoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e18")]
+    [InlineData("2.5", "2.5e18")]
+    public void CurrentFromPicoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromPicoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromPicoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromNanoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e21)]
-    [InlineData(2.5, 2.5e21)]
-    public void CurrentFromNanoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e21")]
+    [InlineData("2.5", "2.5e21")]
+    public void CurrentFromNanoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromNanoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromNanoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromMicroamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e24)]
-    [InlineData(2.5, 2.5e24)]
-    public void CurrentFromMicroamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e24")]
+    [InlineData("2.5", "2.5e24")]
+    public void CurrentFromMicroamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromMicroamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromMicroamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromMilliamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e27)]
-    [InlineData(2.5, 2.5e27)]
-    public void CurrentFromMilliamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e27")]
+    [InlineData("2.5", "2.5e27")]
+    public void CurrentFromMilliamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromMilliamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromMilliamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromCentiamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e28)]
-    [InlineData(2.5, 2.5e28)]
-    public void CurrentFromCentiamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e28")]
+    [InlineData("2.5", "2.5e28")]
+    public void CurrentFromCentiamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromCentiamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromCentiamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromDeciamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e29)]
-    [InlineData(2.5, 2.5e29)]
-    public void CurrentFromDeciamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e29")]
+    [InlineData("2.5", "2.5e29")]
+    public void CurrentFromDeciamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromDeciamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromDeciamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromAmperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e30)]
-    [InlineData(2.5, 2.5e30)]
-    public void CurrentFromAmperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e30")]
+    [InlineData("2.5", "2.5e30")]
+    public void CurrentFromAmperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromAmperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromAmperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromDecaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e31)]
-    [InlineData(2.5, 2.5e31)]
-    public void CurrentFromDecaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e31")]
+    [InlineData("2.5", "2.5e31")]
+    public void CurrentFromDecaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromDecaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromDecaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromHectoamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e32)]
-    [InlineData(2.5, 2.5e32)]
-    public void CurrentFromHectoamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e32")]
+    [InlineData("2.5", "2.5e32")]
+    public void CurrentFromHectoamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromHectoamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromHectoamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromKiloamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e33)]
-    [InlineData(2.5, 2.5e33)]
-    public void CurrentFromKiloamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e33")]
+    [InlineData("2.5", "2.5e33")]
+    public void CurrentFromKiloamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromKiloamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromKiloamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromMegaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e36)]
-    [InlineData(2.5, 2.5e36)]
-    public void CurrentFromMegaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e36")]
+    [InlineData("2.5", "2.5e36")]
+    public void CurrentFromMegaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromMegaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromMegaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromGigaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e39)]
-    [InlineData(2.5, 2.5e39)]
-    public void CurrentFromGigaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e39")]
+    [InlineData("2.5", "2.5e39")]
+    public void CurrentFromGigaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromGigaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromGigaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromTeraamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e42)]
-    [InlineData(2.5, 2.5e42)]
-    public void CurrentFromTeraamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e42")]
+    [InlineData("2.5", "2.5e42")]
+    public void CurrentFromTeraamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromTeraamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromTeraamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromPetaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e45)]
-    [InlineData(2.5, 2.5e45)]
-    public void CurrentFromPetaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e45")]
+    [InlineData("2.5", "2.5e45")]
+    public void CurrentFromPetaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromPetaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromPetaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromExaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e48)]
-    [InlineData(2.5, 2.5e48)]
-    public void CurrentFromExaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e48")]
+    [InlineData("2.5", "2.5e48")]
+    public void CurrentFromExaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromExaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromExaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromZettaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e51)]
-    [InlineData(2.5, 2.5e51)]
-    public void CurrentFromZettaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e51")]
+    [InlineData("2.5", "2.5e51")]
+    public void CurrentFromZettaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromZettaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromZettaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromYottaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e54)]
-    [InlineData(2.5, 2.5e54)]
-    public void CurrentFromYottaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e54")]
+    [InlineData("2.5", "2.5e54")]
+    public void CurrentFromYottaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromYottaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromYottaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromRonnaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e57)]
-    [InlineData(2.5, 2.5e57)]
-    public void CurrentFromRonnaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e57")]
+    [InlineData("2.5", "2.5e57")]
+    public void CurrentFromRonnaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromRonnaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromRonnaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Theory(DisplayName = "Current.FromQuettaamperes should produce the expected QuectoAmperes")]
-    [InlineData(0.0, 0.0)]
-    [InlineData(1.0, 1e60)]
-    [InlineData(2.5, 2.5e60)]
-    public void CurrentFromQuettaamperesShouldProduceExpectedQuectoAmperes(double value, double expected)
+    [InlineData("0", "0")]
+    [InlineData("1", "1e60")]
+    [InlineData("2.5", "2.5e60")]
+    public void CurrentFromQuettaamperesShouldProduceExpectedQuectoAmperes(string value, string expected)
     {
-        Current<double> c = Current<double>.FromQuettaamperes(value);
-        Assert.Equal(expected, c.QuectoAmperes, Tolerance);
+        Current<Float128> c = Current<Float128>.FromQuettaamperes(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), c.QuectoAmperes);
     }
 
     [Fact(DisplayName = "Current.Add should produce the expected result")]
     public void CurrentAddShouldProduceExpectedValue()
     {
         // Given
-        Current<double> left = Current<double>.FromAmperes(1.5);
-        Current<double> right = Current<double>.FromAmperes(0.5);
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("1.5"));
+        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("0.5"));
 
         // When
-        Current<double> result = left.Add(right);
+        Current<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal(2.0, result.Amperes, Tolerance);
+        Assert.Equal(Float128.Parse("2"), result.Amperes);
     }
 
     [Fact(DisplayName = "Current.Subtract should produce the expected result")]
     public void CurrentSubtractShouldProduceExpectedValue()
     {
         // Given
-        Current<double> left = Current<double>.FromAmperes(1.5);
-        Current<double> right = Current<double>.FromAmperes(0.4);
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("1.5"));
+        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("0.4"));
 
         // When
-        Current<double> result = left.Subtract(right);
+        Current<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal(1.1, result.Amperes, Tolerance);
+        Assert.Equal(Float128.Parse("1.1"), result.Amperes);
     }
 
     [Fact(DisplayName = "Current.Multiply should produce the expected result")]
     public void CurrentMultiplyShouldProduceExpectedValue()
     {
         // Given
-        Current<double> left = Current<double>.FromAmperes(10.0);  // 1e31 qA
-        Current<double> right = Current<double>.FromAmperes(3.0);  // 3e30 qA
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("10"));  // 1e31 qA
+        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("3"));  // 3e30 qA
 
         // When
-        Current<double> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qA
+        Current<Float128> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qA
 
         // Then
-        Assert.Equal(1e31, left.QuectoAmperes, Tolerance);
-        Assert.Equal(3e30, right.QuectoAmperes, Tolerance);
-        Assert.Equal(3e61, result.QuectoAmperes, Tolerance);
+        Assert.Equal(Float128.Parse("1e31"), left.QuectoAmperes);
+        Assert.Equal(Float128.Parse("3e30"), right.QuectoAmperes);
+        Assert.Equal(Float128.Parse("3e61"), result.QuectoAmperes);
     }
 
     [Fact(DisplayName = "Current.Divide should produce the expected result")]
     public void CurrentDivideShouldProduceExpectedValue()
     {
         // Given
-        Current<double> left = Current<double>.FromAmperes(100.0);  // 1e32 qA
-        Current<double> right = Current<double>.FromAmperes(20.0);  // 2e31 qA
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("100"));  // 1e32 qA
+        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("20"));  // 2e31 qA
 
         // When
-        Current<double> result = left.Divide(right);  // 1e32 / 2e31 = 5 qA
+        Current<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qA
 
         // Then
-        Assert.Equal(5.0, result.QuectoAmperes, Tolerance);
-        Assert.Equal(5e-30, result.Amperes, Tolerance);
+        Assert.Equal(Float128.Parse("5"), result.QuectoAmperes);
+        Assert.Equal(Float128.Parse("5e-30"), result.Amperes);
     }
 
     [Fact(DisplayName = "Current comparison should produce the expected result (left equal to right)")]
     public void CurrentComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
         // Given
-        Current<double> left = Current<double>.FromAmperes(123.0);
-        Current<double> right = Current<double>.FromAmperes(123.0);
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("123"));
+        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(0, Current<double>.Compare(left, right));
+        Assert.Equal(0, Current<Float128>.Compare(left, right));
         Assert.Equal(0, left.CompareTo(right));
         Assert.Equal(0, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -362,11 +359,11 @@ public sealed class CurrentTests
     public void CurrentComparisonShouldProduceExpectedLeftGreaterThanRight()
     {
         // Given
-        Current<double> left = Current<double>.FromAmperes(456.0);
-        Current<double> right = Current<double>.FromAmperes(123.0);
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("456"));
+        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("123"));
 
         // When / Then
-        Assert.Equal(1, Current<double>.Compare(left, right));
+        Assert.Equal(1, Current<Float128>.Compare(left, right));
         Assert.Equal(1, left.CompareTo(right));
         Assert.Equal(1, left.CompareTo((object)right));
         Assert.True(left > right);
@@ -379,11 +376,11 @@ public sealed class CurrentTests
     public void CurrentComparisonShouldProduceExpectedLeftLessThanRight()
     {
         // Given
-        Current<double> left = Current<double>.FromAmperes(123.0);
-        Current<double> right = Current<double>.FromAmperes(456.0);
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("123"));
+        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("456"));
 
         // When / Then
-        Assert.Equal(-1, Current<double>.Compare(left, right));
+        Assert.Equal(-1, Current<Float128>.Compare(left, right));
         Assert.Equal(-1, left.CompareTo(right));
         Assert.Equal(-1, left.CompareTo((object)right));
         Assert.False(left > right);
@@ -395,12 +392,12 @@ public sealed class CurrentTests
     [Fact(DisplayName = "Current equality should produce the expected result (left equal to right)")]
     public void CurrentEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
-        // Given: 2 A = 2000 mA
-        Current<BigDecimal> left = Current<BigDecimal>.FromAmperes(2.0);
-        Current<BigDecimal> right = Current<BigDecimal>.FromMilliamperes(2000.0);
+        // Given — 2 A and 2000 mA are the same canonical current; equality should hold at Float128.
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("2"));
+        Current<Float128> right = Current<Float128>.FromMilliamperes(Float128.Parse("2000"));
 
         // When / Then
-        Assert.True(Current<BigDecimal>.Equals(left, right));
+        Assert.True(Current<Float128>.Equals(left, right));
         Assert.True(left.Equals(right));
         Assert.True(left.Equals((object)right));
         Assert.True(left == right);
@@ -411,11 +408,11 @@ public sealed class CurrentTests
     public void CurrentEqualityShouldProduceExpectedResultLeftNotEqualToRight()
     {
         // Given
-        Current<double> left = Current<double>.FromAmperes(2.0);
-        Current<double> right = Current<double>.FromMilliamperes(2500.0);
+        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("2"));
+        Current<Float128> right = Current<Float128>.FromMilliamperes(Float128.Parse("2500"));
 
         // When / Then
-        Assert.False(Current<double>.Equals(left, right));
+        Assert.False(Current<Float128>.Equals(left, right));
         Assert.False(left.Equals(right));
         Assert.False(left.Equals((object)right));
         Assert.False(left == right);
@@ -426,7 +423,7 @@ public sealed class CurrentTests
     public void CurrentToStringShouldProduceExpectedResult()
     {
         // Given
-        Current<double> c = Current<double>.FromAmperes(1000.0);
+        Current<Float128> c = Current<Float128>.FromAmperes(Float128.Parse("1000"));
 
         // When / Then
         Assert.Equal("1,000.000 A", $"{c:A3}");
@@ -439,7 +436,7 @@ public sealed class CurrentTests
     public void CurrentToStringMaVsMaAreCaseSensitive()
     {
         // Given
-        Current<double> c = Current<double>.FromAmperes(1.0);
+        Current<Float128> c = Current<Float128>.FromAmperes(Float128.Parse("1"));
 
         // Then
         Assert.Equal("0.000001 MA", $"{c:MA6}"); // mega
@@ -450,7 +447,7 @@ public sealed class CurrentTests
     public void CurrentToStringPaVsPaAreCaseSensitive()
     {
         // Given
-        Current<double> c = Current<double>.FromAmperes(1.0);
+        Current<Float128> c = Current<Float128>.FromAmperes(Float128.Parse("1"));
 
         // Then
         Assert.Equal("0.000000000000001 PA", $"{c:PA15}"); // peta
@@ -461,7 +458,7 @@ public sealed class CurrentTests
     public void CurrentToStringMicroamperesSymbolShouldDifferFromFormatSpecifier()
     {
         // Given
-        Current<double> c = Current<double>.FromAmperes(1.0);
+        Current<Float128> c = Current<Float128>.FromAmperes(Float128.Parse("1"));
 
         // Then: specifier is uA, but symbol rendered is µA
         Assert.Equal("1,000,000.000 µA", $"{c:uA3}");
@@ -472,7 +469,7 @@ public sealed class CurrentTests
     {
         // Given
         CultureInfo customCulture = new("de-DE");
-        Current<double> c = Current<double>.FromAmperes(1234.56);
+        Current<Float128> c = Current<Float128>.FromAmperes(Float128.Parse("1234.56"));
 
         // When
         string formatted = c.ToString("A2", customCulture);

@@ -74,6 +74,12 @@ internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvi
             case 'P':
                 FormatPercent();
                 break;
+            case 'R':
+                FormatRoundTrip();
+                break;
+            case 'X':
+                if (!FormatHexadecimal(specifier, format)) return format.ToString();
+                break;
             default:
                 return format.ToString();
         }

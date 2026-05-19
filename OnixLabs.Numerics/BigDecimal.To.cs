@@ -53,7 +53,7 @@ public readonly partial struct BigDecimal
         if (!TryGetScaledNumberInfo(format, info.NumberFormat, out NumberInfo value)) return format.ToString();
 
         // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-        NumberInfoFormatter formatter = new(value, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P']);
+        NumberInfoFormatter formatter = new(value, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X']);
         return formatter.Format(format);
     }
 
@@ -69,6 +69,15 @@ public readonly partial struct BigDecimal
     {
         const MidpointRounding mode = MidpointRounding.AwayFromZero;
         char specifier = format.IsEmpty || format.IsWhiteSpace() ? NumberInfoFormatter.DefaultFormat : format[0];
+        char upperSpecifier = char.ToUpperInvariant(specifier);
+
+        // R (round-trip) and X (hexadecimal) preserve the exact unscaled value: they do not apply
+        // decimal scaling, and any precision suffix (e.g. X8) is interpreted downstream by the formatter.
+        if (upperSpecifier is 'R' or 'X')
+        {
+            result = ToNumberInfo();
+            return true;
+        }
 
         if (format.Length > 1)
         {
@@ -82,7 +91,7 @@ public readonly partial struct BigDecimal
             return true;
         }
 
-        result = char.ToUpperInvariant(specifier) switch
+        result = upperSpecifier switch
         {
             'C' => SetScale(numberFormat.CurrencyDecimalDigits, mode).ToNumberInfo(),
             'F' => SetScale(numberFormat.NumberDecimalDigits, mode).ToNumberInfo(),

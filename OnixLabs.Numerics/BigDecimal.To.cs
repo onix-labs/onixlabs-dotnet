@@ -49,57 +49,8 @@ public readonly partial struct BigDecimal
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
-
-        if (!TryGetScaledNumberInfo(format, info.NumberFormat, out NumberInfo value)) return format.ToString();
-
         // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-        NumberInfoFormatter formatter = new(value, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X']);
+        NumberInfoFormatter formatter = new(number, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X']);
         return formatter.Format(format);
-    }
-
-    /// <summary>
-    /// Attempts to obtain a <see cref="NumberInfo"/> value that is scaled by either using a custom
-    /// scale that is specified by the format, or by using the default scale for the specified format.
-    /// </summary>
-    /// <param name="format">The format specifier from which to obtain the desired scale.</param>
-    /// <param name="numberFormat">The number format of the target culture that determines default scales for specific formats.</param>
-    /// <param name="result">The <see cref="NumberInfo"/> value with a correctly applied scale.</param>
-    /// <returns>Returns <see langword="true"/> if the scale is applied correctly; otherwise, <see langword="false"/>.</returns>
-    private bool TryGetScaledNumberInfo(ReadOnlySpan<char> format, NumberFormatInfo numberFormat, out NumberInfo result)
-    {
-        const MidpointRounding mode = MidpointRounding.AwayFromZero;
-        char specifier = format.IsEmpty || format.IsWhiteSpace() ? NumberInfoFormatter.DefaultFormat : format[0];
-        char upperSpecifier = char.ToUpperInvariant(specifier);
-
-        // R (round-trip) and X (hexadecimal) preserve the exact unscaled value: they do not apply
-        // decimal scaling, and any precision suffix (e.g. X8) is interpreted downstream by the formatter.
-        if (upperSpecifier is 'R' or 'X')
-        {
-            result = ToNumberInfo();
-            return true;
-        }
-
-        if (format.Length > 1)
-        {
-            if (!int.TryParse(format[1..], out int scale))
-            {
-                result = default;
-                return false;
-            }
-
-            result = SetScale(scale).number;
-            return true;
-        }
-
-        result = upperSpecifier switch
-        {
-            'C' => SetScale(numberFormat.CurrencyDecimalDigits, mode).ToNumberInfo(),
-            'F' => SetScale(numberFormat.NumberDecimalDigits, mode).ToNumberInfo(),
-            'N' => SetScale(numberFormat.NumberDecimalDigits, mode).ToNumberInfo(),
-            'P' => Multiply(this, 100).SetScale(numberFormat.PercentDecimalDigits, mode).ToNumberInfo(),
-            _ => ToNumberInfo()
-        };
-
-        return true;
     }
 }

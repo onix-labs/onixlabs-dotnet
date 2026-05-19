@@ -79,4 +79,18 @@ public sealed class Int256EquatableTests
         Assert.True(Int256.Zero == def);
         Assert.Equal(Int256.Zero.GetHashCode(), def.GetHashCode());
     }
+
+    [Fact(DisplayName = "Int256.GetHashCode should not collide for power-of-two pairs that are 32 bits apart (regression for ulong.GetHashCode XOR loss)")]
+    public void Int256GetHashCodeShouldNotCollideForPowerOfTwoPairsAcross32BitBoundary()
+    {
+        // ulong.GetHashCode XORs its two 32-bit halves, so for a < 32 the values 2^a and 2^(a+32)
+        // map to the same int and the loss propagates through HashCode.Combine on the constituent
+        // limbs. The new GetHashCode hashes the full bit pattern to avoid that collision.
+        for (int shift = 0; shift < 32; shift++)
+        {
+            Int256 small = Int256.One << shift;
+            Int256 large = Int256.One << (shift + 32);
+            Assert.NotEqual(small.GetHashCode(), large.GetHashCode());
+        }
+    }
 }

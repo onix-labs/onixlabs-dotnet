@@ -464,6 +464,53 @@ public sealed class TemperatureTests
         Assert.Equal("1.234,56 K", formatted);
     }
 
+    [Fact(DisplayName = "Temperature.ToString specifier symbols should differ from format specifiers (DE→°De, RE→°Ré, RO→°Rø)")]
+    public void TemperatureToStringSpecifierSymbolsShouldDifferFromFormatSpecifiers()
+    {
+        // Specifier text and rendered symbol diverge for several Temperature scales.
+        // This is analogous to the µ-symbol divergence test on Mass/Current/etc.
+        Temperature<Float128> temperature = Temperature<Float128>.FromCelsius(Float128.Parse("100"));
+
+        Assert.Equal("0.000 °De", $"{temperature:DE3}");
+        Assert.Equal("80.000 °Ré", $"{temperature:RE3}");
+        Assert.Equal("60.000 °Rø", $"{temperature:RO3}");
+    }
+
+    [Theory(DisplayName = "Temperature.ValueOf should be case-insensitive")]
+    [InlineData("c", "C")]
+    [InlineData("de", "DE")]
+    [InlineData("De", "DE")]
+    [InlineData("f", "F")]
+    [InlineData("k", "K")]
+    [InlineData("n", "N")]
+    [InlineData("r", "R")]
+    [InlineData("re", "RE")]
+    [InlineData("Re", "RE")]
+    [InlineData("ro", "RO")]
+    [InlineData("Ro", "RO")]
+    public void TemperatureValueOfShouldBeCaseInsensitive(string lowerSpecifier, string canonicalSpecifier)
+    {
+        // Temperature.ValueOf does ToUpperInvariant on the input before matching, so the
+        // canonical uppercase forms and any-case forms should produce the same value.
+        Temperature<Float128> t = Temperature<Float128>.FromKelvin(Float128.Parse("300"));
+
+        Assert.Equal(t.ValueOf(canonicalSpecifier), t.ValueOf(lowerSpecifier));
+    }
+
+    [Fact(DisplayName = "Temperature.Add of two Celsius values produces sum-in-Kelvin (affine quirk)")]
+    public void TemperatureAddOfTwoCelsiusValuesProducesSumInKelvin()
+    {
+        // Affine quirk: Celsius is a point-in-affine-space, not a vector.
+        // Add operates on the underlying Kelvin field, so C(0) + C(0) = K(273.15) + K(273.15) = K(546.3),
+        // which is not physically meaningful as a temperature. This test documents current behavior
+        // pending the affine semantics decision (punch list #1).
+        Temperature<Float128> zeroCelsius = Temperature<Float128>.FromCelsius(Float128.Parse("0"));
+
+        Temperature<Float128> sum = zeroCelsius.Add(zeroCelsius);
+
+        AssertNearlyEqual(Float128.Parse("546.3"), sum.Kelvin);
+    }
+
     [Theory(DisplayName = "Temperature.ValueOf should return the value at the matching scale")]
     [InlineData("C")]
     [InlineData("DE")]

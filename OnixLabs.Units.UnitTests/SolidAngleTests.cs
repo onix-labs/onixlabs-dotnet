@@ -39,6 +39,86 @@ public sealed class SolidAngleTests
         Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
     }
 
+    [Theory(DisplayName = "SolidAngle.FromRontosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e3")]
+    [InlineData("2.5", "2.5e3")]
+    public void SolidAngleFromRontosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromRontosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromYoctosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e6")]
+    [InlineData("2.5", "2.5e6")]
+    public void SolidAngleFromYoctosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromYoctosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromZeptosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e9")]
+    [InlineData("2.5", "2.5e9")]
+    public void SolidAngleFromZeptosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromZeptosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromAttosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e12")]
+    [InlineData("2.5", "2.5e12")]
+    public void SolidAngleFromAttosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromAttosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromFemtosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e15")]
+    [InlineData("2.5", "2.5e15")]
+    public void SolidAngleFromFemtosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromFemtosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromPicosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e18")]
+    [InlineData("2.5", "2.5e18")]
+    public void SolidAngleFromPicosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromPicosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromNanosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e21")]
+    [InlineData("2.5", "2.5e21")]
+    public void SolidAngleFromNanosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromNanosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromMicrosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e24")]
+    [InlineData("2.5", "2.5e24")]
+    public void SolidAngleFromMicrosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromMicrosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
     [Theory(DisplayName = "SolidAngle.FromMillisteradians should produce the expected QuectoSteradians")]
     [InlineData("0", "0")]
     [InlineData("1", "1e27")]
@@ -46,6 +126,26 @@ public sealed class SolidAngleTests
     public void SolidAngleFromMillisteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
     {
         SolidAngle<Float128> a = SolidAngle<Float128>.FromMillisteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromCentisteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e28")]
+    [InlineData("2.5", "2.5e28")]
+    public void SolidAngleFromCentisteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromCentisteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromDecisteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e29")]
+    [InlineData("2.5", "2.5e29")]
+    public void SolidAngleFromDecisteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromDecisteradians(Float128.Parse(value));
         Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
     }
 
@@ -59,6 +159,26 @@ public sealed class SolidAngleTests
         Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
     }
 
+    [Theory(DisplayName = "SolidAngle.FromDecasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e31")]
+    [InlineData("2.5", "2.5e31")]
+    public void SolidAngleFromDecasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromDecasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromHectosteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e32")]
+    [InlineData("2.5", "2.5e32")]
+    public void SolidAngleFromHectosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromHectosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
     [Theory(DisplayName = "SolidAngle.FromKilosteradians should produce the expected QuectoSteradians")]
     [InlineData("0", "0")]
     [InlineData("1", "1e33")]
@@ -66,6 +186,96 @@ public sealed class SolidAngleTests
     public void SolidAngleFromKilosteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
     {
         SolidAngle<Float128> a = SolidAngle<Float128>.FromKilosteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromMegasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e36")]
+    [InlineData("2.5", "2.5e36")]
+    public void SolidAngleFromMegasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromMegasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromGigasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e39")]
+    [InlineData("2.5", "2.5e39")]
+    public void SolidAngleFromGigasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromGigasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromTerasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e42")]
+    [InlineData("2.5", "2.5e42")]
+    public void SolidAngleFromTerasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromTerasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromPetasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e45")]
+    [InlineData("2.5", "2.5e45")]
+    public void SolidAngleFromPetasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromPetasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromExasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e48")]
+    [InlineData("2.5", "2.5e48")]
+    public void SolidAngleFromExasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromExasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromZettasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e51")]
+    [InlineData("2.5", "2.5e51")]
+    public void SolidAngleFromZettasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromZettasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromYottasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e54")]
+    [InlineData("2.5", "2.5e54")]
+    public void SolidAngleFromYottasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromYottasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromRonnasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e57")]
+    [InlineData("2.5", "2.5e57")]
+    public void SolidAngleFromRonnasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromRonnasteradians(Float128.Parse(value));
+        Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
+    }
+
+    [Theory(DisplayName = "SolidAngle.FromQuettasteradians should produce the expected QuectoSteradians")]
+    [InlineData("0", "0")]
+    [InlineData("1", "1e60")]
+    [InlineData("2.5", "2.5e60")]
+    public void SolidAngleFromQuettasteradiansShouldProduceExpectedQuectoSteradians(string value, string expected)
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromQuettasteradians(Float128.Parse(value));
         Assert.Equal(Float128.Parse(expected), a.QuectoSteradians);
     }
 
@@ -213,6 +423,17 @@ public sealed class SolidAngleTests
         Assert.False(left < right);
     }
 
+    [Fact(DisplayName = "SolidAngle comparison should produce the expected result (left less than right)")]
+    public void SolidAngleComparisonShouldProduceExpectedLeftLessThanRight()
+    {
+        SolidAngle<Float128> left = SolidAngle<Float128>.FromSteradians((Float128)5);
+        SolidAngle<Float128> right = SolidAngle<Float128>.FromSteradians((Float128)10);
+
+        Assert.Equal(-1, SolidAngle<Float128>.Compare(left, right));
+        Assert.True(left < right);
+        Assert.False(left > right);
+    }
+
     [Fact(DisplayName = "SolidAngle equality should produce the expected result (left equal to right via different scales)")]
     public void SolidAngleEqualityShouldProduceExpectedResultLeftEqualToRight()
     {
@@ -258,6 +479,15 @@ public sealed class SolidAngleTests
 
         Assert.Equal("0.000001 Msr", a.ToString("Msr6", CultureInfo.InvariantCulture)); // mega
         Assert.Equal("1,000.000 msr", a.ToString("msr3", CultureInfo.InvariantCulture)); // milli
+    }
+
+    [Fact(DisplayName = "SolidAngle.ToString Psr vs psr are case-sensitive")]
+    public void SolidAngleToStringPsrVsPsrAreCaseSensitive()
+    {
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromSteradians((Float128)1);
+
+        Assert.Equal("0.000000000000001 Psr", $"{a:Psr15}"); // peta
+        Assert.Equal("1,000,000,000,000.000 psr", $"{a:psr3}"); // pico
     }
 
     [Fact(DisplayName = "SolidAngle.ToString µsr symbol should differ from format specifier")]

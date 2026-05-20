@@ -42,18 +42,18 @@ public readonly partial struct Force<T>(
     /// </summary>
     public Acceleration<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude of the current <see cref="Force{T}"/> as the product of the mass (in kilograms) and
-    /// acceleration (in m/s²), yielding the force in Newtons (kg·m/s²).
-    /// </summary>
-    /// <remarks>
-    /// The magnitude is an opaque scalar used by <see cref="Equals(Force{T})"/>, <see cref="CompareTo(Force{T})"/>,
-    /// <see cref="GetHashCode"/>, and the arithmetic operators. It is not intended for display — use
-    /// <see cref="ToString(string, System.IFormatProvider)"/> for that.
-    ///
-    /// As with <see cref="Acceleration{T}"/>, the formula reads each component at its SI base scale (Mass at kg,
-    /// Acceleration at its m/s² magnitude) so the resulting magnitude lands at the human-readable Newton scale and
-    /// round-trips cleanly through arithmetic.
-    /// </remarks>
-    public T Magnitude => Left.KiloGrams * Right.Magnitude;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.KiloGrams * Right.Magnitude;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (Newtons, kg·m/s²).
+    internal T SIBaseValue => Magnitude;
+
+    internal static Force<T> One => new(Mass<T>.FromKilograms(T.One), Acceleration<T>.One);
+
+    internal static Force<T> WithMagnitude(T magnitude) =>
+        new(Mass<T>.FromKilograms(magnitude), Acceleration<T>.One);
 }

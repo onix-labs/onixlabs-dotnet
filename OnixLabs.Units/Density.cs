@@ -41,13 +41,21 @@ public readonly partial struct Density<T>(
     /// </summary>
     public Volume<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude of the current <see cref="Density{T}"/> as the ratio of the canonical mass and volume storage values.
-    /// </summary>
-    /// <remarks>
-    /// The magnitude is an opaque scalar used by <see cref="Equals(Density{T})"/>, <see cref="CompareTo(Density{T})"/>,
-    /// <see cref="GetHashCode"/>, and the arithmetic operators. It is not intended for display — use
-    /// <see cref="ToString(string, System.IFormatProvider)"/> for that.
-    /// </remarks>
-    public T Magnitude => Left.Canonical / Right.Canonical;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Stored at quectogram /
+    // cubic-quectometer scale because the canonical prefixes do not cancel for this ratio — so the value carries a
+    // very large negative exponent and is never meant for display. Internal so the assembly (and InternalsVisibleTo'd
+    // tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Canonical / Right.Canonical;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (kg/m³).
+    internal T SIBaseValue => Left.KiloGrams / Right.CubicMeters;
+
+    internal static Density<T> One =>
+        new(Mass<T>.FromQuectograms(T.One), Volume<T>.FromCubicQuectometers(T.One));
+
+    internal static Density<T> WithMagnitude(T magnitude) =>
+        new(Mass<T>.FromQuectograms(magnitude), Volume<T>.FromCubicQuectometers(T.One));
 }

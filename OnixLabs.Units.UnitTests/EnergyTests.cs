@@ -71,7 +71,7 @@ public sealed class EnergyTests
         Energy<Float128> work = new(NewtonsForce((Float128)10), Distance<Float128>.FromMeters((Float128)2));
 
         // Then — the magnitude is joules directly.
-        Assert.Equal((Float128)20, work.Magnitude);
+        Assert.Equal((Float128)20, work.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy.Add should produce the expected magnitude")]
@@ -85,7 +85,7 @@ public sealed class EnergyTests
         Energy<Float128> result = Energy<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy.Add should reduce magnitudes across decompositions")]
@@ -99,7 +99,7 @@ public sealed class EnergyTests
         Energy<Float128> result = Energy<Float128>.Add(twenty, ten);
 
         // Then
-        Assert.Equal((Float128)30, result.Magnitude);
+        Assert.Equal((Float128)30, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy.Add should reduce across mixed force/distance units")]
@@ -116,7 +116,7 @@ public sealed class EnergyTests
         Energy<Float128> result = Energy<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal((Float128)1_000_100, result.Magnitude);
+        Assert.Equal((Float128)1_000_100, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy.Add with Zero should return an equal-magnitude energy")]
@@ -143,7 +143,7 @@ public sealed class EnergyTests
         Energy<Float128> result = Energy<Float128>.Subtract(left, right);
 
         // Then — magnitude at joule scale, so Subtract is bit-exact for integer values.
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy.Subtract should produce a negative result when left is less than right")]
@@ -157,7 +157,7 @@ public sealed class EnergyTests
         Energy<Float128> result = Energy<Float128>.Subtract(left, right);
 
         // Then
-        Assert.Equal(-(Float128)3, result.Magnitude);
+        Assert.Equal(-(Float128)3, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy + operator should produce the expected result")]
@@ -171,7 +171,7 @@ public sealed class EnergyTests
         Energy<Float128> result = left + right;
 
         // Then
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy - operator should produce the expected result")]
@@ -185,7 +185,7 @@ public sealed class EnergyTests
         Energy<Float128> result = left - right;
 
         // Then
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy instance Add should produce the expected result")]
@@ -199,7 +199,7 @@ public sealed class EnergyTests
         Energy<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy instance Subtract should produce the expected result")]
@@ -213,7 +213,7 @@ public sealed class EnergyTests
         Energy<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Energy Add and Subtract should agree across static / operator / instance forms")]

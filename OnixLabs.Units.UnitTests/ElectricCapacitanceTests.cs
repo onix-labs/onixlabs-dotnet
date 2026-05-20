@@ -58,21 +58,21 @@ public sealed class ElectricCapacitanceTests
     {
         // 10 C / 2 V = 5 F
         ElectricCapacitance<Float128> c = new(Coulombs((Float128)10), Volts((Float128)2));
-        Assert.Equal((Float128)5, c.Magnitude);
+        Assert.Equal((Float128)5, c.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricCapacitance.Add should produce the expected magnitude")]
     public void ElectricCapacitanceAddShouldProduceExpectedValue()
     {
         ElectricCapacitance<Float128> result = ElectricCapacitance<Float128>.Add(Farads((Float128)5), Farads((Float128)3));
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricCapacitance.Subtract should produce the expected magnitude")]
     public void ElectricCapacitanceSubtractShouldProduceExpectedValue()
     {
         ElectricCapacitance<Float128> result = ElectricCapacitance<Float128>.Subtract(Farads((Float128)10), Farads((Float128)3));
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricCapacitance equality should be by magnitude (proportional components)")]

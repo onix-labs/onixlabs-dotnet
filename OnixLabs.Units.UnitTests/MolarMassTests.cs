@@ -41,21 +41,21 @@ public sealed class MolarMassTests
     {
         // 10 kg / 2 mol = 5 kg/mol
         MolarMass<Float128> m = new(Mass<Float128>.FromKilograms((Float128)10), AmountOfSubstance<Float128>.FromMoles((Float128)2));
-        Assert.Equal((Float128)5, m.Magnitude);
+        Assert.Equal((Float128)5, m.SIBaseValue);
     }
 
     [Fact(DisplayName = "MolarMass.Add produces expected value")]
     public void MolarMassAddProducesExpected()
     {
         MolarMass<Float128> r = MolarMass<Float128>.Add(KilogramsPerMole((Float128)5), KilogramsPerMole((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "MolarMass.Subtract produces expected value")]
     public void MolarMassSubtractProducesExpected()
     {
         MolarMass<Float128> r = MolarMass<Float128>.Subtract(KilogramsPerMole((Float128)10), KilogramsPerMole((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "MolarMass equality is by magnitude")]

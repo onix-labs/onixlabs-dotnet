@@ -37,7 +37,17 @@ public readonly partial struct AngularVelocity<T>(
     /// <summary>Gets the <see cref="Time{T}"/> component.</summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>Gets the magnitude in rad/s.</summary>
-    /// <remarks>Opaque scalar for equality/comparison/arithmetic.</remarks>
-    public T Magnitude => Left.Radians / Right.Seconds;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Radians / Right.Seconds;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    internal T SIBaseValue => Magnitude;
+
+    internal static AngularVelocity<T> One => new(Angle<T>.FromRadians(T.One), Time<T>.FromSeconds(T.One));
+
+    internal static AngularVelocity<T> WithMagnitude(T magnitude) =>
+        new(Angle<T>.FromRadians(magnitude), Time<T>.FromSeconds(T.One));
 }

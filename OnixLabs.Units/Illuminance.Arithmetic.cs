@@ -16,19 +16,11 @@ namespace OnixLabs.Units;
 
 public readonly partial struct Illuminance<T>
 {
-    // Result decomposition: `LumensFlux(sum) / Area.FromSquareMeters(1)`. With Right.SquareMeters = 1, the magnitude
-    // formula `Left.Magnitude / Right.SquareMeters` reduces to `sum / 1 = sum`, so the round-trip identity holds
-    // bit-exactly.
-
     /// <inheritdoc/>
     public static Illuminance<T> Add(Illuminance<T> left, Illuminance<T> right) =>
-        new(LumensFlux(left.Magnitude + right.Magnitude), Area<T>.FromSquareMeters(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static Illuminance<T> Subtract(Illuminance<T> left, Illuminance<T> right) =>
-        new(LumensFlux(left.Magnitude - right.Magnitude), Area<T>.FromSquareMeters(T.One));
-
-    // Builds a LuminousFlux of the given lumen magnitude in canonical "(cd × 1 sr)" form.
-    private static LuminousFlux<T> LumensFlux(T lumens) =>
-        new(LuminousIntensity<T>.FromCandelas(lumens), SolidAngle<T>.FromSteradians(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

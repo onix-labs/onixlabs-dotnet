@@ -41,21 +41,21 @@ public sealed class LuminousFluxTests
     {
         // 5 cd × 2 sr = 10 lm
         LuminousFlux<Float128> phi = new(LuminousIntensity<Float128>.FromCandelas((Float128)5), SolidAngle<Float128>.FromSteradians((Float128)2));
-        Assert.Equal((Float128)10, phi.Magnitude);
+        Assert.Equal((Float128)10, phi.SIBaseValue);
     }
 
     [Fact(DisplayName = "LuminousFlux.Add produces expected value")]
     public void LuminousFluxAddProducesExpected()
     {
         LuminousFlux<Float128> r = LuminousFlux<Float128>.Add(Lumens((Float128)5), Lumens((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "LuminousFlux.Subtract produces expected value")]
     public void LuminousFluxSubtractProducesExpected()
     {
         LuminousFlux<Float128> r = LuminousFlux<Float128>.Subtract(Lumens((Float128)10), Lumens((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "LuminousFlux equality is by magnitude")]

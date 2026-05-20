@@ -38,9 +38,18 @@ public readonly partial struct ElectricCapacitance<T>(
     /// <summary>Gets the <see cref="ElectricPotential{T}"/> component.</summary>
     public ElectricPotential<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude as coulombs divided by volts, yielding electric capacitance in farads.
-    /// </summary>
-    /// <remarks>Opaque scalar for <see cref="Equals(ElectricCapacitance{T})"/>, <see cref="CompareTo(ElectricCapacitance{T})"/>, and arithmetic.</remarks>
-    public T Magnitude => Left.Magnitude / Right.Magnitude;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude / Right.Magnitude;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (farads, C/V).
+    internal T SIBaseValue => Magnitude;
+
+    internal static ElectricCapacitance<T> One => new(ElectricCharge<T>.One, ElectricPotential<T>.One);
+
+    internal static ElectricCapacitance<T> WithMagnitude(T magnitude) =>
+        new(ElectricCharge<T>.WithMagnitude(magnitude), ElectricPotential<T>.One);
 }

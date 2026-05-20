@@ -54,21 +54,21 @@ public sealed class PowerTests
     {
         // 10 J / 2 s = 5 W
         Power<Float128> p = new(Joules((Float128)10), Time<Float128>.FromSeconds((Float128)2));
-        Assert.Equal((Float128)5, p.Magnitude);
+        Assert.Equal((Float128)5, p.SIBaseValue);
     }
 
     [Fact(DisplayName = "Power.Add should produce the expected magnitude")]
     public void PowerAddShouldProduceExpectedValue()
     {
         Power<Float128> result = Power<Float128>.Add(Watts((Float128)5), Watts((Float128)3));
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Power.Subtract should produce the expected magnitude")]
     public void PowerSubtractShouldProduceExpectedValue()
     {
         Power<Float128> result = Power<Float128>.Subtract(Watts((Float128)10), Watts((Float128)3));
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Power equality should be by magnitude (proportional components)")]

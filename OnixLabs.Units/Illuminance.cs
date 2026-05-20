@@ -38,9 +38,18 @@ public readonly partial struct Illuminance<T>(
     /// <summary>Gets the <see cref="Area{T}"/> component.</summary>
     public Area<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude as lumens divided by square meters, yielding illuminance in lux.
-    /// </summary>
-    /// <remarks>Opaque scalar for <see cref="Equals(Illuminance{T})"/>, <see cref="CompareTo(Illuminance{T})"/>, and arithmetic.</remarks>
-    public T Magnitude => Left.Magnitude / Right.SquareMeters;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude / Right.SquareMeters;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (lux, lm/m²).
+    internal T SIBaseValue => Magnitude;
+
+    internal static Illuminance<T> One => new(LuminousFlux<T>.One, Area<T>.FromSquareMeters(T.One));
+
+    internal static Illuminance<T> WithMagnitude(T magnitude) =>
+        new(LuminousFlux<T>.WithMagnitude(magnitude), Area<T>.FromSquareMeters(T.One));
 }

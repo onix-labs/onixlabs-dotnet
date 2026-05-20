@@ -41,21 +41,21 @@ public sealed class ElectricChargeTests
     {
         // 5 A × 2 s = 10 C
         ElectricCharge<Float128> q = new(Current<Float128>.FromAmperes((Float128)5), Time<Float128>.FromSeconds((Float128)2));
-        Assert.Equal((Float128)10, q.Magnitude);
+        Assert.Equal((Float128)10, q.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricCharge.Add produces expected value")]
     public void ElectricChargeAddProducesExpected()
     {
         ElectricCharge<Float128> r = ElectricCharge<Float128>.Add(Coulombs((Float128)5), Coulombs((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricCharge.Subtract produces expected value")]
     public void ElectricChargeSubtractProducesExpected()
     {
         ElectricCharge<Float128> r = ElectricCharge<Float128>.Subtract(Coulombs((Float128)10), Coulombs((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricCharge equality is by magnitude")]

@@ -50,7 +50,7 @@ public readonly partial struct LuminousFlux<T>
         // Named-unit alias (lm, klm, Mlm, mlm, ...).
         if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
         {
-            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasValue = SIBaseValue * aliasMultiplier;
             T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
             return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
         }

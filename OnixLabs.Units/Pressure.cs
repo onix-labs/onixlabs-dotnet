@@ -37,9 +37,18 @@ public readonly partial struct Pressure<T>(
     /// <summary>Gets the <see cref="Area{T}"/> component.</summary>
     public Area<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude as Newtons divided by square meters, yielding pressure in pascals.
-    /// </summary>
-    /// <remarks>Opaque scalar for <see cref="Equals(Pressure{T})"/>, <see cref="CompareTo(Pressure{T})"/>, and arithmetic.</remarks>
-    public T Magnitude => Left.Magnitude / Right.SquareMeters;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude / Right.SquareMeters;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (pascals, N/m²).
+    internal T SIBaseValue => Magnitude;
+
+    internal static Pressure<T> One => new(Force<T>.One, Area<T>.FromSquareMeters(T.One));
+
+    internal static Pressure<T> WithMagnitude(T magnitude) =>
+        new(Force<T>.WithMagnitude(magnitude), Area<T>.FromSquareMeters(T.One));
 }

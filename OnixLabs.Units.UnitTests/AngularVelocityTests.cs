@@ -41,21 +41,21 @@ public sealed class AngularVelocityTests
     {
         // 6 rad / 2 s = 3 rad/s
         AngularVelocity<Float128> omega = new(Angle<Float128>.FromRadians((Float128)6), Time<Float128>.FromSeconds((Float128)2));
-        Assert.Equal((Float128)3, omega.Magnitude);
+        Assert.Equal((Float128)3, omega.SIBaseValue);
     }
 
     [Fact(DisplayName = "AngularVelocity.Add produces expected value")]
     public void AngularVelocityAddProducesExpected()
     {
         AngularVelocity<Float128> r = AngularVelocity<Float128>.Add(RadiansPerSecond((Float128)5), RadiansPerSecond((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "AngularVelocity.Subtract produces expected value")]
     public void AngularVelocitySubtractProducesExpected()
     {
         AngularVelocity<Float128> r = AngularVelocity<Float128>.Subtract(RadiansPerSecond((Float128)10), RadiansPerSecond((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "AngularVelocity equality is by magnitude")]

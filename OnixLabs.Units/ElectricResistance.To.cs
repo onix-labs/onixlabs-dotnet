@@ -52,7 +52,7 @@ public readonly partial struct ElectricResistance<T>
         // Named-unit alias (Ω, kΩ, mΩ, MΩ, ...) — also accepts the keyboard-friendly Ohm/kOhm/mOhm/... on input.
         if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol, NamedSymbolAscii))
         {
-            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasValue = SIBaseValue * aliasMultiplier;
             T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
             return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
         }

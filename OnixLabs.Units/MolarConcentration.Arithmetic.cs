@@ -18,9 +18,9 @@ public readonly partial struct MolarConcentration<T>
 {
     /// <inheritdoc/>
     public static MolarConcentration<T> Add(MolarConcentration<T> left, MolarConcentration<T> right) =>
-        new(AmountOfSubstance<T>.FromMoles(left.Magnitude + right.Magnitude), Volume<T>.FromCubicMeters(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static MolarConcentration<T> Subtract(MolarConcentration<T> left, MolarConcentration<T> right) =>
-        new(AmountOfSubstance<T>.FromMoles(left.Magnitude - right.Magnitude), Volume<T>.FromCubicMeters(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

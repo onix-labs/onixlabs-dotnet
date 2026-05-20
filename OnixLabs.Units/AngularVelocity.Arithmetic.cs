@@ -18,9 +18,9 @@ public readonly partial struct AngularVelocity<T>
 {
     /// <inheritdoc/>
     public static AngularVelocity<T> Add(AngularVelocity<T> left, AngularVelocity<T> right) =>
-        new(Angle<T>.FromRadians(left.Magnitude + right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static AngularVelocity<T> Subtract(AngularVelocity<T> left, AngularVelocity<T> right) =>
-        new(Angle<T>.FromRadians(left.Magnitude - right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

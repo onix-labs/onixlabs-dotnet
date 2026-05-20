@@ -38,9 +38,18 @@ public readonly partial struct Power<T>(
     /// <summary>Gets the <see cref="Time{T}"/> component.</summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude as joules divided by seconds, yielding power in watts.
-    /// </summary>
-    /// <remarks>Opaque scalar for <see cref="Equals(Power{T})"/>, <see cref="CompareTo(Power{T})"/>, and arithmetic.</remarks>
-    public T Magnitude => Left.Magnitude / Right.Seconds;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude / Right.Seconds;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (watts, J/s).
+    internal T SIBaseValue => Magnitude;
+
+    internal static Power<T> One => new(Energy<T>.One, Time<T>.FromSeconds(T.One));
+
+    internal static Power<T> WithMagnitude(T magnitude) =>
+        new(Energy<T>.WithMagnitude(magnitude), Time<T>.FromSeconds(T.One));
 }

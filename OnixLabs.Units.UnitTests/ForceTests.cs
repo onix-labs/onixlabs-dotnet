@@ -63,7 +63,7 @@ public sealed class ForceTests
         Force<Float128> weight = new(Mass<Float128>.FromKilograms((Float128)1), MetersPerSecondSquared(Float128.Parse("9.81")));
 
         // Then — the magnitude is Newtons directly.
-        Assert.Equal(Float128.Parse("9.81"), weight.Magnitude);
+        Assert.Equal(Float128.Parse("9.81"), weight.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force.Add should produce the expected magnitude")]
@@ -77,7 +77,7 @@ public sealed class ForceTests
         Force<Float128> result = Force<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force.Add should reduce magnitudes across decompositions")]
@@ -91,7 +91,7 @@ public sealed class ForceTests
         Force<Float128> result = Force<Float128>.Add(tenNewtons, threeNewtons);
 
         // Then
-        Assert.Equal((Float128)13, result.Magnitude);
+        Assert.Equal((Float128)13, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force.Add should reduce across mixed mass/acceleration units")]
@@ -106,7 +106,7 @@ public sealed class ForceTests
         Force<Float128> result = Force<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal((Float128)1500, result.Magnitude);
+        Assert.Equal((Float128)1500, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force.Add with Zero should return an equal-magnitude force")]
@@ -133,7 +133,7 @@ public sealed class ForceTests
         Force<Float128> result = Force<Float128>.Subtract(left, right);
 
         // Then — magnitude at Newton scale, so Subtract is bit-exact for integer values.
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force.Subtract should produce a negative result when left is less than right")]
@@ -147,7 +147,7 @@ public sealed class ForceTests
         Force<Float128> result = Force<Float128>.Subtract(left, right);
 
         // Then
-        Assert.Equal(-(Float128)3, result.Magnitude);
+        Assert.Equal(-(Float128)3, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force + operator should produce the expected result")]
@@ -161,7 +161,7 @@ public sealed class ForceTests
         Force<Float128> result = left + right;
 
         // Then
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force - operator should produce the expected result")]
@@ -175,7 +175,7 @@ public sealed class ForceTests
         Force<Float128> result = left - right;
 
         // Then
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force instance Add should produce the expected result")]
@@ -189,7 +189,7 @@ public sealed class ForceTests
         Force<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force instance Subtract should produce the expected result")]
@@ -203,7 +203,7 @@ public sealed class ForceTests
         Force<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Force Add and Subtract should agree across static / operator / instance forms")]

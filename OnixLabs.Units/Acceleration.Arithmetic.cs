@@ -16,26 +16,11 @@ namespace OnixLabs.Units;
 
 public readonly partial struct Acceleration<T>
 {
-    // Result decomposition: `Speed(Distance.FromMeters(sum), Time.FromSeconds(1))` over `Time.FromSeconds(1)`. With
-    // every component at SI base scale and Right.Seconds = 1, the magnitude formula `Left.Magnitude / Right.Seconds`
-    // reduces to `sum / 1 = sum`, so the round-trip `new(...).Magnitude == sum` holds bit-exactly. ToString then reads
-    // `Left.Left.ValueOf("m") = sum` and `Right.ValueOf("s") = 1`, giving the human-readable "sum m/s²" rendering.
+    /// <inheritdoc/>
+    public static Acceleration<T> Add(Acceleration<T> left, Acceleration<T> right) =>
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
-    public static Acceleration<T> Add(Acceleration<T> left, Acceleration<T> right)
-    {
-        T sum = left.Magnitude + right.Magnitude;
-        return new Acceleration<T>(
-            new Speed<T>(Distance<T>.FromMeters(sum), Time<T>.FromSeconds(T.One)),
-            Time<T>.FromSeconds(T.One));
-    }
-
-    /// <inheritdoc/>
-    public static Acceleration<T> Subtract(Acceleration<T> left, Acceleration<T> right)
-    {
-        T difference = left.Magnitude - right.Magnitude;
-        return new Acceleration<T>(
-            new Speed<T>(Distance<T>.FromMeters(difference), Time<T>.FromSeconds(T.One)),
-            Time<T>.FromSeconds(T.One));
-    }
+    public static Acceleration<T> Subtract(Acceleration<T> left, Acceleration<T> right) =>
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

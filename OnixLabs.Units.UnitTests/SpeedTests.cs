@@ -58,7 +58,7 @@ public sealed class SpeedTests
         Speed<Float128> result = Speed<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal((Float128)30, result.Magnitude);
+        Assert.Equal((Float128)30, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed.Add should reduce magnitudes across decompositions")]
@@ -73,7 +73,7 @@ public sealed class SpeedTests
         Speed<Float128> result = Speed<Float128>.Add(twentyFiveMps, tenMps);
 
         // Then
-        Assert.Equal((Float128)35, result.Magnitude);
+        Assert.Equal((Float128)35, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed.Add should reduce across mixed distance/time units")]
@@ -89,7 +89,7 @@ public sealed class SpeedTests
         Speed<Float128> result = Speed<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal((Float128)15, result.Magnitude);
+        Assert.Equal((Float128)15, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed.Add with Zero should return an equal-magnitude speed")]
@@ -116,7 +116,7 @@ public sealed class SpeedTests
         Speed<Float128> result = Speed<Float128>.Subtract(left, right);
 
         // Then
-        Assert.Equal((Float128)25, result.Magnitude);
+        Assert.Equal((Float128)25, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed.Subtract should reduce magnitudes across decompositions")]
@@ -130,7 +130,7 @@ public sealed class SpeedTests
         Speed<Float128> result = Speed<Float128>.Subtract(thirtyMps, tenMps);
 
         // Then
-        Assert.Equal((Float128)20, result.Magnitude);
+        Assert.Equal((Float128)20, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed.Subtract should produce a negative result when left is less than right")]
@@ -144,7 +144,7 @@ public sealed class SpeedTests
         Speed<Float128> result = Speed<Float128>.Subtract(left, right);
 
         // Then
-        Assert.Equal(-(Float128)15, result.Magnitude);
+        Assert.Equal(-(Float128)15, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed + operator should produce the expected result")]
@@ -158,7 +158,7 @@ public sealed class SpeedTests
         Speed<Float128> result = left + right;
 
         // Then
-        Assert.Equal((Float128)30, result.Magnitude);
+        Assert.Equal((Float128)30, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed - operator should produce the expected result")]
@@ -172,7 +172,7 @@ public sealed class SpeedTests
         Speed<Float128> result = left - right;
 
         // Then
-        Assert.Equal((Float128)25, result.Magnitude);
+        Assert.Equal((Float128)25, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed instance Add should produce the expected result")]
@@ -186,7 +186,7 @@ public sealed class SpeedTests
         Speed<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal((Float128)30, result.Magnitude);
+        Assert.Equal((Float128)30, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed instance Subtract should produce the expected result")]
@@ -200,7 +200,7 @@ public sealed class SpeedTests
         Speed<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal((Float128)25, result.Magnitude);
+        Assert.Equal((Float128)25, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Speed Add and Subtract should agree across static / operator / instance forms")]

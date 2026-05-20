@@ -48,21 +48,21 @@ public sealed class ImpulseTests
     {
         // 5 N × 2 s = 10 N·s
         Impulse<Float128> j = new(NewtonsForce((Float128)5), Time<Float128>.FromSeconds((Float128)2));
-        Assert.Equal((Float128)10, j.Magnitude);
+        Assert.Equal((Float128)10, j.SIBaseValue);
     }
 
     [Fact(DisplayName = "Impulse.Add produces expected value")]
     public void ImpulseAddProducesExpected()
     {
         Impulse<Float128> r = Impulse<Float128>.Add(NewtonSeconds((Float128)5), NewtonSeconds((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "Impulse.Subtract produces expected value")]
     public void ImpulseSubtractProducesExpected()
     {
         Impulse<Float128> r = Impulse<Float128>.Subtract(NewtonSeconds((Float128)10), NewtonSeconds((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "Impulse equality is by magnitude")]

@@ -42,19 +42,19 @@ public readonly partial struct Acceleration<T>(
     /// </summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude of the current <see cref="Acceleration{T}"/> as the ratio of the speed magnitude (in m/s)
-    /// and the time interval (in seconds), yielding the acceleration in m/s².
-    /// </summary>
-    /// <remarks>
-    /// The magnitude is an opaque scalar used by <see cref="Equals(Acceleration{T})"/>, <see cref="CompareTo(Acceleration{T})"/>,
-    /// <see cref="GetHashCode"/>, and the arithmetic operators. It is not intended for display — use
-    /// <see cref="ToString(string, System.IFormatProvider)"/> for that.
-    ///
-    /// Unlike the strict <c>Left.Canonical / Right.Canonical</c> rule for composites of two single-dimension units,
-    /// nested composites read the inner composite at its natural scale (<see cref="Speed{T}.Magnitude"/>, in m/s) and
-    /// the outer single-dimension unit at its SI base scale (<see cref="Time{T}.Seconds"/>). The ratio lands at the
-    /// human-readable m/s² scale, so the magnitude is meaningful and round-trips cleanly through arithmetic.
-    /// </remarks>
-    public T Magnitude => Left.Magnitude / Right.Seconds;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    // Composed from the inner Speed's opaque Magnitude over Time at SI scale (seconds).
+    internal T Magnitude => Left.Magnitude / Right.Seconds;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (m/s²).
+    internal T SIBaseValue => Magnitude;
+
+    internal static Acceleration<T> One => new(Speed<T>.One, Time<T>.FromSeconds(T.One));
+
+    internal static Acceleration<T> WithMagnitude(T magnitude) =>
+        new(Speed<T>.WithMagnitude(magnitude), Time<T>.FromSeconds(T.One));
 }

@@ -18,13 +18,9 @@ public readonly partial struct Momentum<T>
 {
     /// <inheritdoc/>
     public static Momentum<T> Add(Momentum<T> left, Momentum<T> right) =>
-        new(Mass<T>.FromKilograms(left.Magnitude + right.Magnitude), OneMetrePerSecond);
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static Momentum<T> Subtract(Momentum<T> left, Momentum<T> right) =>
-        new(Mass<T>.FromKilograms(left.Magnitude - right.Magnitude), OneMetrePerSecond);
-
-    private static Speed<T> OneMetrePerSecond => new(
-        Distance<T>.FromMeters(T.One),
-        Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

@@ -48,21 +48,21 @@ public sealed class TorqueTests
     {
         // 5 N × 2 m = 10 N·m
         Torque<Float128> t = new(NewtonsForce((Float128)5), Distance<Float128>.FromMeters((Float128)2));
-        Assert.Equal((Float128)10, t.Magnitude);
+        Assert.Equal((Float128)10, t.SIBaseValue);
     }
 
     [Fact(DisplayName = "Torque.Add produces expected value")]
     public void TorqueAddProducesExpected()
     {
         Torque<Float128> r = Torque<Float128>.Add(NewtonMetres((Float128)5), NewtonMetres((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "Torque.Subtract produces expected value")]
     public void TorqueSubtractProducesExpected()
     {
         Torque<Float128> r = Torque<Float128>.Subtract(NewtonMetres((Float128)10), NewtonMetres((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "Torque equality is by magnitude")]

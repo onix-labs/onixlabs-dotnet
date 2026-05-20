@@ -16,19 +16,11 @@ namespace OnixLabs.Units;
 
 public readonly partial struct AngularAcceleration<T>
 {
-    // Result decomposition: AngularVelocityInRadiansPerSecond(sum) / Time.FromSeconds(1). With Right.Seconds = 1, the
-    // magnitude formula `Left.Magnitude / Right.Seconds` reduces to `sum / 1 = sum`, so the round-trip identity
-    // holds bit-exactly.
-
     /// <inheritdoc/>
     public static AngularAcceleration<T> Add(AngularAcceleration<T> left, AngularAcceleration<T> right) =>
-        new(AngularVelocityInRadiansPerSecond(left.Magnitude + right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static AngularAcceleration<T> Subtract(AngularAcceleration<T> left, AngularAcceleration<T> right) =>
-        new(AngularVelocityInRadiansPerSecond(left.Magnitude - right.Magnitude), Time<T>.FromSeconds(T.One));
-
-    // Builds an AngularVelocity of the given rad/s magnitude in canonical "(rad × 1 s)" form.
-    private static AngularVelocity<T> AngularVelocityInRadiansPerSecond(T radiansPerSecond) =>
-        new(Angle<T>.FromRadians(radiansPerSecond), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

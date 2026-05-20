@@ -18,9 +18,9 @@ public readonly partial struct MolarMass<T>
 {
     /// <inheritdoc/>
     public static MolarMass<T> Add(MolarMass<T> left, MolarMass<T> right) =>
-        new(Mass<T>.FromKilograms(left.Magnitude + right.Magnitude), AmountOfSubstance<T>.FromMoles(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static MolarMass<T> Subtract(MolarMass<T> left, MolarMass<T> right) =>
-        new(Mass<T>.FromKilograms(left.Magnitude - right.Magnitude), AmountOfSubstance<T>.FromMoles(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

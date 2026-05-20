@@ -44,21 +44,21 @@ public sealed class MomentumTests
     {
         // 5 kg × 10 m/s = 50 kg·m/s
         Momentum<Float128> p = new(Mass<Float128>.FromKilograms((Float128)5), MetersPerSecond((Float128)10));
-        Assert.Equal((Float128)50, p.Magnitude);
+        Assert.Equal((Float128)50, p.SIBaseValue);
     }
 
     [Fact(DisplayName = "Momentum.Add produces expected value")]
     public void MomentumAddProducesExpected()
     {
         Momentum<Float128> r = Momentum<Float128>.Add(KilogramMetersPerSecond((Float128)5), KilogramMetersPerSecond((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "Momentum.Subtract produces expected value")]
     public void MomentumSubtractProducesExpected()
     {
         Momentum<Float128> r = Momentum<Float128>.Subtract(KilogramMetersPerSecond((Float128)10), KilogramMetersPerSecond((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "Momentum equality is by magnitude")]

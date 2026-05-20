@@ -41,21 +41,21 @@ public sealed class VolumetricFlowRateTests
     {
         // 10 m³ / 2 s = 5 m³/s
         VolumetricFlowRate<Float128> q = new(Volume<Float128>.FromCubicMeters((Float128)10), Time<Float128>.FromSeconds((Float128)2));
-        Assert.Equal((Float128)5, q.Magnitude);
+        Assert.Equal((Float128)5, q.SIBaseValue);
     }
 
     [Fact(DisplayName = "VolumetricFlowRate.Add produces expected value")]
     public void VolumetricFlowRateAddProducesExpected()
     {
         VolumetricFlowRate<Float128> r = VolumetricFlowRate<Float128>.Add(CubicMetersPerSecond((Float128)5), CubicMetersPerSecond((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "VolumetricFlowRate.Subtract produces expected value")]
     public void VolumetricFlowRateSubtractProducesExpected()
     {
         VolumetricFlowRate<Float128> r = VolumetricFlowRate<Float128>.Subtract(CubicMetersPerSecond((Float128)10), CubicMetersPerSecond((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "VolumetricFlowRate equality is by magnitude")]

@@ -16,19 +16,11 @@ namespace OnixLabs.Units;
 
 public readonly partial struct ElectricCapacitance<T>
 {
-    // Result decomposition: `CoulombsCharge(sum) / VoltsPotential(1)`. With Right.Magnitude = 1 (1-V potential), the
-    // magnitude formula `Left.Magnitude / Right.Magnitude` reduces to `sum / 1 = sum`, so the round-trip identity
-    // holds bit-exactly.
-
     /// <inheritdoc/>
     public static ElectricCapacitance<T> Add(ElectricCapacitance<T> left, ElectricCapacitance<T> right) =>
-        new(CoulombsCharge(left.Magnitude + right.Magnitude), ElectricResistance<T>.VoltsPotential(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static ElectricCapacitance<T> Subtract(ElectricCapacitance<T> left, ElectricCapacitance<T> right) =>
-        new(CoulombsCharge(left.Magnitude - right.Magnitude), ElectricResistance<T>.VoltsPotential(T.One));
-
-    // Builds an ElectricCharge of the given coulomb magnitude in canonical "(coulombs A × 1 s)" form.
-    private static ElectricCharge<T> CoulombsCharge(T coulombs) =>
-        new(Current<T>.FromAmperes(coulombs), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

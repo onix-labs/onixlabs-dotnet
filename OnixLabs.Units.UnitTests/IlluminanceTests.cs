@@ -45,21 +45,21 @@ public sealed class IlluminanceTests
     {
         // 10 lm / 2 m² = 5 lx
         Illuminance<Float128> e = new(Lumens((Float128)10), Area<Float128>.FromSquareMeters((Float128)2));
-        Assert.Equal((Float128)5, e.Magnitude);
+        Assert.Equal((Float128)5, e.SIBaseValue);
     }
 
     [Fact(DisplayName = "Illuminance.Add should produce the expected magnitude")]
     public void IlluminanceAddShouldProduceExpectedValue()
     {
         Illuminance<Float128> result = Illuminance<Float128>.Add(Lux((Float128)5), Lux((Float128)3));
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Illuminance.Subtract should produce the expected magnitude")]
     public void IlluminanceSubtractShouldProduceExpectedValue()
     {
         Illuminance<Float128> result = Illuminance<Float128>.Subtract(Lux((Float128)10), Lux((Float128)3));
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Illuminance equality should be by magnitude (proportional components)")]

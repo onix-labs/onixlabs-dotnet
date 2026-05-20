@@ -38,9 +38,18 @@ public readonly partial struct HeatCapacity<T>(
     /// <summary>Gets the <see cref="Temperature{T}"/> component.</summary>
     public Temperature<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude as joules divided by kelvin, yielding heat capacity in J/K.
-    /// </summary>
-    /// <remarks>Opaque scalar for <see cref="Equals(HeatCapacity{T})"/>, <see cref="CompareTo(HeatCapacity{T})"/>, and arithmetic.</remarks>
-    public T Magnitude => Left.Magnitude / Right.Kelvin;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude / Right.Kelvin;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (J/K).
+    internal T SIBaseValue => Magnitude;
+
+    internal static HeatCapacity<T> One => new(Energy<T>.One, Temperature<T>.FromKelvin(T.One));
+
+    internal static HeatCapacity<T> WithMagnitude(T magnitude) =>
+        new(Energy<T>.WithMagnitude(magnitude), Temperature<T>.FromKelvin(T.One));
 }

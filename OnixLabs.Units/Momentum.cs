@@ -37,7 +37,17 @@ public readonly partial struct Momentum<T>(
     /// <summary>Gets the <see cref="Speed{T}"/> component.</summary>
     public Speed<T> Right { get; } = right;
 
-    /// <summary>Gets the magnitude in kg·m/s.</summary>
-    /// <remarks>Opaque scalar for equality/comparison/arithmetic.</remarks>
-    public T Magnitude => Left.KiloGrams * Right.Magnitude;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.KiloGrams * Right.Magnitude;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    internal T SIBaseValue => Magnitude;
+
+    internal static Momentum<T> One => new(Mass<T>.FromKilograms(T.One), Speed<T>.One);
+
+    internal static Momentum<T> WithMagnitude(T magnitude) =>
+        new(Mass<T>.FromKilograms(magnitude), Speed<T>.One);
 }

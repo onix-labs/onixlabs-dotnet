@@ -18,9 +18,9 @@ public readonly partial struct Density<T>
 {
     /// <inheritdoc/>
     public static Density<T> Add(Density<T> left, Density<T> right) =>
-        new(Mass<T>.FromQuectograms(left.Magnitude + right.Magnitude), Volume<T>.FromCubicQuectometers(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static Density<T> Subtract(Density<T> left, Density<T> right) =>
-        new(Mass<T>.FromQuectograms(left.Magnitude - right.Magnitude), Volume<T>.FromCubicQuectometers(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

@@ -18,9 +18,9 @@ public readonly partial struct Speed<T>
 {
     /// <inheritdoc/>
     public static Speed<T> Add(Speed<T> left, Speed<T> right) =>
-        new(Distance<T>.FromMeters(left.Magnitude + right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static Speed<T> Subtract(Speed<T> left, Speed<T> right) =>
-        new(Distance<T>.FromMeters(left.Magnitude - right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

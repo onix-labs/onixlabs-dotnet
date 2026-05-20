@@ -58,21 +58,21 @@ public sealed class MagneticFluxTests
     {
         // 5 V × 2 s = 10 Wb
         MagneticFlux<Float128> wb = new(Volts((Float128)5), Time<Float128>.FromSeconds((Float128)2));
-        Assert.Equal((Float128)10, wb.Magnitude);
+        Assert.Equal((Float128)10, wb.SIBaseValue);
     }
 
     [Fact(DisplayName = "MagneticFlux.Add should produce the expected magnitude")]
     public void MagneticFluxAddShouldProduceExpectedValue()
     {
         MagneticFlux<Float128> result = MagneticFlux<Float128>.Add(Webers((Float128)5), Webers((Float128)3));
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "MagneticFlux.Subtract should produce the expected magnitude")]
     public void MagneticFluxSubtractShouldProduceExpectedValue()
     {
         MagneticFlux<Float128> result = MagneticFlux<Float128>.Subtract(Webers((Float128)10), Webers((Float128)3));
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "MagneticFlux equality should be by magnitude (proportional components)")]

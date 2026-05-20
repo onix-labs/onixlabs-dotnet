@@ -18,9 +18,9 @@ public readonly partial struct MassFlowRate<T>
 {
     /// <inheritdoc/>
     public static MassFlowRate<T> Add(MassFlowRate<T> left, MassFlowRate<T> right) =>
-        new(Mass<T>.FromKilograms(left.Magnitude + right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static MassFlowRate<T> Subtract(MassFlowRate<T> left, MassFlowRate<T> right) =>
-        new(Mass<T>.FromKilograms(left.Magnitude - right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

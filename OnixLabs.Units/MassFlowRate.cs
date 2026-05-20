@@ -37,7 +37,17 @@ public readonly partial struct MassFlowRate<T>(
     /// <summary>Gets the <see cref="Time{T}"/> component.</summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>Gets the magnitude in kg/s.</summary>
-    /// <remarks>Opaque scalar for equality/comparison/arithmetic.</remarks>
-    public T Magnitude => Left.KiloGrams / Right.Seconds;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.KiloGrams / Right.Seconds;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    internal T SIBaseValue => Magnitude;
+
+    internal static MassFlowRate<T> One => new(Mass<T>.FromKilograms(T.One), Time<T>.FromSeconds(T.One));
+
+    internal static MassFlowRate<T> WithMagnitude(T magnitude) =>
+        new(Mass<T>.FromKilograms(magnitude), Time<T>.FromSeconds(T.One));
 }

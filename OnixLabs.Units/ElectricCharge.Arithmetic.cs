@@ -16,16 +16,11 @@ namespace OnixLabs.Units;
 
 public readonly partial struct ElectricCharge<T>
 {
-    // Result decomposition: `Current.FromAmperes(sum)` × `Time.FromSeconds(1)`. With Right.Seconds = 1, the magnitude
-    // formula `Left.Amperes * Right.Seconds` reduces to `sum * 1 = sum`, so the round-trip identity
-    // `new(...).Magnitude == sum` holds bit-exactly. ToString then reads `Current.ValueOf("A") = sum` and
-    // `Time.ValueOf("s") = 1`, giving the human-readable "sum A*s" rendering (i.e. value in coulombs).
-
     /// <inheritdoc/>
     public static ElectricCharge<T> Add(ElectricCharge<T> left, ElectricCharge<T> right) =>
-        new(Current<T>.FromAmperes(left.Magnitude + right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static ElectricCharge<T> Subtract(ElectricCharge<T> left, ElectricCharge<T> right) =>
-        new(Current<T>.FromAmperes(left.Magnitude - right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

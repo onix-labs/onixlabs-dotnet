@@ -45,7 +45,7 @@ public sealed class AngularAccelerationTests
     {
         // 6 rad/s / 2 s = 3 rad/s²
         AngularAcceleration<Float128> alpha = new(RadiansPerSecond((Float128)6), Time<Float128>.FromSeconds((Float128)2));
-        Assert.Equal((Float128)3, alpha.Magnitude);
+        Assert.Equal((Float128)3, alpha.SIBaseValue);
     }
 
     [Fact(DisplayName = "AngularAcceleration.Add produces expected value")]
@@ -53,7 +53,7 @@ public sealed class AngularAccelerationTests
     {
         AngularAcceleration<Float128> r = AngularAcceleration<Float128>.Add(
             RadiansPerSecondSquared((Float128)5), RadiansPerSecondSquared((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "AngularAcceleration.Subtract produces expected value")]
@@ -61,7 +61,7 @@ public sealed class AngularAccelerationTests
     {
         AngularAcceleration<Float128> r = AngularAcceleration<Float128>.Subtract(
             RadiansPerSecondSquared((Float128)10), RadiansPerSecondSquared((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "AngularAcceleration equality is by magnitude (proportional components)")]

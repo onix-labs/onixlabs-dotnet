@@ -16,28 +16,11 @@ namespace OnixLabs.Units;
 
 public readonly partial struct ElectricPotential<T>
 {
-    // Result decomposition: `EnergyInJoules(sum) / OneCoulomb`. With Right.Magnitude = 1 (1 A · 1 s), the magnitude
-    // formula `Left.Magnitude / Right.Magnitude` reduces to `sum / 1 = sum`, so the round-trip identity holds
-    // bit-exactly.
-
     /// <inheritdoc/>
     public static ElectricPotential<T> Add(ElectricPotential<T> left, ElectricPotential<T> right) =>
-        new(EnergyInJoules(left.Magnitude + right.Magnitude), OneCoulomb);
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static ElectricPotential<T> Subtract(ElectricPotential<T> left, ElectricPotential<T> right) =>
-        new(EnergyInJoules(left.Magnitude - right.Magnitude), OneCoulomb);
-
-    // Builds an Energy of the given joule magnitude in canonical "(joules N × 1 m)" form. Used by Add/Subtract to
-    // construct the result's Energy component without depending on Energy.Arithmetic.cs's private helpers.
-    private static Energy<T> EnergyInJoules(T joules) => new(NewtonsForce(joules), Distance<T>.FromMeters(T.One));
-
-    private static Force<T> NewtonsForce(T newtons) => new(
-        Mass<T>.FromKilograms(newtons),
-        new Acceleration<T>(
-            new Speed<T>(Distance<T>.FromMeters(T.One), Time<T>.FromSeconds(T.One)),
-            Time<T>.FromSeconds(T.One)));
-
-    private static ElectricCharge<T> OneCoulomb =>
-        new(Current<T>.FromAmperes(T.One), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

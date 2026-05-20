@@ -42,18 +42,18 @@ public readonly partial struct Impulse<T>(
     /// </summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude of the current <see cref="Impulse{T}"/> as the product of the force (in Newtons) and
-    /// the duration (in seconds), yielding the impulse in Newton-seconds (N·s).
-    /// </summary>
-    /// <remarks>
-    /// The magnitude is an opaque scalar used by <see cref="Equals(Impulse{T})"/>, <see cref="CompareTo(Impulse{T})"/>,
-    /// <see cref="GetHashCode"/>, and the arithmetic operators. It is not intended for display — use
-    /// <see cref="ToString(string, System.IFormatProvider)"/> for that.
-    ///
-    /// Both components are read at their SI base scale (Force at Newtons via <see cref="Force{T}.Magnitude"/>, Time
-    /// at seconds via <see cref="Time{T}.Seconds"/>) so the resulting magnitude lands at the human-readable
-    /// Newton-second scale and round-trips cleanly through arithmetic.
-    /// </remarks>
-    public T Magnitude => Left.Magnitude * Right.Seconds;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude * Right.Seconds;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (Newton-seconds, N·s).
+    internal T SIBaseValue => Magnitude;
+
+    internal static Impulse<T> One => new(Force<T>.One, Time<T>.FromSeconds(T.One));
+
+    internal static Impulse<T> WithMagnitude(T magnitude) =>
+        new(Force<T>.WithMagnitude(magnitude), Time<T>.FromSeconds(T.One));
 }

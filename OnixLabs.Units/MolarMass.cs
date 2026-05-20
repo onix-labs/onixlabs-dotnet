@@ -37,7 +37,18 @@ public readonly partial struct MolarMass<T>(
     /// <summary>Gets the <see cref="AmountOfSubstance{T}"/> component.</summary>
     public AmountOfSubstance<T> Right { get; } = right;
 
-    /// <summary>Gets the magnitude in kg/mol.</summary>
-    /// <remarks>Opaque scalar for equality/comparison/arithmetic.</remarks>
-    public T Magnitude => Left.KiloGrams / Right.Moles;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.KiloGrams / Right.Moles;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    internal T SIBaseValue => Magnitude;
+
+    internal static MolarMass<T> One =>
+        new(Mass<T>.FromKilograms(T.One), AmountOfSubstance<T>.FromMoles(T.One));
+
+    internal static MolarMass<T> WithMagnitude(T magnitude) =>
+        new(Mass<T>.FromKilograms(magnitude), AmountOfSubstance<T>.FromMoles(T.One));
 }

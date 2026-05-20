@@ -18,15 +18,9 @@ public readonly partial struct Pressure<T>
 {
     /// <inheritdoc/>
     public static Pressure<T> Add(Pressure<T> left, Pressure<T> right) =>
-        new(NewtonsForce(left.Magnitude + right.Magnitude), Area<T>.FromSquareMeters(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static Pressure<T> Subtract(Pressure<T> left, Pressure<T> right) =>
-        new(NewtonsForce(left.Magnitude - right.Magnitude), Area<T>.FromSquareMeters(T.One));
-
-    private static Force<T> NewtonsForce(T newtons) => new(
-        Mass<T>.FromKilograms(newtons),
-        new Acceleration<T>(
-            new Speed<T>(Distance<T>.FromMeters(T.One), Time<T>.FromSeconds(T.One)),
-            Time<T>.FromSeconds(T.One)));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

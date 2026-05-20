@@ -42,18 +42,18 @@ public readonly partial struct ElectricCharge<T>(
     /// </summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude of the current <see cref="ElectricCharge{T}"/> as the product of the current (in amperes)
-    /// and the duration (in seconds), yielding the charge in coulombs (A·s).
-    /// </summary>
-    /// <remarks>
-    /// The magnitude is an opaque scalar used by <see cref="Equals(ElectricCharge{T})"/>,
-    /// <see cref="CompareTo(ElectricCharge{T})"/>, <see cref="GetHashCode"/>, and the arithmetic operators. It is not
-    /// intended for display — use <see cref="ToString(string, System.IFormatProvider)"/> for that.
-    ///
-    /// Both components are read at their SI base scale (Current at amperes via <see cref="Current{T}.Amperes"/>, Time
-    /// at seconds via <see cref="Time{T}.Seconds"/>) so the resulting magnitude lands at the human-readable coulomb
-    /// scale and round-trips cleanly through arithmetic.
-    /// </remarks>
-    public T Magnitude => Left.Amperes * Right.Seconds;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Amperes * Right.Seconds;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (coulombs).
+    internal T SIBaseValue => Magnitude;
+
+    internal static ElectricCharge<T> One => new(Current<T>.FromAmperes(T.One), Time<T>.FromSeconds(T.One));
+
+    internal static ElectricCharge<T> WithMagnitude(T magnitude) =>
+        new(Current<T>.FromAmperes(magnitude), Time<T>.FromSeconds(T.One));
 }

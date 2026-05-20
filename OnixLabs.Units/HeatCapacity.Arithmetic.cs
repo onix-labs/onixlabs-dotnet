@@ -16,24 +16,11 @@ namespace OnixLabs.Units;
 
 public readonly partial struct HeatCapacity<T>
 {
-    // Result decomposition: `EnergyInJoules(sum) / Temperature.FromKelvin(1)`. With Right.Kelvin = 1, the magnitude
-    // formula `Left.Magnitude / Right.Kelvin` reduces to `sum / 1 = sum`, so the round-trip identity holds bit-exactly.
-
     /// <inheritdoc/>
     public static HeatCapacity<T> Add(HeatCapacity<T> left, HeatCapacity<T> right) =>
-        new(EnergyInJoules(left.Magnitude + right.Magnitude), Temperature<T>.FromKelvin(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static HeatCapacity<T> Subtract(HeatCapacity<T> left, HeatCapacity<T> right) =>
-        new(EnergyInJoules(left.Magnitude - right.Magnitude), Temperature<T>.FromKelvin(T.One));
-
-    // Builds an Energy of the given joule magnitude in canonical "(joules N × 1 m)" form. Used by Add/Subtract to
-    // construct the result's Energy component without depending on Energy.Arithmetic.cs's private helpers.
-    private static Energy<T> EnergyInJoules(T joules) => new(NewtonsForce(joules), Distance<T>.FromMeters(T.One));
-
-    private static Force<T> NewtonsForce(T newtons) => new(
-        Mass<T>.FromKilograms(newtons),
-        new Acceleration<T>(
-            new Speed<T>(Distance<T>.FromMeters(T.One), Time<T>.FromSeconds(T.One)),
-            Time<T>.FromSeconds(T.One)));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

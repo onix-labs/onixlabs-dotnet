@@ -41,13 +41,20 @@ public readonly partial struct Speed<T>(
     /// </summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude of the current <see cref="Speed{T}"/> as the ratio of the canonical distance and time storage values.
-    /// </summary>
-    /// <remarks>
-    /// The magnitude is an opaque scalar used by <see cref="Equals(Speed{T})"/>, <see cref="CompareTo(Speed{T})"/>,
-    /// <see cref="GetHashCode"/>, and the arithmetic operators. It is not intended for display — use
-    /// <see cref="ToString(string, System.IFormatProvider)"/> for that.
-    /// </remarks>
-    public T Magnitude => Left.Canonical / Right.Canonical;
+    // Opaque scalar used by equality, ordering, hashing, and arithmetic round-trips. Computed from the components'
+    // canonical storage. Internal so the rest of the assembly (and InternalsVisibleTo'd tests) can read it directly;
+    // the public API exposes it only via the explicit IMagnitudinalUnit<T> implementation below.
+    internal T Magnitude => Left.Canonical / Right.Canonical;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (m/s). Used by ToString and tests that assert against a readable scale.
+    internal T SIBaseValue => Left.Meters / Right.Seconds;
+
+    // Canonical decomposition with magnitude 1 m/s, used as the round-trip identity by arithmetic.
+    internal static Speed<T> One => new(Distance<T>.FromMeters(T.One), Time<T>.FromSeconds(T.One));
+
+    internal static Speed<T> WithMagnitude(T magnitude) =>
+        new(Distance<T>.FromMeters(magnitude), Time<T>.FromSeconds(T.One));
 }

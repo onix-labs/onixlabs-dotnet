@@ -60,7 +60,7 @@ public readonly partial struct Energy<T>
         // Named-unit alias (J, kJ, MJ, mJ, ...).
         if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
         {
-            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasValue = SIBaseValue * aliasMultiplier;
             T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
             return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
         }

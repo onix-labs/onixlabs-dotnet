@@ -41,21 +41,21 @@ public sealed class MolarConcentrationTests
     {
         // 10 mol / 2 m³ = 5 mol/m³
         MolarConcentration<Float128> c = new(AmountOfSubstance<Float128>.FromMoles((Float128)10), Volume<Float128>.FromCubicMeters((Float128)2));
-        Assert.Equal((Float128)5, c.Magnitude);
+        Assert.Equal((Float128)5, c.SIBaseValue);
     }
 
     [Fact(DisplayName = "MolarConcentration.Add produces expected value")]
     public void MolarConcentrationAddProducesExpected()
     {
         MolarConcentration<Float128> r = MolarConcentration<Float128>.Add(MolesPerCubicMeter((Float128)5), MolesPerCubicMeter((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "MolarConcentration.Subtract produces expected value")]
     public void MolarConcentrationSubtractProducesExpected()
     {
         MolarConcentration<Float128> r = MolarConcentration<Float128>.Subtract(MolesPerCubicMeter((Float128)10), MolesPerCubicMeter((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "MolarConcentration equality is by magnitude")]

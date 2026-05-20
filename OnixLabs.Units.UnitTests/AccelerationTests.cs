@@ -59,7 +59,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> gravity = MetersPerSecondSquared(Float128.Parse("9.81"));
 
         // Then — the magnitude is the m/s² value directly, not a scaled ratio.
-        Assert.Equal(Float128.Parse("9.81"), gravity.Magnitude);
+        Assert.Equal(Float128.Parse("9.81"), gravity.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration.Add should produce the expected magnitude")]
@@ -73,7 +73,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = Acceleration<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal((Float128)5, result.Magnitude);
+        Assert.Equal((Float128)5, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration.Add should reduce magnitudes across decompositions")]
@@ -89,7 +89,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = Acceleration<Float128>.Add(tenMps2, fiveMps2);
 
         // Then
-        Assert.Equal((Float128)15, result.Magnitude);
+        Assert.Equal((Float128)15, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration.Add should reduce across mixed speed/time units")]
@@ -107,7 +107,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = Acceleration<Float128>.Add(left, right);
 
         // Then
-        Assert.Equal((Float128)15, result.Magnitude);
+        Assert.Equal((Float128)15, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration.Add with Zero should return an equal-magnitude acceleration")]
@@ -134,7 +134,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = Acceleration<Float128>.Subtract(left, right);
 
         // Then — magnitude now sits at m/s² scale, so Subtract is bit-exact for integer values.
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration.Subtract should produce a negative result when left is less than right")]
@@ -148,7 +148,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = Acceleration<Float128>.Subtract(left, right);
 
         // Then
-        Assert.Equal(-(Float128)3, result.Magnitude);
+        Assert.Equal(-(Float128)3, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration + operator should produce the expected result")]
@@ -162,7 +162,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = left + right;
 
         // Then
-        Assert.Equal((Float128)5, result.Magnitude);
+        Assert.Equal((Float128)5, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration - operator should produce the expected result")]
@@ -176,7 +176,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = left - right;
 
         // Then
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration instance Add should produce the expected result")]
@@ -190,7 +190,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = left.Add(right);
 
         // Then
-        Assert.Equal((Float128)5, result.Magnitude);
+        Assert.Equal((Float128)5, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration instance Subtract should produce the expected result")]
@@ -204,7 +204,7 @@ public sealed class AccelerationTests
         Acceleration<Float128> result = left.Subtract(right);
 
         // Then
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Acceleration Add and Subtract should agree across static / operator / instance forms")]

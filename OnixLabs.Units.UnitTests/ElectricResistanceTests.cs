@@ -58,21 +58,21 @@ public sealed class ElectricResistanceTests
     {
         // 10 V / 2 A = 5 Ω
         ElectricResistance<Float128> r = new(Volts((Float128)10), Current<Float128>.FromAmperes((Float128)2));
-        Assert.Equal((Float128)5, r.Magnitude);
+        Assert.Equal((Float128)5, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricResistance.Add should produce the expected magnitude")]
     public void ElectricResistanceAddShouldProduceExpectedValue()
     {
         ElectricResistance<Float128> result = ElectricResistance<Float128>.Add(Ohms((Float128)5), Ohms((Float128)3));
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricResistance.Subtract should produce the expected magnitude")]
     public void ElectricResistanceSubtractShouldProduceExpectedValue()
     {
         ElectricResistance<Float128> result = ElectricResistance<Float128>.Subtract(Ohms((Float128)10), Ohms((Float128)3));
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricResistance equality should be by magnitude (proportional components)")]

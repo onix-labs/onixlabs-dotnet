@@ -52,21 +52,21 @@ public sealed class HeatCapacityTests
     {
         // 10 J / 2 K = 5 J/K
         HeatCapacity<Float128> hc = new(Joules((Float128)10), Temperature<Float128>.FromKelvin((Float128)2));
-        Assert.Equal((Float128)5, hc.Magnitude);
+        Assert.Equal((Float128)5, hc.SIBaseValue);
     }
 
     [Fact(DisplayName = "HeatCapacity.Add should produce the expected magnitude")]
     public void HeatCapacityAddShouldProduceExpectedValue()
     {
         HeatCapacity<Float128> result = HeatCapacity<Float128>.Add(JoulesPerKelvin((Float128)5), JoulesPerKelvin((Float128)3));
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "HeatCapacity.Subtract should produce the expected magnitude")]
     public void HeatCapacitySubtractShouldProduceExpectedValue()
     {
         HeatCapacity<Float128> result = HeatCapacity<Float128>.Subtract(JoulesPerKelvin((Float128)10), JoulesPerKelvin((Float128)3));
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "HeatCapacity equality should be by magnitude (proportional components)")]

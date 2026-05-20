@@ -38,9 +38,18 @@ public readonly partial struct ElectricPotential<T>(
     /// <summary>Gets the <see cref="ElectricCharge{T}"/> component.</summary>
     public ElectricCharge<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude as joules divided by coulombs, yielding electric potential in volts.
-    /// </summary>
-    /// <remarks>Opaque scalar for <see cref="Equals(ElectricPotential{T})"/>, <see cref="CompareTo(ElectricPotential{T})"/>, and arithmetic.</remarks>
-    public T Magnitude => Left.Magnitude / Right.Magnitude;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude / Right.Magnitude;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (volts, J/C).
+    internal T SIBaseValue => Magnitude;
+
+    internal static ElectricPotential<T> One => new(Energy<T>.One, ElectricCharge<T>.One);
+
+    internal static ElectricPotential<T> WithMagnitude(T magnitude) =>
+        new(Energy<T>.WithMagnitude(magnitude), ElectricCharge<T>.One);
 }

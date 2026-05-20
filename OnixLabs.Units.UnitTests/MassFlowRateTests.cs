@@ -41,21 +41,21 @@ public sealed class MassFlowRateTests
     {
         // 10 kg / 2 s = 5 kg/s
         MassFlowRate<Float128> m = new(Mass<Float128>.FromKilograms((Float128)10), Time<Float128>.FromSeconds((Float128)2));
-        Assert.Equal((Float128)5, m.Magnitude);
+        Assert.Equal((Float128)5, m.SIBaseValue);
     }
 
     [Fact(DisplayName = "MassFlowRate.Add produces expected value")]
     public void MassFlowRateAddProducesExpected()
     {
         MassFlowRate<Float128> r = MassFlowRate<Float128>.Add(KilogramsPerSecond((Float128)5), KilogramsPerSecond((Float128)3));
-        Assert.Equal((Float128)8, r.Magnitude);
+        Assert.Equal((Float128)8, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "MassFlowRate.Subtract produces expected value")]
     public void MassFlowRateSubtractProducesExpected()
     {
         MassFlowRate<Float128> r = MassFlowRate<Float128>.Subtract(KilogramsPerSecond((Float128)10), KilogramsPerSecond((Float128)3));
-        Assert.Equal((Float128)7, r.Magnitude);
+        Assert.Equal((Float128)7, r.SIBaseValue);
     }
 
     [Fact(DisplayName = "MassFlowRate equality is by magnitude")]

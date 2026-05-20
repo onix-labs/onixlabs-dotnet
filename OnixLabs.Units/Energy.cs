@@ -42,18 +42,18 @@ public readonly partial struct Energy<T>(
     /// </summary>
     public Distance<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude of the current <see cref="Energy{T}"/> as the product of the force (in Newtons) and
-    /// displacement (in meters), yielding the energy in joules (N·m).
-    /// </summary>
-    /// <remarks>
-    /// The magnitude is an opaque scalar used by <see cref="Equals(Energy{T})"/>, <see cref="CompareTo(Energy{T})"/>,
-    /// <see cref="GetHashCode"/>, and the arithmetic operators. It is not intended for display — use
-    /// <see cref="ToString(string, System.IFormatProvider)"/> for that.
-    ///
-    /// Both components are read at their SI base scale (Force at Newtons via <see cref="Force{T}.Magnitude"/>, Distance
-    /// at meters via <see cref="Distance{T}.Meters"/>) so the resulting magnitude lands at the human-readable joule
-    /// scale and round-trips cleanly through arithmetic.
-    /// </remarks>
-    public T Magnitude => Left.Magnitude * Right.Meters;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude * Right.Meters;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (joules, N·m).
+    internal T SIBaseValue => Magnitude;
+
+    internal static Energy<T> One => new(Force<T>.One, Distance<T>.FromMeters(T.One));
+
+    internal static Energy<T> WithMagnitude(T magnitude) =>
+        new(Force<T>.WithMagnitude(magnitude), Distance<T>.FromMeters(T.One));
 }

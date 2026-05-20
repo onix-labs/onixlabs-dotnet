@@ -38,9 +38,18 @@ public readonly partial struct MagneticFlux<T>(
     /// <summary>Gets the <see cref="Time{T}"/> component.</summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude as volts multiplied by seconds, yielding magnetic flux in webers.
-    /// </summary>
-    /// <remarks>Opaque scalar for <see cref="Equals(MagneticFlux{T})"/>, <see cref="CompareTo(MagneticFlux{T})"/>, and arithmetic.</remarks>
-    public T Magnitude => Left.Magnitude * Right.Seconds;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude * Right.Seconds;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (webers, V·s).
+    internal T SIBaseValue => Magnitude;
+
+    internal static MagneticFlux<T> One => new(ElectricPotential<T>.One, Time<T>.FromSeconds(T.One));
+
+    internal static MagneticFlux<T> WithMagnitude(T magnitude) =>
+        new(ElectricPotential<T>.WithMagnitude(magnitude), Time<T>.FromSeconds(T.One));
 }

@@ -55,21 +55,21 @@ public sealed class ElectricPotentialTests
     {
         // 10 J / 2 C = 5 V
         ElectricPotential<Float128> v = new(Joules((Float128)10), Coulombs((Float128)2));
-        Assert.Equal((Float128)5, v.Magnitude);
+        Assert.Equal((Float128)5, v.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricPotential.Add should produce the expected magnitude")]
     public void ElectricPotentialAddShouldProduceExpectedValue()
     {
         ElectricPotential<Float128> result = ElectricPotential<Float128>.Add(Volts((Float128)5), Volts((Float128)3));
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricPotential.Subtract should produce the expected magnitude")]
     public void ElectricPotentialSubtractShouldProduceExpectedValue()
     {
         ElectricPotential<Float128> result = ElectricPotential<Float128>.Subtract(Volts((Float128)10), Volts((Float128)3));
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "ElectricPotential equality should be by magnitude (proportional components)")]

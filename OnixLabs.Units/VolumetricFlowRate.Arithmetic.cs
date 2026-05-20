@@ -18,9 +18,9 @@ public readonly partial struct VolumetricFlowRate<T>
 {
     /// <inheritdoc/>
     public static VolumetricFlowRate<T> Add(VolumetricFlowRate<T> left, VolumetricFlowRate<T> right) =>
-        new(Volume<T>.FromCubicMeters(left.Magnitude + right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
     public static VolumetricFlowRate<T> Subtract(VolumetricFlowRate<T> left, VolumetricFlowRate<T> right) =>
-        new(Volume<T>.FromCubicMeters(left.Magnitude - right.Magnitude), Time<T>.FromSeconds(T.One));
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

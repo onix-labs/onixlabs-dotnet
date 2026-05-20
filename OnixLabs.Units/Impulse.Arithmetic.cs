@@ -16,30 +16,11 @@ namespace OnixLabs.Units;
 
 public readonly partial struct Impulse<T>
 {
-    // Result decomposition: `ForceInNewtons(sum)` × `Time.FromSeconds(1)`. With Right.Seconds = 1, the magnitude
-    // formula `Left.Magnitude * Right.Seconds` reduces to `sum * 1 = sum`, so the round-trip identity
-    // `new(...).Magnitude == sum` holds bit-exactly. ToString then reads `Force.ValueOf("kg*m/s²") = sum` and
-    // `Time.ValueOf("s") = 1`, giving the human-readable "sum kg*m/s²*s" rendering (i.e. value in Newton-seconds).
+    /// <inheritdoc/>
+    public static Impulse<T> Add(Impulse<T> left, Impulse<T> right) =>
+        WithMagnitude(left.Magnitude + right.Magnitude);
 
     /// <inheritdoc/>
-    public static Impulse<T> Add(Impulse<T> left, Impulse<T> right)
-    {
-        T sum = left.Magnitude + right.Magnitude;
-        return new Impulse<T>(ForceInNewtons(sum), Time<T>.FromSeconds(T.One));
-    }
-
-    /// <inheritdoc/>
-    public static Impulse<T> Subtract(Impulse<T> left, Impulse<T> right)
-    {
-        T difference = left.Magnitude - right.Magnitude;
-        return new Impulse<T>(ForceInNewtons(difference), Time<T>.FromSeconds(T.One));
-    }
-
-    // Builds a Force of the given Newton magnitude in canonical (1-kg × 1-m/s²) form. Used by Add/Subtract to
-    // construct the result's Force component without depending on Force.Arithmetic.cs's private helpers.
-    private static Force<T> ForceInNewtons(T newtons) => new(
-        Mass<T>.FromKilograms(newtons),
-        new Acceleration<T>(
-            new Speed<T>(Distance<T>.FromMeters(T.One), Time<T>.FromSeconds(T.One)),
-            Time<T>.FromSeconds(T.One)));
+    public static Impulse<T> Subtract(Impulse<T> left, Impulse<T> right) =>
+        WithMagnitude(left.Magnitude - right.Magnitude);
 }

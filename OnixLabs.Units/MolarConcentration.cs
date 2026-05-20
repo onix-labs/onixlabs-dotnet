@@ -37,7 +37,18 @@ public readonly partial struct MolarConcentration<T>(
     /// <summary>Gets the <see cref="Volume{T}"/> component.</summary>
     public Volume<T> Right { get; } = right;
 
-    /// <summary>Gets the magnitude in mol/m³.</summary>
-    /// <remarks>Opaque scalar for equality/comparison/arithmetic.</remarks>
-    public T Magnitude => Left.Moles / Right.CubicMeters;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Moles / Right.CubicMeters;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    internal T SIBaseValue => Magnitude;
+
+    internal static MolarConcentration<T> One =>
+        new(AmountOfSubstance<T>.FromMoles(T.One), Volume<T>.FromCubicMeters(T.One));
+
+    internal static MolarConcentration<T> WithMagnitude(T magnitude) =>
+        new(AmountOfSubstance<T>.FromMoles(magnitude), Volume<T>.FromCubicMeters(T.One));
 }

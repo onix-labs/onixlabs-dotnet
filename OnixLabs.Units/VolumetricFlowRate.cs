@@ -37,7 +37,17 @@ public readonly partial struct VolumetricFlowRate<T>(
     /// <summary>Gets the <see cref="Time{T}"/> component.</summary>
     public Time<T> Right { get; } = right;
 
-    /// <summary>Gets the magnitude in m³/s.</summary>
-    /// <remarks>Opaque scalar for equality/comparison/arithmetic.</remarks>
-    public T Magnitude => Left.CubicMeters / Right.Seconds;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.CubicMeters / Right.Seconds;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    internal T SIBaseValue => Magnitude;
+
+    internal static VolumetricFlowRate<T> One => new(Volume<T>.FromCubicMeters(T.One), Time<T>.FromSeconds(T.One));
+
+    internal static VolumetricFlowRate<T> WithMagnitude(T magnitude) =>
+        new(Volume<T>.FromCubicMeters(magnitude), Time<T>.FromSeconds(T.One));
 }

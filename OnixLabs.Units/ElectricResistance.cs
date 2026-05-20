@@ -38,9 +38,18 @@ public readonly partial struct ElectricResistance<T>(
     /// <summary>Gets the <see cref="Current{T}"/> component.</summary>
     public Current<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude as volts divided by amperes, yielding electric resistance in ohms.
-    /// </summary>
-    /// <remarks>Opaque scalar for <see cref="Equals(ElectricResistance{T})"/>, <see cref="CompareTo(ElectricResistance{T})"/>, and arithmetic.</remarks>
-    public T Magnitude => Left.Magnitude / Right.Amperes;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Magnitude / Right.Amperes;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (ohms, V/A).
+    internal T SIBaseValue => Magnitude;
+
+    internal static ElectricResistance<T> One => new(ElectricPotential<T>.One, Current<T>.FromAmperes(T.One));
+
+    internal static ElectricResistance<T> WithMagnitude(T magnitude) =>
+        new(ElectricPotential<T>.WithMagnitude(magnitude), Current<T>.FromAmperes(T.One));
 }

@@ -51,35 +51,35 @@ public sealed class PressureTests
     {
         // 10 N / 2 m² = 5 Pa
         Pressure<Float128> p = new(NewtonsForce((Float128)10), Area<Float128>.FromSquareMeters((Float128)2));
-        Assert.Equal((Float128)5, p.Magnitude);
+        Assert.Equal((Float128)5, p.SIBaseValue);
     }
 
     [Fact(DisplayName = "Pressure.Add should produce the expected magnitude")]
     public void PressureAddShouldProduceExpectedValue()
     {
         Pressure<Float128> result = Pressure<Float128>.Add(Pascals((Float128)5), Pascals((Float128)3));
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Pressure.Subtract should produce the expected magnitude")]
     public void PressureSubtractShouldProduceExpectedValue()
     {
         Pressure<Float128> result = Pressure<Float128>.Subtract(Pascals((Float128)10), Pascals((Float128)3));
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Pressure + operator should produce the expected result")]
     public void PressureAddOperatorShouldProduceExpectedValue()
     {
         Pressure<Float128> result = Pascals((Float128)5) + Pascals((Float128)3);
-        Assert.Equal((Float128)8, result.Magnitude);
+        Assert.Equal((Float128)8, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Pressure - operator should produce the expected result")]
     public void PressureSubtractOperatorShouldProduceExpectedValue()
     {
         Pressure<Float128> result = Pascals((Float128)10) - Pascals((Float128)3);
-        Assert.Equal((Float128)7, result.Magnitude);
+        Assert.Equal((Float128)7, result.SIBaseValue);
     }
 
     [Fact(DisplayName = "Pressure equality should be by magnitude (proportional components)")]

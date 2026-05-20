@@ -43,18 +43,19 @@ public readonly partial struct LuminousFlux<T>(
     /// </summary>
     public SolidAngle<T> Right { get; } = right;
 
-    /// <summary>
-    /// Gets the magnitude of the current <see cref="LuminousFlux{T}"/> as the product of the luminous intensity (in
-    /// candelas) and the solid angle (in steradians), yielding the luminous flux in lumens (cd·sr).
-    /// </summary>
-    /// <remarks>
-    /// The magnitude is an opaque scalar used by <see cref="Equals(LuminousFlux{T})"/>,
-    /// <see cref="CompareTo(LuminousFlux{T})"/>, <see cref="GetHashCode"/>, and the arithmetic operators. It is not
-    /// intended for display — use <see cref="ToString(string, System.IFormatProvider)"/> for that.
-    ///
-    /// Both components are read at their SI base scale (LuminousIntensity at candelas via
-    /// <see cref="LuminousIntensity{T}.Candelas"/>, SolidAngle at steradians via <see cref="SolidAngle{T}.Steradians"/>)
-    /// so the resulting magnitude lands at the human-readable lumen scale and round-trips cleanly through arithmetic.
-    /// </remarks>
-    public T Magnitude => Left.Candelas * Right.Steradians;
+    // Opaque scalar for equality, ordering, hashing, and arithmetic round-trips. Internal so the assembly (and
+    // InternalsVisibleTo'd tests) can read it directly; exposed publicly only via the explicit interface impl.
+    internal T Magnitude => Left.Candelas * Right.Steradians;
+
+    /// <inheritdoc/>
+    T IMagnitudinalUnit<T>.Magnitude => Magnitude;
+
+    // Display-ready SI base value (lumens, cd·sr).
+    internal T SIBaseValue => Magnitude;
+
+    internal static LuminousFlux<T> One =>
+        new(LuminousIntensity<T>.FromCandelas(T.One), SolidAngle<T>.FromSteradians(T.One));
+
+    internal static LuminousFlux<T> WithMagnitude(T magnitude) =>
+        new(LuminousIntensity<T>.FromCandelas(magnitude), SolidAngle<T>.FromSteradians(T.One));
 }

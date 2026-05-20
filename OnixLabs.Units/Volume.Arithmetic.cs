@@ -21,10 +21,4 @@ public readonly partial struct Volume<T>
 
     /// <inheritdoc/>
     public static Volume<T> Subtract(Volume<T> left, Volume<T> right) => new(left.CubicQuectoMeters - right.CubicQuectoMeters);
-
-    /// <inheritdoc/>
-    public static Volume<T> Multiply(Volume<T> left, Volume<T> right) => new(left.CubicQuectoMeters * right.CubicQuectoMeters);
-
-    /// <inheritdoc/>
-    public static Volume<T> Divide(Volume<T> left, Volume<T> right) => new(left.CubicQuectoMeters / right.CubicQuectoMeters);
 }

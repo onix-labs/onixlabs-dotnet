@@ -21,10 +21,4 @@ public readonly partial struct Area<T>
 
     /// <inheritdoc/>
     public static Area<T> Subtract(Area<T> left, Area<T> right) => new(left.SquareQuectoMeters - right.SquareQuectoMeters);
-
-    /// <inheritdoc/>
-    public static Area<T> Multiply(Area<T> left, Area<T> right) => new(left.SquareQuectoMeters * right.SquareQuectoMeters);
-
-    /// <inheritdoc/>
-    public static Area<T> Divide(Area<T> left, Area<T> right) => new(left.SquareQuectoMeters / right.SquareQuectoMeters);
 }

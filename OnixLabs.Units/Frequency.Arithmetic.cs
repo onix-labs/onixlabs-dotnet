@@ -21,10 +21,4 @@ public readonly partial struct Frequency<T>
 
     /// <inheritdoc/>
     public static Frequency<T> Subtract(Frequency<T> left, Frequency<T> right) => new(left.QuectoHertz - right.QuectoHertz);
-
-    /// <inheritdoc/>
-    public static Frequency<T> Multiply(Frequency<T> left, Frequency<T> right) => new(left.QuectoHertz * right.QuectoHertz);
-
-    /// <inheritdoc/>
-    public static Frequency<T> Divide(Frequency<T> left, Frequency<T> right) => new(left.QuectoHertz / right.QuectoHertz);
 }

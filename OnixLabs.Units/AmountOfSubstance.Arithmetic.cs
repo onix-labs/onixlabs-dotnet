@@ -21,10 +21,4 @@ public readonly partial struct AmountOfSubstance<T>
 
     /// <inheritdoc/>
     public static AmountOfSubstance<T> Subtract(AmountOfSubstance<T> left, AmountOfSubstance<T> right) => new(left.QuectoMoles - right.QuectoMoles);
-
-    /// <inheritdoc/>
-    public static AmountOfSubstance<T> Multiply(AmountOfSubstance<T> left, AmountOfSubstance<T> right) => new(left.QuectoMoles * right.QuectoMoles);
-
-    /// <inheritdoc/>
-    public static AmountOfSubstance<T> Divide(AmountOfSubstance<T> left, AmountOfSubstance<T> right) => new(left.QuectoMoles / right.QuectoMoles);
 }

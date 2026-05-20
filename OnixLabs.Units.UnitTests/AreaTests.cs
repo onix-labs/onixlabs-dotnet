@@ -429,37 +429,6 @@ public sealed class AreaTests
         Assert.Equal(Float256.Parse("1100"), result.SquareMeters);
     }
 
-    [Fact(DisplayName = "Area.Multiply should produce the expected result")]
-    public void AreaMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("10")); // 1e61 sqQm
-        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("3")); // 3e60 sqQm
-
-        // When
-        Area<Float256> result = left.Multiply(right); // 1e61 * 3e60 = 3e121 sqQm
-
-        // Then
-        Assert.Equal(Float256.Parse("1e61"), left.SquareQuectoMeters);
-        Assert.Equal(Float256.Parse("3e60"), right.SquareQuectoMeters);
-        Assert.Equal(Float256.Parse("3e121"), result.SquareQuectoMeters);
-    }
-
-    [Fact(DisplayName = "Area.Divide should produce the expected result")]
-    public void AreaDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Area<Float256> left = Area<Float256>.FromSquareMeters(Float256.Parse("100")); // 1e62 sqQm
-        Area<Float256> right = Area<Float256>.FromSquareMeters(Float256.Parse("20")); // 2e61 sqQm
-
-        // When
-        Area<Float256> result = left.Divide(right); // 1e62 / 2e61 = 5 sqQm
-
-        // Then
-        Assert.Equal(Float256.Parse("5"), result.SquareQuectoMeters);
-        Assert.Equal(Float256.Parse("5e-60"), result.SquareMeters);
-    }
-
     [Fact(DisplayName = "Area comparison should produce the expected result (left equal to right)")]
     public void AreaComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

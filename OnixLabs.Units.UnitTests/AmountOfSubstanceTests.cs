@@ -307,37 +307,6 @@ public sealed class AmountOfSubstanceTests
         Assert.Equal(Float128.Parse("1.1"), result.Moles);
     }
 
-    [Fact(DisplayName = "AmountOfSubstance.Multiply should produce the expected result")]
-    public void AmountOfSubstanceMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("10"));  // 1e31 qmol
-        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("3"));  // 3e30 qmol
-
-        // When
-        AmountOfSubstance<Float128> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qmol
-
-        // Then
-        Assert.Equal(Float128.Parse("1e31"), left.QuectoMoles);
-        Assert.Equal(Float128.Parse("3e30"), right.QuectoMoles);
-        Assert.Equal(Float128.Parse("3e61"), result.QuectoMoles);
-    }
-
-    [Fact(DisplayName = "AmountOfSubstance.Divide should produce the expected result")]
-    public void AmountOfSubstanceDivideShouldProduceExpectedValue()
-    {
-        // Given
-        AmountOfSubstance<Float128> left = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("100"));  // 1e32 qmol
-        AmountOfSubstance<Float128> right = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("20"));  // 2e31 qmol
-
-        // When
-        AmountOfSubstance<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qmol
-
-        // Then
-        Assert.Equal(Float128.Parse("5"), result.QuectoMoles);
-        Assert.Equal(Float128.Parse("5e-30"), result.Moles);
-    }
-
     [Fact(DisplayName = "AmountOfSubstance comparison should produce the expected result (left equal to right)")]
     public void AmountOfSubstanceComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

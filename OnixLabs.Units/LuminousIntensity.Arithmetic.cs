@@ -21,10 +21,4 @@ public readonly partial struct LuminousIntensity<T>
 
     /// <inheritdoc/>
     public static LuminousIntensity<T> Subtract(LuminousIntensity<T> left, LuminousIntensity<T> right) => new(left.QuectoCandelas - right.QuectoCandelas);
-
-    /// <inheritdoc/>
-    public static LuminousIntensity<T> Multiply(LuminousIntensity<T> left, LuminousIntensity<T> right) => new(left.QuectoCandelas * right.QuectoCandelas);
-
-    /// <inheritdoc/>
-    public static LuminousIntensity<T> Divide(LuminousIntensity<T> left, LuminousIntensity<T> right) => new(left.QuectoCandelas / right.QuectoCandelas);
 }

@@ -409,37 +409,6 @@ public sealed class FrequencyTests
         Assert.Equal(Float128.Parse("1.1"), result.KiloHertz);
     }
 
-    [Fact(DisplayName = "Frequency.Multiply should produce the expected result")]
-    public void FrequencyMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Frequency<Float128> left = Frequency<Float128>.FromHertz((Float128)10);  // 1e31 qHz
-        Frequency<Float128> right = Frequency<Float128>.FromHertz((Float128)3);  // 3e30 qHz
-
-        // When
-        Frequency<Float128> result = left.Multiply(right);  // 1e31 × 3e30 = 3e61 qHz
-
-        // Then — 3e61 exceeds Float128's 10^48 exact range, so compute expected via the same chain.
-        Assert.Equal((Float128)10 * UnitMath.Pow10<Float128>(30), left.QuectoHertz);
-        Assert.Equal((Float128)3 * UnitMath.Pow10<Float128>(30), right.QuectoHertz);
-        Float128 expected = ((Float128)10 * UnitMath.Pow10<Float128>(30)) * ((Float128)3 * UnitMath.Pow10<Float128>(30));
-        Assert.Equal(expected, result.QuectoHertz);
-    }
-
-    [Fact(DisplayName = "Frequency.Divide should produce the expected result")]
-    public void FrequencyDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Frequency<Float128> left = Frequency<Float128>.FromHertz((Float128)100);  // 1e32 qHz
-        Frequency<Float128> right = Frequency<Float128>.FromHertz((Float128)20);  // 2e31 qHz
-
-        // When
-        Frequency<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qHz
-
-        // Then
-        Assert.Equal((Float128)5, result.QuectoHertz);
-    }
-
     [Fact(DisplayName = "Frequency comparison should produce the expected result (left equal to right)")]
     public void FrequencyComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

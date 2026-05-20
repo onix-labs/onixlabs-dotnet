@@ -419,37 +419,6 @@ public sealed class DistanceTests
         Assert.Equal(Float128.Parse("1100"), result.Meters);
     }
 
-    [Fact(DisplayName = "Distance.Multiply should produce the expected result")]
-    public void DistanceMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Distance<Float128> left = Distance<Float128>.FromMeters(Float128.Parse("10")); // 1e31 qm
-        Distance<Float128> right = Distance<Float128>.FromMeters(Float128.Parse("3")); // 3e30 qm
-
-        // When
-        Distance<Float128> result = left.Multiply(right); // 1e31 * 3e30 = 3e61 qm
-
-        // Then
-        Assert.Equal(Float128.Parse("1e31"), left.QuectoMeters);
-        Assert.Equal(Float128.Parse("3e30"), right.QuectoMeters);
-        Assert.Equal(Float128.Parse("3e61"), result.QuectoMeters);
-    }
-
-    [Fact(DisplayName = "Distance.Divide should produce the expected result")]
-    public void DistanceDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Distance<Float128> left = Distance<Float128>.FromMeters(Float128.Parse("100")); // 1e32 qm
-        Distance<Float128> right = Distance<Float128>.FromMeters(Float128.Parse("20")); // 2e31 qm
-
-        // When
-        Distance<Float128> result = left.Divide(right); // 1e32 / 2e31 = 5 qm
-
-        // Then
-        Assert.Equal(Float128.Parse("5"), result.QuectoMeters);
-        Assert.Equal(Float128.Parse("5e-30"), result.Meters);
-    }
-
     [Fact(DisplayName = "Distance comparison should produce the expected result (left equal to right)")]
     public void DistanceComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

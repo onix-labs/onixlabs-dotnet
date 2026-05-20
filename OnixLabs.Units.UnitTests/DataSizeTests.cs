@@ -466,36 +466,6 @@ public sealed class DataSizeTests
         Assert.Equal(Float128.Parse("1100"), result.Bytes);
     }
 
-    [Fact(DisplayName = "DataSize.Multiply should produce the expected result")]
-    public void DataSizeMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("10")); // 80 bits
-        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("3")); // 24 bits
-
-        // When
-        DataSize<Float128> result = left.Multiply(right); // 80 * 24 = 1920 bits
-
-        // Then
-        Assert.Equal(Float128.Parse("1920"), result.Bits);
-        Assert.Equal(Float128.Parse("240"), result.Bytes);
-    }
-
-    [Fact(DisplayName = "DataSize.Divide should produce the expected result")]
-    public void DataSizeDivideShouldProduceExpectedValue()
-    {
-        // Given
-        DataSize<Float128> left = DataSize<Float128>.FromBytes(Float128.Parse("100")); // 800 bits
-        DataSize<Float128> right = DataSize<Float128>.FromBytes(Float128.Parse("20")); // 160 bits
-
-        // When
-        DataSize<Float128> result = left.Divide(right); // 800 / 160 = 5 bits
-
-        // Then
-        Assert.Equal(Float128.Parse("5"), result.Bits);
-        Assert.Equal(Float128.Parse("0.625"), result.Bytes);
-    }
-
     [Fact(DisplayName = "DataSize comparison should produce the expected result (left equal to right)")]
     public void DataSizeComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

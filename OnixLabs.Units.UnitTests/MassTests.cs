@@ -432,37 +432,6 @@ public sealed class MassTests
         Assert.Equal(Float128.Parse("1.1"), result.KiloGrams);
     }
 
-    [Fact(DisplayName = "Mass.Multiply should produce the expected result")]
-    public void MassMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Mass<Float128> left = Mass<Float128>.FromGrams(Float128.Parse("10"));  // 1e31 qg
-        Mass<Float128> right = Mass<Float128>.FromGrams(Float128.Parse("3"));  // 3e30 qg
-
-        // When
-        Mass<Float128> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qg
-
-        // Then
-        Assert.Equal(Float128.Parse("1e31"), left.QuectoGrams);
-        Assert.Equal(Float128.Parse("3e30"), right.QuectoGrams);
-        Assert.Equal(Float128.Parse("3e61"), result.QuectoGrams);
-    }
-
-    [Fact(DisplayName = "Mass.Divide should produce the expected result")]
-    public void MassDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Mass<Float128> left = Mass<Float128>.FromGrams(Float128.Parse("100"));  // 1e32 qg
-        Mass<Float128> right = Mass<Float128>.FromGrams(Float128.Parse("20"));  // 2e31 qg
-
-        // When
-        Mass<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qg
-
-        // Then
-        Assert.Equal(Float128.Parse("5"), result.QuectoGrams);
-        Assert.Equal(Float128.Parse("5e-30"), result.Grams);
-    }
-
     [Fact(DisplayName = "Mass comparison should produce the expected result (left equal to right)")]
     public void MassComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

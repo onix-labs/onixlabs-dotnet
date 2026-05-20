@@ -21,10 +21,4 @@ public readonly partial struct Angle<T>
 
     /// <inheritdoc/>
     public static Angle<T> Subtract(Angle<T> left, Angle<T> right) => new(left.QuectoRadians - right.QuectoRadians);
-
-    /// <inheritdoc/>
-    public static Angle<T> Multiply(Angle<T> left, Angle<T> right) => new(left.QuectoRadians * right.QuectoRadians);
-
-    /// <inheritdoc/>
-    public static Angle<T> Divide(Angle<T> left, Angle<T> right) => new(left.QuectoRadians / right.QuectoRadians);
 }

@@ -24,8 +24,7 @@ namespace OnixLabs.Units;
 #pragma warning disable CA2231
 public readonly partial struct Time<T> :
     ICanonicalUnit<T>,
-    IAdditiveUnit<Time<T>>,
-    IMultiplicativeUnit<Time<T>>
+    IAdditiveUnit<Time<T>>
     where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {

@@ -307,37 +307,6 @@ public sealed class LuminousIntensityTests
         Assert.Equal(Float128.Parse("1.1"), result.Candelas);
     }
 
-    [Fact(DisplayName = "LuminousIntensity.Multiply should produce the expected result")]
-    public void LuminousIntensityMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        LuminousIntensity<Float128> left = LuminousIntensity<Float128>.FromCandelas(Float128.Parse("10"));  // 1e31 qcd
-        LuminousIntensity<Float128> right = LuminousIntensity<Float128>.FromCandelas(Float128.Parse("3"));  // 3e30 qcd
-
-        // When
-        LuminousIntensity<Float128> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qcd
-
-        // Then
-        Assert.Equal(Float128.Parse("1e31"), left.QuectoCandelas);
-        Assert.Equal(Float128.Parse("3e30"), right.QuectoCandelas);
-        Assert.Equal(Float128.Parse("3e61"), result.QuectoCandelas);
-    }
-
-    [Fact(DisplayName = "LuminousIntensity.Divide should produce the expected result")]
-    public void LuminousIntensityDivideShouldProduceExpectedValue()
-    {
-        // Given
-        LuminousIntensity<Float128> left = LuminousIntensity<Float128>.FromCandelas(Float128.Parse("100"));  // 1e32 qcd
-        LuminousIntensity<Float128> right = LuminousIntensity<Float128>.FromCandelas(Float128.Parse("20"));  // 2e31 qcd
-
-        // When
-        LuminousIntensity<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qcd
-
-        // Then
-        Assert.Equal(Float128.Parse("5"), result.QuectoCandelas);
-        Assert.Equal(Float128.Parse("5e-30"), result.Candelas);
-    }
-
     [Fact(DisplayName = "LuminousIntensity comparison should produce the expected result (left equal to right)")]
     public void LuminousIntensityComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

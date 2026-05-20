@@ -21,10 +21,4 @@ public readonly partial struct Distance<T>
 
     /// <inheritdoc/>
     public static Distance<T> Subtract(Distance<T> left, Distance<T> right) => new(left.QuectoMeters - right.QuectoMeters);
-
-    /// <inheritdoc/>
-    public static Distance<T> Multiply(Distance<T> left, Distance<T> right) => new(left.QuectoMeters * right.QuectoMeters);
-
-    /// <inheritdoc/>
-    public static Distance<T> Divide(Distance<T> left, Distance<T> right) => new(left.QuectoMeters / right.QuectoMeters);
 }

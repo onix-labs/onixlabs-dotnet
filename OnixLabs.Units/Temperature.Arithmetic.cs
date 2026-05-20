@@ -21,10 +21,4 @@ public readonly partial struct Temperature<T>
 
     /// <inheritdoc/>
     public static Temperature<T> Subtract(Temperature<T> left, Temperature<T> right) => new(left.Kelvin - right.Kelvin);
-
-    /// <inheritdoc/>
-    public static Temperature<T> Multiply(Temperature<T> left, Temperature<T> right) => new(left.Kelvin * right.Kelvin);
-
-    /// <inheritdoc/>
-    public static Temperature<T> Divide(Temperature<T> left, Temperature<T> right) => new(left.Kelvin / right.Kelvin);
 }

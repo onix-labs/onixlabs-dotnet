@@ -21,10 +21,4 @@ public readonly partial struct Current<T>
 
     /// <inheritdoc/>
     public static Current<T> Subtract(Current<T> left, Current<T> right) => new(left.QuectoAmperes - right.QuectoAmperes);
-
-    /// <inheritdoc/>
-    public static Current<T> Multiply(Current<T> left, Current<T> right) => new(left.QuectoAmperes * right.QuectoAmperes);
-
-    /// <inheritdoc/>
-    public static Current<T> Divide(Current<T> left, Current<T> right) => new(left.QuectoAmperes / right.QuectoAmperes);
 }

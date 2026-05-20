@@ -21,10 +21,4 @@ public readonly partial struct Mass<T>
 
     /// <inheritdoc/>
     public static Mass<T> Subtract(Mass<T> left, Mass<T> right) => new(left.QuectoGrams - right.QuectoGrams);
-
-    /// <inheritdoc/>
-    public static Mass<T> Multiply(Mass<T> left, Mass<T> right) => new(left.QuectoGrams * right.QuectoGrams);
-
-    /// <inheritdoc/>
-    public static Mass<T> Divide(Mass<T> left, Mass<T> right) => new(left.QuectoGrams / right.QuectoGrams);
 }

@@ -21,10 +21,4 @@ public readonly partial struct Time<T>
 
     /// <inheritdoc/>
     public static Time<T> Subtract(Time<T> left, Time<T> right) => new(left.QuectoSeconds - right.QuectoSeconds);
-
-    /// <inheritdoc/>
-    public static Time<T> Multiply(Time<T> left, Time<T> right) => new(left.QuectoSeconds * right.QuectoSeconds);
-
-    /// <inheritdoc/>
-    public static Time<T> Divide(Time<T> left, Time<T> right) => new(left.QuectoSeconds / right.QuectoSeconds);
 }

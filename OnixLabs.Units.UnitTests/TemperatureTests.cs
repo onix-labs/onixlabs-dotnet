@@ -317,34 +317,6 @@ public sealed class TemperatureTests
         Assert.Equal(Float128.Parse("60"), result.Kelvin);
     }
 
-    [Fact(DisplayName = "Temperature.Multiply should produce the expected result")]
-    public void TemperatureMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("10"));
-        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("3"));
-
-        // When
-        Temperature<Float128> result = left.Multiply(right);
-
-        // Then
-        Assert.Equal(Float128.Parse("30"), result.Kelvin);
-    }
-
-    [Fact(DisplayName = "Temperature.Divide should produce the expected result")]
-    public void TemperatureDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("100"));
-        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("20"));
-
-        // When
-        Temperature<Float128> result = left.Divide(right);
-
-        // Then
-        Assert.Equal(Float128.Parse("5"), result.Kelvin);
-    }
-
     [Fact(DisplayName = "Temperature comparison should produce the expected result (left equal to right)")]
     public void TemperatureComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

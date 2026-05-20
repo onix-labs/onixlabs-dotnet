@@ -24,7 +24,7 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct SolidAngle<T> : IAdditiveUnit<SolidAngle<T>>, IMultiplicativeUnit<SolidAngle<T>> where T : IFloatingPoint<T>
+public readonly partial struct SolidAngle<T> : IAdditiveUnit<SolidAngle<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>

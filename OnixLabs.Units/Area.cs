@@ -24,8 +24,7 @@ namespace OnixLabs.Units;
 #pragma warning disable CA2231
 public readonly partial struct Area<T> :
     ICanonicalUnit<T>,
-    IAdditiveUnit<Area<T>>,
-    IMultiplicativeUnit<Area<T>>
+    IAdditiveUnit<Area<T>>
     where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {

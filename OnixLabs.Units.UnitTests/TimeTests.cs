@@ -358,37 +358,6 @@ public sealed class TimeTests
         Assert.Equal(Float128.Parse("75"), result.Seconds);
     }
 
-    [Fact(DisplayName = "Time.Multiply should produce the expected result")]
-    public void TimeMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Time<Float128> left = Time<Float128>.FromSeconds(Float128.Parse("10"));  // 1e31 qs
-        Time<Float128> right = Time<Float128>.FromSeconds(Float128.Parse("3"));  // 3e30 qs
-
-        // When
-        Time<Float128> result = left.Multiply(right);          // 1e31 * 3e30 = 3e61 qs
-
-        // Then
-        Assert.Equal(Float128.Parse("1e31"), left.QuectoSeconds);
-        Assert.Equal(Float128.Parse("3e30"), right.QuectoSeconds);
-        Assert.Equal(Float128.Parse("3e61"), result.QuectoSeconds);
-    }
-
-    [Fact(DisplayName = "Time.Divide should produce the expected result")]
-    public void TimeDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Time<Float128> left = Time<Float128>.FromSeconds(Float128.Parse("100")); // 1e32 qs
-        Time<Float128> right = Time<Float128>.FromSeconds(Float128.Parse("20")); // 2e31 qs
-
-        // When
-        Time<Float128> result = left.Divide(right);            // 1e32 / 2e31 = 5 qs
-
-        // Then
-        Assert.Equal(Float128.Parse("5"), result.QuectoSeconds);
-        Assert.Equal(Float128.Parse("5e-30"), result.Seconds);
-    }
-
     [Fact(DisplayName = "Time comparison should produce the expected result (left equal to right)")]
     public void TimeComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

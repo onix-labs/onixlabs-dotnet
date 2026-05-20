@@ -23,8 +23,7 @@ namespace OnixLabs.Units;
 // ReSharper disable MemberCanBePrivate.Global
 public readonly partial struct Distance<T> :
     ICanonicalUnit<T>,
-    IAdditiveUnit<Distance<T>>,
-    IMultiplicativeUnit<Distance<T>> where T : IFloatingPoint<T>
+    IAdditiveUnit<Distance<T>> where T : IFloatingPoint<T>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Distance{T}"/> struct.

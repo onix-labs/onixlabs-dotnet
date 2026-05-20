@@ -21,10 +21,4 @@ public readonly partial struct DataSize<T>
 
     /// <inheritdoc/>
     public static DataSize<T> Subtract(DataSize<T> left, DataSize<T> right) => new(left.Bits - right.Bits);
-
-    /// <inheritdoc/>
-    public static DataSize<T> Multiply(DataSize<T> left, DataSize<T> right) => new(left.Bits * right.Bits);
-
-    /// <inheritdoc/>
-    public static DataSize<T> Divide(DataSize<T> left, DataSize<T> right) => new(left.Bits / right.Bits);
 }

@@ -437,37 +437,6 @@ public sealed class AngleTests
         Assert.Equal((Float128)135, result.Degrees);
     }
 
-    [Fact(DisplayName = "Angle.Multiply should produce the expected result")]
-    public void AngleMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Angle<Float128> left = Angle<Float128>.FromRadians((Float128)10);  // 1e31 qrad
-        Angle<Float128> right = Angle<Float128>.FromRadians((Float128)3);  // 3e30 qrad
-
-        // When
-        Angle<Float128> result = left.Multiply(right);  // 1e31 × 3e30 = 3e61 qrad
-
-        // Then — 3e61 exceeds Float128's 10^48 exact range, so compute expected via the same chain.
-        Assert.Equal((Float128)10 * UnitMath.Pow10<Float128>(30), left.QuectoRadians);
-        Assert.Equal((Float128)3 * UnitMath.Pow10<Float128>(30), right.QuectoRadians);
-        Float128 expected = ((Float128)10 * UnitMath.Pow10<Float128>(30)) * ((Float128)3 * UnitMath.Pow10<Float128>(30));
-        Assert.Equal(expected, result.QuectoRadians);
-    }
-
-    [Fact(DisplayName = "Angle.Divide should produce the expected result")]
-    public void AngleDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Angle<Float128> left = Angle<Float128>.FromRadians((Float128)100);  // 1e32 qrad
-        Angle<Float128> right = Angle<Float128>.FromRadians((Float128)20);  // 2e31 qrad
-
-        // When
-        Angle<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qrad
-
-        // Then
-        Assert.Equal((Float128)5, result.QuectoRadians);
-    }
-
     [Fact(DisplayName = "Angle comparison should produce the expected result (left equal to right)")]
     public void AngleComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

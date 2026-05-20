@@ -553,36 +553,6 @@ public sealed class VolumeTests
         Assert.Equal(Float256.Parse("1.1"), result.Liters);
     }
 
-    [Fact(DisplayName = "Volume.Multiply should produce the expected result")]
-    public void VolumeMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Volume<Float256> left = Volume<Float256>.FromCubicMeters(Float256.Parse("2"));  // 2e90 qm³
-        Volume<Float256> right = Volume<Float256>.FromCubicMeters(Float256.Parse("3")); // 3e90 qm³
-
-        // When
-        Volume<Float256> result = left.Multiply(right);  // 2e90 × 3e90 = 6e180 qm³
-
-        // Then
-        Assert.Equal(Float256.Parse("2e90"), left.CubicQuectoMeters);
-        Assert.Equal(Float256.Parse("3e90"), right.CubicQuectoMeters);
-        Assert.Equal(Float256.Parse("6e180"), result.CubicQuectoMeters);
-    }
-
-    [Fact(DisplayName = "Volume.Divide should produce the expected result")]
-    public void VolumeDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Volume<Float256> left = Volume<Float256>.FromCubicMeters(Float256.Parse("10")); // 1e91 qm³
-        Volume<Float256> right = Volume<Float256>.FromCubicMeters(Float256.Parse("2")); // 2e90 qm³
-
-        // When
-        Volume<Float256> result = left.Divide(right); // 1e91 / 2e90 = 5 qm³
-
-        // Then
-        Assert.Equal(Float256.Parse("5"), result.CubicQuectoMeters);
-    }
-
     [Fact(DisplayName = "Volume comparison should produce the expected result (left equal to right)")]
     public void VolumeComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

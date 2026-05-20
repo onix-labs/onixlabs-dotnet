@@ -21,10 +21,4 @@ public readonly partial struct SolidAngle<T>
 
     /// <inheritdoc/>
     public static SolidAngle<T> Subtract(SolidAngle<T> left, SolidAngle<T> right) => new(left.QuectoSteradians - right.QuectoSteradians);
-
-    /// <inheritdoc/>
-    public static SolidAngle<T> Multiply(SolidAngle<T> left, SolidAngle<T> right) => new(left.QuectoSteradians * right.QuectoSteradians);
-
-    /// <inheritdoc/>
-    public static SolidAngle<T> Divide(SolidAngle<T> left, SolidAngle<T> right) => new(left.QuectoSteradians / right.QuectoSteradians);
 }

@@ -307,37 +307,6 @@ public sealed class CurrentTests
         Assert.Equal(Float128.Parse("1.1"), result.Amperes);
     }
 
-    [Fact(DisplayName = "Current.Multiply should produce the expected result")]
-    public void CurrentMultiplyShouldProduceExpectedValue()
-    {
-        // Given
-        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("10"));  // 1e31 qA
-        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("3"));  // 3e30 qA
-
-        // When
-        Current<Float128> result = left.Multiply(right);  // 1e31 * 3e30 = 3e61 qA
-
-        // Then
-        Assert.Equal(Float128.Parse("1e31"), left.QuectoAmperes);
-        Assert.Equal(Float128.Parse("3e30"), right.QuectoAmperes);
-        Assert.Equal(Float128.Parse("3e61"), result.QuectoAmperes);
-    }
-
-    [Fact(DisplayName = "Current.Divide should produce the expected result")]
-    public void CurrentDivideShouldProduceExpectedValue()
-    {
-        // Given
-        Current<Float128> left = Current<Float128>.FromAmperes(Float128.Parse("100"));  // 1e32 qA
-        Current<Float128> right = Current<Float128>.FromAmperes(Float128.Parse("20"));  // 2e31 qA
-
-        // When
-        Current<Float128> result = left.Divide(right);  // 1e32 / 2e31 = 5 qA
-
-        // Then
-        Assert.Equal(Float128.Parse("5"), result.QuectoAmperes);
-        Assert.Equal(Float128.Parse("5e-30"), result.Amperes);
-    }
-
     [Fact(DisplayName = "Current comparison should produce the expected result (left equal to right)")]
     public void CurrentComparisonShouldProduceExpectedResultLeftEqualToRight()
     {

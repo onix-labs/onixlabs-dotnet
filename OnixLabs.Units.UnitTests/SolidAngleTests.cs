@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -297,5 +298,89 @@ public sealed class SolidAngleTests
         string formatted = a.ToString("sr2", german);
 
         Assert.Equal("1.234,56 sr", formatted);
+    }
+
+    [Theory(DisplayName = "SolidAngle.ValueOf should return the value at the matching scale")]
+    [InlineData("qsr")]
+    [InlineData("rsr")]
+    [InlineData("ysr")]
+    [InlineData("zsr")]
+    [InlineData("asr")]
+    [InlineData("fsr")]
+    [InlineData("psr")]
+    [InlineData("nsr")]
+    [InlineData("usr")]
+    [InlineData("msr")]
+    [InlineData("csr")]
+    [InlineData("dsr")]
+    [InlineData("sr")]
+    [InlineData("dasr")]
+    [InlineData("hsr")]
+    [InlineData("ksr")]
+    [InlineData("Msr")]
+    [InlineData("Gsr")]
+    [InlineData("Tsr")]
+    [InlineData("Psr")]
+    [InlineData("Esr")]
+    [InlineData("Zsr")]
+    [InlineData("Ysr")]
+    [InlineData("Rsr")]
+    [InlineData("Qsr")]
+    [InlineData("sqdeg")]
+    [InlineData("sqarcmin")]
+    [InlineData("sqarcsec")]
+    [InlineData("sp")]
+    public void SolidAngleValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromSteradians(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qsr" => a.QuectoSteradians,
+            "rsr" => a.RontoSteradians,
+            "ysr" => a.YoctoSteradians,
+            "zsr" => a.ZeptoSteradians,
+            "asr" => a.AttoSteradians,
+            "fsr" => a.FemtoSteradians,
+            "psr" => a.PicoSteradians,
+            "nsr" => a.NanoSteradians,
+            "usr" => a.MicroSteradians,
+            "msr" => a.MilliSteradians,
+            "csr" => a.CentiSteradians,
+            "dsr" => a.DeciSteradians,
+            "sr" => a.Steradians,
+            "dasr" => a.DecaSteradians,
+            "hsr" => a.HectoSteradians,
+            "ksr" => a.KiloSteradians,
+            "Msr" => a.MegaSteradians,
+            "Gsr" => a.GigaSteradians,
+            "Tsr" => a.TeraSteradians,
+            "Psr" => a.PetaSteradians,
+            "Esr" => a.ExaSteradians,
+            "Zsr" => a.ZettaSteradians,
+            "Ysr" => a.YottaSteradians,
+            "Rsr" => a.RonnaSteradians,
+            "Qsr" => a.QuettaSteradians,
+            "sqdeg" => a.SquareDegrees,
+            "sqarcmin" => a.SquareArcminutes,
+            "sqarcsec" => a.SquareArcseconds,
+            "sp" => a.Spats,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, a.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "SolidAngle.ValueOf should throw on invalid specifier")]
+    public void SolidAngleValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        SolidAngle<Float128> a = SolidAngle<Float128>.FromSteradians(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => a.ValueOf("xx"));
     }
 }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -645,5 +646,101 @@ public sealed class AreaTests
 
         // Then
         Assert.Contains("qm²", result);
+    }
+
+    [Theory(DisplayName = "Area.ValueOf should return the value at the matching scale")]
+    [InlineData("sqqm")]
+    [InlineData("sqrm")]
+    [InlineData("sqym")]
+    [InlineData("sqzm")]
+    [InlineData("sqam")]
+    [InlineData("sqfm")]
+    [InlineData("sqpm")]
+    [InlineData("sqnm")]
+    [InlineData("squm")]
+    [InlineData("sqmm")]
+    [InlineData("sqcm")]
+    [InlineData("sqdm")]
+    [InlineData("sqm")]
+    [InlineData("sqdam")]
+    [InlineData("sqhm")]
+    [InlineData("sqkm")]
+    [InlineData("sqMm")]
+    [InlineData("sqGm")]
+    [InlineData("sqTm")]
+    [InlineData("sqPm")]
+    [InlineData("sqEm")]
+    [InlineData("sqZm")]
+    [InlineData("sqYm")]
+    [InlineData("sqRm")]
+    [InlineData("sqQm")]
+    [InlineData("sqin")]
+    [InlineData("sqft")]
+    [InlineData("sqyd")]
+    [InlineData("sqmi")]
+    [InlineData("sqnmi")]
+    [InlineData("sqfmi")]
+    [InlineData("sqa")]
+    [InlineData("sqau")]
+    [InlineData("sqly")]
+    [InlineData("sqpc")]
+    public void AreaValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse("1234.567"));
+
+        // When
+        Float256 expected = specifier switch
+        {
+            "sqqm" => a.SquareQuectoMeters,
+            "sqrm" => a.SquareRontoMeters,
+            "sqym" => a.SquareYoctoMeters,
+            "sqzm" => a.SquareZeptoMeters,
+            "sqam" => a.SquareAttoMeters,
+            "sqfm" => a.SquareFemtoMeters,
+            "sqpm" => a.SquarePicoMeters,
+            "sqnm" => a.SquareNanoMeters,
+            "squm" => a.SquareMicroMeters,
+            "sqmm" => a.SquareMilliMeters,
+            "sqcm" => a.SquareCentiMeters,
+            "sqdm" => a.SquareDeciMeters,
+            "sqm" => a.SquareMeters,
+            "sqdam" => a.SquareDecaMeters,
+            "sqhm" => a.SquareHectoMeters,
+            "sqkm" => a.SquareKiloMeters,
+            "sqMm" => a.SquareMegaMeters,
+            "sqGm" => a.SquareGigaMeters,
+            "sqTm" => a.SquareTeraMeters,
+            "sqPm" => a.SquarePetaMeters,
+            "sqEm" => a.SquareExaMeters,
+            "sqZm" => a.SquareZettaMeters,
+            "sqYm" => a.SquareYottaMeters,
+            "sqRm" => a.SquareRonnaMeters,
+            "sqQm" => a.SquareQuettaMeters,
+            "sqin" => a.SquareInches,
+            "sqft" => a.SquareFeet,
+            "sqyd" => a.SquareYards,
+            "sqmi" => a.SquareMiles,
+            "sqnmi" => a.SquareNauticalMiles,
+            "sqfmi" => a.SquareFermis,
+            "sqa" => a.SquareAngstroms,
+            "sqau" => a.SquareAstronomicalUnits,
+            "sqly" => a.SquareLightYears,
+            "sqpc" => a.SquareParsecs,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, a.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "Area.ValueOf should throw on invalid specifier")]
+    public void AreaValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Area<Float256> a = Area<Float256>.FromSquareMeters(Float256.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => a.ValueOf("xx"));
     }
 }

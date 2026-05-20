@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -445,5 +446,81 @@ public sealed class AmountOfSubstanceTests
 
         // Then
         Assert.Equal("1.234,56 mol", formatted);
+    }
+
+    [Theory(DisplayName = "AmountOfSubstance.ValueOf should return the value at the matching scale")]
+    [InlineData("qmol")]
+    [InlineData("rmol")]
+    [InlineData("ymol")]
+    [InlineData("zmol")]
+    [InlineData("amol")]
+    [InlineData("fmol")]
+    [InlineData("pmol")]
+    [InlineData("nmol")]
+    [InlineData("umol")]
+    [InlineData("mmol")]
+    [InlineData("cmol")]
+    [InlineData("dmol")]
+    [InlineData("mol")]
+    [InlineData("damol")]
+    [InlineData("hmol")]
+    [InlineData("kmol")]
+    [InlineData("Mmol")]
+    [InlineData("Gmol")]
+    [InlineData("Tmol")]
+    [InlineData("Pmol")]
+    [InlineData("Emol")]
+    [InlineData("Zmol")]
+    [InlineData("Ymol")]
+    [InlineData("Rmol")]
+    [InlineData("Qmol")]
+    public void AmountOfSubstanceValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qmol" => a.QuectoMoles,
+            "rmol" => a.RontoMoles,
+            "ymol" => a.YoctoMoles,
+            "zmol" => a.ZeptoMoles,
+            "amol" => a.AttoMoles,
+            "fmol" => a.FemtoMoles,
+            "pmol" => a.PicoMoles,
+            "nmol" => a.NanoMoles,
+            "umol" => a.MicroMoles,
+            "mmol" => a.MilliMoles,
+            "cmol" => a.CentiMoles,
+            "dmol" => a.DeciMoles,
+            "mol" => a.Moles,
+            "damol" => a.DecaMoles,
+            "hmol" => a.HectoMoles,
+            "kmol" => a.KiloMoles,
+            "Mmol" => a.MegaMoles,
+            "Gmol" => a.GigaMoles,
+            "Tmol" => a.TeraMoles,
+            "Pmol" => a.PetaMoles,
+            "Emol" => a.ExaMoles,
+            "Zmol" => a.ZettaMoles,
+            "Ymol" => a.YottaMoles,
+            "Rmol" => a.RonnaMoles,
+            "Qmol" => a.QuettaMoles,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, a.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "AmountOfSubstance.ValueOf should throw on invalid specifier")]
+    public void AmountOfSubstanceValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        AmountOfSubstance<Float128> a = AmountOfSubstance<Float128>.FromMoles(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => a.ValueOf("xx"));
     }
 }

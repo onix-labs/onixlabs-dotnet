@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -606,5 +607,91 @@ public sealed class AngleTests
 
         // Then
         Assert.Equal("1.234,56 °", formatted);
+    }
+
+    [Theory(DisplayName = "Angle.ValueOf should return the value at the matching scale")]
+    [InlineData("qrad")]
+    [InlineData("rrad")]
+    [InlineData("yrad")]
+    [InlineData("zrad")]
+    [InlineData("arad")]
+    [InlineData("frad")]
+    [InlineData("prad")]
+    [InlineData("nrad")]
+    [InlineData("urad")]
+    [InlineData("mrad")]
+    [InlineData("crad")]
+    [InlineData("drad")]
+    [InlineData("rad")]
+    [InlineData("darad")]
+    [InlineData("hrad")]
+    [InlineData("krad")]
+    [InlineData("Mrad")]
+    [InlineData("Grad")]
+    [InlineData("Trad")]
+    [InlineData("Prad")]
+    [InlineData("Erad")]
+    [InlineData("Zrad")]
+    [InlineData("Yrad")]
+    [InlineData("Rrad")]
+    [InlineData("Qrad")]
+    [InlineData("deg")]
+    [InlineData("arcmin")]
+    [InlineData("arcsec")]
+    [InlineData("gon")]
+    [InlineData("tr")]
+    public void AngleValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        Angle<Float128> a = Angle<Float128>.FromRadians(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qrad" => a.QuectoRadians,
+            "rrad" => a.RontoRadians,
+            "yrad" => a.YoctoRadians,
+            "zrad" => a.ZeptoRadians,
+            "arad" => a.AttoRadians,
+            "frad" => a.FemtoRadians,
+            "prad" => a.PicoRadians,
+            "nrad" => a.NanoRadians,
+            "urad" => a.MicroRadians,
+            "mrad" => a.MilliRadians,
+            "crad" => a.CentiRadians,
+            "drad" => a.DeciRadians,
+            "rad" => a.Radians,
+            "darad" => a.DecaRadians,
+            "hrad" => a.HectoRadians,
+            "krad" => a.KiloRadians,
+            "Mrad" => a.MegaRadians,
+            "Grad" => a.GigaRadians,
+            "Trad" => a.TeraRadians,
+            "Prad" => a.PetaRadians,
+            "Erad" => a.ExaRadians,
+            "Zrad" => a.ZettaRadians,
+            "Yrad" => a.YottaRadians,
+            "Rrad" => a.RonnaRadians,
+            "Qrad" => a.QuettaRadians,
+            "deg" => a.Degrees,
+            "arcmin" => a.Arcminutes,
+            "arcsec" => a.Arcseconds,
+            "gon" => a.Gradians,
+            "tr" => a.Turns,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, a.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "Angle.ValueOf should throw on invalid specifier")]
+    public void AngleValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Angle<Float128> a = Angle<Float128>.FromRadians(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => a.ValueOf("xx"));
     }
 }

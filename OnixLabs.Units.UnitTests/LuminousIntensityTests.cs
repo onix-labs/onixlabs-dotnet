@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -445,5 +446,81 @@ public sealed class LuminousIntensityTests
 
         // Then
         Assert.Equal("1.234,56 cd", formatted);
+    }
+
+    [Theory(DisplayName = "LuminousIntensity.ValueOf should return the value at the matching scale")]
+    [InlineData("qcd")]
+    [InlineData("rcd")]
+    [InlineData("ycd")]
+    [InlineData("zcd")]
+    [InlineData("acd")]
+    [InlineData("fcd")]
+    [InlineData("pcd")]
+    [InlineData("ncd")]
+    [InlineData("ucd")]
+    [InlineData("mcd")]
+    [InlineData("ccd")]
+    [InlineData("dcd")]
+    [InlineData("cd")]
+    [InlineData("dacd")]
+    [InlineData("hcd")]
+    [InlineData("kcd")]
+    [InlineData("Mcd")]
+    [InlineData("Gcd")]
+    [InlineData("Tcd")]
+    [InlineData("Pcd")]
+    [InlineData("Ecd")]
+    [InlineData("Zcd")]
+    [InlineData("Ycd")]
+    [InlineData("Rcd")]
+    [InlineData("Qcd")]
+    public void LuminousIntensityValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        LuminousIntensity<Float128> l = LuminousIntensity<Float128>.FromCandelas(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qcd" => l.QuectoCandelas,
+            "rcd" => l.RontoCandelas,
+            "ycd" => l.YoctoCandelas,
+            "zcd" => l.ZeptoCandelas,
+            "acd" => l.AttoCandelas,
+            "fcd" => l.FemtoCandelas,
+            "pcd" => l.PicoCandelas,
+            "ncd" => l.NanoCandelas,
+            "ucd" => l.MicroCandelas,
+            "mcd" => l.MilliCandelas,
+            "ccd" => l.CentiCandelas,
+            "dcd" => l.DeciCandelas,
+            "cd" => l.Candelas,
+            "dacd" => l.DecaCandelas,
+            "hcd" => l.HectoCandelas,
+            "kcd" => l.KiloCandelas,
+            "Mcd" => l.MegaCandelas,
+            "Gcd" => l.GigaCandelas,
+            "Tcd" => l.TeraCandelas,
+            "Pcd" => l.PetaCandelas,
+            "Ecd" => l.ExaCandelas,
+            "Zcd" => l.ZettaCandelas,
+            "Ycd" => l.YottaCandelas,
+            "Rcd" => l.RonnaCandelas,
+            "Qcd" => l.QuettaCandelas,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, l.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "LuminousIntensity.ValueOf should throw on invalid specifier")]
+    public void LuminousIntensityValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        LuminousIntensity<Float128> l = LuminousIntensity<Float128>.FromCandelas(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => l.ValueOf("xx"));
     }
 }

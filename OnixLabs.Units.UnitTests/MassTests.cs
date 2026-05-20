@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -543,5 +544,103 @@ public sealed class MassTests
 
         // Then
         Assert.Equal("1.234,56 kg", formatted);
+    }
+
+    [Theory(DisplayName = "Mass.ValueOf should return the value at the matching scale")]
+    [InlineData("qg")]
+    [InlineData("rg")]
+    [InlineData("yg")]
+    [InlineData("zg")]
+    [InlineData("ag")]
+    [InlineData("fg")]
+    [InlineData("pg")]
+    [InlineData("ng")]
+    [InlineData("ug")]
+    [InlineData("mg")]
+    [InlineData("cg")]
+    [InlineData("dg")]
+    [InlineData("g")]
+    [InlineData("dag")]
+    [InlineData("hg")]
+    [InlineData("kg")]
+    [InlineData("Mg")]
+    [InlineData("Gg")]
+    [InlineData("Tg")]
+    [InlineData("Pg")]
+    [InlineData("Eg")]
+    [InlineData("Zg")]
+    [InlineData("Yg")]
+    [InlineData("Rg")]
+    [InlineData("Qg")]
+    [InlineData("t")]
+    [InlineData("oz")]
+    [InlineData("lb")]
+    [InlineData("st")]
+    [InlineData("sht")]
+    [InlineData("lt")]
+    [InlineData("ct")]
+    [InlineData("gr")]
+    [InlineData("dr")]
+    [InlineData("slug")]
+    [InlineData("Da")]
+    public void MassValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        Mass<Float128> m = Mass<Float128>.FromGrams(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qg" => m.QuectoGrams,
+            "rg" => m.RontoGrams,
+            "yg" => m.YoctoGrams,
+            "zg" => m.ZeptoGrams,
+            "ag" => m.AttoGrams,
+            "fg" => m.FemtoGrams,
+            "pg" => m.PicoGrams,
+            "ng" => m.NanoGrams,
+            "ug" => m.MicroGrams,
+            "mg" => m.MilliGrams,
+            "cg" => m.CentiGrams,
+            "dg" => m.DeciGrams,
+            "g" => m.Grams,
+            "dag" => m.DecaGrams,
+            "hg" => m.HectoGrams,
+            "kg" => m.KiloGrams,
+            "Mg" => m.MegaGrams,
+            "Gg" => m.GigaGrams,
+            "Tg" => m.TeraGrams,
+            "Pg" => m.PetaGrams,
+            "Eg" => m.ExaGrams,
+            "Zg" => m.ZettaGrams,
+            "Yg" => m.YottaGrams,
+            "Rg" => m.RonnaGrams,
+            "Qg" => m.QuettaGrams,
+            "t" => m.Tonnes,
+            "oz" => m.Ounces,
+            "lb" => m.Pounds,
+            "st" => m.Stones,
+            "sht" => m.ShortTons,
+            "lt" => m.LongTons,
+            "ct" => m.Carats,
+            "gr" => m.Grains,
+            "dr" => m.Drams,
+            "slug" => m.Slugs,
+            "Da" => m.Daltons,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, m.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "Mass.ValueOf should throw on invalid specifier")]
+    public void MassValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Mass<Float128> m = Mass<Float128>.FromGrams(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => m.ValueOf("xx"));
     }
 }

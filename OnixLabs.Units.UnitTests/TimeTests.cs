@@ -469,15 +469,80 @@ public sealed class TimeTests
         Assert.Equal("1.234,56 s", formatted);
     }
 
-    [Fact(DisplayName = "Time.ValueOf should round-trip with ToString specifier")]
-    public void TimeValueOfShouldRoundTripWithToStringSpecifier()
+    [Theory(DisplayName = "Time.ValueOf should return the value at the matching scale")]
+    [InlineData("qs")]
+    [InlineData("rs")]
+    [InlineData("ys")]
+    [InlineData("zs")]
+    [InlineData("as")]
+    [InlineData("fs")]
+    [InlineData("ps")]
+    [InlineData("ns")]
+    [InlineData("us")]
+    [InlineData("ms")]
+    [InlineData("cs")]
+    [InlineData("ds")]
+    [InlineData("s")]
+    [InlineData("das")]
+    [InlineData("hs")]
+    [InlineData("ks")]
+    [InlineData("Ms")]
+    [InlineData("Gs")]
+    [InlineData("Ts")]
+    [InlineData("Ps")]
+    [InlineData("Es")]
+    [InlineData("Zs")]
+    [InlineData("Ys")]
+    [InlineData("Rs")]
+    [InlineData("Qs")]
+    [InlineData("min")]
+    [InlineData("h")]
+    [InlineData("d")]
+    [InlineData("wk")]
+    [InlineData("yr")]
+    public void TimeValueOfShouldReturnValueAtMatchingScale(string specifier)
     {
         // Given
-        Time<Float128> time = Time<Float128>.FromHours(Float128.Parse("2"));
+        Time<Float128> t = Time<Float128>.FromSeconds(Float128.Parse("12345.678"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qs" => t.QuectoSeconds,
+            "rs" => t.RontoSeconds,
+            "ys" => t.YoctoSeconds,
+            "zs" => t.ZeptoSeconds,
+            "as" => t.AttoSeconds,
+            "fs" => t.FemtoSeconds,
+            "ps" => t.PicoSeconds,
+            "ns" => t.NanoSeconds,
+            "us" => t.MicroSeconds,
+            "ms" => t.MilliSeconds,
+            "cs" => t.CentiSeconds,
+            "ds" => t.DeciSeconds,
+            "s" => t.Seconds,
+            "das" => t.DecaSeconds,
+            "hs" => t.HectoSeconds,
+            "ks" => t.KiloSeconds,
+            "Ms" => t.MegaSeconds,
+            "Gs" => t.GigaSeconds,
+            "Ts" => t.TeraSeconds,
+            "Ps" => t.PetaSeconds,
+            "Es" => t.ExaSeconds,
+            "Zs" => t.ZettaSeconds,
+            "Ys" => t.YottaSeconds,
+            "Rs" => t.RonnaSeconds,
+            "Qs" => t.QuettaSeconds,
+            "min" => t.Minutes,
+            "h" => t.Hours,
+            "d" => t.Days,
+            "wk" => t.Weeks,
+            "yr" => t.JulianYears,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
 
         // Then
-        Assert.Equal(Float128.Parse("2"), time.ValueOf("h"));
-        Assert.Equal(Float128.Parse("7200"), time.ValueOf("s"));
+        Assert.Equal(expected, t.ValueOf(specifier));
     }
 
     [Fact(DisplayName = "Time.ValueOf should throw on invalid specifier")]

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -461,5 +462,47 @@ public sealed class TemperatureTests
 
         // Then
         Assert.Equal("1.234,56 K", formatted);
+    }
+
+    [Theory(DisplayName = "Temperature.ValueOf should return the value at the matching scale")]
+    [InlineData("C")]
+    [InlineData("DE")]
+    [InlineData("F")]
+    [InlineData("K")]
+    [InlineData("N")]
+    [InlineData("R")]
+    [InlineData("RE")]
+    [InlineData("RO")]
+    public void TemperatureValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        Temperature<Float128> t = Temperature<Float128>.FromKelvin(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "C" => t.Celsius,
+            "DE" => t.Delisle,
+            "F" => t.Fahrenheit,
+            "K" => t.Kelvin,
+            "N" => t.Newton,
+            "R" => t.Rankine,
+            "RE" => t.Reaumur,
+            "RO" => t.Romer,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, t.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "Temperature.ValueOf should throw on invalid specifier")]
+    public void TemperatureValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Temperature<Float128> t = Temperature<Float128>.FromKelvin(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => t.ValueOf("xx"));
     }
 }

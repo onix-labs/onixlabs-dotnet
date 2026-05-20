@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -544,5 +545,87 @@ public sealed class FrequencyTests
     {
         Float128 diff = expected > actual ? expected - actual : actual - expected;
         Assert.True(diff <= tolerance, $"Expected {expected}, got {actual} (diff {diff} exceeds tolerance {tolerance})");
+    }
+
+    [Theory(DisplayName = "Frequency.ValueOf should return the value at the matching scale")]
+    [InlineData("qHz")]
+    [InlineData("rHz")]
+    [InlineData("yHz")]
+    [InlineData("zHz")]
+    [InlineData("aHz")]
+    [InlineData("fHz")]
+    [InlineData("pHz")]
+    [InlineData("nHz")]
+    [InlineData("uHz")]
+    [InlineData("mHz")]
+    [InlineData("cHz")]
+    [InlineData("dHz")]
+    [InlineData("Hz")]
+    [InlineData("daHz")]
+    [InlineData("hHz")]
+    [InlineData("kHz")]
+    [InlineData("MHz")]
+    [InlineData("GHz")]
+    [InlineData("THz")]
+    [InlineData("PHz")]
+    [InlineData("EHz")]
+    [InlineData("ZHz")]
+    [InlineData("YHz")]
+    [InlineData("RHz")]
+    [InlineData("QHz")]
+    [InlineData("rpm")]
+    [InlineData("bpm")]
+    [InlineData("radps")]
+    public void FrequencyValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        Frequency<Float128> f = Frequency<Float128>.FromHertz(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qHz" => f.QuectoHertz,
+            "rHz" => f.RontoHertz,
+            "yHz" => f.YoctoHertz,
+            "zHz" => f.ZeptoHertz,
+            "aHz" => f.AttoHertz,
+            "fHz" => f.FemtoHertz,
+            "pHz" => f.PicoHertz,
+            "nHz" => f.NanoHertz,
+            "uHz" => f.MicroHertz,
+            "mHz" => f.MilliHertz,
+            "cHz" => f.CentiHertz,
+            "dHz" => f.DeciHertz,
+            "Hz" => f.Hertz,
+            "daHz" => f.DecaHertz,
+            "hHz" => f.HectoHertz,
+            "kHz" => f.KiloHertz,
+            "MHz" => f.MegaHertz,
+            "GHz" => f.GigaHertz,
+            "THz" => f.TeraHertz,
+            "PHz" => f.PetaHertz,
+            "EHz" => f.ExaHertz,
+            "ZHz" => f.ZettaHertz,
+            "YHz" => f.YottaHertz,
+            "RHz" => f.RonnaHertz,
+            "QHz" => f.QuettaHertz,
+            "rpm" => f.RevolutionsPerMinute,
+            "bpm" => f.BeatsPerMinute,
+            "radps" => f.RadiansPerSecond,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, f.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "Frequency.ValueOf should throw on invalid specifier")]
+    public void FrequencyValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Frequency<Float128> f = Frequency<Float128>.FromHertz(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => f.ValueOf("xx"));
     }
 }

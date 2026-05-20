@@ -531,15 +531,90 @@ public sealed class DistanceTests
         Assert.Equal("1.234,56 m", formatted);
     }
 
-    [Fact(DisplayName = "Distance.ValueOf should round-trip with ToString specifier")]
-    public void DistanceValueOfShouldRoundTripWithToStringSpecifier()
+    [Theory(DisplayName = "Distance.ValueOf should return the value at the matching scale")]
+    [InlineData("qm")]
+    [InlineData("rm")]
+    [InlineData("ym")]
+    [InlineData("zm")]
+    [InlineData("am")]
+    [InlineData("fm")]
+    [InlineData("pm")]
+    [InlineData("nm")]
+    [InlineData("um")]
+    [InlineData("mm")]
+    [InlineData("cm")]
+    [InlineData("dm")]
+    [InlineData("m")]
+    [InlineData("dam")]
+    [InlineData("hm")]
+    [InlineData("km")]
+    [InlineData("Mm")]
+    [InlineData("Gm")]
+    [InlineData("Tm")]
+    [InlineData("Pm")]
+    [InlineData("Em")]
+    [InlineData("Zm")]
+    [InlineData("Ym")]
+    [InlineData("Rm")]
+    [InlineData("Qm")]
+    [InlineData("in")]
+    [InlineData("ft")]
+    [InlineData("yd")]
+    [InlineData("mi")]
+    [InlineData("nmi")]
+    [InlineData("fmi")]
+    [InlineData("a")]
+    [InlineData("au")]
+    [InlineData("ly")]
+    [InlineData("pc")]
+    public void DistanceValueOfShouldReturnValueAtMatchingScale(string specifier)
     {
         // Given
-        Distance<Float128> distance = Distance<Float128>.FromMiles(Float128.Parse("25"));
+        Distance<Float128> d = Distance<Float128>.FromMeters(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qm" => d.QuectoMeters,
+            "rm" => d.RontoMeters,
+            "ym" => d.YoctoMeters,
+            "zm" => d.ZeptoMeters,
+            "am" => d.AttoMeters,
+            "fm" => d.FemtoMeters,
+            "pm" => d.PicoMeters,
+            "nm" => d.NanoMeters,
+            "um" => d.MicroMeters,
+            "mm" => d.MilliMeters,
+            "cm" => d.CentiMeters,
+            "dm" => d.DeciMeters,
+            "m" => d.Meters,
+            "dam" => d.DecaMeters,
+            "hm" => d.HectoMeters,
+            "km" => d.KiloMeters,
+            "Mm" => d.MegaMeters,
+            "Gm" => d.GigaMeters,
+            "Tm" => d.TeraMeters,
+            "Pm" => d.PetaMeters,
+            "Em" => d.ExaMeters,
+            "Zm" => d.ZettaMeters,
+            "Ym" => d.YottaMeters,
+            "Rm" => d.RonnaMeters,
+            "Qm" => d.QuettaMeters,
+            "in" => d.Inches,
+            "ft" => d.Feet,
+            "yd" => d.Yards,
+            "mi" => d.Miles,
+            "nmi" => d.NauticalMiles,
+            "fmi" => d.Fermis,
+            "a" => d.Angstroms,
+            "au" => d.AstronomicalUnits,
+            "ly" => d.LightYears,
+            "pc" => d.Parsecs,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
 
         // Then
-        Assert.Equal(Float128.Parse("25"), distance.ValueOf("mi"));
-        Assert.Equal(Float128.Parse("25") * Float128.Parse("1609.344"), distance.ValueOf("m"));
+        Assert.Equal(expected, d.ValueOf(specifier));
     }
 
     [Fact(DisplayName = "Distance.ValueOf should throw on invalid specifier")]

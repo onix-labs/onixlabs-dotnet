@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -663,5 +664,123 @@ public sealed class VolumeTests
 
         // Then
         Assert.Equal("1.234,56 L", formatted);
+    }
+
+    [Theory(DisplayName = "Volume.ValueOf should return the value at the matching scale")]
+    [InlineData("cuqm")]
+    [InlineData("curm")]
+    [InlineData("cuym")]
+    [InlineData("cuzm")]
+    [InlineData("cuam")]
+    [InlineData("cufm")]
+    [InlineData("cupm")]
+    [InlineData("cunm")]
+    [InlineData("cuum")]
+    [InlineData("cumm")]
+    [InlineData("cucm")]
+    [InlineData("cudm")]
+    [InlineData("cum")]
+    [InlineData("cudam")]
+    [InlineData("cuhm")]
+    [InlineData("cukm")]
+    [InlineData("cuMm")]
+    [InlineData("cuGm")]
+    [InlineData("cuTm")]
+    [InlineData("cuPm")]
+    [InlineData("cuEm")]
+    [InlineData("cuZm")]
+    [InlineData("cuYm")]
+    [InlineData("cuRm")]
+    [InlineData("cuQm")]
+    [InlineData("cuin")]
+    [InlineData("cuft")]
+    [InlineData("cuyd")]
+    [InlineData("cumi")]
+    [InlineData("cuau")]
+    [InlineData("culy")]
+    [InlineData("cupc")]
+    [InlineData("L")]
+    [InlineData("mL")]
+    [InlineData("USgal")]
+    [InlineData("USqt")]
+    [InlineData("USpt")]
+    [InlineData("UScup")]
+    [InlineData("USfloz")]
+    [InlineData("UStbsp")]
+    [InlineData("UStsp")]
+    [InlineData("impgal")]
+    [InlineData("impqt")]
+    [InlineData("imppt")]
+    [InlineData("impfloz")]
+    [InlineData("bbl")]
+    public void VolumeValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        Volume<Float256> v = Volume<Float256>.FromCubicMeters(Float256.Parse("1234.567"));
+
+        // When
+        Float256 expected = specifier switch
+        {
+            "cuqm" => v.CubicQuectoMeters,
+            "curm" => v.CubicRontoMeters,
+            "cuym" => v.CubicYoctoMeters,
+            "cuzm" => v.CubicZeptoMeters,
+            "cuam" => v.CubicAttoMeters,
+            "cufm" => v.CubicFemtoMeters,
+            "cupm" => v.CubicPicoMeters,
+            "cunm" => v.CubicNanoMeters,
+            "cuum" => v.CubicMicroMeters,
+            "cumm" => v.CubicMilliMeters,
+            "cucm" => v.CubicCentiMeters,
+            "cudm" => v.CubicDeciMeters,
+            "cum" => v.CubicMeters,
+            "cudam" => v.CubicDecaMeters,
+            "cuhm" => v.CubicHectoMeters,
+            "cukm" => v.CubicKiloMeters,
+            "cuMm" => v.CubicMegaMeters,
+            "cuGm" => v.CubicGigaMeters,
+            "cuTm" => v.CubicTeraMeters,
+            "cuPm" => v.CubicPetaMeters,
+            "cuEm" => v.CubicExaMeters,
+            "cuZm" => v.CubicZettaMeters,
+            "cuYm" => v.CubicYottaMeters,
+            "cuRm" => v.CubicRonnaMeters,
+            "cuQm" => v.CubicQuettaMeters,
+            "cuin" => v.CubicInches,
+            "cuft" => v.CubicFeet,
+            "cuyd" => v.CubicYards,
+            "cumi" => v.CubicMiles,
+            "cuau" => v.CubicAstronomicalUnits,
+            "culy" => v.CubicLightYears,
+            "cupc" => v.CubicParsecs,
+            "L" => v.Liters,
+            "mL" => v.Milliliters,
+            "USgal" => v.USGallons,
+            "USqt" => v.USQuarts,
+            "USpt" => v.USPints,
+            "UScup" => v.USCups,
+            "USfloz" => v.USFluidOunces,
+            "UStbsp" => v.USTablespoons,
+            "UStsp" => v.USTeaspoons,
+            "impgal" => v.ImperialGallons,
+            "impqt" => v.ImperialQuarts,
+            "imppt" => v.ImperialPints,
+            "impfloz" => v.ImperialFluidOunces,
+            "bbl" => v.OilBarrels,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, v.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "Volume.ValueOf should throw on invalid specifier")]
+    public void VolumeValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Volume<Float256> v = Volume<Float256>.FromCubicMeters(Float256.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => v.ValueOf("xx"));
     }
 }

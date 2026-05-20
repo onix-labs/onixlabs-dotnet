@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -577,5 +578,99 @@ public sealed class DataSizeTests
 
         // Then (German uses '.' for thousands and ',' for decimals)
         Assert.Equal("1.234,56 KB", formatted);
+    }
+
+    [Theory(DisplayName = "DataSize.ValueOf should return the value at the matching scale")]
+    [InlineData("b")]
+    [InlineData("B")]
+    [InlineData("Kib")]
+    [InlineData("KiB")]
+    [InlineData("Kb")]
+    [InlineData("KB")]
+    [InlineData("Mib")]
+    [InlineData("MiB")]
+    [InlineData("Mb")]
+    [InlineData("MB")]
+    [InlineData("Gib")]
+    [InlineData("GiB")]
+    [InlineData("Gb")]
+    [InlineData("GB")]
+    [InlineData("Tib")]
+    [InlineData("TiB")]
+    [InlineData("Tb")]
+    [InlineData("TB")]
+    [InlineData("Pib")]
+    [InlineData("PiB")]
+    [InlineData("Pb")]
+    [InlineData("PB")]
+    [InlineData("Eib")]
+    [InlineData("EiB")]
+    [InlineData("Eb")]
+    [InlineData("EB")]
+    [InlineData("Zib")]
+    [InlineData("ZiB")]
+    [InlineData("Zb")]
+    [InlineData("ZB")]
+    [InlineData("Yib")]
+    [InlineData("YiB")]
+    [InlineData("Yb")]
+    [InlineData("YB")]
+    public void DataSizeValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        DataSize<Float128> size = DataSize<Float128>.FromBits(Float128.Parse("12345678"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "b" => size.Bits,
+            "B" => size.Bytes,
+            "Kib" => size.KibiBits,
+            "KiB" => size.KibiBytes,
+            "Kb" => size.KiloBits,
+            "KB" => size.KiloBytes,
+            "Mib" => size.MebiBits,
+            "MiB" => size.MebiBytes,
+            "Mb" => size.MegaBits,
+            "MB" => size.MegaBytes,
+            "Gib" => size.GibiBits,
+            "GiB" => size.GibiBytes,
+            "Gb" => size.GigaBits,
+            "GB" => size.GigaBytes,
+            "Tib" => size.TebiBits,
+            "TiB" => size.TebiBytes,
+            "Tb" => size.TeraBits,
+            "TB" => size.TeraBytes,
+            "Pib" => size.PebiBits,
+            "PiB" => size.PebiBytes,
+            "Pb" => size.PetaBits,
+            "PB" => size.PetaBytes,
+            "Eib" => size.ExbiBits,
+            "EiB" => size.ExbiBytes,
+            "Eb" => size.ExaBits,
+            "EB" => size.ExaBytes,
+            "Zib" => size.ZebiBits,
+            "ZiB" => size.ZebiBytes,
+            "Zb" => size.ZettaBits,
+            "ZB" => size.ZettaBytes,
+            "Yib" => size.YobiBits,
+            "YiB" => size.YobiBytes,
+            "Yb" => size.YottaBits,
+            "YB" => size.YottaBytes,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, size.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "DataSize.ValueOf should throw on invalid specifier")]
+    public void DataSizeValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        DataSize<Float128> size = DataSize<Float128>.FromBits(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => size.ValueOf("xx"));
     }
 }

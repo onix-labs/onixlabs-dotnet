@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Globalization;
 using OnixLabs.Numerics;
 
@@ -445,5 +446,81 @@ public sealed class CurrentTests
 
         // Then
         Assert.Equal("1.234,56 A", formatted);
+    }
+
+    [Theory(DisplayName = "Current.ValueOf should return the value at the matching scale")]
+    [InlineData("qA")]
+    [InlineData("rA")]
+    [InlineData("yA")]
+    [InlineData("zA")]
+    [InlineData("aA")]
+    [InlineData("fA")]
+    [InlineData("pA")]
+    [InlineData("nA")]
+    [InlineData("uA")]
+    [InlineData("mA")]
+    [InlineData("cA")]
+    [InlineData("dA")]
+    [InlineData("A")]
+    [InlineData("daA")]
+    [InlineData("hA")]
+    [InlineData("kA")]
+    [InlineData("MA")]
+    [InlineData("GA")]
+    [InlineData("TA")]
+    [InlineData("PA")]
+    [InlineData("EA")]
+    [InlineData("ZA")]
+    [InlineData("YA")]
+    [InlineData("RA")]
+    [InlineData("QA")]
+    public void CurrentValueOfShouldReturnValueAtMatchingScale(string specifier)
+    {
+        // Given
+        Current<Float128> c = Current<Float128>.FromAmperes(Float128.Parse("1234.567"));
+
+        // When
+        Float128 expected = specifier switch
+        {
+            "qA" => c.QuectoAmperes,
+            "rA" => c.RontoAmperes,
+            "yA" => c.YoctoAmperes,
+            "zA" => c.ZeptoAmperes,
+            "aA" => c.AttoAmperes,
+            "fA" => c.FemtoAmperes,
+            "pA" => c.PicoAmperes,
+            "nA" => c.NanoAmperes,
+            "uA" => c.MicroAmperes,
+            "mA" => c.MilliAmperes,
+            "cA" => c.CentiAmperes,
+            "dA" => c.DeciAmperes,
+            "A" => c.Amperes,
+            "daA" => c.DecaAmperes,
+            "hA" => c.HectoAmperes,
+            "kA" => c.KiloAmperes,
+            "MA" => c.MegaAmperes,
+            "GA" => c.GigaAmperes,
+            "TA" => c.TeraAmperes,
+            "PA" => c.PetaAmperes,
+            "EA" => c.ExaAmperes,
+            "ZA" => c.ZettaAmperes,
+            "YA" => c.YottaAmperes,
+            "RA" => c.RonnaAmperes,
+            "QA" => c.QuettaAmperes,
+            _ => throw new InvalidOperationException($"Unhandled specifier: {specifier}")
+        };
+
+        // Then
+        Assert.Equal(expected, c.ValueOf(specifier));
+    }
+
+    [Fact(DisplayName = "Current.ValueOf should throw on invalid specifier")]
+    public void CurrentValueOfShouldThrowOnInvalidSpecifier()
+    {
+        // Given
+        Current<Float128> c = Current<Float128>.FromAmperes(Float128.Parse("1"));
+
+        // Then
+        Assert.Throws<ArgumentException>(() => c.ValueOf("xx"));
     }
 }

@@ -22,14 +22,17 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Angle<T> : IAdditiveUnit<Angle<T>> where T : IFloatingPoint<T>
+public readonly partial struct Angle<T> : ICanonicalUnit<T>, IAdditiveUnit<Angle<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Angle{T}"/> struct.
     /// </summary>
     /// <param name="value">The angle unit in <see cref="QuectoRadians"/>.</param>
-    private Angle(T value) => QuectoRadians = value;
+    private Angle(T value) => Canonical = value;
+
+    /// <inheritdoc/>
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the angle in Quectoradians (qrad).
@@ -37,7 +40,7 @@ public readonly partial struct Angle<T> : IAdditiveUnit<Angle<T>> where T : IFlo
     /// <remarks>
     /// The format specifier for this value is qrad.
     /// </remarks>
-    public T QuectoRadians { get; }
+    public T QuectoRadians => Canonical;
 
     /// <summary>
     /// Gets the angle in Rontoradians (rrad).

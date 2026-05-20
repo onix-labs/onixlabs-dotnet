@@ -22,14 +22,17 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>> where T : IFloatingPoint<T>
+public readonly partial struct Temperature<T> : ICanonicalUnit<T>, IAdditiveUnit<Temperature<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Temperature{T}"/> struct.
     /// </summary>
     /// <param name="value">The temperature unit in <see cref="Kelvin"/>.</param>
-    private Temperature(T value) => Kelvin = value;
+    private Temperature(T value) => Canonical = value;
+
+    /// <inheritdoc/>
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the temperature in Kelvin (K).
@@ -37,7 +40,7 @@ public readonly partial struct Temperature<T> : IAdditiveUnit<Temperature<T>> wh
     /// <remarks>
     /// The format specifier for this value is K.
     /// </remarks>
-    public T Kelvin { get; }
+    public T Kelvin => Canonical;
 
     /// <summary>
     /// Gets the temperature in Celsius (°C).

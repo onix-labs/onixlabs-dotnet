@@ -22,14 +22,17 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Current<T> : IAdditiveUnit<Current<T>> where T : IFloatingPoint<T>
+public readonly partial struct Current<T> : ICanonicalUnit<T>, IAdditiveUnit<Current<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Current{T}"/> struct.
     /// </summary>
     /// <param name="value">The current unit in <see cref="QuectoAmperes"/>.</param>
-    private Current(T value) => QuectoAmperes = value;
+    private Current(T value) => Canonical = value;
+
+    /// <inheritdoc/>
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the current in Quectoamperes (qA).
@@ -37,7 +40,7 @@ public readonly partial struct Current<T> : IAdditiveUnit<Current<T>> where T : 
     /// <remarks>
     /// The format specifier for this value is qA.
     /// </remarks>
-    public T QuectoAmperes { get; }
+    public T QuectoAmperes => Canonical;
 
     /// <summary>
     /// Gets the current in Rontoamperes (rA).

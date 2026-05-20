@@ -22,14 +22,17 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Frequency<T> : IAdditiveUnit<Frequency<T>> where T : IFloatingPoint<T>
+public readonly partial struct Frequency<T> : ICanonicalUnit<T>, IAdditiveUnit<Frequency<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Frequency{T}"/> struct.
     /// </summary>
     /// <param name="value">The frequency unit in <see cref="QuectoHertz"/>.</param>
-    private Frequency(T value) => QuectoHertz = value;
+    private Frequency(T value) => Canonical = value;
+
+    /// <inheritdoc/>
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the frequency in Quectohertz (qHz).
@@ -37,7 +40,7 @@ public readonly partial struct Frequency<T> : IAdditiveUnit<Frequency<T>> where 
     /// <remarks>
     /// The format specifier for this value is qHz.
     /// </remarks>
-    public T QuectoHertz { get; }
+    public T QuectoHertz => Canonical;
 
     /// <summary>
     /// Gets the frequency in Rontohertz (rHz).

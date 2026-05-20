@@ -576,7 +576,7 @@ internal static class Program
         Row("CubicMeters",      v.CubicMeters);
         Row("CubicCentimeters", v.CubicCentiMeters);
         Row("CubicInches",      v.CubicInches);
-        Row("USGallons",        v.USGallons);
+        Row("UsGallons",        v.UsGallons);
         Row("ImperialGallons",  v.ImperialGallons);
         Row("OilBarrels",       v.OilBarrels);
 

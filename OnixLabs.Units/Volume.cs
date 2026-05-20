@@ -22,10 +22,7 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Volume<T> :
-    ICanonicalUnit<T>,
-    IAdditiveUnit<Volume<T>>
-    where T : IFloatingPoint<T>
+public readonly partial struct Volume<T> : ICanonicalUnit<T>, IAdditiveUnit<Volume<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
@@ -315,7 +312,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is USgal.
     /// </remarks>
-    public T USGallons => CubicQuectoMeters / CuQuectometersPerUSGallon;
+    public T UsGallons => CubicQuectoMeters / CuQuectometersPerUsGallon;
 
     /// <summary>
     /// Gets the volume in US Quarts (US qt).
@@ -323,7 +320,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is USqt.
     /// </remarks>
-    public T USQuarts => CubicQuectoMeters / CuQuectometersPerUSQuart;
+    public T UsQuarts => CubicQuectoMeters / CuQuectometersPerUsQuart;
 
     /// <summary>
     /// Gets the volume in US Pints (US pt).
@@ -331,7 +328,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is USpt.
     /// </remarks>
-    public T USPints => CubicQuectoMeters / CuQuectometersPerUSPint;
+    public T UsPints => CubicQuectoMeters / CuQuectometersPerUsPint;
 
     /// <summary>
     /// Gets the volume in US Cups (US cup).
@@ -339,7 +336,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is UScup.
     /// </remarks>
-    public T USCups => CubicQuectoMeters / CuQuectometersPerUSCup;
+    public T UsCups => CubicQuectoMeters / CuQuectometersPerUsCup;
 
     /// <summary>
     /// Gets the volume in US Fluid Ounces (US fl oz).
@@ -347,7 +344,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is USfloz.
     /// </remarks>
-    public T USFluidOunces => CubicQuectoMeters / CuQuectometersPerUSFluidOunce;
+    public T UsFluidOunces => CubicQuectoMeters / CuQuectometersPerUsFluidOunce;
 
     /// <summary>
     /// Gets the volume in US Tablespoons (US tbsp).
@@ -355,7 +352,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is UStbsp.
     /// </remarks>
-    public T USTablespoons => CubicQuectoMeters / CuQuectometersPerUSTablespoon;
+    public T UsTablespoons => CubicQuectoMeters / CuQuectometersPerUsTablespoon;
 
     /// <summary>
     /// Gets the volume in US Teaspoons (US tsp).
@@ -363,7 +360,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is UStsp.
     /// </remarks>
-    public T USTeaspoons => CubicQuectoMeters / CuQuectometersPerUSTeaspoon;
+    public T UsTeaspoons => CubicQuectoMeters / CuQuectometersPerUsTeaspoon;
 
     /// <summary>
     /// Gets the volume in Imperial Gallons (imp gal).

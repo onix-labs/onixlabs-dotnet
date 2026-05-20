@@ -406,73 +406,73 @@ public sealed class VolumeTests
         Assert.Equal(Float256.Parse(expected), v.CubicQuectoMeters);
     }
 
-    [Theory(DisplayName = "Volume.FromUSGallons should produce the expected CubicQuectoMeters")]
+    [Theory(DisplayName = "Volume.FromUsGallons should produce the expected CubicQuectoMeters")]
     [InlineData("0", "0")]
     [InlineData("1", "3.785411784e87")]
     [InlineData("42", "1.58987294928e89")] // 42 US gal = 1 oil barrel
-    public void VolumeFromUSGallonsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
+    public void VolumeFromUsGallonsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
     {
-        Volume<Float256> v = Volume<Float256>.FromUSGallons(Float256.Parse(value));
+        Volume<Float256> v = Volume<Float256>.FromUsGallons(Float256.Parse(value));
         Assert.Equal(Float256.Parse(expected), v.CubicQuectoMeters);
     }
 
-    [Theory(DisplayName = "Volume.FromUSQuarts should produce the expected CubicQuectoMeters")]
+    [Theory(DisplayName = "Volume.FromUsQuarts should produce the expected CubicQuectoMeters")]
     [InlineData("0", "0")]
     [InlineData("1", "9.46352946e86")]
     [InlineData("4", "3.785411784e87")] // 4 US qt = 1 US gal
-    public void VolumeFromUSQuartsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
+    public void VolumeFromUsQuartsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
     {
-        Volume<Float256> v = Volume<Float256>.FromUSQuarts(Float256.Parse(value));
+        Volume<Float256> v = Volume<Float256>.FromUsQuarts(Float256.Parse(value));
         Assert.Equal(Float256.Parse(expected), v.CubicQuectoMeters);
     }
 
-    [Theory(DisplayName = "Volume.FromUSPints should produce the expected CubicQuectoMeters")]
+    [Theory(DisplayName = "Volume.FromUsPints should produce the expected CubicQuectoMeters")]
     [InlineData("0", "0")]
     [InlineData("1", "4.73176473e86")]
     [InlineData("2", "9.46352946e86")] // 2 US pt = 1 US qt
-    public void VolumeFromUSPintsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
+    public void VolumeFromUsPintsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
     {
-        Volume<Float256> v = Volume<Float256>.FromUSPints(Float256.Parse(value));
+        Volume<Float256> v = Volume<Float256>.FromUsPints(Float256.Parse(value));
         Assert.Equal(Float256.Parse(expected), v.CubicQuectoMeters);
     }
 
-    [Theory(DisplayName = "Volume.FromUSCups should produce the expected CubicQuectoMeters")]
+    [Theory(DisplayName = "Volume.FromUsCups should produce the expected CubicQuectoMeters")]
     [InlineData("0", "0")]
     [InlineData("1", "2.365882365e86")]
     [InlineData("2", "4.73176473e86")] // 2 US cups = 1 US pt
-    public void VolumeFromUSCupsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
+    public void VolumeFromUsCupsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
     {
-        Volume<Float256> v = Volume<Float256>.FromUSCups(Float256.Parse(value));
+        Volume<Float256> v = Volume<Float256>.FromUsCups(Float256.Parse(value));
         Assert.Equal(Float256.Parse(expected), v.CubicQuectoMeters);
     }
 
-    [Theory(DisplayName = "Volume.FromUSFluidOunces should produce the expected CubicQuectoMeters")]
+    [Theory(DisplayName = "Volume.FromUsFluidOunces should produce the expected CubicQuectoMeters")]
     [InlineData("0", "0")]
     [InlineData("1", "2.95735295625e85")]
     [InlineData("8", "2.365882365e86")] // 8 US fl oz = 1 US cup
-    public void VolumeFromUSFluidOuncesShouldProduceExpectedCubicQuectoMeters(string value, string expected)
+    public void VolumeFromUsFluidOuncesShouldProduceExpectedCubicQuectoMeters(string value, string expected)
     {
-        Volume<Float256> v = Volume<Float256>.FromUSFluidOunces(Float256.Parse(value));
+        Volume<Float256> v = Volume<Float256>.FromUsFluidOunces(Float256.Parse(value));
         Assert.Equal(Float256.Parse(expected), v.CubicQuectoMeters);
     }
 
-    [Theory(DisplayName = "Volume.FromUSTablespoons should produce the expected CubicQuectoMeters")]
+    [Theory(DisplayName = "Volume.FromUsTablespoons should produce the expected CubicQuectoMeters")]
     [InlineData("0", "0")]
     [InlineData("1", "1.478676478125e85")]
     [InlineData("2", "2.95735295625e85")] // 2 US tbsp = 1 US fl oz
-    public void VolumeFromUSTablespoonsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
+    public void VolumeFromUsTablespoonsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
     {
-        Volume<Float256> v = Volume<Float256>.FromUSTablespoons(Float256.Parse(value));
+        Volume<Float256> v = Volume<Float256>.FromUsTablespoons(Float256.Parse(value));
         Assert.Equal(Float256.Parse(expected), v.CubicQuectoMeters);
     }
 
-    [Theory(DisplayName = "Volume.FromUSTeaspoons should produce the expected CubicQuectoMeters")]
+    [Theory(DisplayName = "Volume.FromUsTeaspoons should produce the expected CubicQuectoMeters")]
     [InlineData("0", "0")]
     [InlineData("1", "4.92892159375e84")]
     [InlineData("3", "1.478676478125e85")] // 3 US tsp = 1 US tbsp
-    public void VolumeFromUSTeaspoonsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
+    public void VolumeFromUsTeaspoonsShouldProduceExpectedCubicQuectoMeters(string value, string expected)
     {
-        Volume<Float256> v = Volume<Float256>.FromUSTeaspoons(Float256.Parse(value));
+        Volume<Float256> v = Volume<Float256>.FromUsTeaspoons(Float256.Parse(value));
         Assert.Equal(Float256.Parse(expected), v.CubicQuectoMeters);
     }
 
@@ -755,13 +755,13 @@ public sealed class VolumeTests
             "cupc" => v.CubicParsecs,
             "L" => v.Liters,
             "mL" => v.Milliliters,
-            "USgal" => v.USGallons,
-            "USqt" => v.USQuarts,
-            "USpt" => v.USPints,
-            "UScup" => v.USCups,
-            "USfloz" => v.USFluidOunces,
-            "UStbsp" => v.USTablespoons,
-            "UStsp" => v.USTeaspoons,
+            "USgal" => v.UsGallons,
+            "USqt" => v.UsQuarts,
+            "USpt" => v.UsPints,
+            "UScup" => v.UsCups,
+            "USfloz" => v.UsFluidOunces,
+            "UStbsp" => v.UsTablespoons,
+            "UStsp" => v.UsTeaspoons,
             "impgal" => v.ImperialGallons,
             "impqt" => v.ImperialQuarts,
             "imppt" => v.ImperialPints,

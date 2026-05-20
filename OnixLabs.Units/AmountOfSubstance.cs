@@ -22,14 +22,17 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct AmountOfSubstance<T> : IAdditiveUnit<AmountOfSubstance<T>> where T : IFloatingPoint<T>
+public readonly partial struct AmountOfSubstance<T> : ICanonicalUnit<T>, IAdditiveUnit<AmountOfSubstance<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="AmountOfSubstance{T}"/> struct.
     /// </summary>
     /// <param name="value">The amount of substance unit in <see cref="QuectoMoles"/>.</param>
-    private AmountOfSubstance(T value) => QuectoMoles = value;
+    private AmountOfSubstance(T value) => Canonical = value;
+
+    /// <inheritdoc/>
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the amount of substance in Quectomoles (qmol).
@@ -37,7 +40,7 @@ public readonly partial struct AmountOfSubstance<T> : IAdditiveUnit<AmountOfSubs
     /// <remarks>
     /// The format specifier for this value is qmol.
     /// </remarks>
-    public T QuectoMoles { get; }
+    public T QuectoMoles => Canonical;
 
     /// <summary>
     /// Gets the amount of substance in Rontomoles (rmol).

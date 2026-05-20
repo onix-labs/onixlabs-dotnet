@@ -22,14 +22,17 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct LuminousIntensity<T> : IAdditiveUnit<LuminousIntensity<T>> where T : IFloatingPoint<T>
+public readonly partial struct LuminousIntensity<T> : ICanonicalUnit<T>, IAdditiveUnit<LuminousIntensity<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="LuminousIntensity{T}"/> struct.
     /// </summary>
     /// <param name="value">The luminous intensity unit in <see cref="QuectoCandelas"/>.</param>
-    private LuminousIntensity(T value) => QuectoCandelas = value;
+    private LuminousIntensity(T value) => Canonical = value;
+
+    /// <inheritdoc/>
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the luminous intensity in Quectocandelas (qcd).
@@ -37,7 +40,7 @@ public readonly partial struct LuminousIntensity<T> : IAdditiveUnit<LuminousInte
     /// <remarks>
     /// The format specifier for this value is qcd.
     /// </remarks>
-    public T QuectoCandelas { get; }
+    public T QuectoCandelas => Canonical;
 
     /// <summary>
     /// Gets the luminous intensity in Rontocandelas (rcd).

@@ -22,14 +22,17 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct DataSize<T> : IAdditiveUnit<DataSize<T>> where T : IFloatingPoint<T>
+public readonly partial struct DataSize<T> : ICanonicalUnit<T>, IAdditiveUnit<DataSize<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="DataSize{T}"/> struct.
     /// </summary>
     /// <param name="value">The data size unit in <see cref="Bits"/>.</param>
-    private DataSize(T value) => Bits = value;
+    private DataSize(T value) => Canonical = value;
+
+    /// <inheritdoc/>
+    public T Canonical { get; }
 
     /// <summary>
     /// Gets the data size in bits (b).
@@ -37,7 +40,7 @@ public readonly partial struct DataSize<T> : IAdditiveUnit<DataSize<T>> where T 
     /// <remarks>
     /// The format specifier for this value is b.
     /// </remarks>
-    public T Bits { get; }
+    public T Bits => Canonical;
 
     /// <summary>
     /// Gets the data size in bytes (B).

@@ -24,17 +24,20 @@ namespace OnixLabs.Units;
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct SolidAngle<T> : IAdditiveUnit<SolidAngle<T>> where T : IFloatingPoint<T>
+public readonly partial struct SolidAngle<T> : ICanonicalUnit<T>, IAdditiveUnit<SolidAngle<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="SolidAngle{T}"/> struct.
     /// </summary>
     /// <param name="value">The solid-angle value in <see cref="QuectoSteradians"/>.</param>
-    private SolidAngle(T value) => QuectoSteradians = value;
+    private SolidAngle(T value) => Canonical = value;
+
+    /// <inheritdoc/>
+    public T Canonical { get; }
 
     /// <summary>Gets the solid angle in Quectosteradians (qsr).</summary>
-    public T QuectoSteradians { get; }
+    public T QuectoSteradians => Canonical;
 
     /// <summary>Gets the solid angle in Rontosteradians (rsr).</summary>
     public T RontoSteradians => QuectoSteradians.ToRontoUnits();

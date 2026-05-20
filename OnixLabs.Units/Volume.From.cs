@@ -259,49 +259,49 @@ public readonly partial struct Volume<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromUSGallons(T value) => new(value * CuQuectometersPerUSGallon);
+    public static Volume<T> FromUsGallons(T value) => new(value * CuQuectometersPerUsGallon);
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified US Quarts value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromUSQuarts(T value) => new(value * CuQuectometersPerUSQuart);
+    public static Volume<T> FromUsQuarts(T value) => new(value * CuQuectometersPerUsQuart);
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified US Pints value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromUSPints(T value) => new(value * CuQuectometersPerUSPint);
+    public static Volume<T> FromUsPints(T value) => new(value * CuQuectometersPerUsPint);
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified US Cups value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromUSCups(T value) => new(value * CuQuectometersPerUSCup);
+    public static Volume<T> FromUsCups(T value) => new(value * CuQuectometersPerUsCup);
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified US Fluid Ounces value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromUSFluidOunces(T value) => new(value * CuQuectometersPerUSFluidOunce);
+    public static Volume<T> FromUsFluidOunces(T value) => new(value * CuQuectometersPerUsFluidOunce);
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified US Tablespoons value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromUSTablespoons(T value) => new(value * CuQuectometersPerUSTablespoon);
+    public static Volume<T> FromUsTablespoons(T value) => new(value * CuQuectometersPerUsTablespoon);
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified US Teaspoons value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromUSTeaspoons(T value) => new(value * CuQuectometersPerUSTeaspoon);
+    public static Volume<T> FromUsTeaspoons(T value) => new(value * CuQuectometersPerUsTeaspoon);
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Imperial Gallons value.

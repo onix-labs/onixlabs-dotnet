@@ -21,7 +21,7 @@ namespace OnixLabs.Units.UnitTests;
 public sealed class IlluminanceTests
 {
     private static LuminousFlux<Float128> Lumens(Float128 lm) =>
-        new(LuminousIntensity<Float128>.FromCandelas(lm), Angle<Float128>.FromRadians((Float128)1));
+        new(LuminousIntensity<Float128>.FromCandelas(lm), SolidAngle<Float128>.FromSteradians((Float128)1));
 
     private static Illuminance<Float128> Lux(Float128 lx) =>
         new(Lumens(lx), Area<Float128>.FromSquareMeters((Float128)1));
@@ -83,7 +83,7 @@ public sealed class IlluminanceTests
 
     [Fact(DisplayName = "Illuminance.ToString basic")]
     public void IlluminanceToStringBasic() =>
-        Assert.Equal("5.000 cd*rad/sqm", Lux((Float128)5).ToString("cd*rad/sqm:3", CultureInfo.InvariantCulture));
+        Assert.Equal("5.000 cd*sr/sqm", Lux((Float128)5).ToString("cd*sr/sqm:3", CultureInfo.InvariantCulture));
 
     [Fact(DisplayName = "Illuminance.ToString should throw on no separator")]
     public void IlluminanceToStringThrowsOnNoSeparator() =>

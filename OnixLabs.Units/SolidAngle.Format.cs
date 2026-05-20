@@ -12,13 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using OnixLabs.Core;
+
 namespace OnixLabs.Units;
 
-public readonly partial struct Illuminance<T>
+public readonly partial struct SolidAngle<T>
 {
     /// <inheritdoc/>
-    /// <remarks>Non-zero denominator (1 m²) avoids 0/0 = NaN; numerator zero gives a genuine zero magnitude.</remarks>
-    public static Illuminance<T> Zero => new(LuminousFlux<T>.Zero, Area<T>.FromSquareMeters(T.One));
-
-    private const string DefaultFormat = "cd*sr/sqm";
+    public bool TryFormat(
+        Span<char> destination,
+        out int charsWritten,
+        ReadOnlySpan<char> format,
+        IFormatProvider? provider
+    ) => ToString(format, provider).TryCopyTo(destination, out charsWritten);
 }

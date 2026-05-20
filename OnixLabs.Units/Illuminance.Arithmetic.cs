@@ -28,7 +28,7 @@ public readonly partial struct Illuminance<T>
     public static Illuminance<T> Subtract(Illuminance<T> left, Illuminance<T> right) =>
         new(LumensFlux(left.Magnitude - right.Magnitude), Area<T>.FromSquareMeters(T.One));
 
-    // Builds a LuminousFlux of the given lumen magnitude in canonical "(cd × 1 rad)" form.
+    // Builds a LuminousFlux of the given lumen magnitude in canonical "(cd × 1 sr)" form.
     private static LuminousFlux<T> LumensFlux(T lumens) =>
-        new(LuminousIntensity<T>.FromCandelas(lumens), Angle<T>.FromRadians(T.One));
+        new(LuminousIntensity<T>.FromCandelas(lumens), SolidAngle<T>.FromSteradians(T.One));
 }

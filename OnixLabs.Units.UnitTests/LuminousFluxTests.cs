@@ -21,26 +21,26 @@ namespace OnixLabs.Units.UnitTests;
 public sealed class LuminousFluxTests
 {
     private static LuminousFlux<Float128> Lumens(Float128 lm) =>
-        new(LuminousIntensity<Float128>.FromCandelas(lm), Angle<Float128>.FromRadians((Float128)1));
+        new(LuminousIntensity<Float128>.FromCandelas(lm), SolidAngle<Float128>.FromSteradians((Float128)1));
 
     [Fact(DisplayName = "LuminousFlux should preserve components")]
     public void LuminousFluxShouldPreserveComponents()
     {
         LuminousIntensity<Float128> intensity = LuminousIntensity<Float128>.FromCandelas((Float128)5);
-        Angle<Float128> angle = Angle<Float128>.FromRadians((Float128)2);
-        LuminousFlux<Float128> phi = new(intensity, angle);
+        SolidAngle<Float128> solidAngle = SolidAngle<Float128>.FromSteradians((Float128)2);
+        LuminousFlux<Float128> phi = new(intensity, solidAngle);
         Assert.Equal(intensity, phi.Left);
-        Assert.Equal(angle, phi.Right);
+        Assert.Equal(solidAngle, phi.Right);
     }
 
     [Fact(DisplayName = "LuminousFlux.Zero magnitude is zero")]
     public void LuminousFluxZeroIsZero() => Assert.Equal(Float128.Zero, LuminousFlux<Float128>.Zero.Magnitude);
 
-    [Fact(DisplayName = "LuminousFlux magnitude lands at lumens (cd·rad)")]
+    [Fact(DisplayName = "LuminousFlux magnitude lands at lumens (cd·sr)")]
     public void LuminousFluxMagnitudeIsReadable()
     {
-        // 5 cd × 2 rad = 10 lm
-        LuminousFlux<Float128> phi = new(LuminousIntensity<Float128>.FromCandelas((Float128)5), Angle<Float128>.FromRadians((Float128)2));
+        // 5 cd × 2 sr = 10 lm
+        LuminousFlux<Float128> phi = new(LuminousIntensity<Float128>.FromCandelas((Float128)5), SolidAngle<Float128>.FromSteradians((Float128)2));
         Assert.Equal((Float128)10, phi.Magnitude);
     }
 
@@ -61,9 +61,9 @@ public sealed class LuminousFluxTests
     [Fact(DisplayName = "LuminousFlux equality is by magnitude")]
     public void LuminousFluxEqualityIsByMagnitude()
     {
-        // 2 cd × 5 rad = 10 == 5 cd × 2 rad = 10
-        LuminousFlux<Float128> left = new(LuminousIntensity<Float128>.FromCandelas((Float128)2), Angle<Float128>.FromRadians((Float128)5));
-        LuminousFlux<Float128> right = new(LuminousIntensity<Float128>.FromCandelas((Float128)5), Angle<Float128>.FromRadians((Float128)2));
+        // 2 cd × 5 sr = 10 == 5 cd × 2 sr = 10
+        LuminousFlux<Float128> left = new(LuminousIntensity<Float128>.FromCandelas((Float128)2), SolidAngle<Float128>.FromSteradians((Float128)5));
+        LuminousFlux<Float128> right = new(LuminousIntensity<Float128>.FromCandelas((Float128)5), SolidAngle<Float128>.FromSteradians((Float128)2));
         Assert.True(left.Equals(right));
         Assert.Equal(left.GetHashCode(), right.GetHashCode());
     }
@@ -79,9 +79,9 @@ public sealed class LuminousFluxTests
 
     [Fact(DisplayName = "LuminousFlux.ToString basic")]
     public void LuminousFluxToStringBasic() =>
-        Assert.Equal("50.000 cd*rad", Lumens((Float128)50).ToString("cd*rad:3", CultureInfo.InvariantCulture));
+        Assert.Equal("50.000 cd*sr", Lumens((Float128)50).ToString("cd*sr:3", CultureInfo.InvariantCulture));
 
     [Fact(DisplayName = "LuminousFlux.ToString throws on no separator")]
     public void LuminousFluxToStringThrowsOnNoSeparator() =>
-        Assert.Throws<FormatException>(() => Lumens((Float128)5).ToString("cdrad", CultureInfo.InvariantCulture));
+        Assert.Throws<FormatException>(() => Lumens((Float128)5).ToString("cdsr", CultureInfo.InvariantCulture));
 }

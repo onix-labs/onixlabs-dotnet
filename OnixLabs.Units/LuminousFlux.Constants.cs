@@ -18,11 +18,11 @@ public readonly partial struct LuminousFlux<T>
 {
     /// <inheritdoc/>
     /// <remarks>
-    /// As a product composite the magnitude is <c>LuminousIntensity × Angle</c>; zero on either side produces a
-    /// genuine zero. A non-zero angle (1 rad) is used here for safety/symmetry with quotient composites, though
+    /// As a product composite the magnitude is <c>LuminousIntensity × SolidAngle</c>; zero on either side produces a
+    /// genuine zero. A non-zero solid angle (1 sr) is used here for safety/symmetry with quotient composites, though
     /// products tolerate both-zero.
     /// </remarks>
-    public static LuminousFlux<T> Zero => new(LuminousIntensity<T>.Zero, Angle<T>.FromRadians(T.One));
+    public static LuminousFlux<T> Zero => new(LuminousIntensity<T>.Zero, SolidAngle<T>.FromSteradians(T.One));
 
-    private const string DefaultFormat = "cd*rad";
+    private const string DefaultFormat = "cd*sr";
 }

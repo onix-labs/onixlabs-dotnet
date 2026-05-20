@@ -16,16 +16,17 @@ namespace OnixLabs.Units;
 
 public readonly partial struct LuminousFlux<T>
 {
-    // Result decomposition: `LuminousIntensity.FromCandelas(sum)` × `Angle.FromRadians(1)`. With Right.Radians = 1,
-    // the magnitude formula `Left.Candelas * Right.Radians` reduces to `sum * 1 = sum`, so the round-trip identity
-    // `new(...).Magnitude == sum` holds bit-exactly. ToString then reads `LuminousIntensity.ValueOf("cd") = sum` and
-    // `Angle.ValueOf("rad") = 1`, giving the human-readable "sum cd*rad" rendering (i.e. value in lumens).
+    // Result decomposition: `LuminousIntensity.FromCandelas(sum)` × `SolidAngle.FromSteradians(1)`. With
+    // Right.Steradians = 1, the magnitude formula `Left.Candelas * Right.Steradians` reduces to `sum * 1 = sum`,
+    // so the round-trip identity `new(...).Magnitude == sum` holds bit-exactly. ToString then reads
+    // `LuminousIntensity.ValueOf("cd") = sum` and `SolidAngle.ValueOf("sr") = 1`, giving the human-readable
+    // "sum cd*sr" rendering (i.e. value in lumens).
 
     /// <inheritdoc/>
     public static LuminousFlux<T> Add(LuminousFlux<T> left, LuminousFlux<T> right) =>
-        new(LuminousIntensity<T>.FromCandelas(left.Magnitude + right.Magnitude), Angle<T>.FromRadians(T.One));
+        new(LuminousIntensity<T>.FromCandelas(left.Magnitude + right.Magnitude), SolidAngle<T>.FromSteradians(T.One));
 
     /// <inheritdoc/>
     public static LuminousFlux<T> Subtract(LuminousFlux<T> left, LuminousFlux<T> right) =>
-        new(LuminousIntensity<T>.FromCandelas(left.Magnitude - right.Magnitude), Angle<T>.FromRadians(T.One));
+        new(LuminousIntensity<T>.FromCandelas(left.Magnitude - right.Magnitude), SolidAngle<T>.FromSteradians(T.One));
 }

@@ -26,7 +26,7 @@ public readonly partial struct LuminousFlux<T>
     public string ToString(string? format, IFormatProvider? formatProvider) =>
         ToString(format.AsSpan(), formatProvider);
 
-    /// <summary>Formats using <c>&lt;luminous-intensity&gt;*&lt;angle&gt;[:scale]</c> (e.g. <c>cd*rad:3</c> for lumens).</summary>
+    /// <summary>Formats using <c>&lt;luminous-intensity&gt;*&lt;solidAngle&gt;[:scale]</c> (e.g. <c>cd*sr:3</c> for lumens).</summary>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         if (format.IsEmpty) format = DefaultFormat.AsSpan();
@@ -47,21 +47,21 @@ public readonly partial struct LuminousFlux<T>
                 throw new FormatException("LuminousFlux format scale must contain only decimal digits.");
         }
 
-        // LuminousIntensity-spec has no '*'; angle-spec has no '*'. Single '*' separates the two.
+        // LuminousIntensity-spec has no '*'; solid-angle-spec has no '*'. Single '*' separates the two.
         int starIndex = unitPart.IndexOf('*');
         if (starIndex < 0)
             throw new FormatException($"LuminousFlux format must contain '*' (e.g. '{DefaultFormat}').");
 
         ReadOnlySpan<char> luminousIntensitySpecifier = unitPart[..starIndex];
-        ReadOnlySpan<char> angleSpecifier = unitPart[(starIndex + 1)..];
+        ReadOnlySpan<char> solidAngleSpecifier = unitPart[(starIndex + 1)..];
 
-        if (luminousIntensitySpecifier.IsEmpty || angleSpecifier.IsEmpty)
-            throw new FormatException("LuminousFlux format luminous-intensity and angle specifiers must be non-empty.");
+        if (luminousIntensitySpecifier.IsEmpty || solidAngleSpecifier.IsEmpty)
+            throw new FormatException("LuminousFlux format luminous-intensity and solid-angle specifiers must be non-empty.");
 
-        T value = Left.ValueOf(luminousIntensitySpecifier) * Right.ValueOf(angleSpecifier);
+        T value = Left.ValueOf(luminousIntensitySpecifier) * Right.ValueOf(solidAngleSpecifier);
         T rounded = scale > 0 ? T.Round(value, scale) : value;
 
         return $"{rounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} "
-               + $"{new string(luminousIntensitySpecifier)}*{new string(angleSpecifier)}";
+               + $"{new string(luminousIntensitySpecifier)}*{new string(solidAngleSpecifier)}";
     }
 }

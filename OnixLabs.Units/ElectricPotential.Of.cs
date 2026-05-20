@@ -30,6 +30,10 @@ public readonly partial struct ElectricPotential<T>
     /// <returns>Returns the electric-potential value expressed as <c>energy / charge</c> in the requested units.</returns>
     public T ValueOf(ReadOnlySpan<char> specifier)
     {
+        // Named-unit alias (V, kV, mV, MV, ...).
+        if (NamedUnitAlias.TryMatch<T>(specifier, NamedSymbol, out T aliasMultiplier, out _))
+            return Magnitude * aliasMultiplier;
+
         // The energy-spec itself contains '/' (via its inner acceleration spec, e.g. "kg*m/s²*m"), while the
         // charge-spec contains no '/' (only '*'). Split on the LAST '/' — everything before is the energy-spec,
         // everything after is the charge-spec.

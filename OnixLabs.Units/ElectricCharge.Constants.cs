@@ -24,5 +24,8 @@ public readonly partial struct ElectricCharge<T>
     /// </remarks>
     public static ElectricCharge<T> Zero => new(Current<T>.Zero, Time<T>.FromSeconds(T.One));
 
-    private const string DefaultFormat = "A*s";
+    /// <summary>The SI named-unit symbol: <c>C</c> (coulomb). Accepts SI prefixes via <see cref="NamedUnitAlias"/>.</summary>
+    private const string NamedSymbol = "C";
+
+    private const string DefaultFormat = NamedSymbol;
 }

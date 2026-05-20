@@ -29,6 +29,10 @@ public readonly partial struct LuminousFlux<T>
     /// <returns>Returns the luminous-flux value expressed as <c>intensity * solidAngle</c> in the requested units.</returns>
     public T ValueOf(ReadOnlySpan<char> specifier)
     {
+        // Named-unit alias (lm, klm, Mlm, mlm, ...).
+        if (NamedUnitAlias.TryMatch<T>(specifier, NamedSymbol, out T aliasMultiplier, out _))
+            return Magnitude * aliasMultiplier;
+
         // Both intensity-spec and solid-angle-spec have no '*', so the single '*' cleanly separates the two.
         int starIndex = specifier.IndexOf('*');
         if (starIndex < 0)

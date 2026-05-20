@@ -49,10 +49,18 @@ public readonly partial struct Power<T>
                 throw new FormatException("Power format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (W, kW, mW, MW, GW, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // Energy-spec contains '/' (via its inner acceleration), time-spec does not. Split on last '/'.
         int lastSlash = unitPart.LastIndexOf('/');
         if (lastSlash < 0)
-            throw new FormatException($"Power format must contain a '/' separator between energy and time (e.g. '{DefaultFormat}').");
+            throw new FormatException($"Power format must contain a '/' separator between energy and time (e.g. 'kg*m/s²*m/s').");
 
         ReadOnlySpan<char> energySpecifier = unitPart[..lastSlash];
         ReadOnlySpan<char> timeSpecifier = unitPart[(lastSlash + 1)..];

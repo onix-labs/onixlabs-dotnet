@@ -30,6 +30,10 @@ public readonly partial struct Force<T>
     /// <returns>Returns the force value expressed as <c>mass * acceleration</c> in the requested units.</returns>
     public T ValueOf(ReadOnlySpan<char> specifier)
     {
+        // Named-unit alias (N, kN, mN, ...) — checked before compound parsing because aliased forms don't contain '*'.
+        if (NamedUnitAlias.TryMatch<T>(specifier, NamedSymbol, out T aliasMultiplier, out _))
+            return Magnitude * aliasMultiplier;
+
         // Mass specifiers in this library don't contain '*', so splitting on the FIRST '*' separates the mass-spec
         // (no '*') from the acceleration-spec (may contain '/' for compound or '²' for squared forms — both fine).
         int starIndex = specifier.IndexOf('*');

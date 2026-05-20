@@ -20,5 +20,8 @@ public readonly partial struct Power<T>
     /// <remarks>Non-zero denominator (1 s) avoids 0/0 = NaN; numerator zero gives a genuine zero magnitude.</remarks>
     public static Power<T> Zero => new(Energy<T>.Zero, Time<T>.FromSeconds(T.One));
 
-    private const string DefaultFormat = "kg*m/s²*m/s";
+    /// <summary>The SI named-unit symbol: <c>W</c> (watt). Accepts SI prefixes via <see cref="NamedUnitAlias"/>.</summary>
+    private const string NamedSymbol = "W";
+
+    private const string DefaultFormat = NamedSymbol;
 }

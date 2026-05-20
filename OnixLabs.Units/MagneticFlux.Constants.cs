@@ -24,5 +24,8 @@ public readonly partial struct MagneticFlux<T>
     /// </remarks>
     public static MagneticFlux<T> Zero => new(ElectricPotential<T>.Zero, Time<T>.FromSeconds(T.One));
 
-    private const string DefaultFormat = "kg*m/s²*m/A*s*s";
+    /// <summary>The SI named-unit symbol: <c>Wb</c> (weber). Accepts SI prefixes via <see cref="NamedUnitAlias"/>.</summary>
+    private const string NamedSymbol = "Wb";
+
+    private const string DefaultFormat = NamedSymbol;
 }

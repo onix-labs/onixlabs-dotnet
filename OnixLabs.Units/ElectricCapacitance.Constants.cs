@@ -24,5 +24,8 @@ public readonly partial struct ElectricCapacitance<T>
     public static ElectricCapacitance<T> Zero =>
         new(ElectricCharge<T>.Zero, ElectricResistance<T>.VoltsPotential(T.One));
 
-    private const string DefaultFormat = "A*s/kg*m/s²*m/A*s";
+    /// <summary>The SI named-unit symbol: <c>F</c> (farad). Accepts SI prefixes via <see cref="NamedUnitAlias"/>, so <c>pF</c>/<c>nF</c>/<c>μF</c>/<c>mF</c>/etc. all work.</summary>
+    private const string NamedSymbol = "F";
+
+    private const string DefaultFormat = NamedSymbol;
 }

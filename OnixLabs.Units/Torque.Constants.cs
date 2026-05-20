@@ -24,5 +24,7 @@ public readonly partial struct Torque<T>
     /// </remarks>
     public static Torque<T> Zero => new(Force<T>.Zero, Distance<T>.Zero);
 
-    private const string DefaultFormat = "kg*m/s²*m";
+    // Defaults to "N*m" rather than the energy alias "J" — torque and energy share the same SI dimension but are
+    // conventionally distinguished in display.
+    private const string DefaultFormat = "N*m";
 }

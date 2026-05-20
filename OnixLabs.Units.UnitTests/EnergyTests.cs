@@ -408,8 +408,8 @@ public sealed class EnergyTests
         Assert.Equal("9 kg*m/s²*m", energy.ToString("kg*m/s²*m:0", CultureInfo.InvariantCulture));
     }
 
-    [Fact(DisplayName = "Energy default ToString should use kg*m/s²*m")]
-    public void EnergyDefaultToStringShouldUseJouleDimensionalForm()
+    [Fact(DisplayName = "Energy default ToString should use the J alias")]
+    public void EnergyDefaultToStringShouldUseJouleAlias()
     {
         // Given
         Energy<Float128> energy = Joules((Float128)9);
@@ -418,8 +418,24 @@ public sealed class EnergyTests
         string result = energy.ToString();
 
         // Then
-        Assert.EndsWith(" kg*m/s²*m", result);
+        Assert.EndsWith(" J", result);
     }
+
+    [Fact(DisplayName = "Energy.ToString J alias should produce '9.000 J'")]
+    public void EnergyToStringJouleAliasShouldProduceExpected() =>
+        Assert.Equal("9.000 J", Joules((Float128)9).ToString("J:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Energy.ToString kJ alias should produce '0.009 kJ'")]
+    public void EnergyToStringKilojouleAliasShouldProduceExpected() =>
+        Assert.Equal("0.009 kJ", Joules((Float128)9).ToString("kJ:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Energy.ToString MJ alias should produce '0.000009 MJ'")]
+    public void EnergyToStringMegajouleAliasShouldProduceExpected() =>
+        Assert.Equal("0.000009 MJ", Joules((Float128)9).ToString("MJ:6", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Energy compound 'N*m' cascades through Force N alias")]
+    public void EnergyCompoundNewtonMetreCascadesThroughForceAlias() =>
+        Assert.Equal("9.000 N*m", Joules((Float128)9).ToString("N*m:3", CultureInfo.InvariantCulture));
 
     [Fact(DisplayName = "Energy.ToString should honor custom culture separators")]
     public void EnergyToStringShouldHonorCustomCulture()

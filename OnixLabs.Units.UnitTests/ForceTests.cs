@@ -400,8 +400,8 @@ public sealed class ForceTests
         Assert.Equal("9 kg*m/s²", force.ToString("kg*m/s²:0", CultureInfo.InvariantCulture));
     }
 
-    [Fact(DisplayName = "Force default ToString should use kg*m/s²")]
-    public void ForceDefaultToStringShouldUseKilogramsMetersPerSecondSquared()
+    [Fact(DisplayName = "Force default ToString should use the N alias")]
+    public void ForceDefaultToStringShouldUseNewtonAlias()
     {
         // Given
         Force<Float128> force = Newtons((Float128)9);
@@ -410,8 +410,28 @@ public sealed class ForceTests
         string result = force.ToString();
 
         // Then
-        Assert.EndsWith(" kg*m/s²", result);
+        Assert.EndsWith(" N", result);
     }
+
+    [Fact(DisplayName = "Force.ToString N alias should produce '9.000 N'")]
+    public void ForceToStringNAliasShouldProduceExpected() =>
+        Assert.Equal("9.000 N", Newtons((Float128)9).ToString("N:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Force.ToString kN alias should produce '0.009 kN'")]
+    public void ForceToStringKilonewtonAliasShouldProduceExpected() =>
+        Assert.Equal("0.009 kN", Newtons((Float128)9).ToString("kN:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Force.ToString mN alias should produce '9,000.000 mN'")]
+    public void ForceToStringMillinewtonAliasShouldProduceExpected() =>
+        Assert.Equal("9,000.000 mN", Newtons((Float128)9).ToString("mN:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Force.ToString uN alias renders µN symbol")]
+    public void ForceToStringMicronewtonAliasRendersMuSymbol() =>
+        Assert.Equal("9,000,000.000 µN", Newtons((Float128)9).ToString("uN:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Force.ToString MN alias should produce '0.000009 MN'")]
+    public void ForceToStringMeganewtonAliasShouldProduceExpected() =>
+        Assert.Equal("0.000009 MN", Newtons((Float128)9).ToString("MN:6", CultureInfo.InvariantCulture));
 
     [Fact(DisplayName = "Force.ToString should honor custom culture separators")]
     public void ForceToStringShouldHonorCustomCulture()

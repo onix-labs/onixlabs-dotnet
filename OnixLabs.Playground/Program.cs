@@ -771,8 +771,13 @@ internal static class Program
         Sub("Construction (1 F)");
         Row("Magnitude",    c.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'F' with prefixes)");
         Row("default",      c.ToString());
+        Row("\"F:3\"",      c.ToString("F:3", Inv));
+        Row("\"mF:3\"",     c.ToString("mF:3", Inv));
+        Row("\"uF:3\"",     c.ToString("uF:3", Inv));   // µF rendering
+        Row("\"nF:3\"",     c.ToString("nF:3", Inv));
+        Row("\"pF:3\"",     c.ToString("pF:3", Inv));
 
         Sub("Arithmetic");
         ElectricCapacitance<Float128> a = new(q, v);
@@ -798,10 +803,12 @@ internal static class Program
         Sub("Construction (2 A x 5 s = 10 C)");
         Row("Magnitude (C)",    q.Magnitude);
 
-        Sub("Format");
-        Row("default \"A*s\"",  q.ToString());
-        Row("\"A*s:3\"",        q.ToString("A*s:3", Inv));
-        Row("\"mA*s:3\"",       q.ToString("mA*s:3", Inv));
+        Sub("Format (named SI alias 'C' with prefixes)");
+        Row("default",          q.ToString());
+        Row("\"C:3\"",          q.ToString("C:3", Inv));
+        Row("\"mC:3\"",         q.ToString("mC:3", Inv));
+        Row("\"kC:6\"",         q.ToString("kC:6", Inv));
+        Row("\"A*s:3\"",        q.ToString("A*s:3", Inv));   // compound still works
         Row("\"A*h:6\"",        q.ToString("A*h:6", Inv));
 
         Sub("Arithmetic");
@@ -833,8 +840,12 @@ internal static class Program
         Sub("Construction (1 V)");
         Row("Magnitude",    v.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'V' with prefixes)");
         Row("default",      v.ToString());
+        Row("\"V:3\"",      v.ToString("V:3", Inv));
+        Row("\"mV:3\"",     v.ToString("mV:3", Inv));
+        Row("\"kV:3\"",     v.ToString("kV:3", Inv));
+        Row("\"MV:9\"",     v.ToString("MV:9", Inv));
 
         Sub("Arithmetic");
         ElectricPotential<Float128> a = new(oneJoule, oneCoulomb);
@@ -866,8 +877,15 @@ internal static class Program
         Sub("Construction (1 Ohm)");
         Row("Magnitude",    r.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'Ω' with prefixes; ASCII 'Ohm' also accepted on input)");
         Row("default",      r.ToString());
+        Row("\"Ω:3\"",      r.ToString("Ω:3", Inv));
+        Row("\"mΩ:3\"",     r.ToString("mΩ:3", Inv));
+        Row("\"kΩ:6\"",     r.ToString("kΩ:6", Inv));
+        Row("\"MΩ:9\"",     r.ToString("MΩ:9", Inv));
+        Row("\"Ohm:3\"   (ASCII)",  r.ToString("Ohm:3", Inv));
+        Row("\"kOhm:6\"  (ASCII)",  r.ToString("kOhm:6", Inv));
+        Row("\"MOhm:9\"  (ASCII)",  r.ToString("MOhm:9", Inv));
 
         Sub("Arithmetic");
         ElectricResistance<Float128> a = new(oneVolt, Current<Float128>.FromAmperes(F(1)));
@@ -895,8 +913,12 @@ internal static class Program
         Sub("Construction (1 N x 10 m = 10 J)");
         Row("Magnitude (J)",    e.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'J' with prefixes)");
         Row("default",              e.ToString());
+        Row("\"J:3\"",              e.ToString("J:3", Inv));
+        Row("\"kJ:3\"",             e.ToString("kJ:3", Inv));
+        Row("\"MJ:9\"",             e.ToString("MJ:9", Inv));
+        Row("\"N*m:3\"  (cascade)", e.ToString("N*m:3", Inv));   // cascade via Force alias
         Row("\"kg*m/s²*m:4\"",      e.ToString("kg*m/s²*m:4", Inv));
 
         Sub("Arithmetic");
@@ -923,8 +945,13 @@ internal static class Program
         Sub("Construction (5 kg x 1 m/s² = 5 N)");
         Row("Magnitude (N)",    f.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'N' with prefixes)");
         Row("default",          f.ToString());
+        Row("\"N:3\"",          f.ToString("N:3", Inv));
+        Row("\"kN:3\"",         f.ToString("kN:3", Inv));
+        Row("\"mN:3\"",         f.ToString("mN:3", Inv));
+        Row("\"uN:3\"",         f.ToString("uN:3", Inv));   // renders µN
+        Row("\"MN:9\"",         f.ToString("MN:9", Inv));
         Row("\"kg*m/s²:3\"",    f.ToString("kg*m/s²:3", Inv));
 
         Sub("Arithmetic");
@@ -953,8 +980,10 @@ internal static class Program
         Sub("Construction (1 J/K)");
         Row("Magnitude (J/K)",  hc.Magnitude);
 
-        Sub("Format");
+        Sub("Format (compound default cascades through Energy 'J' alias)");
         Row("default",          hc.ToString());
+        Row("\"J/K:3\"",        hc.ToString("J/K:3", Inv));
+        Row("\"kJ/K:6\"",       hc.ToString("kJ/K:6", Inv));
 
         Sub("Arithmetic");
         HeatCapacity<Float128> a = new(oneJoule, Temperature<Float128>.FromKelvin(F(2)));
@@ -976,11 +1005,14 @@ internal static class Program
 
         Illuminance<Float128> lx = new(oneLumen, Area<Float128>.FromSquareMeters(F(1)));
 
-        Sub("Construction (1 lm / 1 m² ~ 1 lx)");
+        Sub("Construction (1 lm / 1 m² = 1 lx)");
         Row("Magnitude",    lx.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'lx' with prefixes)");
         Row("default",      lx.ToString());
+        Row("\"lx:3\"",     lx.ToString("lx:3", Inv));
+        Row("\"klx:3\"",    lx.ToString("klx:3", Inv));
+        Row("\"mlx:3\"",    lx.ToString("mlx:3", Inv));
 
         Sub("Arithmetic");
         Illuminance<Float128> a = new(oneLumen, Area<Float128>.FromSquareMeters(F(2)));
@@ -1007,8 +1039,10 @@ internal static class Program
         Sub("Construction (10 N x 3 s = 30 N*s)");
         Row("Magnitude (N*s)",  j.Magnitude);
 
-        Sub("Format");
+        Sub("Format (compound default cascades through Force 'N' alias)");
         Row("default",          j.ToString());
+        Row("\"N*s:3\"",        j.ToString("N*s:3", Inv));
+        Row("\"kN*s:6\"",       j.ToString("kN*s:6", Inv));
 
         Sub("Arithmetic");
         Impulse<Float128> a = new(tenN, Time<Float128>.FromSeconds(F(1)));
@@ -1031,8 +1065,11 @@ internal static class Program
         Sub("Construction (100 cd over 1 sr = 100 lm)");
         Row("Magnitude (lm)",   lm.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'lm' with prefixes)");
         Row("default",          lm.ToString());
+        Row("\"lm:3\"",         lm.ToString("lm:3", Inv));
+        Row("\"klm:3\"",        lm.ToString("klm:3", Inv));
+        Row("\"mlm:3\"",        lm.ToString("mlm:3", Inv));
         Row("\"cd*sr:3\"",      lm.ToString("cd*sr:3", Inv));
 
         Sub("Arithmetic");
@@ -1099,8 +1136,11 @@ internal static class Program
         Sub("Construction (1 V x 1 s = 1 Wb)");
         Row("Magnitude (Wb)",   wb.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'Wb' with prefixes)");
         Row("default",          wb.ToString());
+        Row("\"Wb:3\"",         wb.ToString("Wb:3", Inv));
+        Row("\"mWb:3\"",        wb.ToString("mWb:3", Inv));
+        Row("\"uWb:3\"",        wb.ToString("uWb:3", Inv));   // µWb rendering
 
         Sub("Arithmetic");
         MagneticFlux<Float128> a = new(oneVolt, Time<Float128>.FromSeconds(F(2)));
@@ -1233,8 +1273,12 @@ internal static class Program
         Sub("Construction (100 J / 10 s = 10 W)");
         Row("Magnitude (W)",    w.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'W' with prefixes)");
         Row("default",          w.ToString());
+        Row("\"W:3\"",          w.ToString("W:3", Inv));
+        Row("\"kW:3\"",         w.ToString("kW:3", Inv));
+        Row("\"MW:9\"",         w.ToString("MW:9", Inv));
+        Row("\"mW:3\"",         w.ToString("mW:3", Inv));
 
         Sub("Arithmetic");
         Power<Float128> a = new(hundredJoules, Time<Float128>.FromSeconds(F(50)));
@@ -1261,8 +1305,12 @@ internal static class Program
         Sub("Construction (1 N / 1 m² = 1 Pa)");
         Row("Magnitude (Pa)",   pa.Magnitude);
 
-        Sub("Format");
+        Sub("Format (named SI alias 'Pa' with prefixes)");
         Row("default",          pa.ToString());
+        Row("\"Pa:3\"",         pa.ToString("Pa:3", Inv));
+        Row("\"hPa:3\"",        pa.ToString("hPa:3", Inv));      // weather convention
+        Row("\"kPa:3\"",        pa.ToString("kPa:3", Inv));
+        Row("\"MPa:9\"",        pa.ToString("MPa:9", Inv));
 
         Sub("Arithmetic");
         Pressure<Float128> a = new(oneN, Area<Float128>.FromSquareMeters(F(2)));
@@ -1318,8 +1366,10 @@ internal static class Program
         Sub("Construction (10 N x 0.5 m = 5 N*m)");
         Row("Magnitude (N*m)",  tau.Magnitude);
 
-        Sub("Format");
+        Sub("Format (compound default cascades through Force 'N' alias; intentionally not 'J' for torque)");
         Row("default",          tau.ToString());
+        Row("\"N*m:3\"",        tau.ToString("N*m:3", Inv));
+        Row("\"kN*m:6\"",       tau.ToString("kN*m:6", Inv));
 
         Sub("Arithmetic");
         Torque<Float128> a = new(tenN, Distance<Float128>.FromMeters(F(1)));

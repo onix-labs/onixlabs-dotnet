@@ -91,4 +91,12 @@ public sealed class ImpulseTests
     [Fact(DisplayName = "Impulse.ToString throws on no separator")]
     public void ImpulseToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => NewtonSeconds((Float128)5).ToString("kgms2s", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Impulse default ToString should use 'N*s' cascading through Force alias")]
+    public void ImpulseDefaultToStringShouldUseNewtonSecondCascade() =>
+        Assert.EndsWith(" N*s", NewtonSeconds((Float128)50).ToString());
+
+    [Fact(DisplayName = "Impulse.ToString 'N*s' compound (cascade through Force alias) should produce '50.000 N*s'")]
+    public void ImpulseToStringNewtonSecondCascadeShouldProduceExpected() =>
+        Assert.Equal("50.000 N*s", NewtonSeconds((Float128)50).ToString("N*s:3", CultureInfo.InvariantCulture));
 }

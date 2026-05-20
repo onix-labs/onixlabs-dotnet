@@ -20,5 +20,14 @@ public readonly partial struct ElectricResistance<T>
     /// <remarks>Non-zero denominator (1 A) avoids 0/0 = NaN; numerator zero gives a genuine zero magnitude.</remarks>
     public static ElectricResistance<T> Zero => new(ElectricPotential<T>.Zero, Current<T>.FromAmperes(T.One));
 
-    private const string DefaultFormat = "kg*m/s²*m/A*s/A";
+    /// <summary>The SI named-unit symbol: <c>Ω</c> (ohm). Accepts SI prefixes via <see cref="NamedUnitAlias"/>, so <c>mΩ</c>/<c>kΩ</c>/<c>MΩ</c>/etc. all work.</summary>
+    private const string NamedSymbol = "Ω";
+
+    /// <summary>
+    /// Keyboard-friendly ASCII alias accepted on input only: <c>Ohm</c>. So <c>ToString("Ohm:3")</c>, <c>"kOhm:3"</c>,
+    /// <c>"mOhm:3"</c>, etc. all parse and render with the canonical <c>Ω</c> symbol.
+    /// </summary>
+    private const string NamedSymbolAscii = "Ohm";
+
+    private const string DefaultFormat = NamedSymbol;
 }

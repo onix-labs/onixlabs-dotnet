@@ -57,11 +57,19 @@ public readonly partial struct Energy<T>
                 throw new FormatException("Energy format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (J, kJ, MJ, mJ, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // The force-spec itself contains '*' (e.g. "kg*m/s²"), so we split on the LAST '*' — everything before is the
         // force-spec, everything after is the outer distance-spec.
         int lastStar = unitPart.LastIndexOf('*');
         if (lastStar < 0)
-            throw new FormatException($"Energy format must contain a '*' separator between the force and distance specifiers (e.g. '{DefaultFormat}').");
+            throw new FormatException($"Energy format must contain a '*' separator between the force and distance specifiers (e.g. 'kg*m/s²*m').");
 
         ReadOnlySpan<char> forceSpecifier = unitPart[..lastStar];
         ReadOnlySpan<char> distanceSpecifier = unitPart[(lastStar + 1)..];

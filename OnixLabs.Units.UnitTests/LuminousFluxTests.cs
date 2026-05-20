@@ -84,4 +84,16 @@ public sealed class LuminousFluxTests
     [Fact(DisplayName = "LuminousFlux.ToString throws on no separator")]
     public void LuminousFluxToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => Lumens((Float128)5).ToString("cdsr", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "LuminousFlux default ToString should use the lm alias")]
+    public void LuminousFluxDefaultToStringShouldUseLumenAlias() =>
+        Assert.EndsWith(" lm", Lumens((Float128)50).ToString());
+
+    [Fact(DisplayName = "LuminousFlux.ToString lm alias should produce '50.000 lm'")]
+    public void LuminousFluxToStringLumenAliasShouldProduceExpected() =>
+        Assert.Equal("50.000 lm", Lumens((Float128)50).ToString("lm:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "LuminousFlux.ToString klm alias should produce '0.050 klm'")]
+    public void LuminousFluxToStringKilolumenAliasShouldProduceExpected() =>
+        Assert.Equal("0.050 klm", Lumens((Float128)50).ToString("klm:3", CultureInfo.InvariantCulture));
 }

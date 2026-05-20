@@ -49,10 +49,18 @@ public readonly partial struct Illuminance<T>
                 throw new FormatException("Illuminance format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (lx, klx, Mlx, mlx, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // Luminous-flux-spec contains '*' but no '/'; area-spec is a bare scale token. Single '/' separates the two.
         int slashIndex = unitPart.IndexOf('/');
         if (slashIndex < 0)
-            throw new FormatException($"Illuminance format must contain a '/' separator between luminous-flux and area (e.g. '{DefaultFormat}').");
+            throw new FormatException($"Illuminance format must contain a '/' separator between luminous-flux and area (e.g. 'cd*sr/sqm').");
 
         ReadOnlySpan<char> luminousFluxSpecifier = unitPart[..slashIndex];
         ReadOnlySpan<char> areaSpecifier = unitPart[(slashIndex + 1)..];

@@ -101,4 +101,36 @@ public sealed class ElectricResistanceTests
     [Fact(DisplayName = "ElectricResistance.ToString should throw on no separator")]
     public void ElectricResistanceToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => Ohms((Float128)5).ToString("nosep", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricResistance default ToString should use the Ω alias")]
+    public void ElectricResistanceDefaultToStringShouldUseOhmAlias() =>
+        Assert.EndsWith(" Ω", Ohms((Float128)5).ToString());
+
+    [Fact(DisplayName = "ElectricResistance.ToString Ω alias should produce '5.000 Ω'")]
+    public void ElectricResistanceToStringOhmAliasShouldProduceExpected() =>
+        Assert.Equal("5.000 Ω", Ohms((Float128)5).ToString("Ω:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricResistance.ToString kΩ alias should produce '0.005 kΩ'")]
+    public void ElectricResistanceToStringKilohmAliasShouldProduceExpected() =>
+        Assert.Equal("0.005 kΩ", Ohms((Float128)5).ToString("kΩ:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricResistance.ToString MΩ alias should produce '0.000005 MΩ'")]
+    public void ElectricResistanceToStringMegohmAliasShouldProduceExpected() =>
+        Assert.Equal("0.000005 MΩ", Ohms((Float128)5).ToString("MΩ:6", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricResistance.ToString 'Ohm' ASCII alias renders canonical Ω")]
+    public void ElectricResistanceToStringOhmAsciiAliasShouldProduceExpected() =>
+        Assert.Equal("5.000 Ω", Ohms((Float128)5).ToString("Ohm:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricResistance.ToString 'kOhm' ASCII alias renders canonical kΩ")]
+    public void ElectricResistanceToStringKilohmAsciiAliasShouldProduceExpected() =>
+        Assert.Equal("0.005 kΩ", Ohms((Float128)5).ToString("kOhm:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricResistance.ToString 'mOhm' ASCII alias renders canonical mΩ")]
+    public void ElectricResistanceToStringMilliohmAsciiAliasShouldProduceExpected() =>
+        Assert.Equal("5,000.000 mΩ", Ohms((Float128)5).ToString("mOhm:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricResistance.ToString 'MOhm' ASCII alias renders canonical MΩ")]
+    public void ElectricResistanceToStringMegohmAsciiAliasShouldProduceExpected() =>
+        Assert.Equal("0.000005 MΩ", Ohms((Float128)5).ToString("MOhm:6", CultureInfo.InvariantCulture));
 }

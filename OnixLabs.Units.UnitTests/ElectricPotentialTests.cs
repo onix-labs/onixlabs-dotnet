@@ -98,4 +98,20 @@ public sealed class ElectricPotentialTests
     [Fact(DisplayName = "ElectricPotential.ToString should throw on no separator")]
     public void ElectricPotentialToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => Volts((Float128)5).ToString("nosep", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricPotential default ToString should use the V alias")]
+    public void ElectricPotentialDefaultToStringShouldUseVoltAlias() =>
+        Assert.EndsWith(" V", Volts((Float128)5).ToString());
+
+    [Fact(DisplayName = "ElectricPotential.ToString V alias should produce '5.000 V'")]
+    public void ElectricPotentialToStringVoltAliasShouldProduceExpected() =>
+        Assert.Equal("5.000 V", Volts((Float128)5).ToString("V:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricPotential.ToString mV alias should produce '5,000.000 mV'")]
+    public void ElectricPotentialToStringMillivoltAliasShouldProduceExpected() =>
+        Assert.Equal("5,000.000 mV", Volts((Float128)5).ToString("mV:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricPotential.ToString kV alias should produce '0.005 kV'")]
+    public void ElectricPotentialToStringKilovoltAliasShouldProduceExpected() =>
+        Assert.Equal("0.005 kV", Volts((Float128)5).ToString("kV:3", CultureInfo.InvariantCulture));
 }

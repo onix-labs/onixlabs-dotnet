@@ -29,6 +29,10 @@ public readonly partial struct ElectricCharge<T>
     /// <returns>Returns the electric-charge value expressed as <c>current * time</c> in the requested units.</returns>
     public T ValueOf(ReadOnlySpan<char> specifier)
     {
+        // Named-unit alias (C, mC, μC, kC, ...).
+        if (NamedUnitAlias.TryMatch<T>(specifier, NamedSymbol, out T aliasMultiplier, out _))
+            return Magnitude * aliasMultiplier;
+
         // Both current-spec and time-spec have no '*', so the single '*' cleanly separates the two.
         int starIndex = specifier.IndexOf('*');
         if (starIndex < 0)

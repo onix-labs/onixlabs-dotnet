@@ -22,5 +22,8 @@ public readonly partial struct ElectricPotential<T>
         Energy<T>.Zero,
         new ElectricCharge<T>(Current<T>.FromAmperes(T.One), Time<T>.FromSeconds(T.One)));
 
-    private const string DefaultFormat = "kg*m/s²*m/A*s";
+    /// <summary>The SI named-unit symbol: <c>V</c> (volt). Accepts SI prefixes via <see cref="NamedUnitAlias"/>.</summary>
+    private const string NamedSymbol = "V";
+
+    private const string DefaultFormat = NamedSymbol;
 }

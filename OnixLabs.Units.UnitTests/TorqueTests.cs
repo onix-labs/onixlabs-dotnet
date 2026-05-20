@@ -91,4 +91,12 @@ public sealed class TorqueTests
     [Fact(DisplayName = "Torque.ToString throws on no separator")]
     public void TorqueToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => NewtonMetres((Float128)5).ToString("kgms2m", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Torque default ToString should use 'N*m' cascading through Force alias")]
+    public void TorqueDefaultToStringShouldUseNewtonMetreCascade() =>
+        Assert.EndsWith(" N*m", NewtonMetres((Float128)50).ToString());
+
+    [Fact(DisplayName = "Torque.ToString 'N*m' compound (cascade through Force alias) should produce '50.000 N*m'")]
+    public void TorqueToStringNewtonMetreCascadeShouldProduceExpected() =>
+        Assert.Equal("50.000 N*m", NewtonMetres((Float128)50).ToString("N*m:3", CultureInfo.InvariantCulture));
 }

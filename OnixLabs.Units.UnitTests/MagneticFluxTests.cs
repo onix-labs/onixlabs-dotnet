@@ -101,4 +101,16 @@ public sealed class MagneticFluxTests
     [Fact(DisplayName = "MagneticFlux.ToString should throw on no separator")]
     public void MagneticFluxToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => Webers((Float128)5).ToString("nosep", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "MagneticFlux default ToString should use the Wb alias")]
+    public void MagneticFluxDefaultToStringShouldUseWeberAlias() =>
+        Assert.EndsWith(" Wb", Webers((Float128)5).ToString());
+
+    [Fact(DisplayName = "MagneticFlux.ToString Wb alias should produce '5.000 Wb'")]
+    public void MagneticFluxToStringWeberAliasShouldProduceExpected() =>
+        Assert.Equal("5.000 Wb", Webers((Float128)5).ToString("Wb:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "MagneticFlux.ToString mWb alias should produce '5,000.000 mWb'")]
+    public void MagneticFluxToStringMilliweberAliasShouldProduceExpected() =>
+        Assert.Equal("5,000.000 mWb", Webers((Float128)5).ToString("mWb:3", CultureInfo.InvariantCulture));
 }

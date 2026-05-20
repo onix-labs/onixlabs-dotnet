@@ -20,5 +20,8 @@ public readonly partial struct Illuminance<T>
     /// <remarks>Non-zero denominator (1 m²) avoids 0/0 = NaN; numerator zero gives a genuine zero magnitude.</remarks>
     public static Illuminance<T> Zero => new(LuminousFlux<T>.Zero, Area<T>.FromSquareMeters(T.One));
 
-    private const string DefaultFormat = "cd*sr/sqm";
+    /// <summary>The SI named-unit symbol: <c>lx</c> (lux). Accepts SI prefixes via <see cref="NamedUnitAlias"/>.</summary>
+    private const string NamedSymbol = "lx";
+
+    private const string DefaultFormat = NamedSymbol;
 }

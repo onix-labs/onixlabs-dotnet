@@ -58,9 +58,17 @@ public readonly partial struct Force<T>
                 throw new FormatException("Force format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (N, kN, mN, MN, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         int starIndex = unitPart.IndexOf('*');
         if (starIndex < 0)
-            throw new FormatException($"Force format must contain a '*' separator between the mass and acceleration specifiers (e.g. '{DefaultFormat}').");
+            throw new FormatException($"Force format must contain a '*' separator between the mass and acceleration specifiers (e.g. 'kg*m/s²').");
 
         ReadOnlySpan<char> massSpecifier = unitPart[..starIndex];
         ReadOnlySpan<char> accelerationSpecifier = unitPart[(starIndex + 1)..];

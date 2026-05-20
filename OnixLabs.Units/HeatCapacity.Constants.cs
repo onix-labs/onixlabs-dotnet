@@ -20,5 +20,6 @@ public readonly partial struct HeatCapacity<T>
     /// <remarks>Non-zero denominator (1 K) avoids 0/0 = NaN; numerator zero gives a genuine zero magnitude.</remarks>
     public static HeatCapacity<T> Zero => new(Energy<T>.Zero, Temperature<T>.FromKelvin(T.One));
 
-    private const string DefaultFormat = "kg*m/s²*m/K";
+    // Defaults to "J/K" using the named Energy alias.
+    private const string DefaultFormat = "J/K";
 }

@@ -49,10 +49,18 @@ public readonly partial struct ElectricPotential<T>
                 throw new FormatException("ElectricPotential format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (V, kV, mV, MV, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // Energy-spec contains '/' (via its inner acceleration), charge-spec uses '*' only. Split on last '/'.
         int lastSlash = unitPart.LastIndexOf('/');
         if (lastSlash < 0)
-            throw new FormatException($"ElectricPotential format must contain a '/' separator between energy and charge (e.g. '{DefaultFormat}').");
+            throw new FormatException($"ElectricPotential format must contain a '/' separator between energy and charge (e.g. 'kg*m/s²*m/A*s').");
 
         ReadOnlySpan<char> energySpecifier = unitPart[..lastSlash];
         ReadOnlySpan<char> chargeSpecifier = unitPart[(lastSlash + 1)..];

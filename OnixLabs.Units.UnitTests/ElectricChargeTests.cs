@@ -84,4 +84,16 @@ public sealed class ElectricChargeTests
     [Fact(DisplayName = "ElectricCharge.ToString throws on no separator")]
     public void ElectricChargeToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => Coulombs((Float128)5).ToString("As", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricCharge default ToString should use the C alias")]
+    public void ElectricChargeDefaultToStringShouldUseCoulombAlias() =>
+        Assert.EndsWith(" C", Coulombs((Float128)5).ToString());
+
+    [Fact(DisplayName = "ElectricCharge.ToString C alias should produce '5.000 C'")]
+    public void ElectricChargeToStringCoulombAliasShouldProduceExpected() =>
+        Assert.Equal("5.000 C", Coulombs((Float128)5).ToString("C:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricCharge.ToString mC alias should produce '5,000.000 mC'")]
+    public void ElectricChargeToStringMillicoulombAliasShouldProduceExpected() =>
+        Assert.Equal("5,000.000 mC", Coulombs((Float128)5).ToString("mC:3", CultureInfo.InvariantCulture));
 }

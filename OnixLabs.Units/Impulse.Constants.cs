@@ -24,5 +24,6 @@ public readonly partial struct Impulse<T>
     /// </remarks>
     public static Impulse<T> Zero => new(Force<T>.Zero, Time<T>.FromSeconds(T.One));
 
-    private const string DefaultFormat = "kg*m/s²*s";
+    // Defaults to "N*s" using the named Force alias.
+    private const string DefaultFormat = "N*s";
 }

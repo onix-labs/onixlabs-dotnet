@@ -101,4 +101,20 @@ public sealed class ElectricCapacitanceTests
     [Fact(DisplayName = "ElectricCapacitance.ToString should throw on no separator")]
     public void ElectricCapacitanceToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => Farads((Float128)5).ToString("nosep", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricCapacitance default ToString should use the F alias")]
+    public void ElectricCapacitanceDefaultToStringShouldUseFaradAlias() =>
+        Assert.EndsWith(" F", Farads((Float128)5).ToString());
+
+    [Fact(DisplayName = "ElectricCapacitance.ToString F alias should produce '5.000 F'")]
+    public void ElectricCapacitanceToStringFaradAliasShouldProduceExpected() =>
+        Assert.Equal("5.000 F", Farads((Float128)5).ToString("F:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricCapacitance.ToString uF alias renders µF and should produce '5,000,000.000 µF'")]
+    public void ElectricCapacitanceToStringMicrofaradAliasShouldProduceExpected() =>
+        Assert.Equal("5,000,000.000 µF", Farads((Float128)5).ToString("uF:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "ElectricCapacitance.ToString nF alias should produce '5,000,000,000.000 nF'")]
+    public void ElectricCapacitanceToStringNanofaradAliasShouldProduceExpected() =>
+        Assert.Equal("5,000,000,000.000 nF", Farads((Float128)5).ToString("nF:3", CultureInfo.InvariantCulture));
 }

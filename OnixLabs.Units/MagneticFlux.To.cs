@@ -49,11 +49,19 @@ public readonly partial struct MagneticFlux<T>
                 throw new FormatException("MagneticFlux format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (Wb, mWb, μWb, kWb, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // ElectricPotential-spec contains '*' (e.g. "kg*m/s²*m/A*s"); time-spec is a bare scale token. Split on the
         // LAST '*' — everything before is the potential-spec, everything after is the time-spec.
         int lastStar = unitPart.LastIndexOf('*');
         if (lastStar < 0)
-            throw new FormatException($"MagneticFlux format must contain a '*' separator between electric-potential and time (e.g. '{DefaultFormat}').");
+            throw new FormatException($"MagneticFlux format must contain a '*' separator between electric-potential and time (e.g. 'kg*m/s²*m/A*s*s').");
 
         ReadOnlySpan<char> potentialSpecifier = unitPart[..lastStar];
         ReadOnlySpan<char> timeSpecifier = unitPart[(lastStar + 1)..];

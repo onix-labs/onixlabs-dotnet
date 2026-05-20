@@ -47,10 +47,18 @@ public readonly partial struct ElectricCharge<T>
                 throw new FormatException("ElectricCharge format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (C, mC, μC, kC, MC, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // Current-spec has no '*'; time-spec has no '*'. Single '*' separates the two.
         int starIndex = unitPart.IndexOf('*');
         if (starIndex < 0)
-            throw new FormatException($"ElectricCharge format must contain '*' (e.g. '{DefaultFormat}').");
+            throw new FormatException($"ElectricCharge format must contain '*' (e.g. 'A*s').");
 
         ReadOnlySpan<char> currentSpecifier = unitPart[..starIndex];
         ReadOnlySpan<char> timeSpecifier = unitPart[(starIndex + 1)..];

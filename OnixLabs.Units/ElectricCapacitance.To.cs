@@ -50,11 +50,19 @@ public readonly partial struct ElectricCapacitance<T>
                 throw new FormatException("ElectricCapacitance format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (F, mF, μF, nF, pF, kF, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // Charge-spec uses '*' only (e.g. "A*s"); potential-spec contains '/' internally. The FIRST '/' cleanly
         // separates the charge half from the potential half.
         int firstSlash = unitPart.IndexOf('/');
         if (firstSlash < 0)
-            throw new FormatException($"ElectricCapacitance format must contain a '/' separator between charge and electric-potential (e.g. '{DefaultFormat}').");
+            throw new FormatException($"ElectricCapacitance format must contain a '/' separator between charge and electric-potential (e.g. 'A*s/kg*m/s²*m/A*s').");
 
         ReadOnlySpan<char> chargeSpecifier = unitPart[..firstSlash];
         ReadOnlySpan<char> potentialSpecifier = unitPart[(firstSlash + 1)..];

@@ -47,10 +47,18 @@ public readonly partial struct LuminousFlux<T>
                 throw new FormatException("LuminousFlux format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (lm, klm, Mlm, mlm, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // LuminousIntensity-spec has no '*'; solid-angle-spec has no '*'. Single '*' separates the two.
         int starIndex = unitPart.IndexOf('*');
         if (starIndex < 0)
-            throw new FormatException($"LuminousFlux format must contain '*' (e.g. '{DefaultFormat}').");
+            throw new FormatException($"LuminousFlux format must contain '*' (e.g. 'cd*sr').");
 
         ReadOnlySpan<char> luminousIntensitySpecifier = unitPart[..starIndex];
         ReadOnlySpan<char> solidAngleSpecifier = unitPart[(starIndex + 1)..];

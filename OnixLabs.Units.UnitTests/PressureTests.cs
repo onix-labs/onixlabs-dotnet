@@ -120,4 +120,24 @@ public sealed class PressureTests
         Assert.Throws<FormatException>(() => Pascals((Float128)5).ToString("noseparator", CultureInfo.InvariantCulture));
         Assert.Throws<FormatException>(() => Pascals((Float128)5).ToString("kg*m/s²/sqm:abc", CultureInfo.InvariantCulture));
     }
+
+    [Fact(DisplayName = "Pressure default ToString should use the Pa alias")]
+    public void PressureDefaultToStringShouldUsePascalAlias() =>
+        Assert.EndsWith(" Pa", Pascals((Float128)5).ToString());
+
+    [Fact(DisplayName = "Pressure.ToString Pa alias should produce '5.000 Pa'")]
+    public void PressureToStringPascalAliasShouldProduceExpected() =>
+        Assert.Equal("5.000 Pa", Pascals((Float128)5).ToString("Pa:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Pressure.ToString hPa alias (meteorology) should produce '0.050 hPa'")]
+    public void PressureToStringHectopascalAliasShouldProduceExpected() =>
+        Assert.Equal("0.050 hPa", Pascals((Float128)5).ToString("hPa:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Pressure.ToString kPa alias should produce '0.005 kPa'")]
+    public void PressureToStringKilopascalAliasShouldProduceExpected() =>
+        Assert.Equal("0.005 kPa", Pascals((Float128)5).ToString("kPa:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Pressure.ToString MPa alias should produce '0.005000 MPa'")]
+    public void PressureToStringMegapascalAliasShouldProduceExpected() =>
+        Assert.Equal("0.005000 MPa", Pascals((Float128)5000).ToString("MPa:6", CultureInfo.InvariantCulture));
 }

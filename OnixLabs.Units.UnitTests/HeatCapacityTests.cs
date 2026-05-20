@@ -95,4 +95,12 @@ public sealed class HeatCapacityTests
     [Fact(DisplayName = "HeatCapacity.ToString should throw on no separator")]
     public void HeatCapacityToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => JoulesPerKelvin((Float128)5).ToString("nosep", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "HeatCapacity default ToString should use 'J/K' cascading through Energy alias")]
+    public void HeatCapacityDefaultToStringShouldUseJoulesPerKelvinCascade() =>
+        Assert.EndsWith(" J/K", JoulesPerKelvin((Float128)5).ToString());
+
+    [Fact(DisplayName = "HeatCapacity.ToString 'J/K' compound (cascade through Energy alias) should produce '5.000 J/K'")]
+    public void HeatCapacityToStringJoulesPerKelvinCascadeShouldProduceExpected() =>
+        Assert.Equal("5.000 J/K", JoulesPerKelvin((Float128)5).ToString("J/K:3", CultureInfo.InvariantCulture));
 }

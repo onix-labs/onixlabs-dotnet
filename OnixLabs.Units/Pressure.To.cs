@@ -49,10 +49,18 @@ public readonly partial struct Pressure<T>
                 throw new FormatException("Pressure format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (Pa, kPa, MPa, hPa, mPa, ...).
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // Force-spec contains '/' (via its acceleration component), area-spec does not. Split on last '/'.
         int lastSlash = unitPart.LastIndexOf('/');
         if (lastSlash < 0)
-            throw new FormatException($"Pressure format must contain a '/' separator between force and area (e.g. '{DefaultFormat}').");
+            throw new FormatException($"Pressure format must contain a '/' separator between force and area (e.g. 'kg*m/s²/sqm').");
 
         ReadOnlySpan<char> forceSpecifier = unitPart[..lastSlash];
         ReadOnlySpan<char> areaSpecifier = unitPart[(lastSlash + 1)..];

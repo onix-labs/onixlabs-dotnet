@@ -24,5 +24,8 @@ public readonly partial struct LuminousFlux<T>
     /// </remarks>
     public static LuminousFlux<T> Zero => new(LuminousIntensity<T>.Zero, SolidAngle<T>.FromSteradians(T.One));
 
-    private const string DefaultFormat = "cd*sr";
+    /// <summary>The SI named-unit symbol: <c>lm</c> (lumen). Accepts SI prefixes via <see cref="NamedUnitAlias"/>.</summary>
+    private const string NamedSymbol = "lm";
+
+    private const string DefaultFormat = NamedSymbol;
 }

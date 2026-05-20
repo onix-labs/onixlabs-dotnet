@@ -24,5 +24,8 @@ public readonly partial struct Force<T>
     /// </remarks>
     public static Force<T> Zero => new(Mass<T>.Zero, Acceleration<T>.Zero);
 
-    private const string DefaultFormat = "kg*m/s²";
+    /// <summary>The SI named-unit symbol: <c>N</c> (newton). Accepts SI prefixes via <see cref="NamedUnitAlias"/>.</summary>
+    private const string NamedSymbol = "N";
+
+    private const string DefaultFormat = NamedSymbol;
 }

@@ -30,6 +30,10 @@ public readonly partial struct Energy<T>
     /// <returns>Returns the energy value expressed as <c>force * distance</c> in the requested units.</returns>
     public T ValueOf(ReadOnlySpan<char> specifier)
     {
+        // Named-unit alias (J, kJ, MJ, mJ, ...) — checked before compound parsing.
+        if (NamedUnitAlias.TryMatch<T>(specifier, NamedSymbol, out T aliasMultiplier, out _))
+            return Magnitude * aliasMultiplier;
+
         // The force-spec itself contains '*' (e.g. "kg*m/s²"), so split on the LAST '*' — everything before is the
         // force-spec, everything after is the outer distance-spec.
         int lastStar = specifier.LastIndexOf('*');

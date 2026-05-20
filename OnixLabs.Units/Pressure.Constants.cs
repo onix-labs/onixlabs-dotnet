@@ -20,5 +20,8 @@ public readonly partial struct Pressure<T>
     /// <remarks>Non-zero denominator (1 m²) avoids 0/0 = NaN; numerator zero gives a genuine zero magnitude.</remarks>
     public static Pressure<T> Zero => new(Force<T>.Zero, Area<T>.FromSquareMeters(T.One));
 
-    private const string DefaultFormat = "kg*m/s²/sqm";
+    /// <summary>The SI named-unit symbol: <c>Pa</c> (pascal). Accepts SI prefixes via <see cref="NamedUnitAlias"/>, so <c>hPa</c>/<c>kPa</c>/<c>MPa</c>/etc. all work.</summary>
+    private const string NamedSymbol = "Pa";
+
+    private const string DefaultFormat = NamedSymbol;
 }

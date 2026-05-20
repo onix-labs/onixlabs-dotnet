@@ -24,5 +24,8 @@ public readonly partial struct Energy<T>
     /// </remarks>
     public static Energy<T> Zero => new(Force<T>.Zero, Distance<T>.Zero);
 
-    private const string DefaultFormat = "kg*m/s²*m";
+    /// <summary>The SI named-unit symbol: <c>J</c> (joule). Accepts SI prefixes via <see cref="NamedUnitAlias"/>.</summary>
+    private const string NamedSymbol = "J";
+
+    private const string DefaultFormat = NamedSymbol;
 }

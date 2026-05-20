@@ -97,4 +97,20 @@ public sealed class PowerTests
     [Fact(DisplayName = "Power.ToString should throw on no separator")]
     public void PowerToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => Watts((Float128)5).ToString("nosep", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Power default ToString should use the W alias")]
+    public void PowerDefaultToStringShouldUseWattAlias() =>
+        Assert.EndsWith(" W", Watts((Float128)9).ToString());
+
+    [Fact(DisplayName = "Power.ToString W alias should produce '9.000 W'")]
+    public void PowerToStringWattAliasShouldProduceExpected() =>
+        Assert.Equal("9.000 W", Watts((Float128)9).ToString("W:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Power.ToString kW alias should produce '0.009 kW'")]
+    public void PowerToStringKilowattAliasShouldProduceExpected() =>
+        Assert.Equal("0.009 kW", Watts((Float128)9).ToString("kW:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Power.ToString MW alias should produce '0.000009 MW'")]
+    public void PowerToStringMegawattAliasShouldProduceExpected() =>
+        Assert.Equal("0.000009 MW", Watts((Float128)9).ToString("MW:6", CultureInfo.InvariantCulture));
 }

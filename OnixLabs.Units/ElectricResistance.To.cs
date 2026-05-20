@@ -49,10 +49,18 @@ public readonly partial struct ElectricResistance<T>
                 throw new FormatException("ElectricResistance format scale must contain only decimal digits.");
         }
 
+        // Named-unit alias (Ω, kΩ, mΩ, MΩ, ...) — also accepts the keyboard-friendly Ohm/kOhm/mOhm/... on input.
+        if (NamedUnitAlias.TryMatch<T>(unitPart, NamedSymbol, out T aliasMultiplier, out string renderedSymbol, NamedSymbolAscii))
+        {
+            T aliasValue = Magnitude * aliasMultiplier;
+            T aliasRounded = scale > 0 ? T.Round(aliasValue, scale) : aliasValue;
+            return $"{aliasRounded.ToString($"N{scale}", formatProvider ?? CultureInfo.CurrentCulture)} {renderedSymbol}";
+        }
+
         // ElectricPotential-spec contains '/'; current-spec is a bare scale token. Split on last '/'.
         int lastSlash = unitPart.LastIndexOf('/');
         if (lastSlash < 0)
-            throw new FormatException($"ElectricResistance format must contain a '/' separator between electric-potential and current (e.g. '{DefaultFormat}').");
+            throw new FormatException($"ElectricResistance format must contain a '/' separator between electric-potential and current (e.g. 'kg*m/s²*m/A*s/A').");
 
         ReadOnlySpan<char> potentialSpecifier = unitPart[..lastSlash];
         ReadOnlySpan<char> currentSpecifier = unitPart[(lastSlash + 1)..];

@@ -88,4 +88,16 @@ public sealed class IlluminanceTests
     [Fact(DisplayName = "Illuminance.ToString should throw on no separator")]
     public void IlluminanceToStringThrowsOnNoSeparator() =>
         Assert.Throws<FormatException>(() => Lux((Float128)5).ToString("nosep", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Illuminance default ToString should use the lx alias")]
+    public void IlluminanceDefaultToStringShouldUseLuxAlias() =>
+        Assert.EndsWith(" lx", Lux((Float128)5).ToString());
+
+    [Fact(DisplayName = "Illuminance.ToString lx alias should produce '5.000 lx'")]
+    public void IlluminanceToStringLuxAliasShouldProduceExpected() =>
+        Assert.Equal("5.000 lx", Lux((Float128)5).ToString("lx:3", CultureInfo.InvariantCulture));
+
+    [Fact(DisplayName = "Illuminance.ToString klx alias should produce '0.005 klx'")]
+    public void IlluminanceToStringKiloluxAliasShouldProduceExpected() =>
+        Assert.Equal("0.005 klx", Lux((Float128)5).ToString("klx:3", CultureInfo.InvariantCulture));
 }

@@ -35,6 +35,7 @@ public readonly partial struct Time<T> :
     /// <param name="value">The time unit in <see cref="QuectoSeconds"/>.</param>
     private Time(T value) => Canonical = value;
 
+    /// <inheritdoc/>
     public T Canonical { get; }
 
     /// <summary>

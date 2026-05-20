@@ -381,7 +381,7 @@ public sealed class DistanceTests
         // irrational so the result is the closest-Float128 to (648000 × AU_meters × 10^30 / π).
         Float128 input = Float128.Parse(value);
         Float128 auMeters = 149_597_870_700L;
-        Float128 quectometersPerParsec = auMeters * 648000 * GenericMath.Pow10<Float128>(30) / Float128.Pi;
+        Float128 quectometersPerParsec = auMeters * 648000 * UnitMath.Pow10<Float128>(30) / Float128.Pi;
         Float128 expectedQuectometers = input * quectometersPerParsec;
 
         // When

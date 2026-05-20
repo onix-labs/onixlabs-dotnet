@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Numerics;
-
 namespace OnixLabs.Units;
 
 public readonly partial struct DataSize<T>
@@ -265,7 +263,7 @@ public readonly partial struct DataSize<T>
     /// <returns>Returns a <see cref="DataSize{T}"/> representing the size in bits.</returns>
     private static DataSize<T> CreateFromBinaryValue(T value, int power, bool isByteValue)
     {
-        T divisor = GenericMath.Pow(T.CreateChecked(1024), power);
+        T divisor = UnitMath.Pow(T.CreateChecked(1024), power);
         return new DataSize<T>(value * (isByteValue ? divisor * T.CreateChecked(8) : divisor));
     }
 
@@ -278,7 +276,7 @@ public readonly partial struct DataSize<T>
     /// <returns>Returns a <see cref="DataSize{T}"/> representing the size in bits.</returns>
     private static DataSize<T> CreateFromMetricValue(T value, int power, bool isByteValue)
     {
-        T divisor = GenericMath.Pow(T.CreateChecked(1000), power);
+        T divisor = UnitMath.Pow(T.CreateChecked(1000), power);
         return new DataSize<T>(value * (isByteValue ? divisor * T.CreateChecked(8) : divisor));
     }
 }

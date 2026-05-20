@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Numerics;
-
 namespace OnixLabs.Units;
 
 public readonly partial struct Area<T>
@@ -30,168 +28,168 @@ public readonly partial struct Area<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareRontometers(T value) => new(value * GenericMath.Pow10<T>(6));
+    public static Area<T> FromSquareRontometers(T value) => new(value * UnitMath.Pow10<T>(6));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Yoctometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareYoctometers(T value) => new(value * GenericMath.Pow10<T>(12));
+    public static Area<T> FromSquareYoctometers(T value) => new(value * UnitMath.Pow10<T>(12));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Zeptometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareZeptometers(T value) => new(value * GenericMath.Pow10<T>(18));
+    public static Area<T> FromSquareZeptometers(T value) => new(value * UnitMath.Pow10<T>(18));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Attometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareAttometers(T value) => new(value * GenericMath.Pow10<T>(24));
+    public static Area<T> FromSquareAttometers(T value) => new(value * UnitMath.Pow10<T>(24));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Femtometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareFemtometers(T value) => new(value * GenericMath.Pow10<T>(30));
+    public static Area<T> FromSquareFemtometers(T value) => new(value * UnitMath.Pow10<T>(30));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Picometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquarePicometers(T value) => new(value * GenericMath.Pow10<T>(36));
+    public static Area<T> FromSquarePicometers(T value) => new(value * UnitMath.Pow10<T>(36));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Nanometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareNanometers(T value) => new(value * GenericMath.Pow10<T>(42));
+    public static Area<T> FromSquareNanometers(T value) => new(value * UnitMath.Pow10<T>(42));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Micrometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareMicrometers(T value) => new(value * GenericMath.Pow10<T>(48));
+    public static Area<T> FromSquareMicrometers(T value) => new(value * UnitMath.Pow10<T>(48));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Millimeters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareMillimeters(T value) => new(value * GenericMath.Pow10<T>(54));
+    public static Area<T> FromSquareMillimeters(T value) => new(value * UnitMath.Pow10<T>(54));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Centimeters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareCentimeters(T value) => new(value * GenericMath.Pow10<T>(56));
+    public static Area<T> FromSquareCentimeters(T value) => new(value * UnitMath.Pow10<T>(56));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Decimeters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareDecimeters(T value) => new(value * GenericMath.Pow10<T>(58));
+    public static Area<T> FromSquareDecimeters(T value) => new(value * UnitMath.Pow10<T>(58));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Meters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareMeters(T value) => new(value * GenericMath.Pow10<T>(60));
+    public static Area<T> FromSquareMeters(T value) => new(value * UnitMath.Pow10<T>(60));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Decameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareDecameters(T value) => new(value * GenericMath.Pow10<T>(62));
+    public static Area<T> FromSquareDecameters(T value) => new(value * UnitMath.Pow10<T>(62));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Hectometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareHectometers(T value) => new(value * GenericMath.Pow10<T>(64));
+    public static Area<T> FromSquareHectometers(T value) => new(value * UnitMath.Pow10<T>(64));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Kilometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareKilometers(T value) => new(value * GenericMath.Pow10<T>(66));
+    public static Area<T> FromSquareKilometers(T value) => new(value * UnitMath.Pow10<T>(66));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Megameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareMegameters(T value) => new(value * GenericMath.Pow10<T>(72));
+    public static Area<T> FromSquareMegameters(T value) => new(value * UnitMath.Pow10<T>(72));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Gigameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareGigameters(T value) => new(value * GenericMath.Pow10<T>(78));
+    public static Area<T> FromSquareGigameters(T value) => new(value * UnitMath.Pow10<T>(78));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Terameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareTerameters(T value) => new(value * GenericMath.Pow10<T>(84));
+    public static Area<T> FromSquareTerameters(T value) => new(value * UnitMath.Pow10<T>(84));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Petameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquarePetameters(T value) => new(value * GenericMath.Pow10<T>(90));
+    public static Area<T> FromSquarePetameters(T value) => new(value * UnitMath.Pow10<T>(90));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Exameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareExameters(T value) => new(value * GenericMath.Pow10<T>(96));
+    public static Area<T> FromSquareExameters(T value) => new(value * UnitMath.Pow10<T>(96));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Zettameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareZettameters(T value) => new(value * GenericMath.Pow10<T>(102));
+    public static Area<T> FromSquareZettameters(T value) => new(value * UnitMath.Pow10<T>(102));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Yottameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareYottameters(T value) => new(value * GenericMath.Pow10<T>(108));
+    public static Area<T> FromSquareYottameters(T value) => new(value * UnitMath.Pow10<T>(108));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Ronnameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareRonnameters(T value) => new(value * GenericMath.Pow10<T>(114));
+    public static Area<T> FromSquareRonnameters(T value) => new(value * UnitMath.Pow10<T>(114));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Quettameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Area{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Area{T}"/> instance from the specified value.</returns>
-    public static Area<T> FromSquareQuettameters(T value) => new(value * GenericMath.Pow10<T>(120));
+    public static Area<T> FromSquareQuettameters(T value) => new(value * UnitMath.Pow10<T>(120));
 
     /// <summary>
     /// Creates a new <see cref="Area{T}"/> instance from the specified Square Inches value.

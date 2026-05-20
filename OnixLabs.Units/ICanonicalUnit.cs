@@ -16,7 +16,14 @@ using System.Numerics;
 
 namespace OnixLabs.Units;
 
+/// <summary>
+/// Defines a unit of measurement that has a canonical representation.
+/// </summary>
+/// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> type of the unit of measurement.</typeparam>
 public interface ICanonicalUnit<out T> where T : IFloatingPoint<T>
 {
+    /// <summary>
+    /// Gets the canonical representation for the current unit of measurement.
+    /// </summary>
     T Canonical { get; }
 }

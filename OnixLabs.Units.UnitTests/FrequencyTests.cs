@@ -248,7 +248,7 @@ public sealed class FrequencyTests
         // Above Float128's 10^48 exact-power-of-10 range, Parse("X.Ye51") and value × Pow10(51) can
         // diverge in the LSB. Compute expected via the same chain as the unit to keep strict equality.
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * GenericMath.Pow10<Float128>(51);
+        Float128 expected = input * UnitMath.Pow10<Float128>(51);
 
         Frequency<Float128> f = Frequency<Float128>.FromZettahertz(input);
 
@@ -262,7 +262,7 @@ public sealed class FrequencyTests
     public void FrequencyFromYottahertzShouldProduceExpectedQuectoHertz(string value)
     {
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * GenericMath.Pow10<Float128>(54);
+        Float128 expected = input * UnitMath.Pow10<Float128>(54);
 
         Frequency<Float128> f = Frequency<Float128>.FromYottahertz(input);
 
@@ -276,7 +276,7 @@ public sealed class FrequencyTests
     public void FrequencyFromRonnahertzShouldProduceExpectedQuectoHertz(string value)
     {
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * GenericMath.Pow10<Float128>(57);
+        Float128 expected = input * UnitMath.Pow10<Float128>(57);
 
         Frequency<Float128> f = Frequency<Float128>.FromRonnahertz(input);
 
@@ -290,7 +290,7 @@ public sealed class FrequencyTests
     public void FrequencyFromQuettahertzShouldProduceExpectedQuectoHertz(string value)
     {
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * GenericMath.Pow10<Float128>(60);
+        Float128 expected = input * UnitMath.Pow10<Float128>(60);
 
         Frequency<Float128> f = Frequency<Float128>.FromQuettahertz(input);
 
@@ -307,7 +307,7 @@ public sealed class FrequencyTests
         // Match the unit's chain exactly: value × (Pow10(30) / 60). The /60 introduces 1 ULP at T;
         // computing the expected via the same chain ensures strict equality remains meaningful.
         Float128 input = Float128.Parse(value);
-        Float128 expectedCanonical = input * (GenericMath.Pow10<Float128>(30) / (Float128)60);
+        Float128 expectedCanonical = input * (UnitMath.Pow10<Float128>(30) / (Float128)60);
         Float128 expectedLiteral = Float128.Parse(expected);
 
         Frequency<Float128> f = Frequency<Float128>.FromRevolutionsPerMinute(input);
@@ -325,7 +325,7 @@ public sealed class FrequencyTests
     public void FrequencyFromBeatsPerMinuteShouldProduceExpectedQuectoHertz(string value, string expected)
     {
         Float128 input = Float128.Parse(value);
-        Float128 expectedCanonical = input * (GenericMath.Pow10<Float128>(30) / (Float128)60);
+        Float128 expectedCanonical = input * (UnitMath.Pow10<Float128>(30) / (Float128)60);
         Float128 expectedLiteral = Float128.Parse(expected);
 
         Frequency<Float128> f = Frequency<Float128>.FromBeatsPerMinute(input);
@@ -343,7 +343,7 @@ public sealed class FrequencyTests
         // 1 rad/s = 1/(2π) Hz, so qHz = value × Pow10(30) / (2π). T.Pi keeps Float128's 40+ digit
         // precision; compute expected via the same chain to keep strict equality meaningful.
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * (GenericMath.Pow10<Float128>(30) / ((Float128)2 * Float128.Pi));
+        Float128 expected = input * (UnitMath.Pow10<Float128>(30) / ((Float128)2 * Float128.Pi));
 
         Frequency<Float128> f = Frequency<Float128>.FromRadiansPerSecond(input);
 
@@ -420,9 +420,9 @@ public sealed class FrequencyTests
         Frequency<Float128> result = left.Multiply(right);  // 1e31 × 3e30 = 3e61 qHz
 
         // Then — 3e61 exceeds Float128's 10^48 exact range, so compute expected via the same chain.
-        Assert.Equal((Float128)10 * GenericMath.Pow10<Float128>(30), left.QuectoHertz);
-        Assert.Equal((Float128)3 * GenericMath.Pow10<Float128>(30), right.QuectoHertz);
-        Float128 expected = ((Float128)10 * GenericMath.Pow10<Float128>(30)) * ((Float128)3 * GenericMath.Pow10<Float128>(30));
+        Assert.Equal((Float128)10 * UnitMath.Pow10<Float128>(30), left.QuectoHertz);
+        Assert.Equal((Float128)3 * UnitMath.Pow10<Float128>(30), right.QuectoHertz);
+        Float128 expected = ((Float128)10 * UnitMath.Pow10<Float128>(30)) * ((Float128)3 * UnitMath.Pow10<Float128>(30));
         Assert.Equal(expected, result.QuectoHertz);
     }
 

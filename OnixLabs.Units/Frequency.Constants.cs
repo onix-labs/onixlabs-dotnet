@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Numerics;
-
 namespace OnixLabs.Units;
 
 public readonly partial struct Frequency<T>
@@ -24,9 +22,9 @@ public readonly partial struct Frequency<T>
     // T-precision conversion factors for non-power-of-10 frequency scales. Each is "QuectoHertz in one X",
     // stored as static readonly per closed T so they're computed once and reused. RPM/BPM divide by 60;
     // rad/s divides by 2π — using T.Pi preserves T's full precision (40+ digits at Float128).
-    private static readonly T QuectoHertzPerRevolutionPerMinute = GenericMath.Pow10<T>(30) / T.CreateChecked(60);              // 1 rpm = 1/60 Hz
-    private static readonly T QuectoHertzPerBeatPerMinute       = GenericMath.Pow10<T>(30) / T.CreateChecked(60);              // 1 bpm = 1/60 Hz
-    private static readonly T QuectoHertzPerRadianPerSecond     = GenericMath.Pow10<T>(30) / (T.CreateChecked(2) * T.Pi);      // 1 rad/s = 1/(2π) Hz
+    private static readonly T QuectoHertzPerRevolutionPerMinute = UnitMath.Pow10<T>(30) / T.CreateChecked(60); // 1 rpm = 1/60 Hz
+    private static readonly T QuectoHertzPerBeatPerMinute = UnitMath.Pow10<T>(30) / T.CreateChecked(60); // 1 bpm = 1/60 Hz
+    private static readonly T QuectoHertzPerRadianPerSecond = UnitMath.Pow10<T>(30) / (T.CreateChecked(2) * T.Pi); // 1 rad/s = 1/(2π) Hz
 
     private const string QuectoHertzSpecifier = "qHz";
     private const string QuectoHertzSymbol = "qHz";

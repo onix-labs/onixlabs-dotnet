@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Numerics;
-
 namespace OnixLabs.Units;
 
 public readonly partial struct Area<T>
@@ -25,21 +23,23 @@ public readonly partial struct Area<T>
     // Each is "SquareQuectoMeters in one X²", written so the entire factor stays at T's precision.
     // Stored as static readonly per closed T so they're computed once and reused. `T.CreateChecked(<decimal>)`
     // would silently pre-round through double's ~15-17 digit precision before reaching T.
-    private static readonly T SqQuectometersPerSquareInch          = T.CreateChecked(64516)              * GenericMath.Pow10<T>(52); // 0.0254² m²
-    private static readonly T SqQuectometersPerSquareFoot          = T.CreateChecked(9290304)            * GenericMath.Pow10<T>(52); // 0.3048² m²
-    private static readonly T SqQuectometersPerSquareYard          = T.CreateChecked(83612736)           * GenericMath.Pow10<T>(52); // 0.9144² m²
-    private static readonly T SqQuectometersPerSquareMile          = T.CreateChecked(2589988110336L)     * GenericMath.Pow10<T>(54); // 1 609.344² m²
-    private static readonly T SqQuectometersPerSquareNauticalMile  = T.CreateChecked(3429904)            * GenericMath.Pow10<T>(60); // 1 852² m²
-    private static readonly T SqQuectometersPerSquareFermi         =                                       GenericMath.Pow10<T>(30); // (1e-15)² m²
-    private static readonly T SqQuectometersPerSquareAngstrom      =                                       GenericMath.Pow10<T>(40); // (1e-10)² m²
+    private static readonly T SqQuectometersPerSquareInch = T.CreateChecked(64516) * UnitMath.Pow10<T>(52); // 0.0254² m²
+    private static readonly T SqQuectometersPerSquareFoot = T.CreateChecked(9290304) * UnitMath.Pow10<T>(52); // 0.3048² m²
+    private static readonly T SqQuectometersPerSquareYard = T.CreateChecked(83612736) * UnitMath.Pow10<T>(52); // 0.9144² m²
+    private static readonly T SqQuectometersPerSquareMile = T.CreateChecked(2589988110336L) * UnitMath.Pow10<T>(54); // 1 609.344² m²
+    private static readonly T SqQuectometersPerSquareNauticalMile = T.CreateChecked(3429904) * UnitMath.Pow10<T>(60); // 1 852² m²
+    private static readonly T SqQuectometersPerSquareFermi = UnitMath.Pow10<T>(30); // (1e-15)² m²
+    private static readonly T SqQuectometersPerSquareAngstrom = UnitMath.Pow10<T>(40); // (1e-10)² m²
+
     private static readonly T SqQuectometersPerSquareAstronomicalUnit =
-        T.CreateChecked(149_597_870_700L) * T.CreateChecked(149_597_870_700L) * GenericMath.Pow10<T>(60);                            // AU² m²
+        T.CreateChecked(149_597_870_700L) * T.CreateChecked(149_597_870_700L) * UnitMath.Pow10<T>(60); // AU² m²
+
     private static readonly T SqQuectometersPerSquareLightYear =
-        T.CreateChecked(9_460_730_472_580_800L) * T.CreateChecked(9_460_730_472_580_800L) * GenericMath.Pow10<T>(60);                // (365.25 d × c)² m²
+        T.CreateChecked(9_460_730_472_580_800L) * T.CreateChecked(9_460_730_472_580_800L) * UnitMath.Pow10<T>(60); // (365.25 d × c)² m²
 
     // Parsec² is (648000 / π)² AU². π is irrational; the division rounds to 1 ULP and is squared.
     private static readonly T MetersPerParsec = T.CreateChecked(149_597_870_700L) * T.CreateChecked(648000) / T.Pi;
-    private static readonly T SqQuectometersPerSquareParsec = MetersPerParsec * MetersPerParsec * GenericMath.Pow10<T>(60);
+    private static readonly T SqQuectometersPerSquareParsec = MetersPerParsec * MetersPerParsec * UnitMath.Pow10<T>(60);
 
     private const string SquareQuectoMetersSpecifier = "sqqm";
     private const string SquareQuectoMetersSymbol = "qm²";

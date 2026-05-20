@@ -5,7 +5,7 @@
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
-        <ProjectReference Include="..\OnixLabs.Numerics\OnixLabs.Numerics.csproj"/>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
+        <InternalsVisibleTo Include="OnixLabs.Units.UnitTests"/>
     </ItemGroup>
 </Project>

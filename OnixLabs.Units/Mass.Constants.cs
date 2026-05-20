@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Numerics;
-
 namespace OnixLabs.Units;
 
 public readonly partial struct Mass<T>
@@ -28,17 +26,17 @@ public readonly partial struct Mass<T>
     // `T.CreateChecked(<integer>) * GenericMath.Pow10<T>(<exponent>)` so the entire factor
     // stays at T's precision; `T.CreateChecked(<lossy-double-literal>)` would pre-round
     // through double's ~15-17 digit precision before reaching T.
-    private static readonly T QuectogramsPerTonne     = GenericMath.Pow10<T>(36);                                     // 1e36
-    private static readonly T QuectogramsPerOunce     = T.CreateChecked(28349523125L) * GenericMath.Pow10<T>(21);    // 28.349523125 g
-    private static readonly T QuectogramsPerPound     = T.CreateChecked(45359237L) * GenericMath.Pow10<T>(25);       // 453.59237 g
-    private static readonly T QuectogramsPerStone     = T.CreateChecked(635029318L) * GenericMath.Pow10<T>(25);      // 6350.29318 g
-    private static readonly T QuectogramsPerShortTon  = T.CreateChecked(90718474L) * GenericMath.Pow10<T>(28);       // 907184.74 g
-    private static readonly T QuectogramsPerLongTon   = T.CreateChecked(10160469088L) * GenericMath.Pow10<T>(26);    // 1016046.9088 g
-    private static readonly T QuectogramsPerCarat     = T.CreateChecked(2) * GenericMath.Pow10<T>(29);                // 0.2 g
-    private static readonly T QuectogramsPerGrain     = T.CreateChecked(6479891L) * GenericMath.Pow10<T>(22);        // 0.06479891 g
-    private static readonly T QuectogramsPerDram      = T.CreateChecked(17718451953125L) * GenericMath.Pow10<T>(17); // 1.7718451953125 g
-    private static readonly T QuectogramsPerSlug      = T.CreateChecked(1459390293720636L) * GenericMath.Pow10<T>(19); // 14593.90293720636 g
-    private static readonly T QuectogramsPerDalton    = T.CreateChecked(16605390666L) / T.CreateChecked(10000);       // 1660539.0666 qg = 1.66053906660e-24 g
+    private static readonly T QuectogramsPerTonne = UnitMath.Pow10<T>(36); // 1e36
+    private static readonly T QuectogramsPerOunce = T.CreateChecked(28349523125L) * UnitMath.Pow10<T>(21); // 28.349523125 g
+    private static readonly T QuectogramsPerPound = T.CreateChecked(45359237L) * UnitMath.Pow10<T>(25); // 453.59237 g
+    private static readonly T QuectogramsPerStone = T.CreateChecked(635029318L) * UnitMath.Pow10<T>(25); // 6350.29318 g
+    private static readonly T QuectogramsPerShortTon = T.CreateChecked(90718474L) * UnitMath.Pow10<T>(28); // 907184.74 g
+    private static readonly T QuectogramsPerLongTon = T.CreateChecked(10160469088L) * UnitMath.Pow10<T>(26); // 1016046.9088 g
+    private static readonly T QuectogramsPerCarat = T.CreateChecked(2) * UnitMath.Pow10<T>(29); // 0.2 g
+    private static readonly T QuectogramsPerGrain = T.CreateChecked(6479891L) * UnitMath.Pow10<T>(22); // 0.06479891 g
+    private static readonly T QuectogramsPerDram = T.CreateChecked(17718451953125L) * UnitMath.Pow10<T>(17); // 1.7718451953125 g
+    private static readonly T QuectogramsPerSlug = T.CreateChecked(1459390293720636L) * UnitMath.Pow10<T>(19); // 14593.90293720636 g
+    private static readonly T QuectogramsPerDalton = T.CreateChecked(16605390666L) / T.CreateChecked(10000); // 1660539.0666 qg = 1.66053906660e-24 g
 
     private const string QuectoGramsSpecifier = "qg";
     private const string RontoGramsSpecifier = "rg";

@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Numerics;
-using OnixLabs.Numerics;
 
 namespace OnixLabs.Units;
 
@@ -36,6 +35,7 @@ public readonly partial struct Volume<T> :
     /// <param name="value">The volume unit in <see cref="CubicQuectoMeters"/>.</param>
     private Volume(T value) => Canonical = value;
 
+    /// <inheritdoc/>
     public T Canonical { get; }
 
     /// <summary>
@@ -52,7 +52,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is curm.
     /// </remarks>
-    public T CubicRontoMeters => CubicQuectoMeters / GenericMath.Pow10<T>(9);
+    public T CubicRontoMeters => CubicQuectoMeters / UnitMath.Pow10<T>(9);
 
     /// <summary>
     /// Gets the volume in Cubic Yoctometers (ym³).
@@ -60,7 +60,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuym.
     /// </remarks>
-    public T CubicYoctoMeters => CubicQuectoMeters / GenericMath.Pow10<T>(18);
+    public T CubicYoctoMeters => CubicQuectoMeters / UnitMath.Pow10<T>(18);
 
     /// <summary>
     /// Gets the volume in Cubic Zeptometers (zm³).
@@ -68,7 +68,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuzm.
     /// </remarks>
-    public T CubicZeptoMeters => CubicQuectoMeters / GenericMath.Pow10<T>(27);
+    public T CubicZeptoMeters => CubicQuectoMeters / UnitMath.Pow10<T>(27);
 
     /// <summary>
     /// Gets the volume in Cubic Attometers (am³).
@@ -76,7 +76,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuam.
     /// </remarks>
-    public T CubicAttoMeters => CubicQuectoMeters / GenericMath.Pow10<T>(36);
+    public T CubicAttoMeters => CubicQuectoMeters / UnitMath.Pow10<T>(36);
 
     /// <summary>
     /// Gets the volume in Cubic Femtometers (fm³).
@@ -84,7 +84,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cufm.
     /// </remarks>
-    public T CubicFemtoMeters => CubicQuectoMeters / GenericMath.Pow10<T>(45);
+    public T CubicFemtoMeters => CubicQuectoMeters / UnitMath.Pow10<T>(45);
 
     /// <summary>
     /// Gets the volume in Cubic Picometers (pm³).
@@ -92,7 +92,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cupm.
     /// </remarks>
-    public T CubicPicoMeters => CubicQuectoMeters / GenericMath.Pow10<T>(54);
+    public T CubicPicoMeters => CubicQuectoMeters / UnitMath.Pow10<T>(54);
 
     /// <summary>
     /// Gets the volume in Cubic Nanometers (nm³).
@@ -100,7 +100,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cunm.
     /// </remarks>
-    public T CubicNanoMeters => CubicQuectoMeters / GenericMath.Pow10<T>(63);
+    public T CubicNanoMeters => CubicQuectoMeters / UnitMath.Pow10<T>(63);
 
     /// <summary>
     /// Gets the volume in Cubic Micrometers (µm³).
@@ -108,7 +108,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuum.
     /// </remarks>
-    public T CubicMicroMeters => CubicQuectoMeters / GenericMath.Pow10<T>(72);
+    public T CubicMicroMeters => CubicQuectoMeters / UnitMath.Pow10<T>(72);
 
     /// <summary>
     /// Gets the volume in Cubic Millimeters (mm³).
@@ -116,7 +116,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cumm.
     /// </remarks>
-    public T CubicMilliMeters => CubicQuectoMeters / GenericMath.Pow10<T>(81);
+    public T CubicMilliMeters => CubicQuectoMeters / UnitMath.Pow10<T>(81);
 
     /// <summary>
     /// Gets the volume in Cubic Centimeters (cm³).
@@ -124,7 +124,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cucm.
     /// </remarks>
-    public T CubicCentiMeters => CubicQuectoMeters / GenericMath.Pow10<T>(84);
+    public T CubicCentiMeters => CubicQuectoMeters / UnitMath.Pow10<T>(84);
 
     /// <summary>
     /// Gets the volume in Cubic Decimeters (dm³).
@@ -132,7 +132,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cudm.
     /// </remarks>
-    public T CubicDeciMeters => CubicQuectoMeters / GenericMath.Pow10<T>(87);
+    public T CubicDeciMeters => CubicQuectoMeters / UnitMath.Pow10<T>(87);
 
     /// <summary>
     /// Gets the volume in Cubic Meters (m³).
@@ -140,7 +140,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cum.
     /// </remarks>
-    public T CubicMeters => CubicQuectoMeters / GenericMath.Pow10<T>(90);
+    public T CubicMeters => CubicQuectoMeters / UnitMath.Pow10<T>(90);
 
     /// <summary>
     /// Gets the volume in Cubic Decameters (dam³).
@@ -148,7 +148,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cudam.
     /// </remarks>
-    public T CubicDecaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(93);
+    public T CubicDecaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(93);
 
     /// <summary>
     /// Gets the volume in Cubic Hectometers (hm³).
@@ -156,7 +156,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuhm.
     /// </remarks>
-    public T CubicHectoMeters => CubicQuectoMeters / GenericMath.Pow10<T>(96);
+    public T CubicHectoMeters => CubicQuectoMeters / UnitMath.Pow10<T>(96);
 
     /// <summary>
     /// Gets the volume in Cubic Kilometers (km³).
@@ -164,7 +164,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cukm.
     /// </remarks>
-    public T CubicKiloMeters => CubicQuectoMeters / GenericMath.Pow10<T>(99);
+    public T CubicKiloMeters => CubicQuectoMeters / UnitMath.Pow10<T>(99);
 
     /// <summary>
     /// Gets the volume in Cubic Megameters (Mm³).
@@ -172,7 +172,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuMm.
     /// </remarks>
-    public T CubicMegaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(108);
+    public T CubicMegaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(108);
 
     /// <summary>
     /// Gets the volume in Cubic Gigameters (Gm³).
@@ -180,7 +180,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuGm.
     /// </remarks>
-    public T CubicGigaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(117);
+    public T CubicGigaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(117);
 
     /// <summary>
     /// Gets the volume in Cubic Terameters (Tm³).
@@ -188,7 +188,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuTm.
     /// </remarks>
-    public T CubicTeraMeters => CubicQuectoMeters / GenericMath.Pow10<T>(126);
+    public T CubicTeraMeters => CubicQuectoMeters / UnitMath.Pow10<T>(126);
 
     /// <summary>
     /// Gets the volume in Cubic Petameters (Pm³).
@@ -196,7 +196,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuPm.
     /// </remarks>
-    public T CubicPetaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(135);
+    public T CubicPetaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(135);
 
     /// <summary>
     /// Gets the volume in Cubic Exameters (Em³).
@@ -204,7 +204,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuEm.
     /// </remarks>
-    public T CubicExaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(144);
+    public T CubicExaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(144);
 
     /// <summary>
     /// Gets the volume in Cubic Zettameters (Zm³).
@@ -212,7 +212,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuZm.
     /// </remarks>
-    public T CubicZettaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(153);
+    public T CubicZettaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(153);
 
     /// <summary>
     /// Gets the volume in Cubic Yottameters (Ym³).
@@ -220,7 +220,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuYm.
     /// </remarks>
-    public T CubicYottaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(162);
+    public T CubicYottaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(162);
 
     /// <summary>
     /// Gets the volume in Cubic Ronnameters (Rm³).
@@ -228,7 +228,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuRm.
     /// </remarks>
-    public T CubicRonnaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(171);
+    public T CubicRonnaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(171);
 
     /// <summary>
     /// Gets the volume in Cubic Quettameters (Qm³).
@@ -236,7 +236,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is cuQm.
     /// </remarks>
-    public T CubicQuettaMeters => CubicQuectoMeters / GenericMath.Pow10<T>(180);
+    public T CubicQuettaMeters => CubicQuectoMeters / UnitMath.Pow10<T>(180);
 
     /// <summary>
     /// Gets the volume in Cubic Inches (in³).
@@ -300,7 +300,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is L.
     /// </remarks>
-    public T Liters => CubicQuectoMeters / GenericMath.Pow10<T>(87);
+    public T Liters => CubicQuectoMeters / UnitMath.Pow10<T>(87);
 
     /// <summary>
     /// Gets the volume in Milliliters (mL).
@@ -308,7 +308,7 @@ public readonly partial struct Volume<T> :
     /// <remarks>
     /// The format specifier for this value is mL.
     /// </remarks>
-    public T Milliliters => CubicQuectoMeters / GenericMath.Pow10<T>(84);
+    public T Milliliters => CubicQuectoMeters / UnitMath.Pow10<T>(84);
 
     /// <summary>
     /// Gets the volume in US Gallons (US gal).

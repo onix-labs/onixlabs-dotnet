@@ -209,7 +209,7 @@ public sealed class VolumeTests
         // can diverge in the LSB because they multiply mantissa fragments in different orders.
         // Compute expected via the same chain as the unit to keep strict equality meaningful.
         Float256 input = Float256.Parse(value);
-        Float256 expected = input * GenericMath.Pow10<Float256>(117);
+        Float256 expected = input * UnitMath.Pow10<Float256>(117);
 
         Volume<Float256> v = Volume<Float256>.FromCubicGigameters(input);
 
@@ -276,7 +276,7 @@ public sealed class VolumeTests
         // can diverge in the LSB because they multiply mantissa fragments in different orders.
         // Compute expected via the same chain as the unit to keep strict equality meaningful.
         Float256 input = Float256.Parse(value);
-        Float256 expected = input * GenericMath.Pow10<Float256>(171);
+        Float256 expected = input * UnitMath.Pow10<Float256>(171);
 
         Volume<Float256> v = Volume<Float256>.FromCubicRonnameters(input);
 
@@ -342,7 +342,7 @@ public sealed class VolumeTests
         // Compute expected at Float256 precision via the same chain as the unit: AU³ × 10^90.
         Float256 input = Float256.Parse(value);
         Float256 auMeters = 149_597_870_700L;
-        Float256 expected = input * auMeters * auMeters * auMeters * GenericMath.Pow10<Float256>(90);
+        Float256 expected = input * auMeters * auMeters * auMeters * UnitMath.Pow10<Float256>(90);
 
         Volume<Float256> v = Volume<Float256>.FromCubicAstronomicalUnits(input);
 
@@ -358,7 +358,7 @@ public sealed class VolumeTests
         // Compute expected at Float256 precision via the same chain as the unit: LY³ × 10^90.
         Float256 input = Float256.Parse(value);
         Float256 lyMeters = 9_460_730_472_580_800L;
-        Float256 expected = input * lyMeters * lyMeters * lyMeters * GenericMath.Pow10<Float256>(90);
+        Float256 expected = input * lyMeters * lyMeters * lyMeters * UnitMath.Pow10<Float256>(90);
 
         Volume<Float256> v = Volume<Float256>.FromCubicLightYears(input);
 
@@ -377,7 +377,7 @@ public sealed class VolumeTests
         // so the division rounds and grouping changes the LSB.
         Float256 input = Float256.Parse(value);
         Float256 metersPerParsec = (Float256)149_597_870_700L * 648000 / Float256.Pi;
-        Float256 cuQmPerCuParsec = metersPerParsec * metersPerParsec * metersPerParsec * GenericMath.Pow10<Float256>(90);
+        Float256 cuQmPerCuParsec = metersPerParsec * metersPerParsec * metersPerParsec * UnitMath.Pow10<Float256>(90);
         Float256 expected = input * cuQmPerCuParsec;
 
         Volume<Float256> v = Volume<Float256>.FromCubicParsecs(input);

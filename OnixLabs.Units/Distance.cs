@@ -32,6 +32,7 @@ public readonly partial struct Distance<T> :
     /// <param name="value">The distance unit in <see cref="QuectoMeters"/>.</param>
     private Distance(T value) => Canonical = value;
 
+    /// <inheritdoc/>
     public T Canonical { get; }
 
     /// <summary>

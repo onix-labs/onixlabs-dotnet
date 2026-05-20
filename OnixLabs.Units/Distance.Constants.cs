@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Numerics;
-
 namespace OnixLabs.Units;
 
 public readonly partial struct Distance<T>
@@ -25,19 +23,19 @@ public readonly partial struct Distance<T>
     // Stored as static readonly per closed T so they're computed once and reused at the target type's
     // precision. Each is "QuectoMeters in one X", written so the entire factor stays at T's precision;
     // `T.CreateChecked(<decimal>)` would silently pre-round through double's ~15-17 digit precision.
-    private static readonly T QuectometersPerInch            = T.CreateChecked(254)                  * GenericMath.Pow10<T>(26); // 0.0254 m
-    private static readonly T QuectometersPerFoot            = T.CreateChecked(3048)                 * GenericMath.Pow10<T>(26); // 0.3048 m
-    private static readonly T QuectometersPerYard            = T.CreateChecked(9144)                 * GenericMath.Pow10<T>(26); // 0.9144 m
-    private static readonly T QuectometersPerMile            = T.CreateChecked(1609344)              * GenericMath.Pow10<T>(27); // 1 609.344 m
-    private static readonly T QuectometersPerNauticalMile    = T.CreateChecked(1852)                 * GenericMath.Pow10<T>(30); // 1 852 m
-    private static readonly T QuectometersPerFermi           =                                          GenericMath.Pow10<T>(15); // 1e-15 m
-    private static readonly T QuectometersPerAngstrom        =                                          GenericMath.Pow10<T>(20); // 1e-10 m
-    private static readonly T QuectometersPerAstronomicalUnit = T.CreateChecked(149_597_870_700L)    * GenericMath.Pow10<T>(30); // exact IAU definition (m)
-    private static readonly T QuectometersPerLightYear       = T.CreateChecked(9_460_730_472_580_800L) * GenericMath.Pow10<T>(30); // 365.25 d × c (m)
+    private static readonly T QuectometersPerInch = T.CreateChecked(254) * UnitMath.Pow10<T>(26); // 0.0254 m
+    private static readonly T QuectometersPerFoot = T.CreateChecked(3048) * UnitMath.Pow10<T>(26); // 0.3048 m
+    private static readonly T QuectometersPerYard = T.CreateChecked(9144) * UnitMath.Pow10<T>(26); // 0.9144 m
+    private static readonly T QuectometersPerMile = T.CreateChecked(1609344) * UnitMath.Pow10<T>(27); // 1 609.344 m
+    private static readonly T QuectometersPerNauticalMile = T.CreateChecked(1852) * UnitMath.Pow10<T>(30); // 1 852 m
+    private static readonly T QuectometersPerFermi = UnitMath.Pow10<T>(15); // 1e-15 m
+    private static readonly T QuectometersPerAngstrom = UnitMath.Pow10<T>(20); // 1e-10 m
+    private static readonly T QuectometersPerAstronomicalUnit = T.CreateChecked(149_597_870_700L) * UnitMath.Pow10<T>(30); // exact IAU definition (m)
+    private static readonly T QuectometersPerLightYear = T.CreateChecked(9_460_730_472_580_800L) * UnitMath.Pow10<T>(30); // 365.25 d × c (m)
 
     // Parsec is defined as (648000 / π) astronomical units. The division by π introduces one ULP of
     // T-precision rounding (π is irrational); every other factor in the chain is exact at Float128.
-    private static readonly T QuectometersPerParsec = T.CreateChecked(149_597_870_700L) * T.CreateChecked(648000) * GenericMath.Pow10<T>(30) / T.Pi;
+    private static readonly T QuectometersPerParsec = T.CreateChecked(149_597_870_700L) * T.CreateChecked(648000) * UnitMath.Pow10<T>(30) / T.Pi;
 
     private const string QuectoMetersSpecifier = "qm";
     private const string RontoMetersSpecifier = "rm";

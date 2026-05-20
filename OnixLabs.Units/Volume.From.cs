@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using OnixLabs.Numerics;
-
 namespace OnixLabs.Units;
 
 public readonly partial struct Volume<T>
@@ -30,168 +28,168 @@ public readonly partial struct Volume<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicRontometers(T value) => new(value * GenericMath.Pow10<T>(9));
+    public static Volume<T> FromCubicRontometers(T value) => new(value * UnitMath.Pow10<T>(9));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Yoctometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicYoctometers(T value) => new(value * GenericMath.Pow10<T>(18));
+    public static Volume<T> FromCubicYoctometers(T value) => new(value * UnitMath.Pow10<T>(18));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Zeptometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicZeptometers(T value) => new(value * GenericMath.Pow10<T>(27));
+    public static Volume<T> FromCubicZeptometers(T value) => new(value * UnitMath.Pow10<T>(27));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Attometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicAttometers(T value) => new(value * GenericMath.Pow10<T>(36));
+    public static Volume<T> FromCubicAttometers(T value) => new(value * UnitMath.Pow10<T>(36));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Femtometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicFemtometers(T value) => new(value * GenericMath.Pow10<T>(45));
+    public static Volume<T> FromCubicFemtometers(T value) => new(value * UnitMath.Pow10<T>(45));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Picometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicPicometers(T value) => new(value * GenericMath.Pow10<T>(54));
+    public static Volume<T> FromCubicPicometers(T value) => new(value * UnitMath.Pow10<T>(54));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Nanometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicNanometers(T value) => new(value * GenericMath.Pow10<T>(63));
+    public static Volume<T> FromCubicNanometers(T value) => new(value * UnitMath.Pow10<T>(63));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Micrometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicMicrometers(T value) => new(value * GenericMath.Pow10<T>(72));
+    public static Volume<T> FromCubicMicrometers(T value) => new(value * UnitMath.Pow10<T>(72));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Millimeters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicMillimeters(T value) => new(value * GenericMath.Pow10<T>(81));
+    public static Volume<T> FromCubicMillimeters(T value) => new(value * UnitMath.Pow10<T>(81));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Centimeters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicCentimeters(T value) => new(value * GenericMath.Pow10<T>(84));
+    public static Volume<T> FromCubicCentimeters(T value) => new(value * UnitMath.Pow10<T>(84));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Decimeters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicDecimeters(T value) => new(value * GenericMath.Pow10<T>(87));
+    public static Volume<T> FromCubicDecimeters(T value) => new(value * UnitMath.Pow10<T>(87));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Meters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicMeters(T value) => new(value * GenericMath.Pow10<T>(90));
+    public static Volume<T> FromCubicMeters(T value) => new(value * UnitMath.Pow10<T>(90));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Decameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicDecameters(T value) => new(value * GenericMath.Pow10<T>(93));
+    public static Volume<T> FromCubicDecameters(T value) => new(value * UnitMath.Pow10<T>(93));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Hectometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicHectometers(T value) => new(value * GenericMath.Pow10<T>(96));
+    public static Volume<T> FromCubicHectometers(T value) => new(value * UnitMath.Pow10<T>(96));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Kilometers value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicKilometers(T value) => new(value * GenericMath.Pow10<T>(99));
+    public static Volume<T> FromCubicKilometers(T value) => new(value * UnitMath.Pow10<T>(99));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Megameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicMegameters(T value) => new(value * GenericMath.Pow10<T>(108));
+    public static Volume<T> FromCubicMegameters(T value) => new(value * UnitMath.Pow10<T>(108));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Gigameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicGigameters(T value) => new(value * GenericMath.Pow10<T>(117));
+    public static Volume<T> FromCubicGigameters(T value) => new(value * UnitMath.Pow10<T>(117));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Terameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicTerameters(T value) => new(value * GenericMath.Pow10<T>(126));
+    public static Volume<T> FromCubicTerameters(T value) => new(value * UnitMath.Pow10<T>(126));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Petameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicPetameters(T value) => new(value * GenericMath.Pow10<T>(135));
+    public static Volume<T> FromCubicPetameters(T value) => new(value * UnitMath.Pow10<T>(135));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Exameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicExameters(T value) => new(value * GenericMath.Pow10<T>(144));
+    public static Volume<T> FromCubicExameters(T value) => new(value * UnitMath.Pow10<T>(144));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Zettameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicZettameters(T value) => new(value * GenericMath.Pow10<T>(153));
+    public static Volume<T> FromCubicZettameters(T value) => new(value * UnitMath.Pow10<T>(153));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Yottameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicYottameters(T value) => new(value * GenericMath.Pow10<T>(162));
+    public static Volume<T> FromCubicYottameters(T value) => new(value * UnitMath.Pow10<T>(162));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Ronnameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicRonnameters(T value) => new(value * GenericMath.Pow10<T>(171));
+    public static Volume<T> FromCubicRonnameters(T value) => new(value * UnitMath.Pow10<T>(171));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Quettameters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromCubicQuettameters(T value) => new(value * GenericMath.Pow10<T>(180));
+    public static Volume<T> FromCubicQuettameters(T value) => new(value * UnitMath.Pow10<T>(180));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Cubic Inches value.
@@ -247,14 +245,14 @@ public readonly partial struct Volume<T>
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromLiters(T value) => new(value * GenericMath.Pow10<T>(87));
+    public static Volume<T> FromLiters(T value) => new(value * UnitMath.Pow10<T>(87));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified Milliliters value.
     /// </summary>
     /// <param name="value">The value from which to construct the new <see cref="Volume{T}"/> instance.</param>
     /// <returns>Returns a new <see cref="Volume{T}"/> instance from the specified value.</returns>
-    public static Volume<T> FromMilliliters(T value) => new(value * GenericMath.Pow10<T>(84));
+    public static Volume<T> FromMilliliters(T value) => new(value * UnitMath.Pow10<T>(84));
 
     /// <summary>
     /// Creates a new <see cref="Volume{T}"/> instance from the specified US Gallons value.

@@ -35,6 +35,7 @@ public readonly partial struct Mass<T> :
     /// <param name="value">The mass unit in <see cref="QuectoGrams"/>.</param>
     private Mass(T value) => Canonical = value;
 
+    /// <inheritdoc/>
     public T Canonical { get; }
 
     /// <summary>

@@ -358,7 +358,7 @@ public sealed class AreaTests
         // Compute expected at Float256 precision via the same chain as the unit: AU² × 10^60.
         Float256 input = Float256.Parse(value);
         Float256 auMeters = 149_597_870_700L;
-        Float256 expected = input * auMeters * auMeters * GenericMath.Pow10<Float256>(60);
+        Float256 expected = input * auMeters * auMeters * UnitMath.Pow10<Float256>(60);
 
         Area<Float256> a = Area<Float256>.FromSquareAstronomicalUnits(input);
 
@@ -374,7 +374,7 @@ public sealed class AreaTests
         // Compute expected at Float256 precision via the same chain as the unit: LY² × 10^60.
         Float256 input = Float256.Parse(value);
         Float256 lyMeters = 9_460_730_472_580_800L;
-        Float256 expected = input * lyMeters * lyMeters * GenericMath.Pow10<Float256>(60);
+        Float256 expected = input * lyMeters * lyMeters * UnitMath.Pow10<Float256>(60);
 
         Area<Float256> a = Area<Float256>.FromSquareLightYears(input);
 
@@ -393,7 +393,7 @@ public sealed class AreaTests
         // input. π is irrational, so the division rounds and grouping changes the LSB.
         Float256 input = Float256.Parse(value);
         Float256 metersPerParsec = (Float256)149_597_870_700L * 648000 / Float256.Pi;
-        Float256 sqQmPerSqParsec = metersPerParsec * metersPerParsec * GenericMath.Pow10<Float256>(60);
+        Float256 sqQmPerSqParsec = metersPerParsec * metersPerParsec * UnitMath.Pow10<Float256>(60);
         Float256 expected = input * sqQmPerSqParsec;
 
         Area<Float256> a = Area<Float256>.FromSquareParsecs(input);
@@ -595,10 +595,10 @@ public sealed class AreaTests
 
         // Then — 1 m² in imperial units; compute expected via Float256 (same chain as the unit).
         // 1 m² = 10^60 sqqm. m²/in² = 10^60 / (64516 × 10^52) = 10^8 / 64516.
-        Float256 sqQm = GenericMath.Pow10<Float256>(60);
-        Assert.Equal(sqQm / ((Float256)64516 * GenericMath.Pow10<Float256>(52)), a.SquareInches);
-        Assert.Equal(sqQm / ((Float256)9290304 * GenericMath.Pow10<Float256>(52)), a.SquareFeet);
-        Assert.Equal(sqQm / ((Float256)83612736 * GenericMath.Pow10<Float256>(52)), a.SquareYards);
+        Float256 sqQm = UnitMath.Pow10<Float256>(60);
+        Assert.Equal(sqQm / ((Float256)64516 * UnitMath.Pow10<Float256>(52)), a.SquareInches);
+        Assert.Equal(sqQm / ((Float256)9290304 * UnitMath.Pow10<Float256>(52)), a.SquareFeet);
+        Assert.Equal(sqQm / ((Float256)83612736 * UnitMath.Pow10<Float256>(52)), a.SquareYards);
     }
 
     [Fact(DisplayName = "Area round-trip conversions should be accurate")]

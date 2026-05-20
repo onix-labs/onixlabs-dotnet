@@ -248,7 +248,7 @@ public sealed class AngleTests
         // Above Float128's 10^48 exact-power-of-10 range, Parse("X.Ye51") and value × Pow10(51) can
         // diverge in the LSB. Compute expected via the same chain as the unit to keep strict equality.
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * GenericMath.Pow10<Float128>(51);
+        Float128 expected = input * UnitMath.Pow10<Float128>(51);
 
         Angle<Float128> a = Angle<Float128>.FromZettaradians(input);
 
@@ -262,7 +262,7 @@ public sealed class AngleTests
     public void AngleFromYottaradiansShouldProduceExpectedQuectoRadians(string value)
     {
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * GenericMath.Pow10<Float128>(54);
+        Float128 expected = input * UnitMath.Pow10<Float128>(54);
 
         Angle<Float128> a = Angle<Float128>.FromYottaradians(input);
 
@@ -276,7 +276,7 @@ public sealed class AngleTests
     public void AngleFromRonnaradiansShouldProduceExpectedQuectoRadians(string value)
     {
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * GenericMath.Pow10<Float128>(57);
+        Float128 expected = input * UnitMath.Pow10<Float128>(57);
 
         Angle<Float128> a = Angle<Float128>.FromRonnaradians(input);
 
@@ -290,7 +290,7 @@ public sealed class AngleTests
     public void AngleFromQuettaradiansShouldProduceExpectedQuectoRadians(string value)
     {
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * GenericMath.Pow10<Float128>(60);
+        Float128 expected = input * UnitMath.Pow10<Float128>(60);
 
         Angle<Float128> a = Angle<Float128>.FromQuettaradians(input);
 
@@ -306,7 +306,7 @@ public sealed class AngleTests
         // Compute expected at Float128 precision via the same chain as the unit: π × 10^30 / 180.
         // T.Pi at Float128 carries 40+ digits, vastly above double's 15-17 digits.
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * (Float128.Pi * GenericMath.Pow10<Float128>(30) / (Float128)180);
+        Float128 expected = input * (Float128.Pi * UnitMath.Pow10<Float128>(30) / (Float128)180);
 
         Angle<Float128> a = Angle<Float128>.FromDegrees(input);
 
@@ -321,7 +321,7 @@ public sealed class AngleTests
     {
         // 1 arcmin = π/(180×60) rad
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * (Float128.Pi * GenericMath.Pow10<Float128>(30) / (Float128)10800);
+        Float128 expected = input * (Float128.Pi * UnitMath.Pow10<Float128>(30) / (Float128)10800);
 
         Angle<Float128> a = Angle<Float128>.FromArcminutes(input);
 
@@ -336,7 +336,7 @@ public sealed class AngleTests
     {
         // 1 arcsec = π/(180×3600) rad
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * (Float128.Pi * GenericMath.Pow10<Float128>(30) / (Float128)648000);
+        Float128 expected = input * (Float128.Pi * UnitMath.Pow10<Float128>(30) / (Float128)648000);
 
         Angle<Float128> a = Angle<Float128>.FromArcseconds(input);
 
@@ -351,7 +351,7 @@ public sealed class AngleTests
     {
         // 1 gon = π/200 rad
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * (Float128.Pi * GenericMath.Pow10<Float128>(30) / (Float128)200);
+        Float128 expected = input * (Float128.Pi * UnitMath.Pow10<Float128>(30) / (Float128)200);
 
         Angle<Float128> a = Angle<Float128>.FromGradians(input);
 
@@ -366,7 +366,7 @@ public sealed class AngleTests
     {
         // 1 tr = 2π rad
         Float128 input = Float128.Parse(value);
-        Float128 expected = input * (Float128.Pi * GenericMath.Pow10<Float128>(30) * (Float128)2);
+        Float128 expected = input * (Float128.Pi * UnitMath.Pow10<Float128>(30) * (Float128)2);
 
         Angle<Float128> a = Angle<Float128>.FromTurns(input);
 
@@ -448,9 +448,9 @@ public sealed class AngleTests
         Angle<Float128> result = left.Multiply(right);  // 1e31 × 3e30 = 3e61 qrad
 
         // Then — 3e61 exceeds Float128's 10^48 exact range, so compute expected via the same chain.
-        Assert.Equal((Float128)10 * GenericMath.Pow10<Float128>(30), left.QuectoRadians);
-        Assert.Equal((Float128)3 * GenericMath.Pow10<Float128>(30), right.QuectoRadians);
-        Float128 expected = ((Float128)10 * GenericMath.Pow10<Float128>(30)) * ((Float128)3 * GenericMath.Pow10<Float128>(30));
+        Assert.Equal((Float128)10 * UnitMath.Pow10<Float128>(30), left.QuectoRadians);
+        Assert.Equal((Float128)3 * UnitMath.Pow10<Float128>(30), right.QuectoRadians);
+        Float128 expected = ((Float128)10 * UnitMath.Pow10<Float128>(30)) * ((Float128)3 * UnitMath.Pow10<Float128>(30));
         Assert.Equal(expected, result.QuectoRadians);
     }
 

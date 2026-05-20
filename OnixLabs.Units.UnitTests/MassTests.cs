@@ -19,11 +19,11 @@ namespace OnixLabs.Units.UnitTests;
 
 public sealed class MassTests
 {
-    // The Dalton conversion factor (1660539.0666 qg) is not exactly representable in binary FP. Constructing it as
-    // (16605390666 / 10000) gives the closest-Float128 to the rational, but a subsequent multiplication by a value
-    // like 2.5 chains a second rounding, producing a result one ULP off from the closest-Float128 of the true product.
-    // The tolerance below sits comfortably above one ULP at the magnitudes used (~10^6) but well below anything that
-    // would mask a genuine factor bug.
+    // The Dalton conversion factor (1660539.06892 qg, CODATA 2022) is not exactly representable in binary FP.
+    // Constructing it as (166053906892 / 100000) gives the closest-Float128 to the rational, but a subsequent
+    // multiplication by a value like 2.5 chains a second rounding, producing a result one ULP off from the
+    // closest-Float128 of the true product. The tolerance below sits comfortably above one ULP at the magnitudes
+    // used (~10^6) but well below anything that would mask a genuine factor bug.
     private static readonly Float128 DaltonTolerance = Float128.Parse("1e-25");
 
     private static void AssertNearlyEqual(Float128 expected, Float128 actual, Float128 tolerance)
@@ -396,8 +396,8 @@ public sealed class MassTests
 
     [Theory(DisplayName = "Mass.FromDaltons should produce the expected QuectoGrams")]
     [InlineData("0", "0")]
-    [InlineData("1", "1.66053906660e6")]
-    [InlineData("2.5", "4.15134766650e6")]
+    [InlineData("1", "1.66053906892e6")]
+    [InlineData("2.5", "4.15134767230e6")]
     public void MassFromDaltonsShouldProduceExpectedQuectoGrams(string value, string expected)
     {
         Mass<Float128> m = Mass<Float128>.FromDaltons(Float128.Parse(value));

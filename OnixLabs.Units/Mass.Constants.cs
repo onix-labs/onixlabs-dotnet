@@ -36,7 +36,9 @@ public readonly partial struct Mass<T>
     private static readonly T QuectogramsPerGrain = T.CreateChecked(6479891L) * UnitMath.Pow10<T>(22); // 0.06479891 g
     private static readonly T QuectogramsPerDram = T.CreateChecked(17718451953125L) * UnitMath.Pow10<T>(17); // 1.7718451953125 g
     private static readonly T QuectogramsPerSlug = T.CreateChecked(1459390293720636L) * UnitMath.Pow10<T>(19); // 14593.90293720636 g
-    private static readonly T QuectogramsPerDalton = T.CreateChecked(16605390666L) / T.CreateChecked(10000); // 1660539.0666 qg = 1.66053906660e-24 g
+    // CODATA 2022 recommended value: 1.66053906892(52) × 10⁻²⁷ kg = 1.66053906892e6 qg.
+    // Source: https://physics.nist.gov/cgi-bin/cuu/Value?ukg
+    private static readonly T QuectogramsPerDalton = T.CreateChecked(166053906892L) / T.CreateChecked(100000); // 1660539.06892 qg = 1.66053906892e-24 g
 
     private const string QuectoGramsSpecifier = "qg";
     private const string RontoGramsSpecifier = "rg";

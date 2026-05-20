@@ -641,7 +641,7 @@ internal static class Program
             Time<Float128>.FromSeconds(F(1)));
 
         Sub("Construction (gravity ~ 9.81 m/s2)");
-        Row("Magnitude (m/s2)", g.Magnitude);
+        Row("Magnitude (m/s2)", ((IMagnitudinalUnit<Float128>)g).Magnitude);
 
         Sub("Format");
         Row("\"m/s²:3\"",   g.ToString("m/s²:3", Inv));
@@ -674,7 +674,7 @@ internal static class Program
             Time<Float128>.FromSeconds(F(1)));
 
         Sub("Construction (2 rad/s²)");
-        Row("Magnitude (rad/s²)", alpha.Magnitude);
+        Row("Magnitude (rad/s²)", ((IMagnitudinalUnit<Float128>)alpha).Magnitude);
 
         Sub("Format");
         Row("default",          alpha.ToString());
@@ -703,7 +703,7 @@ internal static class Program
             Time<Float128>.FromSeconds(F(1)));
 
         Sub("Construction (one revolution per second)");
-        Row("Magnitude (rad/s)", w.Magnitude);
+        Row("Magnitude (rad/s)", ((IMagnitudinalUnit<Float128>)w).Magnitude);
 
         Sub("Format");
         Row("default",          w.ToString());
@@ -731,7 +731,7 @@ internal static class Program
             Volume<Float128>.FromCubicMeters(F(1)));
 
         Sub("Construction (water = 1000 kg/m3)");
-        Row("Magnitude",    water.Magnitude);
+        Row("Magnitude",    ((IMagnitudinalUnit<Float128>)water).Magnitude);
 
         Sub("Format");
         Row("default",          water.ToString());
@@ -769,7 +769,7 @@ internal static class Program
         ElectricCapacitance<Float128> c = new(q, v);
 
         Sub("Construction (1 F)");
-        Row("Magnitude",    c.Magnitude);
+        Row("Magnitude",    ((IMagnitudinalUnit<Float128>)c).Magnitude);
 
         Sub("Format (named SI alias 'F' with prefixes)");
         Row("default",      c.ToString());
@@ -784,8 +784,8 @@ internal static class Program
         ElectricCapacitance<Float128> b = new(
             new ElectricCharge<Float128>(Current<Float128>.FromAmperes(F(2)), Time<Float128>.FromSeconds(F(1))),
             v);
-        Row("a + b",            a.Add(b).Magnitude);
-        Row("b - a",            b.Subtract(a).Magnitude);
+        Row("a + b",            ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a",            ((IMagnitudinalUnit<Float128>)a.Subtract(b)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -801,7 +801,7 @@ internal static class Program
             Time<Float128>.FromSeconds(F(5)));
 
         Sub("Construction (2 A x 5 s = 10 C)");
-        Row("Magnitude (C)",    q.Magnitude);
+        Row("Magnitude (C)",    ((IMagnitudinalUnit<Float128>)q).Magnitude);
 
         Sub("Format (named SI alias 'C' with prefixes)");
         Row("default",          q.ToString());
@@ -814,8 +814,8 @@ internal static class Program
         Sub("Arithmetic");
         ElectricCharge<Float128> a = new(Current<Float128>.FromAmperes(F(1)), Time<Float128>.FromSeconds(F(3)));
         ElectricCharge<Float128> b = new(Current<Float128>.FromAmperes(F(1)), Time<Float128>.FromSeconds(F(7)));
-        Row("a + b (C)",    a.Add(b).Magnitude);
-        Row("b - a (C)",    b.Subtract(a).Magnitude);
+        Row("a + b (C)", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a (C)", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -838,7 +838,7 @@ internal static class Program
         ElectricPotential<Float128> v = new(oneJoule, oneCoulomb);
 
         Sub("Construction (1 V)");
-        Row("Magnitude",    v.Magnitude);
+        Row("Magnitude", ((IMagnitudinalUnit<Float128>)v).Magnitude);
 
         Sub("Format (named SI alias 'V' with prefixes)");
         Row("default",      v.ToString());
@@ -850,8 +850,8 @@ internal static class Program
         Sub("Arithmetic");
         ElectricPotential<Float128> a = new(oneJoule, oneCoulomb);
         ElectricPotential<Float128> b = new(oneJoule, new ElectricCharge<Float128>(Current<Float128>.FromAmperes(F(2)), Time<Float128>.FromSeconds(F(1))));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("a - b",        a.Subtract(b).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("a - b", ((IMagnitudinalUnit<Float128>)a.Subtract(b)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -875,7 +875,7 @@ internal static class Program
         ElectricResistance<Float128> r = new(oneVolt, Current<Float128>.FromAmperes(F(1)));
 
         Sub("Construction (1 Ohm)");
-        Row("Magnitude",    r.Magnitude);
+        Row("Magnitude", ((IMagnitudinalUnit<Float128>)r).Magnitude);
 
         Sub("Format (named SI alias 'Ω' with prefixes; ASCII 'Ohm' also accepted on input)");
         Row("default",      r.ToString());
@@ -890,8 +890,8 @@ internal static class Program
         Sub("Arithmetic");
         ElectricResistance<Float128> a = new(oneVolt, Current<Float128>.FromAmperes(F(1)));
         ElectricResistance<Float128> b = new(oneVolt, Current<Float128>.FromAmperes(F(2)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("a - b",        a.Subtract(b).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("a - b", ((IMagnitudinalUnit<Float128>)a.Subtract(b)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -911,7 +911,7 @@ internal static class Program
         Energy<Float128> e = new(oneNewton, Distance<Float128>.FromMeters(F(10)));
 
         Sub("Construction (1 N x 10 m = 10 J)");
-        Row("Magnitude (J)",    e.Magnitude);
+        Row("Magnitude (J)", ((IMagnitudinalUnit<Float128>)e).Magnitude);
 
         Sub("Format (named SI alias 'J' with prefixes)");
         Row("default",              e.ToString());
@@ -924,8 +924,8 @@ internal static class Program
         Sub("Arithmetic");
         Energy<Float128> a = new(oneNewton, Distance<Float128>.FromMeters(F(2)));
         Energy<Float128> b = new(oneNewton, Distance<Float128>.FromMeters(F(8)));
-        Row("a + b (J)",    a.Add(b).Magnitude);
-        Row("b - a (J)",    b.Subtract(a).Magnitude);
+        Row("a + b (J)", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a (J)", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -943,7 +943,7 @@ internal static class Program
         Force<Float128> f = new(Mass<Float128>.FromKilograms(F(5)), oneMperS2);
 
         Sub("Construction (5 kg x 1 m/s² = 5 N)");
-        Row("Magnitude (N)",    f.Magnitude);
+        Row("Magnitude (N)", ((IMagnitudinalUnit<Float128>)f).Magnitude);
 
         Sub("Format (named SI alias 'N' with prefixes)");
         Row("default",          f.ToString());
@@ -957,8 +957,8 @@ internal static class Program
         Sub("Arithmetic");
         Force<Float128> a = new(Mass<Float128>.FromKilograms(F(2)), oneMperS2);
         Force<Float128> b = new(Mass<Float128>.FromKilograms(F(3)), oneMperS2);
-        Row("a + b (N)",    a.Add(b).Magnitude);
-        Row("b - a (N)",    b.Subtract(a).Magnitude);
+        Row("a + b (N)", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a (N)", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -978,7 +978,7 @@ internal static class Program
         HeatCapacity<Float128> hc = new(oneJoule, Temperature<Float128>.FromKelvin(F(1)));
 
         Sub("Construction (1 J/K)");
-        Row("Magnitude (J/K)",  hc.Magnitude);
+        Row("Magnitude (J/K)", ((IMagnitudinalUnit<Float128>)hc).Magnitude);
 
         Sub("Format (compound default cascades through Energy 'J' alias)");
         Row("default",          hc.ToString());
@@ -988,8 +988,8 @@ internal static class Program
         Sub("Arithmetic");
         HeatCapacity<Float128> a = new(oneJoule, Temperature<Float128>.FromKelvin(F(2)));
         HeatCapacity<Float128> b = new(oneJoule, Temperature<Float128>.FromKelvin(F(4)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("a - b",        a.Subtract(b).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("a - b", ((IMagnitudinalUnit<Float128>)a.Subtract(b)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1006,7 +1006,7 @@ internal static class Program
         Illuminance<Float128> lx = new(oneLumen, Area<Float128>.FromSquareMeters(F(1)));
 
         Sub("Construction (1 lm / 1 m² = 1 lx)");
-        Row("Magnitude",    lx.Magnitude);
+        Row("Magnitude", ((IMagnitudinalUnit<Float128>)lx).Magnitude);
 
         Sub("Format (named SI alias 'lx' with prefixes)");
         Row("default",      lx.ToString());
@@ -1017,8 +1017,8 @@ internal static class Program
         Sub("Arithmetic");
         Illuminance<Float128> a = new(oneLumen, Area<Float128>.FromSquareMeters(F(2)));
         Illuminance<Float128> b = new(oneLumen, Area<Float128>.FromSquareMeters(F(4)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("a - b",        a.Subtract(b).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("a - b", ((IMagnitudinalUnit<Float128>)a.Subtract(b)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1037,7 +1037,7 @@ internal static class Program
         Impulse<Float128> j = new(tenN, Time<Float128>.FromSeconds(F(3)));
 
         Sub("Construction (10 N x 3 s = 30 N*s)");
-        Row("Magnitude (N*s)",  j.Magnitude);
+        Row("Magnitude (N*s)", ((IMagnitudinalUnit<Float128>)j).Magnitude);
 
         Sub("Format (compound default cascades through Force 'N' alias)");
         Row("default",          j.ToString());
@@ -1047,8 +1047,8 @@ internal static class Program
         Sub("Arithmetic");
         Impulse<Float128> a = new(tenN, Time<Float128>.FromSeconds(F(1)));
         Impulse<Float128> b = new(tenN, Time<Float128>.FromSeconds(F(2)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1063,7 +1063,7 @@ internal static class Program
             SolidAngle<Float128>.FromSteradians(F(1)));
 
         Sub("Construction (100 cd over 1 sr = 100 lm)");
-        Row("Magnitude (lm)",   lm.Magnitude);
+        Row("Magnitude (lm)", ((IMagnitudinalUnit<Float128>)lm).Magnitude);
 
         Sub("Format (named SI alias 'lm' with prefixes)");
         Row("default",          lm.ToString());
@@ -1075,8 +1075,8 @@ internal static class Program
         Sub("Arithmetic");
         LuminousFlux<Float128> a = new(LuminousIntensity<Float128>.FromCandelas(F(50)), SolidAngle<Float128>.FromSteradians(F(1)));
         LuminousFlux<Float128> b = new(LuminousIntensity<Float128>.FromCandelas(F(150)), SolidAngle<Float128>.FromSteradians(F(1)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1134,7 +1134,7 @@ internal static class Program
         MagneticFlux<Float128> wb = new(oneVolt, Time<Float128>.FromSeconds(F(1)));
 
         Sub("Construction (1 V x 1 s = 1 Wb)");
-        Row("Magnitude (Wb)",   wb.Magnitude);
+        Row("Magnitude (Wb)", ((IMagnitudinalUnit<Float128>)wb).Magnitude);
 
         Sub("Format (named SI alias 'Wb' with prefixes)");
         Row("default",          wb.ToString());
@@ -1145,8 +1145,8 @@ internal static class Program
         Sub("Arithmetic");
         MagneticFlux<Float128> a = new(oneVolt, Time<Float128>.FromSeconds(F(2)));
         MagneticFlux<Float128> b = new(oneVolt, Time<Float128>.FromSeconds(F(5)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1161,7 +1161,7 @@ internal static class Program
             Time<Float128>.FromMinutes(F(1)));
 
         Sub("Construction (60 kg / 1 min = 1 kg/s)");
-        Row("Magnitude (kg/s)", rate.Magnitude);
+        Row("Magnitude (kg/s)", ((IMagnitudinalUnit<Float128>)rate).Magnitude);
 
         Sub("Format");
         Row("default",          rate.ToString());
@@ -1172,8 +1172,8 @@ internal static class Program
         Sub("Arithmetic");
         MassFlowRate<Float128> a = new(Mass<Float128>.FromKilograms(F(10)), Time<Float128>.FromSeconds(F(1)));
         MassFlowRate<Float128> b = new(Mass<Float128>.FromKilograms(F(30)), Time<Float128>.FromSeconds(F(1)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1188,7 +1188,7 @@ internal static class Program
             Volume<Float128>.FromLiters(F(1)));
 
         Sub("Construction (1 mol / 1 L)");
-        Row("Magnitude",        c.Magnitude);
+        Row("Magnitude", ((IMagnitudinalUnit<Float128>)c).Magnitude);
 
         Sub("Format");
         Row("default",          c.ToString());
@@ -1198,8 +1198,8 @@ internal static class Program
         Sub("Arithmetic");
         MolarConcentration<Float128> a = new(AmountOfSubstance<Float128>.FromMoles(F(2)), Volume<Float128>.FromLiters(F(1)));
         MolarConcentration<Float128> b = new(AmountOfSubstance<Float128>.FromMoles(F(5)), Volume<Float128>.FromLiters(F(1)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1214,7 +1214,7 @@ internal static class Program
             AmountOfSubstance<Float128>.FromMoles(F(1)));
 
         Sub("Construction (water 18.015 g/mol)");
-        Row("Magnitude (kg/mol)", water.Magnitude);
+        Row("Magnitude (kg/mol)", ((IMagnitudinalUnit<Float128>)water).Magnitude);
 
         Sub("Format");
         Row("default",          water.ToString());
@@ -1224,8 +1224,8 @@ internal static class Program
         Sub("Arithmetic");
         MolarMass<Float128> a = new(Mass<Float128>.FromGrams(F(10)), AmountOfSubstance<Float128>.FromMoles(F(1)));
         MolarMass<Float128> b = new(Mass<Float128>.FromGrams(F(20)), AmountOfSubstance<Float128>.FromMoles(F(1)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1240,7 +1240,7 @@ internal static class Program
             new Speed<Float128>(Distance<Float128>.FromMeters(F(3)), Time<Float128>.FromSeconds(F(1))));
 
         Sub("Construction (2 kg x 3 m/s = 6 kg*m/s)");
-        Row("Magnitude",        p.Magnitude);
+        Row("Magnitude", ((IMagnitudinalUnit<Float128>)p).Magnitude);
 
         Sub("Format");
         Row("default",          p.ToString());
@@ -1250,8 +1250,8 @@ internal static class Program
             new Speed<Float128>(Distance<Float128>.FromMeters(F(2)), Time<Float128>.FromSeconds(F(1))));
         Momentum<Float128> b = new(Mass<Float128>.FromKilograms(F(1)),
             new Speed<Float128>(Distance<Float128>.FromMeters(F(5)), Time<Float128>.FromSeconds(F(1))));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1271,7 +1271,7 @@ internal static class Program
         Power<Float128> w = new(hundredJoules, Time<Float128>.FromSeconds(F(10)));
 
         Sub("Construction (100 J / 10 s = 10 W)");
-        Row("Magnitude (W)",    w.Magnitude);
+        Row("Magnitude (W)", ((IMagnitudinalUnit<Float128>)w).Magnitude);
 
         Sub("Format (named SI alias 'W' with prefixes)");
         Row("default",          w.ToString());
@@ -1283,8 +1283,8 @@ internal static class Program
         Sub("Arithmetic");
         Power<Float128> a = new(hundredJoules, Time<Float128>.FromSeconds(F(50)));
         Power<Float128> b = new(hundredJoules, Time<Float128>.FromSeconds(F(25)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1303,7 +1303,7 @@ internal static class Program
         Pressure<Float128> pa = new(oneN, Area<Float128>.FromSquareMeters(F(1)));
 
         Sub("Construction (1 N / 1 m² = 1 Pa)");
-        Row("Magnitude (Pa)",   pa.Magnitude);
+        Row("Magnitude (Pa)", ((IMagnitudinalUnit<Float128>)pa).Magnitude);
 
         Sub("Format (named SI alias 'Pa' with prefixes)");
         Row("default",          pa.ToString());
@@ -1315,8 +1315,8 @@ internal static class Program
         Sub("Arithmetic");
         Pressure<Float128> a = new(oneN, Area<Float128>.FromSquareMeters(F(2)));
         Pressure<Float128> b = new(oneN, Area<Float128>.FromSquareMeters(F(4)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("a - b",        a.Subtract(b).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("a - b", ((IMagnitudinalUnit<Float128>)a.Subtract(b)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1331,7 +1331,7 @@ internal static class Program
             Time<Float128>.FromHours(F(1)));
 
         Sub("Construction (110 km/h)");
-        Row("Magnitude (m/s)",  highway.Magnitude);
+        Row("Magnitude (m/s)", ((IMagnitudinalUnit<Float128>)highway).Magnitude);
 
         Sub("Format");
         Row("default",          highway.ToString());
@@ -1344,8 +1344,8 @@ internal static class Program
         Sub("Arithmetic");
         Speed<Float128> a = new(Distance<Float128>.FromMeters(F(10)), Time<Float128>.FromSeconds(F(1)));
         Speed<Float128> b = new(Distance<Float128>.FromMeters(F(25)), Time<Float128>.FromSeconds(F(1)));
-        Row("a + b (m/s)",  a.Add(b).Magnitude);
-        Row("b - a (m/s)",  b.Subtract(a).Magnitude);
+        Row("a + b (m/s)", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a (m/s)", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1364,7 +1364,7 @@ internal static class Program
         Torque<Float128> tau = new(tenN, Distance<Float128>.FromMeters(F("0.5")));
 
         Sub("Construction (10 N x 0.5 m = 5 N*m)");
-        Row("Magnitude (N*m)",  tau.Magnitude);
+        Row("Magnitude (N*m)", ((IMagnitudinalUnit<Float128>)tau).Magnitude);
 
         Sub("Format (compound default cascades through Force 'N' alias; intentionally not 'J' for torque)");
         Row("default",          tau.ToString());
@@ -1374,8 +1374,8 @@ internal static class Program
         Sub("Arithmetic");
         Torque<Float128> a = new(tenN, Distance<Float128>.FromMeters(F(1)));
         Torque<Float128> b = new(tenN, Distance<Float128>.FromMeters(F(3)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));
@@ -1390,7 +1390,7 @@ internal static class Program
             Time<Float128>.FromSeconds(F(1)));
 
         Sub("Construction (2 L / 1 s)");
-        Row("Magnitude (m³/s)", q.Magnitude);
+        Row("Magnitude (m³/s)", ((IMagnitudinalUnit<Float128>)q).Magnitude);
 
         Sub("Format");
         Row("default",          q.ToString());
@@ -1401,8 +1401,8 @@ internal static class Program
         Sub("Arithmetic");
         VolumetricFlowRate<Float128> a = new(Volume<Float128>.FromLiters(F(1)), Time<Float128>.FromSeconds(F(1)));
         VolumetricFlowRate<Float128> b = new(Volume<Float128>.FromLiters(F(3)), Time<Float128>.FromSeconds(F(1)));
-        Row("a + b",        a.Add(b).Magnitude);
-        Row("b - a",        b.Subtract(a).Magnitude);
+        Row("a + b", ((IMagnitudinalUnit<Float128>)a.Add(b)).Magnitude);
+        Row("b - a", ((IMagnitudinalUnit<Float128>)b.Subtract(a)).Magnitude);
 
         Sub("Equality / Comparison");
         Row("a == b",           a.Equals(b));

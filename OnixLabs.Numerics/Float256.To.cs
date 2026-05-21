@@ -75,11 +75,28 @@ public readonly partial struct Float256
         if (IsNaN(this)) return NaNSymbol;
         if (IsPositiveInfinity(this)) return PositiveInfinitySymbol;
         if (IsNegativeInfinity(this)) return NegativeInfinitySymbol;
-        if (IsZero(this)) return IsNegative(this) ? NegativeZeroSymbol : PositiveZeroSymbol;
+        if (IsZero(this))
+        {
+            // Only short-circuit zero for round-trip/general formats. Precision-bearing formats (N3, F2, C, P, …)
+            // expect padded fractional digits, so route through NumberInfo for correct padding and grouping.
+            if (format.IsEmpty || format.IsWhiteSpace() || IsRoundTripOrGeneralFormat(format))
+                return IsNegative(this) ? NegativeZeroSymbol : PositiveZeroSymbol;
+            return NumberInfo.Zero.ToString(format.ToString(), formatProvider);
+        }
 
         int significantDigits = ResolveSignificantDigits(format);
         NumberInfo numberInfo = ToDecimalNumberInfo(this, significantDigits);
         return numberInfo.ToString(format.ToString(), formatProvider);
+    }
+
+    /// <summary>
+    /// Returns <see langword="true"/> if the supplied format specifier is <c>G</c> or <c>R</c>
+    /// (with or without a digit suffix); otherwise <see langword="false"/>.
+    /// </summary>
+    private static bool IsRoundTripOrGeneralFormat(ReadOnlySpan<char> format)
+    {
+        char specifier = char.ToUpperInvariant(format[0]);
+        return specifier is 'G' or 'R';
     }
 
     /// <summary>

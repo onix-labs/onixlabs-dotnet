@@ -14,7 +14,6 @@
 
 using System;
 using System.Globalization;
-using System.Numerics;
 
 namespace OnixLabs.Numerics;
 
@@ -24,7 +23,7 @@ public readonly partial struct Float128
     /// The maximum number of significant decimal digits sufficient to uniquely identify any <see cref="Float128"/> value when parsed back.
     /// </summary>
     /// <remarks>The IEEE 754 binary128 round-trip digit count is 36.</remarks>
-    public const int MaxRoundTripDigits = 36;
+    private const int MaxRoundTripDigits = 36;
 
     /// <summary>
     /// The textual symbol returned by <see cref="ToString()"/> for <see cref="NaN"/> values.
@@ -68,7 +67,8 @@ public readonly partial struct Float128
     /// <param name="format">The format to use, or <see langword="null"/> to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value, or <see langword="null"/> to use the current culture.</param>
     /// <returns>Returns the value of the current instance formatted using the specified format and provider.</returns>
-    public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString((format ?? DefaultFormatSpecifier).AsSpan(), formatProvider);
+    public string ToString(string? format, IFormatProvider? formatProvider = null) =>
+        ToString((format ?? DefaultFormatSpecifier).AsSpan(), formatProvider);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format and format provider.
@@ -81,11 +81,28 @@ public readonly partial struct Float128
         if (IsNaN(this)) return NaNSymbol;
         if (IsPositiveInfinity(this)) return PositiveInfinitySymbol;
         if (IsNegativeInfinity(this)) return NegativeInfinitySymbol;
-        if (IsZero(this)) return IsNegative(this) ? NegativeZeroSymbol : PositiveZeroSymbol;
+        if (IsZero(this))
+        {
+            // Only short-circuit zero for round-trip/general formats. Precision-bearing formats (N3, F2, C, P, …)
+            // expect padded fractional digits, so route through NumberInfo for correct padding and grouping.
+            if (format.IsEmpty || format.IsWhiteSpace() || IsRoundTripOrGeneralFormat(format))
+                return IsNegative(this) ? NegativeZeroSymbol : PositiveZeroSymbol;
+            return NumberInfo.Zero.ToString(format, formatProvider);
+        }
 
         int significantDigits = ResolveSignificantDigits(format);
         NumberInfo numberInfo = ToDecimalNumberInfo(this, significantDigits);
-        return numberInfo.ToString(format.ToString(), formatProvider);
+        return numberInfo.ToString(format, formatProvider);
+    }
+
+    /// <summary>
+    /// Returns <see langword="true"/> if the supplied format specifier is <c>G</c> or <c>R</c>
+    /// (with or without a digit suffix); otherwise <see langword="false"/>.
+    /// </summary>
+    private static bool IsRoundTripOrGeneralFormat(ReadOnlySpan<char> format)
+    {
+        char specifier = char.ToUpperInvariant(format[0]);
+        return specifier is 'G' or 'R';
     }
 
     /// <summary>
@@ -98,15 +115,10 @@ public readonly partial struct Float128
         if (format.IsEmpty || format.IsWhiteSpace()) return MaxRoundTripDigits;
 
         char specifier = char.ToUpperInvariant(format[0]);
-        if (specifier == 'G' || specifier == 'R')
-        {
-            if (format.Length > 1 && int.TryParse(format[1..], NumberStyles.None, CultureInfo.InvariantCulture, out int digits) && digits > 0)
-            {
-                return digits;
-            }
+        if (specifier != 'G' && specifier != 'R') return MaxRoundTripDigits;
 
-            return MaxRoundTripDigits;
-        }
+        if (format.Length > 1 && int.TryParse(format[1..], NumberStyles.None, CultureInfo.InvariantCulture, out int digits) && digits > 0)
+            return digits;
 
         return MaxRoundTripDigits;
     }
@@ -125,7 +137,7 @@ public readonly partial struct Float128
     /// </remarks>
     private static NumberInfo ToDecimalNumberInfo(Float128 value, int significantDigits)
     {
-        Float256 widened = (Float256)value;
+        Float256 widened = value;
         return Float256.ToDecimalNumberInfo(widened, significantDigits);
     }
 }

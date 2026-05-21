@@ -290,34 +290,6 @@ public sealed class TemperatureTests
         AssertNearlyEqual(Float128.Parse(expectedRomer), temperature.Romer);
     }
 
-    [Fact(DisplayName = "Temperature.Add should produce the expected result")]
-    public void TemperatureAddShouldProduceExpectedValue()
-    {
-        // Given
-        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("100"));
-        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("50"));
-
-        // When
-        Temperature<Float128> result = left.Add(right);
-
-        // Then
-        Assert.Equal(Float128.Parse("150"), result.Kelvin);
-    }
-
-    [Fact(DisplayName = "Temperature.Subtract should produce the expected result")]
-    public void TemperatureSubtractShouldProduceExpectedValue()
-    {
-        // Given
-        Temperature<Float128> left = Temperature<Float128>.FromKelvin(Float128.Parse("100"));
-        Temperature<Float128> right = Temperature<Float128>.FromKelvin(Float128.Parse("40"));
-
-        // When
-        Temperature<Float128> result = left.Subtract(right);
-
-        // Then
-        Assert.Equal(Float128.Parse("60"), result.Kelvin);
-    }
-
     [Fact(DisplayName = "Temperature comparison should produce the expected result (left equal to right)")]
     public void TemperatureComparisonShouldProduceExpectedResultLeftEqualToRight()
     {
@@ -495,20 +467,6 @@ public sealed class TemperatureTests
         Temperature<Float128> t = Temperature<Float128>.FromKelvin(Float128.Parse("300"));
 
         Assert.Equal(t.ValueOf(canonicalSpecifier), t.ValueOf(lowerSpecifier));
-    }
-
-    [Fact(DisplayName = "Temperature.Add of two Celsius values produces sum-in-Kelvin (affine quirk)")]
-    public void TemperatureAddOfTwoCelsiusValuesProducesSumInKelvin()
-    {
-        // Affine quirk: Celsius is a point-in-affine-space, not a vector.
-        // Add operates on the underlying Kelvin field, so C(0) + C(0) = K(273.15) + K(273.15) = K(546.3),
-        // which is not physically meaningful as a temperature. This test documents current behavior
-        // pending the affine semantics decision (punch list #1).
-        Temperature<Float128> zeroCelsius = Temperature<Float128>.FromCelsius(Float128.Parse("0"));
-
-        Temperature<Float128> sum = zeroCelsius.Add(zeroCelsius);
-
-        AssertNearlyEqual(Float128.Parse("546.3"), sum.Kelvin);
     }
 
     [Theory(DisplayName = "Temperature.ValueOf should return the value at the matching scale")]

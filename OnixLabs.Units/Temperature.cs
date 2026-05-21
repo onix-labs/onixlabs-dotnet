@@ -19,10 +19,24 @@ namespace OnixLabs.Units;
 /// <summary>
 /// Represents a unit of temperature.
 /// </summary>
+/// <remarks>
+/// Temperature is an affine quantity — a point on a scale, not a magnitude — so addition and
+/// subtraction operators (<c>+</c>, <c>-</c>) are intentionally not defined. Adding two
+/// temperatures has no physical meaning (e.g. <c>100°C + 50°C</c> is not <c>150°C</c>; the
+/// offset between each scale and Kelvin gets double-counted). To increase or decrease a
+/// temperature by a known delta, do the arithmetic on the underlying Kelvin field and
+/// reconstruct:
+/// <code>
+/// var hotter = Temperature&lt;double&gt;.FromKelvin(temperature.Kelvin + deltaInKelvin);
+/// </code>
+/// To express the difference between two temperatures, subtract their Kelvin readings to obtain
+/// a raw delta (which is identical in Kelvin and Celsius, and scaled differently in Fahrenheit
+/// or Rankine): <c>var delta = a.Kelvin - b.Kelvin;</c>.
+/// </remarks>
 /// <typeparam name="T">The underlying <see cref="IFloatingPoint{TSelf}"/> value type.</typeparam>
 // ReSharper disable MemberCanBePrivate.Global
 #pragma warning disable CA2231
-public readonly partial struct Temperature<T> : ICanonicalUnit<T>, IAdditiveUnit<Temperature<T>> where T : IFloatingPoint<T>
+public readonly partial struct Temperature<T> : ICanonicalUnit<T>, IUnit<Temperature<T>> where T : IFloatingPoint<T>
 #pragma warning restore CA2231
 {
     /// <summary>

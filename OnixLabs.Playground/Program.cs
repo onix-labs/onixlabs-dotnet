@@ -516,11 +516,11 @@ internal static class Program
         Row("98.6 F as C",  body.ToString("C3", Inv));
         Row("98.6 F as K",  body.ToString("K3", Inv));
 
-        Sub("Arithmetic (on Kelvin scale)");
+        Sub("Increase/decrease (Temperature has no +/- operators; reconstruct via FromKelvin)");
         Temperature<Float128> a = Temperature<Float128>.FromKelvin(F(100));
         Temperature<Float128> b = Temperature<Float128>.FromKelvin(F(50));
-        Row("100K + 50K",   a.Add(b).ToString("K3", Inv));
-        Row("100K - 50K",   a.Subtract(b).ToString("K3", Inv));
+        Row("100K + 50K delta",   Temperature<Float128>.FromKelvin(a.Kelvin + F(50)).ToString("K3", Inv));
+        Row("100K - 50K delta",   Temperature<Float128>.FromKelvin(a.Kelvin - F(50)).ToString("K3", Inv));
 
         Sub("Equality / Comparison");
         Temperature<Float128> zeroC = Temperature<Float128>.FromCelsius(F(0));

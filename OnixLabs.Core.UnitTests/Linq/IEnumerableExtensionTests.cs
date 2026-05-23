@@ -971,6 +971,23 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.Sum should return zero when the enumerable is empty")]
+    public void SumShouldReturnZeroWhenEnumerableIsEmpty()
+    {
+        // Required as Sum() already exists for concrete number types.
+        static T SumProxy<T>(IEnumerable<T> enumerable) where T : INumberBase<T> => enumerable.Sum();
+
+        // Given
+        IEnumerable<decimal> elements = EmptyEnumerable<decimal>();
+        const decimal expected = 0m;
+
+        // When
+        decimal actual = SumProxy(elements);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.Sum with selector should produce the expected result")]
     public void SumWithSelectorShouldProduceExpectedResult()
     {

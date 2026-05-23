@@ -87,6 +87,42 @@ public class ResultEqualityComparerTests
         Assert.False(result2);
     }
 
+    [Fact(DisplayName = "ResultEqualityComparer.Equals should return false when comparing Success(default) and Failure for value types")]
+    public void ResultEqualityComparerEqualsShouldReturnFalseWhenComparingSuccessDefaultAndFailureForValueTypes()
+    {
+        // Given
+        Exception exception = new("Failure");
+        Result<int> success = 0;
+        Result<int> failure = exception;
+        ResultEqualityComparer<int> comparer = new();
+
+        // When
+        bool result1 = comparer.Equals(success, failure);
+        bool result2 = comparer.Equals(failure, success);
+
+        // Then
+        Assert.False(result1);
+        Assert.False(result2);
+    }
+
+    [Fact(DisplayName = "ResultEqualityComparer.Equals should return false when comparing Success(default) and Failure for booleans")]
+    public void ResultEqualityComparerEqualsShouldReturnFalseWhenComparingSuccessDefaultAndFailureForBooleans()
+    {
+        // Given
+        Exception exception = new("Failure");
+        Result<bool> success = false;
+        Result<bool> failure = exception;
+        ResultEqualityComparer<bool> comparer = new();
+
+        // When
+        bool result1 = comparer.Equals(success, failure);
+        bool result2 = comparer.Equals(failure, success);
+
+        // Then
+        Assert.False(result1);
+        Assert.False(result2);
+    }
+
     [Fact(DisplayName = "ResultEqualityComparer.Equals should return true when comparing identical Success values")]
     public void ResultEqualityComparerEqualsShouldReturnTrueWhenComparingIdenticalSomeValues()
     {

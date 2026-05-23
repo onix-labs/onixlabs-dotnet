@@ -34,15 +34,14 @@ public sealed class ResultEqualityComparer<T>(EqualityComparer<T>? valueComparer
     public bool Equals(Result<T>? x, Result<T>? y)
     {
         if (ReferenceEquals(x, y)) return true;
-        if (x is null || y is null) return x is null && y is null;
+        if (x is null || y is null) return false;
 
         if (x is Failure<T> xFailure && y is Failure<T> yFailure)
             return object.Equals(xFailure.Exception, yFailure.Exception);
 
-        T? xValue = x.GetValueOrDefault();
-        T? yValue = y.GetValueOrDefault();
+        if (x is not Success<T> xSuccess || y is not Success<T> ySuccess) return false;
 
-        return valueComparer.GetOrDefault().Equals(xValue, yValue);
+        return valueComparer.GetOrDefault().Equals(xSuccess.Value, ySuccess.Value);
     }
 
     /// <inheritdoc/>

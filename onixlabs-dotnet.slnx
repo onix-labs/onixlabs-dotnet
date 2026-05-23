@@ -23,9 +23,5 @@
     <Project Path="OnixLabs.Security.UnitTests/OnixLabs.Security.UnitTests.csproj" />
     <Project Path="OnixLabs.Security/OnixLabs.Security.csproj" />
   </Folder>
-  <Folder Name="/Units/">
-    <Project Path="OnixLabs.Units.UnitTests/OnixLabs.Units.UnitTests.csproj" />
-    <Project Path="OnixLabs.Units/OnixLabs.Units.csproj" />
-  </Folder>
   <Project Path="OnixLabs.Playground/OnixLabs.Playground.csproj" />
 </Solution>

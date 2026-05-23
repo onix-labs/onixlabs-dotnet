@@ -106,7 +106,13 @@ public static class IEnumerableExtensions
         /// Determines whether the current <see cref="IEnumerable"/> is empty.
         /// </summary>
         /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable"/> is empty; otherwise, <see langword="false"/>.</returns>
-        public bool IsEmpty() => enumerable.LongCount() is 0;
+        public bool IsEmpty()
+        {
+            ArgumentNullException.RequireNotNull(enumerable, EnumerableNullExceptionMessage);
+            // ReSharper disable once GenericEnumeratorNotDisposed
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            return !enumerator.MoveNext();
+        }
 
         /// <summary>
         /// Determines whether the current <see cref="IEnumerable"/> is not empty.
@@ -118,7 +124,13 @@ public static class IEnumerableExtensions
         /// Determines whether the current <see cref="IEnumerable"/> contains a single element.
         /// </summary>
         /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable"/> contains a single element; otherwise, <see langword="false"/>.</returns>
-        public bool IsSingle() => enumerable.LongCount() is 1;
+        public bool IsSingle()
+        {
+            ArgumentNullException.RequireNotNull(enumerable, EnumerableNullExceptionMessage);
+            // ReSharper disable once GenericEnumeratorNotDisposed
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            return enumerator.MoveNext() && !enumerator.MoveNext();
+        }
 
         /// <summary>
         /// Determines whether the current <see cref="IEnumerable"/> contains an even number of elements.
@@ -301,7 +313,12 @@ public static class IEnumerableExtensions
         /// Determines whether the current <see cref="IEnumerable{T}"/> is empty.
         /// </summary>
         /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> is empty; otherwise, <see langword="false"/>.</returns>
-        public bool IsEmpty() => enumerable.LongCount() is 0;
+        public bool IsEmpty()
+        {
+            ArgumentNullException.RequireNotNull(enumerable, EnumerableNullExceptionMessage);
+            using IEnumerator<T> enumerator = enumerable.GetEnumerator();
+            return !enumerator.MoveNext();
+        }
 
         /// <summary>
         /// Determines whether the current <see cref="IEnumerable{T}"/> is not empty.
@@ -313,7 +330,12 @@ public static class IEnumerableExtensions
         /// Determines whether the current <see cref="IEnumerable{T}"/> contains a single element.
         /// </summary>
         /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains a single element; otherwise, <see langword="false"/>.</returns>
-        public bool IsSingle() => enumerable.LongCount() is 1;
+        public bool IsSingle()
+        {
+            ArgumentNullException.RequireNotNull(enumerable, EnumerableNullExceptionMessage);
+            using IEnumerator<T> enumerator = enumerable.GetEnumerator();
+            return enumerator.MoveNext() && !enumerator.MoveNext();
+        }
 
         /// <summary>
         /// Determines whether the current <see cref="IEnumerable{T}"/> contains an even number of elements that match the specified predicate, or in total when no predicate is supplied.

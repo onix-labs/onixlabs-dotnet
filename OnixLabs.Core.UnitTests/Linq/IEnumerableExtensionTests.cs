@@ -472,6 +472,80 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.IsEmpty should short-circuit without enumerating the entire sequence (non-generic)")]
+    public void IsEmptyShouldShortCircuitNonGeneric()
+    {
+        // Given
+        static IEnumerable<int> Sequence()
+        {
+            yield return 1;
+            throw new InvalidOperationException("IsEmpty enumerated beyond the first element.");
+        }
+
+        IEnumerable enumerable = Sequence();
+
+        // When
+        bool result = enumerable.IsEmpty();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsEmpty should short-circuit without enumerating the entire sequence")]
+    public void IsEmptyShouldShortCircuit()
+    {
+        // Given
+        static IEnumerable<int> Sequence()
+        {
+            yield return 1;
+            throw new InvalidOperationException("IsEmpty enumerated beyond the first element.");
+        }
+
+        // When
+        bool result = Sequence().IsEmpty();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsSingle should short-circuit once more than one element is found (non-generic)")]
+    public void IsSingleShouldShortCircuitNonGeneric()
+    {
+        // Given
+        static IEnumerable<int> Sequence()
+        {
+            yield return 1;
+            yield return 2;
+            throw new InvalidOperationException("IsSingle enumerated beyond the second element.");
+        }
+
+        IEnumerable enumerable = Sequence();
+
+        // When
+        bool result = enumerable.IsSingle();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsSingle should short-circuit once more than one element is found")]
+    public void IsSingleShouldShortCircuit()
+    {
+        // Given
+        static IEnumerable<int> Sequence()
+        {
+            yield return 1;
+            yield return 2;
+            throw new InvalidOperationException("IsSingle enumerated beyond the second element.");
+        }
+
+        // When
+        bool result = Sequence().IsSingle();
+
+        // Then
+        Assert.False(result);
+    }
+
     [Fact(DisplayName = "IEnumerable.IsCountEven should return true when the enumerable contains an even number of elements (non-generic)")]
     public void IsCountEvenShouldProduceExpectedResultTrueNonGeneric()
     {

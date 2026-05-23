@@ -1028,6 +1028,16 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected.Exception.Message, actualException.Message);
     }
 
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should propagate exceptions thrown by the predicate rather than capturing them")]
+    public void SingleOrNoneShouldPropagatePredicateExceptions()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
+
+        // When / Then
+        Assert.Throws<NotSupportedException>(() => elements.SingleOrNone(_ => throw new NotSupportedException()));
+    }
+
     [Fact(DisplayName = "IEnumerable.Sum should produce the expected result")]
     public void SumShouldProduceExpectedResult()
     {

@@ -530,30 +530,23 @@ public static class IEnumerableExtensions
         {
             ArgumentNullException.RequireNotNull(enumerable, EnumerableNullExceptionMessage);
 
-            try
+            Func<T, bool> condition = predicate ?? (_ => true);
+            Optional<T> result = Optional<T>.None;
+            bool found = false;
+
+            foreach (T element in enumerable)
             {
-                Func<T, bool> condition = predicate ?? (_ => true);
-                Optional<T> result = Optional<T>.None;
-                bool found = false;
+                if (!condition(element))
+                    continue;
 
-                foreach (T element in enumerable)
-                {
-                    if (!condition(element))
-                        continue;
+                if (found)
+                    return new InvalidOperationException("Sequence contains more than one matching element");
 
-                    if (found)
-                        throw new InvalidOperationException("Sequence contains more than one matching element");
-
-                    result = element;
-                    found = true;
-                }
-
-                return result;
+                result = element;
+                found = true;
             }
-            catch (Exception exception)
-            {
-                return exception;
-            }
+
+            return result;
         }
     }
 

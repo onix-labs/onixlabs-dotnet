@@ -477,10 +477,13 @@ public static class IEnumerableExtensions
         /// </returns>
         public Optional<T> FirstOrNone(Func<T, bool>? predicate = null)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
 
-            return Optional<T>.Of(enumerable.FirstOrDefault(predicate ?? (_ => true)));
+            foreach (T element in enumerable)
+                if (predicate is null || predicate(element))
+                    return element;
+
+            return Optional<T>.None;
         }
 
         /// <summary>
@@ -494,10 +497,15 @@ public static class IEnumerableExtensions
         /// </returns>
         public Optional<T> LastOrNone(Func<T, bool>? predicate = null)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
 
-            return Optional<T>.Of(enumerable.LastOrDefault(predicate ?? (_ => true)));
+            Optional<T> result = Optional<T>.None;
+
+            foreach (T element in enumerable)
+                if (predicate is null || predicate(element))
+                    result = element;
+
+            return result;
         }
 
         /// <summary>
@@ -513,12 +521,27 @@ public static class IEnumerableExtensions
         /// </returns>
         public Result<Optional<T>> SingleOrNone(Func<T, bool>? predicate = null)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
 
             try
             {
-                return Optional<T>.Of(enumerable.SingleOrDefault(predicate ?? (_ => true)));
+                Func<T, bool> condition = predicate ?? (_ => true);
+                Optional<T> result = Optional<T>.None;
+                bool found = false;
+
+                foreach (T element in enumerable)
+                {
+                    if (!condition(element))
+                        continue;
+
+                    if (found)
+                        throw new InvalidOperationException("Sequence contains more than one matching element");
+
+                    result = element;
+                    found = true;
+                }
+
+                return result;
             }
             catch (Exception exception)
             {

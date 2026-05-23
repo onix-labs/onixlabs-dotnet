@@ -191,6 +191,34 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return some when the first element is the default value of the underlying type.")]
+    public void FirstOrNoneShouldReturnSomeWhenFirstElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(0, 1, 2);
+        Optional<int> expected = Optional<int>.Some(0);
+
+        // When
+        Optional<int> actual = elements.FirstOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return some when the first matching element is the default value of the underlying type.")]
+    public void FirstOrNoneShouldReturnSomeWhenFirstMatchingElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(3, 0, 1);
+        Optional<int> expected = Optional<int>.Some(0);
+
+        // When
+        Optional<int> actual = elements.FirstOrNone(number => number < 2);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.ForEach should iterate over every element in the enumerable (non-generic)")]
     public void ForEachShouldProduceExpectedResultNonGeneric()
     {
@@ -660,6 +688,34 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return some when the last element is the default value of the underlying type.")]
+    public void LastOrNoneShouldReturnSomeWhenLastElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(2, 1, 0);
+        Optional<int> expected = Optional<int>.Some(0);
+
+        // When
+        Optional<int> actual = elements.LastOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return some when the last matching element is the default value of the underlying type.")]
+    public void LastOrNoneShouldReturnSomeWhenLastMatchingElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(1, 0, 3);
+        Optional<int> expected = Optional<int>.Some(0);
+
+        // When
+        Optional<int> actual = elements.LastOrNone(number => number < 2);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.None should return true when none of the elements satisfy the specified predicate condition")]
     public void NoneShouldProduceExpectedResultTrue()
     {
@@ -803,6 +859,34 @@ public sealed class IEnumerableExtensionTests
 
         // When
         Result<Optional<int>> actual = elements.SingleOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success some when the single element is the default value of the underlying type.")]
+    public void SingleOrNoneShouldReturnSuccessSomeWhenSingleElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(0);
+        Result<Optional<int>> expected = Optional<int>.Some(0).ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success some when the single matching element is the default value of the underlying type.")]
+    public void SingleOrNoneShouldReturnSuccessSomeWhenSingleMatchingElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(0, 1, 2);
+        Result<Optional<int>> expected = Optional<int>.Some(0).ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone(number => number < 1);
 
         // Then
         Assert.Equal(expected, actual);

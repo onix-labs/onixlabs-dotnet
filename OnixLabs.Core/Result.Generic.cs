@@ -283,7 +283,14 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying value of the current <see cref="Result{T}"/> instance;
     /// otherwise throws the underlying exception if the current <see cref="Result{T}"/> is in a failed stated.
     /// </returns>
-    public T GetValueOrThrow() => this is Success<T> success ? success.Value : throw GetExceptionOrThrow();
+    public T GetValueOrThrow()
+    {
+        if (this is Success<T> success)
+            return success.Value;
+
+        Throw(); // We know this is Failure<T>; preserves the original stack trace via ExceptionDispatchInfo.
+        return default!; // unreachable
+    }
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance as an <see langword="out"/> parameter.

@@ -27,10 +27,12 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <param name="name">The name of the enumeration entry.</param>
     /// <returns>Returns an enumeration entry for the specified name.</returns>
-    /// <exception cref="ArgumentException">If a single enumeration entry for the specified name does not exist.</exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown when no entry, or multiple entries, exist for <paramref name="name"/>.
+    /// </exception>
     public static T FromName(string name)
     {
-        IEnumerable<T> results = GetAll().Where(entry => entry.Name == name).ToArray();
+        T[] results = GetAll().Where(entry => entry.Name == name).ToArray();
 
         Require(results.IsNotEmpty(), $"Enumeration entry for name '{name}' not found in {typeof(T).Name}.", nameof(name));
         Require(results.IsSingle(), $"Multiple enumeration entries for name '{name}' found in {typeof(T).Name}.", nameof(name));
@@ -43,10 +45,12 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <param name="value">The value of the enumeration entry.</param>
     /// <returns>Returns an enumeration entry for the specified value.</returns>
-    /// <exception cref="ArgumentException">If a single enumeration entry for the specified value does not exist.</exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown when no entry, or multiple entries, exist for <paramref name="value"/>.
+    /// </exception>
     public static T FromValue(int value)
     {
-        IEnumerable<T> results = GetAll().Where(entry => entry.Value == value).ToArray();
+        T[] results = GetAll().Where(entry => entry.Value == value).ToArray();
 
         Require(results.IsNotEmpty(), $"Enumeration entry for value '{value}' not found in {typeof(T).Name}.", nameof(value));
         Require(results.IsSingle(), $"Multiple enumeration entries for value '{value}' found in {typeof(T).Name}.", nameof(value));

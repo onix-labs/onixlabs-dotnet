@@ -417,7 +417,7 @@ public static class IEnumerableExtensions
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
             RequireNotNull(specification, SpecificationNullExceptionMessage);
 
-            return enumerable.Where(specification.Criteria.Compile());
+            return enumerable.Where(specification.IsSatisfiedBy);
         }
 
         /// <summary>
@@ -431,7 +431,7 @@ public static class IEnumerableExtensions
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
             RequireNotNull(specification, SpecificationNullExceptionMessage);
 
-            return enumerable.Where(specification.Not().Criteria.Compile());
+            return enumerable.WhereNot(specification.IsSatisfiedBy);
         }
 
         /// <summary>

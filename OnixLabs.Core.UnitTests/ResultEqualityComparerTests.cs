@@ -170,9 +170,26 @@ public class ResultEqualityComparerTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "ResultEqualityComparer.GetHashCode should use the supplied custom comparer when comparing Success values")]
+    public void ResultEqualityComparerGetHashCodeShouldUseSuppliedCustomComparerWhenComparingSuccessValues()
+    {
+        // Given
+        Result<string> upper = "HELLO";
+        Result<string> lower = "hello";
+        ResultEqualityComparer<string> comparer = new(new CaseInsensitiveStringComparer());
+
+        // When
+        int upperHash = comparer.GetHashCode(upper);
+        int lowerHash = comparer.GetHashCode(lower);
+
+        // Then
+        Assert.True(comparer.Equals(upper, lower));
+        Assert.Equal(upperHash, lowerHash);
+    }
+
     private sealed class CaseInsensitiveStringComparer : EqualityComparer<string>
     {
         public override bool Equals(string? x, string? y) => string.Equals(x, y, StringComparison.InvariantCultureIgnoreCase);
-        public override int GetHashCode(string obj) => obj.GetHashCode();
+        public override int GetHashCode(string obj) => StringComparer.InvariantCultureIgnoreCase.GetHashCode(obj);
     }
 }

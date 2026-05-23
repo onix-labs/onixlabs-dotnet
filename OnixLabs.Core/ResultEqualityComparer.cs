@@ -46,5 +46,9 @@ public sealed class ResultEqualityComparer<T>(EqualityComparer<T>? valueComparer
     }
 
     /// <inheritdoc/>
-    public int GetHashCode(Result<T> obj) => obj.GetHashCode();
+    public int GetHashCode(Result<T> obj)
+    {
+        if (obj is not Success<T> success) return obj.GetHashCode();
+        return success.Value is null ? 0 : valueComparer.GetOrDefault().GetHashCode(success.Value);
+    }
 }

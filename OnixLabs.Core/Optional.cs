@@ -61,8 +61,22 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
     /// <remarks>
-    /// This method is similar to the <see cref="Some"/> method, however <see cref="Some"/> will treat <see langword="struct"/>
-    /// <see langword="default"/> values as present, whereas <see cref="Of"/> will treat them as absent.
+    /// <para>
+    /// This method is "strip-default" wrapping: any <see langword="null"/> or <see langword="default"/> value
+    /// collapses to <see cref="None"/>. For value-type <typeparamref name="T"/>, this means
+    /// <c>Optional&lt;int&gt;.Of(0)</c>, <c>Optional&lt;Guid&gt;.Of(Guid.Empty)</c>, and
+    /// <c>Optional&lt;DateTime&gt;.Of(default)</c> all return <see cref="None"/>.
+    /// </para>
+    /// <para>
+    /// The other construction pathways behave differently:
+    /// <list type="bullet">
+    /// <item><see cref="Some"/> wraps any non-null value, including value-type defaults. <c>Some(0)</c> yields <see cref="Some{T}"/> with value <c>0</c>.</item>
+    /// <item>The implicit conversion (<c>Optional&lt;T&gt; opt = value;</c>) also wraps any non-null value, including value-type defaults. <c>Optional&lt;int&gt; opt = 0;</c> yields <see cref="Some{T}"/> with value <c>0</c>.</item>
+    /// </list>
+    /// Use <see cref="Of(T)"/> when you want default values treated as absent (e.g. when bridging from
+    /// dictionary-lookup or struct-default APIs); use <see cref="Some"/> or the implicit conversion when you
+    /// want only <see langword="null"/> treated as absent.
+    /// </para>
     /// </remarks>
     /// <param name="value">The underlying optional value.</param>
     /// <returns>
@@ -101,6 +115,11 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
+    /// <remarks>
+    /// For value-type <typeparamref name="T"/>, this preserves default values as <see cref="Some{T}"/>:
+    /// <c>Optional&lt;int&gt; opt = 0;</c> yields <see cref="Some{T}"/> with value <c>0</c>. This differs
+    /// from <see cref="Of(T)"/>, which treats value-type defaults as <see cref="None"/>.
+    /// </remarks>
     /// <param name="value">The underlying optional value.</param>
     /// <returns>
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if

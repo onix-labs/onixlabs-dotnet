@@ -71,7 +71,8 @@ public readonly partial struct Float256
             // Scale exceeds Float256's range. For positive digits the precision is long exhausted
             // (the value cannot resolve a 10^-digits step) so rounding is a no-op. For negative digits
             // the granularity exceeds every finite Float256 magnitude, so every value rounds to zero.
-            return negative ? (IsNegative(value) ? NegativeZero : Zero) : value;
+            if (!negative) return value;
+            return IsNegative(value) ? NegativeZero : Zero;
         }
 
         if (negative)
@@ -98,7 +99,7 @@ public readonly partial struct Float256
     private static Float256 PowerOfTenForRound(int magnitude)
     {
         if (magnitude < PowersOfTen.Length) return PowersOfTen[magnitude];
-        return Pow(PowersOfTen[1], (Float256)magnitude);
+        return Pow(PowersOfTen[1], magnitude);
     }
 
     /// <summary>
@@ -195,9 +196,7 @@ public readonly partial struct Float256
         UInt256 truncatedBits = bits & ~fractionMask;
         bool roundBit = (trailingSignificand & (UInt256.One << roundPosition)) != UInt256.Zero;
         bool stickyBit = (trailingSignificand & stickyMask) != UInt256.Zero;
-        bool lsbBit = unbiasedExponent == 0
-            ? true
-            : (trailingSignificand & (UInt256.One << lsbPosition)) != UInt256.Zero;
+        bool lsbBit = unbiasedExponent == 0 || (trailingSignificand & (UInt256.One << lsbPosition)) != UInt256.Zero;
 
         context = new RoundingContext
         {

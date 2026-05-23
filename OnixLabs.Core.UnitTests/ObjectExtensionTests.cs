@@ -109,6 +109,84 @@ public sealed class ObjectExtensionTests
         Assert.Equal("Object must be of type System.Int32 (Parameter 'right')", exception.Message);
     }
 
+    // The following tests exercise the F-bounded / CRTP overload of CompareToObject, where the implementing
+    // type (the base) differs from the comparable parameter (the derived). Without these, overload #1 is
+    // only covered transitively via EnumerationTests.
+
+    [Fact(DisplayName = "CompareToObject (F-bounded) should produce zero if the current instance is equal to the specified object.")]
+    public void CompareToObjectFBoundedShouldProduceZeroIfCurrentIsEqualToSpecifiedObject()
+    {
+        // Given
+        CrtpComparable<CrtpComparableDerived> left = new CrtpComparableDerived(5);
+        object right = new CrtpComparableDerived(5);
+        const int expected = 0;
+
+        // When
+        int actual = left.CompareToObject(right);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "CompareToObject (F-bounded) should produce positive one if the specified object is null.")]
+    public void CompareToObjectFBoundedShouldProducePositiveOneIfSpecifiedObjectIsNull()
+    {
+        // Given
+        CrtpComparable<CrtpComparableDerived> left = new CrtpComparableDerived(5);
+        const int expected = 1;
+
+        // When
+        int actual = left.CompareToObject(null);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "CompareToObject (F-bounded) should produce positive one if the current instance is greater than the specified object.")]
+    public void CompareToObjectFBoundedShouldProducePositiveOneIfCurrentIsGreaterThanSpecifiedObject()
+    {
+        // Given
+        CrtpComparable<CrtpComparableDerived> left = new CrtpComparableDerived(5);
+        object right = new CrtpComparableDerived(3);
+        const int expected = 1;
+
+        // When
+        int actual = left.CompareToObject(right);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "CompareToObject (F-bounded) should produce negative one if the current instance is less than the specified object.")]
+    public void CompareToObjectFBoundedShouldProduceNegativeOneIfCurrentIsLessThanSpecifiedObject()
+    {
+        // Given
+        CrtpComparable<CrtpComparableDerived> left = new CrtpComparableDerived(3);
+        object right = new CrtpComparableDerived(5);
+        const int expected = -1;
+
+        // When
+        int actual = left.CompareToObject(right);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "CompareToObject (F-bounded) should throw ArgumentException if the specified object is of the incorrect type.")]
+    public void CompareToObjectFBoundedShouldThrowArgumentExceptionIfSpecifiedObjectIsOfIncorrectType()
+    {
+        // Given
+        CrtpComparable<CrtpComparableDerived> left = new CrtpComparableDerived(5);
+
+        // When
+        Exception exception = Assert.Throws<ArgumentException>(() => left.CompareToObject("not a CrtpComparableDerived"));
+
+        // Then
+        Assert.Equal(
+            $"Object must be of type {typeof(CrtpComparableDerived).FullName} (Parameter 'right')",
+            exception.Message);
+    }
+
     [Theory(DisplayName = "IsWithinRangeInclusive should produce the expected result")]
     [InlineData(2, 1, 3, true)]
     [InlineData(1, 1, 3, true)]

@@ -49,7 +49,7 @@ public static class ObjectExtensions
     /// <returns>Returns the current <paramref name="value"/> once the specified <see cref="Action{T}"/> has been executed.</returns>
     public static T Apply<T>(this T value, Action<T> action) where T : class
     {
-        RequireNotNull(action, "Action must not be null.");
+        ArgumentNullException.RequireNotNull(action, "Action must not be null.");
         action(value);
         return value;
     }
@@ -63,18 +63,26 @@ public static class ObjectExtensions
     /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
     public static T Apply<T>(this T value, Func<T, T> function) where T : struct
     {
-        RequireNotNull(function, "Function must not be null.");
+        ArgumentNullException.RequireNotNull(function, "Function must not be null.");
         return function(value);
     }
 
     /// <summary>
-    /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
+    /// Implements the non-generic <see cref="IComparable.CompareTo(object)"/> contract on top of a generic
+    /// <see cref="IComparable{T}"/> implementation, where the implementing type differs from the comparable
+    /// parameter <typeparamref name="T"/>. This is the F-bounded / CRTP path — for example,
+    /// <c>Enumeration&lt;T&gt; : IComparable&lt;T&gt;</c> where <c>T : Enumeration&lt;T&gt;</c>.
     /// </summary>
-    /// <param name="left">The <paramref name="left"/> <see cref="IComparable{T}"/> instance to compare.</param>
-    /// <param name="right">The <paramref name="right"/> <see cref="Object"/> instance to compare.</param>
-    /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
-    /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
-    /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
+    /// <param name="left">The current <see cref="IComparable{T}"/> instance.</param>
+    /// <param name="right">The object to compare against. May be <see langword="null"/>.</param>
+    /// <typeparam name="T">The comparable parameter — not necessarily the runtime type of <paramref name="left"/>.</typeparam>
+    /// <returns>
+    /// Returns a positive value when <paramref name="right"/> is <see langword="null"/>; otherwise returns the
+    /// signed comparison result from <see cref="IComparable{T}.CompareTo(T)"/>.
+    /// </returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="right"/> is not <see langword="null"/> and is not of type <typeparamref name="T"/>.
+    /// </exception>
     public static int CompareToObject<T>(this IComparable<T> left, object? right) => right switch
     {
         null => 1,
@@ -82,48 +90,55 @@ public static class ObjectExtensions
         _ => throw new ArgumentException($"Object must be of type {typeof(T).FullName}", nameof(right))
     };
 
-    /// <summary>
-    /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
-    /// </summary>
-    /// <param name="left">The <paramref name="left"/> <see cref="IComparable{T}"/> instance to compare.</param>
-    /// <param name="right">The <paramref name="right"/> <see cref="Object"/> instance to compare.</param>
-    /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
-    /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
-    /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
-    public static int CompareToObject<T>(this T left, object? right) where T : IComparable<T> => right switch
+    /// <param name="left">The current <typeparamref name="T"/> instance.</param>
+    /// <typeparam name="T">The implementing type, which is also the comparable parameter.</typeparam>
+    extension<T>(T left) where T : IComparable<T>
     {
-        null => 1,
-        T other => left.CompareTo(other),
-        _ => throw new ArgumentException($"Object must be of type {typeof(T).FullName}", nameof(right))
-    };
+        /// <summary>
+        /// Implements the non-generic <see cref="IComparable.CompareTo(object)"/> contract on top of a generic
+        /// <see cref="IComparable{T}"/> implementation, where the implementing type is itself <typeparamref name="T"/>.
+        /// This is the self-comparable path — for example, <c>Hash : IComparable&lt;Hash&gt;</c>
+        /// It avoids boxing when <typeparamref name="T"/> is a value type.
+        /// </summary>
+        /// <param name="right">The object to compare against. May be <see langword="null"/>.</param>
+        /// <returns>
+        /// Returns a positive value when <paramref name="right"/> is <see langword="null"/>; otherwise returns the
+        /// signed comparison result from <see cref="IComparable{T}.CompareTo(T)"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown when <paramref name="right"/> is not <see langword="null"/> and is not of type <typeparamref name="T"/>.
+        /// </exception>
+        public int CompareToObject(object? right) => right switch
+        {
+            null => 1,
+            T other => left.CompareTo(other),
+            _ => throw new ArgumentException($"Object must be of type {typeof(T).FullName}", nameof(right))
+        };
 
-    /// <summary>
-    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, inclusive of the specified minimum and maximum values.
-    /// </summary>
-    /// <param name="value">The value to test.</param>
-    /// <param name="min">The inclusive minimum value.</param>
-    /// <param name="max">The inclusive maximum value.</param>
-    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
-    /// <returns>
-    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
-    /// inclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
-    /// </returns>
-    public static bool IsWithinRangeInclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
-        value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
+        /// <summary>
+        /// Determines whether the current <see cref="IComparable{T}"/> value falls within range,
+        /// inclusive of the specified minimum and maximum values.
+        /// </summary>
+        /// <param name="min">The inclusive minimum value.</param>
+        /// <param name="max">The inclusive maximum value.</param>
+        /// <returns>
+        /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
+        /// inclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
+        /// </returns>
+        public bool IsWithinRangeInclusive(T min, T max) => left.CompareTo(min) >= 0 && left.CompareTo(max) <= 0;
 
-    /// <summary>
-    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, exclusive of the specified minimum and maximum values.
-    /// </summary>
-    /// <param name="value">The value to test.</param>
-    /// <param name="min">The exclusive minimum value.</param>
-    /// <param name="max">The exclusive maximum value.</param>
-    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
-    /// <returns>
-    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
-    /// exclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
-    /// </returns>
-    public static bool IsWithinRangeExclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
-        value.CompareTo(min) > 0 && value.CompareTo(max) < 0;
+        /// <summary>
+        /// Determines whether the current <see cref="IComparable{T}"/> value falls within range,
+        /// exclusive of the specified minimum and maximum values.
+        /// </summary>
+        /// <param name="min">The exclusive minimum value.</param>
+        /// <param name="max">The exclusive maximum value.</param>
+        /// <returns>
+        /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
+        /// exclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
+        /// </returns>
+        public bool IsWithinRangeExclusive(T min, T max) => left.CompareTo(min) > 0 && left.CompareTo(max) < 0;
+    }
 
     /// <summary>
     /// Calls the specified <see cref="Func{T, TResult}"/> with the current <paramref name="value"/> as its argument and returns the result.
@@ -135,75 +150,77 @@ public static class ObjectExtensions
     /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
     public static TResult Let<TSource, TResult>(this TSource value, Func<TSource, TResult> function)
     {
-        RequireNotNull(function, "Function must not be null.");
+        ArgumentNullException.RequireNotNull(function, "Function must not be null.");
         return function(value);
     }
 
-    /// <summary>
-    /// Gets a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.
-    /// </summary>
-    /// <remarks>This method is designed specifically for record-like objects and may produce undesirable results when applied to primitive-like objects.</remarks>
     /// <param name="value">The current <see cref="Object"/> instance.</param>
-    /// <returns>Returns a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.</returns>
-    public static string ToRecordString(this object? value)
+    extension(object? value)
     {
-        if (value is null) return Null;
-
-        Type type = value.GetType();
-
-        try
+        /// <summary>
+        /// Gets a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.
+        /// </summary>
+        /// <remarks>This method is designed specifically for record-like objects and may produce undesirable results when applied to primitive-like objects.</remarks>
+        /// <returns>Returns a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.</returns>
+        public string ToRecordString()
         {
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            StringBuilder builder = new();
-            IEnumerable<PropertyInfo> properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            if (value is null) return Null;
 
-            builder.Append(type.GetCSharpTypeDeclaration());
+            Type type = value.GetType();
 
-            if (properties.IsEmpty())
-                return builder.Append(ObjectEmptyBrackets).ToString();
-
-            builder.Append(ObjectOpenBracket);
-
-            // ReSharper disable once HeapView.ObjectAllocation.Possible
-            foreach (PropertyInfo property in properties)
+            try
             {
-                builder.Append(property.Name).Append(ObjectPropertyAssignment);
+                // ReSharper disable once HeapView.ObjectAllocation.Evident
+                StringBuilder builder = new();
+                IEnumerable<PropertyInfo> properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-                object? propertyValue = property.GetValue(value);
+                builder.Append(type.GetCSharpTypeDeclaration());
 
-                switch (propertyValue)
+                if (properties.IsEmpty())
+                    return builder.Append(ObjectEmptyBrackets).ToString();
+
+                builder.Append(ObjectOpenBracket);
+
+                // ReSharper disable once HeapView.ObjectAllocation.Possible
+                foreach (PropertyInfo property in properties)
                 {
-                    case null:
-                        builder.Append(Null);
-                        break;
-                    case string:
-                        builder.Append(propertyValue.ToStringOrNull());
-                        break;
-                    case IEnumerable enumerable:
-                        builder.Append(enumerable.ToCollectionString());
-                        break;
-                    default:
-                        builder.Append(propertyValue.ToStringOrNull());
-                        break;
+                    builder.Append(property.Name).Append(ObjectPropertyAssignment);
+
+                    object? propertyValue = property.GetValue(value);
+
+                    switch (propertyValue)
+                    {
+                        case null:
+                            builder.Append(Null);
+                            break;
+                        case string:
+                            builder.Append(propertyValue.ToStringOrNull());
+                            break;
+                        case IEnumerable enumerable:
+                            builder.Append(enumerable.ToCollectionString());
+                            break;
+                        default:
+                            builder.Append(propertyValue.ToStringOrNull());
+                            break;
+                    }
+
+                    builder.Append(ObjectPropertySeparator);
                 }
 
-                builder.Append(ObjectPropertySeparator);
+                return builder.TrimEnd(ObjectPropertySeparator).Append(ObjectCloseBracket).ToString();
             }
+            catch
+            {
+                return string.Concat(type.GetCSharpTypeDeclaration(), ObjectEmptyBrackets);
+            }
+        }
 
-            return builder.TrimEnd(ObjectPropertySeparator).Append(ObjectCloseBracket).ToString();
-        }
-        catch
-        {
-            return string.Concat(type.GetCSharpTypeDeclaration(), ObjectEmptyBrackets);
-        }
+        /// <summary>
+        /// Obtains a <see cref="String"/> representation of the current <see cref="Object"/>, or a string literal null if the current object is <see langword="null"/>.
+        /// </summary>
+        /// <returns>Returns a <see cref="String"/> representation of the current <see cref="Object"/>, or a string literal null if the current object is <see langword="null"/>.</returns>
+        public string ToStringOrNull() => value?.ToString() ?? Null;
     }
-
-    /// <summary>
-    /// Obtains a <see cref="String"/> representation of the current <see cref="Object"/>, or a string literal null if the current object is <see langword="null"/>.
-    /// </summary>
-    /// <param name="value">The current <see cref="Object"/> from which to obtain a <see cref="String"/> representation.</param>
-    /// <returns>Returns a <see cref="String"/> representation of the current <see cref="Object"/>, or a string literal null if the current object is <see langword="null"/>.</returns>
-    public static string ToStringOrNull(this object? value) => value?.ToString() ?? Null;
 
     /// <summary>
     /// Obtains an <see cref="Optional{T}"/> representation of the current <see cref="Object"/>.

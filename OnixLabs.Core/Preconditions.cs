@@ -122,7 +122,7 @@ public static class Preconditions
         /// <typeparam name="T">The underlying type of the value.</typeparam>
         /// <returns>Returns a non-null value of the specified type.</returns>
         /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-        public static T CheckNotNull<T>(T? value, string message = ArgumentNull) =>
+        public static T CheckNotNull<T>([NotNull] T? value, string message = ArgumentNull) =>
             value ?? throw new InvalidOperationException(message);
 
         /// <summary>
@@ -133,7 +133,7 @@ public static class Preconditions
         /// <typeparam name="T">The underlying type of the value.</typeparam>
         /// <returns>Returns a non-null value of the specified type.</returns>
         /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
-        public static T CheckNotNull<T>(T? value, string message = ArgumentNull) where T : struct =>
+        public static T CheckNotNull<T>([NotNull] T? value, string message = ArgumentNull) where T : struct =>
             value ?? throw new InvalidOperationException(message);
 
         /// <summary>
@@ -143,7 +143,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or an empty string.</param>
         /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
         /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/> or an empty string.</exception>
-        public static string CheckNotNullOrEmpty(string? value, string message = ArgumentNullOrEmpty) =>
+        public static string CheckNotNullOrEmpty([NotNull] string? value, string message = ArgumentNullOrEmpty) =>
             !string.IsNullOrEmpty(value) ? value : throw new InvalidOperationException(message);
 
         /// <summary>
@@ -153,7 +153,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or a whitespace string.</param>
         /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
         /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/> or a whitespace string.</exception>
-        public static string CheckNotNullOrWhiteSpace(string? value, string message = ArgumentNullOrWhiteSpace) =>
+        public static string CheckNotNullOrWhiteSpace([NotNull] string? value, string message = ArgumentNullOrWhiteSpace) =>
             !string.IsNullOrWhiteSpace(value) ? value : throw new InvalidOperationException(message);
     }
 

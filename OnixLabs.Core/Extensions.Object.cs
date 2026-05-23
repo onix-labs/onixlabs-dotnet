@@ -68,16 +68,6 @@ public static class ObjectExtensions
     }
 
     /// <summary>
-    /// Compares the current <typeparamref name="T"/> instance with the specified <typeparamref name="T"/> instance.
-    /// </summary>
-    /// <param name="left">The <paramref name="left"/> <typeparamref name="T"/> instance to compare.</param>
-    /// <param name="right">The <paramref name="right"/> <typeparamref name="T"/> instance to compare.</param>
-    /// <typeparam name="T">The underlying type of the current <typeparamref name="T"/>.</typeparam>
-    /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
-    public static int CompareToNullable<T>(this T left, T? right) where T : struct, IComparable<T> =>
-        right.HasValue ? left.CompareTo(right.Value) : 1;
-
-    /// <summary>
     /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
     /// </summary>
     /// <param name="left">The <paramref name="left"/> <see cref="IComparable{T}"/> instance to compare.</param>
@@ -119,7 +109,7 @@ public static class ObjectExtensions
     /// inclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
     /// </returns>
     public static bool IsWithinRangeInclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
-        value.CompareTo(min) is 0 or 1 && value.CompareTo(max) is 0 or -1;
+        value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
 
     /// <summary>
     /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, exclusive of the specified minimum and maximum values.
@@ -133,7 +123,7 @@ public static class ObjectExtensions
     /// exclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
     /// </returns>
     public static bool IsWithinRangeExclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
-        value.CompareTo(min) is 1 && value.CompareTo(max) is -1;
+        value.CompareTo(min) > 0 && value.CompareTo(max) < 0;
 
     /// <summary>
     /// Calls the specified <see cref="Func{T, TResult}"/> with the current <paramref name="value"/> as its argument and returns the result.

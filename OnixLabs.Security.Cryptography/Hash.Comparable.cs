@@ -32,14 +32,14 @@ public readonly partial struct Hash
     public int CompareTo(object? obj) => this.CompareToObject(obj);
 
     /// <inheritdoc/>
-    public static bool operator >(Hash left, Hash right) => left.CompareTo(right) is 1;
+    public static bool operator >(Hash left, Hash right) => left.CompareTo(right) > 0;
 
     /// <inheritdoc/>
-    public static bool operator >=(Hash left, Hash right) => left.CompareTo(right) is 0 or 1;
+    public static bool operator >=(Hash left, Hash right) => left.CompareTo(right) >= 0;
 
     /// <inheritdoc/>
-    public static bool operator <(Hash left, Hash right) => left.CompareTo(right) is -1;
+    public static bool operator <(Hash left, Hash right) => left.CompareTo(right) < 0;
 
     /// <inheritdoc/>
-    public static bool operator <=(Hash left, Hash right) => left.CompareTo(right) is 0 or -1;
+    public static bool operator <=(Hash left, Hash right) => left.CompareTo(right) <= 0;
 }

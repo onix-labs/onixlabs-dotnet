@@ -139,6 +139,61 @@ public sealed class ObjectExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Theory(DisplayName = "IsWithinRangeInclusive should produce the expected result for decimals")]
+    [InlineData(1.5, 1.0, 2.0, true)]
+    [InlineData(1.0, 1.0, 2.0, true)]
+    [InlineData(2.0, 1.0, 2.0, true)]
+    [InlineData(0.5, 1.0, 2.0, false)]
+    [InlineData(2.5, 1.0, 2.0, false)]
+    public void IsWithinRangeInclusiveShouldProduceExpectedResultForDecimals(double value, double min, double max, bool expected)
+    {
+        // When
+        bool actual = ((decimal)value).IsWithinRangeInclusive((decimal)min, (decimal)max);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "IsWithinRangeExclusive should produce the expected result for decimals")]
+    [InlineData(1.5, 1.0, 2.0, true)]
+    [InlineData(1.0, 1.0, 2.0, false)]
+    [InlineData(2.0, 1.0, 2.0, false)]
+    [InlineData(0.5, 1.0, 2.0, false)]
+    [InlineData(2.5, 1.0, 2.0, false)]
+    public void IsWithinRangeExclusiveShouldProduceExpectedResultForDecimals(double value, double min, double max, bool expected)
+    {
+        // When
+        bool actual = ((decimal)value).IsWithinRangeExclusive((decimal)min, (decimal)max);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IsWithinRangeInclusive should handle IComparable<T> implementations that return values outside the set {-1, 0, 1}")]
+    public void IsWithinRangeInclusiveShouldHandleIComparableImplementationsReturningArbitraryIntegers()
+    {
+        // Given a comparable whose CompareTo returns the raw signed delta — this is contract-legal
+        // (IComparable<T> requires only a sign, not magnitude ±1). A pattern-match such as
+        // `value.CompareTo(min) is 0 or 1` would incorrectly reject any value whose delta exceeds 1.
+        RawDeltaComparable value = new(50);
+        RawDeltaComparable min = new(10);
+        RawDeltaComparable max = new(100);
+
+        // value.CompareTo(min) == 40; max.CompareTo(value) == 50.
+        Assert.True(value.IsWithinRangeInclusive(min, max));
+    }
+
+    [Fact(DisplayName = "IsWithinRangeExclusive should handle IComparable<T> implementations that return values outside the set {-1, 0, 1}")]
+    public void IsWithinRangeExclusiveShouldHandleIComparableImplementationsReturningArbitraryIntegers()
+    {
+        // Same scenario as above; exclusive bounds should still admit the value.
+        RawDeltaComparable value = new(50);
+        RawDeltaComparable min = new(10);
+        RawDeltaComparable max = new(100);
+
+        Assert.True(value.IsWithinRangeExclusive(min, max));
+    }
+
     [Fact(DisplayName = "Let should produce the expected result")]
     public void LetShouldProduceExpectedResult()
     {

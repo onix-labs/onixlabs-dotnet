@@ -17,7 +17,7 @@ namespace OnixLabs.Core;
 public abstract partial class Enumeration<T>
 {
     /// <inheritdoc/>
-    public int CompareTo(T? other) => Value.CompareToNullable(other?.Value);
+    public int CompareTo(T? other) => other is null ? 1 : Value.CompareTo(other.Value);
 
     /// <inheritdoc/>
     public int CompareTo(object? obj) => this.CompareToObject(obj);

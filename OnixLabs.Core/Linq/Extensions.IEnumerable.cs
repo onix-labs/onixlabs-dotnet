@@ -425,11 +425,15 @@ public static class IEnumerableExtensions
         {
             ArgumentNullException.RequireNotNull(enumerable, EnumerableNullExceptionMessage);
             ArgumentNullException.RequireNotNull(predicate, PredicateNullExceptionMessage);
+            return Iterator();
 
-            // ReSharper disable once HeapView.ObjectAllocation.Possible
-            foreach (T element in enumerable)
-                if (!predicate(element))
-                    yield return element;
+            IEnumerable<T> Iterator()
+            {
+                // ReSharper disable once HeapView.ObjectAllocation.Possible
+                foreach (T element in enumerable)
+                    if (!predicate(element))
+                        yield return element;
+            }
         }
 
         /// <summary>

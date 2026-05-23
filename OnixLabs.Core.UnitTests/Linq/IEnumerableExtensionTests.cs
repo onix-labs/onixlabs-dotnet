@@ -1022,6 +1022,16 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.WhereNot should throw immediately when the predicate is null, without enumerating")]
+    public void WhereNotShouldThrowImmediatelyWhenPredicateIsNull()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
+
+        // When / Then
+        Assert.Throws<ArgumentNullException>(() => elements.WhereNot((Func<int, bool>)null!));
+    }
+
     [Fact(DisplayName = "IEnumerable.WhereNotNull should produce the expected result (class)")]
     public void WhereNotNullShouldProduceExpectedResultClass()
     {

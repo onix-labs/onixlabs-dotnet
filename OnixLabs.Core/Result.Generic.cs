@@ -231,7 +231,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    public Exception GetExceptionOrDefault(Exception defaultException) => this is Failure<T> failure ? failure.Exception : defaultException;
+    public Exception GetExceptionOrDefault(Exception defaultException) => GetExceptionOrDefault() ?? defaultException;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
@@ -241,7 +241,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or <see cref="None{T}"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    public Optional<Exception> GetExceptionOrNone() => this is Failure<T> failure ? failure.Exception : Optional<Exception>.None;
+    public Optional<Exception> GetExceptionOrNone() => GetExceptionOrDefault();
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
@@ -252,7 +252,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
     /// <exception cref="InvalidOperationException">If the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
-    public Exception GetExceptionOrThrow() => this is Failure<T> failure ? failure.Exception : throw new InvalidOperationException("The current result is not in a failure state.");
+    public Exception GetExceptionOrThrow() => CheckNotNull(GetExceptionOrDefault(), "The current result is in a success state; no exception to retrieve.");
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;

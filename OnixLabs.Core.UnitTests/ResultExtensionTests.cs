@@ -59,7 +59,7 @@ public sealed class ResultExtensionTests
             await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
-        Assert.Equal("The current result is not in a failure state.", exception.Message);
+        Assert.Equal("The current result is in a success state; no exception to retrieve.", exception.Message);
     }
 
     [Fact(DisplayName = "Result Failure.GetExceptionOrDefaultAsync should produce the expected result.")]
@@ -138,7 +138,7 @@ public sealed class ResultExtensionTests
             await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
-        Assert.Equal("The current result is not in a failure state.", exception.Message);
+        Assert.Equal("The current result is in a success state; no exception to retrieve.", exception.Message);
     }
 
     [Fact(DisplayName = "Result<T> Failure.GetExceptionOrDefaultAsync should produce the expected result.")]

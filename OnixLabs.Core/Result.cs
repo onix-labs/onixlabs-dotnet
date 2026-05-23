@@ -186,12 +186,12 @@ public abstract class Result : IValueEquatable<Result>
     /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </summary>
-    /// <param name="defaultValue">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
     /// <returns>
     /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </returns>
-    public Exception GetExceptionOrDefault(Exception defaultValue) => this is Failure failure ? failure.Exception : defaultValue;
+    public Exception GetExceptionOrDefault(Exception defaultException) => GetExceptionOrDefault() ?? defaultException;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
@@ -212,7 +212,7 @@ public abstract class Result : IValueEquatable<Result>
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </returns>
     /// <exception cref="InvalidOperationException">If the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
-    public Exception GetExceptionOrThrow() => this is Failure failure ? failure.Exception : throw new InvalidOperationException("The current result is not in a failure state.");
+    public Exception GetExceptionOrThrow() => CheckNotNull(GetExceptionOrDefault(), "The current result is in a success state; no exception to retrieve.");
 
     /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result"/> instance.

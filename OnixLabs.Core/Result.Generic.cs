@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -832,11 +833,14 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.
     /// </summary>
-    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
+    /// <remarks>
+    /// The original stack trace of the underlying exception is preserved via
+    /// <see cref="ExceptionDispatchInfo"/>; the rethrow point is recorded as a continuation.
+    /// </remarks>
     public void Throw()
     {
         if (this is Failure<T> failure)
-            throw failure.Exception;
+            ExceptionDispatchInfo.Capture(failure.Exception).Throw();
     }
 
     /// <inheritdoc/>

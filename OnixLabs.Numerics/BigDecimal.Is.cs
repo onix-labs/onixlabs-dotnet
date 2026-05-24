@@ -114,7 +114,8 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value to be checked.</param>
     /// <returns>Returns <see langword="true"/> if value is normal; otherwise, <see langword="false"/>.</returns>
-    static bool INumberBase<BigDecimal>.IsNormal(BigDecimal value) => true;
+    /// <remarks>Zero is not considered normal, consistent with the convention of the built-in numeric types.</remarks>
+    static bool INumberBase<BigDecimal>.IsNormal(BigDecimal value) => !IsZero(value);
 
     /// <summary>
     /// Determines if a value is positive infinity.

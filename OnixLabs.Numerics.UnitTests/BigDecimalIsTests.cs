@@ -13,12 +13,17 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
+using System.Numerics;
 using OnixLabs.Numerics.UnitTests.Data;
 
 namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class BigDecimalIsTests
 {
+    // Invokes the static-virtual INumberBase.IsNormal through a generic constraint.
+    private static bool IsNormal<T>(T value) where T : INumberBase<T> => T.IsNormal(value);
+
     [BigDecimalIsData]
     [Theory(DisplayName = "BigDecimal.IsInteger should produce the expected result")]
     public void BigDecimalIsIntegerShouldProduceExpectedResult(decimal value, Guid _)
@@ -98,6 +103,23 @@ public sealed class BigDecimalIsTests
 
         // When
         bool actual = BigDecimal.IsZero(value);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "BigDecimal.IsNormal should treat zero as not normal, matching the BCL convention")]
+    [InlineData("0", false)]
+    [InlineData("1", true)]
+    [InlineData("-1", true)]
+    [InlineData("0.5", true)]
+    public void BigDecimalIsNormalShouldTreatZeroAsNotNormal(string value, bool expected)
+    {
+        // Given
+        BigDecimal subject = BigDecimal.Parse(value, CultureInfo.InvariantCulture);
+
+        // When
+        bool actual = IsNormal(subject);
 
         // Then
         Assert.Equal(expected, actual);

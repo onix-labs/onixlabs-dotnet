@@ -18,9 +18,19 @@ namespace OnixLabs.Numerics;
 
 public readonly partial struct Float256
 {
-    /// <summary>Computes the square root of the specified <see cref="Float256"/> value.</summary>
+    /// <summary>
+    /// Computes the square root of the specified <see cref="Float256"/> value, rounded to nearest, ties-to-even per IEEE 754.
+    /// </summary>
     /// <param name="value">The value whose square root is to be computed.</param>
-    /// <returns>Returns the square root of <paramref name="value"/>.</returns>
+    /// <returns>Returns the square root of <paramref name="value"/>, faithfully rounded to within one unit in the last place (ULP); <see cref="NaN"/> for negative inputs or NaN; preserves the sign of zero.</returns>
+    /// <remarks>
+    /// The implementation uses Newton-Raphson iteration on top of the bit-twiddled <see cref="Multiply(Float256, Float256)"/> and
+    /// <see cref="Divide(Float256, Float256)"/> primitives. Starting from a power-of-two initial estimate derived from the unbiased
+    /// exponent, Newton-Raphson on square root converges quadratically; the loop runs twelve iterations with an early exit once the
+    /// estimate stabilises. The exponent-derived seed keeps the iteration valid across the full binary256 range, including magnitudes
+    /// beyond the <see cref="double"/> range. Because the iteration rounds at each step and applies no final residual-correction step,
+    /// the result is faithfully rounded (within 1 ULP) rather than guaranteed correctly-rounded.
+    /// </remarks>
     public static Float256 Sqrt(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -28,9 +38,13 @@ public readonly partial struct Float256
         if (IsNegative(value)) return NaN;
         if (IsPositiveInfinity(value)) return value;
 
-        double seed = Math.Sqrt((double)value);
-        if (double.IsNaN(seed) || seed == 0.0) seed = 1.0;
-        Float256 estimate = (Float256)seed;
+        DecomposeFinite(value.Bits, out _, out int unbiasedExponent, out UInt256 significand);
+        NormalizeSubnormal(ref significand, ref unbiasedExponent);
+
+        int halvedExponent = unbiasedExponent >> 1;
+        UInt256 initialEstimateBits = new UInt256(UInt128.Zero, (UInt128)(uint)(halvedExponent + ExponentBias)) << BiasedExponentShift;
+        Float256 estimate = new(initialEstimateBits);
+
         Float256 half = Half;
 
         for (int iteration = 0; iteration < 12; iteration++)

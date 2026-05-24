@@ -34,8 +34,13 @@ public readonly partial struct Float256
 
         bool negative = IsNegative(value);
         Float256 absValue = Abs(value);
-        double initialEstimate = Math.Cbrt((double)absValue);
-        Float256 estimate = (Float256)initialEstimate;
+
+        DecomposeFinite(absValue.Bits, out _, out int unbiasedExponent, out UInt256 significand);
+        NormalizeSubnormal(ref significand, ref unbiasedExponent);
+
+        int thirdExponent = unbiasedExponent / 3;
+        UInt256 initialEstimateBits = new UInt256(UInt128.Zero, (UInt128)(uint)(thirdExponent + ExponentBias)) << BiasedExponentShift;
+        Float256 estimate = new(initialEstimateBits);
 
         for (int iteration = 0; iteration < 12; iteration++)
         {

@@ -54,6 +54,22 @@ public sealed class Float128RootTests
         AssertCloseToReference((Float128)(-3), Float128.Cbrt((Float128)(-27)), ulpTolerance: 4);
     }
 
+    [Fact(DisplayName = "Float128.Cbrt of a value beyond the double range should not saturate to infinity")]
+    public void Float128CbrtBeyondDoubleRangeShouldNotSaturate()
+    {
+        Float128 value = Float128.ScaleB(Float128.One, 3000);
+        Float128 expected = Float128.ScaleB(Float128.One, 1000);
+        Assert.Equal(expected.Bits, Float128.Cbrt(value).Bits);
+    }
+
+    [Fact(DisplayName = "Float128.Cbrt of a value below the double range should not collapse to zero")]
+    public void Float128CbrtBelowDoubleRangeShouldNotCollapse()
+    {
+        Float128 value = Float128.ScaleB(Float128.One, -3000);
+        Float128 expected = Float128.ScaleB(Float128.One, -1000);
+        Assert.Equal(expected.Bits, Float128.Cbrt(value).Bits);
+    }
+
     [Theory(DisplayName = "Float128.Cbrt should match Math.Cbrt within double precision")]
     [InlineData(0.5)]
     [InlineData(2.0)]

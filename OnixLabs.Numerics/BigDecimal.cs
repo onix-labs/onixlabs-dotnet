@@ -67,6 +67,28 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// <summary>
     /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
     /// </summary>
+    /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/> value.</param>
+    /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
+    public BigDecimal(Float128 value, ConversionMode mode = default)
+    {
+        RequireIsDefined(mode);
+        number = value.ToNumberInfo(mode);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
+    /// </summary>
+    /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/> value.</param>
+    /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
+    public BigDecimal(Float256 value, ConversionMode mode = default)
+    {
+        RequireIsDefined(mode);
+        number = value.ToNumberInfo(mode);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
+    /// </summary>
     /// <param name="value">The decimal value from which to construct a <see cref="BigDecimal"/> value.</param>
     public BigDecimal(decimal value) => number = value.ToNumberInfo();
 

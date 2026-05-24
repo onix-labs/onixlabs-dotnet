@@ -293,6 +293,30 @@ public static class NumericsExtensions
     }
 
     /// <summary>
+    /// Converts the current <see cref="Float128"/> value to a <see cref="NumberInfo"/> value.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="mode">The conversion mode that determines whether the current <see cref="Float128"/> value should be converted from its binary or decimal representation.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
+    public static NumberInfo ToNumberInfo(this Float128 value, ConversionMode mode = default)
+    {
+        RequireIsDefined(mode);
+        return Ieee754Converter.Convert(value, mode);
+    }
+
+    /// <summary>
+    /// Converts the current <see cref="Float256"/> value to a <see cref="NumberInfo"/> value.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="mode">The conversion mode that determines whether the current <see cref="Float256"/> value should be converted from its binary or decimal representation.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
+    public static NumberInfo ToNumberInfo(this Float256 value, ConversionMode mode = default)
+    {
+        RequireIsDefined(mode);
+        return Ieee754Converter.Convert(value, mode);
+    }
+
+    /// <summary>
     /// Converts the current <see cref="decimal"/> value to a <see cref="NumberInfo"/> value.
     /// </summary>
     /// <param name="value">The value to convert.</param>

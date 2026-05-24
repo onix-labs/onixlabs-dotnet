@@ -29,49 +29,10 @@ public readonly partial struct Float256
     {
         if (IsNaN(value)) throw new OverflowException($"Cannot convert NaN to {nameof(BigDecimal)}.");
         if (IsInfinity(value)) throw new OverflowException($"Cannot convert infinity to {nameof(BigDecimal)}.");
-        if (IsZero(value)) return BigDecimal.Zero;
 
-        DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
-        NormalizeSubnormal(ref significand, ref unbiasedExponent);
-
-        int binaryExponent = unbiasedExponent - TrailingSignificandBits;
-        BigInteger significandAsBigInteger = (BigInteger)significand;
-        if (sign) significandAsBigInteger = -significandAsBigInteger;
-
-        if (binaryExponent >= 0)
-        {
-            BigInteger unscaledValue = significandAsBigInteger << binaryExponent;
-            return new BigDecimal(unscaledValue, 0);
-        }
-
-        int absoluteExponent = -binaryExponent;
-        BigInteger scaledUnscaledValue = significandAsBigInteger * BigInteger.Pow(5, absoluteExponent);
-        return TrimRedundantScale(new BigDecimal(scaledUnscaledValue, absoluteExponent));
-    }
-
-    /// <summary>
-    /// Removes any redundant trailing zero decimal places from the specified <see cref="BigDecimal"/> by dividing the unscaled value by ten while the remainder is zero.
-    /// </summary>
-    /// <param name="value">The value whose scale should be minimised.</param>
-    /// <returns>Returns a <see cref="BigDecimal"/> equal to <paramref name="value"/> but with the smallest non-negative scale that still represents it exactly.</returns>
-    private static BigDecimal TrimRedundantScale(BigDecimal value)
-    {
-        if (BigDecimal.IsZero(value)) return value;
-        if (value.Scale == 0) return value;
-
-        BigInteger remainingUnscaledValue = value.UnscaledValue;
-        int currentScale = value.Scale;
-        BigInteger ten = (BigInteger)10;
-
-        while (currentScale > 0)
-        {
-            BigInteger quotient = BigInteger.DivRem(remainingUnscaledValue, ten, out BigInteger remainder);
-            if (!remainder.IsZero) break;
-            remainingUnscaledValue = quotient;
-            currentScale--;
-        }
-
-        return new BigDecimal(remainingUnscaledValue, currentScale);
+        // The exact (binary) conversion now lives in Ieee754Converter, the single home for IEEE 754 to decimal
+        // conversion across float, double, Float128 and Float256.
+        return new BigDecimal(value, ConversionMode.Binary);
     }
 
     /// <summary>

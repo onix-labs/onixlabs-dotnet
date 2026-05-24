@@ -66,6 +66,48 @@ internal static class Ieee754Converter
     }
 
     /// <summary>
+    /// Converts an IEEE 754 quadruple-precision binary floating-point number.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="mode">The mode that specifies whether the value should be converted using its binary or decimal representation.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
+    public static NumberInfo Convert(Float128 value, ConversionMode mode)
+    {
+        RequireRealNumber(value);
+        RequireIsDefined(mode);
+
+        if (IsZeroOrOne(value, out NumberInfo result)) return result;
+
+        return mode switch
+        {
+            ConversionMode.Binary => ConvertFromBinary(value),
+            ConversionMode.Decimal => ConvertFromDecimal(value),
+            _ => throw new ArgumentOutOfRangeException(nameof(mode))
+        };
+    }
+
+    /// <summary>
+    /// Converts an IEEE 754 octuple-precision binary floating-point number.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="mode">The mode that specifies whether the value should be converted using its binary or decimal representation.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
+    public static NumberInfo Convert(Float256 value, ConversionMode mode)
+    {
+        RequireRealNumber(value);
+        RequireIsDefined(mode);
+
+        if (IsZeroOrOne(value, out NumberInfo result)) return result;
+
+        return mode switch
+        {
+            ConversionMode.Binary => ConvertFromBinary(value),
+            ConversionMode.Decimal => ConvertFromDecimal(value),
+            _ => throw new ArgumentOutOfRangeException(nameof(mode))
+        };
+    }
+
+    /// <summary>
     /// Converts an IEEE 754 single-precision binary floating-point number using its binary representation.
     /// </summary>
     /// <param name="value">The value to convert.</param>
@@ -148,6 +190,76 @@ internal static class Ieee754Converter
         else
         {
             unscaledValue <<= (int)exponent;
+        }
+
+        return new NumberInfo(unscaledValue, scale);
+    }
+
+    /// <summary>
+    /// Converts an IEEE 754 quadruple-precision binary floating-point number using its binary representation.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
+    private static NumberInfo ConvertFromBinary(Float128 value)
+    {
+        Float128.DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt128 significand);
+        Float128.NormalizeSubnormal(ref significand, ref unbiasedExponent);
+
+        int exponent = unbiasedExponent - Float128.TrailingSignificandBits;
+        BigInteger unscaledValue = significand;
+
+        while (exponent < 0 && unscaledValue.IsEven)
+        {
+            exponent++;
+            unscaledValue >>= 1;
+        }
+
+        if (sign) unscaledValue = -unscaledValue;
+        int scale = 0;
+
+        if (exponent < 0)
+        {
+            scale = -exponent;
+            unscaledValue *= BigInteger.Pow(5, scale);
+        }
+        else
+        {
+            unscaledValue <<= exponent;
+        }
+
+        return new NumberInfo(unscaledValue, scale);
+    }
+
+    /// <summary>
+    /// Converts an IEEE 754 octuple-precision binary floating-point number using its binary representation.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
+    private static NumberInfo ConvertFromBinary(Float256 value)
+    {
+        Float256.DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
+        Float256.NormalizeSubnormal(ref significand, ref unbiasedExponent);
+
+        int exponent = unbiasedExponent - Float256.TrailingSignificandBits;
+        BigInteger unscaledValue = significand;
+
+        while (exponent < 0 && unscaledValue.IsEven)
+        {
+            exponent++;
+            unscaledValue >>= 1;
+        }
+
+        if (sign) unscaledValue = -unscaledValue;
+        int scale = 0;
+
+        if (exponent < 0)
+        {
+            scale = -exponent;
+            unscaledValue *= BigInteger.Pow(5, scale);
+        }
+        else
+        {
+            unscaledValue <<= exponent;
         }
 
         return new NumberInfo(unscaledValue, scale);

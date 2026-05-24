@@ -20,6 +20,11 @@ namespace OnixLabs.Numerics;
 public readonly partial struct NumberInfo
 {
     /// <summary>
+    /// The set of format specifiers supported when formatting a <see cref="NumberInfo"/> value.
+    /// </summary>
+    private static readonly char[] SupportedFormats = ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X'];
+
+    /// <summary>
     /// Formats the value of the current instance using the default format.
     /// </summary>
     /// <returns>The value of the current instance in the default format.</returns>
@@ -43,8 +48,8 @@ public readonly partial struct NumberInfo
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
-        // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-        NumberInfoFormatter formatter = new(this, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X']);
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
+        NumberInfoFormatter formatter = new(this, info, SupportedFormats);
         return formatter.Format(format);
     }
 }

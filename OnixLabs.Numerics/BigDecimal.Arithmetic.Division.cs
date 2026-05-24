@@ -57,21 +57,38 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the quotient of the specified <see cref="BigInteger"/> values, rounded using the specified rounding mode.</returns>
     private static BigInteger DivideAndRound(BigInteger dividend, BigInteger divisor, MidpointRounding mode)
     {
-        // 1. Obtain the quotient and remainder by dividing the dividend by the divisor.
+        // 1. An exact division leaves no fractional part, so there is nothing to round towards.
         (BigInteger quotient, BigInteger remainder) = BigInteger.DivRem(dividend, divisor);
+        if (remainder.IsZero) return quotient;
 
-        // 2. Obtain the unit value of the quotient as this is required to accurately round towards an even number.
-        int unit = (int)(quotient % 10);
+        // 2. DivRem truncates the quotient towards zero, so rounding away from zero means stepping in the
+        //    direction of the true value's sign; the truncated quotient alone cannot reveal that sign when it is
+        //    zero, so it is derived from the operands instead.
+        int valueSign = dividend.Sign * divisor.Sign;
 
-        // 3. Obtain the remainder with 10 digits of precision, which is required for accurate rounding.
-        remainder = remainder * RoundingMagnitude / divisor;
+        // 3. The directional modes are defined relative to the number line rather than the midpoint, so the size
+        //    of the fraction is irrelevant to them, and only the sign decides the outcome.
+        switch (mode)
+        {
+            case MidpointRounding.ToZero: return quotient;
+            case MidpointRounding.ToPositiveInfinity: return valueSign > 0 ? quotient + 1 : quotient;
+            case MidpointRounding.ToNegativeInfinity: return valueSign < 0 ? quotient - 1 : quotient;
 
-        // 4. Convert the remainder to a double with 10 digits of fractional precision and add the unit.
-        double valueToRound = (double)remainder / RoundingMagnitude + unit;
+            // Ignored cases — fall through to step 4.
+            case MidpointRounding.ToEven or MidpointRounding.AwayFromZero:
+            default: break;
+        }
 
-        // 5. Round until zero fractional digits remain and subtract the unit; yields 1 or 0.
-        int rounded = (int)Math.Round(valueToRound, mode) - unit;
+        // 4. The remaining modes round to the nearest integer, so the fraction must be weighed against one half.
+        //    Doubling the remainder and comparing it to the divisor performs that comparison exactly in integers,
+        //    avoiding the precision loss that converting the fraction to a double would introduce.
+        int comparison = (BigInteger.Abs(remainder) * 2).CompareTo(BigInteger.Abs(divisor));
 
-        return quotient + rounded;
+        // 5. Below the midpoint rounds towards zero, and above it rounds away; an exact midpoint is a tie, broken
+        //    away from zero or towards the even quotient depending on the requested mode.
+        if (comparison < 0) return quotient;
+        if (comparison > 0 || mode is MidpointRounding.AwayFromZero) return quotient + valueSign;
+
+        return quotient.IsEven ? quotient : quotient + valueSign;
     }
 }

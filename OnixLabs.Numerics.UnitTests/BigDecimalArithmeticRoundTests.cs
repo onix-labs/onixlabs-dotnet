@@ -32,4 +32,23 @@ public sealed class BigDecimalArithmeticRoundTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Theory(DisplayName = "BigDecimal.Round should round correctly just past a midpoint beyond ten fractional digits")]
+    [InlineData("2.50000000001", 0, MidpointRounding.ToEven)]
+    [InlineData("2.50000000001", 0, MidpointRounding.AwayFromZero)]
+    [InlineData("-2.50000000001", 0, MidpointRounding.ToEven)]
+    [InlineData("0.250000000001", 1, MidpointRounding.ToEven)]
+    [InlineData("2.49999999999", 0, MidpointRounding.ToEven)]
+    public void BigDecimalRoundShouldRoundCorrectlyJustPastAMidpoint(string value, int scale, MidpointRounding mode)
+    {
+        // Given
+        decimal input = decimal.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
+        decimal expected = decimal.Round(input, scale, mode);
+
+        // When
+        BigDecimal actual = BigDecimal.Round(input, scale, mode);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
 }

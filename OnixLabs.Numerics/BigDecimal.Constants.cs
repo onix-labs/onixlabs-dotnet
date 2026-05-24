@@ -79,11 +79,6 @@ public readonly partial struct BigDecimal
     /// </summary>
     private static readonly CultureInfo DefaultCulture = CultureInfo.CurrentCulture;
 
-    /// <summary>
-    /// The magnitude by which a remainder must be multiplied in order to obtain ten digits of precision when rounding.
-    /// </summary>
-    private const long RoundingMagnitude = 10_000_000_000;
-
     /// <inheritdoc cref="INumberBase{TSelf}.Radix"/>
     static int INumberBase<BigDecimal>.Radix => 10;
 

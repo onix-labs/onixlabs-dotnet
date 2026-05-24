@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 using System.Numerics;
 
 namespace OnixLabs.Numerics;
@@ -185,7 +186,9 @@ public readonly partial struct BigDecimal
         if (value < decimal.MinValue || value > decimal.MaxValue)
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Decimal)}.");
 
-        return Convert.ToDecimal(value.ToString("E"));
+        // The "E" format emits an exponent, which decimal.Parse only accepts with AllowExponent (NumberStyles.Float);
+        // Convert.ToDecimal uses NumberStyles.Number and would reject it. The format and parse share a culture.
+        return decimal.Parse(value.ToString("E"), NumberStyles.Float, DefaultCulture);
     }
 
     /// <summary>

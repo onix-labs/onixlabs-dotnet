@@ -119,87 +119,90 @@ public readonly partial struct BigDecimal
 
     private static bool TryConvertTo<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
+        // Each branch must first convert the BigDecimal to the concrete target type via its explicit conversion
+        // operator, then box that result. Boxing the BigDecimal directly and unboxing to TOther would throw, as
+        // a boxed value can only be unboxed to its own exact type.
         if (typeof(TOther) == typeof(sbyte))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(sbyte)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(byte))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(byte)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(short))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(short)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(ushort))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(ushort)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(int))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(int)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(uint))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(uint)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(long))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(long)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(ulong))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(ulong)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(Int128))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(Int128)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(UInt128))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(UInt128)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(BigInteger))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(BigInteger)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(decimal))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(decimal)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(double))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(double)value;
             return true;
         }
 
         if (typeof(TOther) == typeof(float))
         {
-            result = (TOther)(object)value;
+            result = (TOther)(object)(float)value;
             return true;
         }
 

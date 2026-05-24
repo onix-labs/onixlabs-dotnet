@@ -51,4 +51,14 @@ public sealed class BigDecimalConvertTests
         Assert.Equal(new BigDecimal(42), Create<BigDecimal, long>(42L));
         Assert.Equal(new BigDecimal(42), Create<BigDecimal, BigInteger>(42));
     }
+
+    [Fact(DisplayName = "IConvertible.ToDateTime should throw InvalidCastException")]
+    public void ConvertibleToDateTimeShouldThrowInvalidCastException()
+    {
+        // Given
+        IConvertible value = new BigDecimal(42);
+
+        // When / Then
+        Assert.Throws<InvalidCastException>(() => value.ToDateTime(null));
+    }
 }

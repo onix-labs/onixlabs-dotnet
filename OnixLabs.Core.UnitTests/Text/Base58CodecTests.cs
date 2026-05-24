@@ -129,6 +129,54 @@ public sealed class Base58CodecTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Base58Codec round-trip should preserve leading zero bytes (Bitcoin)")]
+    public void Base58CodecRoundTripShouldPreserveLeadingZeroBytesBitcoin()
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base58;
+        byte[] expected = [0x00, 0x00, 0x61];
+
+        // When
+        string encoded = codec.Encode(expected, Base58FormatProvider.Bitcoin);
+        byte[] actual = codec.Decode(encoded, Base58FormatProvider.Bitcoin);
+
+        // Then
+        Assert.Equal("112g", encoded);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Base58Codec round-trip should preserve leading zero bytes (Flickr)")]
+    public void Base58CodecRoundTripShouldPreserveLeadingZeroBytesFlickr()
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base58;
+        byte[] expected = [0x00, 0x00, 0x61];
+
+        // When
+        string encoded = codec.Encode(expected, Base58FormatProvider.Flickr);
+        byte[] actual = codec.Decode(encoded, Base58FormatProvider.Flickr);
+
+        // Then
+        Assert.Equal("112F", encoded);
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Base58Codec round-trip should preserve leading zero bytes using the provider's zero character (Ripple)")]
+    public void Base58CodecRoundTripShouldPreserveLeadingZeroBytesRipple()
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base58;
+        byte[] expected = [0x00, 0x00, 0x61];
+
+        // When
+        string encoded = codec.Encode(expected, Base58FormatProvider.Ripple);
+        byte[] actual = codec.Decode(encoded, Base58FormatProvider.Ripple);
+
+        // Then
+        Assert.Equal("rrpg", encoded);
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Base58Codec.Encode should throw FormatException when the format provider is invalid")]
     public void Base58CodecEncodeShouldThrowFormatExceptionWhenFormatProviderIsInvalid()
     {

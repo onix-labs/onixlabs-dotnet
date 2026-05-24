@@ -145,4 +145,13 @@ public sealed class Float128ConvertTests
     {
         Assert.Equal(1, CreateTruncating<int, Float128>((Float128)1.9));
     }
+
+    [Fact(DisplayName = "CreateChecked from an out-of-range Float128 should throw, not saturate (regression)")]
+    public void CreateCheckedFromOutOfRangeFloat128ShouldThrow()
+    {
+        Assert.Throws<OverflowException>(() => CreateChecked<int, Float128>(Float128.MaxValue));
+        Assert.Throws<OverflowException>(() => CreateChecked<byte, Float128>(Float128.NegativeOne));
+        Assert.Throws<OverflowException>(() => CreateChecked<long, Float128>(Float128.NaN));
+        Assert.Throws<OverflowException>(() => CreateChecked<Int128, Float128>(Float128.MaxValue));
+    }
 }

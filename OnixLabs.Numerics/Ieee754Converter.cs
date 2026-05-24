@@ -14,10 +14,7 @@
 
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Numerics;
-using OnixLabs.Core;
-using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Numerics;
 
@@ -164,24 +161,10 @@ internal static class Ieee754Converter
     /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
     private static NumberInfo ConvertFromDecimal<T>(T value) where T : IBinaryFloatingPointIeee754<T>
     {
-        const char zero = '0';
-        const string format = "R";
-        const string delimiter = "E";
-        const StringComparison comparison = StringComparison.CurrentCultureIgnoreCase;
-
-        int exponent = int.Parse(value.ToString("E", NumberFormatInfo.CurrentInfo).SubstringAfterLast(delimiter, comparison: comparison));
-
-        string digits = value
-            .ToString(format, NumberFormatInfo.CurrentInfo)
-            .SubstringBeforeFirst(delimiter, comparison: comparison)
-            .Where(char.IsDigit)
-            .JoinToString(string.Empty)
-            .PadRight(int.Max(0, exponent + 1), zero);
-
-        BigInteger unscaledValue = BigInteger.Parse(digits) * T.Sign(value);
-        int scale = BigInteger.Abs(unscaledValue).ToString().Length - (exponent + 1);
-
-        return new NumberInfo(unscaledValue, scale);
+        // The "R" (round-trip) format yields the shortest decimal that maps back to the same binary value, which
+        // is exactly the Dragon4 representation we want. Parsing it with the invariant culture reuses the tested
+        // NumberInfo parser, which correctly applies the round-trip exponent to both the magnitude and the scale.
+        return NumberInfo.Parse(value.ToString("R", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
     }
 
     /// <summary>

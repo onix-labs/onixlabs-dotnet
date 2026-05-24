@@ -110,6 +110,24 @@ public sealed class NumberInfoParseTests
         Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
     }
 
+    [Theory(DisplayName = "NumberInfo.Parse should apply a positive or negative exponent to the magnitude")]
+    [InlineData("1.5E3", "1500")]
+    [InlineData("15E2", "1500")]
+    [InlineData("1E5", "100000")]
+    [InlineData("1.23E2", "123")]
+    [InlineData("1.5E-3", "0.0015")]
+    public void NumberInfoParseShouldApplyExponentToTheMagnitude(string value, string expected)
+    {
+        // Given
+        NumberInfo expectedResult = decimal.Parse(expected, CultureInfo.InvariantCulture).ToNumberInfo();
+
+        // When
+        NumberInfo actual = NumberInfo.Parse(value, NumberStyles.Float, CultureInfo.InvariantCulture);
+
+        // Then
+        Assert.Equal(expectedResult, actual, NumberInfoEqualityComparer.Semantic);
+    }
+
     [Theory(DisplayName = "NumberInfo.Parse should parse a trailing sign consistently with decimal.Parse")]
     [InlineData("5-")]
     [InlineData("123-")]

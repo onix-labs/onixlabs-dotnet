@@ -13,12 +13,32 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 using System.Numerics;
 
 namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class BigDecimalConvertTests
 {
+    [Theory(DisplayName = "BigDecimal from a double in Decimal mode should round-trip the shortest representation")]
+    [InlineData(9.9999999)]
+    [InlineData(99.999999)]
+    [InlineData(0.99999999)]
+    [InlineData(9999.9999)]
+    [InlineData(1.5)]
+    [InlineData(123.456)]
+    public void BigDecimalFromDoubleInDecimalModeShouldRoundTripShortestRepresentation(double value)
+    {
+        // Given
+        string expected = value.ToString("R", CultureInfo.InvariantCulture);
+
+        // When
+        BigDecimal actual = new(value, ConversionMode.Decimal);
+
+        // Then
+        Assert.Equal(expected, actual.ToString("G", CultureInfo.InvariantCulture));
+    }
+
     // Invokes the static-virtual INumberBase.CreateChecked through a generic constraint, which exercises
     // BigDecimal.TryConvertToChecked (when TTo is BigDecimal) and TryConvertFromChecked (when TFrom is BigDecimal).
     private static TTo Create<TTo, TFrom>(TFrom value)

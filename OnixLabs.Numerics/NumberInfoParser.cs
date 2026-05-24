@@ -53,7 +53,18 @@ internal sealed partial class NumberInfoParser(NumberStyles style, IFormatProvid
         // At this point, only digits, thousands and decimal separators should remain.
         if (!TryGetNumberInfo(ref value, out NumberInfo rawResult)) return false;
 
-        result = new NumberInfo(rawResult.UnscaledValue * sign, int.Max(rawResult.Scale - exponent, 0));
+        BigInteger unscaledValue = rawResult.UnscaledValue * sign;
+        int scale = rawResult.Scale - exponent;
+
+        // A negative scale means the exponent has shifted the value above its fractional digits; the magnitude
+        // must grow accordingly, since the scale itself cannot be negative. A non-negative scale needs no change.
+        if (scale < 0)
+        {
+            unscaledValue *= BigInteger.Pow(10, -scale);
+            scale = 0;
+        }
+
+        result = new NumberInfo(unscaledValue, scale);
         return true;
     }
 

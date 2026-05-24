@@ -62,4 +62,14 @@ public sealed class GenericMathDeltaTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "GenericMath.Delta should not wrap for unsigned types when left is less than right")]
+    public void GenericMathDeltaShouldNotWrapForUnsignedTypes()
+    {
+        // Before the order-aware fix, left - right wrapped for unsigned types when left < right.
+        Assert.Equal(3u, GenericMath.Delta(2u, 5u));
+        Assert.Equal(3u, GenericMath.Delta(5u, 2u));
+        Assert.Equal((byte)200, GenericMath.Delta((byte)55, (byte)255));
+        Assert.Equal((byte)200, GenericMath.Delta((byte)255, (byte)55));
+    }
 }

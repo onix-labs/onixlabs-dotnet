@@ -24,13 +24,17 @@ namespace OnixLabs.Numerics;
 public static class GenericMath
 {
     /// <summary>
-    /// Computes the delta, or difference between the specified numbers.
+    /// Computes the delta, or absolute difference, between the specified numbers.
     /// </summary>
     /// <param name="left">The <paramref name="left"/> number from which to compute the delta.</param>
     /// <param name="right">The <paramref name="right"/> number from which to compute the delta.</param>
-    /// <typeparam name="T">The underlying <see cref="INumberBase{TSelf}"/> type.</typeparam>
-    /// <returns>Returns the delta, or difference between the specified numbers.</returns>
-    public static T Delta<T>(T left, T right) where T : INumberBase<T> => T.Abs(left - right);
+    /// <typeparam name="T">The underlying <see cref="INumber{TSelf}"/> type.</typeparam>
+    /// <returns>Returns the absolute difference between the specified numbers.</returns>
+    /// <remarks>
+    /// The difference is computed in order (subtracting the smaller operand from the larger), so the result is correct for
+    /// unsigned integer types, which would otherwise wrap when <paramref name="left"/> is less than <paramref name="right"/>.
+    /// </remarks>
+    public static T Delta<T>(T left, T right) where T : INumber<T> => left < right ? right - left : left - right;
 
     /// <summary>
     /// Gets the factorial of the specified <see cref="IBinaryInteger{TSelf}"/> value.
@@ -44,10 +48,13 @@ public static class GenericMath
 
         if (value <= T.One) return BigInteger.One;
 
+        // Iterate over a BigInteger counter rather than T: a T counter overflows when value is T.MaxValue
+        // (e.g. byte 255 + 1 wraps to 0), which would loop forever.
+        BigInteger maximum = value.ToBigInteger();
         BigInteger result = BigInteger.One;
 
-        for (T factor = T.One; factor <= value; factor++)
-            result *= factor.ToBigInteger();
+        for (BigInteger factor = 2; factor <= maximum; factor++)
+            result *= factor;
 
         return result;
     }

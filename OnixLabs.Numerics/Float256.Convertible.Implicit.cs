@@ -288,7 +288,7 @@ public readonly partial struct Float256
 
         UInt128 sourceBits = value.Bits;
         UInt256 sign = (UInt256)(uint)(sourceBits >> Float128.SignShift) << SignShift;
-        uint biasedExponent = (uint)(uint)((sourceBits >> sourceSignificandBits) & sourceMaxBiasedExponent);
+        uint biasedExponent = (uint)((sourceBits >> sourceSignificandBits) & sourceMaxBiasedExponent);
         UInt128 trailingSignificand = sourceBits & sourceSignificandMask;
 
         if (biasedExponent == sourceMaxBiasedExponent)

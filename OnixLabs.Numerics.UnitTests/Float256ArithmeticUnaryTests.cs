@@ -62,4 +62,13 @@ public sealed class Float256ArithmeticUnaryTests
         Assert.Equal((-Float256.NegativeOne).Bits.UpperBits, Float256.Negate(Float256.NegativeOne).Bits.UpperBits);
         Assert.Equal((-Float256.NegativeOne).Bits.LowerBits, Float256.Negate(Float256.NegativeOne).Bits.LowerBits);
     }
+
+    [Fact(DisplayName = "Float256.UnaryAdd and UnarySubtract should mirror the operators")]
+    public void Float256UnaryNamedMethodsShouldMirrorOperators()
+    {
+        Assert.Equal((+Float256.One).Bits.UpperBits, Float256.UnaryAdd(Float256.One).Bits.UpperBits);
+        Assert.Equal((+Float256.One).Bits.LowerBits, Float256.UnaryAdd(Float256.One).Bits.LowerBits);
+        Assert.Equal((-Float256.One).Bits.UpperBits, Float256.UnarySubtract(Float256.One).Bits.UpperBits);
+        Assert.Equal((-Float256.One).Bits.LowerBits, Float256.UnarySubtract(Float256.One).Bits.LowerBits);
+    }
 }

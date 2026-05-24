@@ -76,6 +76,76 @@ public sealed class Float128ConvertibleImplicitTests
         Assert.Equal(new UInt128(expectedHigh, expectedLow), actual.Bits);
     }
 
+    [Theory(DisplayName = "Float128 implicit conversion from Int128 should match the Int64 conversion for representable values")]
+    [InlineData(0L)]
+    [InlineData(1L)]
+    [InlineData(-1L)]
+    [InlineData(long.MaxValue)]
+    [InlineData(long.MinValue)]
+    public void Float128ImplicitFromInt128ShouldMatchInt64Conversion(long value)
+    {
+        Float128 fromInt128 = (Int128)value;
+        Float128 fromInt64 = value;
+        Assert.Equal(fromInt64.Bits, fromInt128.Bits);
+    }
+
+    [Theory(DisplayName = "Float128 implicit conversion from UInt128 should match the UInt64 conversion for representable values")]
+    [InlineData(0UL)]
+    [InlineData(1UL)]
+    [InlineData(ulong.MaxValue)]
+    public void Float128ImplicitFromUInt128ShouldMatchUInt64Conversion(ulong value)
+    {
+        Float128 fromUInt128 = (UInt128)value;
+        Float128 fromUInt64 = value;
+        Assert.Equal(fromUInt64.Bits, fromUInt128.Bits);
+    }
+
+    [Fact(DisplayName = "Float128 implicit conversion from Int128 should round-trip a value within the 113-bit significand")]
+    public void Float128ImplicitFromInt128ShouldRoundTripExactValue()
+    {
+        Int128 value = (Int128.One << 100) + Int128.One;
+        Float128 wide = value;
+        Assert.Equal(value, (Int128)wide);
+    }
+
+    [Fact(DisplayName = "Float128 implicit conversion from Int128.MinValue should preserve sign and round-trip")]
+    public void Float128ImplicitFromInt128MinValueShouldRoundTrip()
+    {
+        Float128 wide = Int128.MinValue;
+        Assert.True(Float128.IsNegative(wide));
+        Assert.Equal(Int128.MinValue, (Int128)wide);
+    }
+
+    [Fact(DisplayName = "Float128 implicit conversion from UInt128 should round-trip a 113-bit significand value")]
+    public void Float128ImplicitFromUInt128ShouldRoundTripExactValue()
+    {
+        UInt128 value = (UInt128.One << 113) - UInt128.One;
+        Float128 wide = value;
+        Assert.Equal(value, (UInt128)wide);
+    }
+
+    [Theory(DisplayName = "Float128 implicit conversion from decimal should match the double conversion for exactly representable values")]
+    [InlineData(0.0)]
+    [InlineData(1.0)]
+    [InlineData(-1.0)]
+    [InlineData(0.5)]
+    [InlineData(1.5)]
+    [InlineData(0.25)]
+    public void Float128ImplicitFromDecimalShouldMatchDoubleForExactValues(double value)
+    {
+        Float128 fromDecimal = (decimal)value;
+        Float128 fromDouble = value;
+        Assert.Equal(fromDouble.Bits, fromDecimal.Bits);
+    }
+
+    [Fact(DisplayName = "Float128 implicit conversion from decimal should round-trip a non-dyadic decimal value")]
+    public void Float128ImplicitFromDecimalShouldRoundTripNonDyadicValue()
+    {
+        const decimal value = 0.1m;
+        Float128 wide = value;
+        Assert.Equal(value, (decimal)wide);
+    }
+
     [Theory(DisplayName = "Float128 implicit conversion from double should preserve the double value losslessly")]
     [InlineData(0.0)]
     [InlineData(1.0)]

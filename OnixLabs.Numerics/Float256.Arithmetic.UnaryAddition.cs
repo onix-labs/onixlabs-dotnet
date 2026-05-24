@@ -16,8 +16,13 @@ namespace OnixLabs.Numerics;
 
 public readonly partial struct Float256
 {
+    /// <summary>Computes the unary addition of the specified <see cref="Float256"/> value.</summary>
+    /// <param name="value">The value for which to perform unary addition.</param>
+    /// <returns>Returns <paramref name="value"/> unchanged.</returns>
+    public static Float256 UnaryAdd(Float256 value) => value;
+
     /// <summary>Returns the specified <see cref="Float256"/> value unchanged.</summary>
     /// <param name="value">The value to return.</param>
     /// <returns>Returns <paramref name="value"/> unchanged.</returns>
-    public static Float256 operator +(Float256 value) => value;
+    public static Float256 operator +(Float256 value) => UnaryAdd(value);
 }

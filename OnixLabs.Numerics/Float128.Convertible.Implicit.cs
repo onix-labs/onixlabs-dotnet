@@ -76,11 +76,32 @@ public readonly partial struct Float128
     public static implicit operator Float128(ulong value) => FromUInt64(value);
 
     /// <summary>
+    /// Performs an implicit conversion from the specified <see cref="Int128"/> value to a <see cref="Float128"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="Int128"/> value to convert.</param>
+    /// <returns>Returns a new <see cref="Float128"/> value that represents the specified <see cref="Int128"/> value.</returns>
+    public static implicit operator Float128(Int128 value) => FromInt128(value);
+
+    /// <summary>
+    /// Performs an implicit conversion from the specified <see cref="UInt128"/> value to a <see cref="Float128"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="UInt128"/> value to convert.</param>
+    /// <returns>Returns a new <see cref="Float128"/> value that represents the specified <see cref="UInt128"/> value.</returns>
+    public static implicit operator Float128(UInt128 value) => FromUInt128(value);
+
+    /// <summary>
     /// Performs an implicit conversion from the specified <see cref="char"/> value to a <see cref="Float128"/> value.
     /// </summary>
     /// <param name="value">The <see cref="char"/> value to convert.</param>
     /// <returns>Returns a new <see cref="Float128"/> value that represents the specified <see cref="char"/> value.</returns>
     public static implicit operator Float128(char value) => FromUInt64(value);
+
+    /// <summary>
+    /// Performs an implicit conversion from the specified <see cref="decimal"/> value to a <see cref="Float128"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="decimal"/> value to convert.</param>
+    /// <returns>Returns a new <see cref="Float128"/> value that represents the specified <see cref="decimal"/> value.</returns>
+    public static implicit operator Float128(decimal value) => FromDecimal(value);
 
     /// <summary>
     /// Performs an implicit conversion from the specified <see cref="Half"/> value to a <see cref="Float128"/> value.

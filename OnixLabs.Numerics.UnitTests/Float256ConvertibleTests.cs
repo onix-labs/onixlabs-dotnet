@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics.UnitTests;
 
@@ -91,13 +92,13 @@ public sealed class Float256ConvertibleTests
     [Fact(DisplayName = "Float256.IConvertible.ToString of NaN should produce NaN")]
     public void Float256IConvertibleToStringOfNaNShouldProduceNaN()
     {
-        Assert.Equal("NaN", AsConvertible(Float256.NaN).ToString(null));
+        Assert.Equal("NaN", AsConvertible(Float256.NaN).ToString(CultureInfo.InvariantCulture));
     }
 
     [Fact(DisplayName = "Float256.IConvertible.ToString of infinity should produce the Infinity literal")]
     public void Float256IConvertibleToStringOfInfinityShouldProduceLiteral()
     {
-        Assert.Equal("Infinity", AsConvertible(Float256.PositiveInfinity).ToString(null));
-        Assert.Equal("-Infinity", AsConvertible(Float256.NegativeInfinity).ToString(null));
+        Assert.Equal("Infinity", AsConvertible(Float256.PositiveInfinity).ToString(CultureInfo.InvariantCulture));
+        Assert.Equal("-Infinity", AsConvertible(Float256.NegativeInfinity).ToString(CultureInfo.InvariantCulture));
     }
 }

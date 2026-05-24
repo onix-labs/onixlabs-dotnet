@@ -27,29 +27,9 @@ public readonly partial struct Float256
     public const int MaxRoundTripDigits = 73;
 
     /// <summary>
-    /// The literal used to format a NaN <see cref="Float256"/> value.
-    /// </summary>
-    private const string NaNSymbol = "NaN";
-
-    /// <summary>
-    /// The literal used to format a positive infinity <see cref="Float256"/> value.
-    /// </summary>
-    private const string PositiveInfinitySymbol = "Infinity";
-
-    /// <summary>
-    /// The literal used to format a negative infinity <see cref="Float256"/> value.
-    /// </summary>
-    private const string NegativeInfinitySymbol = "-Infinity";
-
-    /// <summary>
     /// The literal used to format a positive zero <see cref="Float256"/> value.
     /// </summary>
     private const string PositiveZeroSymbol = "0";
-
-    /// <summary>
-    /// The literal used to format a negative zero <see cref="Float256"/> value.
-    /// </summary>
-    private const string NegativeZeroSymbol = "-0";
 
     /// <summary>
     /// The default format specifier used when none is supplied to <see cref="ToString()"/>.
@@ -72,15 +52,17 @@ public readonly partial struct Float256
     /// <returns>Returns the value of the current instance formatted using the specified format and provider.</returns>
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        if (IsNaN(this)) return NaNSymbol;
-        if (IsPositiveInfinity(this)) return PositiveInfinitySymbol;
-        if (IsNegativeInfinity(this)) return NegativeInfinitySymbol;
+        NumberFormatInfo numberFormat = NumberFormatInfo.GetInstance(formatProvider);
+
+        if (IsNaN(this)) return numberFormat.NaNSymbol;
+        if (IsPositiveInfinity(this)) return numberFormat.PositiveInfinitySymbol;
+        if (IsNegativeInfinity(this)) return numberFormat.NegativeInfinitySymbol;
         if (IsZero(this))
         {
             // Only short-circuit zero for round-trip/general formats. Precision-bearing formats (N3, F2, C, P, …)
             // expect padded fractional digits, so route through NumberInfo for correct padding and grouping.
             if (format.IsEmpty || format.IsWhiteSpace() || IsRoundTripOrGeneralFormat(format))
-                return IsNegative(this) ? NegativeZeroSymbol : PositiveZeroSymbol;
+                return IsNegative(this) ? numberFormat.NegativeSign + PositiveZeroSymbol : PositiveZeroSymbol;
             return NumberInfo.Zero.ToString(format.ToString(), formatProvider);
         }
 

@@ -18,35 +18,37 @@ namespace OnixLabs.Numerics;
 
 public readonly partial struct Float256
 {
-    /// <summary>Returns the smallest <see cref="Float256"/> value strictly greater than <paramref name="value"/>.</summary>
-    /// <param name="value">The value whose successor is to be returned.</param>
-    /// <returns>Returns the next-larger representable <see cref="Float256"/> value.</returns>
+    /// <summary>
+    /// Returns the smallest <see cref="Float256"/> value larger than the specified value.
+    /// </summary>
+    /// <param name="value">The value to increment.</param>
+    /// <returns>Returns the next representable <see cref="Float256"/> value above <paramref name="value"/>; <see cref="NaN"/> remains NaN; <see cref="PositiveInfinity"/> remains positive infinity; <see cref="NegativeInfinity"/> becomes <see cref="MinValue"/>; either zero becomes <see cref="Epsilon"/>.</returns>
     public static Float256 BitIncrement(Float256 value)
     {
         if (IsNaN(value)) return value;
         if (IsPositiveInfinity(value)) return value;
         if (IsNegativeInfinity(value)) return MinValue;
-        if (IsNegative(value))
-        {
-            if (IsZero(value)) return Epsilon;
-            return new Float256(value.Bits - UInt256.One);
-        }
-        return new Float256(value.Bits + UInt256.One);
+        if (IsZero(value)) return Epsilon;
+
+        return IsNegative(value)
+            ? new Float256(value.Bits - UInt256.One)
+            : new Float256(value.Bits + UInt256.One);
     }
 
-    /// <summary>Returns the largest <see cref="Float256"/> value strictly less than <paramref name="value"/>.</summary>
-    /// <param name="value">The value whose predecessor is to be returned.</param>
-    /// <returns>Returns the next-smaller representable <see cref="Float256"/> value.</returns>
+    /// <summary>
+    /// Returns the largest <see cref="Float256"/> value smaller than the specified value.
+    /// </summary>
+    /// <param name="value">The value to decrement.</param>
+    /// <returns>Returns the next representable <see cref="Float256"/> value below <paramref name="value"/>; <see cref="NaN"/> remains NaN; <see cref="NegativeInfinity"/> remains negative infinity; <see cref="PositiveInfinity"/> becomes <see cref="MaxValue"/>; either zero becomes the largest negative subnormal.</returns>
     public static Float256 BitDecrement(Float256 value)
     {
         if (IsNaN(value)) return value;
         if (IsNegativeInfinity(value)) return value;
         if (IsPositiveInfinity(value)) return MaxValue;
-        if (IsNegative(value))
-        {
-            return new Float256(value.Bits + UInt256.One);
-        }
         if (IsZero(value)) return new Float256(SignMask | UInt256.One);
-        return new Float256(value.Bits - UInt256.One);
+
+        return IsNegative(value)
+            ? new Float256(value.Bits + UInt256.One)
+            : new Float256(value.Bits - UInt256.One);
     }
 }

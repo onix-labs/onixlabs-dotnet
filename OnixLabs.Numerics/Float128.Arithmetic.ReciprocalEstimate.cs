@@ -29,6 +29,6 @@ public readonly partial struct Float128
     /// Computes an approximation of the reciprocal of the square root of the specified <see cref="Float128"/> value.
     /// </summary>
     /// <param name="value">The value whose reciprocal square root is to be approximated.</param>
-    /// <returns>Returns an approximation of <c>1 / √value</c>; this implementation returns the correctly-rounded result.</returns>
+    /// <returns>Returns an approximation of <c>1 / √value</c>, faithfully rounded to within one unit in the last place (ULP) since it inherits the accuracy of <see cref="Sqrt"/>.</returns>
     public static Float128 ReciprocalSqrtEstimate(Float128 value) => One / Sqrt(value);
 }

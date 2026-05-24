@@ -55,7 +55,7 @@ public sealed class Base16Codec : IBaseCodec
 
             result = formatProvider == Base16FormatProvider.Uppercase
                 ? Convert.ToHexString(value)
-                : Convert.ToHexString(value).ToLower();
+                : Convert.ToHexString(value).ToLowerInvariant();
 
             return true;
         }

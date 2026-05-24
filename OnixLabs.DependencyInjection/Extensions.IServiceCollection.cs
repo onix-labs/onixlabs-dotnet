@@ -152,7 +152,7 @@ public static class IServiceCollectionExtensions
         /// </summary>
         /// <param name="serviceType">The type of the service to register.</param>
         /// <param name="implementationType">The implementation type of the service.</param>
-        /// <param name="lifetime">The lifetime of the specified service.</param>
+        /// <param name="lifetime">The lifetime of the specified service. The default lifetime is <see cref="ServiceLifetime.Singleton"/>.</param>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddService(Type serviceType,
@@ -173,7 +173,7 @@ public static class IServiceCollectionExtensions
         /// <param name="serviceType">The type of the service to register.</param>
         /// <param name="implementationType">The implementation type of the service.</param>
         /// <param name="serviceKey">The <see cref="ServiceDescriptor.ServiceKey"/> of the service.</param>
-        /// <param name="lifetime">The lifetime of the specified service.</param>
+        /// <param name="lifetime">The lifetime of the specified service. The default lifetime is <see cref="ServiceLifetime.Singleton"/>.</param>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddKeyedService(Type serviceType,

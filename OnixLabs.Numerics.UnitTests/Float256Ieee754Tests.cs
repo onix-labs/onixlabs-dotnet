@@ -23,6 +23,11 @@ public sealed class Float256Ieee754Tests
     {
         Assert.Equal(Float256.Zero, Float256.Ieee754Remainder((Float256)6, (Float256)3));
         Assert.Equal((Float256)0.5, Float256.Ieee754Remainder((Float256)3.5, (Float256)3));
+
+        // Regression: exact even when the quotient exceeds the 237-bit significand precision.
+        // 2^240 mod 3 = 1 (< 1.5) -> 1; 2^241 mod 3 = 2 (> 1.5) -> 2 - 3 = -1.
+        Assert.Equal(Float256.One, Float256.Ieee754Remainder(Float256.ScaleB(Float256.One, 240), (Float256)3));
+        Assert.Equal((Float256)(-1), Float256.Ieee754Remainder(Float256.ScaleB(Float256.One, 241), (Float256)3));
     }
 
     [Fact(DisplayName = "Float256.Ieee754Remainder of NaN should return NaN")]

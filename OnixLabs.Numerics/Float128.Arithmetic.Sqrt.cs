@@ -22,12 +22,13 @@ public readonly partial struct Float128
     /// Computes the square root of the specified <see cref="Float128"/> value, rounded to nearest, ties-to-even per IEEE 754.
     /// </summary>
     /// <param name="value">The value whose square root is to be computed.</param>
-    /// <returns>Returns the correctly-rounded square root of <paramref name="value"/>; <see cref="NaN"/> for negative inputs or NaN; preserves the sign of zero.</returns>
+    /// <returns>Returns the square root of <paramref name="value"/>, faithfully rounded to within one unit in the last place (ULP); <see cref="NaN"/> for negative inputs or NaN; preserves the sign of zero.</returns>
     /// <remarks>
     /// The implementation uses Newton-Raphson iteration on top of the bit-twiddled <see cref="Multiply(Float128, Float128)"/> and
     /// <see cref="Divide(Float128, Float128)"/> primitives. Starting from a power-of-two initial estimate derived from the unbiased
     /// exponent, six iterations are sufficient to reach binary128 precision because Newton-Raphson on square root converges
-    /// quadratically.
+    /// quadratically; the loop runs eight for a safety margin. Because the iteration rounds at each step and applies no final
+    /// residual-correction step, the result is faithfully rounded (within 1 ULP) rather than guaranteed correctly-rounded.
     /// </remarks>
     public static Float128 Sqrt(Float128 value)
     {

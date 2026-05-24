@@ -33,11 +33,11 @@ public sealed class Int512GetWriteTests
         Assert.Equal(0, Int512.Zero.GetShortestBitLength());
     }
 
-    [Fact(DisplayName = "Int512.GetShortestBitLength of One should be 2 (1 bit for value, 1 for sign)")]
-    public void Int512GetShortestBitLengthOfOneShouldBe2()
+    [Fact(DisplayName = "Int512.GetShortestBitLength of One should be 1 (no sign bit for non-negative values)")]
+    public void Int512GetShortestBitLengthOfOneShouldBe1()
     {
-        // For two's-complement, +1 needs at least 2 bits: a sign bit (0) and the value bit (1).
-        Assert.Equal(2, Int512.One.GetShortestBitLength());
+        // Matching Int128: a non-negative value's shortest two's-complement length excludes the sign bit, so +1 needs 1 bit.
+        Assert.Equal(1, Int512.One.GetShortestBitLength());
     }
 
     [Fact(DisplayName = "Int512.GetShortestBitLength of NegativeOne should be 1 (just the sign bit)")]
@@ -46,10 +46,11 @@ public sealed class Int512GetWriteTests
         Assert.Equal(1, Int512.NegativeOne.GetShortestBitLength());
     }
 
-    [Fact(DisplayName = "Int512.GetShortestBitLength of MaxValue should be 512")]
-    public void Int512GetShortestBitLengthOfMaxValueShouldBe512()
+    [Fact(DisplayName = "Int512.GetShortestBitLength of MaxValue should be 511 (no sign bit for non-negative values)")]
+    public void Int512GetShortestBitLengthOfMaxValueShouldBe511()
     {
-        Assert.Equal(512, Int512.MaxValue.GetShortestBitLength());
+        // MaxValue is 2^511 - 1: 511 value bits, no sign bit (matching Int128.MaxValue -> 127).
+        Assert.Equal(511, Int512.MaxValue.GetShortestBitLength());
     }
 
     [Fact(DisplayName = "Int512.GetShortestBitLength of MinValue should be 512")]

@@ -25,6 +25,16 @@ public sealed class Float128Ieee754Tests
         Assert.Equal((Float128)0.5, Float128.Ieee754Remainder((Float128)3.5, (Float128)3));
     }
 
+    [Fact(DisplayName = "Float128.Ieee754Remainder should be exact when the quotient exceeds significand precision (regression)")]
+    public void Float128Ieee754RemainderShouldBeExactForLargeQuotients()
+    {
+        // 2^120 mod 3 = 1 (< 1.5, quotient rounds down) -> 1.
+        Assert.Equal(Float128.One, Float128.Ieee754Remainder(Float128.ScaleB(Float128.One, 120), (Float128)3));
+
+        // 2^121 mod 3 = 2 (> 1.5, quotient rounds up) -> 2 - 3 = -1.
+        Assert.Equal((Float128)(-1), Float128.Ieee754Remainder(Float128.ScaleB(Float128.One, 121), (Float128)3));
+    }
+
     [Fact(DisplayName = "Float128.Ieee754Remainder of NaN should return NaN")]
     public void Float128Ieee754RemainderOfNaNShouldReturnNaN()
     {

@@ -61,4 +61,29 @@ public sealed class Float256ArithmeticModulusTests
         Assert.Equal(expectedFloat.Bits.UpperBits, actual.Bits.UpperBits);
         Assert.Equal(expectedFloat.Bits.LowerBits, actual.Bits.LowerBits);
     }
+
+    [Theory(DisplayName = "Float256.Remainder should be exact when the quotient exceeds significand precision (regression)")]
+    [InlineData(240, 1)]  // 2^240 mod 3 = 1 (2^even ≡ 1 mod 3)
+    [InlineData(241, 2)]  // 2^241 mod 3 = 2 (2^odd  ≡ 2 mod 3)
+    [InlineData(400, 1)]
+    public void Float256RemainderShouldBeExactForLargeQuotients(int exponent, int expectedRemainder)
+    {
+        Float256 dividend = Float256.ScaleB(Float256.One, exponent);
+        Float256 actual = dividend % (Float256)3;
+        Float256 expected = (Float256)expectedRemainder;
+
+        Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
+    }
+
+    [Fact(DisplayName = "Float256.Remainder of a large negative dividend should carry the dividend sign")]
+    public void Float256RemainderLargeNegativeShouldCarrySign()
+    {
+        Float256 dividend = -Float256.ScaleB(Float256.One, 240); // -2^240
+        Float256 actual = dividend % (Float256)3;
+        Float256 expected = (Float256)(-1);
+
+        Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
+    }
 }

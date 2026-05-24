@@ -55,9 +55,13 @@ public readonly partial struct BigDecimal
     /// <returns>Returns the normalized unscaled values of the specified <see cref="BigDecimal"/> values.</returns>
     public static (BigInteger Left, BigInteger Right) NormalizeUnscaledValues(BigDecimal left, BigDecimal right)
     {
-        BigInteger minOrderOfMagnitude = BigInteger.Min(left.number.ScaleFactor, right.number.ScaleFactor);
-        BigInteger leftNormalized = left.UnscaledValue * right.number.ScaleFactor / minOrderOfMagnitude;
-        BigInteger rightNormalized = right.UnscaledValue * left.number.ScaleFactor / minOrderOfMagnitude;
+        BigInteger leftNormalized = left.UnscaledValue;
+        BigInteger rightNormalized = right.UnscaledValue;
+
+        // Align both values to the larger scale by raising the value with the smaller scale. This needs a single
+        // power-of-ten factor, rather than scaling both sides by their full scale factor and dividing by the smaller.
+        if (left.Scale < right.Scale) leftNormalized *= BigInteger.Pow(10, right.Scale - left.Scale);
+        else if (right.Scale < left.Scale) rightNormalized *= BigInteger.Pow(10, left.Scale - right.Scale);
 
         return (leftNormalized, rightNormalized);
     }

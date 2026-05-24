@@ -121,4 +121,30 @@ public sealed class SecurityTokenTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "SecurityToken.Length should return zero for the default instance")]
+    public void SecurityTokenLengthShouldReturnZeroForDefaultInstance()
+    {
+        // Given
+        SecurityToken token = default;
+
+        // When
+        int actual = token.Length;
+
+        // Then
+        Assert.Equal(0, actual);
+    }
+
+    [Fact(DisplayName = "SecurityToken.ToString should return an empty string for the default instance")]
+    public void SecurityTokenToStringShouldReturnEmptyStringForDefaultInstance()
+    {
+        // Given
+        SecurityToken token = default;
+
+        // When
+        string actual = token.ToString();
+
+        // Then
+        Assert.Equal(string.Empty, actual);
+    }
 }

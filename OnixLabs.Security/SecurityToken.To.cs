@@ -17,5 +17,5 @@ namespace OnixLabs.Security;
 public readonly partial struct SecurityToken
 {
     /// <inheritdoc/>
-    public override string ToString() => value;
+    public override string ToString() => value ?? string.Empty;
 }

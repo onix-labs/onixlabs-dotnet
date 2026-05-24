@@ -692,4 +692,37 @@ public sealed class SecurityTokenBuilderTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "SecurityTokenBuilder.ToSecurityToken should throw InvalidOperationException when no character set is specified")]
+    public void SecurityTokenBuilderToSecurityTokenShouldThrowWhenNoCharacterSetSpecified()
+    {
+        // Given
+        SecurityTokenBuilder builder = SecurityTokenBuilder.CreatePseudoRandom(32, 0);
+
+        // When / Then
+        Assert.Throws<InvalidOperationException>(() => builder.ToSecurityToken());
+    }
+
+    [Fact(DisplayName = "SecurityTokenBuilder.CreatePseudoRandom should throw ArgumentOutOfRangeException when the length is negative")]
+    public void SecurityTokenBuilderShouldThrowWhenLengthIsNegative()
+    {
+        // When / Then
+        Assert.Throws<ArgumentOutOfRangeException>(() => SecurityTokenBuilder.CreatePseudoRandom(-1, 0));
+    }
+
+    [Fact(DisplayName = "SecurityTokenBuilder.ToSecurityToken should produce a token of the requested length when the length exceeds the stack-allocation threshold")]
+    public void SecurityTokenBuilderToSecurityTokenShouldProduceExpectedLengthForLargeLength()
+    {
+        // Given
+        const int length = 100_000;
+        SecurityTokenBuilder builder = SecurityTokenBuilder
+            .CreatePseudoRandom(length, 0)
+            .UseAlphaNumericCharacters();
+
+        // When
+        SecurityToken token = builder.ToSecurityToken();
+
+        // Then
+        Assert.Equal(length, token.Length);
+    }
 }

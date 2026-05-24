@@ -20,6 +20,11 @@ namespace OnixLabs.Numerics;
 public readonly partial struct BigDecimal
 {
     /// <summary>
+    /// The set of format specifiers supported when formatting a <see cref="BigDecimal"/> value.
+    /// </summary>
+    private static readonly char[] SupportedFormats = ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X'];
+
+    /// <summary>
     /// Gets a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.
     /// </summary>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.</returns>
@@ -49,8 +54,8 @@ public readonly partial struct BigDecimal
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
         CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
-        // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-        NumberInfoFormatter formatter = new(number, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X']);
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
+        NumberInfoFormatter formatter = new(number, info, SupportedFormats);
         return formatter.Format(format);
     }
 }

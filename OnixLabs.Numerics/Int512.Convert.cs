@@ -207,21 +207,21 @@ public readonly partial struct Int512
     /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a recognised destination type; otherwise, <see langword="false"/>.</returns>
     private static bool TryConvertToSaturating<TOther>(Int512 value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
-        if (typeof(TOther) == typeof(sbyte)) { result = (TOther)(object)(value < (Int512)sbyte.MinValue ? sbyte.MinValue : value > (Int512)sbyte.MaxValue ? sbyte.MaxValue : (sbyte)value); return true; }
-        if (typeof(TOther) == typeof(byte)) { result = (TOther)(object)(IsNegative(value) ? (byte)0 : value > (Int512)byte.MaxValue ? byte.MaxValue : (byte)value); return true; }
-        if (typeof(TOther) == typeof(short)) { result = (TOther)(object)(value < (Int512)short.MinValue ? short.MinValue : value > (Int512)short.MaxValue ? short.MaxValue : (short)value); return true; }
-        if (typeof(TOther) == typeof(ushort)) { result = (TOther)(object)(IsNegative(value) ? (ushort)0 : value > (Int512)ushort.MaxValue ? ushort.MaxValue : (ushort)value); return true; }
-        if (typeof(TOther) == typeof(int)) { result = (TOther)(object)(value < (Int512)int.MinValue ? int.MinValue : value > (Int512)int.MaxValue ? int.MaxValue : (int)value); return true; }
-        if (typeof(TOther) == typeof(uint)) { result = (TOther)(object)(IsNegative(value) ? 0u : value > (Int512)uint.MaxValue ? uint.MaxValue : (uint)value); return true; }
-        if (typeof(TOther) == typeof(long)) { result = (TOther)(object)(value < (Int512)long.MinValue ? long.MinValue : value > (Int512)long.MaxValue ? long.MaxValue : (long)value); return true; }
-        if (typeof(TOther) == typeof(ulong)) { result = (TOther)(object)(IsNegative(value) ? 0UL : value > (Int512)ulong.MaxValue ? ulong.MaxValue : (ulong)value); return true; }
-        if (typeof(TOther) == typeof(Int128)) { result = (TOther)(object)(value < (Int512)Int128.MinValue ? Int128.MinValue : value > (Int512)Int128.MaxValue ? Int128.MaxValue : (Int128)value); return true; }
-        if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(IsNegative(value) ? UInt128.Zero : value > (Int512)UInt128.MaxValue ? UInt128.MaxValue : (UInt128)value); return true; }
-        if (typeof(TOther) == typeof(Int256)) { result = (TOther)(object)(value < (Int512)Int256.MinValue ? Int256.MinValue : value > (Int512)Int256.MaxValue ? Int256.MaxValue : (Int256)value); return true; }
-        if (typeof(TOther) == typeof(UInt256)) { result = (TOther)(object)(IsNegative(value) ? UInt256.Zero : !UInt256.IsZero(value.UpperBits) ? UInt256.MaxValue : value.LowerBits); return true; }
+        if (typeof(TOther) == typeof(sbyte)) { result = (TOther)(object)(sbyte)Clamp(value, (Int512)sbyte.MinValue, (Int512)sbyte.MaxValue); return true; }
+        if (typeof(TOther) == typeof(byte)) { result = (TOther)(object)(byte)Clamp(value, Zero, (Int512)byte.MaxValue); return true; }
+        if (typeof(TOther) == typeof(short)) { result = (TOther)(object)(short)Clamp(value, (Int512)short.MinValue, (Int512)short.MaxValue); return true; }
+        if (typeof(TOther) == typeof(ushort)) { result = (TOther)(object)(ushort)Clamp(value, Zero, (Int512)ushort.MaxValue); return true; }
+        if (typeof(TOther) == typeof(int)) { result = (TOther)(object)(int)Clamp(value, (Int512)int.MinValue, (Int512)int.MaxValue); return true; }
+        if (typeof(TOther) == typeof(uint)) { result = (TOther)(object)(uint)Clamp(value, Zero, (Int512)uint.MaxValue); return true; }
+        if (typeof(TOther) == typeof(long)) { result = (TOther)(object)(long)Clamp(value, (Int512)long.MinValue, (Int512)long.MaxValue); return true; }
+        if (typeof(TOther) == typeof(ulong)) { result = (TOther)(object)(ulong)Clamp(value, Zero, (Int512)ulong.MaxValue); return true; }
+        if (typeof(TOther) == typeof(Int128)) { result = (TOther)(object)(Int128)Clamp(value, (Int512)Int128.MinValue, (Int512)Int128.MaxValue); return true; }
+        if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(UInt128)Clamp(value, Zero, (Int512)UInt128.MaxValue); return true; }
+        if (typeof(TOther) == typeof(Int256)) { result = (TOther)(object)(Int256)Clamp(value, (Int512)Int256.MinValue, (Int512)Int256.MaxValue); return true; }
+        if (typeof(TOther) == typeof(UInt256)) { result = (TOther)(object)(UInt256)Clamp(value, Zero, (Int512)UInt256.MaxValue); return true; }
         if (typeof(TOther) == typeof(UInt512)) { result = (TOther)(object)(IsNegative(value) ? UInt512.Zero : new UInt512(value.UpperBits, value.LowerBits)); return true; }
         if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
-        if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(IsNegative(value) ? (char)0 : value > (Int512)char.MaxValue ? char.MaxValue : (char)value); return true; }
+        if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(char)Clamp(value, Zero, (Int512)char.MaxValue); return true; }
         if (typeof(TOther) == typeof(float)) { result = (TOther)(object)(float)value; return true; }
         if (typeof(TOther) == typeof(double)) { result = (TOther)(object)(double)value; return true; }
         if (typeof(TOther) == typeof(decimal)) { result = (TOther)(object)(decimal)value; return true; }

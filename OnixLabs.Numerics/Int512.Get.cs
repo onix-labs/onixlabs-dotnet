@@ -36,8 +36,8 @@ public readonly partial struct Int512
             return 1;
         }
 
-        if (!UInt256.IsZero(UpperBits)) return HalfBitWidth + UpperBits.GetShortestBitLength() + 1;
-        if (!UInt256.IsZero(LowerBits)) return LowerBits.GetShortestBitLength() + 1;
+        if (!UInt256.IsZero(UpperBits)) return HalfBitWidth + UpperBits.GetShortestBitLength();
+        if (!UInt256.IsZero(LowerBits)) return LowerBits.GetShortestBitLength();
         return 0;
     }
 

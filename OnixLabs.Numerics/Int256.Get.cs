@@ -36,8 +36,8 @@ public readonly partial struct Int256
             return 1;
         }
 
-        if (UpperBits != UInt128.Zero) return 128 + (128 - (int)UInt128.LeadingZeroCount(UpperBits)) + 1;
-        if (LowerBits != UInt128.Zero) return 128 - (int)UInt128.LeadingZeroCount(LowerBits) + 1;
+        if (UpperBits != UInt128.Zero) return 128 + (128 - (int)UInt128.LeadingZeroCount(UpperBits));
+        if (LowerBits != UInt128.Zero) return 128 - (int)UInt128.LeadingZeroCount(LowerBits);
         return 0;
     }
 

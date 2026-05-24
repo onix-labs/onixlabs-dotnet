@@ -20,6 +20,22 @@ namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class BigDecimalConvertTests
 {
+    [Theory(DisplayName = "BigDecimal explicit conversion to decimal, double and float should produce the expected value")]
+    [InlineData("42")]
+    [InlineData("1.5")]
+    [InlineData("-0.25")]
+    [InlineData("0")]
+    public void ExplicitConversionToDecimalDoubleAndFloatShouldProduceExpectedValue(string value)
+    {
+        // Given
+        BigDecimal subject = BigDecimal.Parse(value, CultureInfo.InvariantCulture);
+
+        // When / Then
+        Assert.Equal(decimal.Parse(value, CultureInfo.InvariantCulture), (decimal)subject);
+        Assert.Equal(double.Parse(value, CultureInfo.InvariantCulture), (double)subject);
+        Assert.Equal(float.Parse(value, CultureInfo.InvariantCulture), (float)subject);
+    }
+
     [Theory(DisplayName = "BigDecimal from a double in Decimal mode should round-trip the shortest representation")]
     [InlineData(9.9999999)]
     [InlineData(99.999999)]

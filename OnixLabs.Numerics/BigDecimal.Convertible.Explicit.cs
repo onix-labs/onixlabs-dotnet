@@ -158,7 +158,8 @@ public readonly partial struct BigDecimal
         if (value < float.MinValue || value > float.MaxValue)
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Single)}.");
 
-        return Convert.ToSingle(value.ToString("E"));
+        // Parse with the same culture used to format, and NumberStyles.Float so the "E" exponent is accepted.
+        return float.Parse(value.ToString("E"), NumberStyles.Float, DefaultCulture);
     }
 
     /// <summary>
@@ -172,7 +173,8 @@ public readonly partial struct BigDecimal
         if (value < double.MinValue || value > double.MaxValue)
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Double)}.");
 
-        return Convert.ToDouble(value.ToString("E"));
+        // Parse with the same culture used to format, and NumberStyles.Float so the "E" exponent is accepted.
+        return double.Parse(value.ToString("E"), NumberStyles.Float, DefaultCulture);
     }
 
     /// <summary>

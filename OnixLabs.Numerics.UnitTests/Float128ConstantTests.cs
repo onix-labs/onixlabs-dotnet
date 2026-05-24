@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics.UnitTests;
 
@@ -172,5 +173,27 @@ public sealed class Float128ConstantTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Float128 math constants must initialise culture-invariantly (regression: run isolated)")]
+    public void Float128MathConstantsShouldInitialiseCultureInvariantly()
+    {
+        // Given: a comma-decimal culture where '.' is a group separator, which (with AllowThousands)
+        // would misparse the '.'-delimited constant literals as gigantic integers if parsed culture-sensitively.
+        CultureInfo original = CultureInfo.CurrentCulture;
+        CultureInfo.CurrentCulture = new CultureInfo("de-DE");
+
+        try
+        {
+            // Then: Pi must remain ~3.14159, not a misparsed ~40-digit integer.
+            Assert.True(Float128.Pi > Float128.Parse("3", CultureInfo.InvariantCulture));
+            Assert.True(Float128.Pi < Float128.Parse("4", CultureInfo.InvariantCulture));
+            Assert.True(Float128.E > Float128.Parse("2", CultureInfo.InvariantCulture));
+            Assert.True(Float128.E < Float128.Parse("3", CultureInfo.InvariantCulture));
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = original;
+        }
     }
 }

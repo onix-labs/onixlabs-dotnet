@@ -109,4 +109,90 @@ public sealed class NumberInfoParseTests
         // Then
         Assert.Equal(expected, actual, NumberInfoEqualityComparer.Semantic);
     }
+
+    [Theory(DisplayName = "NumberInfo.Parse should accept a leading sign for a leading-sign culture")]
+    [InlineData("+5", 5)]
+    [InlineData("-5", -5)]
+    [InlineData("+123", 123)]
+    [InlineData("-123", -123)]
+    public void NumberInfoParseShouldAcceptLeadingSignForLeadingSignCulture(string value, int expected)
+    {
+        // Given
+        // Invariant culture uses NumberNegativePattern 1 (-n), so signs are expected in the leading position.
+        NumberInfo expectedResult = ((decimal)expected).ToNumberInfo();
+
+        // When
+        NumberInfo actual = NumberInfo.Parse(value, NumberStyles.Any, CultureInfo.InvariantCulture);
+
+        // Then
+        Assert.Equal(expectedResult, actual, NumberInfoEqualityComparer.Semantic);
+    }
+
+    [Theory(DisplayName = "NumberInfo.Parse should reject a trailing sign for a leading-sign culture")]
+    [InlineData("5+")]
+    [InlineData("5-")]
+    [InlineData("123+")]
+    [InlineData("123-")]
+    public void NumberInfoParseShouldRejectTrailingSignForLeadingSignCulture(string value)
+    {
+        // Given / When
+        bool parsed = NumberInfo.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out NumberInfo _);
+
+        // Then
+        Assert.False(parsed);
+    }
+
+    [Theory(DisplayName = "NumberInfo.Parse should accept a trailing sign for a trailing-sign culture")]
+    [InlineData("5-", -5)]
+    [InlineData("5+", 5)]
+    [InlineData("123-", -123)]
+    [InlineData("123+", 123)]
+    public void NumberInfoParseShouldAcceptTrailingSignForTrailingSignCulture(string value, int expected)
+    {
+        // Given
+        CultureInfo culture = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+        culture.NumberFormat.NumberNegativePattern = 3; // n-
+        NumberInfo expectedResult = ((decimal)expected).ToNumberInfo();
+
+        // When
+        NumberInfo actual = NumberInfo.Parse(value, NumberStyles.Any, culture);
+
+        // Then
+        Assert.Equal(expectedResult, actual, NumberInfoEqualityComparer.Semantic);
+    }
+
+    [Theory(DisplayName = "NumberInfo.Parse should reject a leading sign for a trailing-sign culture")]
+    [InlineData("-5")]
+    [InlineData("+5")]
+    public void NumberInfoParseShouldRejectLeadingSignForTrailingSignCulture(string value)
+    {
+        // Given
+        CultureInfo culture = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+        culture.NumberFormat.NumberNegativePattern = 3; // n-
+
+        // When
+        bool parsed = NumberInfo.TryParse(value, NumberStyles.Any, culture, out NumberInfo _);
+
+        // Then
+        Assert.False(parsed);
+    }
+
+    [Theory(DisplayName = "NumberInfo.Parse should express negatives with parentheses for a parenthesis culture")]
+    [InlineData("(5)", -5, true)]
+    [InlineData("(123)", -123, true)]
+    [InlineData("+5", 5, true)]
+    [InlineData("-5", 0, false)]
+    public void NumberInfoParseShouldExpressNegativesWithParenthesesForParenthesisCulture(string value, int expected, bool shouldParse)
+    {
+        // Given
+        CultureInfo culture = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+        culture.NumberFormat.NumberNegativePattern = 0; // (n)
+
+        // When
+        bool parsed = NumberInfo.TryParse(value, NumberStyles.Any, culture, out NumberInfo actual);
+
+        // Then
+        Assert.Equal(shouldParse, parsed);
+        if (shouldParse) Assert.Equal(((decimal)expected).ToNumberInfo(), actual, NumberInfoEqualityComparer.Semantic);
+    }
 }

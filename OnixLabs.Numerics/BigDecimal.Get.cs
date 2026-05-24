@@ -22,11 +22,20 @@ public readonly partial struct BigDecimal
     int IFloatingPoint<BigDecimal>.GetExponentByteCount() => sizeof(int);
 
     /// <inheritdoc cref="IFloatingPoint{TSelf}.GetExponentShortestBitLength"/>
-    int IFloatingPoint<BigDecimal>.GetExponentShortestBitLength() => sizeof(int) - int.LeadingZeroCount(number.Exponent);
+    int IFloatingPoint<BigDecimal>.GetExponentShortestBitLength()
+    {
+        int exponent = number.Exponent;
+
+        // LeadingZeroCount counts bits, so the bit width is sizeof(int) * 8. A negative exponent needs one
+        // additional bit for the sign, mirroring the shortest two's complement length used by the integer types.
+        return exponent >= 0
+            ? sizeof(int) * 8 - int.LeadingZeroCount(exponent)
+            : sizeof(int) * 8 + 1 - int.LeadingZeroCount(~exponent);
+    }
 
     /// <inheritdoc cref="IFloatingPoint{TSelf}.GetSignificandBitLength"/>
-    int IFloatingPoint<BigDecimal>.GetSignificandBitLength() => number.Significand.ToByteArray().Length * 8;
+    int IFloatingPoint<BigDecimal>.GetSignificandBitLength() => number.Significand.GetByteCount() * 8;
 
     /// <inheritdoc cref="IFloatingPoint{TSelf}.GetSignificandByteCount"/>
-    int IFloatingPoint<BigDecimal>.GetSignificandByteCount() => number.Significand.ToByteArray().Length;
+    int IFloatingPoint<BigDecimal>.GetSignificandByteCount() => number.Significand.GetByteCount();
 }

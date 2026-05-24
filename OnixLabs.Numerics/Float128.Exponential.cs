@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics;
 
@@ -21,12 +22,12 @@ public readonly partial struct Float128
     /// <summary>
     /// The largest exponent above which <see cref="Exp"/> saturates to <see cref="PositiveInfinity"/>.
     /// </summary>
-    private static readonly Float128 ExpUpperThreshold = Parse("11357");
+    private static readonly Float128 ExpUpperThreshold = Parse("11357", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The smallest exponent below which <see cref="Exp"/> underflows to <see cref="Zero"/>.
     /// </summary>
-    private static readonly Float128 ExpLowerThreshold = Parse("-11434");
+    private static readonly Float128 ExpLowerThreshold = Parse("-11434", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Computes <see cref="E"/> raised to the power of the specified <see cref="Float128"/> value.

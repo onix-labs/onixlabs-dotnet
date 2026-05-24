@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics;
 
@@ -21,7 +22,7 @@ public readonly partial struct Float256
     /// <summary>
     /// The absolute argument threshold below which the <see cref="Atan"/> series converges quickly without further half-angle reduction.
     /// </summary>
-    private static readonly Float256 AtanReductionThreshold = Parse("0.03125");
+    private static readonly Float256 AtanReductionThreshold = Parse("0.03125", CultureInfo.InvariantCulture);
 
     /// <summary>Computes the angle whose sine is the specified value.</summary>
     /// <param name="value">The value whose arcsine is to be computed.</param>

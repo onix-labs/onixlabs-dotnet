@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics;
 
@@ -21,7 +22,7 @@ public readonly partial struct Float128
     /// <summary>
     /// The magnitude below which <see cref="Atan(Float128)"/> evaluates its Taylor series directly without further argument reduction.
     /// </summary>
-    private static readonly Float128 AtanReductionThreshold = Parse("0.0625");
+    private static readonly Float128 AtanReductionThreshold = Parse("0.0625", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Computes the angle whose sine is the specified <see cref="Float128"/> value.

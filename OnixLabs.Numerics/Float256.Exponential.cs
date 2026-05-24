@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics;
 
@@ -21,12 +22,12 @@ public readonly partial struct Float256
     /// <summary>
     /// The upper input bound for <see cref="Exp(Float256)"/>; inputs above this value saturate to <see cref="PositiveInfinity"/>.
     /// </summary>
-    private static readonly Float256 ExpUpperThreshold = Parse("181708");
+    private static readonly Float256 ExpUpperThreshold = Parse("181708", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The lower input bound for <see cref="Exp(Float256)"/>; inputs below this value underflow to <see cref="Zero"/>.
     /// </summary>
-    private static readonly Float256 ExpLowerThreshold = Parse("-181851");
+    private static readonly Float256 ExpLowerThreshold = Parse("-181851", CultureInfo.InvariantCulture);
 
     /// <summary>Computes <see cref="E"/> raised to the power of the specified <see cref="Float256"/> value.</summary>
     /// <param name="value">The exponent.</param>

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics.UnitTests;
 
@@ -68,6 +69,31 @@ public sealed class Float128InverseTrigonometryTests
         double actualDouble = (double)actual;
         double tolerance = Math.Max(Math.Abs(expected) * 1e-14, 1e-14);
         Assert.True(Math.Abs(actualDouble - expected) <= tolerance, $"Expected {expected} but got {actualDouble}");
+    }
+
+    [Fact(DisplayName = "Float128.Atan must use a culture-invariant reduction threshold (regression: run isolated)")]
+    public void Float128AtanShouldUseCultureInvariantThreshold()
+    {
+        // The atan reduction threshold is a decimal-point constant. A culture-sensitive misparse skips the
+        // half-angle acceleration loop, leaving the series to converge only Leibniz-slowly near a reduced argument of 1.
+        CultureInfo original = CultureInfo.CurrentCulture;
+        CultureInfo.CurrentCulture = new CultureInfo("de-DE");
+
+        try
+        {
+            // Inputs whose reduced argument lands in (threshold, 1]: without the acceleration loop the
+            // series converges only Leibniz-slowly, so a misparsed threshold loses many digits here.
+            foreach (double input in new[] { 0.5, 1.0, 1.5 })
+            {
+                double expected = Math.Atan(input);
+                double actual = (double)Float128.Atan((Float128)input);
+                Assert.True(Math.Abs(actual - expected) <= 1e-12, $"Atan({input}) = {actual}, expected {expected}");
+            }
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = original;
+        }
     }
 
     [Fact(DisplayName = "Float128.Asin of zero should preserve sign of zero")]

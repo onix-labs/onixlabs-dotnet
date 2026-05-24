@@ -77,7 +77,7 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is greater than the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsGreaterThan(NumberInfo left, NumberInfo right) => Compare(left, right) is 1;
+    public bool IsGreaterThan(NumberInfo left, NumberInfo right) => Compare(left, right) > 0;
 
     /// <summary>
     /// Determines whether the <paramref name="left"/> <see cref="NumberInfo"/> value is greater than, or equal to the <paramref name="right"/> <see cref="NumberInfo"/> value.
@@ -85,7 +85,7 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is greater than, or equal to the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsGreaterThanOrEqual(NumberInfo left, NumberInfo right) => Compare(left, right) is 0 or 1;
+    public bool IsGreaterThanOrEqual(NumberInfo left, NumberInfo right) => Compare(left, right) >= 0;
 
     /// <summary>
     /// Determines whether the <paramref name="left"/> <see cref="NumberInfo"/> value is less than the <paramref name="right"/> <see cref="NumberInfo"/> value.
@@ -93,7 +93,7 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is less than the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsLessThan(NumberInfo left, NumberInfo right) => Compare(left, right) is -1;
+    public bool IsLessThan(NumberInfo left, NumberInfo right) => Compare(left, right) < 0;
 
     /// <summary>
     /// Determines whether the <paramref name="left"/> <see cref="NumberInfo"/> value is less than, or equal to the <paramref name="right"/> <see cref="NumberInfo"/> value.
@@ -101,5 +101,5 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
     /// <param name="left">The <paramref name="left"/> <see cref="NumberInfo"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> <see cref="NumberInfo"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="NumberInfo"/> value is less than, or equal to the <paramref name="right"/> <see cref="NumberInfo"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsLessThanOrEqual(NumberInfo left, NumberInfo right) => Compare(left, right) is -1 or 0;
+    public bool IsLessThanOrEqual(NumberInfo left, NumberInfo right) => Compare(left, right) <= 0;
 }

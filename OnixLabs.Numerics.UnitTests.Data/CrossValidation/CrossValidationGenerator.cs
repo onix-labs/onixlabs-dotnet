@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace OnixLabs.Numerics.UnitTests.Data.CrossValidation;
@@ -142,5 +143,45 @@ public static class CrossValidationGenerator
         UInt256 upper = RandomUInt256(rng);
         UInt256 lower = RandomUInt256(rng);
         return new UInt512(upper, lower);
+    }
+
+    /// <summary>
+    /// Generates <see cref="BigDecimal"/> values mixing hand-picked edge cases (signed zeros at various scales,
+    /// units, powers of ten, near-boundary scales) with deterministically-seeded random unscaled-value/scale pairs.
+    /// Unlike the <see cref="decimal"/>-bounded brute-force provider, these span arbitrary precision and scale.
+    /// </summary>
+    public static IEnumerable<BigDecimal> GenerateBigDecimal(int randomCount, int seed)
+    {
+        // Constants and signed zeros at assorted scales.
+        yield return BigDecimal.Zero;
+        yield return BigDecimal.One;
+        yield return BigDecimal.NegativeOne;
+        yield return BigDecimal.Ten;
+        yield return new BigDecimal(BigInteger.Zero, 18);
+        yield return new BigDecimal(BigInteger.One, 28);
+        yield return new BigDecimal(BigInteger.MinusOne, 28);
+
+        // Powers of ten and all-nines masks across a wide scale range, which stress scale alignment.
+        for (int scale = 0; scale <= 40; scale += 4)
+        {
+            yield return new BigDecimal(BigInteger.Pow(10, 30), scale);
+            yield return new BigDecimal(-BigInteger.Pow(10, 30), scale);
+            yield return new BigDecimal(BigInteger.Pow(10, 28) - BigInteger.One, scale);
+        }
+
+        // Uniform random unscaled values of varied width, paired with random non-negative scales.
+        Random rng = new(seed);
+        for (int i = 0; i < randomCount; i++)
+            yield return RandomBigDecimal(rng);
+    }
+
+    private static BigDecimal RandomBigDecimal(Random rng)
+    {
+        int byteLength = rng.Next(1, 24);
+        Span<byte> buffer = stackalloc byte[byteLength];
+        rng.NextBytes(buffer);
+        BigInteger unscaledValue = new(buffer, isUnsigned: false, isBigEndian: false);
+        int scale = rng.Next(0, 40);
+        return new BigDecimal(unscaledValue, scale);
     }
 }

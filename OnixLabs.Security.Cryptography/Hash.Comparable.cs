@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Numerics;
+using System;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -20,13 +20,7 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Hash
 {
     /// <inheritdoc/>
-    public int CompareTo(Hash other)
-    {
-        BigInteger left = new(value);
-        BigInteger right = new(other.value);
-
-        return left.CompareTo(right);
-    }
+    public int CompareTo(Hash other) => AsReadOnlySpan().SequenceCompareTo(other.AsReadOnlySpan());
 
     /// <inheritdoc/>
     public int CompareTo(object? obj) => this.CompareToObject(obj);

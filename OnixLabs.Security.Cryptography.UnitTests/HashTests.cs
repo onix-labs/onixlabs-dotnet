@@ -232,6 +232,48 @@ public sealed class HashTests
         Assert.Equal(1, right.Length);
     }
 
+    [Fact(DisplayName = "Hashes should compare lexicographically in big-endian byte order")]
+    public void HashesShouldCompareLexicographicallyInBigEndianByteOrder()
+    {
+        // Given
+        Hash left = new([0x00, 0x01]);
+        Hash right = new([0x01, 0x00]);
+
+        // When
+        int actual = left.CompareTo(right);
+
+        // Then
+        Assert.True(actual < 0);
+    }
+
+    [Fact(DisplayName = "Hashes should compare bytes as unsigned values")]
+    public void HashesShouldCompareBytesAsUnsignedValues()
+    {
+        // Given
+        Hash left = new([0x80]);
+        Hash right = new([0x7F]);
+
+        // When
+        int actual = left.CompareTo(right);
+
+        // Then
+        Assert.True(actual > 0);
+    }
+
+    [Fact(DisplayName = "Default hash should compare as lesser than a non-empty hash without throwing")]
+    public void DefaultHashShouldCompareAsLesserThanANonEmptyHashWithoutThrowing()
+    {
+        // Given
+        Hash left = default;
+        Hash right = new([1]);
+
+        // When
+        int actual = left.CompareTo(right);
+
+        // Then
+        Assert.True(actual < 0);
+    }
+
     [Fact(DisplayName = "Hash comparison operators should produce the expected results when the left-hand hash is lesser")]
     public void HashComparisonOperatorsShouldProduceTheExpectedResultsWhenTheLeftHandHashIsLesser()
     {

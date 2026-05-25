@@ -47,8 +47,17 @@ public sealed partial class RsaPrivateKey
     /// <returns>Returns a new <see cref="RSA"/> instance containing the imported key data.</returns>
     private RSA ImportKeyData()
     {
-        RSA algorithm = RSA.Create();
-        algorithm.ImportRSAPrivateKey(KeyData, out int _);
-        return algorithm;
+        byte[] keyData = KeyData;
+
+        try
+        {
+            RSA algorithm = RSA.Create();
+            algorithm.ImportRSAPrivateKey(keyData, out int _);
+            return algorithm;
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

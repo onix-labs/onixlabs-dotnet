@@ -27,7 +27,15 @@ public sealed partial class RsaPrivateKey
     {
         using RSA key = RSA.Create();
         byte[] keyData = key.ExportRSAPrivateKey();
-        return new RsaPrivateKey(keyData);
+
+        try
+        {
+            return new RsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 
     /// <summary>
@@ -39,6 +47,14 @@ public sealed partial class RsaPrivateKey
     {
         using RSA key = RSA.Create(parameters);
         byte[] keyData = key.ExportRSAPrivateKey();
-        return new RsaPrivateKey(keyData);
+
+        try
+        {
+            return new RsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

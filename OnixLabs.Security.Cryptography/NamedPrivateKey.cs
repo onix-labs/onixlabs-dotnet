@@ -21,6 +21,7 @@ public readonly partial record struct NamedPrivateKey : ICryptoPrimitive<NamedPr
 {
     private const string Separator = ":";
     private const string KeyAlgorithmNameNullOrWhiteSpace = "Key algorithm name must not be null or whitespace.";
+    private const string PrivateKeyNull = "Private key must not be null.";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NamedPrivateKey"/> struct.
@@ -29,7 +30,7 @@ public readonly partial record struct NamedPrivateKey : ICryptoPrimitive<NamedPr
     /// <param name="algorithmName">The name of the key algorithm that was used to produce the associated private key.</param>
     public NamedPrivateKey(PrivateKey privateKey, string algorithmName)
     {
-        PrivateKey = privateKey;
+        PrivateKey = RequireNotNull(privateKey, PrivateKeyNull);
         AlgorithmName = RequireNotNullOrWhiteSpace(algorithmName, KeyAlgorithmNameNullOrWhiteSpace);
     }
 

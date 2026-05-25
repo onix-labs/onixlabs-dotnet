@@ -19,8 +19,10 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial record struct NamedPublicKey
 {
     /// <inheritdoc/>
-    public ReadOnlyMemory<byte> AsReadOnlyMemory() => PublicKey.AsReadOnlyMemory();
+    public ReadOnlyMemory<byte> AsReadOnlyMemory() =>
+        PublicKey is null ? ReadOnlyMemory<byte>.Empty : PublicKey.AsReadOnlyMemory();
 
     /// <inheritdoc/>
-    public ReadOnlySpan<byte> AsReadOnlySpan() => PublicKey.AsReadOnlySpan();
+    public ReadOnlySpan<byte> AsReadOnlySpan() =>
+        PublicKey is null ? ReadOnlySpan<byte>.Empty : PublicKey.AsReadOnlySpan();
 }

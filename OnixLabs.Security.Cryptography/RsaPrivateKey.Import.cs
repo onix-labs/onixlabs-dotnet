@@ -36,7 +36,7 @@ public sealed partial class RsaPrivateKey
     /// <inheritdoc/>
     public static RsaPrivateKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
-        RSA algorithm = RSA.Create();
+        using RSA algorithm = RSA.Create();
         algorithm.ImportRSAPrivateKey(data, out bytesRead);
         return new RsaPrivateKey(algorithm);
     }

@@ -47,8 +47,17 @@ public sealed partial class EcdsaPrivateKey
     /// <returns>Returns a new <see cref="ECDsa"/> instance containing the imported key data.</returns>
     private ECDsa ImportKeyData()
     {
-        ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportECPrivateKey(KeyData, out int _);
-        return algorithm;
+        byte[] keyData = KeyData;
+
+        try
+        {
+            ECDsa algorithm = ECDsa.Create();
+            algorithm.ImportECPrivateKey(keyData, out int _);
+            return algorithm;
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

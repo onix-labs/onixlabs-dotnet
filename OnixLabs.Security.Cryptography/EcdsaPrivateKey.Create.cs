@@ -27,7 +27,15 @@ public sealed partial class EcdsaPrivateKey
     {
         using ECDsa key = ECDsa.Create();
         byte[] keyData = key.ExportECPrivateKey();
-        return new EcdsaPrivateKey(keyData);
+
+        try
+        {
+            return new EcdsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 
     /// <summary>
@@ -39,7 +47,15 @@ public sealed partial class EcdsaPrivateKey
     {
         using ECDsa key = ECDsa.Create(curve);
         byte[] keyData = key.ExportECPrivateKey();
-        return new EcdsaPrivateKey(keyData);
+
+        try
+        {
+            return new EcdsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 
     /// <summary>
@@ -51,6 +67,14 @@ public sealed partial class EcdsaPrivateKey
     {
         using ECDsa key = ECDsa.Create(parameters);
         byte[] keyData = key.ExportECPrivateKey();
-        return new EcdsaPrivateKey(keyData);
+
+        try
+        {
+            return new EcdsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

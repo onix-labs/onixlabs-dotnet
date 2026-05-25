@@ -147,8 +147,8 @@ public readonly partial struct Float128
     /// Evaluates the Taylor series for <c>sin(r)</c> on the reduced argument <c>|r| ≤ π/4</c>.
     /// </summary>
     /// <param name="r">The reduced argument whose magnitude is at most <c>π/4</c>.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>sin(r)</c>.</returns>
-    private static Float128 SinSeries(Float128 r)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>sin(r)</c>.</returns>
+    private static Float128 SinSeries(in Float128 r)
     {
         Float128 sum = r;
         Float128 term = r;
@@ -168,8 +168,8 @@ public readonly partial struct Float128
     /// Evaluates the Taylor series for <c>cos(r)</c> on the reduced argument <c>|r| ≤ π/4</c>.
     /// </summary>
     /// <param name="r">The reduced argument whose magnitude is at most <c>π/4</c>.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>cos(r)</c>.</returns>
-    private static Float128 CosSeries(Float128 r)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>cos(r)</c>.</returns>
+    private static Float128 CosSeries(in Float128 r)
     {
         Float128 sum = One;
         Float128 term = One;
@@ -190,8 +190,8 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="r">The reduced angle whose magnitude is at most <c>π/4</c>.</param>
     /// <param name="quadrant">The quadrant index in the range <c>[0, 3]</c>.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>sin(value)</c>.</returns>
-    private static Float128 SinFromQuadrant(Float128 r, int quadrant) => quadrant switch
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>sin(value)</c>.</returns>
+    private static Float128 SinFromQuadrant(in Float128 r, int quadrant) => quadrant switch
     {
         0 => SinSeries(r),
         1 => CosSeries(r),
@@ -204,8 +204,8 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="r">The reduced angle whose magnitude is at most <c>π/4</c>.</param>
     /// <param name="quadrant">The quadrant index in the range <c>[0, 3]</c>.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>cos(value)</c>.</returns>
-    private static Float128 CosFromQuadrant(Float128 r, int quadrant) => quadrant switch
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>cos(value)</c>.</returns>
+    private static Float128 CosFromQuadrant(in Float128 r, int quadrant) => quadrant switch
     {
         0 => CosSeries(r),
         1 => -SinSeries(r),
@@ -218,8 +218,8 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="r">The reduced angle whose magnitude is at most <c>π/4</c>.</param>
     /// <param name="quadrant">The quadrant index in the range <c>[0, 3]</c>.</param>
-    /// <returns>A tuple containing the <see cref="Float128"/> approximations of <c>sin(value)</c> and <c>cos(value)</c>.</returns>
-    private static (Float128 Sin, Float128 Cos) SinCosFromQuadrant(Float128 r, int quadrant)
+    /// <returns>Returns a tuple containing the <see cref="Float128"/> approximations of <c>sin(value)</c> and <c>cos(value)</c>.</returns>
+    private static (Float128 Sin, Float128 Cos) SinCosFromQuadrant(in Float128 r, int quadrant)
     {
         Float128 sin = SinSeries(r);
         Float128 cos = CosSeries(r);

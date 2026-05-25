@@ -171,4 +171,33 @@ public sealed class SpecificationTests
         Assert.Single(result);
         Assert.Contains(Person.Charlie, result);
     }
+
+    [Fact(DisplayName = "IQueryable.Where should return the expected result")]
+    public void QueryableWhereShouldReturnExpectedResult()
+    {
+        // Given
+        PersonOlderThanSpecification specification = new(20);
+
+        // When
+        IEnumerable<Person> result = Person.People.AsQueryable().Where(specification).ToList();
+
+        // Then
+        Assert.Equal(2, IEnumerableExtensions.Count(result));
+        Assert.Contains(Person.Bob, result);
+        Assert.Contains(Person.Charlie, result);
+    }
+
+    [Fact(DisplayName = "IQueryable.WhereNot should return the expected result")]
+    public void QueryableWhereNotShouldReturnExpectedResult()
+    {
+        // Given
+        PersonOlderThanSpecification specification = new(20);
+
+        // When
+        IEnumerable<Person> result = Person.People.AsQueryable().WhereNot(specification).ToList();
+
+        // Then
+        Assert.Single(result);
+        Assert.Contains(Person.Alice, result);
+    }
 }

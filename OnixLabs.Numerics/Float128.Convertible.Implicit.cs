@@ -76,11 +76,32 @@ public readonly partial struct Float128
     public static implicit operator Float128(ulong value) => FromUInt64(value);
 
     /// <summary>
+    /// Performs an implicit conversion from the specified <see cref="Int128"/> value to a <see cref="Float128"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="Int128"/> value to convert.</param>
+    /// <returns>Returns a new <see cref="Float128"/> value that represents the specified <see cref="Int128"/> value.</returns>
+    public static implicit operator Float128(Int128 value) => FromInt128(value);
+
+    /// <summary>
+    /// Performs an implicit conversion from the specified <see cref="UInt128"/> value to a <see cref="Float128"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="UInt128"/> value to convert.</param>
+    /// <returns>Returns a new <see cref="Float128"/> value that represents the specified <see cref="UInt128"/> value.</returns>
+    public static implicit operator Float128(UInt128 value) => FromUInt128(value);
+
+    /// <summary>
     /// Performs an implicit conversion from the specified <see cref="char"/> value to a <see cref="Float128"/> value.
     /// </summary>
     /// <param name="value">The <see cref="char"/> value to convert.</param>
     /// <returns>Returns a new <see cref="Float128"/> value that represents the specified <see cref="char"/> value.</returns>
     public static implicit operator Float128(char value) => FromUInt64(value);
+
+    /// <summary>
+    /// Performs an implicit conversion from the specified <see cref="decimal"/> value to a <see cref="Float128"/> value.
+    /// </summary>
+    /// <param name="value">The <see cref="decimal"/> value to convert.</param>
+    /// <returns>Returns a new <see cref="Float128"/> value that represents the specified <see cref="decimal"/> value.</returns>
+    public static implicit operator Float128(decimal value) => FromDecimal(value);
 
     /// <summary>
     /// Performs an implicit conversion from the specified <see cref="Half"/> value to a <see cref="Float128"/> value.
@@ -107,7 +128,7 @@ public readonly partial struct Float128
     /// Converts the specified <see cref="ulong"/> value to its exact <see cref="Float128"/> representation.
     /// </summary>
     /// <param name="value">The unsigned 64-bit integer value to convert.</param>
-    /// <returns>A <see cref="Float128"/> representing the exact value of <paramref name="value"/>.</returns>
+    /// <returns>Returns a <see cref="Float128"/> representing the exact value of <paramref name="value"/>.</returns>
     private static Float128 FromUInt64(ulong value)
     {
         if (value == 0UL) return Zero;
@@ -124,7 +145,7 @@ public readonly partial struct Float128
     /// Converts the specified <see cref="long"/> value to its exact <see cref="Float128"/> representation, preserving sign.
     /// </summary>
     /// <param name="value">The signed 64-bit integer value to convert.</param>
-    /// <returns>A <see cref="Float128"/> representing the exact value of <paramref name="value"/>.</returns>
+    /// <returns>Returns a <see cref="Float128"/> representing the exact value of <paramref name="value"/>.</returns>
     private static Float128 FromInt64(long value)
     {
         if (value == 0L) return Zero;
@@ -139,7 +160,7 @@ public readonly partial struct Float128
     /// Converts the specified <see cref="float"/> value to its exact <see cref="Float128"/> representation, preserving NaN payloads, infinities and subnormals.
     /// </summary>
     /// <param name="value">The <see cref="float"/> value to convert.</param>
-    /// <returns>A <see cref="Float128"/> representing the exact value of <paramref name="value"/>.</returns>
+    /// <returns>Returns a <see cref="Float128"/> representing the exact value of <paramref name="value"/>.</returns>
     private static Float128 FromSingle(float value)
     {
         const int singleBias = 127;
@@ -181,7 +202,7 @@ public readonly partial struct Float128
     /// Converts the specified <see cref="double"/> value to its exact <see cref="Float128"/> representation, preserving NaN payloads, infinities and subnormals.
     /// </summary>
     /// <param name="value">The <see cref="double"/> value to convert.</param>
-    /// <returns>A <see cref="Float128"/> representing the exact value of <paramref name="value"/>.</returns>
+    /// <returns>Returns a <see cref="Float128"/> representing the exact value of <paramref name="value"/>.</returns>
     private static Float128 FromDouble(double value)
     {
         const int doubleBias = 1023;
@@ -226,7 +247,7 @@ public readonly partial struct Float128
     /// <param name="sourceSignificand">The non-zero trailing significand of the subnormal source value.</param>
     /// <param name="sourceSignificandBits">The number of trailing significand bits of the source format.</param>
     /// <param name="sourceMinNormalExponent">The unbiased exponent of the smallest normal value in the source format.</param>
-    /// <returns>A normalized <see cref="Float128"/> equivalent to the subnormal source value.</returns>
+    /// <returns>Returns a normalized <see cref="Float128"/> equivalent to the subnormal source value.</returns>
     private static Float128 FromSubnormal(UInt128 sign, ulong sourceSignificand, int sourceSignificandBits, int sourceMinNormalExponent)
     {
         int leadingBitPosition = 63 - (int)ulong.LeadingZeroCount(sourceSignificand);

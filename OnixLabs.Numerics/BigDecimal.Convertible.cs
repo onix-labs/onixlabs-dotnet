@@ -105,8 +105,10 @@ public readonly partial struct BigDecimal
     /// Converts the value of this instance to an equivalent <see cref="DateTime"/> using the specified culture-specific formatting information.
     /// </summary>
     /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that supplies culture-specific formatting information.</param>
-    /// <returns>Returns a <see cref="DateTime"/> instance equivalent to the value of this instance.</returns>
-    DateTime IConvertible.ToDateTime(IFormatProvider? provider) => DateTime.FromBinary((long)UnscaledValue);
+    /// <returns>Returns nothing; converting a <see cref="BigDecimal"/> to a <see cref="DateTime"/> is not a supported conversion.</returns>
+    /// <exception cref="InvalidCastException">Always thrown, as a <see cref="BigDecimal"/> cannot be meaningfully converted to a <see cref="DateTime"/>.</exception>
+    DateTime IConvertible.ToDateTime(IFormatProvider? provider) =>
+        throw new InvalidCastException($"Invalid cast from '{nameof(BigDecimal)}' to '{nameof(DateTime)}'.");
 
     /// <summary>
     /// Converts the value of this instance to an equivalent <see cref="bool"/> value using the specified culture-specific formatting information.

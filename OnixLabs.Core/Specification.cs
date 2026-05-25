@@ -29,10 +29,25 @@ public abstract class Specification<T>
 {
     /// <summary>
     /// The empty specification, which always evaluates to <see langword="true"/>.
+    /// Serves as the identity element for <see cref="And(IEnumerable{Specification{T}})"/>.
     /// </summary>
     public static readonly Specification<T> Empty = new BooleanSpecification<T>(true);
 
-    private Lazy<Func<T, bool>>? compiledCriteria;
+    /// <summary>
+    /// The never specification, which always evaluates to <see langword="false"/>.
+    /// Serves as the identity element for <see cref="Or(IEnumerable{Specification{T}})"/>.
+    /// </summary>
+    public static readonly Specification<T> Never = new BooleanSpecification<T>(false);
+
+    private readonly Lazy<Func<T, bool>> compiledCriteria;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Specification{T}"/> class.
+    /// </summary>
+    protected Specification()
+    {
+        compiledCriteria = new Lazy<Func<T, bool>>(() => Criteria.Compile());
+    }
 
     /// <summary>
     /// Gets the underlying expression criteria of the current specification.
@@ -42,8 +57,10 @@ public abstract class Specification<T>
 
     /// <summary>
     /// Gets the compiled criteria delegate, caching it for subsequent invocations.
+    /// The underlying <see cref="Lazy{T}"/> uses double-checked locking, so the expression is compiled exactly once even under concurrent access.
     /// </summary>
-    private Func<T, bool> CompiledCriteria => (compiledCriteria ??= new Lazy<Func<T, bool>>(Criteria.Compile)).Value;
+    /// <value>The compiled form of <see cref="Criteria"/>, evaluated against a candidate value.</value>
+    private Func<T, bool> CompiledCriteria => compiledCriteria.Value;
 
     /// <summary>
     /// Combines multiple specifications using a logical AND operation.
@@ -55,7 +72,7 @@ public abstract class Specification<T>
     /// </returns>
     public static Specification<T> And(params IEnumerable<Specification<T>> specifications) => specifications.IsNotEmpty()
         ? specifications.Aggregate((left, right) => left.And(right))
-        : new BooleanSpecification<T>(true);
+        : Empty;
 
     /// <summary>
     /// Combines multiple specifications using a logical OR operation.
@@ -67,7 +84,7 @@ public abstract class Specification<T>
     /// </returns>
     public static Specification<T> Or(params IEnumerable<Specification<T>> specifications) => specifications.IsNotEmpty()
         ? specifications.Aggregate((left, right) => left.Or(right))
-        : new BooleanSpecification<T>(false);
+        : Never;
 
     /// <summary>
     /// Combines the current specification with another using a logical AND operation.

@@ -37,18 +37,18 @@ public sealed class OptionalTests
         Assert.Equal(Optional<string>.None, text);
     }
 
-    [Fact(DisplayName = "Optional.Of should produce the expected result for implicit default values.")]
-    public void OptionalOfShouldProduceExpectedResultForImplicitDefaultValues()
+    [Fact(DisplayName = "Optional implicit conversion should produce the expected result for default values.")]
+    public void OptionalImplicitConversionShouldProduceExpectedResultForDefaultValues()
     {
         // Given / When
-        Optional<int> number = Optional<int>.Of(0);
-        Optional<string> text = Optional<string>.Of(null);
+        Optional<int> number = 0;
+        Optional<string> text = (string?)null;
 
         // Then
-        Assert.True(Optional<int>.IsNone(number));
-        Assert.False(number.HasValue);
-        Assert.IsType<None<int>>(number);
-        Assert.Equal(Optional<int>.None, number);
+        Assert.True(Optional<int>.IsSome(number));
+        Assert.True(number.HasValue);
+        Assert.IsType<Some<int>>(number);
+        Assert.Equal(0, number);
 
         Assert.True(Optional<string>.IsNone(text));
         Assert.False(text.HasValue);

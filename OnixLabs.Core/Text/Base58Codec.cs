@@ -67,7 +67,7 @@ public sealed class Base58Codec : IBaseCodec
             }
 
             for (int index = 0; index < value.Length && value[index] == 0; index++)
-                builder.Insert(0, '1');
+                builder.Insert(0, formatProvider.Alphabet[0]);
 
             result = builder.ToString();
             return true;
@@ -111,9 +111,11 @@ public sealed class Base58Codec : IBaseCodec
                 data = data * 58 + characterIndex;
             }
 
+            char zeroCharacter = formatProvider.Alphabet[0];
+
             int leadingZeroCount = value
                 .ToArray()
-                .TakeWhile(character => character is '1')
+                .TakeWhile(character => character == zeroCharacter)
                 .Count();
 
             IEnumerable<byte> leadingZeros = Enumerable

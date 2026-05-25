@@ -193,4 +193,29 @@ public sealed class IServiceCollectionExtensionTests
         Assert.Equal(serviceKey, serviceDescriptor.ServiceKey);
         Assert.Equal(implementationType, serviceDescriptor.KeyedImplementationType);
     }
+
+    [Fact(DisplayName = "ServiceCollection add-service overloads should throw ArgumentOutOfRangeException for an undefined lifetime")]
+    public void ServiceCollectionAddServiceShouldThrowForUndefinedLifetime()
+    {
+        // Given
+        const string serviceKey = "my-service-key";
+        const ServiceLifetime lifetime = (ServiceLifetime)int.MaxValue;
+        ServiceCollection services = [];
+        Type serviceType = typeof(IAbstraction);
+        Type implementationType = typeof(Implementation);
+
+        // Then
+        Assert.Throws<ArgumentOutOfRangeException>(() => services.AddService<Implementation>(lifetime));
+        Assert.Throws<ArgumentOutOfRangeException>(() => services.AddKeyedService<Implementation>(serviceKey, lifetime));
+        Assert.Throws<ArgumentOutOfRangeException>(() => services.AddService<IAbstraction, Implementation>(lifetime));
+        Assert.Throws<ArgumentOutOfRangeException>(() => services.AddKeyedService<IAbstraction, Implementation>(serviceKey, lifetime));
+        Assert.Throws<ArgumentOutOfRangeException>(() => services.AddService<IAbstraction>(Factory, lifetime));
+        Assert.Throws<ArgumentOutOfRangeException>(() => services.AddKeyedService<IAbstraction>(KeyedFactory, serviceKey, lifetime));
+        Assert.Throws<ArgumentOutOfRangeException>(() => services.AddService(serviceType, implementationType, lifetime));
+        Assert.Throws<ArgumentOutOfRangeException>(() => services.AddKeyedService(serviceType, implementationType, serviceKey, lifetime));
+        return;
+
+        IAbstraction Factory(IServiceProvider sp) => new Implementation();
+        IAbstraction KeyedFactory(IServiceProvider sp, object? key) => new Implementation();
+    }
 }

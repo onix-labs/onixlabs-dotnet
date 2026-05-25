@@ -26,7 +26,7 @@ internal abstract class RandomNumberProvider
     /// <summary>
     /// Initializes a new instance of the <see cref="RandomNumberProvider"/> class.
     /// </summary>
-    internal RandomNumberProvider()
+    private protected RandomNumberProvider()
     {
     }
 
@@ -44,11 +44,11 @@ internal abstract class RandomNumberProvider
     public static RandomNumberProvider CreateSecureRandomNumberProvider() => new SecureRandomNumberProvider();
 
     /// <summary>
-    /// Gets the next random <see cref="Int32"/> value.
+    /// Gets the next random <see cref="int"/> value.
     /// </summary>
     /// <param name="minimum">The minimum random value.</param>
     /// <param name="maximum">The maximum random value.</param>
-    /// <returns>Returns the next random <see cref="Int32"/> value.</returns>
+    /// <returns>Returns the next random <see cref="int"/> value.</returns>
     internal abstract int GetNextInt(int minimum, int maximum);
 }
 

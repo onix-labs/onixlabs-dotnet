@@ -772,7 +772,7 @@ public static class ResultExtensions
     /// or <see cref="Optional{T}.None"/> if the result is in a <see cref="Failure{T}"/> state.
     /// </returns>
     public static Optional<T> GetValueOrNone<T>(this Result<T> result) where T : notnull =>
-        result is Success<T> success ? Optional<T>.Of(success.Value) : Optional<T>.None;
+        result is Success<T> success ? success.Value : Optional<T>.None;
 
     /// <summary>
     /// Gets the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
@@ -854,7 +854,7 @@ public static class ResultExtensions
     /// or returns the default value if the result is in a <see cref="Failure{T}"/> state, or the <see cref="Optional{T}"/> is <see cref="Optional{T}.None"/>.
     /// </returns>
     public static T GetOptionalValueOrDefault<T>(this Result<Optional<T>> result, T defaultValue) where T : notnull =>
-        result is Success<Optional<T>> { Value.HasValue: true } ? result.GetOptionalValueOrThrow() : defaultValue;
+        result is Success<Optional<T>> { Value: Some<T> some } ? some.Value : defaultValue;
 
     /// <summary>
     /// Asynchronously gets the underlying <typeparamref name="T"/> value from the current <see cref="Result{T}"/> of <see cref="Optional{T}"/>,

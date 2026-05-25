@@ -20,7 +20,7 @@ namespace OnixLabs.Numerics;
 public readonly partial struct UInt256
 {
     /// <summary>
-    /// The total number of bits in the IEEE 754 binary256 layout of the <see cref="UInt256"/> type.
+    /// The total number of bits in the <see cref="UInt256"/> type.
     /// </summary>
     internal const int BitWidth = 256;
 

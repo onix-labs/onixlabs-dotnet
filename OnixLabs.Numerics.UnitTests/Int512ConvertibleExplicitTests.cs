@@ -207,4 +207,52 @@ public sealed class Int512ConvertibleExplicitTests
         Assert.Throws<OverflowException>(() => checked((Int512)Float128.PositiveInfinity));
         Assert.Throws<OverflowException>(() => checked((Int512)Float128.NegativeInfinity));
     }
+
+    [Theory(DisplayName = "Int512 explicit narrowing to primitive integers should match the BigInteger low-bits truncation")]
+    [InlineData(42L)]
+    [InlineData(-42L)]
+    [InlineData(long.MaxValue)]
+    [InlineData(long.MinValue)]
+    public void Int512ExplicitNarrowingToPrimitivesShouldMatchTruncatedLowBits(long value)
+    {
+        Int512 source = value;
+        // Independent oracle: the primitive narrowing of the original value (the low bits are unchanged).
+        Assert.Equal((short)value, (short)source);
+        Assert.Equal((ushort)value, (ushort)source);
+        Assert.Equal((int)value, (int)source);
+        Assert.Equal((uint)value, (uint)source);
+        Assert.Equal(value, (long)source);
+        Assert.Equal((ulong)value, (ulong)source);
+    }
+
+    [Fact(DisplayName = "Int512 explicit checked narrowing to unsigned primitives should throw for negative values")]
+    public void Int512ExplicitCheckedNarrowingToUnsignedShouldThrowForNegative()
+    {
+        Assert.Throws<OverflowException>(() => checked((ushort)Int512.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((uint)Int512.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((ulong)Int512.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((char)Int512.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((UInt128)Int512.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((UInt256)Int512.NegativeOne));
+    }
+
+    [Fact(DisplayName = "Int512 explicit checked narrowing to UInt256 should throw when the upper limb is populated")]
+    public void Int512ExplicitCheckedNarrowingToUInt256ShouldThrowForUpperLimb()
+    {
+        // 2^400 needs the upper 256-bit limb, so it cannot fit in a UInt256.
+        Int512 source = (Int512)(BigInteger.One << 400);
+        Assert.Throws<OverflowException>(() => checked((UInt256)source));
+        // A value that fits exactly in UInt256 should succeed and match the BigInteger oracle.
+        Int512 inRange = UInt256.MaxValue;
+        Assert.Equal((UInt256)((BigInteger)inRange), checked((UInt256)inRange));
+    }
+
+    [Fact(DisplayName = "Int512 round-trip of a large value occupying the upper limb should preserve the value via BigInteger")]
+    public void Int512RoundTripOfUpperLimbValueShouldPreserveViaBigInteger()
+    {
+        BigInteger oracle = (BigInteger.One << 400) + 1234567890123456789L;
+        Int512 value = (Int512)oracle;
+        Assert.Equal(oracle, (BigInteger)value);
+        Assert.NotEqual(UInt256.Zero, value.UpperBits);
+    }
 }

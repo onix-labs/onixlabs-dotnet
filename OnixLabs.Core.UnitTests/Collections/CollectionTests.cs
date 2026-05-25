@@ -318,6 +318,55 @@ public sealed class CollectionTests
         Assert.True(expected.SequenceEqual(actual));
     }
 
+    [Fact(DisplayName = "Collections.DictionaryOf with tuple items should return the expected result")]
+    public void CollectionsDictionaryOfWithTupleItemsShouldReturnTheExpectedResult()
+    {
+        // Given
+        Dictionary<object, object?> expected = new(DictionaryInitializers);
+        Dictionary<object, object?> actual = DictionaryOf<object, object?>((123, true), ("abc", null), (123.45f, "value"));
+
+        // Then
+        // ReSharper disable once UsageOfDefaultStructEquality
+        Assert.True(expected.SequenceEqual(actual));
+    }
+
+    [Fact(DisplayName = "Collections.ImmutableDictionaryOf with tuple items should return the expected result")]
+    public void CollectionsImmutableDictionaryOfWithTupleItemsShouldReturnTheExpectedResult()
+    {
+        // Given
+        ImmutableDictionary<object, object?> expected = new Dictionary<object, object?>(DictionaryInitializers).ToImmutableDictionary();
+        ImmutableDictionary<object, object?> actual = ImmutableDictionaryOf<object, object?>((123, true), ("abc", null), (123.45f, "value"));
+
+        // Then
+        // ReSharper disable once UsageOfDefaultStructEquality
+        Assert.True(expected.SequenceEqual(actual));
+    }
+
+    [Fact(DisplayName = "Collections.SortedDictionaryOf with tuple items should return the expected result")]
+    public void CollectionsSortedDictionaryOfWithTupleItemsShouldReturnTheExpectedResult()
+    {
+        // Given
+        SortedDictionary<string, object> expected = new(DictionaryOf(SortedDictionaryInitializers));
+        SortedDictionary<string, object> actual = SortedDictionaryOf<string, object>(("key1", 123), ("key2", false), ("key3", "abc"));
+
+        // Then
+        // ReSharper disable once UsageOfDefaultStructEquality
+        Assert.True(expected.SequenceEqual(actual));
+    }
+
+    [Fact(DisplayName = "Collections.ImmutableSortedDictionaryOf with tuple items should return the expected result")]
+    public void CollectionsImmutableSortedDictionaryOfWithTupleItemsShouldReturnTheExpectedResult()
+    {
+        // Given
+        SortedDictionary<string, object> sorted = new(DictionaryOf(SortedDictionaryInitializers));
+        ImmutableSortedDictionary<string, object> expected = sorted.ToImmutableSortedDictionary();
+        ImmutableSortedDictionary<string, object> actual = ImmutableSortedDictionaryOf<string, object>(("key1", 123), ("key2", false), ("key3", "abc"));
+
+        // Then
+        // ReSharper disable once UsageOfDefaultStructEquality
+        Assert.True(expected.SequenceEqual(actual));
+    }
+
     [Fact(DisplayName = "Collections.HashSetOf should return the expected result")]
     public void CollectionsHashSetOfShouldReturnTheExpectedResult()
     {

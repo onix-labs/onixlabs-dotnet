@@ -55,6 +55,7 @@ public readonly partial struct Float256
     decimal IConvertible.ToDecimal(IFormatProvider? provider) => (decimal)this;
 
     /// <inheritdoc cref="IConvertible.ToDateTime"/>
+    /// <exception cref="InvalidCastException">Thrown when the value is converted to a <see cref="DateTime"/>.</exception>
     DateTime IConvertible.ToDateTime(IFormatProvider? provider) => throw new InvalidCastException($"Cannot convert {nameof(Float256)} to {nameof(DateTime)}.");
 
     /// <inheritdoc cref="IConvertible.ToBoolean"/>

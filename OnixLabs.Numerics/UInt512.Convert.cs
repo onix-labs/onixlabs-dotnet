@@ -34,6 +34,7 @@ public readonly partial struct UInt512
     /// <param name="value">The value to convert.</param>
     /// <param name="result">When this method returns, contains the converted value if the source type is recognised; otherwise, the default value.</param>
     /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a recognised source type; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is outside the range of <see cref="UInt512"/>.</exception>
     private static bool TryConvertFromChecked<TOther>(TOther value, out UInt512 result) where TOther : INumberBase<TOther>
     {
         if (typeof(TOther) == typeof(sbyte)) { result = checked((UInt512)(sbyte)(object)value!); return true; }
@@ -147,6 +148,7 @@ public readonly partial struct UInt512
     /// <param name="value">The value to convert.</param>
     /// <param name="result">When this method returns, contains the converted value if the destination type is recognised; otherwise, the default value.</param>
     /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a recognised destination type; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is outside the range of <typeparamref name="TOther"/>.</exception>
     private static bool TryConvertToChecked<TOther>(UInt512 value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
         if (typeof(TOther) == typeof(sbyte)) { result = (TOther)(object)checked((sbyte)value); return true; }

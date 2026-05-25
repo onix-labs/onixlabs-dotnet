@@ -335,7 +335,7 @@ public readonly partial struct Float128
     /// <param name="value">The <see cref="Float128"/> value to convert.</param>
     /// <param name="magnitude">When this method returns, contains the absolute integer magnitude when the status is <see cref="ExtractionStatus.Ok"/>.</param>
     /// <param name="isNegative">When this method returns, indicates whether the original value was negative.</param>
-    /// <returns>An <see cref="ExtractionStatus"/> describing the outcome of the extraction.</returns>
+    /// <returns>Returns an <see cref="ExtractionStatus"/> describing the outcome of the extraction.</returns>
     private static ExtractionStatus ExtractIntegerMagnitude(Float128 value, out UInt128 magnitude, out bool isNegative)
     {
         magnitude = UInt128.Zero;
@@ -365,7 +365,7 @@ public readonly partial struct Float128
     /// <param name="value">The <see cref="Float128"/> value to convert.</param>
     /// <param name="minValue">The minimum value of the destination signed integer type.</param>
     /// <param name="maxValue">The maximum value of the destination signed integer type.</param>
-    /// <returns>The converted integer value, saturated to <paramref name="minValue"/> or <paramref name="maxValue"/> when out of range, or zero for NaN.</returns>
+    /// <returns>Returns the converted integer value, saturated to <paramref name="minValue"/> or <paramref name="maxValue"/> when out of range, or zero for NaN.</returns>
     private static long ConvertToSignedSaturating(Float128 value, long minValue, long maxValue)
     {
         ExtractionStatus status = ExtractIntegerMagnitude(value, out UInt128 magnitude, out bool isNegative);
@@ -393,7 +393,7 @@ public readonly partial struct Float128
     /// <param name="minValue">The minimum value of the destination signed integer type.</param>
     /// <param name="maxValue">The maximum value of the destination signed integer type.</param>
     /// <param name="typeName">The display name of the destination type, used in exception messages.</param>
-    /// <returns>The converted integer value when it fits within the supplied range.</returns>
+    /// <returns>Returns the converted integer value when it fits within the supplied range.</returns>
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is NaN, infinite, or otherwise outside the representable range.</exception>
     private static long ConvertToSignedChecked(Float128 value, long minValue, long maxValue, string typeName)
     {
@@ -420,7 +420,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="value">The <see cref="Float128"/> value to convert.</param>
     /// <param name="maxValue">The maximum value of the destination unsigned integer type.</param>
-    /// <returns>The converted unsigned integer value, saturated to zero or <paramref name="maxValue"/> when out of range, or zero for NaN.</returns>
+    /// <returns>Returns the converted unsigned integer value, saturated to zero or <paramref name="maxValue"/> when out of range, or zero for NaN.</returns>
     private static ulong ConvertToUnsignedSaturating(Float128 value, ulong maxValue)
     {
         ExtractionStatus status = ExtractIntegerMagnitude(value, out UInt128 magnitude, out bool isNegative);
@@ -438,7 +438,7 @@ public readonly partial struct Float128
     /// <param name="value">The <see cref="Float128"/> value to convert.</param>
     /// <param name="maxValue">The maximum value of the destination unsigned integer type.</param>
     /// <param name="typeName">The display name of the destination type, used in exception messages.</param>
-    /// <returns>The converted unsigned integer value when it fits within the supplied range.</returns>
+    /// <returns>Returns the converted unsigned integer value when it fits within the supplied range.</returns>
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is NaN, infinite, negative, or otherwise outside the representable range.</exception>
     private static ulong ConvertToUnsignedChecked(Float128 value, ulong maxValue, string typeName)
     {
@@ -455,7 +455,7 @@ public readonly partial struct Float128
     /// Converts the specified <see cref="Float128"/> value to the nearest <see cref="double"/>, rounding to nearest ties-to-even and saturating to infinity on overflow.
     /// </summary>
     /// <param name="value">The <see cref="Float128"/> value to convert.</param>
-    /// <returns>The closest representable <see cref="double"/> value.</returns>
+    /// <returns>Returns the closest representable <see cref="double"/> value.</returns>
     private static double ConvertToDouble(Float128 value)
     {
         if (IsNaN(value)) return double.NaN;

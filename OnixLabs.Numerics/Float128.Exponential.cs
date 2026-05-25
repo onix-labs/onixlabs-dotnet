@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics;
 
@@ -21,12 +22,12 @@ public readonly partial struct Float128
     /// <summary>
     /// The largest exponent above which <see cref="Exp"/> saturates to <see cref="PositiveInfinity"/>.
     /// </summary>
-    private static readonly Float128 ExpUpperThreshold = Parse("11357");
+    private static readonly Float128 ExpUpperThreshold = Parse("11357", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The smallest exponent below which <see cref="Exp"/> underflows to <see cref="Zero"/>.
     /// </summary>
-    private static readonly Float128 ExpLowerThreshold = Parse("-11434");
+    private static readonly Float128 ExpLowerThreshold = Parse("-11434", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Computes <see cref="E"/> raised to the power of the specified <see cref="Float128"/> value.
@@ -131,8 +132,8 @@ public readonly partial struct Float128
     /// Evaluates the exponential function by range-reducing to <c>r = value - n ln 2</c> and summing the Taylor series for <c>e^r</c>, then rescaling by <c>2^n</c>.
     /// </summary>
     /// <param name="value">The exponent within the supported finite range.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>e^value</c>.</returns>
-    private static Float128 ExpCore(Float128 value)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>e^value</c>.</returns>
+    private static Float128 ExpCore(in Float128 value)
     {
         Float128 nFloat = Round(value * Log2E);
         int n = (int)nFloat;
@@ -155,8 +156,8 @@ public readonly partial struct Float128
     /// Evaluates <c>e^value - 1</c>, summing the Taylor series directly for small arguments to retain precision near zero.
     /// </summary>
     /// <param name="value">The exponent within the supported finite range.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>e^value - 1</c>.</returns>
-    private static Float128 ExpM1Core(Float128 value)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>e^value - 1</c>.</returns>
+    private static Float128 ExpM1Core(in Float128 value)
     {
         if (Abs(value) >= Half)
         {

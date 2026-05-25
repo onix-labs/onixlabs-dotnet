@@ -35,8 +35,13 @@ public readonly partial struct Hash
     /// <inheritdoc/>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out Hash result)
     {
-        bool isDecoded = IBaseCodec.TryGetBytes(value, provider ?? Base16FormatProvider.Invariant, out byte[] bytes);
-        result = new Hash(bytes);
-        return isDecoded;
+        if (IBaseCodec.TryGetBytes(value, provider ?? Base16FormatProvider.Invariant, out byte[] bytes))
+        {
+            result = new Hash(bytes);
+            return true;
+        }
+
+        result = default;
+        return false;
     }
 }

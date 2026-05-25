@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.ComponentModel;
 using System.Linq;
 
@@ -39,6 +40,7 @@ public static class IQueryableExtensions
         /// </summary>
         /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the specification.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current <see cref="IQueryable{T}"/> or <paramref name="specification"/> is <see langword="null"/>.</exception>
         public IQueryable<T> Where(Specification<T> specification)
         {
             RequireNotNull(queryable, QueryableNullExceptionMessage);
@@ -52,6 +54,7 @@ public static class IQueryableExtensions
         /// </summary>
         /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
         /// <returns>Returns an <see cref="IQueryable{T}"/> that contains elements from the input sequence that satisfy the negated specification.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current <see cref="IQueryable{T}"/> or <paramref name="specification"/> is <see langword="null"/>.</exception>
         public IQueryable<T> WhereNot(Specification<T> specification)
         {
             RequireNotNull(queryable, QueryableNullExceptionMessage);

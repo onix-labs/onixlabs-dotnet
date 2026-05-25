@@ -58,11 +58,12 @@ public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueC
         {
             if (UnscaledValue == BigInteger.Zero) return BigInteger.Zero;
 
+            // Strip trailing zeros by repeated division. The previous implementation recomputed
+            // BigInteger.Pow(10, exponent) on every iteration, making this O(k^2) in the trailing-zero count;
+            // dividing by ten each step is O(k) and allocation-free for the divisor.
             BigInteger significand = UnscaledValue;
-            int exponent = 0;
-
-            while (significand % BigInteger.Pow(10, exponent) == BigInteger.Zero) exponent++;
-            return significand / BigInteger.Pow(10, --exponent);
+            while (significand % 10 == BigInteger.Zero) significand /= 10;
+            return significand;
         }
     }
 

@@ -22,10 +22,14 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Secret
 {
     /// <inheritdoc/>
-    public ReadOnlyMemory<byte> AsReadOnlyMemory() => protectedData.Decrypt(encryptedValue);
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="Secret"/> has been disposed.</exception>
+    public ReadOnlyMemory<byte> AsReadOnlyMemory() =>
+        protectedData is null ? ReadOnlyMemory<byte>.Empty : protectedData.Decrypt(encryptedValue);
 
     /// <inheritdoc/>
-    public ReadOnlySpan<byte> AsReadOnlySpan() => protectedData.Decrypt(encryptedValue);
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="Secret"/> has been disposed.</exception>
+    public ReadOnlySpan<byte> AsReadOnlySpan() =>
+        protectedData is null ? ReadOnlySpan<byte>.Empty : protectedData.Decrypt(encryptedValue);
 
     /// <summary>
     /// Creates a new <see cref="Secret"/> instance from the specified <see cref="ReadOnlySpan{T}"/> value.

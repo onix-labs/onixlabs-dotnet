@@ -23,7 +23,7 @@ public sealed partial class EcdsaPublicKey
     public static EcdsaPublicKey ImportPem(ReadOnlySpan<char> data)
     {
         using ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportFromPem(data);
+        PemKeyImporter.Import(algorithm, data);
         return new EcdsaPublicKey(algorithm);
     }
 
@@ -31,7 +31,7 @@ public sealed partial class EcdsaPublicKey
     public static EcdsaPublicKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         return new EcdsaPublicKey(algorithm);
     }
 
@@ -39,7 +39,7 @@ public sealed partial class EcdsaPublicKey
     public static EcdsaPublicKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         return new EcdsaPublicKey(algorithm);
     }
 }

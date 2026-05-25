@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using OnixLabs.Core.UnitTests.Data;
 
@@ -165,5 +166,57 @@ public sealed class EnumerationTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Enumeration.CompareTo should tie-break on Name when Values are equal")]
+    public void EnumerationCompareToShouldTieBreakOnNameWhenValuesAreEqual()
+    {
+        // Given
+        TestEnumeration alpha = new(1, "Alpha");
+        TestEnumeration bravo = new(1, "Bravo");
+
+        // Then
+        Assert.True(alpha.CompareTo(bravo) < 0);
+        Assert.True(bravo.CompareTo(alpha) > 0);
+    }
+
+    [Fact(DisplayName = "Enumeration.CompareTo should return zero for entries with identical Value and Name")]
+    public void EnumerationCompareToShouldReturnZeroForEntriesWithIdenticalValueAndName()
+    {
+        // Given
+        TestEnumeration first = new(1, "Alpha");
+        TestEnumeration second = new(1, "Alpha");
+
+        // Then
+        Assert.Equal(0, first.CompareTo(second));
+    }
+
+    [Fact(DisplayName = "Enumeration.CompareTo should return zero only when Equals returns true (contract invariant)")]
+    public void EnumerationCompareToZeroImpliesEqualsTrue()
+    {
+        // Given two entries with identical Value but differing Name.
+        TestEnumeration alpha = new(1, "Alpha");
+        TestEnumeration bravo = new(1, "Bravo");
+
+        // Then CompareTo must not return zero, because Equals returns false.
+        Assert.False(alpha.Equals(bravo));
+        Assert.NotEqual(0, alpha.CompareTo(bravo));
+    }
+
+    [Theory(DisplayName = "Enumeration constructor should throw ArgumentException when name is empty or whitespace")]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("   ")]
+    [InlineData("\t")]
+    [InlineData("\n")]
+    public void EnumerationConstructorShouldThrowWhenNameIsEmptyOrWhitespace(string name)
+    {
+        Assert.Throws<ArgumentException>(() => new TestEnumeration(1, name));
+    }
+
+    [Fact(DisplayName = "Enumeration constructor should throw ArgumentException when name is null")]
+    public void EnumerationConstructorShouldThrowWhenNameIsNull()
+    {
+        Assert.Throws<ArgumentException>(() => new TestEnumeration(1, null!));
     }
 }

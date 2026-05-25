@@ -135,8 +135,8 @@ public readonly partial struct Float128
     /// Computes the base-2 logarithm of the specified <see cref="Float128"/> value, returning the exact exponent for exact powers of two.
     /// </summary>
     /// <param name="value">The positive finite value whose base-2 logarithm is to be computed.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>log2(value)</c>.</returns>
-    private static Float128 Log2Core(Float128 value)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>log2(value)</c>.</returns>
+    private static Float128 Log2Core(in Float128 value)
     {
         if (IsPow2(value)) return (Float128)ILogB(value);
 
@@ -148,8 +148,8 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="value">The positive finite value whose natural logarithm is to be computed.</param>
     /// <param name="reducedExponent">When this method returns, contains the binary exponent used during reduction.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>ln(value)</c>.</returns>
-    private static Float128 LogCore(Float128 value, out int reducedExponent)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>ln(value)</c>.</returns>
+    private static Float128 LogCore(in Float128 value, out int reducedExponent)
     {
         int e = ILogB(value);
         Float128 m = ScaleB(value, -e);
@@ -171,8 +171,8 @@ public readonly partial struct Float128
     /// Computes <c>ln(1 + value)</c> using the <c>atanh</c> series directly for small arguments to retain precision near zero.
     /// </summary>
     /// <param name="value">The value satisfying <c>1 + value &gt; 0</c>.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>ln(1 + value)</c>.</returns>
-    private static Float128 Log1pCore(Float128 value)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>ln(1 + value)</c>.</returns>
+    private static Float128 Log1pCore(in Float128 value)
     {
         Float128 absValue = Abs(value);
 
@@ -189,8 +189,8 @@ public readonly partial struct Float128
     /// Evaluates the Taylor series for <c>atanh(u)</c>, used as the core kernel for logarithm reductions.
     /// </summary>
     /// <param name="u">The reduced argument whose magnitude is small enough for rapid series convergence.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>atanh(u)</c>.</returns>
-    private static Float128 AtanhSeries(Float128 u)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>atanh(u)</c>.</returns>
+    private static Float128 AtanhSeries(in Float128 u)
     {
         Float128 sum = u;
         Float128 term = u;

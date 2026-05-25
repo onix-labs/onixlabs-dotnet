@@ -60,7 +60,7 @@ public sealed partial class EcdsaPublicKey
     public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.VerifyData(data.ToArray(), offset, count, signature.ToArray(), algorithm, format);
+        return key.VerifyData(data.Slice(offset, count), signature, algorithm, format);
     }
 
     /// <inheritdoc/>
@@ -116,15 +116,13 @@ public sealed partial class EcdsaPublicKey
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        // TODO : Spans for data and signature are inefficiently converted back to an array.
-        return key.VerifyData(data.ToArray(), offset, count, signature.AsReadOnlySpan().ToArray(), algorithm, format);
+        return key.VerifyData(data.Slice(offset, count), signature.AsReadOnlySpan(), algorithm, format);
     }
 
     /// <inheritdoc/>
     public bool IsDataValid(DigitalSignature signature, Stream data, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        // TODO : Span for signature is inefficiently converted back to an array.
         return key.VerifyData(data, signature.AsReadOnlySpan().ToArray(), algorithm, format);
     }
 
@@ -287,7 +285,7 @@ public sealed partial class EcdsaPublicKey
     /// Performs a signature check pre-condition that throws a <see cref="CryptographicException"/> in the event that the specified condition is <see langword="false"/>.
     /// </summary>
     /// <param name="condition">The signature condition to check.</param>
-    /// <exception cref="CryptographicException">If the specified condition is <see langword="false"/>.</exception>
+    /// <exception cref="CryptographicException">Thrown when the specified condition is <see langword="false"/>.</exception>
     private static void CheckSignature(bool condition)
     {
         if (condition) return;

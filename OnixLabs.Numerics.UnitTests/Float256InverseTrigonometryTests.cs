@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics.UnitTests;
 
@@ -69,6 +70,30 @@ public sealed class Float256InverseTrigonometryTests
         Float256 expected = (Float256)Math.Atan(input);
         Float256 tolerance = Float256.Max(Float256.Abs(expected) * Float256.Parse("1E-14"), Float256.Parse("1E-14"));
         Assert.True(Float256.Abs(actual - expected) <= tolerance, $"Expected {expected} but got {actual}");
+    }
+
+    [Fact(DisplayName = "Float256.Atan must use a culture-invariant reduction threshold (regression: run isolated)")]
+    public void Float256AtanShouldUseCultureInvariantThreshold()
+    {
+        // The atan reduction threshold is a decimal-point constant. A culture-sensitive misparse skips the
+        // half-angle acceleration loop, leaving the series to converge only Leibniz-slowly near a reduced argument of 1.
+        CultureInfo original = CultureInfo.CurrentCulture;
+        CultureInfo.CurrentCulture = new CultureInfo("de-DE");
+
+        try
+        {
+            // Inputs whose reduced argument lands in (threshold, 1] are where the lost acceleration shows up.
+            foreach (double input in new[] { 0.5, 1.0, 1.5 })
+            {
+                double expected = Math.Atan(input);
+                double actual = (double)Float256.Atan((Float256)input);
+                Assert.True(Math.Abs(actual - expected) <= 1e-12, $"Atan({input}) = {actual}, expected {expected}");
+            }
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = original;
+        }
     }
 
     [Fact(DisplayName = "Float256.Asin of zero should preserve sign of zero")]

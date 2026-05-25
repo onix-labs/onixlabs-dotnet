@@ -268,22 +268,22 @@ public readonly partial struct Float256
 
     /// <summary>Converts the specified <see cref="Float256"/> value to a <see cref="Half"/> by reducing precision and rounding to nearest, ties-to-even.</summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>The <see cref="Half"/> closest to <paramref name="value"/>.</returns>
+    /// <returns>Returns the <see cref="Half"/> closest to <paramref name="value"/>.</returns>
     public static explicit operator Half(Float256 value) => (Half)(double)value;
 
     /// <summary>Converts the specified <see cref="Float256"/> value to a <see cref="float"/> by reducing precision and rounding to nearest, ties-to-even.</summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>The <see cref="float"/> closest to <paramref name="value"/>.</returns>
+    /// <returns>Returns the <see cref="float"/> closest to <paramref name="value"/>.</returns>
     public static explicit operator float(Float256 value) => (float)(double)value;
 
     /// <summary>Converts the specified <see cref="Float256"/> value to a <see cref="double"/>.</summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>The <see cref="double"/> closest to <paramref name="value"/>, rounded to nearest, ties-to-even, saturating to ±infinity on overflow and tapering to a subnormal or signed zero on underflow.</returns>
+    /// <returns>Returns the <see cref="double"/> closest to <paramref name="value"/>, rounded to nearest, ties-to-even, saturating to ±infinity on overflow and tapering to a subnormal or signed zero on underflow.</returns>
     public static explicit operator double(Float256 value) => ConvertToDouble(value);
 
     /// <summary>Converts the specified <see cref="Float256"/> value to a <see cref="decimal"/> via a <see cref="double"/> intermediate.</summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>The <see cref="decimal"/> closest to <paramref name="value"/>, computed through a <see cref="double"/> intermediate.</returns>
+    /// <returns>Returns the <see cref="decimal"/> closest to <paramref name="value"/>, computed through a <see cref="double"/> intermediate.</returns>
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is NaN, infinite, or outside the range of <see cref="decimal"/>.</exception>
     /// <remarks>This conversion is doubly-rounded (binary256 → binary64 → decimal). A native binary-to-decimal printer will replace this once available.</remarks>
     public static explicit operator decimal(Float256 value)
@@ -295,7 +295,7 @@ public readonly partial struct Float256
 
     /// <summary>Converts the specified <see cref="Float256"/> value to a <see cref="Float128"/> by reducing precision and rounding to nearest, ties-to-even.</summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>The <see cref="Float128"/> closest to <paramref name="value"/>, saturating to ±infinity on overflow and tapering to a subnormal or signed zero on underflow.</returns>
+    /// <returns>Returns the <see cref="Float128"/> closest to <paramref name="value"/>, saturating to ±infinity on overflow and tapering to a subnormal or signed zero on underflow.</returns>
     public static explicit operator Float128(Float256 value) => ConvertToFloat128(value);
 
     /// <summary>
@@ -330,7 +330,7 @@ public readonly partial struct Float256
     /// <param name="value">The <see cref="Float256"/> value to convert.</param>
     /// <param name="magnitude">When this method returns, contains the absolute integer magnitude when the status is <see cref="ExtractionStatus.Ok"/>.</param>
     /// <param name="isNegative">When this method returns, indicates whether the original value was negative.</param>
-    /// <returns>An <see cref="ExtractionStatus"/> describing the outcome of the extraction.</returns>
+    /// <returns>Returns an <see cref="ExtractionStatus"/> describing the outcome of the extraction.</returns>
     private static ExtractionStatus ExtractInt128Magnitude(Float256 value, out UInt128 magnitude, out bool isNegative)
     {
         magnitude = UInt128.Zero;
@@ -361,7 +361,7 @@ public readonly partial struct Float256
     /// <param name="value">The <see cref="Float256"/> value to convert.</param>
     /// <param name="minValue">The minimum value of the destination signed integer type.</param>
     /// <param name="maxValue">The maximum value of the destination signed integer type.</param>
-    /// <returns>The converted integer value, saturated to <paramref name="minValue"/> or <paramref name="maxValue"/> when out of range, or zero for NaN.</returns>
+    /// <returns>Returns the converted integer value, saturated to <paramref name="minValue"/> or <paramref name="maxValue"/> when out of range, or zero for NaN.</returns>
     private static long ConvertToSignedSaturating(Float256 value, long minValue, long maxValue)
     {
         ExtractionStatus status = ExtractInt128Magnitude(value, out UInt128 magnitude, out bool isNegative);
@@ -389,7 +389,7 @@ public readonly partial struct Float256
     /// <param name="minValue">The minimum value of the destination signed integer type.</param>
     /// <param name="maxValue">The maximum value of the destination signed integer type.</param>
     /// <param name="typeName">The display name of the destination type, used in exception messages.</param>
-    /// <returns>The converted integer value when it fits within the supplied range.</returns>
+    /// <returns>Returns the converted integer value when it fits within the supplied range.</returns>
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is NaN, infinite, or otherwise outside the representable range.</exception>
     private static long ConvertToSignedChecked(Float256 value, long minValue, long maxValue, string typeName)
     {
@@ -416,7 +416,7 @@ public readonly partial struct Float256
     /// </summary>
     /// <param name="value">The <see cref="Float256"/> value to convert.</param>
     /// <param name="maxValue">The maximum value of the destination unsigned integer type.</param>
-    /// <returns>The converted unsigned integer value, saturated to zero or <paramref name="maxValue"/> when out of range, or zero for NaN.</returns>
+    /// <returns>Returns the converted unsigned integer value, saturated to zero or <paramref name="maxValue"/> when out of range, or zero for NaN.</returns>
     private static ulong ConvertToUnsignedSaturating(Float256 value, ulong maxValue)
     {
         ExtractionStatus status = ExtractInt128Magnitude(value, out UInt128 magnitude, out bool isNegative);
@@ -434,7 +434,7 @@ public readonly partial struct Float256
     /// <param name="value">The <see cref="Float256"/> value to convert.</param>
     /// <param name="maxValue">The maximum value of the destination unsigned integer type.</param>
     /// <param name="typeName">The display name of the destination type, used in exception messages.</param>
-    /// <returns>The converted unsigned integer value when it fits within the supplied range.</returns>
+    /// <returns>Returns the converted unsigned integer value when it fits within the supplied range.</returns>
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is NaN, infinite, negative, or otherwise outside the representable range.</exception>
     private static ulong ConvertToUnsignedChecked(Float256 value, ulong maxValue, string typeName)
     {

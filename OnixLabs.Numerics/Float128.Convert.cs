@@ -23,7 +23,7 @@ public readonly partial struct Float128
     static bool INumberBase<Float128>.TryConvertFromChecked<TOther>(TOther value, out Float128 result) => TryConvertFrom(value, out result);
     static bool INumberBase<Float128>.TryConvertFromSaturating<TOther>(TOther value, out Float128 result) => TryConvertFrom(value, out result);
     static bool INumberBase<Float128>.TryConvertFromTruncating<TOther>(TOther value, out Float128 result) => TryConvertFrom(value, out result);
-    static bool INumberBase<Float128>.TryConvertToChecked<TOther>(Float128 value, [MaybeNullWhen(false)] out TOther result) => TryConvertTo(value, out result);
+    static bool INumberBase<Float128>.TryConvertToChecked<TOther>(Float128 value, [MaybeNullWhen(false)] out TOther result) => TryConvertToChecked(value, out result);
     static bool INumberBase<Float128>.TryConvertToSaturating<TOther>(Float128 value, [MaybeNullWhen(false)] out TOther result) => TryConvertTo(value, out result);
     static bool INumberBase<Float128>.TryConvertToTruncating<TOther>(Float128 value, [MaybeNullWhen(false)] out TOther result) => TryConvertTo(value, out result);
 
@@ -33,7 +33,7 @@ public readonly partial struct Float128
     /// <typeparam name="TOther">The source numeric type being converted from.</typeparam>
     /// <param name="value">The value to convert.</param>
     /// <param name="result">When this method returns, contains the converted <see cref="Float128"/> if successful; otherwise, the default value.</param>
-    /// <returns><see langword="true"/> if <typeparamref name="TOther"/> is a supported source type; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a supported source type; otherwise, <see langword="false"/>.</returns>
     private static bool TryConvertFrom<TOther>(TOther value, out Float128 result) where TOther : INumberBase<TOther>
     {
         if (typeof(TOther) == typeof(sbyte)) { result = (sbyte)(object)value!; return true; }
@@ -65,7 +65,7 @@ public readonly partial struct Float128
     /// <typeparam name="TOther">The destination numeric type being converted to.</typeparam>
     /// <param name="value">The <see cref="Float128"/> value to convert.</param>
     /// <param name="result">When this method returns, contains the converted value if successful; otherwise, the default value.</param>
-    /// <returns><see langword="true"/> if <typeparamref name="TOther"/> is a supported destination type; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a supported destination type; otherwise, <see langword="false"/>.</returns>
     private static bool TryConvertTo<TOther>(Float128 value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
         if (typeof(TOther) == typeof(sbyte)) { result = (TOther)(object)(sbyte)value; return true; }
@@ -80,6 +80,39 @@ public readonly partial struct Float128
         if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(UInt128)value; return true; }
         if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
         if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(char)value; return true; }
+        if (typeof(TOther) == typeof(Half)) { result = (TOther)(object)(Half)value; return true; }
+        if (typeof(TOther) == typeof(float)) { result = (TOther)(object)(float)value; return true; }
+        if (typeof(TOther) == typeof(double)) { result = (TOther)(object)(double)value; return true; }
+        if (typeof(TOther) == typeof(decimal)) { result = (TOther)(object)(decimal)value; return true; }
+        if (typeof(TOther) == typeof(BigDecimal)) { result = (TOther)(object)(BigDecimal)value; return true; }
+        if (typeof(TOther) == typeof(Float128)) { result = (TOther)(object)value; return true; }
+
+        result = default;
+        return false;
+    }
+
+    /// <summary>
+    /// Attempts to convert the specified <see cref="Float128"/> value into the requested numeric type <typeparamref name="TOther"/> using checked conversions that throw on overflow.
+    /// </summary>
+    /// <typeparam name="TOther">The destination numeric type being converted to.</typeparam>
+    /// <param name="value">The <see cref="Float128"/> value to convert.</param>
+    /// <param name="result">When this method returns, contains the converted value if successful; otherwise, the default value.</param>
+    /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a supported destination type; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is outside the representable range of <typeparamref name="TOther"/>.</exception>
+    private static bool TryConvertToChecked<TOther>(Float128 value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
+    {
+        if (typeof(TOther) == typeof(sbyte)) { result = (TOther)(object)checked((sbyte)value); return true; }
+        if (typeof(TOther) == typeof(byte)) { result = (TOther)(object)checked((byte)value); return true; }
+        if (typeof(TOther) == typeof(short)) { result = (TOther)(object)checked((short)value); return true; }
+        if (typeof(TOther) == typeof(ushort)) { result = (TOther)(object)checked((ushort)value); return true; }
+        if (typeof(TOther) == typeof(int)) { result = (TOther)(object)checked((int)value); return true; }
+        if (typeof(TOther) == typeof(uint)) { result = (TOther)(object)checked((uint)value); return true; }
+        if (typeof(TOther) == typeof(long)) { result = (TOther)(object)checked((long)value); return true; }
+        if (typeof(TOther) == typeof(ulong)) { result = (TOther)(object)checked((ulong)value); return true; }
+        if (typeof(TOther) == typeof(Int128)) { result = (TOther)(object)checked((Int128)value); return true; }
+        if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)checked((UInt128)value); return true; }
+        if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
+        if (typeof(TOther) == typeof(char)) { result = (TOther)(object)checked((char)value); return true; }
         if (typeof(TOther) == typeof(Half)) { result = (TOther)(object)(Half)value; return true; }
         if (typeof(TOther) == typeof(float)) { result = (TOther)(object)(float)value; return true; }
         if (typeof(TOther) == typeof(double)) { result = (TOther)(object)(double)value; return true; }

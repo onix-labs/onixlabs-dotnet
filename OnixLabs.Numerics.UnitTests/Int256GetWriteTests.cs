@@ -145,4 +145,56 @@ public sealed class Int256GetWriteTests
 
         for (int i = 0; i < 32; i++) Assert.Equal(beBuffer[i], leBuffer[31 - i]);
     }
+
+    [Theory(DisplayName = "Int256.GetShortestBitLength should match the Int128 sibling for in-range values")]
+    [InlineData(0L)]
+    [InlineData(1L)]
+    [InlineData(-1L)]
+    [InlineData(-2L)]
+    [InlineData(255L)]
+    [InlineData(-128L)]
+    [InlineData(long.MaxValue)]
+    [InlineData(long.MinValue)]
+    public void Int256GetShortestBitLengthShouldMatchInt128Sibling(long value)
+    {
+        // The honest oracle is the BCL IBinaryInteger sibling Int128 (NOT BigInteger.GetBitLength,
+        // which differs by one for negative values).
+        int expected = ShortestBitLength((Int128)value);
+        Assert.Equal(expected, ((Int256)value).GetShortestBitLength());
+    }
+
+    private static int ShortestBitLength<T>(T value) where T : IBinaryInteger<T> => value.GetShortestBitLength();
+
+    [Fact(DisplayName = "Int256.GetShortestBitLength of constants should match independently-known bit lengths")]
+    public void Int256GetShortestBitLengthOfConstantsShouldMatchKnownValues()
+    {
+        // MaxValue = 2^255 - 1: 255 value bits, no sign bit. MinValue = -2^255: needs the full 256 bits.
+        Assert.Equal(0, Int256.Zero.GetShortestBitLength());
+        Assert.Equal(1, Int256.One.GetShortestBitLength());
+        Assert.Equal(1, Int256.NegativeOne.GetShortestBitLength());
+        Assert.Equal(255, Int256.MaxValue.GetShortestBitLength());
+        Assert.Equal(256, Int256.MinValue.GetShortestBitLength());
+    }
+
+    [Fact(DisplayName = "Int256.GetShortestBitLength of a large positive value should match Int128 sibling shifted into the upper limb")]
+    public void Int256GetShortestBitLengthOfUpperLimbValueShouldMatchSibling()
+    {
+        // 2^200 + 1 occupies the upper limb: bit length is 201 (highest set bit is index 200, no sign bit needed).
+        Int256 value = (Int256)((BigInteger.One << 200) + BigInteger.One);
+        Assert.Equal(201, value.GetShortestBitLength());
+    }
+
+    [Fact(DisplayName = "Int256.TryWriteBigEndian of a positive value should match BigInteger big-endian bytes")]
+    public void Int256TryWriteBigEndianShouldMatchBigIntegerBytes()
+    {
+        Int256 value = (Int256)(BigInteger.Pow(2, 200) + 12345);
+        Span<byte> buffer = stackalloc byte[32];
+        Assert.True(value.TryWriteBigEndian(buffer, out _));
+
+        BigInteger big = (BigInteger)value;
+        byte[] bigBytes = big.ToByteArray(isUnsigned: false, isBigEndian: true);
+        byte[] expected = new byte[32];
+        Array.Copy(bigBytes, 0, expected, 32 - bigBytes.Length, bigBytes.Length);
+        Assert.Equal(expected, buffer.ToArray());
+    }
 }

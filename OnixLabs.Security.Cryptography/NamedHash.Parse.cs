@@ -46,10 +46,10 @@ public readonly partial record struct NamedHash
 
         if (name.IsEmpty || data.IsEmpty) return false;
 
-        bool isDecoded = Hash.TryParse(data, provider, out Hash hash);
+        if (!Hash.TryParse(data, provider, out Hash hash)) return false;
 
         result = new NamedHash(hash, name.ToString());
 
-        return isDecoded;
+        return true;
     }
 }

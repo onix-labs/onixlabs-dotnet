@@ -25,6 +25,7 @@ public readonly partial struct BigDecimal
     /// <param name="exponent">The exponent to raise by.</param>
     /// <param name="mode">Specifies the <see cref="MidpointRounding"/> rounding mode that should be applied for values raised to the power of a negative exponent.</param>
     /// <returns>Returns the power of the specified <see cref="BigDecimal"/> value, raised to the power of the specified exponent.</returns>
+    /// <exception cref="DivideByZeroException">Thrown when <paramref name="value"/> is zero and <paramref name="exponent"/> is negative.</exception>
     public static BigDecimal Pow(BigDecimal value, int exponent, MidpointRounding mode = default)
     {
         if (IsZero(value))
@@ -43,6 +44,9 @@ public readonly partial struct BigDecimal
         int absExponent = int.Abs(exponent);
         while (--absExponent > 0) result *= Abs(value);
 
-        return (exponent < 0 ? Divide(One.SetScale(value.Scale), result, mode) : result) * value.number.Sign;
+        BigDecimal magnitude = exponent < 0 ? Divide(One.SetScale(value.Scale), result, mode) : result;
+
+        // The sign of the result is negative only when the base is negative and the exponent is odd.
+        return IsNegative(value) && int.IsOddInteger(exponent) ? -magnitude : magnitude;
     }
 }

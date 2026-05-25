@@ -35,7 +35,7 @@ public static class ISpanParsableExtensions
         /// <param name="value">The value to parse.</param>
         /// <param name="provider">An object that provides culture-specific formatting information about the value.</param>
         /// <returns>Returns a new instance of <typeparamref name="T"/> parsed from the specified value.</returns>
-        /// <exception cref="FormatException">If the value cannot be parsed.</exception>
+        /// <exception cref="FormatException">Thrown when the value cannot be parsed.</exception>
         public static T ParseOrThrow(ReadOnlySpan<char> value, IFormatProvider? provider = null)
         {
             // ReSharper disable once ConvertIfStatementToReturnStatement

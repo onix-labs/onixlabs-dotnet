@@ -20,11 +20,11 @@ namespace OnixLabs.Numerics;
 public readonly partial struct UInt512
 {
     /// <summary>Gets the number of bytes that will be written by <see cref="TryWriteBigEndian"/> or <see cref="TryWriteLittleEndian"/>.</summary>
-    /// <returns>64.</returns>
+    /// <returns>Returns the number of bytes needed to write this value in either endianness.</returns>
     public int GetByteCount() => 64;
 
     /// <summary>Gets the length, in bits, of the shortest two's-complement representation of the current value.</summary>
-    /// <returns>The shortest bit length.</returns>
+    /// <returns>Returns the shortest bit length of the current value.</returns>
     public int GetShortestBitLength()
     {
         if (!UInt256.IsZero(UpperBits)) return HalfBitWidth + UpperBits.GetShortestBitLength();

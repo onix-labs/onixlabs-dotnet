@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 
 namespace OnixLabs.Numerics.UnitTests;
 
@@ -148,5 +149,27 @@ public sealed class Float256ConstantTests
         // Then
         Assert.Equal(new UInt128(0x7FFF_F800_0000_0000UL, 0UL), value.Bits.UpperBits);
         Assert.Equal(UInt128.Zero, value.Bits.LowerBits);
+    }
+
+    [Fact(DisplayName = "Float256 math constants must initialise culture-invariantly (regression: run isolated)")]
+    public void Float256MathConstantsShouldInitialiseCultureInvariantly()
+    {
+        // Given: a comma-decimal culture where '.' is a group separator, which (with AllowThousands)
+        // would misparse the '.'-delimited constant literals as gigantic integers if parsed culture-sensitively.
+        CultureInfo original = CultureInfo.CurrentCulture;
+        CultureInfo.CurrentCulture = new CultureInfo("de-DE");
+
+        try
+        {
+            // Then: Pi must remain ~3.14159, not a misparsed ~100-digit integer.
+            Assert.True(Float256.Pi > Float256.Parse("3", CultureInfo.InvariantCulture));
+            Assert.True(Float256.Pi < Float256.Parse("4", CultureInfo.InvariantCulture));
+            Assert.True(Float256.E > Float256.Parse("2", CultureInfo.InvariantCulture));
+            Assert.True(Float256.E < Float256.Parse("3", CultureInfo.InvariantCulture));
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = original;
+        }
     }
 }

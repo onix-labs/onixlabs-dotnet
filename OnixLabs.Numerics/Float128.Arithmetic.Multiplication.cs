@@ -84,7 +84,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="significand">A reference to the significand, updated in place.</param>
     /// <param name="unbiasedExponent">A reference to the unbiased exponent, decremented by the number of left shifts applied.</param>
-    private static void NormalizeSubnormal(ref UInt128 significand, ref int unbiasedExponent)
+    internal static void NormalizeSubnormal(ref UInt128 significand, ref int unbiasedExponent)
     {
         if (significand == UInt128.Zero) return;
         if ((significand & ImplicitSignificandBit) != UInt128.Zero) return;

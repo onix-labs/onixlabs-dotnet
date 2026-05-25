@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 using System.Numerics;
 
 namespace OnixLabs.Numerics;
@@ -191,62 +192,62 @@ public readonly partial struct Float128
     /// <summary>
     /// The cached <see cref="Float128"/> value of Euler's number, rounded to binary128 precision.
     /// </summary>
-    private static readonly Float128 CachedE = Parse("2.7182818284590452353602874713526624977572");
+    private static readonly Float128 CachedE = Parse("2.7182818284590452353602874713526624977572", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The cached <see cref="Float128"/> value of the ratio of a circle's circumference to its diameter, rounded to binary128 precision.
     /// </summary>
-    private static readonly Float128 CachedPi = Parse("3.1415926535897932384626433832795028841972");
+    private static readonly Float128 CachedPi = Parse("3.1415926535897932384626433832795028841972", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The cached <see cref="Float128"/> value of the number of radians in one turn, rounded to binary128 precision.
     /// </summary>
-    private static readonly Float128 CachedTau = Parse("6.2831853071795864769252867665590057683944");
+    private static readonly Float128 CachedTau = Parse("6.2831853071795864769252867665590057683944", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The natural logarithm of two, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 Ln2 = Parse("0.6931471805599453094172321214581765680755");
+    internal static readonly Float128 Ln2 = Parse("0.6931471805599453094172321214581765680755", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The natural logarithm of ten, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 Ln10 = Parse("2.3025850929940456840179914546843642076011");
+    internal static readonly Float128 Ln10 = Parse("2.3025850929940456840179914546843642076011", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The base-2 logarithm of <see cref="E"/>, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 Log2E = Parse("1.4426950408889634073599246810018921374266");
+    internal static readonly Float128 Log2E = Parse("1.4426950408889634073599246810018921374266", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The base-10 logarithm of <see cref="E"/>, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 Log10E = Parse("0.4342944819032518276511289189166050822944");
+    internal static readonly Float128 Log10E = Parse("0.4342944819032518276511289189166050822944", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The square root of two, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 SqrtTwo = Parse("1.4142135623730950488016887242096980785697");
+    internal static readonly Float128 SqrtTwo = Parse("1.4142135623730950488016887242096980785697", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The constant π divided by two, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 PiOver2 = Parse("1.5707963267948966192313216916397514420985");
+    internal static readonly Float128 PiOver2 = Parse("1.5707963267948966192313216916397514420985", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The constant π divided by four, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 PiOver4 = Parse("0.7853981633974483096156608458198757210493");
+    internal static readonly Float128 PiOver4 = Parse("0.7853981633974483096156608458198757210493", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The constant two divided by π, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 TwoOverPi = Parse("0.6366197723675813430755350534900574481378");
+    internal static readonly Float128 TwoOverPi = Parse("0.6366197723675813430755350534900574481378", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The constant three times π divided by four, rounded to binary128 precision.
     /// </summary>
-    internal static readonly Float128 ThreePiOver4 = Parse("2.3561944901923449288469825374596271631478");
+    internal static readonly Float128 ThreePiOver4 = Parse("2.3561944901923449288469825374596271631478", CultureInfo.InvariantCulture);
 
     /// <inheritdoc cref="IAdditiveIdentity{TSelf,TResult}.AdditiveIdentity"/>
     static Float128 IAdditiveIdentity<Float128, Float128>.AdditiveIdentity => Zero;

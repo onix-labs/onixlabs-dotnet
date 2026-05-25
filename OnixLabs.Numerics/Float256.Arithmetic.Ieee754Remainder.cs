@@ -21,7 +21,12 @@ public readonly partial struct Float256
     /// <summary>Computes the IEEE 754 remainder of two <see cref="Float256"/> values.</summary>
     /// <param name="left">The dividend.</param>
     /// <param name="right">The divisor.</param>
-    /// <returns>Returns <c>left - RoundToNearestEven(left / right) * right</c>; NaN for invalid combinations.</returns>
+    /// <returns>Returns the exact value of <paramref name="left"/> minus <c>n * right</c>, where <c>n</c> is <c>left / right</c> rounded to the nearest integer with ties to even; NaN for invalid combinations.</returns>
+    /// <remarks>
+    /// The exact truncating remainder and the parity of the truncating quotient are obtained from a single Sterbenz-safe reduction of
+    /// <paramref name="left"/> modulo <c>2 * |right|</c>, then adjusted by one modulus when the remainder exceeds half the divisor (ties to even).
+    /// Every arithmetic step is exact, so the IEEE 754 remainder is returned without rounding error even for very large quotients.
+    /// </remarks>
     public static Float256 Ieee754Remainder(Float256 left, Float256 right)
     {
         if (IsNaN(left) || IsNaN(right)) return NaN;
@@ -30,8 +35,25 @@ public readonly partial struct Float256
         if (IsInfinity(right)) return left;
         if (IsZero(left)) return left;
 
-        Float256 quotient = left / right;
-        Float256 nearestQuotient = Round(quotient, MidpointRounding.ToEven);
-        return left - nearestQuotient * right;
+        bool sign = IsNegative(left);
+        Float256 absLeft = ClearSign(left);
+        Float256 absRight = ClearSign(right);
+
+        Float256 twoModulus = ScaleB(absRight, 1);
+        Float256 doubleRemainder = absLeft < twoModulus ? absLeft : ReduceModulo(absLeft, twoModulus);
+
+        bool quotientOdd = doubleRemainder >= absRight;
+        Float256 truncatedRemainder = quotientOdd ? doubleRemainder - absRight : doubleRemainder;
+
+        Float256 twiceRemainder = ScaleB(truncatedRemainder, 1);
+        bool subtractModulus = twiceRemainder > absRight || (twiceRemainder == absRight && quotientOdd);
+
+        if (!subtractModulus)
+        {
+            return sign ? new Float256(truncatedRemainder.Bits | SignMask) : truncatedRemainder;
+        }
+
+        Float256 adjusted = absRight - truncatedRemainder;
+        return sign ? adjusted : new Float256(adjusted.Bits | SignMask);
     }
 }

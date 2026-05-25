@@ -60,7 +60,7 @@ public abstract class BigDecimalEqualityComparer : IEqualityComparer<BigDecimal>
 
     /// <summary>Returns a hash code for the specified object.</summary>
     /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
-    /// <returns>A hash code for the specified object.</returns>
+    /// <returns>Returns a hash code for the specified object.</returns>
     public int GetHashCode(object obj) => obj is BigDecimal value ? GetHashCode(value) : obj.GetHashCode();
 
     /// <summary>

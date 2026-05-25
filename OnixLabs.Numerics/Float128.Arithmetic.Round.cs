@@ -48,8 +48,7 @@ public readonly partial struct Float128
     /// </remarks>
     public static Float128 Round(Float128 value, int digits, MidpointRounding mode)
     {
-        if (!IsFinite(value)) return value;
-        if (IsZero(value)) return value;
+        if (!IsFinite(value) || IsZero(value)) return value;
         if (digits == 0) return Round(value, mode);
         if (digits == int.MinValue) return IsNegative(value) ? NegativeZero : Zero;
 
@@ -63,22 +62,20 @@ public readonly partial struct Float128
             // Scale exceeds Float128's range. For positive digits the precision is long exhausted
             // (the value cannot resolve a 10^-digits step) so rounding is a no-op. For negative digits
             // the granularity exceeds every finite Float128 magnitude, so every value rounds to zero.
-            return negative ? (IsNegative(value) ? NegativeZero : Zero) : value;
+            if (!negative) return value;
+
+            return IsNegative(value) ? NegativeZero : Zero;
         }
 
-        if (negative)
-        {
-            Float128 reduced = value / scale;
-            Float128 rounded = Round(reduced, mode);
-            return rounded * scale;
-        }
+        if (negative) return Round(value / scale, mode) * scale;
 
         Float128 scaled = value * scale;
+
         // If the multiplication overflows then the value is already coarser than the requested
         // rounding step, so return the input unchanged.
         if (!IsFinite(scaled)) return value;
-        Float128 roundedScaled = Round(scaled, mode);
-        return roundedScaled / scale;
+
+        return Round(scaled, mode) / scale;
     }
 
     /// <summary>
@@ -90,7 +87,8 @@ public readonly partial struct Float128
     private static Float128 PowerOfTenForRound(int magnitude)
     {
         if (magnitude < PowersOfTen.Length) return PowersOfTen[magnitude];
-        return Pow(PowersOfTen[1], (Float128)magnitude);
+
+        return Pow(PowersOfTen[1], magnitude);
     }
 
     /// <summary>
@@ -114,7 +112,7 @@ public readonly partial struct Float128
     /// Rounds the specified <see cref="Float128"/> value to the nearest integer, with ties breaking to the value whose least significant bit is even.
     /// </summary>
     /// <param name="value">The <see cref="Float128"/> value to round.</param>
-    /// <returns>The value of <paramref name="value"/> rounded to the nearest integer using banker's rounding.</returns>
+    /// <returns>Returns the value of <paramref name="value"/> rounded to the nearest integer using banker's rounding.</returns>
     private static Float128 RoundHalfToEven(Float128 value)
     {
         if (!TryStartRound(value, out RoundingContext context)) return context.EarlyResult;
@@ -127,10 +125,11 @@ public readonly partial struct Float128
     /// Rounds the specified <see cref="Float128"/> value to the nearest integer, with ties breaking away from zero.
     /// </summary>
     /// <param name="value">The <see cref="Float128"/> value to round.</param>
-    /// <returns>The value of <paramref name="value"/> rounded to the nearest integer, with halves moved away from zero.</returns>
+    /// <returns>Returns the value of <paramref name="value"/> rounded to the nearest integer, with halves moved away from zero.</returns>
     private static Float128 RoundHalfAwayFromZero(Float128 value)
     {
         if (!TryStartRound(value, out RoundingContext context)) return context.EarlyResult;
+
         return ApplyRounding(context, roundUp: context.RoundBit);
     }
 
@@ -139,19 +138,13 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="value">The <see cref="Float128"/> value being rounded.</param>
     /// <param name="context">When this method returns, contains either the rounding context to apply or an early-exit result.</param>
-    /// <returns><see langword="true"/> if rounding should proceed; otherwise, <see langword="false"/> when an early-exit result is supplied in <paramref name="context"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if rounding should proceed; otherwise, <see langword="false"/> when an early-exit result is supplied in <paramref name="context"/>.</returns>
     private static bool TryStartRound(Float128 value, out RoundingContext context)
     {
         context = default;
         UInt128 bits = value.Bits;
 
-        if (!IsFinite(value))
-        {
-            context = new RoundingContext { EarlyResult = value, EarlyExit = true };
-            return false;
-        }
-
-        if (IsZero(value))
+        if (!IsFinite(value) || IsZero(value))
         {
             context = new RoundingContext { EarlyResult = value, EarlyExit = true };
             return false;
@@ -194,6 +187,7 @@ public readonly partial struct Float128
                 LsbBitOfTruncated = false,
                 IsUnitOnIncrement = true
             };
+
             return true;
         }
 
@@ -204,9 +198,7 @@ public readonly partial struct Float128
         UInt128 truncatedBits = bits & ~fractionMask;
         bool roundBit = (trailingSignificand & (UInt128.One << roundPosition)) != UInt128.Zero;
         bool stickyBit = (trailingSignificand & stickyMask) != UInt128.Zero;
-        bool lsbBit = unbiasedExponent == 0
-            ? true
-            : (trailingSignificand & (UInt128.One << lsbPosition)) != UInt128.Zero;
+        bool lsbBit = unbiasedExponent == 0 || (trailingSignificand & (UInt128.One << lsbPosition)) != UInt128.Zero;
 
         context = new RoundingContext
         {
@@ -217,6 +209,7 @@ public readonly partial struct Float128
             LsbBitOfTruncated = lsbBit,
             IsUnitOnIncrement = false
         };
+
         return true;
     }
 
@@ -225,7 +218,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="context">The rounding context produced by <see cref="TryStartRound"/>.</param>
     /// <param name="roundUp">A value indicating whether the magnitude should be incremented.</param>
-    /// <returns>The <see cref="Float128"/> integer value obtained after applying the rounding decision.</returns>
+    /// <returns>Returns the <see cref="Float128"/> integer value obtained after applying the rounding decision.</returns>
     private static Float128 ApplyRounding(RoundingContext context, bool roundUp)
     {
         if (!roundUp) return context.Truncated;

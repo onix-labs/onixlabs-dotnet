@@ -128,6 +128,32 @@ public sealed class NumericExtensionsTests
         Assert.Throws<InvalidOperationException>(() => input.SetScale(scale));
     }
 
+    [Theory(DisplayName = "Decimal.SetScale should allow scaling sub-unit values up to the 96-bit significand limit")]
+    [InlineData("0.5", 28, "0.5")]
+    [InlineData("1.5", 28, "1.5")]
+    [InlineData("0", 28, "0")]
+    [InlineData("0.0000000001", 28, "0.0000000001")]
+    public void DecimalSetScaleShouldAllowMaxScaleWithinSignificandLimit(string inputStr, int scale, string expectedStr)
+    {
+        // Given
+        decimal input = decimal.Parse(inputStr, CultureInfo.InvariantCulture);
+        decimal expected = decimal.Parse(expectedStr, CultureInfo.InvariantCulture);
+
+        // When
+        decimal result = input.SetScale(scale);
+
+        // Then
+        Assert.Equal(expected, result);
+        Assert.Equal(scale, result.Scale);
+    }
+
+    [Fact(DisplayName = "Decimal.SetScale should throw when increasing the scale would overflow the 96-bit significand")]
+    public void DecimalSetScaleShouldThrowWhenScalingOverflowsSignificand()
+    {
+        // decimal.MaxValue already occupies the full 96-bit significand, so any scale increase overflows.
+        Assert.Throws<ArgumentException>(() => decimal.MaxValue.SetScale(1));
+    }
+
     [Theory(DisplayName = "Decimal.SetScale(rounding) should apply correct rounding")]
     [InlineData("123.456", 2, MidpointRounding.AwayFromZero, "123.46")]
     [InlineData("123.454", 2, MidpointRounding.AwayFromZero, "123.45")]

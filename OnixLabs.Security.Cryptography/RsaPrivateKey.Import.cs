@@ -36,7 +36,7 @@ public sealed partial class RsaPrivateKey
     /// <inheritdoc/>
     public static RsaPrivateKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
-        RSA algorithm = RSA.Create();
+        using RSA algorithm = RSA.Create();
         algorithm.ImportRSAPrivateKey(data, out bytesRead);
         return new RsaPrivateKey(algorithm);
     }
@@ -45,10 +45,20 @@ public sealed partial class RsaPrivateKey
     /// Imports the key data into a new <see cref="RSA"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="RSA"/> instance containing the imported key data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid RSA private key.</exception>
     private RSA ImportKeyData()
     {
-        RSA algorithm = RSA.Create();
-        algorithm.ImportRSAPrivateKey(KeyData, out int _);
-        return algorithm;
+        byte[] keyData = KeyData;
+
+        try
+        {
+            RSA algorithm = RSA.Create();
+            algorithm.ImportRSAPrivateKey(keyData, out int _);
+            return algorithm;
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

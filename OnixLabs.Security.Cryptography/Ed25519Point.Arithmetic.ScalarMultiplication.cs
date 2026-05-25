@@ -58,13 +58,13 @@ internal readonly partial struct Ed25519Point
     }
 
     /// <summary>
-    /// Performs a branch-free conditional swap. If <paramref name="condition"/> is 1 the inputs are exchanged;
-    /// if 0 they pass through unchanged. The same memory writes happen in both cases, so the
+    /// Performs a branch-free conditional swap. If the low bit of <paramref name="condition"/> is 1 the inputs
+    /// are exchanged; if 0 they pass through unchanged. The same memory writes happen in both cases, so the
     /// observable instruction trace does not depend on <paramref name="condition"/>.
     /// </summary>
     /// <param name="a">The first curve point that is potentially swapped with <paramref name="b"/>.</param>
     /// <param name="b">The second curve point that is potentially swapped with <paramref name="a"/>.</param>
-    /// <param name="condition">The swap condition; zero leaves the inputs unchanged, non-zero exchanges them.</param>
+    /// <param name="condition">The swap condition; expected to be 0 or 1. The low bit drives the swap: 0 leaves the inputs unchanged, 1 exchanges them.</param>
     private static void ConditionalSwap(ref Ed25519Point a, ref Ed25519Point b, ulong condition)
     {
         Ed25519FieldElement newAx = Ed25519FieldElement.ConditionalSelect(a.x, b.x, condition);

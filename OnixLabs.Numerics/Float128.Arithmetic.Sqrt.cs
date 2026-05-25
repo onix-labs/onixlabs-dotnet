@@ -22,16 +22,14 @@ public readonly partial struct Float128
     /// Computes the square root of the specified <see cref="Float128"/> value, rounded to nearest, ties-to-even per IEEE 754.
     /// </summary>
     /// <param name="value">The value whose square root is to be computed.</param>
-    /// <returns>Returns the correctly-rounded square root of <paramref name="value"/>; <see cref="NaN"/> for negative inputs or NaN; preserves the sign of zero.</returns>
+    /// <returns>Returns the square root of <paramref name="value"/>, faithfully rounded to within one unit in the last place (ULP); <see cref="NaN"/> for negative inputs or NaN; preserves the sign of zero.</returns>
     /// <remarks>
-    /// The implementation uses Newton-Raphson iteration on top of the bit-twiddled <see cref="Multiply(Float128, Float128)"/> and
-    /// <see cref="Divide(Float128, Float128)"/> primitives. Starting from a power-of-two initial estimate derived from the unbiased
-    /// exponent, six iterations are sufficient to reach binary128 precision because Newton-Raphson on square root converges
-    /// quadratically.
+    /// The implementation uses Newton-Raphson iteration seeded from an exponent-derived power-of-two estimate that stays valid across the full binary128 range.
+    /// Because the iteration rounds at each step and applies no final residual correction, the result is faithfully rounded to within 1 ULP rather than guaranteed correctly-rounded.
     /// </remarks>
     public static Float128 Sqrt(Float128 value)
     {
-        if (IsNaN(value)) return NaN;
+        if (IsNaN(value)) return value;
         if (IsZero(value)) return value;
         if (IsNegative(value)) return NaN;
         if (IsPositiveInfinity(value)) return value;
@@ -43,11 +41,13 @@ public readonly partial struct Float128
         UInt128 initialEstimateBits = (UInt128)(uint)(halvedExponent + ExponentBias) << BiasedExponentShift;
         Float128 estimate = new(initialEstimateBits);
 
-        Float128 half = One / Two;
+        Float128 half = Half;
 
-        for (int iteration = 0; iteration < 8; iteration++)
+        for (int iteration = 0; iteration < 12; iteration++)
         {
-            estimate = (estimate + value / estimate) * half;
+            Float128 next = (estimate + value / estimate) * half;
+            if (next == estimate) break;
+            estimate = next;
         }
 
         return estimate;

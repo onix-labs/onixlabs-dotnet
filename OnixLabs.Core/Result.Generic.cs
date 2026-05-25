@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -191,7 +192,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
         if (this is Success<T> { Value: IAsyncDisposable disposable })
-            await disposable.DisposeAsync();
+            await disposable.DisposeAsync().ConfigureAwait(false);
 
         GC.SuppressFinalize(this);
     }
@@ -230,7 +231,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    public Exception GetExceptionOrDefault(Exception defaultException) => this is Failure<T> failure ? failure.Exception : defaultException;
+    public Exception GetExceptionOrDefault(Exception defaultException) => GetExceptionOrDefault() ?? defaultException;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
@@ -240,7 +241,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or <see cref="None{T}"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    public Optional<Exception> GetExceptionOrNone() => this is Failure<T> failure ? failure.Exception : Optional<Exception>.None;
+    public Optional<Exception> GetExceptionOrNone() => GetExceptionOrDefault();
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
@@ -250,8 +251,8 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    /// <exception cref="InvalidOperationException">If the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
-    public Exception GetExceptionOrThrow() => this is Failure<T> failure ? failure.Exception : throw new InvalidOperationException("The current result is not in a failure state.");
+    /// <exception cref="InvalidOperationException">Thrown when the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
+    public Exception GetExceptionOrThrow() => CheckNotNull(GetExceptionOrDefault(), "The current result is in a success state; no exception to retrieve.");
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;
@@ -282,7 +283,14 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying value of the current <see cref="Result{T}"/> instance;
     /// otherwise throws the underlying exception if the current <see cref="Result{T}"/> is in a failed stated.
     /// </returns>
-    public T GetValueOrThrow() => this is Success<T> success ? success.Value : throw GetExceptionOrThrow();
+    public T GetValueOrThrow()
+    {
+        if (this is Success<T> success)
+            return success.Value;
+
+        Throw(); // We know this is Failure<T>; preserves the original stack trace via ExceptionDispatchInfo.
+        return default!; // unreachable
+    }
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance as an <see langword="out"/> parameter.
@@ -832,11 +840,14 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.
     /// </summary>
-    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
+    /// <remarks>
+    /// The original stack trace of the underlying exception is preserved via
+    /// <see cref="ExceptionDispatchInfo"/>; the rethrow point is recorded as a continuation.
+    /// </remarks>
     public void Throw()
     {
         if (this is Failure<T> failure)
-            throw failure.Exception;
+            ExceptionDispatchInfo.Capture(failure.Exception).Throw();
     }
 
     /// <inheritdoc/>

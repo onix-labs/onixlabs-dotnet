@@ -72,7 +72,7 @@ public readonly partial struct NumberInfo
     /// Serves as a hash code function for this instance.
     /// This method implements the <see cref="NumberInfoEqualityComparer.Strict"/> comparer.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for this instance.</returns>
     public override int GetHashCode() => NumberInfoEqualityComparer.Strict.GetHashCode(this);
 
     /// <summary>

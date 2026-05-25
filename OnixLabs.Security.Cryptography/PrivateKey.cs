@@ -65,5 +65,6 @@ public abstract partial class PrivateKey : ICryptoPrimitive<PrivateKey>, IDispos
     /// Gets the cryptographic private key data.
     /// </summary>
     /// <value>The decrypted byte array containing the cryptographic private key data.</value>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
     protected byte[] KeyData => protectedData.Decrypt(field);
 }

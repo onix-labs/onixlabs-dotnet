@@ -114,4 +114,34 @@ public sealed class MerkleTreeGenericTests
         Assert.Equal(a, b);
         Assert.Equal(a.Hash, b.Hash);
     }
+
+    [Fact(DisplayName = "MerkleTree.ToMerkleTree should produce a non-generic Merkle tree whose hash code is consistent with equality")]
+    public void MerkleTreeToMerkleTreeShouldProduceANonGenericMerkleTreeWhoseHashCodeIsConsistentWithEquality()
+    {
+        // Given
+        MerkleTree<MerkleNode> a = MerkleTree.Create(setA, Algorithm);
+
+        // When
+        MerkleTree b = a.ToMerkleTree(Algorithm);
+
+        // Then
+        Assert.True(b.Equals(a));
+        Assert.Equal(a.GetHashCode(), b.GetHashCode());
+    }
+
+    [Fact(DisplayName = "Generic and non-generic Merkle trees with the same root hash should be symmetrically equal")]
+    public void GenericAndNonGenericMerkleTreesWithTheSameRootHashShouldBeSymmetricallyEqual()
+    {
+        // Given
+        MerkleTree<MerkleNode> a = MerkleTree.Create(setA, Algorithm);
+        MerkleTree b = a.ToMerkleTree(Algorithm);
+
+        // When
+        bool aEqualsB = a.Equals((object)b);
+        bool bEqualsA = b.Equals((object)a);
+
+        // Then
+        Assert.True(aEqualsB);
+        Assert.True(bEqualsA);
+    }
 }

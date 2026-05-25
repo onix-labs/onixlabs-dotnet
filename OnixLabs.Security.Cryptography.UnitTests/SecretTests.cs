@@ -251,4 +251,40 @@ public sealed class SecretTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "Default Secret should not throw when disposed")]
+    public void DefaultSecretShouldNotThrowWhenDisposed()
+    {
+        // Given
+        Secret candidate = default;
+
+        // When / Then
+        candidate.Dispose();
+    }
+
+    [Fact(DisplayName = "Default Secret should return an empty span")]
+    public void DefaultSecretShouldReturnAnEmptySpan()
+    {
+        // Given
+        Secret candidate = default;
+
+        // When
+        ReadOnlySpan<byte> actual = candidate.AsReadOnlySpan();
+
+        // Then
+        Assert.True(actual.IsEmpty);
+    }
+
+    [Fact(DisplayName = "Default Secret should return an empty string")]
+    public void DefaultSecretShouldReturnAnEmptyString()
+    {
+        // Given
+        Secret candidate = default;
+
+        // When
+        string actual = candidate.ToString();
+
+        // Then
+        Assert.Equal(string.Empty, actual);
+    }
 }

@@ -41,5 +41,10 @@ public sealed class OptionalEqualityComparer<T>(EqualityComparer<T>? valueEquali
     }
 
     /// <inheritdoc/>
-    public int GetHashCode(Optional<T> obj) => obj.GetHashCode();
+    public int GetHashCode(Optional<T> obj)
+    {
+        // ReSharper disable once ConvertIfStatementToReturnStatement
+        if (obj is not Some<T> some) return 0;
+        return (valueEqualityComparer ?? EqualityComparer<T>.Default).GetHashCode(some.Value);
+    }
 }

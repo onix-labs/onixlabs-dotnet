@@ -39,4 +39,17 @@ public sealed class GenericMathFactorialTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "GenericMath.Factorial should not overflow its loop counter at the type maximum")]
+    public void GenericMathFactorialShouldNotOverflowCounterAtTypeMaximum()
+    {
+        // Before the BigInteger-counter fix this looped forever, because incrementing a byte counter past
+        // byte.MaxValue wraps to zero. The result must equal the same factorial computed with a wider type.
+
+        // When
+        BigInteger actual = GenericMath.Factorial(byte.MaxValue);
+
+        // Then
+        Assert.Equal(GenericMath.Factorial(255), actual);
+    }
 }

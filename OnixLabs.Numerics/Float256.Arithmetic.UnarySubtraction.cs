@@ -16,8 +16,16 @@ namespace OnixLabs.Numerics;
 
 public readonly partial struct Float256
 {
+    /// <summary>Computes the unary subtraction of the specified <see cref="Float256"/> value.</summary>
+    /// <param name="value">The value for which to perform unary subtraction.</param>
+    /// <returns>Returns the negation of <paramref name="value"/>; toggles the sign bit.</returns>
+    /// <remarks>
+    /// Negation toggles the sign bit only; NaN bit patterns are preserved (with their sign bit flipped).
+    /// </remarks>
+    public static Float256 UnarySubtract(Float256 value) => new(value.Bits ^ SignMask);
+
     /// <summary>Returns the negation of the specified <see cref="Float256"/> value.</summary>
     /// <param name="value">The value to negate.</param>
     /// <returns>Returns the negation of <paramref name="value"/>; toggles the sign bit.</returns>
-    public static Float256 operator -(Float256 value) => new(value.Bits ^ SignMask);
+    public static Float256 operator -(Float256 value) => UnarySubtract(value);
 }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -34,7 +35,7 @@ internal sealed partial class NumberInfoFormatter
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     private readonly StringBuilder builder = new();
     private readonly NumberFormatInfo numberFormat;
-    private readonly IEnumerable<char> allowedFormats;
+    private readonly SearchValues<char> allowedFormats;
     private NumberInfo value;
 
     /// <summary>
@@ -47,7 +48,7 @@ internal sealed partial class NumberInfoFormatter
     {
         this.value = value;
         numberFormat = NumberFormatInfo.GetInstance(formatProvider);
-        this.allowedFormats = allowedFormats.Select(char.ToUpperInvariant);
+        this.allowedFormats = SearchValues.Create(allowedFormats.Select(char.ToUpperInvariant).ToArray());
     }
 
     /// <summary>

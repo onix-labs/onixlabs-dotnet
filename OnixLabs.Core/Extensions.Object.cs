@@ -30,6 +30,7 @@ namespace OnixLabs.Core;
 /// <summary>
 /// Provides extension methods for <see cref="object"/> instances.
 /// </summary>
+// ReSharper disable ConvertToExtensionBlock
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class ObjectExtensions
 {
@@ -47,6 +48,7 @@ public static class ObjectExtensions
     /// <param name="action">The action into which the current <paramref name="value"/> will be passed.</param>
     /// <typeparam name="T">The underlying type of the current value.</typeparam>
     /// <returns>Returns the current <paramref name="value"/> once the specified <see cref="Action{T}"/> has been executed.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="action"/> is <see langword="null"/>.</exception>
     public static T Apply<T>(this T value, Action<T> action) where T : class
     {
         RequireNotNull(action, "Action must not be null.");
@@ -61,79 +63,12 @@ public static class ObjectExtensions
     /// <param name="function">The function into which the current <paramref name="value"/> will be passed.</param>
     /// <typeparam name="T">The underlying type of the current value.</typeparam>
     /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> is <see langword="null"/>.</exception>
     public static T Apply<T>(this T value, Func<T, T> function) where T : struct
     {
         RequireNotNull(function, "Function must not be null.");
         return function(value);
     }
-
-    /// <summary>
-    /// Compares the current <typeparamref name="T"/> instance with the specified <typeparamref name="T"/> instance.
-    /// </summary>
-    /// <param name="left">The <paramref name="left"/> <typeparamref name="T"/> instance to compare.</param>
-    /// <param name="right">The <paramref name="right"/> <typeparamref name="T"/> instance to compare.</param>
-    /// <typeparam name="T">The underlying type of the current <typeparamref name="T"/>.</typeparam>
-    /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
-    public static int CompareToNullable<T>(this T left, T? right) where T : struct, IComparable<T> =>
-        right.HasValue ? left.CompareTo(right.Value) : 1;
-
-    /// <summary>
-    /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
-    /// </summary>
-    /// <param name="left">The <paramref name="left"/> <see cref="IComparable{T}"/> instance to compare.</param>
-    /// <param name="right">The <paramref name="right"/> <see cref="Object"/> instance to compare.</param>
-    /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
-    /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
-    /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
-    public static int CompareToObject<T>(this IComparable<T> left, object? right) => right switch
-    {
-        null => 1,
-        T other => left.CompareTo(other),
-        _ => throw new ArgumentException($"Object must be of type {typeof(T).FullName}", nameof(right))
-    };
-
-    /// <summary>
-    /// Compares the current <see cref="IComparable{T}"/> instance with the specified <see cref="Object"/> instance.
-    /// </summary>
-    /// <param name="left">The <paramref name="left"/> <see cref="IComparable{T}"/> instance to compare.</param>
-    /// <param name="right">The <paramref name="right"/> <see cref="Object"/> instance to compare.</param>
-    /// <typeparam name="T">The underlying type of the current <see cref="IComparable{T}"/>.</typeparam>
-    /// <returns>Returns a signed integer that indicates the relative order of the objects being compared.</returns>
-    /// <exception cref="ArgumentException">If the specified object is not <see langword="null"/>, or of the specified type.</exception>
-    public static int CompareToObject<T>(this T left, object? right) where T : IComparable<T> => right switch
-    {
-        null => 1,
-        T other => left.CompareTo(other),
-        _ => throw new ArgumentException($"Object must be of type {typeof(T).FullName}", nameof(right))
-    };
-
-    /// <summary>
-    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, inclusive of the specified minimum and maximum values.
-    /// </summary>
-    /// <param name="value">The value to test.</param>
-    /// <param name="min">The inclusive minimum value.</param>
-    /// <param name="max">The inclusive maximum value.</param>
-    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
-    /// <returns>
-    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
-    /// inclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
-    /// </returns>
-    public static bool IsWithinRangeInclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
-        value.CompareTo(min) is 0 or 1 && value.CompareTo(max) is 0 or -1;
-
-    /// <summary>
-    /// Determines whether the current <see cref="IComparable{T}"/> value falls within range, exclusive of the specified minimum and maximum values.
-    /// </summary>
-    /// <param name="value">The value to test.</param>
-    /// <param name="min">The exclusive minimum value.</param>
-    /// <param name="max">The exclusive maximum value.</param>
-    /// <typeparam name="T">The underlying <see cref="IComparable{T}"/> type.</typeparam>
-    /// <returns>
-    /// Returns <see langword="true"/> if the current <see cref="IComparable{T}"/> value falls within range,
-    /// exclusive of the specified minimum and maximum values; otherwise, <see langword="false"/>.
-    /// </returns>
-    public static bool IsWithinRangeExclusive<T>(this T value, T min, T max) where T : IComparable<T> =>
-        value.CompareTo(min) is 1 && value.CompareTo(max) is -1;
 
     /// <summary>
     /// Calls the specified <see cref="Func{T, TResult}"/> with the current <paramref name="value"/> as its argument and returns the result.
@@ -143,6 +78,7 @@ public static class ObjectExtensions
     /// <typeparam name="TSource">The underlying type of the current value.</typeparam>
     /// <typeparam name="TResult">The underlying type of the result value.</typeparam>
     /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> is <see langword="null"/>.</exception>
     public static TResult Let<TSource, TResult>(this TSource value, Func<TSource, TResult> function)
     {
         RequireNotNull(function, "Function must not be null.");
@@ -152,8 +88,8 @@ public static class ObjectExtensions
     /// <summary>
     /// Gets a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.
     /// </summary>
-    /// <remarks>This method is designed specifically for record-like objects and may produce undesirable results when applied to primitive-like objects.</remarks>
     /// <param name="value">The current <see cref="Object"/> instance.</param>
+    /// <remarks>This method is designed specifically for record-like objects and may produce undesirable results when applied to primitive-like objects.</remarks>
     /// <returns>Returns a record-like <see cref="String"/> representation of the current <see cref="Object"/> instance.</returns>
     public static string ToRecordString(this object? value)
     {
@@ -211,7 +147,7 @@ public static class ObjectExtensions
     /// <summary>
     /// Obtains a <see cref="String"/> representation of the current <see cref="Object"/>, or a string literal null if the current object is <see langword="null"/>.
     /// </summary>
-    /// <param name="value">The current <see cref="Object"/> from which to obtain a <see cref="String"/> representation.</param>
+    /// <param name="value">The current <see cref="Object"/> instance.</param>
     /// <returns>Returns a <see cref="String"/> representation of the current <see cref="Object"/>, or a string literal null if the current object is <see langword="null"/>.</returns>
     public static string ToStringOrNull(this object? value) => value?.ToString() ?? Null;
 

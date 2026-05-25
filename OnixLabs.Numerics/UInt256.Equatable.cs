@@ -43,7 +43,7 @@ public readonly partial struct UInt256
     /// <summary>
     /// Serves as the hash code function for this instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for the current instance.</returns>
     /// <remarks>
     /// Hashes every byte of the 256-bit representation rather than combining the upper and lower
     /// <see cref="UInt128"/> hashes: <see cref="ulong.GetHashCode"/> XORs its two 32-bit halves, which

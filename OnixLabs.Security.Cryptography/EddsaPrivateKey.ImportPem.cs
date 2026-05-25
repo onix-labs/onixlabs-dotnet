@@ -79,10 +79,12 @@ public sealed partial class EddsaPrivateKey
     /// </summary>
     /// <param name="pem">The PEM-encoded text to decode.</param>
     /// <returns>Returns a tuple containing the PEM label and the decoded DER bytes.</returns>
-    /// <exception cref="CryptographicException">Thrown when the Base64 payload cannot be decoded into the expected number of bytes.</exception>
+    /// <exception cref="CryptographicException">Thrown when the input does not contain a PEM-encoded value, or the Base64 payload cannot be decoded into the expected number of bytes.</exception>
     private static (string Label, byte[] Der) DecodePem(ReadOnlySpan<char> pem)
     {
-        PemFields fields = PemEncoding.Find(pem);
+        if (!PemEncoding.TryFind(pem, out PemFields fields))
+            throw new CryptographicException("The specified input does not contain a PEM-encoded value.");
+
         string label = pem[fields.Label].ToString();
         byte[] der = new byte[fields.DecodedDataLength];
 

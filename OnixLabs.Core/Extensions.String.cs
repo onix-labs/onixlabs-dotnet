@@ -297,7 +297,7 @@ public static class StringExtensions
         /// If the default value is <see langword="null"/>, then the current <see cref="String"/> instance is returned.
         /// </returns>
         public string SubstringAfterLast(string delimiter, string? defaultValue = null, StringComparison comparison = DefaultComparison) =>
-            receiver.SubstringAfterIndex(receiver.LastIndexOf(delimiter, comparison), 1, defaultValue);
+            receiver.SubstringAfterIndex(receiver.LastIndexOf(delimiter, comparison), delimiter.Length, defaultValue);
 
         /// <summary>
         /// Obtains a sub-string before the nth occurrence of the specified character within the current <see cref="String"/> instance.
@@ -397,6 +397,7 @@ public static class StringExtensions
         /// <param name="provider">An object that provides culture-specific formatting information.</param>
         /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
         /// <returns>Returns a new <see cref="DateTime"/> instance parsed from the current <see cref="String"/> instance.</returns>
+        /// <exception cref="FormatException">Thrown when the current <see cref="String"/> instance is not a recognised <see cref="DateTime"/>.</exception>
         public DateTime ToDateTime(IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles) =>
             DateTime.Parse(receiver, provider, styles);
 
@@ -406,6 +407,7 @@ public static class StringExtensions
         /// <param name="provider">An object that provides culture-specific formatting information.</param>
         /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
         /// <returns>Returns a new <see cref="DateOnly"/> instance parsed from the current <see cref="String"/> instance.</returns>
+        /// <exception cref="FormatException">Thrown when the current <see cref="String"/> instance is not a recognised <see cref="DateOnly"/>.</exception>
         public DateOnly ToDateOnly(IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles) =>
             DateOnly.Parse(receiver, provider, styles);
 
@@ -415,6 +417,7 @@ public static class StringExtensions
         /// <param name="provider">An object that provides culture-specific formatting information.</param>
         /// <param name="styles">A bit-wise combination of enumeration values that indicate the style elements that can be present.</param>
         /// <returns>Returns a new <see cref="TimeOnly"/> instance parsed from the current <see cref="String"/> instance.</returns>
+        /// <exception cref="FormatException">Thrown when the current <see cref="String"/> instance is not a recognised <see cref="TimeOnly"/>.</exception>
         public TimeOnly ToTimeOnly(IFormatProvider? provider = null, DateTimeStyles styles = DefaultStyles) =>
             TimeOnly.Parse(receiver, provider, styles);
 

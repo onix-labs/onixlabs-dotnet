@@ -143,7 +143,7 @@ public readonly partial struct Float128
     /// <param name="style">The <see cref="NumberStyles"/> permitted within the mantissa portion.</param>
     /// <param name="provider">An object that provides culture-specific information.</param>
     /// <param name="result">When this method returns, contains the parsed <see cref="BigDecimal"/> if successful; otherwise, the default value.</param>
-    /// <returns><see langword="true"/> if the value was parsed successfully; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if the value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     private static bool TryParseBigDecimalWithExponent(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider, out BigDecimal result)
     {
         int exponentMarkerIndex = -1;
@@ -186,7 +186,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="mantissa">The <see cref="BigDecimal"/> mantissa.</param>
     /// <param name="decimalExponent">The signed decimal exponent.</param>
-    /// <returns>The <see cref="BigDecimal"/> value obtained after applying <paramref name="decimalExponent"/>.</returns>
+    /// <returns>Returns the <see cref="BigDecimal"/> value obtained after applying <paramref name="decimalExponent"/>.</returns>
     private static BigDecimal ApplyDecimalExponent(BigDecimal mantissa, int decimalExponent)
     {
         if (decimalExponent == 0) return mantissa;
@@ -214,7 +214,7 @@ public readonly partial struct Float128
     /// <param name="trimmed">The trimmed character span to inspect.</param>
     /// <param name="numberFormat">The culture-specific number format providing the special-value symbols.</param>
     /// <param name="result">When this method returns, contains the matched special <see cref="Float128"/> value if successful; otherwise, the default value.</param>
-    /// <returns><see langword="true"/> if <paramref name="trimmed"/> matches a special value; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if <paramref name="trimmed"/> matches a special value; otherwise, <see langword="false"/>.</returns>
     private static bool TryParseSpecialValue(ReadOnlySpan<char> trimmed, NumberFormatInfo numberFormat, out Float128 result)
     {
         if (trimmed.SequenceEqual(numberFormat.NaNSymbol.AsSpan()))

@@ -26,8 +26,10 @@ public abstract partial class PrivateKey
     public abstract NamedPrivateKey ToNamedPrivateKey();
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
     public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
     public override string ToString() => ToString(Base16FormatProvider.Invariant);
 }

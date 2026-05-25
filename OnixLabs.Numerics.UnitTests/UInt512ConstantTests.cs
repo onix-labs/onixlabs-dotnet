@@ -112,4 +112,40 @@ public sealed class UInt512ConstantTests
         BigInteger expected = ((BigInteger.One << 512) - BigInteger.One) - ((BigInteger.One << 256) - BigInteger.One);
         Assert.Equal(expected, (BigInteger)value);
     }
+
+    [Fact(DisplayName = "UInt512.AdditiveIdentity should equal Zero")]
+    public void UInt512AdditiveIdentityShouldEqualZero()
+    {
+        Assert.Equal(UInt512.Zero, AdditiveIdentity<UInt512, UInt512>());
+    }
+
+    [Fact(DisplayName = "UInt512.MultiplicativeIdentity should equal One")]
+    public void UInt512MultiplicativeIdentityShouldEqualOne()
+    {
+        Assert.Equal(UInt512.One, MultiplicativeIdentity<UInt512, UInt512>());
+    }
+
+    [Fact(DisplayName = "UInt512.Radix should be 2")]
+    public void UInt512RadixShouldBeTwo()
+    {
+        Assert.Equal(2, Radix<UInt512>());
+    }
+
+    [Fact(DisplayName = "UInt512 IMinMaxValue members should equal the public MinValue and MaxValue")]
+    public void UInt512MinMaxValueInterfaceMembersShouldEqualPublicConstants()
+    {
+        Assert.Equal(UInt512.MinValue, MinValue<UInt512>());
+        Assert.Equal(UInt512.MaxValue, MaxValue<UInt512>());
+        Assert.Equal((BigInteger.One << 512) - BigInteger.One, (BigInteger)MaxValue<UInt512>());
+    }
+
+    private static TResult AdditiveIdentity<T, TResult>() where T : IAdditiveIdentity<T, TResult> => T.AdditiveIdentity;
+
+    private static TResult MultiplicativeIdentity<T, TResult>() where T : IMultiplicativeIdentity<T, TResult> => T.MultiplicativeIdentity;
+
+    private static int Radix<T>() where T : INumberBase<T> => T.Radix;
+
+    private static T MinValue<T>() where T : IMinMaxValue<T> => T.MinValue;
+
+    private static T MaxValue<T>() where T : IMinMaxValue<T> => T.MaxValue;
 }

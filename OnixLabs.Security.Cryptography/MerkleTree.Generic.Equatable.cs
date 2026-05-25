@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class MerkleTree<T>
@@ -22,10 +20,10 @@ public abstract partial class MerkleTree<T>
     public bool Equals(MerkleTree<T>? other) => ReferenceEquals(this, other) || other is not null && other.Hash == Hash;
 
     /// <inheritdoc/>
-    public override bool Equals(object? obj) => Equals(obj as MerkleTree<T>);
+    public override bool Equals(object? obj) => Equals(obj as MerkleTree);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(GetType(), Hash);
+    public override int GetHashCode() => Hash.GetHashCode();
 
     /// <inheritdoc/>
     public static bool operator ==(MerkleTree<T>? left, MerkleTree<T>? right) => Equals(left, right);

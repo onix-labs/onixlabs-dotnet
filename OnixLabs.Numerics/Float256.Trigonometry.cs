@@ -18,9 +18,11 @@ namespace OnixLabs.Numerics;
 
 public readonly partial struct Float256
 {
-    /// <summary>Computes the sine of the specified angle in radians.</summary>
-    /// <param name="value">The angle, in radians.</param>
-    /// <returns>Returns the sine of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the sine of the specified <see cref="Float256"/> value, where the angle is expressed in radians.
+    /// </summary>
+    /// <param name="value">The angle, in radians, for which to compute the sine.</param>
+    /// <returns>Returns the sine of <paramref name="value"/>; NaN for NaN or infinity; preserves the sign of zero.</returns>
     public static Float256 Sin(Float256 value)
     {
         if (IsNaN(value) || IsInfinity(value)) return NaN;
@@ -30,9 +32,11 @@ public readonly partial struct Float256
         return SinFromQuadrant(r, quadrant);
     }
 
-    /// <summary>Computes the cosine of the specified angle in radians.</summary>
-    /// <param name="value">The angle, in radians.</param>
-    /// <returns>Returns the cosine of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the cosine of the specified <see cref="Float256"/> value, where the angle is expressed in radians.
+    /// </summary>
+    /// <param name="value">The angle, in radians, for which to compute the cosine.</param>
+    /// <returns>Returns the cosine of <paramref name="value"/>; NaN for NaN or infinity; <see cref="One"/> for zero.</returns>
     public static Float256 Cos(Float256 value)
     {
         if (IsNaN(value) || IsInfinity(value)) return NaN;
@@ -42,9 +46,11 @@ public readonly partial struct Float256
         return CosFromQuadrant(r, quadrant);
     }
 
-    /// <summary>Computes the tangent of the specified angle in radians.</summary>
-    /// <param name="value">The angle, in radians.</param>
-    /// <returns>Returns the tangent of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the tangent of the specified <see cref="Float256"/> value, where the angle is expressed in radians.
+    /// </summary>
+    /// <param name="value">The angle, in radians, for which to compute the tangent.</param>
+    /// <returns>Returns the tangent of <paramref name="value"/>; NaN for NaN or infinity; preserves the sign of zero.</returns>
     public static Float256 Tan(Float256 value)
     {
         if (IsNaN(value) || IsInfinity(value)) return NaN;
@@ -54,9 +60,11 @@ public readonly partial struct Float256
         return sin / cos;
     }
 
-    /// <summary>Computes the sine and cosine of the specified angle in radians.</summary>
-    /// <param name="value">The angle, in radians.</param>
-    /// <returns>Returns a tuple containing the sine and cosine.</returns>
+    /// <summary>
+    /// Computes the sine and cosine of the specified <see cref="Float256"/> value, where the angle is expressed in radians.
+    /// </summary>
+    /// <param name="value">The angle, in radians, for which to compute the sine and cosine.</param>
+    /// <returns>Returns a tuple containing the sine and cosine of <paramref name="value"/>.</returns>
     public static (Float256 Sin, Float256 Cos) SinCos(Float256 value)
     {
         if (IsNaN(value) || IsInfinity(value)) return (NaN, NaN);
@@ -66,9 +74,11 @@ public readonly partial struct Float256
         return SinCosFromQuadrant(r, quadrant);
     }
 
-    /// <summary>Computes the sine of π multiplied by the specified value.</summary>
-    /// <param name="value">The angle, in half-turns.</param>
-    /// <returns>Returns the sine of <c>π · value</c>.</returns>
+    /// <summary>
+    /// Computes the sine of π multiplied by the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The angle, in half-turns, for which to compute the sine.</param>
+    /// <returns>Returns the sine of <c>π · value</c>; NaN for NaN or infinity; preserves the sign of zero.</returns>
     public static Float256 SinPi(Float256 value)
     {
         if (IsNaN(value) || IsInfinity(value)) return NaN;
@@ -78,9 +88,11 @@ public readonly partial struct Float256
         return Sin(value * Pi);
     }
 
-    /// <summary>Computes the cosine of π multiplied by the specified value.</summary>
-    /// <param name="value">The angle, in half-turns.</param>
-    /// <returns>Returns the cosine of <c>π · value</c>.</returns>
+    /// <summary>
+    /// Computes the cosine of π multiplied by the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The angle, in half-turns, for which to compute the cosine.</param>
+    /// <returns>Returns the cosine of <c>π · value</c>; NaN for NaN or infinity; <see cref="One"/> for zero.</returns>
     public static Float256 CosPi(Float256 value)
     {
         if (IsNaN(value) || IsInfinity(value)) return NaN;
@@ -89,9 +101,11 @@ public readonly partial struct Float256
         return Cos(value * Pi);
     }
 
-    /// <summary>Computes the tangent of π multiplied by the specified value.</summary>
-    /// <param name="value">The angle, in half-turns.</param>
-    /// <returns>Returns the tangent of <c>π · value</c>.</returns>
+    /// <summary>
+    /// Computes the tangent of π multiplied by the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The angle, in half-turns, for which to compute the tangent.</param>
+    /// <returns>Returns the tangent of <c>π · value</c>; NaN for NaN or infinity; preserves the sign of zero.</returns>
     public static Float256 TanPi(Float256 value)
     {
         if (IsNaN(value) || IsInfinity(value)) return NaN;
@@ -101,8 +115,10 @@ public readonly partial struct Float256
         return Tan(value * Pi);
     }
 
-    /// <summary>Computes the sine and cosine of π multiplied by the specified value.</summary>
-    /// <param name="value">The angle, in half-turns.</param>
+    /// <summary>
+    /// Computes the sine and cosine of π multiplied by the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The angle, in half-turns, for which to compute the sine and cosine.</param>
     /// <returns>Returns a tuple containing the sine and cosine of <c>π · value</c>.</returns>
     public static (Float256 SinPi, Float256 CosPi) SinCosPi(Float256 value)
     {
@@ -132,7 +148,7 @@ public readonly partial struct Float256
     /// </summary>
     /// <param name="r">The reduced argument in <c>[-π/4, π/4]</c>.</param>
     /// <returns>Returns the sine of <paramref name="r"/> rounded to <see cref="Float256"/> precision.</returns>
-    private static Float256 SinSeries(Float256 r)
+    private static Float256 SinSeries(in Float256 r)
     {
         Float256 sum = r;
         Float256 term = r;
@@ -153,7 +169,7 @@ public readonly partial struct Float256
     /// </summary>
     /// <param name="r">The reduced argument in <c>[-π/4, π/4]</c>.</param>
     /// <returns>Returns the cosine of <paramref name="r"/> rounded to <see cref="Float256"/> precision.</returns>
-    private static Float256 CosSeries(Float256 r)
+    private static Float256 CosSeries(in Float256 r)
     {
         Float256 sum = One;
         Float256 term = One;
@@ -175,7 +191,7 @@ public readonly partial struct Float256
     /// <param name="r">The reduced argument produced by <see cref="ReducePiOver2"/>.</param>
     /// <param name="quadrant">The quadrant index in the range <c>[0, 3]</c>.</param>
     /// <returns>Returns the sine of the original angle.</returns>
-    private static Float256 SinFromQuadrant(Float256 r, int quadrant) => quadrant switch
+    private static Float256 SinFromQuadrant(in Float256 r, int quadrant) => quadrant switch
     {
         0 => SinSeries(r),
         1 => CosSeries(r),
@@ -189,7 +205,7 @@ public readonly partial struct Float256
     /// <param name="r">The reduced argument produced by <see cref="ReducePiOver2"/>.</param>
     /// <param name="quadrant">The quadrant index in the range <c>[0, 3]</c>.</param>
     /// <returns>Returns the cosine of the original angle.</returns>
-    private static Float256 CosFromQuadrant(Float256 r, int quadrant) => quadrant switch
+    private static Float256 CosFromQuadrant(in Float256 r, int quadrant) => quadrant switch
     {
         0 => CosSeries(r),
         1 => -SinSeries(r),
@@ -203,7 +219,7 @@ public readonly partial struct Float256
     /// <param name="r">The reduced argument produced by <see cref="ReducePiOver2"/>.</param>
     /// <param name="quadrant">The quadrant index in the range <c>[0, 3]</c>.</param>
     /// <returns>Returns a tuple containing the sine and cosine of the original angle.</returns>
-    private static (Float256 Sin, Float256 Cos) SinCosFromQuadrant(Float256 r, int quadrant)
+    private static (Float256 Sin, Float256 Cos) SinCosFromQuadrant(in Float256 r, int quadrant)
     {
         Float256 sin = SinSeries(r);
         Float256 cos = CosSeries(r);

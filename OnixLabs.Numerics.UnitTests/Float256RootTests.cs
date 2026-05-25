@@ -56,6 +56,24 @@ public sealed class Float256RootTests
         AssertCloseToReference((Float256)(-3), Float256.Cbrt((Float256)(-27)), ulpTolerance: 4);
     }
 
+    [Fact(DisplayName = "Float256.Cbrt of a value beyond the double range should not saturate to infinity")]
+    public void Float256CbrtBeyondDoubleRangeShouldNotSaturate()
+    {
+        Float256 value = Float256.ScaleB(Float256.One, 3000);
+        Float256 expected = Float256.ScaleB(Float256.One, 1000);
+        Assert.Equal(expected.Bits.UpperBits, Float256.Cbrt(value).Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, Float256.Cbrt(value).Bits.LowerBits);
+    }
+
+    [Fact(DisplayName = "Float256.Cbrt of a value below the double range should not collapse to zero")]
+    public void Float256CbrtBelowDoubleRangeShouldNotCollapse()
+    {
+        Float256 value = Float256.ScaleB(Float256.One, -3000);
+        Float256 expected = Float256.ScaleB(Float256.One, -1000);
+        Assert.Equal(expected.Bits.UpperBits, Float256.Cbrt(value).Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, Float256.Cbrt(value).Bits.LowerBits);
+    }
+
     [Theory(DisplayName = "Float256.Cbrt should match Math.Cbrt within double precision")]
     [InlineData(0.5)]
     [InlineData(2.0)]

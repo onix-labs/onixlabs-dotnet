@@ -176,4 +176,23 @@ public sealed class HashAlgorithmExtensionTests
         Assert.False(result);
         Assert.Equal(0, bytesWritten);
     }
+
+    [Fact(DisplayName = "HashAlgorithm.TryComputeHash should produce the expected result with two rounds into an oversized destination")]
+    public void HashAlgorithmTryComputeHashShouldProduceExpectedResultWithTwoRoundsIntoOversizedDestination()
+    {
+        // Given
+        using HashAlgorithm algorithm = SHA256.Create();
+        byte[] data = "abc123".ToByteArray();
+        Span<byte> destination = stackalloc byte[64]; // Larger than the 32-byte hash size.
+        const string expected = "efaaeb3b1d1d85e8587ef0527ca43b9575ce8149ba1ee41583d3d19bd130daf8";
+
+        // When
+        bool result = algorithm.TryComputeHash(data, destination, 0, data.Length, 2, out int bytesWritten);
+        string actual = Convert.ToHexString(destination[..bytesWritten]).ToLower();
+
+        // Then
+        Assert.True(result);
+        Assert.Equal(32, bytesWritten);
+        Assert.Equal(expected, actual);
+    }
 }

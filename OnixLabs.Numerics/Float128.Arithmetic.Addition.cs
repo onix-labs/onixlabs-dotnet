@@ -68,7 +68,7 @@ public readonly partial struct Float128
     /// <param name="sigA">The full significand of the first operand including its implicit leading bit.</param>
     /// <param name="expB">The unbiased exponent of the second operand.</param>
     /// <param name="sigB">The full significand of the second operand including its implicit leading bit.</param>
-    /// <returns>The correctly rounded <see cref="Float128"/> sum of the two magnitudes.</returns>
+    /// <returns>Returns the correctly rounded <see cref="Float128"/> sum of the two magnitudes.</returns>
     private static Float128 AddMagnitudes(bool sign, int expA, UInt128 sigA, int expB, UInt128 sigB)
     {
         if (expA < expB)
@@ -107,7 +107,7 @@ public readonly partial struct Float128
     /// <param name="signRight">The sign of the right operand.</param>
     /// <param name="expRight">The unbiased exponent of the right operand.</param>
     /// <param name="sigRight">The full significand of the right operand including its implicit leading bit.</param>
-    /// <returns>The correctly rounded <see cref="Float128"/> difference of the two magnitudes.</returns>
+    /// <returns>Returns the correctly rounded <see cref="Float128"/> difference of the two magnitudes.</returns>
     private static Float128 SubtractMagnitudes(bool signLeft, int expLeft, UInt128 sigLeft, bool signRight, int expRight, UInt128 sigRight)
     {
         int magnitudeComparison;

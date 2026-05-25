@@ -35,6 +35,8 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// <param name="value">The unscaled integer value from which to construct a <see cref="BigDecimal"/> value.</param>
     /// <param name="scale">The scale of the <see cref="BigDecimal"/> value.</param>
     /// <param name="mode">The scale mode that determines how the specified value should be scaled.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="scale"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ScaleMode"/> value.</exception>
     public BigDecimal(BigInteger value, int scale = 0, ScaleMode mode = default)
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
@@ -47,6 +49,7 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// </summary>
     /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/> value.</param>
     /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ConversionMode"/> value.</exception>
     public BigDecimal(float value, ConversionMode mode = default)
     {
         RequireIsDefined(mode);
@@ -58,7 +61,32 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     /// </summary>
     /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/> value.</param>
     /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ConversionMode"/> value.</exception>
     public BigDecimal(double value, ConversionMode mode = default)
+    {
+        RequireIsDefined(mode);
+        number = value.ToNumberInfo(mode);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
+    /// </summary>
+    /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/> value.</param>
+    /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ConversionMode"/> value.</exception>
+    public BigDecimal(Float128 value, ConversionMode mode = default)
+    {
+        RequireIsDefined(mode);
+        number = value.ToNumberInfo(mode);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BigDecimal"/> struct.
+    /// </summary>
+    /// <param name="value">The floating-point value from which to construct a <see cref="BigDecimal"/> value.</param>
+    /// <param name="mode">The conversion mode that determines whether the floating-point value should be converted from its binary or decimal representation.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ConversionMode"/> value.</exception>
+    public BigDecimal(Float256 value, ConversionMode mode = default)
     {
         RequireIsDefined(mode);
         number = value.ToNumberInfo(mode);

@@ -19,8 +19,10 @@ namespace OnixLabs.Security.Cryptography;
 public abstract partial class PrivateKey
 {
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => KeyData;
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
     public ReadOnlySpan<byte> AsReadOnlySpan() => KeyData;
 }

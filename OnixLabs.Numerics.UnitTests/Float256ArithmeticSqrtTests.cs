@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class Float256ArithmeticSqrtTests
@@ -20,6 +22,15 @@ public sealed class Float256ArithmeticSqrtTests
     public void Float256SqrtOfNaNShouldReturnNaN()
     {
         Assert.True(Float256.IsNaN(Float256.Sqrt(Float256.NaN)));
+    }
+
+    [Fact(DisplayName = "Float256.Sqrt of NaN should preserve the NaN bit pattern")]
+    public void Float256SqrtOfNaNShouldPreservePayload()
+    {
+        Float256 payloadNaN = new(Float256.NaN.Bits | new UInt256(UInt128.Zero, UInt128.One));
+        Assert.True(Float256.IsNaN(payloadNaN));
+        Assert.Equal(payloadNaN.Bits.UpperBits, Float256.Sqrt(payloadNaN).Bits.UpperBits);
+        Assert.Equal(payloadNaN.Bits.LowerBits, Float256.Sqrt(payloadNaN).Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Sqrt of negative finite should return NaN")]
@@ -66,6 +77,16 @@ public sealed class Float256ArithmeticSqrtTests
         Float256 expectedFloat = expected;
         Assert.Equal(expectedFloat.Bits.UpperBits, actual.Bits.UpperBits);
         Assert.Equal(expectedFloat.Bits.LowerBits, actual.Bits.LowerBits);
+    }
+
+    [Fact(DisplayName = "Float256.Sqrt of a value beyond the double range should not saturate to infinity")]
+    public void Float256SqrtBeyondDoubleRangeShouldNotSaturate()
+    {
+        Float256 value = Float256.ScaleB(Float256.One, 2000);
+        Float256 expected = Float256.ScaleB(Float256.One, 1000);
+        Float256 actual = Float256.Sqrt(value);
+        Assert.Equal(expected.Bits.UpperBits, actual.Bits.UpperBits);
+        Assert.Equal(expected.Bits.LowerBits, actual.Bits.LowerBits);
     }
 
     [Fact(DisplayName = "Float256.Sqrt of 2 should produce a value close to 1.414...")]

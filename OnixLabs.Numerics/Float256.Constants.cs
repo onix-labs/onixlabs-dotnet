@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 using System.Numerics;
 
 namespace OnixLabs.Numerics;
@@ -129,7 +130,7 @@ public readonly partial struct Float256
     /// Gets the <see cref="Float256"/> value representing the integer ten.
     /// </summary>
     /// <value>The <see cref="Float256"/> value representing the integer ten.</value>
-    public static Float256 Ten => Parse("10");
+    public static Float256 Ten => Parse("10", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Gets the smallest positive finite <see cref="Float256"/> value greater than zero (a subnormal).
@@ -175,75 +176,78 @@ public readonly partial struct Float256
 
     /// <summary>Gets the natural logarithmic base, specified by the constant, e.</summary>
     /// <value>The <see cref="Float256"/> value of Euler's number, rounded to binary256 precision.</value>
+    /// <remarks>The constant is parsed from a 108-significant-digit decimal representation to guarantee a bit-correct binary256 result.</remarks>
     public static Float256 E => CachedE;
 
     /// <summary>Gets the ratio of the circumference of a circle to its diameter, specified by the constant, π.</summary>
     /// <value>The <see cref="Float256"/> value of π, rounded to binary256 precision.</value>
+    /// <remarks>The constant is parsed from a 108-significant-digit decimal representation to guarantee a bit-correct binary256 result.</remarks>
     public static Float256 Pi => CachedPi;
 
     /// <summary>Gets the number of radians in one turn, specified by the constant, τ.</summary>
     /// <value>The <see cref="Float256"/> value of τ, rounded to binary256 precision.</value>
+    /// <remarks>The constant is parsed from a 108-significant-digit decimal representation to guarantee a bit-correct binary256 result.</remarks>
     public static Float256 Tau => CachedTau;
 
     /// <summary>
     /// The natural exponential constant <see cref="E"/>, cached at binary256 precision to avoid repeated parsing.
     /// </summary>
-    private static readonly Float256 CachedE = Parse("2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852516642742746");
+    private static readonly Float256 CachedE = Parse("2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852516642742746", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The mathematical constant π, cached at binary256 precision to avoid repeated parsing.
     /// </summary>
-    private static readonly Float256 CachedPi = Parse("3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214");
+    private static readonly Float256 CachedPi = Parse("3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The mathematical constant τ (one full turn in radians), cached at binary256 precision to avoid repeated parsing.
     /// </summary>
-    private static readonly Float256 CachedTau = Parse("6.28318530717958647692528676655900576839433879875021164194988918461563281257241799725606965068423413596429");
+    private static readonly Float256 CachedTau = Parse("6.28318530717958647692528676655900576839433879875021164194988918461563281257241799725606965068423413596429", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The natural logarithm of two, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 Ln2 = Parse("0.69314718055994530941723212145817656807550013436025525412068000949339362196969471560586332699641868754200");
+    internal static readonly Float256 Ln2 = Parse("0.69314718055994530941723212145817656807550013436025525412068000949339362196969471560586332699641868754200", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The natural logarithm of ten, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 Ln10 = Parse("2.30258509299404568401799145468436420760110148862877297603332790096757260967735248023599720508959829834197");
+    internal static readonly Float256 Ln10 = Parse("2.30258509299404568401799145468436420760110148862877297603332790096757260967735248023599720508959829834197", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The base-2 logarithm of <see cref="E"/>, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 Log2E = Parse("1.44269504088896340735992468100189213742664595415298593413544940693110921918118507988552662289350634449699");
+    internal static readonly Float256 Log2E = Parse("1.44269504088896340735992468100189213742664595415298593413544940693110921918118507988552662289350634449699", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The base-10 logarithm of <see cref="E"/>, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 Log10E = Parse("0.43429448190325182765112891891660508229439700580366656611445378316586464920887077472922494933843174831870");
+    internal static readonly Float256 Log10E = Parse("0.43429448190325182765112891891660508229439700580366656611445378316586464920887077472922494933843174831870", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The square root of two, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 SqrtTwo = Parse("1.41421356237309504880168872420969807856967187537694807317667973799073247846210703885038753432764157273501");
+    internal static readonly Float256 SqrtTwo = Parse("1.41421356237309504880168872420969807856967187537694807317667973799073247846210703885038753432764157273501", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The constant π divided by two, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 PiOver2 = Parse("1.57079632679489661923132169163975144209858469968755291048747229615390820314310449931401741267105853399107");
+    internal static readonly Float256 PiOver2 = Parse("1.57079632679489661923132169163975144209858469968755291048747229615390820314310449931401741267105853399107", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The constant π divided by four, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 PiOver4 = Parse("0.78539816339744830961566084581987572104929234984377645524373614807695410157155224965700870633552926699553");
+    internal static readonly Float256 PiOver4 = Parse("0.78539816339744830961566084581987572104929234984377645524373614807695410157155224965700870633552926699553", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The constant two divided by π, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 TwoOverPi = Parse("0.63661977236758134307553505349005744813783858296182579499066937623558719053934030817241015149997655711782");
+    internal static readonly Float256 TwoOverPi = Parse("0.63661977236758134307553505349005744813783858296182579499066937623558719053934030817241015149997655711782", CultureInfo.InvariantCulture);
 
     /// <summary>
     /// The constant three times π divided by four, rounded to binary256 precision.
     /// </summary>
-    internal static readonly Float256 ThreePiOver4 = Parse("2.35619449019234492884698253745962716314787704953132936573120453390050120206321674897644612900658560098661");
+    internal static readonly Float256 ThreePiOver4 = Parse("2.35619449019234492884698253745962716314787704953132936573120453390050120206321674897644612900658560098661", CultureInfo.InvariantCulture);
 
     /// <inheritdoc cref="IAdditiveIdentity{TSelf,TResult}.AdditiveIdentity"/>
     static Float256 IAdditiveIdentity<Float256, Float256>.AdditiveIdentity => Zero;

@@ -25,6 +25,7 @@ public readonly partial struct NumberInfo
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">An object that provides culture-specific information about the specified value.</param>
     /// <returns>Returns a new <see cref="NumberInfo"/> instance parsed from the specified value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a correct format.</exception>
     public static NumberInfo Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>
@@ -34,6 +35,7 @@ public readonly partial struct NumberInfo
     /// <param name="style">A bitwise combination of number styles that can be present in the specified value.</param>
     /// <param name="provider">An object that provides culture-specific information about the specified value.</param>
     /// <returns>Returns a new <see cref="NumberInfo"/> instance parsed from the specified value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a correct format.</exception>
     public static NumberInfo Parse(string value, NumberStyles style, IFormatProvider? provider = null) => Parse(value.AsSpan(), style, provider);
 
     /// <summary>
@@ -42,6 +44,7 @@ public readonly partial struct NumberInfo
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">An object that provides culture-specific information about the specified value.</param>
     /// <returns>Returns a new <see cref="NumberInfo"/> instance parsed from the specified value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a correct format.</exception>
     public static NumberInfo Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null) => Parse(value, DefaultNumberStyles, provider);
 
     /// <summary>
@@ -51,10 +54,11 @@ public readonly partial struct NumberInfo
     /// <param name="style">A bitwise combination of number styles that can be present in the specified value.</param>
     /// <param name="provider">An object that provides culture-specific information about the specified value.</param>
     /// <returns>Returns a new <see cref="NumberInfo"/> instance parsed from the specified value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a correct format.</exception>
     // ReSharper disable once MemberCanBePrivate.Global
     public static NumberInfo Parse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider = null)
     {
-        CultureInfo info = provider as CultureInfo ?? DefaultCulture;
+        IFormatProvider info = provider ?? CultureInfo.CurrentCulture;
         if (TryParse(value, style, info, out NumberInfo result)) return result;
         throw new FormatException($"The input string '{value}' was not in a correct format.");
     }
@@ -105,7 +109,7 @@ public readonly partial struct NumberInfo
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
-    public static bool TryParse(ReadOnlySpan<char> value, out NumberInfo result) => TryParse(value, DefaultCulture, out result);
+    public static bool TryParse(ReadOnlySpan<char> value, out NumberInfo result) => TryParse(value, CultureInfo.CurrentCulture, out result);
 
     /// <summary>
     /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="NumberInfo"/> value.
@@ -133,7 +137,7 @@ public readonly partial struct NumberInfo
     // ReSharper disable once MemberCanBePrivate.Global
     public static bool TryParse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider, out NumberInfo result)
     {
-        CultureInfo info = provider as CultureInfo ?? DefaultCulture;
+        IFormatProvider info = provider ?? CultureInfo.CurrentCulture;
         // ReSharper disable once HeapView.ObjectAllocation.Evident
         NumberInfoParser parser = new(style, info);
         return parser.TryParse(value, out result);

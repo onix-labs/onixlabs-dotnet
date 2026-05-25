@@ -54,7 +54,7 @@ public readonly partial struct Float128
     /// <summary>
     /// Serves as the hash code function for this instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for this instance.</returns>
     /// <remarks>
     /// The hash code collapses positive and negative zero to a single value, and collapses any NaN bit pattern
     /// to the canonical quiet NaN, so values that compare equal via <see cref="Equals(Float128)"/> share a hash code.

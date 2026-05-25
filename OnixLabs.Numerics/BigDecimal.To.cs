@@ -20,6 +20,11 @@ namespace OnixLabs.Numerics;
 public readonly partial struct BigDecimal
 {
     /// <summary>
+    /// The set of format specifiers supported when formatting a <see cref="BigDecimal"/> value.
+    /// </summary>
+    private static readonly char[] SupportedFormats = ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X'];
+
+    /// <summary>
     /// Gets a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.
     /// </summary>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.</returns>
@@ -28,15 +33,15 @@ public readonly partial struct BigDecimal
     /// <summary>
     /// Formats the value of the current instance using the default format.
     /// </summary>
-    /// <returns>The value of the current instance in the default format.</returns>
-    public override string ToString() => ToString(DefaultNumberFormat, DefaultCulture);
+    /// <returns>Returns the value of the current instance in the default format.</returns>
+    public override string ToString() => ToString(DefaultNumberFormat, CultureInfo.CurrentCulture);
 
     /// <summary>
     /// Formats the value of the current instance using the specified format.
     /// </summary>
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
+    /// <returns>Returns the value of the current instance in the specified format.</returns>
     public string ToString(string? format, IFormatProvider? formatProvider = null) => ToString((format ?? DefaultNumberFormat).AsSpan(), formatProvider);
 
     /// <summary>
@@ -44,13 +49,13 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="format">The format to use, or null to use the default format.</param>
     /// <param name="formatProvider">The provider to use to format the value.</param>
-    /// <returns>The value of the current instance in the specified format.</returns>
+    /// <returns>Returns the value of the current instance in the specified format.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
     public string ToString(ReadOnlySpan<char> format, IFormatProvider? formatProvider = null)
     {
-        CultureInfo info = formatProvider as CultureInfo ?? DefaultCulture;
-        // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-        NumberInfoFormatter formatter = new(number, info, ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X']);
+        IFormatProvider info = formatProvider ?? CultureInfo.CurrentCulture;
+        // ReSharper disable once HeapView.ObjectAllocation.Evident
+        NumberInfoFormatter formatter = new(number, info, SupportedFormats);
         return formatter.Format(format);
     }
 }

@@ -87,6 +87,42 @@ public class ResultEqualityComparerTests
         Assert.False(result2);
     }
 
+    [Fact(DisplayName = "ResultEqualityComparer.Equals should return false when comparing Success(default) and Failure for value types")]
+    public void ResultEqualityComparerEqualsShouldReturnFalseWhenComparingSuccessDefaultAndFailureForValueTypes()
+    {
+        // Given
+        Exception exception = new("Failure");
+        Result<int> success = 0;
+        Result<int> failure = exception;
+        ResultEqualityComparer<int> comparer = new();
+
+        // When
+        bool result1 = comparer.Equals(success, failure);
+        bool result2 = comparer.Equals(failure, success);
+
+        // Then
+        Assert.False(result1);
+        Assert.False(result2);
+    }
+
+    [Fact(DisplayName = "ResultEqualityComparer.Equals should return false when comparing Success(default) and Failure for booleans")]
+    public void ResultEqualityComparerEqualsShouldReturnFalseWhenComparingSuccessDefaultAndFailureForBooleans()
+    {
+        // Given
+        Exception exception = new("Failure");
+        Result<bool> success = false;
+        Result<bool> failure = exception;
+        ResultEqualityComparer<bool> comparer = new();
+
+        // When
+        bool result1 = comparer.Equals(success, failure);
+        bool result2 = comparer.Equals(failure, success);
+
+        // Then
+        Assert.False(result1);
+        Assert.False(result2);
+    }
+
     [Fact(DisplayName = "ResultEqualityComparer.Equals should return true when comparing identical Success values")]
     public void ResultEqualityComparerEqualsShouldReturnTrueWhenComparingIdenticalSomeValues()
     {
@@ -170,9 +206,26 @@ public class ResultEqualityComparerTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "ResultEqualityComparer.GetHashCode should use the supplied custom comparer when comparing Success values")]
+    public void ResultEqualityComparerGetHashCodeShouldUseSuppliedCustomComparerWhenComparingSuccessValues()
+    {
+        // Given
+        Result<string> upper = "HELLO";
+        Result<string> lower = "hello";
+        ResultEqualityComparer<string> comparer = new(new CaseInsensitiveStringComparer());
+
+        // When
+        int upperHash = comparer.GetHashCode(upper);
+        int lowerHash = comparer.GetHashCode(lower);
+
+        // Then
+        Assert.True(comparer.Equals(upper, lower));
+        Assert.Equal(upperHash, lowerHash);
+    }
+
     private sealed class CaseInsensitiveStringComparer : EqualityComparer<string>
     {
         public override bool Equals(string? x, string? y) => string.Equals(x, y, StringComparison.InvariantCultureIgnoreCase);
-        public override int GetHashCode(string obj) => obj.GetHashCode();
+        public override int GetHashCode(string obj) => StringComparer.InvariantCultureIgnoreCase.GetHashCode(obj);
     }
 }

@@ -33,11 +33,11 @@ public sealed class Int512GetWriteTests
         Assert.Equal(0, Int512.Zero.GetShortestBitLength());
     }
 
-    [Fact(DisplayName = "Int512.GetShortestBitLength of One should be 2 (1 bit for value, 1 for sign)")]
-    public void Int512GetShortestBitLengthOfOneShouldBe2()
+    [Fact(DisplayName = "Int512.GetShortestBitLength of One should be 1 (no sign bit for non-negative values)")]
+    public void Int512GetShortestBitLengthOfOneShouldBe1()
     {
-        // For two's-complement, +1 needs at least 2 bits: a sign bit (0) and the value bit (1).
-        Assert.Equal(2, Int512.One.GetShortestBitLength());
+        // Matching Int128: a non-negative value's shortest two's-complement length excludes the sign bit, so +1 needs 1 bit.
+        Assert.Equal(1, Int512.One.GetShortestBitLength());
     }
 
     [Fact(DisplayName = "Int512.GetShortestBitLength of NegativeOne should be 1 (just the sign bit)")]
@@ -46,10 +46,11 @@ public sealed class Int512GetWriteTests
         Assert.Equal(1, Int512.NegativeOne.GetShortestBitLength());
     }
 
-    [Fact(DisplayName = "Int512.GetShortestBitLength of MaxValue should be 512")]
-    public void Int512GetShortestBitLengthOfMaxValueShouldBe512()
+    [Fact(DisplayName = "Int512.GetShortestBitLength of MaxValue should be 511 (no sign bit for non-negative values)")]
+    public void Int512GetShortestBitLengthOfMaxValueShouldBe511()
     {
-        Assert.Equal(512, Int512.MaxValue.GetShortestBitLength());
+        // MaxValue is 2^511 - 1: 511 value bits, no sign bit (matching Int128.MaxValue -> 127).
+        Assert.Equal(511, Int512.MaxValue.GetShortestBitLength());
     }
 
     [Fact(DisplayName = "Int512.GetShortestBitLength of MinValue should be 512")]
@@ -149,5 +150,46 @@ public sealed class Int512GetWriteTests
         Assert.True(Int512.TryReadBigEndian(buffer, isUnsigned: true, out Int512 value));
         // The all-FF bit pattern read as signed-from-unsigned yields the same bit pattern (NegativeOne).
         Assert.Equal(Int512.NegativeOne, value);
+    }
+
+    [Theory(DisplayName = "Int512.GetShortestBitLength should match the Int128 sibling for in-range values")]
+    [InlineData(0L)]
+    [InlineData(1L)]
+    [InlineData(-1L)]
+    [InlineData(-2L)]
+    [InlineData(255L)]
+    [InlineData(-128L)]
+    [InlineData(long.MaxValue)]
+    [InlineData(long.MinValue)]
+    public void Int512GetShortestBitLengthShouldMatchInt128Sibling(long value)
+    {
+        // The honest oracle is the BCL IBinaryInteger sibling Int128 (NOT BigInteger.GetBitLength,
+        // which differs by one for negative values).
+        int expected = ShortestBitLength((Int128)value);
+        Assert.Equal(expected, ((Int512)value).GetShortestBitLength());
+    }
+
+    private static int ShortestBitLength<T>(T value) where T : IBinaryInteger<T> => value.GetShortestBitLength();
+
+    [Fact(DisplayName = "Int512.GetShortestBitLength of a large positive value crossing the 256-bit limb should match the highest set bit index plus one")]
+    public void Int512GetShortestBitLengthOfUpperLimbValueShouldMatch()
+    {
+        // 2^400 + 1 has its highest set bit at index 400; positive, so 401 bits.
+        Int512 value = (Int512)((BigInteger.One << 400) + BigInteger.One);
+        Assert.Equal(401, value.GetShortestBitLength());
+    }
+
+    [Fact(DisplayName = "Int512.TryWriteBigEndian of a positive value should match BigInteger big-endian bytes")]
+    public void Int512TryWriteBigEndianShouldMatchBigIntegerBytes()
+    {
+        Int512 value = (Int512)(BigInteger.Pow(2, 400) + 987654321);
+        Span<byte> buffer = stackalloc byte[64];
+        Assert.True(value.TryWriteBigEndian(buffer, out _));
+
+        BigInteger big = (BigInteger)value;
+        byte[] bigBytes = big.ToByteArray(isUnsigned: false, isBigEndian: true);
+        byte[] expected = new byte[64];
+        Array.Copy(bigBytes, 0, expected, 64 - bigBytes.Length, bigBytes.Length);
+        Assert.Equal(expected, buffer.ToArray());
     }
 }

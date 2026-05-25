@@ -21,22 +21,22 @@ public readonly partial struct UInt512
 {
     /// <summary>Determines whether the specified <see cref="UInt512"/> value represents zero.</summary>
     /// <param name="value">The value.</param>
-    /// <returns>True if zero; otherwise false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value is zero; otherwise, <see langword="false"/>.</returns>
     public static bool IsZero(UInt512 value) => UInt256.IsZero(value.UpperBits) && UInt256.IsZero(value.LowerBits);
 
     /// <summary>Determines whether the specified <see cref="UInt512"/> value is even.</summary>
     /// <param name="value">The value.</param>
-    /// <returns>True if even; otherwise false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value is even; otherwise, <see langword="false"/>.</returns>
     public static bool IsEvenInteger(UInt512 value) => UInt256.IsEvenInteger(value.LowerBits);
 
     /// <summary>Determines whether the specified <see cref="UInt512"/> value is odd.</summary>
     /// <param name="value">The value.</param>
-    /// <returns>True if odd; otherwise false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value is odd; otherwise, <see langword="false"/>.</returns>
     public static bool IsOddInteger(UInt512 value) => UInt256.IsOddInteger(value.LowerBits);
 
     /// <summary>Determines whether the specified <see cref="UInt512"/> value is a positive integer power of two.</summary>
     /// <param name="value">The value.</param>
-    /// <returns>True if a positive power of two; otherwise false.</returns>
+    /// <returns>Returns <see langword="true"/> if the specified value is a positive power of two; otherwise, <see langword="false"/>.</returns>
     public static bool IsPow2(UInt512 value)
     {
         if (IsZero(value)) return false;

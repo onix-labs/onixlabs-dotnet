@@ -46,7 +46,7 @@ public sealed class BigDecimalOrdinalityComparer : IComparer<BigDecimal>, ICompa
     /// <param name="x">The first <see cref="BigDecimal"/> value to compare.</param>
     /// <param name="y">The second <see cref="BigDecimal"/> value to compare.</param>
     /// <returns>Returns a signed integer that indicates the relative order of the <see cref="BigDecimal"/> values being compared.</returns>
-    /// <exception cref="ArgumentException">If either <paramref name="x"/> or <paramref name="y"/> are not of type <see cref="BigDecimal"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when either <paramref name="x"/> or <paramref name="y"/> are not of type <see cref="BigDecimal"/>.</exception>
     public int Compare(object? x, object? y)
     {
         if (x is not BigDecimal left) throw new ArgumentException($"Argument must be of type {nameof(BigDecimal)}", nameof(x));
@@ -69,7 +69,7 @@ public sealed class BigDecimalOrdinalityComparer : IComparer<BigDecimal>, ICompa
     /// <param name="left">The <paramref name="left"/> <see cref="BigDecimal"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> <see cref="BigDecimal"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="BigDecimal"/> value is greater than the <paramref name="right"/> <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsGreaterThan(BigDecimal left, BigDecimal right) => Compare(left, right) is 1;
+    public bool IsGreaterThan(BigDecimal left, BigDecimal right) => Compare(left, right) > 0;
 
     /// <summary>
     /// Determines whether the <paramref name="left"/> <see cref="BigDecimal"/> value is greater than, or equal to the <paramref name="right"/> <see cref="BigDecimal"/> value.
@@ -77,7 +77,7 @@ public sealed class BigDecimalOrdinalityComparer : IComparer<BigDecimal>, ICompa
     /// <param name="left">The <paramref name="left"/> <see cref="BigDecimal"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> <see cref="BigDecimal"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="BigDecimal"/> value is greater than, or equal to the <paramref name="right"/> <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsGreaterThanOrEqual(BigDecimal left, BigDecimal right) => Compare(left, right) is 0 or 1;
+    public bool IsGreaterThanOrEqual(BigDecimal left, BigDecimal right) => Compare(left, right) >= 0;
 
     /// <summary>
     /// Determines whether the <paramref name="left"/> <see cref="BigDecimal"/> value is less than the <paramref name="right"/> <see cref="BigDecimal"/> value.
@@ -85,7 +85,7 @@ public sealed class BigDecimalOrdinalityComparer : IComparer<BigDecimal>, ICompa
     /// <param name="left">The <paramref name="left"/> <see cref="BigDecimal"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> <see cref="BigDecimal"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="BigDecimal"/> value is less than the <paramref name="right"/> <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsLessThan(BigDecimal left, BigDecimal right) => Compare(left, right) is -1;
+    public bool IsLessThan(BigDecimal left, BigDecimal right) => Compare(left, right) < 0;
 
     /// <summary>
     /// Determines whether the <paramref name="left"/> <see cref="BigDecimal"/> value is less than, or equal to the <paramref name="right"/> <see cref="BigDecimal"/> value.
@@ -93,5 +93,5 @@ public sealed class BigDecimalOrdinalityComparer : IComparer<BigDecimal>, ICompa
     /// <param name="left">The <paramref name="left"/> <see cref="BigDecimal"/> value to compare.</param>
     /// <param name="right">The <paramref name="right"/> <see cref="BigDecimal"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> <see cref="BigDecimal"/> value is less than, or equal to the <paramref name="right"/> <see cref="BigDecimal"/> value; otherwise, <see langword="false"/>.</returns>
-    public bool IsLessThanOrEqual(BigDecimal left, BigDecimal right) => Compare(left, right) is -1 or 0;
+    public bool IsLessThanOrEqual(BigDecimal left, BigDecimal right) => Compare(left, right) <= 0;
 }

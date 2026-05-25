@@ -27,7 +27,15 @@ public sealed partial class EcdsaPrivateKey
     {
         using ECDsa key = ECDsa.Create();
         byte[] keyData = key.ExportECPrivateKey();
-        return new EcdsaPrivateKey(keyData);
+
+        try
+        {
+            return new EcdsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 
     /// <summary>
@@ -35,11 +43,20 @@ public sealed partial class EcdsaPrivateKey
     /// </summary>
     /// <param name="curve">The elliptic curve from which to create a new ECDSA cryptographic private key.</param>
     /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance.</returns>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="curve"/> does not represent a valid elliptic curve.</exception>
     public static EcdsaPrivateKey Create(ECCurve curve)
     {
         using ECDsa key = ECDsa.Create(curve);
         byte[] keyData = key.ExportECPrivateKey();
-        return new EcdsaPrivateKey(keyData);
+
+        try
+        {
+            return new EcdsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 
     /// <summary>
@@ -47,10 +64,19 @@ public sealed partial class EcdsaPrivateKey
     /// </summary>
     /// <param name="parameters">The elliptic curve parameters from which to create a new ECDSA cryptographic private key.</param>
     /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance.</returns>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="parameters"/> does not represent a valid ECDSA private key.</exception>
     public static EcdsaPrivateKey Create(ECParameters parameters)
     {
         using ECDsa key = ECDsa.Create(parameters);
         byte[] keyData = key.ExportECPrivateKey();
-        return new EcdsaPrivateKey(keyData);
+
+        try
+        {
+            return new EcdsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

@@ -53,7 +53,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns a new <see cref="BigDecimal"/> instance parsed from the specified value.</returns>
     public static BigDecimal Parse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider = null)
     {
-        CultureInfo info = provider as CultureInfo ?? DefaultCulture;
+        IFormatProvider info = provider ?? CultureInfo.CurrentCulture;
         if (TryParse(value, style, info, out BigDecimal result)) return result;
         throw new FormatException($"The input string '{value}' was not in a correct format.");
     }
@@ -104,7 +104,7 @@ public readonly partial struct BigDecimal
     /// </param>
     /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
-    public static bool TryParse(ReadOnlySpan<char> value, out BigDecimal result) => TryParse(value, DefaultCulture, out result);
+    public static bool TryParse(ReadOnlySpan<char> value, out BigDecimal result) => TryParse(value, CultureInfo.CurrentCulture, out result);
 
     /// <summary>
     /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> value into a <see cref="BigDecimal"/> value.
@@ -131,7 +131,7 @@ public readonly partial struct BigDecimal
     /// <returns>Returns <see langword="true"/> if the specified value was parsed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool TryParse(ReadOnlySpan<char> value, NumberStyles style, IFormatProvider? provider, out BigDecimal result)
     {
-        CultureInfo info = provider as CultureInfo ?? DefaultCulture;
+        IFormatProvider info = provider ?? CultureInfo.CurrentCulture;
         // ReSharper disable once HeapView.ObjectAllocation.Evident
         NumberInfoParser parser = new(style, info);
 

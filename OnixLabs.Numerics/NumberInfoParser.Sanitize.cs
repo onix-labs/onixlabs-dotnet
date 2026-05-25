@@ -81,7 +81,7 @@ internal sealed partial class NumberInfoParser
         if (!hasTrailingPositiveSign) return true;
         if ((style & AllowTrailingSign) is 0) return false;
 
-        value = value.TrimStart(numberFormat.PositiveSign);
+        value = value.TrimEnd(numberFormat.PositiveSign);
         return true;
     }
 
@@ -103,7 +103,7 @@ internal sealed partial class NumberInfoParser
         if (!hasTrailingNegativeSign) return true;
         if ((style & AllowTrailingSign) is 0) return false;
 
-        value = value.TrimStart(numberFormat.NegativeSign);
+        value = value.TrimEnd(numberFormat.NegativeSign);
         return true;
     }
 

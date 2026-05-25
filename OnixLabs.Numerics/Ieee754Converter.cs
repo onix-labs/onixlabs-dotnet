@@ -14,10 +14,7 @@
 
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Numerics;
-using OnixLabs.Core;
-using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Numerics;
 
@@ -54,6 +51,48 @@ internal static class Ieee754Converter
     /// <param name="mode">The mode that specifies whether the value should be converted using its binary or decimal representation.</param>
     /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
     public static NumberInfo Convert(double value, ConversionMode mode)
+    {
+        RequireRealNumber(value);
+        RequireIsDefined(mode);
+
+        if (IsZeroOrOne(value, out NumberInfo result)) return result;
+
+        return mode switch
+        {
+            ConversionMode.Binary => ConvertFromBinary(value),
+            ConversionMode.Decimal => ConvertFromDecimal(value),
+            _ => throw new ArgumentOutOfRangeException(nameof(mode))
+        };
+    }
+
+    /// <summary>
+    /// Converts an IEEE 754 quadruple-precision binary floating-point number.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="mode">The mode that specifies whether the value should be converted using its binary or decimal representation.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
+    public static NumberInfo Convert(Float128 value, ConversionMode mode)
+    {
+        RequireRealNumber(value);
+        RequireIsDefined(mode);
+
+        if (IsZeroOrOne(value, out NumberInfo result)) return result;
+
+        return mode switch
+        {
+            ConversionMode.Binary => ConvertFromBinary(value),
+            ConversionMode.Decimal => ConvertFromDecimal(value),
+            _ => throw new ArgumentOutOfRangeException(nameof(mode))
+        };
+    }
+
+    /// <summary>
+    /// Converts an IEEE 754 octuple-precision binary floating-point number.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="mode">The mode that specifies whether the value should be converted using its binary or decimal representation.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
+    public static NumberInfo Convert(Float256 value, ConversionMode mode)
     {
         RequireRealNumber(value);
         RequireIsDefined(mode);
@@ -157,6 +196,76 @@ internal static class Ieee754Converter
     }
 
     /// <summary>
+    /// Converts an IEEE 754 quadruple-precision binary floating-point number using its binary representation.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
+    private static NumberInfo ConvertFromBinary(in Float128 value)
+    {
+        Float128.DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt128 significand);
+        Float128.NormalizeSubnormal(ref significand, ref unbiasedExponent);
+
+        int exponent = unbiasedExponent - Float128.TrailingSignificandBits;
+        BigInteger unscaledValue = significand;
+
+        while (exponent < 0 && unscaledValue.IsEven)
+        {
+            exponent++;
+            unscaledValue >>= 1;
+        }
+
+        if (sign) unscaledValue = -unscaledValue;
+        int scale = 0;
+
+        if (exponent < 0)
+        {
+            scale = -exponent;
+            unscaledValue *= BigInteger.Pow(5, scale);
+        }
+        else
+        {
+            unscaledValue <<= exponent;
+        }
+
+        return new NumberInfo(unscaledValue, scale);
+    }
+
+    /// <summary>
+    /// Converts an IEEE 754 octuple-precision binary floating-point number using its binary representation.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
+    private static NumberInfo ConvertFromBinary(in Float256 value)
+    {
+        Float256.DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
+        Float256.NormalizeSubnormal(ref significand, ref unbiasedExponent);
+
+        int exponent = unbiasedExponent - Float256.TrailingSignificandBits;
+        BigInteger unscaledValue = significand;
+
+        while (exponent < 0 && unscaledValue.IsEven)
+        {
+            exponent++;
+            unscaledValue >>= 1;
+        }
+
+        if (sign) unscaledValue = -unscaledValue;
+        int scale = 0;
+
+        if (exponent < 0)
+        {
+            scale = -exponent;
+            unscaledValue *= BigInteger.Pow(5, scale);
+        }
+        else
+        {
+            unscaledValue <<= exponent;
+        }
+
+        return new NumberInfo(unscaledValue, scale);
+    }
+
+    /// <summary>
     /// Converts an IEEE 754 binary floating-point number using its decimal representation.
     /// </summary>
     /// <param name="value">The value to convert.</param>
@@ -164,24 +273,10 @@ internal static class Ieee754Converter
     /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
     private static NumberInfo ConvertFromDecimal<T>(T value) where T : IBinaryFloatingPointIeee754<T>
     {
-        const char zero = '0';
-        const string format = "R";
-        const string delimiter = "E";
-        const StringComparison comparison = StringComparison.CurrentCultureIgnoreCase;
-
-        int exponent = int.Parse(value.ToString("E", NumberFormatInfo.CurrentInfo).SubstringAfterLast(delimiter, comparison: comparison));
-
-        string digits = value
-            .ToString(format, NumberFormatInfo.CurrentInfo)
-            .SubstringBeforeFirst(delimiter, comparison: comparison)
-            .Where(char.IsDigit)
-            .JoinToString(string.Empty)
-            .PadRight(int.Max(0, exponent + 1), zero);
-
-        BigInteger unscaledValue = BigInteger.Parse(digits) * T.Sign(value);
-        int scale = BigInteger.Abs(unscaledValue).ToString().Length - (exponent + 1);
-
-        return new NumberInfo(unscaledValue, scale);
+        // The "R" (round-trip) format yields the shortest decimal that maps back to the same binary value, which
+        // is exactly the Dragon4 representation we want. Parsing it with the invariant culture reuses the tested
+        // NumberInfo parser, which correctly applies the round-trip exponent to both the magnitude and the scale.
+        return NumberInfo.Parse(value.ToString("R", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
     }
 
     /// <summary>

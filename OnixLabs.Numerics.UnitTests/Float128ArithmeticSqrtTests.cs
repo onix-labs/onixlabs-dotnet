@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class Float128ArithmeticSqrtTests
@@ -20,6 +22,22 @@ public sealed class Float128ArithmeticSqrtTests
     public void Float128SqrtOfNaNShouldReturnNaN()
     {
         Assert.True(Float128.IsNaN(Float128.Sqrt(Float128.NaN)));
+    }
+
+    [Fact(DisplayName = "Float128.Sqrt of NaN should preserve the NaN bit pattern")]
+    public void Float128SqrtOfNaNShouldPreservePayload()
+    {
+        Float128 payloadNaN = new(Float128.NaN.Bits | UInt128.One);
+        Assert.True(Float128.IsNaN(payloadNaN));
+        Assert.Equal(payloadNaN.Bits, Float128.Sqrt(payloadNaN).Bits);
+    }
+
+    [Fact(DisplayName = "Float128.Sqrt of a value beyond the double range should not saturate to infinity")]
+    public void Float128SqrtBeyondDoubleRangeShouldNotSaturate()
+    {
+        Float128 value = Float128.ScaleB(Float128.One, 2000);
+        Float128 expected = Float128.ScaleB(Float128.One, 1000);
+        Assert.Equal(expected.Bits, Float128.Sqrt(value).Bits);
     }
 
     [Fact(DisplayName = "Float128.Sqrt of negative finite should return NaN")]

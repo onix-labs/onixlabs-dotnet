@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class Float128ArithmeticAbsTests
@@ -42,5 +44,22 @@ public sealed class Float128ArithmeticAbsTests
     public void Float128AbsShouldReturnNaNForNaN()
     {
         Assert.True(Float128.IsNaN(Float128.Abs(Float128.NaN)));
+    }
+
+    [Fact(DisplayName = "Float128.Sign should return -1, 0 and 1 for negative, zero and positive values")]
+    public void Float128SignShouldReturnExpectedValues()
+    {
+        Assert.Equal(1, Float128.Sign(Float128.One));
+        Assert.Equal(-1, Float128.Sign(Float128.NegativeOne));
+        Assert.Equal(0, Float128.Sign(Float128.Zero));
+        Assert.Equal(0, Float128.Sign(Float128.NegativeZero));
+        Assert.Equal(1, Float128.Sign(Float128.PositiveInfinity));
+        Assert.Equal(-1, Float128.Sign(Float128.NegativeInfinity));
+    }
+
+    [Fact(DisplayName = "Float128.Sign should throw for NaN")]
+    public void Float128SignShouldThrowForNaN()
+    {
+        Assert.Throws<ArithmeticException>(() => Float128.Sign(Float128.NaN));
     }
 }

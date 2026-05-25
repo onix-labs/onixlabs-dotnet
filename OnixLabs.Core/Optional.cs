@@ -61,8 +61,11 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// the specified value is not <see langword="default"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
     /// <remarks>
-    /// This method is similar to the <see cref="Some"/> method, however <see cref="Some"/> will treat <see langword="struct"/>
-    /// <see langword="default"/> values as present, whereas <see cref="Of"/> will treat them as absent.
+    /// This is "strip-default" wrapping: any <see langword="null"/> or <see langword="default"/> value collapses to
+    /// <see cref="None"/>, so <c>Of(0)</c>, <c>Of(Guid.Empty)</c> and <c>Of(default)</c> all return <see cref="None"/>.
+    /// By contrast, <see cref="Some"/> and the implicit conversion wrap any non-null value, including value-type defaults.
+    /// Prefer <see cref="Of(T)"/> when defaults should be treated as absent (e.g. dictionary-lookup or struct-default APIs);
+    /// prefer <see cref="Some"/> or the implicit conversion when only <see langword="null"/> should be absent.
     /// </remarks>
     /// <param name="value">The underlying optional value.</param>
     /// <returns>
@@ -77,6 +80,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
     /// <param name="value">The underlying optional value.</param>
+    /// <typeparam name="TStruct">The underlying value type of the optional value.</typeparam>
     /// <returns>
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
@@ -94,6 +98,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is <see langword="null"/>.</exception>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Some<T> Some(T value) => new(RequireNotNull(value, "Value must not be null."));
 
@@ -101,6 +106,11 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Creates a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
     /// the specified value is not <see langword="null"/>; otherwise, the underlying value is <see cref="None"/>.
     /// </summary>
+    /// <remarks>
+    /// For value-type <typeparamref name="T"/>, this preserves default values as <see cref="Some{T}"/>:
+    /// <c>Optional&lt;int&gt; opt = 0;</c> yields <see cref="Some{T}"/> with value <c>0</c>. This differs
+    /// from <see cref="Of(T)"/>, which treats value-type defaults as <see cref="None"/>.
+    /// </remarks>
     /// <param name="value">The underlying optional value.</param>
     /// <returns>
     /// Returns a new instance of the <see cref="Optional{T}"/> class, where the underlying value is present if
@@ -118,7 +128,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// Returns the underlying value of the specified <see cref="Optional{T}"/> instance;
     /// otherwise throws an <see cref="InvalidOperationException"/> if the value is absent.
     /// </returns>
-    /// <exception cref="InvalidOperationException">If the underlying value is absent.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the underlying value is absent.</exception>
     public static explicit operator T(Optional<T> value) => value.GetValueOrThrow();
 
     /// <summary>

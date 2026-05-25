@@ -46,14 +46,16 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<
     /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
     private Secret(byte[] value)
     {
+        using SHA256 algorithm = SHA256.Create();
         encryptedValue = protectedData.Encrypt(value);
-        hash = Hash.Compute(SHA256.Create(), value);
+        hash = Hash.Compute(algorithm, value);
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Secret"/> struct.
     /// </summary>
     /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
+    /// <exception cref="CryptographicException">Thrown when the hash of the secret value could not be computed.</exception>
     public Secret(ReadOnlySpan<byte> value) : this(value.ToArray())
     {
     }
@@ -62,6 +64,7 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<
     /// Initializes a new instance of the <see cref="Secret"/> struct.
     /// </summary>
     /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
+    /// <exception cref="CryptographicException">Thrown when the hash of the secret value could not be computed.</exception>
     public Secret(ReadOnlyMemory<byte> value) : this(value.ToArray())
     {
     }
@@ -70,6 +73,7 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<
     /// Initializes a new instance of the <see cref="Secret"/> struct.
     /// </summary>
     /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
+    /// <exception cref="CryptographicException">Thrown when the hash of the secret value could not be computed.</exception>
     public Secret(ReadOnlySequence<byte> value) : this(value.ToArray())
     {
     }

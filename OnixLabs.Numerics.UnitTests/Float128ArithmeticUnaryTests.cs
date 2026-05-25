@@ -49,4 +49,11 @@ public sealed class Float128ArithmeticUnaryTests
         Assert.Equal((+Float128.One).Bits, Float128.UnaryAdd(Float128.One).Bits);
         Assert.Equal((-Float128.One).Bits, Float128.UnarySubtract(Float128.One).Bits);
     }
+
+    [Fact(DisplayName = "Float128.Negate should mirror the unary minus operator")]
+    public void Float128NegateShouldMirrorUnaryMinusOperator()
+    {
+        Assert.Equal((-Float128.One).Bits, Float128.Negate(Float128.One).Bits);
+        Assert.Equal((-Float128.NegativeOne).Bits, Float128.Negate(Float128.NegativeOne).Bits);
+    }
 }

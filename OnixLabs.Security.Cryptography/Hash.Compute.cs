@@ -29,6 +29,7 @@ public readonly partial struct Hash
     /// <param name="data">The <see cref="byte"/> array data from which to compute a hash.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, byte[] data, int rounds = 1) =>
         algorithm.ComputeHash(data, rounds);
 
@@ -41,6 +42,7 @@ public readonly partial struct Hash
     /// <param name="count">The number of bytes in the array to use as data.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, byte[] data, int offset, int count, int rounds = 1) =>
         algorithm.ComputeHash(data, offset, count, rounds);
 
@@ -51,6 +53,7 @@ public readonly partial struct Hash
     /// <param name="data">The <see cref="ReadOnlySpan{T}"/> data from which to compute a hash.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<byte> data, int rounds = 1) =>
         algorithm.ComputeHash(data, rounds);
 
@@ -63,6 +66,7 @@ public readonly partial struct Hash
     /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<byte> data, int offset, int count, int rounds = 1) =>
         algorithm.ComputeHash(data, offset, count, rounds);
 
@@ -73,6 +77,7 @@ public readonly partial struct Hash
     /// <param name="stream">The <see cref="Stream"/> data from which to compute a hash.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, Stream stream, int rounds = 1) =>
         algorithm.ComputeHash(stream, rounds);
 
@@ -83,6 +88,7 @@ public readonly partial struct Hash
     /// <param name="data">The <see cref="IBinaryConvertible"/> data from which to compute a hash.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1) =>
         algorithm.ComputeHash(data, rounds);
 
@@ -93,6 +99,7 @@ public readonly partial struct Hash
     /// <param name="data">The <see cref="ISpanBinaryConvertible"/> data from which to compute a hash.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, ISpanBinaryConvertible data, int rounds = 1) =>
         algorithm.ComputeHash(data.AsReadOnlySpan(), rounds);
 
@@ -104,6 +111,7 @@ public readonly partial struct Hash
     /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
     /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
         algorithm.ComputeHash(data, encoding, rounds);
 }

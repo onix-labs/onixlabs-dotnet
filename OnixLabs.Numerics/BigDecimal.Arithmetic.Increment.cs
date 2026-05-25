@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Numerics;
-
 namespace OnixLabs.Numerics;
 
 public readonly partial struct BigDecimal
@@ -23,13 +21,7 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value to increment.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value incremented by one integral unit.</returns>
-    public static BigDecimal Increment(BigDecimal value)
-    {
-        BigInteger power = BigInteger.Pow(10, value.Scale);
-        (BigInteger quotient, BigInteger remainder) = BigInteger.DivRem(value.UnscaledValue, power);
-
-        return new BigDecimal((quotient + 1) * power + remainder, value.Scale);
-    }
+    public static BigDecimal Increment(BigDecimal value) => new(value.UnscaledValue + value.number.ScaleFactor, value.Scale);
 
     /// <summary>
     /// Increments the fractional component of the specified <see cref="BigDecimal"/> value by one.

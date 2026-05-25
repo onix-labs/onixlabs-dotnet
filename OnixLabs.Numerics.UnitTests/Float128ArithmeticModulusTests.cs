@@ -58,4 +58,30 @@ public sealed class Float128ArithmeticModulusTests
         Float128 expectedFloat = expected;
         Assert.Equal(expectedFloat.Bits, actual.Bits);
     }
+
+    [Theory(DisplayName = "Float128.Remainder should be exact when the quotient exceeds significand precision (regression)")]
+    [InlineData(120, 1)]  // 2^120 mod 3 = 1 (2^even ≡ 1 mod 3)
+    [InlineData(121, 2)]  // 2^121 mod 3 = 2 (2^odd  ≡ 2 mod 3)
+    [InlineData(200, 1)]
+    [InlineData(255, 2)]
+    public void Float128RemainderShouldBeExactForLargeQuotients(int exponent, int expectedRemainder)
+    {
+        // Given: 2^exponent (representable exactly) divided by 3, where the true quotient far exceeds the 113-bit significand.
+        Float128 dividend = Float128.ScaleB(Float128.One, exponent);
+        Float128 divisor = (Float128)3;
+
+        // When
+        Float128 actual = dividend % divisor;
+
+        // Then: the truncating remainder must equal the exact integer remainder, not collapse to zero.
+        Assert.Equal(((Float128)expectedRemainder).Bits, actual.Bits);
+    }
+
+    [Fact(DisplayName = "Float128.Remainder of a large negative dividend should carry the dividend sign")]
+    public void Float128RemainderLargeNegativeShouldCarrySign()
+    {
+        Float128 dividend = -Float128.ScaleB(Float128.One, 120); // -2^120
+        Float128 actual = dividend % (Float128)3;
+        Assert.Equal(((Float128)(-1)).Bits, actual.Bits);
+    }
 }

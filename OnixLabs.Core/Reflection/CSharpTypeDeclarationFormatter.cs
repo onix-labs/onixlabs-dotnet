@@ -65,12 +65,13 @@ internal static class CSharpTypeDeclarationFormatter
     /// Gets the type declaration for the current <see cref="Type"/> instance.
     /// </summary>
     /// <remarks>
-    /// Depending on the specified <see cref="TypeDeclarationFlags"/>, this method is capable or returning type declarations including
-    /// simple type names, namespace qualified types names, aliased types names, nullable shorthand notation, generic arguments, and value tuples.
+    /// Depending on the specified <see cref="TypeDeclarationFlags"/>, this method is capable of returning type declarations including
+    /// simple type names, namespace qualified type names, aliased type names, nullable shorthand notation, generic arguments, and value tuples.
     /// </remarks>
     /// <param name="type">The current <see cref="Type"/> instance from which to obtain the type declaration.</param>
     /// <param name="flags">The flags that specify how the type declaration should be formatted.</param>
     /// <returns>Returns the type declaration for the current <see cref="Type"/> instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="type"/> is <see langword="null"/>.</exception>
     public static string GetTypeDeclaration(Type type, TypeDeclarationFlags flags)
     {
         RequireNotNull(type, TypeNullExceptionMessage);
@@ -136,7 +137,7 @@ internal static class CSharpTypeDeclarationFormatter
         bool useTupleNames = (flags & TypeDeclarationFlags.UseValueTupleNames) is not 0;
 
         return (useTupleSyntax || useTupleNames)
-               && type.Name.StartsWith(nameof(ValueTuple))
+               && type.Name.StartsWith(nameof(ValueTuple), StringComparison.Ordinal)
                && type.GenericTypeArguments.Length > 1;
     }
 

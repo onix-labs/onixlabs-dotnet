@@ -29,49 +29,10 @@ public readonly partial struct Float128
     {
         if (IsNaN(value)) throw new OverflowException($"Cannot convert NaN to {nameof(BigDecimal)}.");
         if (IsInfinity(value)) throw new OverflowException($"Cannot convert infinity to {nameof(BigDecimal)}.");
-        if (IsZero(value)) return BigDecimal.Zero;
 
-        DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt128 significand);
-        NormalizeSubnormal(ref significand, ref unbiasedExponent);
-
-        int binaryExponent = unbiasedExponent - TrailingSignificandBits;
-        BigInteger significandAsBigInteger = UInt128ToBigInteger(significand);
-        if (sign) significandAsBigInteger = -significandAsBigInteger;
-
-        if (binaryExponent >= 0)
-        {
-            BigInteger unscaledValue = significandAsBigInteger << binaryExponent;
-            return new BigDecimal(unscaledValue, 0);
-        }
-
-        int absoluteExponent = -binaryExponent;
-        BigInteger scaledUnscaledValue = significandAsBigInteger * BigInteger.Pow(5, absoluteExponent);
-        return TrimRedundantScale(new BigDecimal(scaledUnscaledValue, absoluteExponent));
-    }
-
-    /// <summary>
-    /// Removes trailing zeros from the unscaled value of the specified <see cref="BigDecimal"/>, reducing its scale without changing the represented number.
-    /// </summary>
-    /// <param name="value">The <see cref="BigDecimal"/> value to normalize.</param>
-    /// <returns>An equivalent <see cref="BigDecimal"/> with redundant scale digits trimmed.</returns>
-    private static BigDecimal TrimRedundantScale(BigDecimal value)
-    {
-        if (BigDecimal.IsZero(value)) return value;
-        if (value.Scale == 0) return value;
-
-        BigInteger remainingUnscaledValue = value.UnscaledValue;
-        int currentScale = value.Scale;
-        BigInteger ten = (BigInteger)10;
-
-        while (currentScale > 0)
-        {
-            BigInteger quotient = BigInteger.DivRem(remainingUnscaledValue, ten, out BigInteger remainder);
-            if (!remainder.IsZero) break;
-            remainingUnscaledValue = quotient;
-            currentScale--;
-        }
-
-        return new BigDecimal(remainingUnscaledValue, currentScale);
+        // The exact (binary) conversion now lives in Ieee754Converter, the single home for IEEE 754 to decimal
+        // conversion across float, double, Float128 and Float256.
+        return new BigDecimal(value, ConversionMode.Binary);
     }
 
     /// <summary>
@@ -161,7 +122,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="absoluteUnscaledValue">The absolute value of the <see cref="BigDecimal.UnscaledValue"/>.</param>
     /// <param name="scale">The scale of the <see cref="BigDecimal"/> being converted.</param>
-    /// <returns>The number of guard bits to retain beyond the binary128 significand precision during conversion.</returns>
+    /// <returns>Returns the number of guard bits to retain beyond the binary128 significand precision during conversion.</returns>
     private static int ChooseExtraBits(BigInteger absoluteUnscaledValue, int scale)
     {
         const double Log2Of10 = 3.3219280948873623d;
@@ -177,22 +138,10 @@ public readonly partial struct Float128
     }
 
     /// <summary>
-    /// Converts the specified <see cref="UInt128"/> value to a non-negative <see cref="BigInteger"/>.
-    /// </summary>
-    /// <param name="value">The <see cref="UInt128"/> value to convert.</param>
-    /// <returns>A <see cref="BigInteger"/> with the same numeric value as <paramref name="value"/>.</returns>
-    private static BigInteger UInt128ToBigInteger(UInt128 value)
-    {
-        ulong high = (ulong)(value >> 64);
-        ulong low = (ulong)value;
-        return ((BigInteger)high << 64) | low;
-    }
-
-    /// <summary>
     /// Converts the low 128 bits of the specified <see cref="BigInteger"/> to a <see cref="UInt128"/>, truncating any higher-order bits.
     /// </summary>
     /// <param name="value">The <see cref="BigInteger"/> value to convert.</param>
-    /// <returns>A <see cref="UInt128"/> containing the low 128 bits of <paramref name="value"/>.</returns>
+    /// <returns>Returns a <see cref="UInt128"/> containing the low 128 bits of <paramref name="value"/>.</returns>
     private static UInt128 BigIntegerToUInt128(BigInteger value)
     {
         UInt128 result = UInt128.Zero;

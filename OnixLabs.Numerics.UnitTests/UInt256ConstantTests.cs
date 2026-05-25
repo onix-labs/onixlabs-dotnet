@@ -86,4 +86,40 @@ public sealed class UInt256ConstantTests
         Assert.Equal(UInt128.One, UInt256.One.LowerBits);
         Assert.Equal((UInt256)1, UInt256.PopCount(UInt256.One));
     }
+
+    [Fact(DisplayName = "UInt256.AdditiveIdentity should equal Zero")]
+    public void UInt256AdditiveIdentityShouldEqualZero()
+    {
+        Assert.Equal(UInt256.Zero, AdditiveIdentity<UInt256, UInt256>());
+    }
+
+    [Fact(DisplayName = "UInt256.MultiplicativeIdentity should equal One")]
+    public void UInt256MultiplicativeIdentityShouldEqualOne()
+    {
+        Assert.Equal(UInt256.One, MultiplicativeIdentity<UInt256, UInt256>());
+    }
+
+    [Fact(DisplayName = "UInt256.Radix should be 2")]
+    public void UInt256RadixShouldBeTwo()
+    {
+        Assert.Equal(2, Radix<UInt256>());
+    }
+
+    [Fact(DisplayName = "UInt256 IMinMaxValue members should equal the public MinValue and MaxValue")]
+    public void UInt256MinMaxValueInterfaceMembersShouldEqualPublicConstants()
+    {
+        Assert.Equal(UInt256.MinValue, MinValue<UInt256>());
+        Assert.Equal(UInt256.MaxValue, MaxValue<UInt256>());
+        Assert.Equal((BigInteger.One << 256) - BigInteger.One, (BigInteger)MaxValue<UInt256>());
+    }
+
+    private static TResult AdditiveIdentity<T, TResult>() where T : IAdditiveIdentity<T, TResult> => T.AdditiveIdentity;
+
+    private static TResult MultiplicativeIdentity<T, TResult>() where T : IMultiplicativeIdentity<T, TResult> => T.MultiplicativeIdentity;
+
+    private static int Radix<T>() where T : INumberBase<T> => T.Radix;
+
+    private static T MinValue<T>() where T : IMinMaxValue<T> => T.MinValue;
+
+    private static T MaxValue<T>() where T : IMinMaxValue<T> => T.MaxValue;
 }

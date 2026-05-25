@@ -230,4 +230,18 @@ public sealed class UInt512ConvertibleExplicitTests
     {
         Assert.Throws<OverflowException>(() => checked((UInt512)Float128.NaN));
     }
+
+    [Fact(DisplayName = "UInt512 explicit narrowing to primitive integers should equal the BigInteger low-bits masks for an upper-limb value")]
+    public void UInt512ExplicitNarrowingToPrimitivesShouldMatchMaskedLowBits()
+    {
+        // A value with the upper 256-bit limb populated, so the narrowed low bits are non-trivial.
+        BigInteger oracle = (BigInteger.One << 400) + 0xDEAD_BEEF_CAFE_F00DUL;
+        UInt512 source = (UInt512)oracle;
+
+        Assert.Equal((byte)(oracle & 0xFF), (byte)source);
+        Assert.Equal((ushort)(oracle & 0xFFFF), (ushort)source);
+        Assert.Equal((uint)(oracle & 0xFFFFFFFF), (uint)source);
+        Assert.Equal((ulong)(oracle & ulong.MaxValue), (ulong)source);
+        Assert.NotEqual(UInt256.Zero, source.UpperBits);
+    }
 }

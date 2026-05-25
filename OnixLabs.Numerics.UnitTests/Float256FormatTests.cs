@@ -23,21 +23,43 @@ public sealed class Float256FormatTests
     [Fact(DisplayName = "Float256.ToString of NaN should produce NaN literal")]
     public void Float256ToStringOfNaNShouldProduceNaNLiteral()
     {
-        Assert.Equal("NaN", Float256.NaN.ToString());
+        Assert.Equal("NaN", Float256.NaN.ToString("G", CultureInfo.InvariantCulture));
     }
 
     [Fact(DisplayName = "Float256.ToString of infinity should produce Infinity literal")]
     public void Float256ToStringOfInfinityShouldProduceInfinityLiteral()
     {
-        Assert.Equal("Infinity", Float256.PositiveInfinity.ToString());
-        Assert.Equal("-Infinity", Float256.NegativeInfinity.ToString());
+        Assert.Equal("Infinity", Float256.PositiveInfinity.ToString("G", CultureInfo.InvariantCulture));
+        Assert.Equal("-Infinity", Float256.NegativeInfinity.ToString("G", CultureInfo.InvariantCulture));
     }
 
     [Fact(DisplayName = "Float256.ToString of signed zero should produce 0 or -0")]
     public void Float256ToStringOfSignedZeroShouldProduceSignedZeroLiteral()
     {
-        Assert.Equal("0", Float256.Zero.ToString());
-        Assert.Equal("-0", Float256.NegativeZero.ToString());
+        Assert.Equal("0", Float256.Zero.ToString("G", CultureInfo.InvariantCulture));
+        Assert.Equal("-0", Float256.NegativeZero.ToString("G", CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Float256.ToString should use the provider's NaN, infinity and negative-sign symbols")]
+    public void Float256ToStringShouldUseProviderSpecialSymbols()
+    {
+        NumberFormatInfo numberFormat = new()
+        {
+            NaNSymbol = "NICHTZAHL",
+            PositiveInfinitySymbol = "UNENDLICH",
+            NegativeInfinitySymbol = "~UNENDLICH",
+            NegativeSign = "~",
+        };
+
+        Assert.Equal("NICHTZAHL", Float256.NaN.ToString("G", numberFormat));
+        Assert.Equal("UNENDLICH", Float256.PositiveInfinity.ToString("G", numberFormat));
+        Assert.Equal("~UNENDLICH", Float256.NegativeInfinity.ToString("G", numberFormat));
+        Assert.Equal("~0", Float256.NegativeZero.ToString("G", numberFormat));
+
+        // The special-value symbols must round-trip through Parse under the same provider.
+        Assert.True(Float256.IsNaN(Float256.Parse(Float256.NaN.ToString("G", numberFormat), numberFormat)));
+        Assert.Equal(Float256.PositiveInfinity, Float256.Parse(Float256.PositiveInfinity.ToString("G", numberFormat), numberFormat));
+        Assert.Equal(Float256.NegativeInfinity, Float256.Parse(Float256.NegativeInfinity.ToString("G", numberFormat), numberFormat));
     }
 
     [Theory(DisplayName = "Float256.ToString of small integers should produce integer text")]

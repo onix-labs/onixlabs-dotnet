@@ -67,7 +67,6 @@ public sealed partial class RsaPublicKey
     public bool IsDataValid(DigitalSignature signature, Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        // TODO : Span for signature is inefficiently converted back to an array.
         return key.VerifyData(data, signature.AsReadOnlySpan().ToArray(), algorithm, padding);
     }
 
@@ -182,7 +181,7 @@ public sealed partial class RsaPublicKey
     /// Performs a signature check pre-condition that throws a <see cref="CryptographicException"/> in the event that the specified condition is <see langword="false"/>.
     /// </summary>
     /// <param name="condition">The signature condition to check.</param>
-    /// <exception cref="CryptographicException">If the specified condition is <see langword="false"/>.</exception>
+    /// <exception cref="CryptographicException">Thrown when the specified condition is <see langword="false"/>.</exception>
     private static void CheckSignature(bool condition)
     {
         if (condition) return;

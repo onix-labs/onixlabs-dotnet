@@ -1,0 +1,100 @@
+// Copyright © 2020 ONIXLabs
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Globalization;
+using System.Numerics;
+
+namespace OnixLabs.Numerics.UnitTests;
+
+public sealed class BigDecimalConvertTests
+{
+    [Theory(DisplayName = "BigDecimal explicit conversion to decimal, double and float should produce the expected value")]
+    [InlineData("42")]
+    [InlineData("1.5")]
+    [InlineData("-0.25")]
+    [InlineData("0")]
+    public void ExplicitConversionToDecimalDoubleAndFloatShouldProduceExpectedValue(string value)
+    {
+        // Given
+        BigDecimal subject = BigDecimal.Parse(value, CultureInfo.InvariantCulture);
+
+        // When / Then
+        Assert.Equal(decimal.Parse(value, CultureInfo.InvariantCulture), (decimal)subject);
+        Assert.Equal(double.Parse(value, CultureInfo.InvariantCulture), (double)subject);
+        Assert.Equal(float.Parse(value, CultureInfo.InvariantCulture), (float)subject);
+    }
+
+    [Theory(DisplayName = "BigDecimal from a double in Decimal mode should round-trip the shortest representation")]
+    [InlineData(9.9999999)]
+    [InlineData(99.999999)]
+    [InlineData(0.99999999)]
+    [InlineData(9999.9999)]
+    [InlineData(1.5)]
+    [InlineData(123.456)]
+    public void BigDecimalFromDoubleInDecimalModeShouldRoundTripShortestRepresentation(double value)
+    {
+        // Given
+        string expected = value.ToString("R", CultureInfo.InvariantCulture);
+
+        // When
+        BigDecimal actual = new(value, ConversionMode.Decimal);
+
+        // Then
+        Assert.Equal(expected, actual.ToString("G", CultureInfo.InvariantCulture));
+    }
+
+    // Invokes the static-virtual INumberBase.CreateChecked through a generic constraint, which exercises
+    // BigDecimal.TryConvertToChecked (when TTo is BigDecimal) and TryConvertFromChecked (when TFrom is BigDecimal).
+    private static TTo Create<TTo, TFrom>(TFrom value)
+        where TTo : INumberBase<TTo>
+        where TFrom : INumberBase<TFrom>
+        => TTo.CreateChecked(value);
+
+    [Fact(DisplayName = "INumberBase.CreateChecked should convert a BigDecimal to a target numeric type")]
+    public void CreateCheckedShouldConvertBigDecimalToTargetType()
+    {
+        // Given
+        BigDecimal value = new(42);
+
+        // When / Then
+        Assert.Equal((sbyte)42, Create<sbyte, BigDecimal>(value));
+        Assert.Equal((byte)42, Create<byte, BigDecimal>(value));
+        Assert.Equal(42, Create<int, BigDecimal>(value));
+        Assert.Equal(42L, Create<long, BigDecimal>(value));
+        Assert.Equal(42, Create<Int128, BigDecimal>(value));
+        Assert.Equal(42, Create<BigInteger, BigDecimal>(value));
+        Assert.Equal(42d, Create<double, BigDecimal>(value));
+        Assert.Equal(42m, Create<decimal, BigDecimal>(value));
+    }
+
+    [Fact(DisplayName = "INumberBase.CreateChecked should convert a numeric value to a BigDecimal")]
+    public void CreateCheckedShouldConvertNumericValueToBigDecimal()
+    {
+        // When / Then
+        Assert.Equal(new BigDecimal(42), Create<BigDecimal, int>(42));
+        Assert.Equal(new BigDecimal(42), Create<BigDecimal, long>(42L));
+        Assert.Equal(new BigDecimal(42), Create<BigDecimal, BigInteger>(42));
+    }
+
+    [Fact(DisplayName = "IConvertible.ToDateTime should throw InvalidCastException")]
+    public void ConvertibleToDateTimeShouldThrowInvalidCastException()
+    {
+        // Given
+        IConvertible value = new BigDecimal(42);
+
+        // When / Then
+        Assert.Throws<InvalidCastException>(() => value.ToDateTime(null));
+    }
+}

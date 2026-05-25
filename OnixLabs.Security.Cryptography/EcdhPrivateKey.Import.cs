@@ -44,10 +44,20 @@ public sealed partial class EcdhPrivateKey
     /// Imports the key data into a new <see cref="ECDiffieHellman"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="ECDiffieHellman"/> instance containing the imported key data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid EC Diffie-Hellman private key.</exception>
     private ECDiffieHellman ImportKeyData()
     {
-        ECDiffieHellman algorithm = ECDiffieHellman.Create();
-        algorithm.ImportECPrivateKey(KeyData, out int _);
-        return algorithm;
+        byte[] keyData = KeyData;
+
+        try
+        {
+            ECDiffieHellman algorithm = ECDiffieHellman.Create();
+            algorithm.ImportECPrivateKey(keyData, out int _);
+            return algorithm;
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

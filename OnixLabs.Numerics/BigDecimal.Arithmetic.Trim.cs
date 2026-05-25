@@ -27,10 +27,20 @@ public readonly partial struct BigDecimal
     public static BigDecimal TrimTrailingZeros(BigDecimal value)
     {
         if (IsZero(value)) return Zero;
+        if (value.Scale == 0) return value;
 
-        int exponent = 0;
-        while (value.UnscaledValue % BigInteger.Pow(10, exponent) == 0) exponent++;
-        return new BigDecimal(value.UnscaledValue / BigInteger.Pow(10, --exponent), value.Scale - exponent);
+        BigInteger unscaledValue = value.UnscaledValue;
+        int scale = value.Scale;
+
+        // Only fractional trailing zeros may be trimmed; stopping once the scale reaches zero keeps the integral
+        // part intact, which also prevents the scale from going negative (the type forbids a negative scale).
+        while (scale > 0 && unscaledValue % 10 == BigInteger.Zero)
+        {
+            unscaledValue /= 10;
+            scale--;
+        }
+
+        return new BigDecimal(unscaledValue, scale);
     }
 
     /// <summary>

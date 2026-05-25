@@ -201,19 +201,19 @@ public readonly partial struct Int256
     /// <returns>Returns <see langword="true"/> if the destination type is supported; otherwise, <see langword="false"/>.</returns>
     private static bool TryConvertToSaturating<TOther>(Int256 value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
-        if (typeof(TOther) == typeof(sbyte)) { result = (TOther)(object)(value < (Int256)sbyte.MinValue ? sbyte.MinValue : value > (Int256)sbyte.MaxValue ? sbyte.MaxValue : (sbyte)value); return true; }
-        if (typeof(TOther) == typeof(byte)) { result = (TOther)(object)(IsNegative(value) ? (byte)0 : value > (Int256)byte.MaxValue ? byte.MaxValue : (byte)value); return true; }
-        if (typeof(TOther) == typeof(short)) { result = (TOther)(object)(value < (Int256)short.MinValue ? short.MinValue : value > (Int256)short.MaxValue ? short.MaxValue : (short)value); return true; }
-        if (typeof(TOther) == typeof(ushort)) { result = (TOther)(object)(IsNegative(value) ? (ushort)0 : value > (Int256)ushort.MaxValue ? ushort.MaxValue : (ushort)value); return true; }
-        if (typeof(TOther) == typeof(int)) { result = (TOther)(object)(value < (Int256)int.MinValue ? int.MinValue : value > (Int256)int.MaxValue ? int.MaxValue : (int)value); return true; }
-        if (typeof(TOther) == typeof(uint)) { result = (TOther)(object)(IsNegative(value) ? 0u : value > (Int256)uint.MaxValue ? uint.MaxValue : (uint)value); return true; }
-        if (typeof(TOther) == typeof(long)) { result = (TOther)(object)(value < (Int256)long.MinValue ? long.MinValue : value > (Int256)long.MaxValue ? long.MaxValue : (long)value); return true; }
-        if (typeof(TOther) == typeof(ulong)) { result = (TOther)(object)(IsNegative(value) ? 0UL : value > (Int256)ulong.MaxValue ? ulong.MaxValue : (ulong)value); return true; }
-        if (typeof(TOther) == typeof(Int128)) { result = (TOther)(object)(value < (Int256)Int128.MinValue ? Int128.MinValue : value > (Int256)Int128.MaxValue ? Int128.MaxValue : (Int128)value); return true; }
-        if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(IsNegative(value) ? UInt128.Zero : value.UpperBits != UInt128.Zero ? UInt128.MaxValue : value.LowerBits); return true; }
+        if (typeof(TOther) == typeof(sbyte)) { result = (TOther)(object)(sbyte)Clamp(value, (Int256)sbyte.MinValue, (Int256)sbyte.MaxValue); return true; }
+        if (typeof(TOther) == typeof(byte)) { result = (TOther)(object)(byte)Clamp(value, Zero, (Int256)byte.MaxValue); return true; }
+        if (typeof(TOther) == typeof(short)) { result = (TOther)(object)(short)Clamp(value, (Int256)short.MinValue, (Int256)short.MaxValue); return true; }
+        if (typeof(TOther) == typeof(ushort)) { result = (TOther)(object)(ushort)Clamp(value, Zero, (Int256)ushort.MaxValue); return true; }
+        if (typeof(TOther) == typeof(int)) { result = (TOther)(object)(int)Clamp(value, (Int256)int.MinValue, (Int256)int.MaxValue); return true; }
+        if (typeof(TOther) == typeof(uint)) { result = (TOther)(object)(uint)Clamp(value, Zero, (Int256)uint.MaxValue); return true; }
+        if (typeof(TOther) == typeof(long)) { result = (TOther)(object)(long)Clamp(value, (Int256)long.MinValue, (Int256)long.MaxValue); return true; }
+        if (typeof(TOther) == typeof(ulong)) { result = (TOther)(object)(ulong)Clamp(value, Zero, (Int256)ulong.MaxValue); return true; }
+        if (typeof(TOther) == typeof(Int128)) { result = (TOther)(object)(Int128)Clamp(value, (Int256)Int128.MinValue, (Int256)Int128.MaxValue); return true; }
+        if (typeof(TOther) == typeof(UInt128)) { result = (TOther)(object)(UInt128)Clamp(value, Zero, (Int256)UInt128.MaxValue); return true; }
         if (typeof(TOther) == typeof(UInt256)) { result = (TOther)(object)(IsNegative(value) ? UInt256.Zero : new UInt256(value.UpperBits, value.LowerBits)); return true; }
         if (typeof(TOther) == typeof(BigInteger)) { result = (TOther)(object)(BigInteger)value; return true; }
-        if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(IsNegative(value) ? (char)0 : value > (Int256)char.MaxValue ? char.MaxValue : (char)value); return true; }
+        if (typeof(TOther) == typeof(char)) { result = (TOther)(object)(char)Clamp(value, Zero, (Int256)char.MaxValue); return true; }
         if (typeof(TOther) == typeof(float)) { result = (TOther)(object)(float)value; return true; }
         if (typeof(TOther) == typeof(double)) { result = (TOther)(object)(double)value; return true; }
         if (typeof(TOther) == typeof(decimal)) { result = (TOther)(object)(decimal)value; return true; }

@@ -11,3 +11,9 @@ max_line_length             = 140
 
 # ReSharper properties
 resharper_csharp_wrap_lines = false
+
+[*.cs]
+# Silence ReSharper/Rider's built-in StyleCop inspections that conflict with house style.
+# These contradict documented conventions (see docs/csharp.md); no StyleCop analyzer runs in the build.
+dotnet_diagnostic.SA1200.severity = none   # using directives placement (the codebase uses file-scoped namespaces)
+dotnet_diagnostic.SA1402.severity = none   # multiple types per file is deliberately allowed

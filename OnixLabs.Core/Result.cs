@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -185,12 +186,12 @@ public abstract class Result : IValueEquatable<Result>
     /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </summary>
-    /// <param name="defaultValue">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
     /// <returns>
     /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </returns>
-    public Exception GetExceptionOrDefault(Exception defaultValue) => this is Failure failure ? failure.Exception : defaultValue;
+    public Exception GetExceptionOrDefault(Exception defaultException) => GetExceptionOrDefault() ?? defaultException;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
@@ -210,8 +211,8 @@ public abstract class Result : IValueEquatable<Result>
     /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </returns>
-    /// <exception cref="InvalidOperationException">If the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
-    public Exception GetExceptionOrThrow() => this is Failure failure ? failure.Exception : throw new InvalidOperationException("The current result is not in a failure state.");
+    /// <exception cref="InvalidOperationException">Thrown when the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
+    public Exception GetExceptionOrThrow() => CheckNotNull(GetExceptionOrDefault(), "The current result is in a success state; no exception to retrieve.");
 
     /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result"/> instance.
@@ -722,11 +723,14 @@ public abstract class Result : IValueEquatable<Result>
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result"/> is in a failure state.
     /// </summary>
-    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
+    /// <remarks>
+    /// The original stack trace of the underlying exception is preserved via
+    /// <see cref="ExceptionDispatchInfo"/>; the rethrow point is recorded as a continuation.
+    /// </remarks>
     public void Throw()
     {
         if (this is Failure failure)
-            throw failure.Exception;
+            ExceptionDispatchInfo.Capture(failure.Exception).Throw();
     }
 
     /// <inheritdoc/>

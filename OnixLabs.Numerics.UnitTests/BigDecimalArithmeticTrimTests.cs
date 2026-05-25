@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
 using OnixLabs.Numerics.UnitTests.Data;
 
 namespace OnixLabs.Numerics.UnitTests;
@@ -27,5 +28,24 @@ public sealed class BigDecimalArithmeticTrimTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "BigDecimal.TrimTrailingZeros should not trim zeros belonging to the integral part")]
+    [InlineData("10", "10")]
+    [InlineData("100", "100")]
+    [InlineData("10.0", "10")]
+    [InlineData("120.00", "120")]
+    [InlineData("0", "0")]
+    public void BigDecimalTrimTrailingZerosShouldNotTrimIntegralZeros(string value, string expected)
+    {
+        // Given
+        BigDecimal input = BigDecimal.Parse(value, CultureInfo.InvariantCulture);
+        BigDecimal expectedResult = BigDecimal.Parse(expected, CultureInfo.InvariantCulture);
+
+        // When
+        BigDecimal actual = input.TrimTrailingZeros();
+
+        // Then
+        Assert.Equal(expectedResult, actual, BigDecimalEqualityComparer.Strict);
     }
 }

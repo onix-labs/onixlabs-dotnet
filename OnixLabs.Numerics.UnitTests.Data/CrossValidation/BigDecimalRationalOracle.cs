@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Numerics;
 
 namespace OnixLabs.Numerics.UnitTests.Data.CrossValidation;
@@ -33,5 +34,50 @@ public static class BigDecimalRationalOracle
     {
         (BigInteger numerator, BigInteger denominator) = ToRational(actual);
         return numerator * expectedDenominator == expectedNumerator * denominator;
+    }
+
+    /// <summary>
+    /// Rounds the exact rational <paramref name="dividend"/> / <paramref name="divisor"/> to an integer under the
+    /// specified <paramref name="mode"/>. This is an independent reference for <c>BigDecimal.DivideAndRound</c>: it is
+    /// expressed in terms of the mathematical floor and a non-negative remainder, whereas the production code rounds
+    /// from a truncated-towards-zero quotient — so the two agree only if both are correct.
+    /// </summary>
+    public static BigInteger RoundedQuotient(BigInteger dividend, BigInteger divisor, MidpointRounding mode)
+    {
+        // Normalise so the divisor is positive; flipping both operands preserves the value of the ratio.
+        if (divisor.Sign < 0)
+        {
+            dividend = -dividend;
+            divisor = -divisor;
+        }
+
+        // Floored division: floor = ⌊dividend / divisor⌋ with remainder in [0, divisor).
+        BigInteger floor = BigInteger.DivRem(dividend, divisor, out BigInteger remainder);
+        if (remainder.Sign < 0)
+        {
+            floor -= BigInteger.One;
+            remainder += divisor;
+        }
+
+        if (remainder.IsZero) return floor;
+
+        BigInteger ceiling = floor + BigInteger.One;
+
+        switch (mode)
+        {
+            case MidpointRounding.ToNegativeInfinity: return floor;
+            case MidpointRounding.ToPositiveInfinity: return ceiling;
+            case MidpointRounding.ToZero: return dividend.Sign > 0 ? floor : ceiling;
+            default: break;
+        }
+
+        // Nearest modes: weigh the fraction (remainder / divisor) against one half by doubling the remainder.
+        int comparison = (remainder * 2).CompareTo(divisor);
+        if (comparison < 0) return floor;
+        if (comparison > 0) return ceiling;
+
+        // Exact midpoint tie: away from zero steps in the value's direction; to-even picks the even neighbour.
+        if (mode is MidpointRounding.AwayFromZero) return dividend.Sign > 0 ? ceiling : floor;
+        return floor.IsEven ? floor : ceiling;
     }
 }

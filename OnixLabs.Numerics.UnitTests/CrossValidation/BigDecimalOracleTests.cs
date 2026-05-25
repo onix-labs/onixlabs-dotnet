@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Numerics;
 using OnixLabs.Numerics.UnitTests.Data.CrossValidation;
 using static OnixLabs.Numerics.UnitTests.Data.CrossValidation.BigDecimalRationalOracle;
@@ -28,6 +29,15 @@ namespace OnixLabs.Numerics.UnitTests.CrossValidation;
 /// </summary>
 public sealed class BigDecimalOracleTests
 {
+    private static readonly MidpointRounding[] RoundingModes =
+    [
+        MidpointRounding.ToEven,
+        MidpointRounding.AwayFromZero,
+        MidpointRounding.ToZero,
+        MidpointRounding.ToPositiveInfinity,
+        MidpointRounding.ToNegativeInfinity,
+    ];
+
     [Theory(DisplayName = "BigDecimal: (a + b) matches the exact rational oracle")]
     [BigDecimalBinaryData]
     public void AdditionMatchesOracle(BigDecimal a, BigDecimal b)
@@ -54,6 +64,36 @@ public sealed class BigDecimalOracleTests
         (BigInteger numeratorB, BigInteger denominatorB) = ToRational(b);
         Assert.True(ValueEquals(a * b, numeratorA * numeratorB, denominatorA * denominatorB));
     }
+
+    [Theory(DisplayName = "BigDecimal: Divide matches the exact rational oracle, rounded to the dividend scale, across all rounding modes")]
+    [BigDecimalBinaryData]
+    public void DivisionMatchesOracle(BigDecimal a, BigDecimal b)
+    {
+        if (b == BigDecimal.Zero) return;
+
+        BigInteger dividend = a.UnscaledValue * BigInteger.Pow(10, b.Scale);
+        BigInteger divisor = b.UnscaledValue;
+        BigInteger resultDenominator = BigInteger.Pow(10, a.Scale);
+
+        foreach (MidpointRounding mode in RoundingModes)
+        {
+            BigInteger expectedQuotient = RoundedQuotient(dividend, divisor, mode);
+            BigDecimal actual = BigDecimal.Divide(a, b, mode);
+            Assert.True(ValueEquals(actual, expectedQuotient, resultDenominator), $"Divide({a}, {b}, {mode})");
+        }
+    }
+
+    [Theory(DisplayName = "BigDecimal: a / a equals 1 for non-zero a")]
+    [BigDecimalUnaryData]
+    public void DivisionBySelfIsOne(BigDecimal a)
+    {
+        if (a == BigDecimal.Zero) return;
+        Assert.True(a / a == BigDecimal.One);
+    }
+
+    [Theory(DisplayName = "BigDecimal: a / 1 equals a")]
+    [BigDecimalUnaryData]
+    public void DivisionByOneIsIdentity(BigDecimal a) => Assert.True(a / BigDecimal.One == a);
 
     [Theory(DisplayName = "BigDecimal: addition is commutative")]
     [BigDecimalBinaryData]

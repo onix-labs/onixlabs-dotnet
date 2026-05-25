@@ -46,8 +46,9 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<
     /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
     private Secret(byte[] value)
     {
+        using SHA256 algorithm = SHA256.Create();
         encryptedValue = protectedData.Encrypt(value);
-        hash = Hash.Compute(SHA256.Create(), value);
+        hash = Hash.Compute(algorithm, value);
     }
 
     /// <summary>

@@ -17,6 +17,19 @@ namespace OnixLabs.Security.Cryptography;
 public abstract partial class Sha3
 {
     /// <summary>
+    /// The FIPS 202 SHA-3 round constants applied during the iota step of each permutation round.
+    /// </summary>
+    private static readonly ulong[] RoundConstants =
+    [
+        0x0000000000000001, 0x0000000000008082, 0x800000000000808A, 0x8000000080008000,
+        0x000000000000808B, 0x0000000080000001, 0x8000000080008081, 0x8000000000008009,
+        0x000000000000008A, 0x0000000000000088, 0x0000000080008009, 0x000000008000000A,
+        0x000000008000808B, 0x800000000000008B, 0x8000000000008089, 0x8000000000008003,
+        0x8000000000008002, 0x8000000000000080, 0x000000000000800A, 0x800000008000000A,
+        0x8000000080008081, 0x8000000000008080, 0x0000000080000001, 0x8000000080008008
+    ];
+
+    /// <summary>
     /// Performs the FIPS 202 SHA-3 permutation.
     /// </summary>
     /// <param name="state">The state upon which to perform the permutation.</param>
@@ -25,17 +38,6 @@ public abstract partial class Sha3
         const int hashRounds = 24;
 
         ulong c0, c1, c2, c3, c4, d0, d1, d2, d3, d4;
-
-        // ReSharper disable once HeapView.ObjectAllocation
-        ulong[] roundConstants =
-        [
-            0x0000000000000001, 0x0000000000008082, 0x800000000000808A, 0x8000000080008000,
-            0x000000000000808B, 0x0000000080000001, 0x8000000080008081, 0x8000000000008009,
-            0x000000000000008A, 0x0000000000000088, 0x0000000080008009, 0x000000008000000A,
-            0x000000008000808B, 0x800000000000008B, 0x8000000000008089, 0x8000000000008003,
-            0x8000000000008002, 0x8000000000000080, 0x000000000000800A, 0x800000008000000A,
-            0x8000000080008081, 0x8000000000008080, 0x0000000080000001, 0x8000000080008008
-        ];
 
         for (int round = 0; round < hashRounds; round++)
         {
@@ -136,7 +138,7 @@ public abstract partial class Sha3
             }
         }
 
-        void Iota(int round) => state[0] ^= roundConstants[round];
+        void Iota(int round) => state[0] ^= RoundConstants[round];
 
         ulong RotateLeft(ulong x, byte y) => (x << y) | (x >> (64 - y));
     }

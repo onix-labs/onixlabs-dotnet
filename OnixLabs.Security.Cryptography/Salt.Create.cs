@@ -26,8 +26,13 @@ public readonly partial struct Salt
     /// <returns>Returns a new <see cref="Salt"/> instance of the specified length.</returns>
     public static Salt Create(int length)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(length);
+
+        const int maxStackSize = 256;
         using RandomNumberGenerator generator = RandomNumberGenerator.Create();
-        Span<byte> value = stackalloc byte[length];
+
+        // Why: length is caller-supplied and unbounded; stackalloc only for small buffers to avoid a stack overflow.
+        Span<byte> value = length <= maxStackSize ? stackalloc byte[length] : new byte[length];
         generator.GetBytes(value);
         return new Salt(value);
     }
@@ -39,8 +44,13 @@ public readonly partial struct Salt
     /// <returns>Returns a new non-zero <see cref="Salt"/> instance of the specified length.</returns>
     public static Salt CreateNonZero(int length)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(length);
+
+        const int maxStackSize = 256;
         using RandomNumberGenerator generator = RandomNumberGenerator.Create();
-        Span<byte> value = stackalloc byte[length];
+
+        // Why: length is caller-supplied and unbounded; stackalloc only for small buffers to avoid a stack overflow.
+        Span<byte> value = length <= maxStackSize ? stackalloc byte[length] : new byte[length];
         generator.GetNonZeroBytes(value);
         return new Salt(value);
     }

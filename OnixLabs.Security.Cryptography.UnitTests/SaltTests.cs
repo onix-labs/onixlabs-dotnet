@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
@@ -182,5 +183,30 @@ public sealed class SaltTests
         Assert.True(candidate.AsReadOnlySpan().ToArray().None(value => value is 0));
 
         Assert.Equal(32, candidate.Length);
+    }
+
+    [Fact(DisplayName = "Salt.Create should produce a salt of the specified length beyond the stack-allocation threshold")]
+    public void SaltCreateShouldProduceASaltOfTheSpecifiedLengthBeyondTheStackAllocationThreshold()
+    {
+        // Given / When
+        const int expected = 1024;
+        Salt candidate = Salt.Create(expected);
+
+        // Then
+        Assert.Equal(expected, candidate.Length);
+    }
+
+    [Fact(DisplayName = "Salt.Create should throw ArgumentOutOfRangeException for a negative length")]
+    public void SaltCreateShouldThrowForNegativeLength()
+    {
+        // Given / When / Then
+        Assert.Throws<ArgumentOutOfRangeException>(() => Salt.Create(-1));
+    }
+
+    [Fact(DisplayName = "Salt.CreateNonZero should throw ArgumentOutOfRangeException for a negative length")]
+    public void SaltCreateNonZeroShouldThrowForNegativeLength()
+    {
+        // Given / When / Then
+        Assert.Throws<ArgumentOutOfRangeException>(() => Salt.CreateNonZero(-1));
     }
 }

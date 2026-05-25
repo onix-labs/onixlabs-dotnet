@@ -22,7 +22,9 @@ public sealed partial class EddsaPublicKey
     /// <inheritdoc/>
     public static EddsaPublicKey ImportPem(ReadOnlySpan<char> data)
     {
-        PemFields fields = PemEncoding.Find(data);
+        if (!PemEncoding.TryFind(data, out PemFields fields))
+            throw new CryptographicException("The specified input does not contain a PEM-encoded value.");
+
         string label = data[fields.Label].ToString();
 
         if (label != PublicKeyLabel)

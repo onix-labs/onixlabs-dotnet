@@ -356,6 +356,20 @@ public sealed class EddsaKeyTests
         Assert.True(publicKey.IsDataValid(signature, [0x00]));
     }
 
+    [Fact(DisplayName = "EddsaPrivateKey.ImportPem should throw CryptographicException for malformed PEM")]
+    public void EddsaPrivateKeyImportPemShouldThrowCryptographicExceptionForMalformedPem()
+    {
+        // When / Then
+        Assert.Throws<CryptographicException>(() => EddsaPrivateKey.ImportPem("not a pem"));
+    }
+
+    [Fact(DisplayName = "EddsaPublicKey.ImportPem should throw CryptographicException for malformed PEM")]
+    public void EddsaPublicKeyImportPemShouldThrowCryptographicExceptionForMalformedPem()
+    {
+        // When / Then
+        Assert.Throws<CryptographicException>(() => EddsaPublicKey.ImportPem("not a pem"));
+    }
+
     private static byte[] DecodeHex(string value) =>
         IBaseCodec.Base16.Decode(value, Base16FormatProvider.Invariant);
 }

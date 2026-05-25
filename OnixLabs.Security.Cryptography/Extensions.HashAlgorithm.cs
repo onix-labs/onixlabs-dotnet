@@ -82,7 +82,7 @@ public static class HashAlgorithmExtensions
         /// <returns>Returns the computed hash value.</returns>
         /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
-            algorithm.ComputeHash(encoding.GetOrDefault().GetBytes(data.ToArray()), rounds);
+            algorithm.ComputeHash(encoding.GetOrDefault().GetBytes(data), rounds);
 
         /// <summary>
         /// Computes the hash value for the specified <see cref="IBinaryConvertible"/> value.

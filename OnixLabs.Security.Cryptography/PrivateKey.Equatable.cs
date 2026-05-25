@@ -21,6 +21,7 @@ namespace OnixLabs.Security.Cryptography;
 public abstract partial class PrivateKey
 {
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> or <paramref name="other"/> has been disposed.</exception>
     public bool Equals(PrivateKey? other) =>
         ReferenceEquals(this, other)
         || other is not null
@@ -28,9 +29,11 @@ public abstract partial class PrivateKey
         && CryptographicOperations.FixedTimeEquals(other.KeyData, KeyData);
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> or <paramref name="obj"/> has been disposed.</exception>
     public override bool Equals(object? obj) => Equals(obj as PrivateKey);
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
     public override int GetHashCode() => HashCode.Combine(GetType(), KeyData.GetContentHashCode());
 
     /// <inheritdoc/>

@@ -90,6 +90,7 @@ public sealed partial class EddsaPrivateKey
     /// </summary>
     /// <param name="info">The decoded PKCS#8 private-key information from which to construct the key.</param>
     /// <returns>Returns a new <see cref="EddsaPrivateKey"/> initialized from the seed contained in <paramref name="info"/>.</returns>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="info"/> does not contain a valid Ed25519 PKCS#8 private key.</exception>
     private static EddsaPrivateKey FromPkcs8Info(Pkcs8PrivateKeyInfo info)
     {
         byte[] encoded = info.Encode();

@@ -34,7 +34,7 @@ internal sealed partial class ProtectedData : IDisposable
     /// </summary>
     /// <param name="data">The data to encrypt.</param>
     /// <returns>Returns the encrypted data.</returns>
-    /// <exception cref="ObjectDisposedException">If the current instance has been disposed.</exception>
+    /// <exception cref="ObjectDisposedException">Thrown when the current instance has been disposed.</exception>
     public byte[] Encrypt(byte[] data)
     {
         ObjectDisposedException.ThrowIf(isDisposed, this);
@@ -63,7 +63,7 @@ internal sealed partial class ProtectedData : IDisposable
     /// </summary>
     /// <param name="data">The data to decrypt.</param>
     /// <returns>Returns the decrypted data.</returns>
-    /// <exception cref="ObjectDisposedException">If the current instance has been disposed.</exception>
+    /// <exception cref="ObjectDisposedException">Thrown when the current instance has been disposed.</exception>
     public byte[] Decrypt(byte[] data)
     {
         ObjectDisposedException.ThrowIf(isDisposed, this);

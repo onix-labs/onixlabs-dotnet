@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -27,6 +28,8 @@ public abstract partial class MerkleTree<T>
     /// <param name="leaves">The Merkle tree leaf nodes from which to build a Merkle tree.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash together left-hand and right-hand <see cref="MerkleTree"/> nodes.</param>
     /// <returns>Returns a new <see cref="MerkleTree"/> node that represents the Merkle root.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="leaves"/> is empty.</exception>
+    /// <exception cref="CryptographicException">Thrown when a hash could not be computed while building the Merkle tree.</exception>
     public static MerkleTree<T> Create(IEnumerable<T> leaves, HashAlgorithm algorithm)
     {
         // ReSharper disable once HeapView.ObjectAllocation

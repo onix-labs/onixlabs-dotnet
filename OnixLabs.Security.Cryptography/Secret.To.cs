@@ -25,11 +25,14 @@ public readonly partial struct Secret
     /// </summary>
     /// <param name="encoding">The encoding that will be used to determine the format of the string.</param>
     /// <returns>Returns a <see cref="string"/> that represents the current object.</returns>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="Secret"/> has been disposed.</exception>
     public string ToString(Encoding encoding) => encoding.GetString(AsReadOnlySpan());
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="Secret"/> has been disposed.</exception>
     public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="Secret"/> has been disposed.</exception>
     public override string ToString() => ToString(Base16FormatProvider.Invariant);
 }

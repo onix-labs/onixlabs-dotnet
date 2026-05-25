@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Security.Cryptography;
@@ -25,6 +26,7 @@ public abstract partial class MerkleTree<T>
     /// </summary>
     /// <param name="algorithm">The hash algorithm that will be used to construct the resulting <see cref="MerkleTree"/>.</param>
     /// <returns>Returns a new hash-only, non-generic <see cref="MerkleTree"/> instance from the current <see cref="MerkleTree{T}"/> instance.</returns>
+    /// <exception cref="CryptographicException">Thrown when a hash could not be computed while building the resulting Merkle tree.</exception>
     public MerkleTree ToMerkleTree(HashAlgorithm algorithm)
     {
         IEnumerable<Hash> hashes = GetLeafHashes();

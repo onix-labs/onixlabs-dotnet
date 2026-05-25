@@ -44,6 +44,7 @@ public sealed partial class RsaPublicKey
     /// Imports the key data into a new <see cref="RSA"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="RSA"/> instance containing the imported key data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid RSA public key.</exception>
     private RSA ImportKeyData()
     {
         RSA algorithm = RSA.Create();

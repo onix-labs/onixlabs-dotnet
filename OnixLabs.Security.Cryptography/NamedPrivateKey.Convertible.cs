@@ -19,10 +19,12 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial record struct NamedPrivateKey
 {
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the underlying <see cref="PrivateKey"/> has been disposed.</exception>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() =>
         PrivateKey is null ? ReadOnlyMemory<byte>.Empty : PrivateKey.AsReadOnlyMemory();
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the underlying <see cref="PrivateKey"/> has been disposed.</exception>
     public ReadOnlySpan<byte> AsReadOnlySpan() =>
         PrivateKey is null ? ReadOnlySpan<byte>.Empty : PrivateKey.AsReadOnlySpan();
 }

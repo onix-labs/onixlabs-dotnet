@@ -37,7 +37,7 @@ internal static class PemKeyImporter
     /// </summary>
     /// <param name="algorithm">The algorithm into which the key material is imported.</param>
     /// <param name="data">The RFC 7468 PEM-encoded key material to import.</param>
-    /// <exception cref="CryptographicException">If <paramref name="data"/> does not contain a valid PEM-encoded key.</exception>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="data"/> does not contain a valid PEM-encoded key.</exception>
     public static void Import(AsymmetricAlgorithm algorithm, ReadOnlySpan<char> data)
     {
         try
@@ -56,7 +56,7 @@ internal static class PemKeyImporter
     /// <param name="algorithm">The algorithm into which the key material is imported.</param>
     /// <param name="data">The encrypted RFC 7468 PEM-encoded key material to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
-    /// <exception cref="CryptographicException">If <paramref name="data"/> does not contain a valid PEM-encoded key.</exception>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="data"/> does not contain a valid PEM-encoded key.</exception>
     public static void Import(AsymmetricAlgorithm algorithm, ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         try
@@ -75,7 +75,7 @@ internal static class PemKeyImporter
     /// <param name="algorithm">The algorithm into which the key material is imported.</param>
     /// <param name="data">The encrypted RFC 7468 PEM-encoded key material to import.</param>
     /// <param name="password">The password required for password based decryption.</param>
-    /// <exception cref="CryptographicException">If <paramref name="data"/> does not contain a valid PEM-encoded key.</exception>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="data"/> does not contain a valid PEM-encoded key.</exception>
     public static void Import(AsymmetricAlgorithm algorithm, ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         try

@@ -30,6 +30,7 @@ public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, I
     /// </summary>
     /// <param name="hash">The underlying hash value.</param>
     /// <param name="algorithmName">The name of the hash algorithm that was used to produce the associated hash.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="algorithmName"/> is <see langword="null"/>, empty, or consists only of whitespace.</exception>
     public NamedHash(Hash hash, string algorithmName)
     {
         Hash = hash;
@@ -41,6 +42,7 @@ public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, I
     /// </summary>
     /// <param name="hash">The underlying hash value.</param>
     /// <param name="algorithmName">The name of the hash algorithm that was used to produce the associated hash.</param>
+    /// <exception cref="ArgumentException">Thrown when the name of <paramref name="algorithmName"/> is <see langword="null"/>, empty, or consists only of whitespace.</exception>
     public NamedHash(Hash hash, HashAlgorithmName algorithmName)
     {
         Hash = hash;

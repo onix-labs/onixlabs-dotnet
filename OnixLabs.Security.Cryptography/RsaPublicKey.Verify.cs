@@ -181,7 +181,7 @@ public sealed partial class RsaPublicKey
     /// Performs a signature check pre-condition that throws a <see cref="CryptographicException"/> in the event that the specified condition is <see langword="false"/>.
     /// </summary>
     /// <param name="condition">The signature condition to check.</param>
-    /// <exception cref="CryptographicException">If the specified condition is <see langword="false"/>.</exception>
+    /// <exception cref="CryptographicException">Thrown when the specified condition is <see langword="false"/>.</exception>
     private static void CheckSignature(bool condition)
     {
         if (condition) return;

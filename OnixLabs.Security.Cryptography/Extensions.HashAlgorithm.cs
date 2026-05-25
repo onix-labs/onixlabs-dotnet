@@ -42,7 +42,7 @@ public static class HashAlgorithmExtensions
         /// <param name="data">The input data to compute the hash for.</param>
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
-        /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+        /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(ReadOnlySpan<byte> data, int rounds = 1)
         {
             Span<byte> destination = stackalloc byte[algorithm.HashSize / 8];
@@ -61,7 +61,7 @@ public static class HashAlgorithmExtensions
         /// <param name="count">The number of bytes in the input to use as data.</param>
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
-        /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+        /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(ReadOnlySpan<byte> data, int offset, int count, int rounds = 1)
         {
             ReadOnlySpan<byte> source = data.Slice(offset, count);
@@ -80,7 +80,7 @@ public static class HashAlgorithmExtensions
         /// <param name="encoding">The <see cref="Encoding"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/>.</param>
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
-        /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+        /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
             algorithm.ComputeHash(encoding.GetOrDefault().GetBytes(data), rounds);
 
@@ -90,7 +90,7 @@ public static class HashAlgorithmExtensions
         /// <param name="data">The input data to compute the hash for.</param>
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
-        /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+        /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(IBinaryConvertible data, int rounds = 1) =>
             algorithm.ComputeHash(data.AsReadOnlySpan(), rounds);
 
@@ -102,7 +102,7 @@ public static class HashAlgorithmExtensions
         /// <param name="count">The number of bytes in the input to use as data.</param>
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
-        /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+        /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(IBinaryConvertible data, int offset, int count, int rounds = 1) =>
             algorithm.ComputeHash(data.AsReadOnlySpan(), offset, count, rounds);
 
@@ -112,7 +112,7 @@ public static class HashAlgorithmExtensions
         /// <param name="data">The input data to compute the hash for.</param>
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
-        /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+        /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(ISpanBinaryConvertible data, int rounds = 1) =>
             algorithm.ComputeHash(data.AsReadOnlySpan(), rounds);
 
@@ -124,7 +124,7 @@ public static class HashAlgorithmExtensions
         /// <param name="count">The number of bytes in the input to use as data.</param>
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
-        /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+        /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(ISpanBinaryConvertible data, int offset, int count, int rounds = 1) =>
             algorithm.ComputeHash(data.AsReadOnlySpan(), offset, count, rounds);
 
@@ -134,7 +134,7 @@ public static class HashAlgorithmExtensions
         /// <param name="stream">The input data to compute the hash for.</param>
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
-        /// <exception cref="CryptographicException">If the hash could not be computed for the specified input data.</exception>
+        /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
         public byte[] ComputeHash(Stream stream, int rounds) => rounds is 1
             ? algorithm.ComputeHash(stream)
             : algorithm.ComputeHash(algorithm.ComputeHash(stream), rounds - 1);

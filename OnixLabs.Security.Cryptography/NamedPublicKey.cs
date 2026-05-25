@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
@@ -28,6 +30,8 @@ public readonly partial record struct NamedPublicKey : ICryptoPrimitive<NamedPub
     /// </summary>
     /// <param name="publicKey">The underlying public key value.</param>
     /// <param name="algorithmName">The name of the key algorithm that was used to produce the associated public key.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="publicKey"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="algorithmName"/> is <see langword="null"/>, empty, or consists only of whitespace.</exception>
     public NamedPublicKey(PublicKey publicKey, string algorithmName)
     {
         PublicKey = RequireNotNull(publicKey, PublicKeyNull);

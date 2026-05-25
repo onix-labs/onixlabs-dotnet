@@ -45,6 +45,7 @@ public sealed partial class EcdsaPrivateKey
     /// Imports the key data into a new <see cref="ECDsa"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="ECDsa"/> instance containing the imported key data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid ECDSA private key.</exception>
     private ECDsa ImportKeyData()
     {
         byte[] keyData = KeyData;

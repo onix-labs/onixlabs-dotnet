@@ -45,6 +45,7 @@ public sealed partial class RsaPrivateKey
     /// Imports the key data into a new <see cref="RSA"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="RSA"/> instance containing the imported key data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid RSA private key.</exception>
     private RSA ImportKeyData()
     {
         byte[] keyData = KeyData;

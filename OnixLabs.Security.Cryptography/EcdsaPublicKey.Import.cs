@@ -44,6 +44,7 @@ public sealed partial class EcdsaPublicKey
     /// Imports the key data into a new <see cref="ECDsa"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="ECDsa"/> instance containing the imported key data.</returns>
+    /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid ECDSA public key.</exception>
     private ECDsa ImportKeyData()
     {
         ECDsa algorithm = ECDsa.Create();

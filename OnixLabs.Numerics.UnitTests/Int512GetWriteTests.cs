@@ -151,4 +151,45 @@ public sealed class Int512GetWriteTests
         // The all-FF bit pattern read as signed-from-unsigned yields the same bit pattern (NegativeOne).
         Assert.Equal(Int512.NegativeOne, value);
     }
+
+    [Theory(DisplayName = "Int512.GetShortestBitLength should match the Int128 sibling for in-range values")]
+    [InlineData(0L)]
+    [InlineData(1L)]
+    [InlineData(-1L)]
+    [InlineData(-2L)]
+    [InlineData(255L)]
+    [InlineData(-128L)]
+    [InlineData(long.MaxValue)]
+    [InlineData(long.MinValue)]
+    public void Int512GetShortestBitLengthShouldMatchInt128Sibling(long value)
+    {
+        // The honest oracle is the BCL IBinaryInteger sibling Int128 (NOT BigInteger.GetBitLength,
+        // which differs by one for negative values).
+        int expected = ShortestBitLength((Int128)value);
+        Assert.Equal(expected, ((Int512)value).GetShortestBitLength());
+    }
+
+    private static int ShortestBitLength<T>(T value) where T : IBinaryInteger<T> => value.GetShortestBitLength();
+
+    [Fact(DisplayName = "Int512.GetShortestBitLength of a large positive value crossing the 256-bit limb should match the highest set bit index plus one")]
+    public void Int512GetShortestBitLengthOfUpperLimbValueShouldMatch()
+    {
+        // 2^400 + 1 has its highest set bit at index 400; positive, so 401 bits.
+        Int512 value = (Int512)((BigInteger.One << 400) + BigInteger.One);
+        Assert.Equal(401, value.GetShortestBitLength());
+    }
+
+    [Fact(DisplayName = "Int512.TryWriteBigEndian of a positive value should match BigInteger big-endian bytes")]
+    public void Int512TryWriteBigEndianShouldMatchBigIntegerBytes()
+    {
+        Int512 value = (Int512)(BigInteger.Pow(2, 400) + 987654321);
+        Span<byte> buffer = stackalloc byte[64];
+        Assert.True(value.TryWriteBigEndian(buffer, out _));
+
+        BigInteger big = (BigInteger)value;
+        byte[] bigBytes = big.ToByteArray(isUnsigned: false, isBigEndian: true);
+        byte[] expected = new byte[64];
+        Array.Copy(bigBytes, 0, expected, 64 - bigBytes.Length, bigBytes.Length);
+        Assert.Equal(expected, buffer.ToArray());
+    }
 }

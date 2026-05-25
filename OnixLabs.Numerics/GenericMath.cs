@@ -87,7 +87,7 @@ public static class GenericMath
     /// <param name="value">The base value to be raised.</param>
     /// <param name="exponent">The exponent to which <paramref name="value"/> is raised. Must be greater than or equal to zero.</param>
     /// <returns>Returns a value of type <typeparamref name="T"/> equal to <paramref name="value"/> raised to the power of <paramref name="exponent"/>, computed at <typeparamref name="T"/>'s precision.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="exponent"/> is less than zero.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="exponent"/> is less than zero.</exception>
     /// <remarks>
     /// Computing the power in <typeparamref name="T"/> preserves precision at the target type. Routing through
     /// a <see cref="double"/> intermediary (for example <c>T.CreateChecked(Math.Pow(10, exponent))</c>) caps
@@ -121,6 +121,6 @@ public static class GenericMath
     /// <typeparam name="T">The numeric type. Must implement <see cref="INumber{T}"/>.</typeparam>
     /// <param name="exponent">The exponent to raise 10 to. Must be greater than or equal to zero.</param>
     /// <returns>Returns a value of type <typeparamref name="T"/> equal to 10 raised to the power of <paramref name="exponent"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="exponent"/> is less than zero.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="exponent"/> is less than zero.</exception>
     public static T Pow10<T>(int exponent) where T : INumber<T> => Pow(T.CreateChecked(10), exponent);
 }

@@ -155,4 +155,59 @@ public sealed class Int256ConvertibleExplicitTests
         Assert.Throws<OverflowException>(() => checked((Int256)Float128.NaN));
         Assert.Throws<OverflowException>(() => checked((Int256)Float128.PositiveInfinity));
     }
+
+    [Theory(DisplayName = "Int256 explicit narrowing to primitive integers should match the BigInteger low-bits truncation")]
+    [InlineData(42L)]
+    [InlineData(-42L)]
+    [InlineData(long.MaxValue)]
+    [InlineData(long.MinValue)]
+    public void Int256ExplicitNarrowingToPrimitivesShouldMatchTruncatedLowBits(long value)
+    {
+        Int256 source = value;
+        // Independent oracle: the primitive narrowing of the original value (the low bits are unchanged).
+        Assert.Equal((short)value, (short)source);
+        Assert.Equal((ushort)value, (ushort)source);
+        Assert.Equal((int)value, (int)source);
+        Assert.Equal((uint)value, (uint)source);
+        Assert.Equal(value, (long)source);
+        Assert.Equal((ulong)value, (ulong)source);
+    }
+
+    [Fact(DisplayName = "Int256 explicit checked narrowing to unsigned primitives should throw for negative values")]
+    public void Int256ExplicitCheckedNarrowingToUnsignedShouldThrowForNegative()
+    {
+        Assert.Throws<OverflowException>(() => checked((ushort)Int256.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((uint)Int256.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((ulong)Int256.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((char)Int256.NegativeOne));
+        Assert.Throws<OverflowException>(() => checked((UInt128)Int256.NegativeOne));
+    }
+
+    [Fact(DisplayName = "Int256 explicit checked narrowing to signed primitives should throw for out-of-range values")]
+    public void Int256ExplicitCheckedNarrowingToSignedShouldThrowForOutOfRange()
+    {
+        Assert.Throws<OverflowException>(() => checked((short)(Int256)(short.MaxValue + 1)));
+        Assert.Throws<OverflowException>(() => checked((int)((Int256)int.MaxValue + Int256.One)));
+        Assert.Throws<OverflowException>(() => checked((long)((Int256)long.MaxValue + Int256.One)));
+    }
+
+    [Fact(DisplayName = "Int256 explicit checked narrowing to UInt128 should throw when the upper limb is populated")]
+    public void Int256ExplicitCheckedNarrowingToUInt128ShouldThrowForUpperLimb()
+    {
+        // 2^200 needs the upper 128-bit limb, so it cannot fit in a UInt128.
+        Int256 source = (Int256)(BigInteger.One << 200);
+        Assert.Throws<OverflowException>(() => checked((UInt128)source));
+        // A value that fits exactly in UInt128 should succeed and match the BigInteger oracle.
+        Int256 inRange = UInt128.MaxValue;
+        Assert.Equal((UInt128)((BigInteger)inRange), checked((UInt128)inRange));
+    }
+
+    [Fact(DisplayName = "Int256 round-trip of a large value occupying the upper limb should preserve the value via BigInteger")]
+    public void Int256RoundTripOfUpperLimbValueShouldPreserveViaBigInteger()
+    {
+        BigInteger oracle = (BigInteger.One << 200) + 1234567890123456789L;
+        Int256 value = (Int256)oracle;
+        Assert.Equal(oracle, (BigInteger)value);
+        Assert.NotEqual(UInt128.Zero, value.UpperBits);
+    }
 }

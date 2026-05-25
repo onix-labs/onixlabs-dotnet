@@ -300,7 +300,7 @@ public readonly partial struct UInt256
         return (char)value.LowerBits;
     }
 
-    /// <summary>Explicitly converts a <see cref="UInt256"/> value to a <see cref="BigInteger"/>.</summary>
+    /// <summary>Implicitly converts a <see cref="UInt256"/> value to a <see cref="BigInteger"/>.</summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the <see cref="BigInteger"/> representation of <paramref name="value"/>.</returns>
     public static implicit operator BigInteger(UInt256 value) => UInt256ToBigInteger(value);
@@ -413,7 +413,7 @@ public readonly partial struct UInt256
     /// </summary>
     /// <param name="value">The <see cref="UInt256"/> value to convert.</param>
     /// <returns>Returns the <see cref="BigInteger"/> representation of <paramref name="value"/>.</returns>
-    internal static BigInteger UInt256ToBigInteger(UInt256 value)
+    internal static BigInteger UInt256ToBigInteger(in UInt256 value)
     {
         BigInteger high = ((BigInteger)(ulong)(value.UpperBits >> 64) << 64) | (ulong)value.UpperBits;
         BigInteger low = ((BigInteger)(ulong)(value.LowerBits >> 64) << 64) | (ulong)value.LowerBits;

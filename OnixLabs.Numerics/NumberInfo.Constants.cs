@@ -45,9 +45,4 @@ public readonly partial struct NumberInfo
     /// The default number styles for parsing decimal values.
     /// </summary>
     private const NumberStyles DefaultNumberStyles = NumberStyles.Any;
-
-    /// <summary>
-    /// The default culture for formatting and parsing operations.
-    /// </summary>
-    private static readonly CultureInfo DefaultCulture = CultureInfo.CurrentCulture;
 }

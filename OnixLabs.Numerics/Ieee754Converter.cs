@@ -200,7 +200,7 @@ internal static class Ieee754Converter
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
-    private static NumberInfo ConvertFromBinary(Float128 value)
+    private static NumberInfo ConvertFromBinary(in Float128 value)
     {
         Float128.DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt128 significand);
         Float128.NormalizeSubnormal(ref significand, ref unbiasedExponent);
@@ -235,7 +235,7 @@ internal static class Ieee754Converter
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns a <see cref="NumberInfo"/> containing the unscaled value and scale.</returns>
-    private static NumberInfo ConvertFromBinary(Float256 value)
+    private static NumberInfo ConvertFromBinary(in Float256 value)
     {
         Float256.DecomposeFinite(value.Bits, out bool sign, out int unbiasedExponent, out UInt256 significand);
         Float256.NormalizeSubnormal(ref significand, ref unbiasedExponent);

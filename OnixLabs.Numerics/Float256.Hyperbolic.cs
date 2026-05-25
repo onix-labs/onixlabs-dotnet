@@ -23,9 +23,11 @@ public readonly partial struct Float256
     /// </summary>
     private static readonly Float256 TanhSaturationThreshold = (Float256)90;
 
-    /// <summary>Computes the hyperbolic sine of the specified value.</summary>
-    /// <param name="value">The value.</param>
-    /// <returns>Returns the hyperbolic sine of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the hyperbolic sine of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose hyperbolic sine is to be computed.</param>
+    /// <returns>Returns the hyperbolic sine of <paramref name="value"/>; preserves the sign of zero; ±infinity for ±infinity or overflow.</returns>
     public static Float256 Sinh(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -39,9 +41,11 @@ public readonly partial struct Float256
         return ScaleB(expPlus - expMinus, -1);
     }
 
-    /// <summary>Computes the hyperbolic cosine of the specified value.</summary>
-    /// <param name="value">The value.</param>
-    /// <returns>Returns the hyperbolic cosine of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the hyperbolic cosine of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose hyperbolic cosine is to be computed.</param>
+    /// <returns>Returns the hyperbolic cosine of <paramref name="value"/>; <see cref="One"/> for zero; <see cref="PositiveInfinity"/> for ±infinity or overflow.</returns>
     public static Float256 Cosh(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -55,9 +59,11 @@ public readonly partial struct Float256
         return ScaleB(expPositive + One / expPositive, -1);
     }
 
-    /// <summary>Computes the hyperbolic tangent of the specified value.</summary>
-    /// <param name="value">The value.</param>
-    /// <returns>Returns the hyperbolic tangent of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the hyperbolic tangent of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose hyperbolic tangent is to be computed.</param>
+    /// <returns>Returns the hyperbolic tangent of <paramref name="value"/>; preserves the sign of zero; saturates to ±1 for large magnitudes; ±1 for ±infinity.</returns>
     public static Float256 Tanh(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -75,9 +81,11 @@ public readonly partial struct Float256
         return expM1TwoX / (expM1TwoX + Two);
     }
 
-    /// <summary>Computes the inverse hyperbolic sine of the specified value.</summary>
-    /// <param name="value">The value.</param>
-    /// <returns>Returns the inverse hyperbolic sine of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the inverse hyperbolic sine of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose inverse hyperbolic sine is to be computed.</param>
+    /// <returns>Returns the inverse hyperbolic sine of <paramref name="value"/>; preserves the sign of zero; ±infinity for ±infinity.</returns>
     public static Float256 Asinh(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -92,9 +100,11 @@ public readonly partial struct Float256
         return negative ? -result : result;
     }
 
-    /// <summary>Computes the inverse hyperbolic cosine of the specified value.</summary>
-    /// <param name="value">The value.</param>
-    /// <returns>Returns the inverse hyperbolic cosine of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the inverse hyperbolic cosine of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose inverse hyperbolic cosine is to be computed.</param>
+    /// <returns>Returns the inverse hyperbolic cosine of <paramref name="value"/>; NaN for inputs less than one; <see cref="Zero"/> when <paramref name="value"/> equals one; <see cref="PositiveInfinity"/> for positive infinity.</returns>
     public static Float256 Acosh(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -107,9 +117,11 @@ public readonly partial struct Float256
         return LogP1(inner);
     }
 
-    /// <summary>Computes the inverse hyperbolic tangent of the specified value.</summary>
-    /// <param name="value">The value.</param>
-    /// <returns>Returns the inverse hyperbolic tangent of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the inverse hyperbolic tangent of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose inverse hyperbolic tangent is to be computed.</param>
+    /// <returns>Returns the inverse hyperbolic tangent of <paramref name="value"/>; preserves the sign of zero; ±infinity at ±1; NaN for inputs outside <c>[-1, 1]</c>.</returns>
     public static Float256 Atanh(Float256 value)
     {
         if (IsNaN(value)) return value;

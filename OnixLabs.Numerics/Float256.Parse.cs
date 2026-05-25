@@ -29,6 +29,7 @@ public readonly partial struct Float256
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">An object that provides culture-specific information about the specified value.</param>
     /// <returns>Returns the parsed <see cref="Float256"/> value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a valid format.</exception>
     public static Float256 Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>Parses the specified string value into a <see cref="Float256"/> value.</summary>
@@ -36,12 +37,14 @@ public readonly partial struct Float256
     /// <param name="style">A bitwise combination of number styles that can be present in the specified value.</param>
     /// <param name="provider">An object that provides culture-specific information about the specified value.</param>
     /// <returns>Returns the parsed <see cref="Float256"/> value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a valid format.</exception>
     public static Float256 Parse(string value, NumberStyles style, IFormatProvider? provider = null) => Parse(value.AsSpan(), style, provider);
 
     /// <summary>Parses the specified span value into a <see cref="Float256"/> value.</summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">An object that provides culture-specific information about the specified value.</param>
     /// <returns>Returns the parsed <see cref="Float256"/> value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a valid format.</exception>
     public static Float256 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null) => Parse(value, DefaultNumberStyles, provider);
 
     /// <summary>Parses the specified span value into a <see cref="Float256"/> value.</summary>

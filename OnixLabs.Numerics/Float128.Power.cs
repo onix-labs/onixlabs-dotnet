@@ -85,8 +85,8 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="x">The positive base.</param>
     /// <param name="y">The exponent.</param>
-    /// <returns>The <see cref="Float128"/> value of <c>x^y</c>.</returns>
-    private static Float128 PowPositive(Float128 x, Float128 y)
+    /// <returns>Returns the <see cref="Float128"/> value of <c>x^y</c>.</returns>
+    private static Float128 PowPositive(in Float128 x, in Float128 y)
     {
         if (IsInteger(y) && Abs(y) <= (Float128)64L)
         {
@@ -102,8 +102,8 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="x">The base.</param>
     /// <param name="n">The signed integer exponent.</param>
-    /// <returns>The <see cref="Float128"/> value of <c>x^n</c>.</returns>
-    private static Float128 PowInteger(Float128 x, long n)
+    /// <returns>Returns the <see cref="Float128"/> value of <c>x^n</c>.</returns>
+    private static Float128 PowInteger(in Float128 x, long n)
     {
         if (n == 0L) return One;
         if (n == 1L) return x;

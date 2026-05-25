@@ -176,14 +176,17 @@ public readonly partial struct Float256
 
     /// <summary>Gets the natural logarithmic base, specified by the constant, e.</summary>
     /// <value>The <see cref="Float256"/> value of Euler's number, rounded to binary256 precision.</value>
+    /// <remarks>The constant is parsed from a 108-significant-digit decimal representation to guarantee a bit-correct binary256 result.</remarks>
     public static Float256 E => CachedE;
 
     /// <summary>Gets the ratio of the circumference of a circle to its diameter, specified by the constant, π.</summary>
     /// <value>The <see cref="Float256"/> value of π, rounded to binary256 precision.</value>
+    /// <remarks>The constant is parsed from a 108-significant-digit decimal representation to guarantee a bit-correct binary256 result.</remarks>
     public static Float256 Pi => CachedPi;
 
     /// <summary>Gets the number of radians in one turn, specified by the constant, τ.</summary>
     /// <value>The <see cref="Float256"/> value of τ, rounded to binary256 precision.</value>
+    /// <remarks>The constant is parsed from a 108-significant-digit decimal representation to guarantee a bit-correct binary256 result.</remarks>
     public static Float256 Tau => CachedTau;
 
     /// <summary>

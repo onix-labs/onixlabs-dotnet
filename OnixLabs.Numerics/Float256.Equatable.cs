@@ -51,7 +51,7 @@ public readonly partial struct Float256
     /// <summary>
     /// Serves as the hash code function for this instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for this instance.</returns>
     public override int GetHashCode()
     {
         if (IsNaNBits(Bits)) return NaN.Bits.GetHashCode();

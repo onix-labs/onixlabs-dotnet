@@ -51,7 +51,7 @@ public readonly partial struct Float128
     /// <summary>
     /// Extracts the unbiased exponent of this <see cref="Float128"/> in the form expected by the serialization helpers, treating subnormals as the minimum normal exponent.
     /// </summary>
-    /// <returns>The unbiased exponent value used when serializing the significand and exponent pair.</returns>
+    /// <returns>Returns the unbiased exponent value used when serializing the significand and exponent pair.</returns>
     private short ExtractUnbiasedExponentForSerialization()
     {
         uint biasedExponent = ExtractBiasedExponent(Bits);

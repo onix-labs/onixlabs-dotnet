@@ -31,7 +31,7 @@ public readonly partial struct Int256
     /// <summary>Returns the absolute value of the specified <see cref="Int256"/> without throwing on overflow.</summary>
     /// <param name="value">The value whose absolute value is to be computed.</param>
     /// <returns>Returns the absolute value; <see cref="MinValue"/> is returned unchanged.</returns>
-    internal static Int256 AbsUnchecked(Int256 value) => IsNegative(value) ? -value : value;
+    internal static Int256 AbsUnchecked(in Int256 value) => IsNegative(value) ? -value : value;
 
     /// <summary>Returns the negation of the specified <see cref="Int256"/>.</summary>
     /// <param name="value">The value to negate.</param>

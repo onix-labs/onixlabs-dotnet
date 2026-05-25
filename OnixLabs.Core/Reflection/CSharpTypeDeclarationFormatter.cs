@@ -71,6 +71,7 @@ internal static class CSharpTypeDeclarationFormatter
     /// <param name="type">The current <see cref="Type"/> instance from which to obtain the type declaration.</param>
     /// <param name="flags">The flags that specify how the type declaration should be formatted.</param>
     /// <returns>Returns the type declaration for the current <see cref="Type"/> instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="type"/> is <see langword="null"/>.</exception>
     public static string GetTypeDeclaration(Type type, TypeDeclarationFlags flags)
     {
         RequireNotNull(type, TypeNullExceptionMessage);

@@ -43,12 +43,11 @@ public readonly partial struct UInt512
     /// <summary>
     /// Serves as the hash code function for this instance.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for the current instance.</returns>
     /// <remarks>
     /// Hashes every byte of the 512-bit representation rather than combining the upper and lower
     /// <see cref="UInt256"/> hashes: <see cref="ulong.GetHashCode"/> XORs its two 32-bit halves, which
-    /// causes pairs like <c>2^k</c> and <c>2^(k+32)</c> to collide and that loss propagates through
-    /// <see cref="HashCode.Combine{T1,T2}(T1,T2)"/> on the constituent limbs.
+    /// causes pairs like <c>2^k</c> and <c>2^(k+32)</c> to collide.
     /// </remarks>
     public override int GetHashCode()
     {

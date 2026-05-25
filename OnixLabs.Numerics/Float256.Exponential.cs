@@ -29,9 +29,11 @@ public readonly partial struct Float256
     /// </summary>
     private static readonly Float256 ExpLowerThreshold = Parse("-181851", CultureInfo.InvariantCulture);
 
-    /// <summary>Computes <see cref="E"/> raised to the power of the specified <see cref="Float256"/> value.</summary>
-    /// <param name="value">The exponent.</param>
-    /// <returns>Returns <c>e^value</c>.</returns>
+    /// <summary>
+    /// Computes <see cref="E"/> raised to the power of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The exponent to raise <see cref="E"/> to.</param>
+    /// <returns>Returns <c>e^value</c>; NaN for NaN; <see cref="PositiveInfinity"/> for positive infinity or overflow; <see cref="Zero"/> for negative infinity or underflow.</returns>
     public static Float256 Exp(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -44,9 +46,11 @@ public readonly partial struct Float256
         return ExpCore(value);
     }
 
-    /// <summary>Computes <c>2</c> raised to the power of the specified <see cref="Float256"/> value.</summary>
-    /// <param name="value">The exponent.</param>
-    /// <returns>Returns <c>2^value</c>.</returns>
+    /// <summary>
+    /// Computes <c>2</c> raised to the power of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The exponent to raise <c>2</c> to.</param>
+    /// <returns>Returns <c>2^value</c>; NaN for NaN; <see cref="PositiveInfinity"/> for positive infinity or overflow; <see cref="Zero"/> for negative infinity or underflow.</returns>
     public static Float256 Exp2(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -64,9 +68,11 @@ public readonly partial struct Float256
         return Exp(value * Ln2);
     }
 
-    /// <summary>Computes <c>10</c> raised to the power of the specified <see cref="Float256"/> value.</summary>
-    /// <param name="value">The exponent.</param>
-    /// <returns>Returns <c>10^value</c>.</returns>
+    /// <summary>
+    /// Computes <c>10</c> raised to the power of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The exponent to raise <c>10</c> to.</param>
+    /// <returns>Returns <c>10^value</c>; NaN for NaN; <see cref="PositiveInfinity"/> for positive infinity or overflow; <see cref="Zero"/> for negative infinity or underflow.</returns>
     public static Float256 Exp10(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -77,9 +83,11 @@ public readonly partial struct Float256
         return Exp(value * Ln10);
     }
 
-    /// <summary>Computes <see cref="E"/> raised to the power minus one of the specified <see cref="Float256"/> value, preserving precision near zero.</summary>
-    /// <param name="value">The exponent.</param>
-    /// <returns>Returns <c>e^value - 1</c>.</returns>
+    /// <summary>
+    /// Computes <see cref="E"/> raised to the power of the specified <see cref="Float256"/> value, minus one, preserving accuracy near zero.
+    /// </summary>
+    /// <param name="value">The exponent to raise <see cref="E"/> to.</param>
+    /// <returns>Returns <c>e^value - 1</c>; preserves the sign of zero; returns <see cref="NegativeOne"/> for negative infinity.</returns>
     public static Float256 ExpM1(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -90,9 +98,11 @@ public readonly partial struct Float256
         return ExpM1Core(value);
     }
 
-    /// <summary>Computes <c>2</c> raised to the power minus one of the specified <see cref="Float256"/> value, preserving precision near zero.</summary>
-    /// <param name="value">The exponent.</param>
-    /// <returns>Returns <c>2^value - 1</c>.</returns>
+    /// <summary>
+    /// Computes <c>2</c> raised to the power of the specified <see cref="Float256"/> value, minus one, preserving accuracy near zero.
+    /// </summary>
+    /// <param name="value">The exponent to raise <c>2</c> to.</param>
+    /// <returns>Returns <c>2^value - 1</c>; preserves the sign of zero; returns <see cref="NegativeOne"/> for negative infinity.</returns>
     public static Float256 Exp2M1(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -103,9 +113,11 @@ public readonly partial struct Float256
         return ExpM1Core(value * Ln2);
     }
 
-    /// <summary>Computes <c>10</c> raised to the power minus one of the specified <see cref="Float256"/> value, preserving precision near zero.</summary>
-    /// <param name="value">The exponent.</param>
-    /// <returns>Returns <c>10^value - 1</c>.</returns>
+    /// <summary>
+    /// Computes <c>10</c> raised to the power of the specified <see cref="Float256"/> value, minus one, preserving accuracy near zero.
+    /// </summary>
+    /// <param name="value">The exponent to raise <c>10</c> to.</param>
+    /// <returns>Returns <c>10^value - 1</c>; preserves the sign of zero; returns <see cref="NegativeOne"/> for negative infinity.</returns>
     public static Float256 Exp10M1(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -121,7 +133,7 @@ public readonly partial struct Float256
     /// </summary>
     /// <param name="value">The exponent, assumed to be finite and inside the saturation thresholds.</param>
     /// <returns>Returns <c>e^value</c> rounded to <see cref="Float256"/> precision.</returns>
-    private static Float256 ExpCore(Float256 value)
+    private static Float256 ExpCore(in Float256 value)
     {
         Float256 nFloat = Round(value * Log2E);
         int n = (int)nFloat;
@@ -145,7 +157,7 @@ public readonly partial struct Float256
     /// </summary>
     /// <param name="value">The exponent, assumed to be finite.</param>
     /// <returns>Returns <c>e^value - 1</c> rounded to <see cref="Float256"/> precision.</returns>
-    private static Float256 ExpM1Core(Float256 value)
+    private static Float256 ExpM1Core(in Float256 value)
     {
         if (Abs(value) >= Half)
         {

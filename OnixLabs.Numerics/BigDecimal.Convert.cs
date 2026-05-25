@@ -20,13 +20,31 @@ namespace OnixLabs.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    /// <inheritdoc/>
     static bool INumberBase<BigDecimal>.TryConvertFromChecked<TOther>(TOther value, out BigDecimal result) => TryConvertFrom(value, out result);
+
+    /// <inheritdoc/>
     static bool INumberBase<BigDecimal>.TryConvertFromSaturating<TOther>(TOther value, out BigDecimal result) => TryConvertFrom(value, out result);
+
+    /// <inheritdoc/>
     static bool INumberBase<BigDecimal>.TryConvertFromTruncating<TOther>(TOther value, out BigDecimal result) => TryConvertFrom(value, out result);
+
+    /// <inheritdoc/>
     static bool INumberBase<BigDecimal>.TryConvertToChecked<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result) => TryConvertTo(value, out result);
+
+    /// <inheritdoc/>
     static bool INumberBase<BigDecimal>.TryConvertToSaturating<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result) => TryConvertTo(value, out result);
+
+    /// <inheritdoc/>
     static bool INumberBase<BigDecimal>.TryConvertToTruncating<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result) => TryConvertTo(value, out result);
 
+    /// <summary>
+    /// Attempts to convert the specified value of another numeric type into a <see cref="BigDecimal"/> value.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="result">When this method returns, contains the converted <see cref="BigDecimal"/> value, or the default value if the conversion failed.</param>
+    /// <typeparam name="TOther">The numeric type of the value to convert from.</typeparam>
+    /// <returns>Returns <see langword="true"/> if the conversion succeeded; otherwise, <see langword="false"/>.</returns>
     private static bool TryConvertFrom<TOther>(TOther value, out BigDecimal result) where TOther : INumberBase<TOther>
     {
         if (typeof(TOther) == typeof(sbyte))
@@ -117,6 +135,13 @@ public readonly partial struct BigDecimal
         return false;
     }
 
+    /// <summary>
+    /// Attempts to convert the specified <see cref="BigDecimal"/> value into a value of another numeric type.
+    /// </summary>
+    /// <param name="value">The <see cref="BigDecimal"/> value to convert.</param>
+    /// <param name="result">When this method returns, contains the converted value, or the default value if the conversion failed.</param>
+    /// <typeparam name="TOther">The numeric type of the value to convert to.</typeparam>
+    /// <returns>Returns <see langword="true"/> if the conversion succeeded; otherwise, <see langword="false"/>.</returns>
     private static bool TryConvertTo<TOther>(BigDecimal value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
         // Each branch must first convert the BigDecimal to the concrete target type via its explicit conversion

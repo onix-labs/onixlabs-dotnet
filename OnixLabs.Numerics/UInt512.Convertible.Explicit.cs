@@ -428,7 +428,7 @@ public readonly partial struct UInt512
     /// </summary>
     /// <param name="value">The value to convert.</param>
     /// <returns>Returns the <see cref="BigInteger"/> representation of <paramref name="value"/>.</returns>
-    internal static BigInteger UInt512ToBigInteger(UInt512 value)
+    internal static BigInteger UInt512ToBigInteger(in UInt512 value)
     {
         BigInteger high = (BigInteger)value.UpperBits;
         BigInteger low = (BigInteger)value.LowerBits;

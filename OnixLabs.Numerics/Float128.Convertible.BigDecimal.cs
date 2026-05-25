@@ -122,7 +122,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="absoluteUnscaledValue">The absolute value of the <see cref="BigDecimal.UnscaledValue"/>.</param>
     /// <param name="scale">The scale of the <see cref="BigDecimal"/> being converted.</param>
-    /// <returns>The number of guard bits to retain beyond the binary128 significand precision during conversion.</returns>
+    /// <returns>Returns the number of guard bits to retain beyond the binary128 significand precision during conversion.</returns>
     private static int ChooseExtraBits(BigInteger absoluteUnscaledValue, int scale)
     {
         const double Log2Of10 = 3.3219280948873623d;
@@ -141,7 +141,7 @@ public readonly partial struct Float128
     /// Converts the low 128 bits of the specified <see cref="BigInteger"/> to a <see cref="UInt128"/>, truncating any higher-order bits.
     /// </summary>
     /// <param name="value">The <see cref="BigInteger"/> value to convert.</param>
-    /// <returns>A <see cref="UInt128"/> containing the low 128 bits of <paramref name="value"/>.</returns>
+    /// <returns>Returns a <see cref="UInt128"/> containing the low 128 bits of <paramref name="value"/>.</returns>
     private static UInt128 BigIntegerToUInt128(BigInteger value)
     {
         UInt128 result = UInt128.Zero;

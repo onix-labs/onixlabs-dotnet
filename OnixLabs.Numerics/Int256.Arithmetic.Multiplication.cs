@@ -62,21 +62,21 @@ public readonly partial struct Int256
     /// </summary>
     /// <param name="value">The <see cref="Int256"/> value to reinterpret.</param>
     /// <returns>Returns the <see cref="UInt256"/> value sharing the same bit pattern as <paramref name="value"/>.</returns>
-    internal static UInt256 ReinterpretAsUnsigned(Int256 value) => new(value.UpperBits, value.LowerBits);
+    internal static UInt256 ReinterpretAsUnsigned(in Int256 value) => new(value.UpperBits, value.LowerBits);
 
     /// <summary>
     /// Reinterprets the bit pattern of the specified <see cref="UInt256"/> value as an <see cref="Int256"/> value without changing the underlying bytes.
     /// </summary>
     /// <param name="value">The <see cref="UInt256"/> value to reinterpret.</param>
     /// <returns>Returns the <see cref="Int256"/> value sharing the same bit pattern as <paramref name="value"/>.</returns>
-    internal static Int256 ReinterpretAsSigned(UInt256 value) => new(value.UpperBits, value.LowerBits);
+    internal static Int256 ReinterpretAsSigned(in UInt256 value) => new(value.UpperBits, value.LowerBits);
 
     /// <summary>
     /// Computes the absolute magnitude of the specified <see cref="Int256"/> value as a <see cref="UInt256"/> value, so that <see cref="Int256.MinValue"/> can be represented without overflow.
     /// </summary>
     /// <param name="value">The <see cref="Int256"/> value whose absolute magnitude is required.</param>
     /// <returns>Returns the unsigned magnitude of <paramref name="value"/>.</returns>
-    internal static UInt256 AbsToUnsigned(Int256 value)
+    internal static UInt256 AbsToUnsigned(in Int256 value)
     {
         if (IsNegative(value))
         {

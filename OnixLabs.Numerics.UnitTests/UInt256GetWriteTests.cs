@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Numerics;
 
 namespace OnixLabs.Numerics.UnitTests;
 
@@ -139,5 +140,40 @@ public sealed class UInt256GetWriteTests
         Assert.True(UInt256.MaxValue.TryWriteBigEndian(buffer, out _));
         Assert.True(UInt256.TryReadBigEndian(buffer, true, out UInt256 read));
         Assert.Equal(UInt256.MaxValue, read);
+    }
+
+    [Theory(DisplayName = "UInt256.GetShortestBitLength should match the UInt128 sibling for in-range values")]
+    [InlineData(0UL)]
+    [InlineData(1UL)]
+    [InlineData(2UL)]
+    [InlineData(255UL)]
+    [InlineData(ulong.MaxValue)]
+    public void UInt256GetShortestBitLengthShouldMatchUInt128Sibling(ulong value)
+    {
+        int expected = ShortestBitLength((UInt128)value);
+        Assert.Equal(expected, ((UInt256)value).GetShortestBitLength());
+    }
+
+    private static int ShortestBitLength<T>(T value) where T : IBinaryInteger<T> => value.GetShortestBitLength();
+
+    [Fact(DisplayName = "UInt256.GetShortestBitLength of MaxValue should match the BigInteger bit length (256)")]
+    public void UInt256GetShortestBitLengthOfMaxValueShouldMatchBigInteger()
+    {
+        BigInteger big = (BigInteger.One << 256) - BigInteger.One;
+        Assert.Equal((int)big.GetBitLength(), UInt256.MaxValue.GetShortestBitLength());
+    }
+
+    [Fact(DisplayName = "UInt256.TryWriteBigEndian should match BigInteger big-endian bytes")]
+    public void UInt256TryWriteBigEndianShouldMatchBigIntegerBytes()
+    {
+        UInt256 value = UInt256.Parse("123456789012345678901234567890");
+        Span<byte> buffer = stackalloc byte[32];
+        Assert.True(value.TryWriteBigEndian(buffer, out _));
+
+        BigInteger big = (BigInteger)value;
+        byte[] bigBytes = big.ToByteArray(isUnsigned: true, isBigEndian: true);
+        byte[] expected = new byte[32];
+        Array.Copy(bigBytes, 0, expected, 32 - bigBytes.Length, bigBytes.Length);
+        Assert.Equal(expected, buffer.ToArray());
     }
 }

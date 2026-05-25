@@ -79,8 +79,8 @@ public readonly partial struct Float128
         int doublings = 0;
         while (reduced > AtanReductionThreshold)
         {
-            Float128 oneePlusSquared = One + reduced * reduced;
-            reduced = reduced / (One + Sqrt(oneePlusSquared));
+            Float128 onePlusSquared = One + reduced * reduced;
+            reduced = reduced / (One + Sqrt(onePlusSquared));
             doublings++;
         }
 
@@ -131,9 +131,9 @@ public readonly partial struct Float128
             return yNegative ? -Pi : Pi;
         }
 
-        Float128 base_atan = Atan(y / x);
-        if (IsPositive(x)) return base_atan;
-        return yNegative ? base_atan - Pi : base_atan + Pi;
+        Float128 baseAtan = Atan(y / x);
+        if (IsPositive(x)) return baseAtan;
+        return yNegative ? baseAtan - Pi : baseAtan + Pi;
     }
 
     /// <summary>
@@ -186,8 +186,8 @@ public readonly partial struct Float128
     /// Evaluates the Taylor series for <c>atan(y)</c> on the reduced argument, suitable for small magnitudes of <paramref name="y"/>.
     /// </summary>
     /// <param name="y">The reduced argument whose magnitude is small enough for rapid series convergence.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>atan(y)</c>.</returns>
-    private static Float128 AtanSeries(Float128 y)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>atan(y)</c>.</returns>
+    private static Float128 AtanSeries(in Float128 y)
     {
         Float128 sum = y;
         Float128 term = y;

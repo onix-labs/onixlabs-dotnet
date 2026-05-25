@@ -172,4 +172,40 @@ public sealed class UInt256ConvertibleExplicitTests
         BigInteger converted = (BigInteger)source;
         Assert.Equal(source, (UInt256)converted);
     }
+
+    [Fact(DisplayName = "UInt256 explicit narrowing to primitive integers should equal the BigInteger low-bits masks")]
+    public void UInt256ExplicitNarrowingToPrimitivesShouldMatchMaskedLowBits()
+    {
+        // A value with the upper limb populated, so the narrowed low bits are non-trivial.
+        BigInteger oracle = (BigInteger.One << 200) + 0xDEAD_BEEF_CAFE_F00DUL;
+        UInt256 source = (UInt256)oracle;
+
+        Assert.Equal((byte)(oracle & 0xFF), (byte)source);
+        Assert.Equal((ushort)(oracle & 0xFFFF), (ushort)source);
+        Assert.Equal((uint)(oracle & 0xFFFFFFFF), (uint)source);
+        Assert.Equal((ulong)(oracle & ulong.MaxValue), (ulong)source);
+    }
+
+    [Fact(DisplayName = "UInt256 explicit checked narrowing should throw when the value exceeds the target range")]
+    public void UInt256ExplicitCheckedNarrowingShouldThrowWhenOutOfRange()
+    {
+        UInt256 source = (UInt256)0x1_0000UL;
+        Assert.Throws<OverflowException>(() => checked((byte)source));
+        Assert.Throws<OverflowException>(() => checked((ushort)((UInt256)(ushort.MaxValue + 1))));
+        Assert.Throws<OverflowException>(() => checked((uint)((UInt256)uint.MaxValue + UInt256.One)));
+        Assert.Throws<OverflowException>(() => checked((ulong)((UInt256)ulong.MaxValue + UInt256.One)));
+        // Signed targets overflow when the unsigned value exceeds the signed maximum.
+        Assert.Throws<OverflowException>(() => checked((int)((UInt256)(uint)int.MaxValue + UInt256.One)));
+        Assert.Throws<OverflowException>(() => checked((long)((UInt256)(ulong)long.MaxValue + UInt256.One)));
+    }
+
+    [Fact(DisplayName = "UInt256 explicit checked narrowing of in-range values should match the unchecked result")]
+    public void UInt256ExplicitCheckedNarrowingOfInRangeShouldMatchUnchecked()
+    {
+        UInt256 source = (UInt256)250UL;
+        Assert.Equal((byte)250, checked((byte)source));
+        Assert.Equal((ushort)250, checked((ushort)source));
+        Assert.Equal(250, checked((int)source));
+        Assert.Equal(250L, checked((long)source));
+    }
 }

@@ -91,7 +91,7 @@ public readonly partial struct Float128
     /// Resolves the number of significant digits requested by the specified format specifier, defaulting to <see cref="MaxRoundTripDigits"/> when unspecified.
     /// </summary>
     /// <param name="format">The format specifier to inspect.</param>
-    /// <returns>The number of significant digits to use when rendering the value.</returns>
+    /// <returns>Returns the number of significant digits to use when rendering the value.</returns>
     private static int ResolveSignificantDigits(ReadOnlySpan<char> format)
     {
         if (format.IsEmpty || format.IsWhiteSpace()) return MaxRoundTripDigits;

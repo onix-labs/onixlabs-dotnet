@@ -90,4 +90,48 @@ public sealed class Int256ConstantTests
         Assert.True(Int256.MinValue == Int256.MinValue);
         Assert.True(Int256.MaxValue == Int256.MaxValue);
     }
+
+    [Fact(DisplayName = "Int256.AdditiveIdentity should equal Zero")]
+    public void Int256AdditiveIdentityShouldEqualZero()
+    {
+        Assert.Equal(Int256.Zero, AdditiveIdentity<Int256, Int256>());
+    }
+
+    [Fact(DisplayName = "Int256.MultiplicativeIdentity should equal One")]
+    public void Int256MultiplicativeIdentityShouldEqualOne()
+    {
+        Assert.Equal(Int256.One, MultiplicativeIdentity<Int256, Int256>());
+    }
+
+    [Fact(DisplayName = "Int256.Radix should be 2")]
+    public void Int256RadixShouldBeTwo()
+    {
+        Assert.Equal(2, Radix<Int256>());
+    }
+
+    [Fact(DisplayName = "Int256 IMinMaxValue members should equal the public MinValue and MaxValue")]
+    public void Int256MinMaxValueInterfaceMembersShouldEqualPublicConstants()
+    {
+        Assert.Equal(Int256.MinValue, MinValue<Int256>());
+        Assert.Equal(Int256.MaxValue, MaxValue<Int256>());
+    }
+
+    [Fact(DisplayName = "Int256 ISignedNumber.NegativeOne should equal the public NegativeOne")]
+    public void Int256SignedNumberNegativeOneShouldEqualPublicConstant()
+    {
+        Assert.Equal(Int256.NegativeOne, SignedNegativeOne<Int256>());
+        Assert.Equal(BigInteger.MinusOne, (BigInteger)SignedNegativeOne<Int256>());
+    }
+
+    private static TResult AdditiveIdentity<T, TResult>() where T : IAdditiveIdentity<T, TResult> => T.AdditiveIdentity;
+
+    private static TResult MultiplicativeIdentity<T, TResult>() where T : IMultiplicativeIdentity<T, TResult> => T.MultiplicativeIdentity;
+
+    private static int Radix<T>() where T : INumberBase<T> => T.Radix;
+
+    private static T MinValue<T>() where T : IMinMaxValue<T> => T.MinValue;
+
+    private static T MaxValue<T>() where T : IMinMaxValue<T> => T.MaxValue;
+
+    private static T SignedNegativeOne<T>() where T : ISignedNumber<T> => T.NegativeOne;
 }

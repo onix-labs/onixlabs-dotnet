@@ -33,7 +33,7 @@ public readonly partial struct Float128
     /// <typeparam name="TOther">The source numeric type being converted from.</typeparam>
     /// <param name="value">The value to convert.</param>
     /// <param name="result">When this method returns, contains the converted <see cref="Float128"/> if successful; otherwise, the default value.</param>
-    /// <returns><see langword="true"/> if <typeparamref name="TOther"/> is a supported source type; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a supported source type; otherwise, <see langword="false"/>.</returns>
     private static bool TryConvertFrom<TOther>(TOther value, out Float128 result) where TOther : INumberBase<TOther>
     {
         if (typeof(TOther) == typeof(sbyte)) { result = (sbyte)(object)value!; return true; }
@@ -65,7 +65,7 @@ public readonly partial struct Float128
     /// <typeparam name="TOther">The destination numeric type being converted to.</typeparam>
     /// <param name="value">The <see cref="Float128"/> value to convert.</param>
     /// <param name="result">When this method returns, contains the converted value if successful; otherwise, the default value.</param>
-    /// <returns><see langword="true"/> if <typeparamref name="TOther"/> is a supported destination type; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a supported destination type; otherwise, <see langword="false"/>.</returns>
     private static bool TryConvertTo<TOther>(Float128 value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {
         if (typeof(TOther) == typeof(sbyte)) { result = (TOther)(object)(sbyte)value; return true; }
@@ -97,7 +97,7 @@ public readonly partial struct Float128
     /// <typeparam name="TOther">The destination numeric type being converted to.</typeparam>
     /// <param name="value">The <see cref="Float128"/> value to convert.</param>
     /// <param name="result">When this method returns, contains the converted value if successful; otherwise, the default value.</param>
-    /// <returns><see langword="true"/> if <typeparamref name="TOther"/> is a supported destination type; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if <typeparamref name="TOther"/> is a supported destination type; otherwise, <see langword="false"/>.</returns>
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is outside the representable range of <typeparamref name="TOther"/>.</exception>
     private static bool TryConvertToChecked<TOther>(Float128 value, [MaybeNullWhen(false)] out TOther result) where TOther : INumberBase<TOther>
     {

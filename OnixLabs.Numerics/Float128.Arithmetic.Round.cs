@@ -112,7 +112,7 @@ public readonly partial struct Float128
     /// Rounds the specified <see cref="Float128"/> value to the nearest integer, with ties breaking to the value whose least significant bit is even.
     /// </summary>
     /// <param name="value">The <see cref="Float128"/> value to round.</param>
-    /// <returns>The value of <paramref name="value"/> rounded to the nearest integer using banker's rounding.</returns>
+    /// <returns>Returns the value of <paramref name="value"/> rounded to the nearest integer using banker's rounding.</returns>
     private static Float128 RoundHalfToEven(Float128 value)
     {
         if (!TryStartRound(value, out RoundingContext context)) return context.EarlyResult;
@@ -125,7 +125,7 @@ public readonly partial struct Float128
     /// Rounds the specified <see cref="Float128"/> value to the nearest integer, with ties breaking away from zero.
     /// </summary>
     /// <param name="value">The <see cref="Float128"/> value to round.</param>
-    /// <returns>The value of <paramref name="value"/> rounded to the nearest integer, with halves moved away from zero.</returns>
+    /// <returns>Returns the value of <paramref name="value"/> rounded to the nearest integer, with halves moved away from zero.</returns>
     private static Float128 RoundHalfAwayFromZero(Float128 value)
     {
         if (!TryStartRound(value, out RoundingContext context)) return context.EarlyResult;
@@ -138,7 +138,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="value">The <see cref="Float128"/> value being rounded.</param>
     /// <param name="context">When this method returns, contains either the rounding context to apply or an early-exit result.</param>
-    /// <returns><see langword="true"/> if rounding should proceed; otherwise, <see langword="false"/> when an early-exit result is supplied in <paramref name="context"/>.</returns>
+    /// <returns>Returns <see langword="true"/> if rounding should proceed; otherwise, <see langword="false"/> when an early-exit result is supplied in <paramref name="context"/>.</returns>
     private static bool TryStartRound(Float128 value, out RoundingContext context)
     {
         context = default;
@@ -218,7 +218,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="context">The rounding context produced by <see cref="TryStartRound"/>.</param>
     /// <param name="roundUp">A value indicating whether the magnitude should be incremented.</param>
-    /// <returns>The <see cref="Float128"/> integer value obtained after applying the rounding decision.</returns>
+    /// <returns>Returns the <see cref="Float128"/> integer value obtained after applying the rounding decision.</returns>
     private static Float128 ApplyRounding(RoundingContext context, bool roundUp)
     {
         if (!roundUp) return context.Truncated;

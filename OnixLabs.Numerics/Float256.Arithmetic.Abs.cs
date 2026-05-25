@@ -31,7 +31,7 @@ public readonly partial struct Float256
     /// <summary>Returns the sign of the specified <see cref="Float256"/> value.</summary>
     /// <param name="value">The value whose sign is to be returned.</param>
     /// <returns>Returns -1 for negative values, 0 for zero, and 1 for positive values.</returns>
-    /// <exception cref="ArithmeticException">If <paramref name="value"/> is <see cref="NaN"/>.</exception>
+    /// <exception cref="ArithmeticException">Thrown when <paramref name="value"/> is <see cref="NaN"/>.</exception>
     public static int Sign(Float256 value)
     {
         if (IsNaN(value)) throw new ArithmeticException("Function does not accept floating point Not-a-Number values.");

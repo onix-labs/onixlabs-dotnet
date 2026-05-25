@@ -26,8 +26,8 @@ public readonly partial struct BigDecimal
     /// <param name="scale">The number of decimal places to round by. The default value is zero.</param>
     /// <param name="mode">The rounding mode to round by. The default value is <see cref="MidpointRounding.ToEven"/>.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value rounded to the specified number of fractional digits.</returns>
-    /// <exception cref="ArgumentException">If the specified scale is negative.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If the specified rounding mode is not defined.</exception>
+    /// <exception cref="ArgumentException">Thrown when the specified scale is negative.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified rounding mode is not defined.</exception>
     public static BigDecimal Round(BigDecimal value, int scale = 0, MidpointRounding mode = default)
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
@@ -63,8 +63,8 @@ public readonly partial struct BigDecimal
     /// <param name="scale">The number of decimal places to round by. The default value is zero.</param>
     /// <param name="mode">The rounding mode to round by. The default value is <see cref="MidpointRounding.ToEven"/>.</param>
     /// <returns>Returns a <see cref="BigDecimal"/> value rounded to the specified number of fractional digits.</returns>
-    /// <exception cref="ArgumentException">If the specified scale is negative.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If the specified rounding mode is not defined.</exception>
+    /// <exception cref="ArgumentException">Thrown when the specified scale is negative.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified rounding mode is not defined.</exception>
     public BigDecimal Round(int scale = 0, MidpointRounding mode = default) => Round(this, scale, mode);
 
     /// <summary>

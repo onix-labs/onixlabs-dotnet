@@ -62,7 +62,7 @@ internal sealed partial class NumberInfoFormatter
     /// Returns a copy of the specified <see cref="NumberInfo"/> rescaled to the desired decimal scale.
     /// Uses <see cref="MidpointRounding.AwayFromZero"/> when the target scale is less than the current scale.
     /// </summary>
-    private static NumberInfo Rescale(NumberInfo value, int targetScale)
+    private static NumberInfo Rescale(in NumberInfo value, int targetScale)
     {
         if (targetScale == value.Scale) return value;
 

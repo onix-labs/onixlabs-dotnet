@@ -62,21 +62,21 @@ public readonly partial struct Int512
     /// </summary>
     /// <param name="value">The signed value whose bits should be reinterpreted.</param>
     /// <returns>Returns the <see cref="UInt512"/> value with the same bit pattern as <paramref name="value"/>.</returns>
-    internal static UInt512 ReinterpretAsUnsigned(Int512 value) => new(value.UpperBits, value.LowerBits);
+    internal static UInt512 ReinterpretAsUnsigned(in Int512 value) => new(value.UpperBits, value.LowerBits);
 
     /// <summary>
     /// Reinterprets the bit pattern of a <see cref="UInt512"/> value as an <see cref="Int512"/> value.
     /// </summary>
     /// <param name="value">The unsigned value whose bits should be reinterpreted.</param>
     /// <returns>Returns the <see cref="Int512"/> value with the same bit pattern as <paramref name="value"/>.</returns>
-    internal static Int512 ReinterpretAsSigned(UInt512 value) => new(value.UpperBits, value.LowerBits);
+    internal static Int512 ReinterpretAsSigned(in UInt512 value) => new(value.UpperBits, value.LowerBits);
 
     /// <summary>
     /// Computes the unsigned magnitude of an <see cref="Int512"/> value by negating the bit pattern when negative.
     /// </summary>
     /// <param name="value">The signed value whose absolute magnitude is required.</param>
     /// <returns>Returns the absolute magnitude of <paramref name="value"/> as a <see cref="UInt512"/>.</returns>
-    internal static UInt512 AbsToUnsigned(Int512 value)
+    internal static UInt512 AbsToUnsigned(in Int512 value)
     {
         if (IsNegative(value))
         {

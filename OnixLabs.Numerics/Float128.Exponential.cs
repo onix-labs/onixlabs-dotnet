@@ -132,8 +132,8 @@ public readonly partial struct Float128
     /// Evaluates the exponential function by range-reducing to <c>r = value - n ln 2</c> and summing the Taylor series for <c>e^r</c>, then rescaling by <c>2^n</c>.
     /// </summary>
     /// <param name="value">The exponent within the supported finite range.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>e^value</c>.</returns>
-    private static Float128 ExpCore(Float128 value)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>e^value</c>.</returns>
+    private static Float128 ExpCore(in Float128 value)
     {
         Float128 nFloat = Round(value * Log2E);
         int n = (int)nFloat;
@@ -156,8 +156,8 @@ public readonly partial struct Float128
     /// Evaluates <c>e^value - 1</c>, summing the Taylor series directly for small arguments to retain precision near zero.
     /// </summary>
     /// <param name="value">The exponent within the supported finite range.</param>
-    /// <returns>The <see cref="Float128"/> approximation of <c>e^value - 1</c>.</returns>
-    private static Float128 ExpM1Core(Float128 value)
+    /// <returns>Returns the <see cref="Float128"/> approximation of <c>e^value - 1</c>.</returns>
+    private static Float128 ExpM1Core(in Float128 value)
     {
         if (Abs(value) >= Half)
         {

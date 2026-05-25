@@ -26,6 +26,8 @@ public readonly partial struct BigDecimal
     /// <param name="right">The <paramref name="right"/> value to divide by.</param>
     /// <param name="mode">The rounding strategy to use. The default value is <see cref="MidpointRounding.ToEven"/>.</param>
     /// <returns>Returns the quotient of the specified <see cref="BigDecimal"/> values.</returns>
+    /// <exception cref="DivideByZeroException">Thrown when <paramref name="right"/> is zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="MidpointRounding"/> value.</exception>
     public static BigDecimal Divide(BigDecimal left, BigDecimal right, MidpointRounding mode = default)
     {
         RequireIsDefined(mode);

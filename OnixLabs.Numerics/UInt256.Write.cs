@@ -83,10 +83,9 @@ public readonly partial struct UInt256
         if (source.Length > ByteCount)
         {
             ReadOnlySpan<byte> overflow = source[..^ByteCount];
-            byte signCheck = isUnsigned ? (byte)0 : (byte)0;
             foreach (byte b in overflow)
             {
-                if (b != signCheck)
+                if (b != 0)
                 {
                     value = default;
                     return false;
@@ -123,10 +122,9 @@ public readonly partial struct UInt256
         if (source.Length > ByteCount)
         {
             ReadOnlySpan<byte> overflow = source[ByteCount..];
-            byte signCheck = isUnsigned ? (byte)0 : (byte)0;
             foreach (byte b in overflow)
             {
-                if (b != signCheck)
+                if (b != 0)
                 {
                     value = default;
                     return false;

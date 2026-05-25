@@ -29,6 +29,8 @@ public readonly partial struct Int256
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">An optional culture-specific format provider.</param>
     /// <returns>Returns the parsed <see cref="Int256"/> value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a correct format.</exception>
+    /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is outside the range of <see cref="Int256"/>.</exception>
     public static Int256 Parse(string value, IFormatProvider? provider = null) => Parse(value.AsSpan(), provider);
 
     /// <summary>Parses the specified string into an <see cref="Int256"/> value using the specified styles.</summary>
@@ -36,12 +38,16 @@ public readonly partial struct Int256
     /// <param name="style">A bitwise combination of number styles.</param>
     /// <param name="provider">An optional culture-specific format provider.</param>
     /// <returns>Returns the parsed <see cref="Int256"/> value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a correct format.</exception>
+    /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is outside the range of <see cref="Int256"/>.</exception>
     public static Int256 Parse(string value, NumberStyles style, IFormatProvider? provider = null) => Parse(value.AsSpan(), style, provider);
 
     /// <summary>Parses the specified span into an <see cref="Int256"/> value.</summary>
     /// <param name="value">The value to parse.</param>
     /// <param name="provider">An optional culture-specific format provider.</param>
     /// <returns>Returns the parsed <see cref="Int256"/> value.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not in a correct format.</exception>
+    /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is outside the range of <see cref="Int256"/>.</exception>
     public static Int256 Parse(ReadOnlySpan<char> value, IFormatProvider? provider = null) => Parse(value, DefaultNumberStyles, provider);
 
     /// <summary>Parses the specified span into an <see cref="Int256"/> value using the specified styles.</summary>

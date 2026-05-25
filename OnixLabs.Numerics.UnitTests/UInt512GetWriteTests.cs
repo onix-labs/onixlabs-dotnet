@@ -184,6 +184,27 @@ public sealed class UInt512GetWriteTests
         Assert.Throws<OverflowException>(() => UInt512.ReadBigEndian(copy, isUnsigned: true));
     }
 
+    [Theory(DisplayName = "UInt512.GetShortestBitLength should match the UInt128 sibling for in-range values")]
+    [InlineData(0UL)]
+    [InlineData(1UL)]
+    [InlineData(2UL)]
+    [InlineData(255UL)]
+    [InlineData(ulong.MaxValue)]
+    public void UInt512GetShortestBitLengthShouldMatchUInt128Sibling(ulong value)
+    {
+        int expected = ShortestBitLength((UInt128)value);
+        Assert.Equal(expected, ((UInt512)value).GetShortestBitLength());
+    }
+
+    private static int ShortestBitLength<T>(T value) where T : IBinaryInteger<T> => value.GetShortestBitLength();
+
+    [Fact(DisplayName = "UInt512.GetShortestBitLength of MaxValue should match the BigInteger bit length (512)")]
+    public void UInt512GetShortestBitLengthOfMaxValueShouldMatchBigInteger()
+    {
+        BigInteger big = (BigInteger.One << 512) - BigInteger.One;
+        Assert.Equal((int)big.GetBitLength(), UInt512.MaxValue.GetShortestBitLength());
+    }
+
     [Fact(DisplayName = "UInt512 big-endian writes should produce the network byte order of BigInteger")]
     public void UInt512BigEndianMatchesBigIntegerOrder()
     {

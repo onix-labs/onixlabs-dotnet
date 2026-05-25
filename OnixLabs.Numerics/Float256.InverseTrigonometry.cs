@@ -24,9 +24,11 @@ public readonly partial struct Float256
     /// </summary>
     private static readonly Float256 AtanReductionThreshold = Parse("0.03125", CultureInfo.InvariantCulture);
 
-    /// <summary>Computes the angle whose sine is the specified value.</summary>
-    /// <param name="value">The value whose arcsine is to be computed.</param>
-    /// <returns>Returns the angle in radians.</returns>
+    /// <summary>
+    /// Computes the angle whose sine is the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose arcsine is to be computed, in the closed interval <c>[-1, 1]</c>.</param>
+    /// <returns>Returns the angle, in radians, whose sine is <paramref name="value"/>; NaN for NaN or values outside <c>[-1, 1]</c>; preserves the sign of zero.</returns>
     public static Float256 Asin(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -40,9 +42,11 @@ public readonly partial struct Float256
         return Atan(value / denominator);
     }
 
-    /// <summary>Computes the angle whose cosine is the specified value.</summary>
-    /// <param name="value">The value whose arccosine is to be computed.</param>
-    /// <returns>Returns the angle in radians.</returns>
+    /// <summary>
+    /// Computes the angle whose cosine is the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose arccosine is to be computed, in the closed interval <c>[-1, 1]</c>.</param>
+    /// <returns>Returns the angle, in radians, whose cosine is <paramref name="value"/>; NaN for NaN or values outside <c>[-1, 1]</c>.</returns>
     public static Float256 Acos(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -55,9 +59,11 @@ public readonly partial struct Float256
         return PiOver2 - Asin(value);
     }
 
-    /// <summary>Computes the angle whose tangent is the specified value.</summary>
+    /// <summary>
+    /// Computes the angle whose tangent is the specified <see cref="Float256"/> value.
+    /// </summary>
     /// <param name="value">The value whose arctangent is to be computed.</param>
-    /// <returns>Returns the angle in radians.</returns>
+    /// <returns>Returns the angle, in radians, whose tangent is <paramref name="value"/>; preserves the sign of zero; ±π/2 for ±infinity.</returns>
     public static Float256 Atan(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -86,10 +92,12 @@ public readonly partial struct Float256
         return result;
     }
 
-    /// <summary>Computes the angle whose tangent is the quotient of the specified values.</summary>
-    /// <param name="y">The numerator.</param>
-    /// <param name="x">The denominator.</param>
-    /// <returns>Returns the angle in radians, in <c>(-π, π]</c>.</returns>
+    /// <summary>
+    /// Computes the angle whose tangent is the quotient of the specified <see cref="Float256"/> values, accounting for the quadrant of <c>(x, y)</c>.
+    /// </summary>
+    /// <param name="y">The numerator of the quotient.</param>
+    /// <param name="x">The denominator of the quotient.</param>
+    /// <returns>Returns the angle, in radians, whose tangent is <c>y / x</c>; resolves all four quadrants.</returns>
     public static Float256 Atan2(Float256 y, Float256 x)
     {
         if (IsNaN(y) || IsNaN(x)) return NaN;
@@ -128,9 +136,11 @@ public readonly partial struct Float256
         return yNegative ? atan - Pi : atan + Pi;
     }
 
-    /// <summary>Computes <see cref="Asin"/> divided by π.</summary>
-    /// <param name="value">The value whose arcsine is to be computed.</param>
-    /// <returns>Returns <c>Asin(value) / π</c>.</returns>
+    /// <summary>
+    /// Computes the angle whose sine is the specified <see cref="Float256"/> value, divided by π.
+    /// </summary>
+    /// <param name="value">The value whose arcsine is to be computed, in the closed interval <c>[-1, 1]</c>.</param>
+    /// <returns>Returns <c>Asin(value) / π</c>; NaN for NaN or values outside <c>[-1, 1]</c>; preserves the sign of zero.</returns>
     public static Float256 AsinPi(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -139,9 +149,11 @@ public readonly partial struct Float256
         return Asin(value) / Pi;
     }
 
-    /// <summary>Computes <see cref="Acos"/> divided by π.</summary>
-    /// <param name="value">The value whose arccosine is to be computed.</param>
-    /// <returns>Returns <c>Acos(value) / π</c>.</returns>
+    /// <summary>
+    /// Computes the angle whose cosine is the specified <see cref="Float256"/> value, divided by π.
+    /// </summary>
+    /// <param name="value">The value whose arccosine is to be computed, in the closed interval <c>[-1, 1]</c>.</param>
+    /// <returns>Returns <c>Acos(value) / π</c>; NaN for NaN or values outside <c>[-1, 1]</c>.</returns>
     public static Float256 AcosPi(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -149,9 +161,11 @@ public readonly partial struct Float256
         return Acos(value) / Pi;
     }
 
-    /// <summary>Computes <see cref="Atan"/> divided by π.</summary>
+    /// <summary>
+    /// Computes the angle whose tangent is the specified <see cref="Float256"/> value, divided by π.
+    /// </summary>
     /// <param name="value">The value whose arctangent is to be computed.</param>
-    /// <returns>Returns <c>Atan(value) / π</c>.</returns>
+    /// <returns>Returns <c>Atan(value) / π</c>; preserves the sign of zero; ±½ for ±infinity.</returns>
     public static Float256 AtanPi(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -160,10 +174,12 @@ public readonly partial struct Float256
         return Atan(value) / Pi;
     }
 
-    /// <summary>Computes <see cref="Atan2"/> divided by π.</summary>
-    /// <param name="y">The numerator.</param>
-    /// <param name="x">The denominator.</param>
-    /// <returns>Returns <c>Atan2(y, x) / π</c>.</returns>
+    /// <summary>
+    /// Computes the angle whose tangent is the quotient of the specified <see cref="Float256"/> values, divided by π, accounting for the quadrant of <c>(x, y)</c>.
+    /// </summary>
+    /// <param name="y">The numerator of the quotient.</param>
+    /// <param name="x">The denominator of the quotient.</param>
+    /// <returns>Returns <c>Atan2(y, x) / π</c>; resolves all four quadrants.</returns>
     public static Float256 Atan2Pi(Float256 y, Float256 x) => Atan2(y, x) / Pi;
 
     /// <summary>
@@ -171,7 +187,7 @@ public readonly partial struct Float256
     /// </summary>
     /// <param name="y">The reduced argument, assumed to be small enough for rapid series convergence.</param>
     /// <returns>Returns the arctangent of <paramref name="y"/> rounded to <see cref="Float256"/> precision.</returns>
-    private static Float256 AtanSeries(Float256 y)
+    private static Float256 AtanSeries(in Float256 y)
     {
         Float256 sum = y;
         Float256 term = y;

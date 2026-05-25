@@ -74,11 +74,6 @@ public readonly partial struct BigDecimal
     /// </summary>
     private const NumberStyles DefaultNumberStyles = NumberStyles.Any;
 
-    /// <summary>
-    /// The default culture for formatting and parsing operations.
-    /// </summary>
-    private static readonly CultureInfo DefaultCulture = CultureInfo.CurrentCulture;
-
     /// <inheritdoc cref="INumberBase{TSelf}.Radix"/>
     static int INumberBase<BigDecimal>.Radix => 10;
 

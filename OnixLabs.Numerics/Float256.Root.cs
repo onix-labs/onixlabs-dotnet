@@ -23,9 +23,11 @@ public readonly partial struct Float256
     /// </summary>
     private static readonly Float256 CbrtThree = (Float256)3;
 
-    /// <summary>Computes the cube root of the specified <see cref="Float256"/> value.</summary>
-    /// <param name="value">The value.</param>
-    /// <returns>Returns the cube root of <paramref name="value"/>.</returns>
+    /// <summary>
+    /// Computes the cube root of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose cube root is to be computed.</param>
+    /// <returns>Returns the cube root of <paramref name="value"/>; preserves the sign of zero and of negative inputs; ±infinity for ±infinity.</returns>
     public static Float256 Cbrt(Float256 value)
     {
         if (IsNaN(value)) return value;
@@ -53,10 +55,12 @@ public readonly partial struct Float256
         return negative ? -estimate : estimate;
     }
 
-    /// <summary>Computes the <c>n</c>th root of the specified <see cref="Float256"/> value.</summary>
-    /// <param name="value">The value.</param>
+    /// <summary>
+    /// Computes the <c>n</c>th root of the specified <see cref="Float256"/> value.
+    /// </summary>
+    /// <param name="value">The value whose root is to be computed.</param>
     /// <param name="n">The index of the root.</param>
-    /// <returns>Returns the <c>n</c>th root of <paramref name="value"/>.</returns>
+    /// <returns>Returns the <c>n</c>th root of <paramref name="value"/>; NaN for an even root of a negative value; preserves the sign of zero and infinities for odd <c>n</c>.</returns>
     public static Float256 RootN(Float256 value, int n)
     {
         if (n == 0) return NaN;
@@ -95,10 +99,12 @@ public readonly partial struct Float256
         return negative ? -result : result;
     }
 
-    /// <summary>Computes the Euclidean length <c>√(x² + y²)</c>, avoiding intermediate overflow.</summary>
+    /// <summary>
+    /// Computes the Euclidean length, <c>√(x² + y²)</c>, of the specified <see cref="Float256"/> values, avoiding intermediate overflow.
+    /// </summary>
     /// <param name="x">The first value.</param>
     /// <param name="y">The second value.</param>
-    /// <returns>Returns the Euclidean length.</returns>
+    /// <returns>Returns the Euclidean length of <paramref name="x"/> and <paramref name="y"/>; <see cref="PositiveInfinity"/> when either input is infinite.</returns>
     public static Float256 Hypot(Float256 x, Float256 y)
     {
         if (IsInfinity(x) || IsInfinity(y)) return PositiveInfinity;

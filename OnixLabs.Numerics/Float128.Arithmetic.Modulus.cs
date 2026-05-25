@@ -56,7 +56,7 @@ public readonly partial struct Float128
     /// </summary>
     /// <param name="value">The value whose magnitude is required.</param>
     /// <returns>Returns the absolute value of <paramref name="value"/>.</returns>
-    internal static Float128 ClearSign(Float128 value) => new(value.Bits & ~SignMask);
+    internal static Float128 ClearSign(in Float128 value) => new(value.Bits & ~SignMask);
 
     /// <summary>
     /// Computes the exact remainder of <paramref name="absLeft"/> modulo <paramref name="modulus"/>, where both are finite, positive and <paramref name="absLeft"/> is greater than or equal to <paramref name="modulus"/>.
@@ -69,7 +69,7 @@ public readonly partial struct Float128
     /// Because that multiple lies in <c>(remainder / 2, remainder]</c>, the subtraction satisfies the Sterbenz lemma and is exact.
     /// The number of iterations is bounded by the binary exponent difference between the operands.
     /// </remarks>
-    private static Float128 ReduceModulo(Float128 absLeft, Float128 modulus)
+    private static Float128 ReduceModulo(in Float128 absLeft, in Float128 modulus)
     {
         Float128 remainder = absLeft;
 

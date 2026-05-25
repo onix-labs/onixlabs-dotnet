@@ -24,7 +24,7 @@ public readonly partial struct Float256
     /// The maximum number of significant decimal digits sufficient to uniquely identify any <see cref="Float256"/> value when parsed back.
     /// </summary>
     /// <remarks>The IEEE 754 binary256 round-trip digit count is 73.</remarks>
-    public const int MaxRoundTripDigits = 73;
+    private const int MaxRoundTripDigits = 73;
 
     /// <summary>
     /// The literal used to format a positive zero <see cref="Float256"/> value.

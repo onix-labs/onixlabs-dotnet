@@ -46,7 +46,7 @@ public sealed class BigDecimalOrdinalityComparer : IComparer<BigDecimal>, ICompa
     /// <param name="x">The first <see cref="BigDecimal"/> value to compare.</param>
     /// <param name="y">The second <see cref="BigDecimal"/> value to compare.</param>
     /// <returns>Returns a signed integer that indicates the relative order of the <see cref="BigDecimal"/> values being compared.</returns>
-    /// <exception cref="ArgumentException">If either <paramref name="x"/> or <paramref name="y"/> are not of type <see cref="BigDecimal"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when either <paramref name="x"/> or <paramref name="y"/> are not of type <see cref="BigDecimal"/>.</exception>
     public int Compare(object? x, object? y)
     {
         if (x is not BigDecimal left) throw new ArgumentException($"Argument must be of type {nameof(BigDecimal)}", nameof(x));

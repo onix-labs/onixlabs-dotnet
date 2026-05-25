@@ -118,4 +118,48 @@ public sealed class Int512ConstantTests
         Assert.Equal(upper, value.UpperBits);
         Assert.Equal(lower, value.LowerBits);
     }
+
+    [Fact(DisplayName = "Int512.AdditiveIdentity should equal Zero")]
+    public void Int512AdditiveIdentityShouldEqualZero()
+    {
+        Assert.Equal(Int512.Zero, AdditiveIdentity<Int512, Int512>());
+    }
+
+    [Fact(DisplayName = "Int512.MultiplicativeIdentity should equal One")]
+    public void Int512MultiplicativeIdentityShouldEqualOne()
+    {
+        Assert.Equal(Int512.One, MultiplicativeIdentity<Int512, Int512>());
+    }
+
+    [Fact(DisplayName = "Int512.Radix should be 2")]
+    public void Int512RadixShouldBeTwo()
+    {
+        Assert.Equal(2, Radix<Int512>());
+    }
+
+    [Fact(DisplayName = "Int512 IMinMaxValue members should equal the public MinValue and MaxValue")]
+    public void Int512MinMaxValueInterfaceMembersShouldEqualPublicConstants()
+    {
+        Assert.Equal(Int512.MinValue, MinValue<Int512>());
+        Assert.Equal(Int512.MaxValue, MaxValue<Int512>());
+    }
+
+    [Fact(DisplayName = "Int512 ISignedNumber.NegativeOne should equal the public NegativeOne")]
+    public void Int512SignedNumberNegativeOneShouldEqualPublicConstant()
+    {
+        Assert.Equal(Int512.NegativeOne, SignedNegativeOne<Int512>());
+        Assert.Equal(BigInteger.MinusOne, (BigInteger)SignedNegativeOne<Int512>());
+    }
+
+    private static TResult AdditiveIdentity<T, TResult>() where T : IAdditiveIdentity<T, TResult> => T.AdditiveIdentity;
+
+    private static TResult MultiplicativeIdentity<T, TResult>() where T : IMultiplicativeIdentity<T, TResult> => T.MultiplicativeIdentity;
+
+    private static int Radix<T>() where T : INumberBase<T> => T.Radix;
+
+    private static T MinValue<T>() where T : IMinMaxValue<T> => T.MinValue;
+
+    private static T MaxValue<T>() where T : IMinMaxValue<T> => T.MaxValue;
+
+    private static T SignedNegativeOne<T>() where T : ISignedNumber<T> => T.NegativeOne;
 }

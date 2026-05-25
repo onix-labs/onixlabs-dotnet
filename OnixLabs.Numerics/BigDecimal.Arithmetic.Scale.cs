@@ -26,6 +26,8 @@ public readonly partial struct BigDecimal
     /// <param name="scale">The scale to apply to the value.</param>
     /// <param name="mode">The <see cref="MidpointRounding"/> mode to be used when the specified scale is less than the current scale.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value with the specified scale.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="scale"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="MidpointRounding"/> value.</exception>
     // ReSharper disable once MemberCanBePrivate.Global
     public static BigDecimal SetScale(BigDecimal value, int scale, MidpointRounding mode = default)
     {
@@ -45,6 +47,8 @@ public readonly partial struct BigDecimal
     /// <param name="scale">The scale to apply to the value.</param>
     /// <param name="mode">The <see cref="MidpointRounding"/> mode to be used when the specified scale is less than the current scale.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value with the specified scale.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="scale"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="MidpointRounding"/> value.</exception>
     public BigDecimal SetScale(int scale, MidpointRounding mode = default) => SetScale(this, scale, mode);
 
     /// <summary>

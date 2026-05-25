@@ -84,7 +84,7 @@ public readonly partial struct Float256
     /// <param name="x">The positive base of the exponentiation.</param>
     /// <param name="y">The exponent of the exponentiation.</param>
     /// <returns>Returns <c>x^y</c> rounded to <see cref="Float256"/> precision.</returns>
-    private static Float256 PowPositive(Float256 x, Float256 y)
+    private static Float256 PowPositive(in Float256 x, in Float256 y)
     {
         if (IsInteger(y) && Abs(y) <= (Float256)64L)
         {
@@ -101,7 +101,7 @@ public readonly partial struct Float256
     /// <param name="x">The base of the exponentiation.</param>
     /// <param name="n">The integer exponent of the exponentiation.</param>
     /// <returns>Returns <c>x^n</c> rounded to <see cref="Float256"/> precision; reciprocates the result for negative <paramref name="n"/>.</returns>
-    private static Float256 PowInteger(Float256 x, long n)
+    private static Float256 PowInteger(in Float256 x, long n)
     {
         if (n == 0L) return One;
         if (n == 1L) return x;

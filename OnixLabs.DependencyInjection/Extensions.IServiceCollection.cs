@@ -26,7 +26,7 @@ namespace OnixLabs.DependencyInjection;
 public static class IServiceCollectionExtensions
 {
     /// <summary>
-    /// Provides extension methods for <see cref="IServiceCollection"/> instances.
+    /// Defines instance-style extensions over an <see cref="IServiceCollection"/> for registering services with a configurable <see cref="ServiceLifetime"/>.
     /// </summary>
     /// <param name="services">The current <see cref="IServiceCollection"/> instance.</param>
     extension(IServiceCollection services)
@@ -37,7 +37,7 @@ public static class IServiceCollectionExtensions
         /// <param name="lifetime">The lifetime of the specified <typeparamref name="TService"/> service. The default lifetime is <see cref="ServiceLifetime.Singleton"/>.</param>
         /// <typeparam name="TService">The underlying type of the service to add.</typeparam>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddService<TService>(
             ServiceLifetime lifetime = default
         ) where TService : class => RequireIsDefined(lifetime) switch
@@ -55,7 +55,7 @@ public static class IServiceCollectionExtensions
         /// <param name="lifetime">The lifetime of the specified <typeparamref name="TService"/> service. The default lifetime is <see cref="ServiceLifetime.Singleton"/>.</param>
         /// <typeparam name="TService">The underlying type of the service to add.</typeparam>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddKeyedService<TService>(
             object? serviceKey,
             ServiceLifetime lifetime = default
@@ -74,7 +74,7 @@ public static class IServiceCollectionExtensions
         /// <param name="lifetime">The lifetime of the specified <typeparamref name="TService"/> service. The default lifetime is <see cref="ServiceLifetime.Singleton"/>.</param>
         /// <typeparam name="TService">The underlying type of the service to add.</typeparam>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddService<TService>(
             Func<IServiceProvider, TService> implementationFactory,
             ServiceLifetime lifetime = default
@@ -87,14 +87,14 @@ public static class IServiceCollectionExtensions
         };
 
         /// <summary>
-        /// Adds keyed a service of the type specified in <typeparamref name="TService"/> to the specified <see cref="IServiceCollection"/>.
+        /// Adds a keyed service of the type specified in <typeparamref name="TService"/> to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="implementationFactory">The factory that creates the service.</param>
         /// <param name="serviceKey">The <see cref="ServiceDescriptor.ServiceKey"/> of the service.</param>
         /// <param name="lifetime">The lifetime of the specified <typeparamref name="TService"/> service. The default lifetime is <see cref="ServiceLifetime.Singleton"/>.</param>
         /// <typeparam name="TService">The underlying type of the service to add.</typeparam>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddKeyedService<TService>(
             Func<IServiceProvider, object?, TService> implementationFactory,
             object? serviceKey,
@@ -115,7 +115,7 @@ public static class IServiceCollectionExtensions
         /// <typeparam name="TService">The type of the service to add.</typeparam>
         /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddService<TService, TImplementation>(
             ServiceLifetime lifetime = default
         ) where TImplementation : class, TService where TService : class => RequireIsDefined(lifetime) switch
@@ -135,7 +135,7 @@ public static class IServiceCollectionExtensions
         /// <typeparam name="TService">The type of the service to add.</typeparam>
         /// <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddKeyedService<TService, TImplementation>(object? serviceKey,
             ServiceLifetime lifetime = default
         ) where TImplementation : class, TService where TService : class => RequireIsDefined(lifetime) switch
@@ -152,9 +152,9 @@ public static class IServiceCollectionExtensions
         /// </summary>
         /// <param name="serviceType">The type of the service to register.</param>
         /// <param name="implementationType">The implementation type of the service.</param>
-        /// <param name="lifetime">The lifetime of the specified service.</param>
+        /// <param name="lifetime">The lifetime of the specified service. The default lifetime is <see cref="ServiceLifetime.Singleton"/>.</param>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddService(Type serviceType,
             Type implementationType,
             ServiceLifetime lifetime = default
@@ -173,9 +173,9 @@ public static class IServiceCollectionExtensions
         /// <param name="serviceType">The type of the service to register.</param>
         /// <param name="implementationType">The implementation type of the service.</param>
         /// <param name="serviceKey">The <see cref="ServiceDescriptor.ServiceKey"/> of the service.</param>
-        /// <param name="lifetime">The lifetime of the specified service.</param>
+        /// <param name="lifetime">The lifetime of the specified service. The default lifetime is <see cref="ServiceLifetime.Singleton"/>.</param>
         /// <returns>Returns a reference to the current <see cref="IServiceCollection"/> instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified <paramref name="lifetime"/> is not defined.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified <paramref name="lifetime"/> is not defined.</exception>
         public IServiceCollection AddKeyedService(Type serviceType,
             Type implementationType,
             object? serviceKey,

@@ -191,6 +191,34 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return some when the first element is the default value of the underlying type.")]
+    public void FirstOrNoneShouldReturnSomeWhenFirstElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(0, 1, 2);
+        Optional<int> expected = Optional<int>.Some(0);
+
+        // When
+        Optional<int> actual = elements.FirstOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.FirstOrNone should return some when the first matching element is the default value of the underlying type.")]
+    public void FirstOrNoneShouldReturnSomeWhenFirstMatchingElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(3, 0, 1);
+        Optional<int> expected = Optional<int>.Some(0);
+
+        // When
+        Optional<int> actual = elements.FirstOrNone(number => number < 2);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.ForEach should iterate over every element in the enumerable (non-generic)")]
     public void ForEachShouldProduceExpectedResultNonGeneric()
     {
@@ -444,6 +472,80 @@ public sealed class IEnumerableExtensionTests
         Assert.False(result);
     }
 
+    [Fact(DisplayName = "IEnumerable.IsEmpty should short-circuit without enumerating the entire sequence (non-generic)")]
+    public void IsEmptyShouldShortCircuitNonGeneric()
+    {
+        // Given
+        static IEnumerable<int> Sequence()
+        {
+            yield return 1;
+            throw new InvalidOperationException("IsEmpty enumerated beyond the first element.");
+        }
+
+        IEnumerable enumerable = Sequence();
+
+        // When
+        bool result = enumerable.IsEmpty();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsEmpty should short-circuit without enumerating the entire sequence")]
+    public void IsEmptyShouldShortCircuit()
+    {
+        // Given
+        static IEnumerable<int> Sequence()
+        {
+            yield return 1;
+            throw new InvalidOperationException("IsEmpty enumerated beyond the first element.");
+        }
+
+        // When
+        bool result = Sequence().IsEmpty();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsSingle should short-circuit once more than one element is found (non-generic)")]
+    public void IsSingleShouldShortCircuitNonGeneric()
+    {
+        // Given
+        static IEnumerable<int> Sequence()
+        {
+            yield return 1;
+            yield return 2;
+            throw new InvalidOperationException("IsSingle enumerated beyond the second element.");
+        }
+
+        IEnumerable enumerable = Sequence();
+
+        // When
+        bool result = enumerable.IsSingle();
+
+        // Then
+        Assert.False(result);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsSingle should short-circuit once more than one element is found")]
+    public void IsSingleShouldShortCircuit()
+    {
+        // Given
+        static IEnumerable<int> Sequence()
+        {
+            yield return 1;
+            yield return 2;
+            throw new InvalidOperationException("IsSingle enumerated beyond the second element.");
+        }
+
+        // When
+        bool result = Sequence().IsSingle();
+
+        // Then
+        Assert.False(result);
+    }
+
     [Fact(DisplayName = "IEnumerable.IsCountEven should return true when the enumerable contains an even number of elements (non-generic)")]
     public void IsCountEvenShouldProduceExpectedResultTrueNonGeneric()
     {
@@ -660,6 +762,34 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return some when the last element is the default value of the underlying type.")]
+    public void LastOrNoneShouldReturnSomeWhenLastElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(2, 1, 0);
+        Optional<int> expected = Optional<int>.Some(0);
+
+        // When
+        Optional<int> actual = elements.LastOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.LastOrNone should return some when the last matching element is the default value of the underlying type.")]
+    public void LastOrNoneShouldReturnSomeWhenLastMatchingElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(1, 0, 3);
+        Optional<int> expected = Optional<int>.Some(0);
+
+        // When
+        Optional<int> actual = elements.LastOrNone(number => number < 2);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.None should return true when none of the elements satisfy the specified predicate condition")]
     public void NoneShouldProduceExpectedResultTrue()
     {
@@ -808,6 +938,34 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success some when the single element is the default value of the underlying type.")]
+    public void SingleOrNoneShouldReturnSuccessSomeWhenSingleElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(0);
+        Result<Optional<int>> expected = Optional<int>.Some(0).ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should return success some when the single matching element is the default value of the underlying type.")]
+    public void SingleOrNoneShouldReturnSuccessSomeWhenSingleMatchingElementIsDefaultValue()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(0, 1, 2);
+        Result<Optional<int>> expected = Optional<int>.Some(0).ToResult();
+
+        // When
+        Result<Optional<int>> actual = elements.SingleOrNone(number => number < 1);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "IEnumerable.SingleOrNone should return failure when the enumerable contains more than one element.")]
     public void SingleOrNoneShouldReturnFailureSomeWhenEnumerableContainsMoreThanOneElement()
     {
@@ -870,6 +1028,16 @@ public sealed class IEnumerableExtensionTests
         Assert.Equal(expected.Exception.Message, actualException.Message);
     }
 
+    [Fact(DisplayName = "IEnumerable.SingleOrNone should propagate exceptions thrown by the predicate rather than capturing them")]
+    public void SingleOrNoneShouldPropagatePredicateExceptions()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
+
+        // When / Then
+        Assert.Throws<NotSupportedException>(() => elements.SingleOrNone(_ => throw new NotSupportedException()));
+    }
+
     [Fact(DisplayName = "IEnumerable.Sum should produce the expected result")]
     public void SumShouldProduceExpectedResult()
     {
@@ -879,6 +1047,23 @@ public sealed class IEnumerableExtensionTests
         // Given
         IEnumerable<decimal> elements = EnumerableOf(12.34m, 34.56m, 56.78m);
         const decimal expected = 103.68m;
+
+        // When
+        decimal actual = SumProxy(elements);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.Sum should return zero when the enumerable is empty")]
+    public void SumShouldReturnZeroWhenEnumerableIsEmpty()
+    {
+        // Required as Sum() already exists for concrete number types.
+        static T SumProxy<T>(IEnumerable<T> enumerable) where T : INumberBase<T> => enumerable.Sum();
+
+        // Given
+        IEnumerable<decimal> elements = EmptyEnumerable<decimal>();
+        const decimal expected = 0m;
 
         // When
         decimal actual = SumProxy(elements);
@@ -919,6 +1104,16 @@ public sealed class IEnumerableExtensionTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.WhereNot should throw immediately when the predicate is null, without enumerating")]
+    public void WhereNotShouldThrowImmediatelyWhenPredicateIsNull()
+    {
+        // Given
+        IEnumerable<int> elements = EnumerableOf(1, 2, 3);
+
+        // When / Then
+        Assert.Throws<ArgumentNullException>(() => elements.WhereNot((Func<int, bool>)null!));
     }
 
     [Fact(DisplayName = "IEnumerable.WhereNotNull should produce the expected result (class)")]

@@ -1,4 +1,4 @@
-// Copyright © 2020 ONIXLabs
+// Copyright 2020 ONIXLabs
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -126,9 +126,9 @@ public static partial class Collection
     public static ImmutableQueue<T> ImmutableQueueOf<T>(params ImmutableQueue<T> items) => items;
 
     /// <summary>
-    /// Create a <see cref="Dictionary{TKey,TValue}"/> of the specified items.
+    /// Creates a <see cref="Dictionary{TKey,TValue}"/> of the specified items.
     /// </summary>
-    /// <param name="items">The items which wil populate the dictionary.</param>
+    /// <param name="items">The items which will populate the dictionary.</param>
     /// <typeparam name="TKey">The underlying type of the dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the dictionary value.</typeparam>
     /// <returns>Returns a dictionary populated with the specified items.</returns>
@@ -136,9 +136,9 @@ public static partial class Collection
         (params IEnumerable<KeyValuePair<TKey, TValue>> items) where TKey : notnull => new(items);
 
     /// <summary>
-    /// Create a <see cref="Dictionary{TKey,TValue}"/> of the specified items.
+    /// Creates a <see cref="Dictionary{TKey,TValue}"/> of the specified items.
     /// </summary>
-    /// <param name="items">The items which wil populate the dictionary.</param>
+    /// <param name="items">The items which will populate the dictionary.</param>
     /// <typeparam name="TKey">The underlying type of the dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the dictionary value.</typeparam>
     /// <returns>Returns a dictionary populated with the specified items.</returns>
@@ -147,9 +147,9 @@ public static partial class Collection
         DictionaryOf(items.Select(item => new KeyValuePair<TKey, TValue>(item.key, item.value)));
 
     /// <summary>
-    /// Create an <see cref="ImmutableDictionary{TKey,TValue}"/> of the specified items.
+    /// Creates an <see cref="ImmutableDictionary{TKey,TValue}"/> of the specified items.
     /// </summary>
-    /// <param name="items">The items which wil populate the immutable dictionary.</param>
+    /// <param name="items">The items which will populate the immutable dictionary.</param>
     /// <typeparam name="TKey">The underlying type of the immutable dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the immutable dictionary value.</typeparam>
     /// <returns>Returns an immutable dictionary populated with the specified items.</returns>
@@ -157,9 +157,9 @@ public static partial class Collection
         (params IEnumerable<KeyValuePair<TKey, TValue>> items) where TKey : notnull => ImmutableDictionary.CreateRange(items);
 
     /// <summary>
-    /// Create an <see cref="ImmutableDictionary{TKey,TValue}"/> of the specified items.
+    /// Creates an <see cref="ImmutableDictionary{TKey,TValue}"/> of the specified items.
     /// </summary>
-    /// <param name="items">The items which wil populate the immutable dictionary.</param>
+    /// <param name="items">The items which will populate the immutable dictionary.</param>
     /// <typeparam name="TKey">The underlying type of the immutable dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the immutable dictionary value.</typeparam>
     /// <returns>Returns an immutable dictionary populated with the specified items.</returns>
@@ -168,9 +168,9 @@ public static partial class Collection
         ImmutableDictionary.CreateRange(items.Select(item => new KeyValuePair<TKey, TValue>(item.key, item.value)));
 
     /// <summary>
-    /// Create a <see cref="SortedDictionary{TKey,TValue}"/> of the specified items.
+    /// Creates a <see cref="SortedDictionary{TKey,TValue}"/> of the specified items.
     /// </summary>
-    /// <param name="items">The items which wil populate the sorted dictionary.</param>
+    /// <param name="items">The items which will populate the sorted dictionary.</param>
     /// <typeparam name="TKey">The underlying type of the sorted dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the sorted dictionary value.</typeparam>
     /// <returns>Returns a sorted dictionary populated with the specified items.</returns>
@@ -178,9 +178,9 @@ public static partial class Collection
         (params IEnumerable<KeyValuePair<TKey, TValue>> items) where TKey : notnull => new(DictionaryOf(items));
 
     /// <summary>
-    /// Create a <see cref="SortedDictionary{TKey,TValue}"/> of the specified items.
+    /// Creates a <see cref="SortedDictionary{TKey,TValue}"/> of the specified items.
     /// </summary>
-    /// <param name="items">The items which wil populate the sorted dictionary.</param>
+    /// <param name="items">The items which will populate the sorted dictionary.</param>
     /// <typeparam name="TKey">The underlying type of the sorted dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the sorted dictionary value.</typeparam>
     /// <returns>Returns a sorted dictionary populated with the specified items.</returns>
@@ -188,9 +188,9 @@ public static partial class Collection
         (params IEnumerable<(TKey key, TValue value)> items) where TKey : notnull => new(DictionaryOf(items));
 
     /// <summary>
-    /// Create an <see cref="ImmutableSortedDictionary{TKey,TValue}"/> of the specified items.
+    /// Creates an <see cref="ImmutableSortedDictionary{TKey,TValue}"/> of the specified items.
     /// </summary>
-    /// <param name="items">The items which wil populate the immutable sorted dictionary.</param>
+    /// <param name="items">The items which will populate the immutable sorted dictionary.</param>
     /// <typeparam name="TKey">The underlying type of the immutable sorted dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the immutable sorted dictionary value.</typeparam>
     /// <returns>Returns an immutable sorted dictionary populated with the specified items.</returns>
@@ -198,9 +198,9 @@ public static partial class Collection
         (params IEnumerable<KeyValuePair<TKey, TValue>> items) where TKey : notnull => ImmutableSortedDictionary.CreateRange(items);
 
     /// <summary>
-    /// Create an <see cref="ImmutableSortedDictionary{TKey,TValue}"/> of the specified items.
+    /// Creates an <see cref="ImmutableSortedDictionary{TKey,TValue}"/> of the specified items.
     /// </summary>
-    /// <param name="items">The items which wil populate the immutable sorted dictionary.</param>
+    /// <param name="items">The items which will populate the immutable sorted dictionary.</param>
     /// <typeparam name="TKey">The underlying type of the immutable sorted dictionary key.</typeparam>
     /// <typeparam name="TValue">The underlying type of the immutable sorted dictionary value.</typeparam>
     /// <returns>Returns an immutable sorted dictionary populated with the specified items.</returns>

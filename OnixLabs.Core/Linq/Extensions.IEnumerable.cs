@@ -51,6 +51,7 @@ public static class IEnumerableExtensions
         /// Obtains a number that represents how many elements are in the current <see cref="IEnumerable"/>.
         /// </summary>
         /// <returns>Returns a number that represents how many elements are in the current <see cref="IEnumerable"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
         public int Count()
         {
             // ReSharper disable PossibleMultipleEnumeration
@@ -74,10 +75,10 @@ public static class IEnumerableExtensions
         /// Performs the specified <see cref="Action{T}"/> for each element of the current <see cref="IEnumerable"/>.
         /// </summary>
         /// <param name="action">The <see cref="Action{T}"/> to perform for each <see cref="IEnumerable"/> element.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="action"/> is <see langword="null"/>.</exception>
         public void ForEach(Action<object?> action)
         {
-            if (enumerable is null)
-                return;
+            if (enumerable is null) return;
 
             RequireNotNull(action, ActionNullExceptionMessage);
 
@@ -92,8 +93,7 @@ public static class IEnumerableExtensions
         /// <returns>Returns the computed content hash code of the current <see cref="IEnumerable"/>.</returns>
         public int GetContentHashCode()
         {
-            if (enumerable is null)
-                return 0;
+            if (enumerable is null) return 0;
 
             HashCode result = new();
 
@@ -108,7 +108,14 @@ public static class IEnumerableExtensions
         /// Determines whether the current <see cref="IEnumerable"/> is empty.
         /// </summary>
         /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable"/> is empty; otherwise, <see langword="false"/>.</returns>
-        public bool IsEmpty() => enumerable.LongCount() is 0;
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
+        public bool IsEmpty()
+        {
+            RequireNotNull(enumerable, EnumerableNullExceptionMessage);
+            // ReSharper disable once GenericEnumeratorNotDisposed
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            return !enumerator.MoveNext();
+        }
 
         /// <summary>
         /// Determines whether the current <see cref="IEnumerable"/> is not empty.
@@ -120,7 +127,14 @@ public static class IEnumerableExtensions
         /// Determines whether the current <see cref="IEnumerable"/> contains a single element.
         /// </summary>
         /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable"/> contains a single element; otherwise, <see langword="false"/>.</returns>
-        public bool IsSingle() => enumerable.LongCount() is 1;
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
+        public bool IsSingle()
+        {
+            RequireNotNull(enumerable, EnumerableNullExceptionMessage);
+            // ReSharper disable once GenericEnumeratorNotDisposed
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            return enumerator.MoveNext() && !enumerator.MoveNext();
+        }
 
         /// <summary>
         /// Determines whether the current <see cref="IEnumerable"/> contains an even number of elements.
@@ -141,8 +155,7 @@ public static class IEnumerableExtensions
         /// <returns>Returns the elements of the current <see cref="IEnumerable"/>, joined into a new <see cref="String"/> instance.</returns>
         public string JoinToString(string separator = CollectionSeparator)
         {
-            if (enumerable is null)
-                return string.Empty;
+            if (enumerable is null) return string.Empty;
 
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             StringBuilder builder = new();
@@ -158,6 +171,7 @@ public static class IEnumerableExtensions
         /// Obtains a number that represents how many elements are in the current <see cref="IEnumerable"/>.
         /// </summary>
         /// <returns>Returns a number that represents how many elements are in the current <see cref="IEnumerable"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
         // ReSharper disable once MemberCanBePrivate.Global
         public long LongCount()
         {
@@ -199,6 +213,7 @@ public static class IEnumerableExtensions
         /// <param name="comparer">The equality comparer that will be used to compare objects of type <typeparamref name="TProperty"/>, or <see langword="null"/> to use the default equality comparer.</param>
         /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
         /// <returns>Returns <see langword="true"/> if all selected element properties are equal; otherwise <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public bool AllEqualBy<TProperty>(Func<T, TProperty> selector, IEqualityComparer<TProperty>? comparer = null)
         {
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
@@ -206,9 +221,7 @@ public static class IEnumerableExtensions
 
             using IEnumerator<T> enumerator = enumerable.GetEnumerator();
 
-            // AllEqualBy of empty IEnumerable<T> is considered true.
-            if (!enumerator.MoveNext())
-                return true;
+            if (!enumerator.MoveNext()) return true;
 
             TProperty firstValue = selector(enumerator.Current);
             IEqualityComparer<TProperty> nonNullComparer = comparer.GetOrDefault();
@@ -227,6 +240,7 @@ public static class IEnumerableExtensions
         /// <param name="comparer">The equality comparer that will be used to compare objects of type <typeparamref name="TProperty"/>, or <see langword="null"/> to use the default equality comparer.</param>
         /// <typeparam name="TProperty">The underlying type of each selected <see cref="IEnumerable{T}"/> element.</typeparam>
         /// <returns>Returns <see langword="true"/> if any selected element properties are equal; otherwise <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public bool AnyEqualBy<TProperty>(Func<T, TProperty> selector, IEqualityComparer<TProperty>? comparer = null)
         {
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
@@ -234,9 +248,7 @@ public static class IEnumerableExtensions
 
             using IEnumerator<T> enumerator = enumerable.GetEnumerator();
 
-            // AnyEqualBy of empty IEnumerable<T> is considered false.
-            if (!enumerator.MoveNext())
-                return false;
+            if (!enumerator.MoveNext()) return false;
 
             TProperty firstValue = selector(enumerator.Current);
             IEqualityComparer<TProperty> nonNullComparer = comparer.GetOrDefault();
@@ -253,6 +265,7 @@ public static class IEnumerableExtensions
         /// </summary>
         /// <param name="predicate">The function to test each element for a condition.</param>
         /// <returns>Returns a number that represents how many elements in the current <see cref="IEnumerable{T}"/> do not satisfy the specified predicate condition.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         public int CountNot(Func<T, bool> predicate)
         {
             // ReSharper disable PossibleMultipleEnumeration
@@ -276,10 +289,10 @@ public static class IEnumerableExtensions
         /// Performs the specified <see cref="Action{T}"/> for each element of the current <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <param name="action">The <see cref="Action{T}"/> to perform for each <see cref="IEnumerable{T}"/> element.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="action"/> is <see langword="null"/>.</exception>
         public void ForEach(Action<T> action)
         {
-            if (enumerable is null)
-                return;
+            if (enumerable is null) return;
 
             RequireNotNull(action, ActionNullExceptionMessage);
 
@@ -294,8 +307,7 @@ public static class IEnumerableExtensions
         /// <returns>Returns the computed content hash code of the current <see cref="IEnumerable{T}"/>.</returns>
         public int GetContentHashCode()
         {
-            if (enumerable is null)
-                return 0;
+            if (enumerable is null) return 0;
 
             HashCode result = new();
 
@@ -310,7 +322,13 @@ public static class IEnumerableExtensions
         /// Determines whether the current <see cref="IEnumerable{T}"/> is empty.
         /// </summary>
         /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> is empty; otherwise, <see langword="false"/>.</returns>
-        public bool IsEmpty() => enumerable.LongCount() is 0;
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
+        public bool IsEmpty()
+        {
+            RequireNotNull(enumerable, EnumerableNullExceptionMessage);
+            using IEnumerator<T> enumerator = enumerable.GetEnumerator();
+            return !enumerator.MoveNext();
+        }
 
         /// <summary>
         /// Determines whether the current <see cref="IEnumerable{T}"/> is not empty.
@@ -322,26 +340,31 @@ public static class IEnumerableExtensions
         /// Determines whether the current <see cref="IEnumerable{T}"/> contains a single element.
         /// </summary>
         /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains a single element; otherwise, <see langword="false"/>.</returns>
-        public bool IsSingle() => enumerable.LongCount() is 1;
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
+        public bool IsSingle()
+        {
+            RequireNotNull(enumerable, EnumerableNullExceptionMessage);
+            using IEnumerator<T> enumerator = enumerable.GetEnumerator();
+            return enumerator.MoveNext() && !enumerator.MoveNext();
+        }
 
         /// <summary>
-        /// Determines whether the current <see cref="IEnumerable{T}"/> contains an even number of elements.
+        /// Determines whether the current <see cref="IEnumerable{T}"/> contains an even number of elements that match the specified predicate, or in total when no predicate is supplied.
         /// </summary>
-        /// <param name="predicate">The function to test each element for a condition.</param>
-        /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an even number of elements; otherwise, <see langword="false"/>.</returns>
+        /// <param name="predicate">An optional function to test each element for a condition. If <see langword="null"/>, all elements are counted.</param>
+        /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an even number of matching elements; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
         public bool IsCountEven(Func<T, bool>? predicate = null)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
-
             return (enumerable.LongCount(predicate ?? (_ => true)) & 1) is 0;
         }
 
         /// <summary>
-        /// Determines whether the current <see cref="IEnumerable{T}"/> contains an odd number of elements.
+        /// Determines whether the current <see cref="IEnumerable{T}"/> contains an odd number of elements that match the specified predicate, or in total when no predicate is supplied.
         /// </summary>
-        /// <param name="predicate">The function to test each element for a condition.</param>
-        /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an odd number of elements; otherwise, <see langword="false"/>.</returns>
+        /// <param name="predicate">An optional function to test each element for a condition. If <see langword="null"/>, all elements are counted.</param>
+        /// <returns>Returns <see langword="true"/> if the <see cref="IEnumerable{T}"/> contains an odd number of matching elements; otherwise, <see langword="false"/>.</returns>
         public bool IsCountOdd(Func<T, bool>? predicate = null) => !enumerable.IsCountEven(predicate);
 
         /// <summary>
@@ -351,8 +374,7 @@ public static class IEnumerableExtensions
         /// <returns>Returns the elements of the current <see cref="IEnumerable{T}"/>, joined into a new <see cref="String"/> instance.</returns>
         public string JoinToString(string separator = CollectionSeparator)
         {
-            if (enumerable is null)
-                return string.Empty;
+            if (enumerable is null) return string.Empty;
 
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             StringBuilder builder = new();
@@ -369,23 +391,22 @@ public static class IEnumerableExtensions
         /// </summary>
         /// <param name="predicate">The function to test each element for a condition.</param>
         /// <returns>Returns <see langword="true"/> if none of the elements of the current <see cref="IEnumerable{T}"/> satisfy the specified predicate condition; otherwise, <see langword="false"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
         public bool None(Func<T, bool> predicate)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
-
             return !enumerable.Any(predicate);
         }
 
-        /// <summary>Determines whether two sequences are <see langword="null"/>, or equal by comparing their elements by using a specified <see cref="T:IEqualityComparer{T}" />.</summary>
-        /// <param name="other">An <see cref="T:IEnumerable{T}" /> to compare to the first sequence.</param>
-        /// <param name="comparer">An <see cref="T:IEqualityComparer{T}" /> to use to compare elements.</param>
-        /// <returns> Returns <see langword="true" /> if the two source sequences are <see langword="null"/>, or of equal length and their corresponding elements compare equal according to <paramref name="comparer" />; otherwise, <see langword="false" />.</returns>
+        /// <summary>
+        /// Determines whether two sequences are <see langword="null"/>, or equal by comparing their elements by using a specified <see cref="IEqualityComparer{T}"/>.
+        /// </summary>
+        /// <param name="other">An <see cref="IEnumerable{T}"/> to compare to the first sequence.</param>
+        /// <param name="comparer">An <see cref="IEqualityComparer{T}"/> to use to compare elements.</param>
+        /// <returns>Returns <see langword="true"/> if the two source sequences are <see langword="null"/>, or of equal length and their corresponding elements compare equal according to <paramref name="comparer"/>; otherwise, <see langword="false"/>.</returns>
         public bool SequenceEqualOrNull(IEnumerable<T>? other, IEqualityComparer<T>? comparer = null)
         {
-            if (enumerable is null || other is null)
-                return enumerable is null && other is null;
-
+            if (enumerable is null || other is null) return enumerable is null && other is null;
             return enumerable.SequenceEqual(other, comparer.GetOrDefault());
         }
 
@@ -395,9 +416,9 @@ public static class IEnumerableExtensions
         /// <param name="selector">The selector function which will be used to select each <see cref="INumberBase{T}"/> property from each element.</param>
         /// <typeparam name="TResult">The underlying <see cref="INumberBase{T}"/> type of each element to sum.</typeparam>
         /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence or <paramref name="selector"/> is <see langword="null"/>.</exception>
         public TResult SumBy<TResult>(Func<T, TResult> selector) where TResult : INumberBase<TResult>
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
             RequireNotNull(selector, SelectorNullExceptionMessage);
 
@@ -409,13 +430,13 @@ public static class IEnumerableExtensions
         /// </summary>
         /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
         /// <returns>Returns an <see cref="IEnumerable{T}"/> that contains elements from the input sequence that satisfy the specification.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence or <paramref name="specification"/> is <see langword="null"/>.</exception>
         public IEnumerable<T> Where(Specification<T> specification)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
             RequireNotNull(specification, SpecificationNullExceptionMessage);
 
-            return enumerable.Where(specification.Criteria.Compile());
+            return enumerable.Where(specification.IsSatisfiedBy);
         }
 
         /// <summary>
@@ -423,13 +444,14 @@ public static class IEnumerableExtensions
         /// </summary>
         /// <param name="specification">The <see cref="Specification{T}"/> to filter by.</param>
         /// <returns>Returns an <see cref="IEnumerable{T}"/> that contains elements from the input sequence that satisfy the negated specification.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence or <paramref name="specification"/> is <see langword="null"/>.</exception>
         public IEnumerable<T> WhereNot(Specification<T> specification)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
             RequireNotNull(specification, SpecificationNullExceptionMessage);
 
-            return enumerable.Where(specification.Not().Criteria.Compile());
+            // ReSharper disable once HeapView.ObjectAllocation, HeapView.DelegateAllocation
+            return enumerable.WhereNot(specification.IsSatisfiedBy);
         }
 
         /// <summary>
@@ -437,16 +459,20 @@ public static class IEnumerableExtensions
         /// </summary>
         /// <param name="predicate">The function to test each element for a condition.</param>
         /// <returns>Returns a new <see cref="IEnumerable{T}"/> that contains elements that do not satisfy the condition.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence or <paramref name="predicate"/> is <see langword="null"/>.</exception>
         public IEnumerable<T> WhereNot(Func<T, bool> predicate)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
             RequireNotNull(predicate, PredicateNullExceptionMessage);
+            return Iterator();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery, HeapView.ObjectAllocation.Possible
-            foreach (T element in enumerable)
-                if (!predicate(element))
-                    yield return element;
+            IEnumerable<T> Iterator()
+            {
+                // ReSharper disable once HeapView.ObjectAllocation.Possible
+                foreach (T element in enumerable)
+                    if (!predicate(element))
+                        yield return element;
+            }
         }
 
         /// <summary>
@@ -473,12 +499,16 @@ public static class IEnumerableExtensions
         /// Returns the first element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;
         /// otherwise <see cref="Optional{T}.None"/> if no such element is found.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
         public Optional<T> FirstOrNone(Func<T, bool>? predicate = null)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
 
-            return Optional<T>.Of(enumerable.FirstOrDefault(predicate ?? (_ => true)));
+            foreach (T element in enumerable)
+                if (predicate is null || predicate(element))
+                    return element;
+
+            return Optional<T>.None;
         }
 
         /// <summary>
@@ -490,12 +520,18 @@ public static class IEnumerableExtensions
         /// Returns the last element of the current <see cref="IEnumerable{T}"/> that satisfies the specified predicate;
         /// otherwise <see cref="Optional{T}.None"/> if no such element is found.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
         public Optional<T> LastOrNone(Func<T, bool>? predicate = null)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
 
-            return Optional<T>.Of(enumerable.LastOrDefault(predicate ?? (_ => true)));
+            Optional<T> result = Optional<T>.None;
+
+            foreach (T element in enumerable)
+                if (predicate is null || predicate(element))
+                    result = element;
+
+            return result;
         }
 
         /// <summary>
@@ -509,19 +545,28 @@ public static class IEnumerableExtensions
         /// otherwise <see cref="Optional{T}.None"/> if no such element is found,
         /// or <see cref="Failure{T}"/> if the current <see cref="IEnumerable{T}"/> contains more than one matching element.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown when the current sequence is <see langword="null"/>.</exception>
         public Result<Optional<T>> SingleOrNone(Func<T, bool>? predicate = null)
         {
-            // ReSharper disable PossibleMultipleEnumeration
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
 
-            try
+            Func<T, bool> condition = predicate ?? (_ => true);
+            Optional<T> result = Optional<T>.None;
+            bool found = false;
+
+            foreach (T element in enumerable)
             {
-                return Optional<T>.Of(enumerable.SingleOrDefault(predicate ?? (_ => true)));
+                if (!condition(element))
+                    continue;
+
+                if (found)
+                    return new InvalidOperationException("Sequence contains more than one matching element");
+
+                result = element;
+                found = true;
             }
-            catch (Exception exception)
-            {
-                return exception;
-            }
+
+            return result;
         }
     }
 
@@ -531,12 +576,11 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> to sum.</param>
     /// <typeparam name="T">The underlying <see cref="INumberBase{T}"/> type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns the sum of the elements of the current <see cref="IEnumerable{T}"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="enumerable"/> is <see langword="null"/>.</exception>
     public static T Sum<T>(this IEnumerable<T> enumerable) where T : INumberBase<T>
     {
-        // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage);
-
-        return enumerable.IsEmpty() ? T.Zero : enumerable.Aggregate((left, right) => left + right);
+        return enumerable.Aggregate(T.Zero, (sum, value) => sum + value);
     }
 
     /// <summary>
@@ -545,11 +589,10 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a new <see cref="IEnumerable{T}"/> that contains elements that are not <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="enumerable"/> is <see langword="null"/>.</exception>
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : class
     {
-        // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage);
-
         return enumerable.Where(element => element is not null)!;
     }
 
@@ -559,11 +602,10 @@ public static class IEnumerableExtensions
     /// <param name="enumerable">The current <see cref="IEnumerable{T}"/> on which to perform the operation.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a new <see cref="IEnumerable{T}"/> that contains elements that are not <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="enumerable"/> is <see langword="null"/>.</exception>
     public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : struct
     {
-        // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage);
-
         return enumerable.Where(element => element.HasValue).Select(element => element!.Value);
     }
 
@@ -575,12 +617,11 @@ public static class IEnumerableExtensions
     /// <param name="provider">An object that provides culture-specific formatting information.</param>
     /// <typeparam name="T">The underlying type of the <see cref="IEnumerable{T}"/>.</typeparam>
     /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="IEnumerable{T}"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="enumerable"/> is <see langword="null"/>.</exception>
     // ReSharper disable once HeapView.ClosureAllocation
     public static string ToCollectionString<T>(this IEnumerable<T> enumerable, string format, IFormatProvider? provider = null) where T : IFormattable
     {
-        // ReSharper disable PossibleMultipleEnumeration
         RequireNotNull(enumerable, EnumerableNullExceptionMessage);
-
         // ReSharper disable once HeapView.DelegateAllocation
         return enumerable.Select(element => element.ToString(format, provider)).ToCollectionString();
     }

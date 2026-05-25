@@ -24,7 +24,7 @@ namespace OnixLabs.Core;
 public sealed class OptionalEqualityComparer<T>(EqualityComparer<T>? valueEqualityComparer = null) : IEqualityComparer<Optional<T>> where T : notnull
 {
     /// <summary>
-    /// Gets the default <see cref="OptionalEqualityComparer{T}"/> instance.
+    /// The default <see cref="OptionalEqualityComparer{T}"/> instance.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly OptionalEqualityComparer<T> Default = new();
@@ -41,5 +41,10 @@ public sealed class OptionalEqualityComparer<T>(EqualityComparer<T>? valueEquali
     }
 
     /// <inheritdoc/>
-    public int GetHashCode(Optional<T> obj) => obj.GetHashCode();
+    public int GetHashCode(Optional<T> obj)
+    {
+        // ReSharper disable once ConvertIfStatementToReturnStatement
+        if (obj is not Some<T> some) return 0;
+        return (valueEqualityComparer ?? EqualityComparer<T>.Default).GetHashCode(some.Value);
+    }
 }

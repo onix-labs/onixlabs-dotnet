@@ -25,16 +25,12 @@ public abstract partial class Enumeration<T>
     /// Gets all the enumeration entries for the current type.
     /// </summary>
     /// <returns>Returns all the enumeration entries for the current type.</returns>
-    public static IReadOnlySet<T> GetAll() => typeof(T)
-        .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
-        .Select(field => field.GetValue(null))
-        .OfType<T>()
-        .ToFrozenSet();
+    public static IReadOnlySet<T> GetAll() => EnumerationCache.All;
 
     /// <summary>
-    /// Gets all the enumeration entries for the current type.
+    /// Gets all the enumeration entries, as value/name tuples, for the current type.
     /// </summary>
-    /// <returns>Returns all the enumeration entries for the current type.</returns>
+    /// <returns>Returns all the enumeration entries, as value/name tuples, for the current type.</returns>
     public static IReadOnlySet<(int Value, string Name)> GetEntries() => GetAll().Select(entry => entry.ToEntry()).ToFrozenSet();
 
     /// <summary>
@@ -48,4 +44,20 @@ public abstract partial class Enumeration<T>
     /// </summary>
     /// <returns>Returns all the enumeration values for the current type.</returns>
     public static IReadOnlySet<int> GetValues() => GetAll().Select(entry => entry.Value).ToFrozenSet();
+
+    /// <summary>
+    /// Represents a per-enumeration type cache of the discovered enumeration entries.
+    /// The CLR initialises one static field per closed generic, so the reflection scan runs once per concrete enumeration type.
+    /// </summary>
+    private static class EnumerationCache
+    {
+        /// <summary>
+        /// The set of all enumeration entries declared by <typeparamref name="T"/>, discovered once per concrete type.
+        /// </summary>
+        public static readonly FrozenSet<T> All = typeof(T)
+            .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
+            .Select(field => field.GetValue(null))
+            .OfType<T>()
+            .ToFrozenSet();
+    }
 }

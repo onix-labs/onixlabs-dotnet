@@ -23,7 +23,7 @@ namespace OnixLabs.Core.Text;
 public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IFormatProvider
 {
     /// <summary>
-    /// Gets the invariant Base-16 format provider.
+    /// The invariant Base-16 format provider.
     /// </summary>
     /// <remarks>
     /// The invariant format provider favors lowercase for Base-16 encoding.
@@ -32,12 +32,12 @@ public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IF
     public static readonly Base16FormatProvider Invariant = new(0, nameof(Invariant), "0123456789ABCDEFabcdef");
 
     /// <summary>
-    /// Gets the uppercase Base-16 format provider.
+    /// The uppercase Base-16 format provider.
     /// </summary>
     public static readonly Base16FormatProvider Uppercase = new(1, nameof(Uppercase), "0123456789ABCDEF");
 
     /// <summary>
-    /// Gets the lowercase Base-16 format provider.
+    /// The lowercase Base-16 format provider.
     /// </summary>
     public static readonly Base16FormatProvider Lowercase = new(2, nameof(Lowercase), "0123456789abcdef");
 
@@ -52,6 +52,7 @@ public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IF
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base16FormatProvider"/> instance.
     /// </summary>
+    /// <value>The Base-16 alphabet associated with the current format provider.</value>
     public string Alphabet { get; }
 
     /// <inheritdoc/>

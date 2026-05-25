@@ -22,7 +22,7 @@ public sealed partial class EcdhPrivateKey
     /// <summary>
     /// Creates a new EC Diffie-Hellman cryptographic private key.
     /// </summary>
-    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance.</returns>
+    /// <returns>Returns a new <see cref="EcdhPrivateKey"/> instance.</returns>
     public static EcdhPrivateKey Create()
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
@@ -33,7 +33,8 @@ public sealed partial class EcdhPrivateKey
     /// Creates a new EC Diffie-Hellman cryptographic private key.
     /// </summary>
     /// <param name="curve">The elliptic curve from which to create a new EC Diffie-Hellman cryptographic private key.</param>
-    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance.</returns>
+    /// <returns>Returns a new <see cref="EcdhPrivateKey"/> instance.</returns>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="curve"/> does not represent a valid elliptic curve.</exception>
     public static EcdhPrivateKey Create(ECCurve curve)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create(curve);
@@ -44,7 +45,8 @@ public sealed partial class EcdhPrivateKey
     /// Creates a new EC Diffie-Hellman cryptographic private key.
     /// </summary>
     /// <param name="parameters">The elliptic curve parameters from which to create a new EC Diffie-Hellman cryptographic private key.</param>
-    /// <returns>Returns a new <see cref="EcdsaPrivateKey"/> instance.</returns>
+    /// <returns>Returns a new <see cref="EcdhPrivateKey"/> instance.</returns>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="parameters"/> does not represent a valid EC Diffie-Hellman private key.</exception>
     public static EcdhPrivateKey Create(ECParameters parameters)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create(parameters);

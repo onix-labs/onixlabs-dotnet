@@ -40,23 +40,38 @@ public sealed class SecurityTokenBuilder
     /// </summary>
     /// <param name="length">The desired length of the generated security token.</param>
     /// <param name="provider">The <see cref="RandomNumberProvider"/> that will be used to randomly select security token characters.</param>
-    private SecurityTokenBuilder(int length, RandomNumberProvider provider) => (this.length, this.provider) = (length, provider);
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
+    private SecurityTokenBuilder(int length, RandomNumberProvider provider)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(length);
+        (this.length, this.provider) = (length, provider);
+    }
 
     /// <summary>
     /// Creates a new <see cref="SecurityTokenBuilder"/> instance using a pseudo-random number provider.
     /// </summary>
+    /// <remarks>
+    /// <see cref="Random"/> is not cryptographically secure and produces predictable output; do not use this method
+    /// to generate security tokens in production. Use <see cref="CreateSecureRandom"/> instead.
+    /// </remarks>
     /// <param name="length">The desired length of the generated security token.</param>
     /// <param name="random">The underlying <see cref="Random"/> pseudo-random instance.</param>
     /// <returns>Returns a new <see cref="SecurityTokenBuilder"/> instance using a pseudo-random number provider.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
     public static SecurityTokenBuilder CreatePseudoRandom(int length, Random? random = null) =>
         new(length, RandomNumberProvider.CreatePseudoRandomNumberProvider(random ?? new Random()));
 
     /// <summary>
     /// Creates a new <see cref="SecurityTokenBuilder"/> instance using a pseudo-random number provider.
     /// </summary>
+    /// <remarks>
+    /// <see cref="Random"/> is not cryptographically secure and produces predictable output; do not use this method
+    /// to generate security tokens in production. Use <see cref="CreateSecureRandom"/> instead.
+    /// </remarks>
     /// <param name="length">The desired length of the generated security token.</param>
     /// <param name="seed">The seed for the pseudo-random number provider.</param>
     /// <returns>Returns a new <see cref="SecurityTokenBuilder"/> instance using a pseudo-random number provider.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
     public static SecurityTokenBuilder CreatePseudoRandom(int length, int seed) =>
         new(length, RandomNumberProvider.CreatePseudoRandomNumberProvider(new Random(seed)));
 
@@ -65,6 +80,7 @@ public sealed class SecurityTokenBuilder
     /// </summary>
     /// <param name="length">The desired length of the generated security token.</param>
     /// <returns>Returns a new <see cref="SecurityTokenBuilder"/> instance using a secure random number provider.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
     public static SecurityTokenBuilder CreateSecureRandom(int length) =>
         new(length, RandomNumberProvider.CreateSecureRandomNumberProvider());
 
@@ -119,10 +135,17 @@ public sealed class SecurityTokenBuilder
     /// Creates a new <see cref="SecurityToken"/> instance from the current <see cref="SecurityTokenBuilder"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="SecurityToken"/> instance.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when no character set has been specified.</exception>
     public SecurityToken ToSecurityToken()
     {
-        Span<char> result = stackalloc char[length];
+        if (characters.Count == 0)
+            throw new InvalidOperationException("At least one character set must be specified before building a security token.");
+
+        const int maxStackSize = 256;
         List<char> allowedCharacters = characters.ToList();
+
+        // Why: length is caller-supplied and unbounded; stackalloc only for small buffers to avoid a stack overflow.
+        Span<char> result = length <= maxStackSize ? stackalloc char[length] : new char[length];
 
         for (int index = 0; index < length; index++)
             result[index] = allowedCharacters[provider.GetNextInt(0, allowedCharacters.Count)];

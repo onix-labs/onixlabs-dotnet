@@ -24,6 +24,6 @@ public interface ISpanBinaryConvertible
     /// <summary>
     /// Gets the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.
     /// </summary>
-    /// <returns>Return the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
+    /// <returns>Returns the current <see cref="ISpanBinaryConvertible"/> instance as a new <see cref="ReadOnlySpan{T}"/> instance.</returns>
     ReadOnlySpan<byte> AsReadOnlySpan();
 }

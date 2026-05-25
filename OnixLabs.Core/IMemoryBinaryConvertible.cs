@@ -24,6 +24,6 @@ public interface IMemoryBinaryConvertible
     /// <summary>
     /// Gets the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.
     /// </summary>
-    /// <returns>Return the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
+    /// <returns>Returns the current <see cref="IMemoryBinaryConvertible"/> instance as a new <see cref="ReadOnlyMemory{T}"/> instance.</returns>
     ReadOnlyMemory<byte> AsReadOnlyMemory();
 }

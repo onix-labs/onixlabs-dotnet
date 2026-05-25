@@ -22,10 +22,10 @@ namespace OnixLabs.Security.Cryptography;
 /// </summary>
 // ReSharper disable UnusedMethodReturnValue.Global
 [EditorBrowsable(EditorBrowsableState.Never)]
-public static class Extensions
+public static class ReadOnlySpanExtensions
 {
     /// <summary>
-    /// /// Provides extension methods for <see cref="ReadOnlySpan{T}"/> instances.
+    /// Defines instance-style extensions over a <see cref="ReadOnlySpan{T}"/> of <see cref="byte"/> for converting to cryptographic primitives.
     /// </summary>
     /// <param name="receiver">The current <see cref="ReadOnlySpan{T}"/> instance.</param>
     extension(ReadOnlySpan<byte> receiver)

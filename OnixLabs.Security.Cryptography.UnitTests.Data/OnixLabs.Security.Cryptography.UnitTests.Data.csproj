@@ -6,4 +6,7 @@
         <ProjectReference Include="..\OnixLabs.Security.Cryptography\OnixLabs.Security.Cryptography.csproj"/>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
     </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="wycheproof_eddsa_test.json"/>
+    </ItemGroup>
 </Project>

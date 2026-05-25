@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,11 +34,13 @@ public abstract class Result : IValueEquatable<Result>
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result"/> is in a successful state.
     /// </summary>
+    /// <value><see langword="true"/> if the current <see cref="Result"/> is in a successful state; otherwise, <see langword="false"/>.</value>
     public bool IsSuccess => this is Success;
 
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result"/> is in a failed state.
     /// </summary>
+    /// <value><see langword="true"/> if the current <see cref="Result"/> is in a failed state; otherwise, <see langword="false"/>.</value>
     public bool IsFailure => this is Failure;
 
     /// <summary>
@@ -139,17 +142,17 @@ public abstract class Result : IValueEquatable<Result>
     /// <summary>
     /// Performs an equality comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is equal to the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(Result? left, Result? right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is not equal to the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Result? left, Result? right) => !Equals(left, right);
 
     /// <inheritdoc/>
@@ -183,12 +186,12 @@ public abstract class Result : IValueEquatable<Result>
     /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </summary>
-    /// <param name="defaultValue">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
+    /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result"/> is in a <see cref="Success"/> state.</param>
     /// <returns>
     /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or the specified default exception if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </returns>
-    public Exception GetExceptionOrDefault(Exception defaultValue) => this is Failure failure ? failure.Exception : defaultValue;
+    public Exception GetExceptionOrDefault(Exception defaultException) => GetExceptionOrDefault() ?? defaultException;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
@@ -208,8 +211,8 @@ public abstract class Result : IValueEquatable<Result>
     /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </returns>
-    /// <exception cref="InvalidOperationException">If the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
-    public Exception GetExceptionOrThrow() => this is Failure failure ? failure.Exception : throw new InvalidOperationException("The current result is not in a failure state.");
+    /// <exception cref="InvalidOperationException">Thrown when the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
+    public Exception GetExceptionOrThrow() => CheckNotNull(GetExceptionOrDefault(), "The current result is in a success state; no exception to retrieve.");
 
     /// <summary>
     /// Executes the action that matches the value of the current <see cref="Result"/> instance.
@@ -719,12 +722,15 @@ public abstract class Result : IValueEquatable<Result>
 
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result"/> is in a failure state.
-    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
     /// </summary>
+    /// <remarks>
+    /// The original stack trace of the underlying exception is preserved via
+    /// <see cref="ExceptionDispatchInfo"/>; the rethrow point is recorded as a continuation.
+    /// </remarks>
     public void Throw()
     {
         if (this is Failure failure)
-            throw failure.Exception;
+            ExceptionDispatchInfo.Capture(failure.Exception).Throw();
     }
 
     /// <inheritdoc/>
@@ -737,7 +743,7 @@ public abstract class Result : IValueEquatable<Result>
 public sealed class Success : Result
 {
     /// <summary>
-    /// Gets the singleton <see cref="Success"/> instance.
+    /// The singleton <see cref="Success"/> instance.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     internal static readonly Success Instance = new();
@@ -750,10 +756,11 @@ public sealed class Success : Result
     }
 
     /// <summary>
-    /// Obtains a new <see cref="Success{T}"/> instance containing the current exception.
+    /// Obtains a new <see cref="Success{T}"/> instance containing the specified value.
     /// </summary>
+    /// <param name="value">The underlying successful result value.</param>
     /// <typeparam name="TResult">The underlying type of the <see cref="Success{T}"/> to return.</typeparam>
-    /// <returns>Returns a new <see cref="Success{T}"/> instance containing the current exception.</returns>
+    /// <returns>Returns a new <see cref="Success{T}"/> instance containing the specified value.</returns>
     // ReSharper disable once MemberCanBeMadeStatic.Global
 #pragma warning disable CA1822
     public Success<TResult> ToTypedResult<TResult>(TResult value) => Result<TResult>.Success(value);
@@ -774,6 +781,7 @@ public sealed class Failure : Result
     /// <summary>
     /// Gets the underlying result exception.
     /// </summary>
+    /// <value>The underlying exception representing the failed result.</value>
     public Exception Exception { get; }
 
     /// <summary>

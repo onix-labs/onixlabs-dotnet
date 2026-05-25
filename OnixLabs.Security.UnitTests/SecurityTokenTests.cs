@@ -105,6 +105,19 @@ public sealed class SecurityTokenTests
         Assert.NotEqual(leftHashCode, rightHashCode);
     }
 
+    [Fact(DisplayName = "SecurityToken.Equals(object) should produce the expected result")]
+    public void SecurityTokenEqualsObjectShouldProduceExpectedResult()
+    {
+        // Given
+        SecurityToken token = new("abc123");
+
+        // Then
+        Assert.True(token.Equals((object)new SecurityToken("abc123")));
+        Assert.False(token.Equals((object)new SecurityToken("xyz789")));
+        Assert.False(token.Equals("abc123"));
+        Assert.False(token.Equals(null));
+    }
+
     [Theory(DisplayName = "SecurityToken.Length should produce the expected result")]
     [InlineData("a", 1)]
     [InlineData("ab", 2)]
@@ -120,5 +133,31 @@ public sealed class SecurityTokenTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "SecurityToken.Length should return zero for the default instance")]
+    public void SecurityTokenLengthShouldReturnZeroForDefaultInstance()
+    {
+        // Given
+        SecurityToken token = default;
+
+        // When
+        int actual = token.Length;
+
+        // Then
+        Assert.Equal(0, actual);
+    }
+
+    [Fact(DisplayName = "SecurityToken.ToString should return an empty string for the default instance")]
+    public void SecurityTokenToStringShouldReturnEmptyStringForDefaultInstance()
+    {
+        // Given
+        SecurityToken token = default;
+
+        // When
+        string actual = token.ToString();
+
+        // Then
+        Assert.Equal(string.Empty, actual);
     }
 }

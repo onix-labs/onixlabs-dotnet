@@ -768,11 +768,11 @@ public static class ResultExtensions
     /// <param name="result">The <see cref="Result{T}"/> instance from which to obtain the <see cref="Optional{T}"/> value.</param>
     /// <typeparam name="T">The underlying type of the <see cref="Optional{T}"/> value.</typeparam>
     /// <returns>
-    /// Return the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
+    /// Returns the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
     /// or <see cref="Optional{T}.None"/> if the result is in a <see cref="Failure{T}"/> state.
     /// </returns>
     public static Optional<T> GetValueOrNone<T>(this Result<T> result) where T : notnull =>
-        result is Success<T> success ? Optional<T>.Of(success.Value) : Optional<T>.None;
+        result is Success<T> success ? success.Value : Optional<T>.None;
 
     /// <summary>
     /// Gets the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
@@ -781,7 +781,7 @@ public static class ResultExtensions
     /// <param name="result">The <see cref="Result{T}"/> instance from which to obtain the <see cref="Optional{T}"/> value.</param>
     /// <typeparam name="T">The underlying type of the <see cref="Optional{T}"/> value.</typeparam>
     /// <returns>
-    /// Return the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
+    /// Returns the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
     /// or <see cref="Optional{T}.None"/> if the result is in a <see cref="Failure{T}"/> state.
     /// </returns>
     public static Optional<T> GetValueOrNone<T>(this Result<Optional<T>> result) where T : notnull =>
@@ -795,7 +795,7 @@ public static class ResultExtensions
     /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <typeparam name="T">The underlying type of the <see cref="Optional{T}"/> value.</typeparam>
     /// <returns>
-    /// Return the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
+    /// Returns the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
     /// or <see cref="Optional{T}.None"/> if the result is in a <see cref="Failure{T}"/> state.
     /// </returns>
     public static async ValueTask<Optional<T>> GetValueOrNoneAsync<T>(this Task<Result<T>> task, CancellationToken token = default) where T : notnull =>
@@ -809,7 +809,7 @@ public static class ResultExtensions
     /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
     /// <typeparam name="T">The underlying type of the <see cref="Optional{T}"/> value.</typeparam>
     /// <returns>
-    /// Return the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
+    /// Returns the <see cref="Optional{T}"/> value of the current <see cref="Result{T}"/> instance,
     /// or <see cref="Optional{T}.None"/> if the result is in a <see cref="Failure{T}"/> state.
     /// </returns>
     public static async ValueTask<Optional<T>> GetValueOrNoneAsync<T>(this Task<Result<Optional<T>>> task, CancellationToken token = default) where T : notnull =>
@@ -854,7 +854,7 @@ public static class ResultExtensions
     /// or returns the default value if the result is in a <see cref="Failure{T}"/> state, or the <see cref="Optional{T}"/> is <see cref="Optional{T}.None"/>.
     /// </returns>
     public static T GetOptionalValueOrDefault<T>(this Result<Optional<T>> result, T defaultValue) where T : notnull =>
-        result is Success<Optional<T>> { Value.HasValue: true } ? result.GetOptionalValueOrThrow() : defaultValue;
+        result is Success<Optional<T>> { Value: Some<T> some } ? some.Value : defaultValue;
 
     /// <summary>
     /// Asynchronously gets the underlying <typeparamref name="T"/> value from the current <see cref="Result{T}"/> of <see cref="Optional{T}"/>,
@@ -886,7 +886,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="task">The current <see cref="Task{TResult}"/> of <see cref="Failure{T}"/> from which to obtain a typed <see cref="Failure{T}"/> instance.</param>
     /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
-    /// /// <typeparam name="T">The underlying type of the current <see cref="Failure{T}"/>.</typeparam>
+    /// <typeparam name="T">The underlying type of the current <see cref="Failure{T}"/>.</typeparam>
     /// <typeparam name="TResult">The underlying type of the <see cref="Failure{T}"/> to return.</typeparam>
     /// <returns>Returns a new <see cref="Failure{T}"/> instance containing the current exception.</returns>
     public static async ValueTask<Failure<TResult>> ToTypedResultAsync<T, TResult>(this Task<Failure<T>> task, CancellationToken token = default) =>

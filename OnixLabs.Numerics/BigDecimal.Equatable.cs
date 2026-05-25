@@ -20,16 +20,16 @@ public readonly partial struct BigDecimal
     /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are equal.
     /// This method implements the <see cref="BigDecimalEqualityComparer.Strict"/> comparer.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool Equals(BigDecimal left, BigDecimal right) => Equals(left, right, BigDecimalEqualityComparer.Strict);
 
     /// <summary>
     /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are equal.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <param name="comparer">The equality comparer to use to determine equality.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     // ReSharper disable once MemberCanBePrivate.Global
@@ -72,15 +72,15 @@ public readonly partial struct BigDecimal
     /// Serves as a hash code function for this instance.
     /// This method implements the <see cref="BigDecimalEqualityComparer.Strict"/> comparer.
     /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <returns>Returns a hash code for this instance.</returns>
     public override int GetHashCode() => BigDecimalEqualityComparer.Strict.GetHashCode(this);
 
     /// <summary>
     /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are equal.
     /// This method implements the <see cref="BigDecimalEqualityComparer.Semantic"/> comparer.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(BigDecimal left, BigDecimal right) => Equals(left, right, BigDecimalEqualityComparer.Semantic);
 
@@ -88,8 +88,8 @@ public readonly partial struct BigDecimal
     /// Compares two instances of <see cref="BigDecimal"/> to determine whether their values are not equal.
     /// This method implements the <see cref="BigDecimalEqualityComparer.Semantic"/> comparer.
     /// </summary>
-    /// <param name="left">The left-hand value to compare.</param>
-    /// <param name="right">The right-hand value to compare.</param>
+    /// <param name="left">The <paramref name="left"/> value to compare.</param>
+    /// <param name="right">The <paramref name="right"/> value to compare.</param>
     /// <returns>Returns <see langword="true"/> if the two specified instances are not equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(BigDecimal left, BigDecimal right) => !Equals(left, right, BigDecimalEqualityComparer.Semantic);
 }

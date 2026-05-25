@@ -64,5 +64,6 @@ public readonly partial struct Salt : ICryptoPrimitive<Salt>
     /// <summary>
     /// Gets the length of the current <see cref="Salt"/> in bytes.
     /// </summary>
+    /// <value>The number of bytes in the underlying salt value.</value>
     public int Length => value?.Length ?? 0;
 }

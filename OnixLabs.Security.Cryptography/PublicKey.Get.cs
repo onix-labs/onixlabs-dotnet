@@ -23,5 +23,6 @@ public abstract partial class PublicKey
     /// </summary>
     /// <param name="algorithm">The <see cref="HashAlgorithm"/> that will be used to hash the public key data.</param>
     /// <returns>Returns a <see cref="Hash"/> representation of the current <see cref="PublicKey"/> instance.</returns>
+    /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the public key data.</exception>
     public Hash GetHash(HashAlgorithm algorithm) => Hash.Compute(algorithm, KeyData);
 }

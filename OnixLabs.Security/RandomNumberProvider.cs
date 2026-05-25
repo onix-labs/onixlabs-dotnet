@@ -26,7 +26,7 @@ internal abstract class RandomNumberProvider
     /// <summary>
     /// Initializes a new instance of the <see cref="RandomNumberProvider"/> class.
     /// </summary>
-    internal RandomNumberProvider()
+    private protected RandomNumberProvider()
     {
     }
 
@@ -44,11 +44,11 @@ internal abstract class RandomNumberProvider
     public static RandomNumberProvider CreateSecureRandomNumberProvider() => new SecureRandomNumberProvider();
 
     /// <summary>
-    /// Gets the next random <see cref="Int32"/> value.
+    /// Gets the next random <see cref="int"/> value.
     /// </summary>
     /// <param name="minimum">The minimum random value.</param>
     /// <param name="maximum">The maximum random value.</param>
-    /// <returns>Returns the next random <see cref="Int32"/> value.</returns>
+    /// <returns>Returns the next random <see cref="int"/> value.</returns>
     internal abstract int GetNextInt(int minimum, int maximum);
 }
 
@@ -58,12 +58,7 @@ internal abstract class RandomNumberProvider
 /// <param name="random">The <see cref="Random"/> instance that will be used to generate random values.</param>
 file sealed class PseudoRandomNumberProvider(Random random) : RandomNumberProvider
 {
-    /// <summary>
-    /// Gets the next random <see cref="Int32"/> value.
-    /// </summary>
-    /// <param name="minimum">The minimum random value.</param>
-    /// <param name="maximum">The maximum random value.</param>
-    /// <returns>Returns the next random <see cref="Int32"/> value.</returns>
+    /// <inheritdoc/>
     internal override int GetNextInt(int minimum, int maximum) => random.Next(minimum, maximum);
 }
 
@@ -72,11 +67,6 @@ file sealed class PseudoRandomNumberProvider(Random random) : RandomNumberProvid
 /// </summary>
 file sealed class SecureRandomNumberProvider : RandomNumberProvider
 {
-    /// <summary>
-    /// Gets the next random <see cref="Int32"/> value.
-    /// </summary>
-    /// <param name="minimum">The minimum random value.</param>
-    /// <param name="maximum">The maximum random value.</param>
-    /// <returns>Returns the next random <see cref="Int32"/> value.</returns>
+    /// <inheritdoc/>
     internal override int GetNextInt(int minimum, int maximum) => RandomNumberGenerator.GetInt32(minimum, maximum);
 }

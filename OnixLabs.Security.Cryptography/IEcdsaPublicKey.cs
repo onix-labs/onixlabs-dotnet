@@ -44,8 +44,8 @@ public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublic
     /// </summary>
     /// <param name="signature">The signature to validate against the current ECDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current ECDSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
     /// <param name="format">The digital signature format that was used to generate the cryptographic digital signature.</param>
     /// <returns>
@@ -102,8 +102,8 @@ public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublic
     /// </summary>
     /// <param name="signature">The signature to validate against the current ECDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current ECDSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
     /// <param name="format">The digital signature format that was used to generate the cryptographic digital signature.</param>
     /// <returns>
@@ -160,8 +160,8 @@ public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublic
     /// </summary>
     /// <param name="signature">The signature to validate against the current ECDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current ECDSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
     /// <param name="format">The digital signature format that was used to generate the cryptographic digital signature.</param>
     /// <returns>
@@ -218,8 +218,8 @@ public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublic
     /// </summary>
     /// <param name="signature">The signature to validate against the current ECDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current ECDSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
     /// <param name="format">The digital signature format that was used to generate the cryptographic digital signature.</param>
     /// <returns>
@@ -324,8 +324,8 @@ public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublic
     /// </summary>
     /// <param name="signature">The signature to validate against the current ECDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current ECDSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
     /// <param name="format">The digital signature format that was used to generate the cryptographic digital signature.</param>
     void VerifyData(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithm algorithm, DSASignatureFormat format = default);
@@ -366,8 +366,8 @@ public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublic
     /// </summary>
     /// <param name="signature">The signature to validate against the current ECDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current ECDSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
     /// <param name="format">The digital signature format that was used to generate the cryptographic digital signature.</param>
     void VerifyData(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, DSASignatureFormat format = default);
@@ -408,8 +408,8 @@ public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublic
     /// </summary>
     /// <param name="signature">The signature to validate against the current ECDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current ECDSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
     /// <param name="format">The digital signature format that was used to generate the cryptographic digital signature.</param>
     void VerifyData(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithm algorithm, DSASignatureFormat format = default);
@@ -450,8 +450,8 @@ public interface IEcdsaPublicKey : IPublicKeyImportable<EcdsaPublicKey>, IPublic
     /// </summary>
     /// <param name="signature">The signature to validate against the current ECDSA cryptographic public key.</param>
     /// <param name="data">The unsigned data to validate against the current ECDSA cryptographic public key.</param>
-    /// <param name="offset">The offset into the byte array from which to begin using data.</param>
-    /// <param name="count">The number of bytes in the array to use as data.</param>
+    /// <param name="offset">The offset into the <see cref="ReadOnlySpan{T}"/> from which to begin using data.</param>
+    /// <param name="count">The number of bytes in the <see cref="ReadOnlySpan{T}"/> to use as data.</param>
     /// <param name="algorithm">The hash algorithm that was used to hash and sign the input data.</param>
     /// <param name="format">The digital signature format that was used to generate the cryptographic digital signature.</param>
     void VerifyData(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, DSASignatureFormat format = default);

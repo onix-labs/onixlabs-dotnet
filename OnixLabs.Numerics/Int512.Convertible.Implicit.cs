@@ -1,0 +1,89 @@
+// Copyright © 2020 ONIXLabs
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+
+namespace OnixLabs.Numerics;
+
+public readonly partial struct Int512
+{
+    /// <summary>Implicitly converts an <see cref="sbyte"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(sbyte value) => (Int256)(Int128)value;
+
+    /// <summary>Implicitly converts a <see cref="byte"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(byte value) => new(UInt256.Zero, value);
+
+    /// <summary>Implicitly converts a <see cref="short"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(short value) => (Int256)(Int128)value;
+
+    /// <summary>Implicitly converts a <see cref="ushort"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(ushort value) => new(UInt256.Zero, value);
+
+    /// <summary>Implicitly converts an <see cref="int"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(int value) => (Int256)(Int128)value;
+
+    /// <summary>Implicitly converts a <see cref="uint"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(uint value) => new(UInt256.Zero, value);
+
+    /// <summary>Implicitly converts a <see cref="long"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(long value) => (Int256)(Int128)value;
+
+    /// <summary>Implicitly converts a <see cref="ulong"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(ulong value) => new(UInt256.Zero, value);
+
+    /// <summary>Implicitly converts an <see cref="Int128"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(Int128 value) => (Int256)value;
+
+    /// <summary>Implicitly converts a <see cref="UInt128"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(UInt128 value) => new(UInt256.Zero, value);
+
+    /// <summary>Implicitly converts an <see cref="Int256"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(Int256 value)
+    {
+        UInt256 signExtension = Int256.IsNegative(value) ? UInt256.MaxValue : UInt256.Zero;
+        return new Int512(signExtension, Int256.ReinterpretAsUnsigned(value));
+    }
+
+    /// <summary>Implicitly converts a <see cref="UInt256"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(UInt256 value) => new(UInt256.Zero, value);
+
+    /// <summary>Implicitly converts a <see cref="char"/> value to an <see cref="Int512"/> value.</summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>Returns the <see cref="Int512"/> representation of <paramref name="value"/>.</returns>
+    public static implicit operator Int512(char value) => new(UInt256.Zero, value);
+}

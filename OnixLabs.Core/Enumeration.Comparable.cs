@@ -17,7 +17,17 @@ namespace OnixLabs.Core;
 public abstract partial class Enumeration<T>
 {
     /// <inheritdoc/>
-    public int CompareTo(T? other) => Value.CompareToNullable(other?.Value);
+    public int CompareTo(T? other)
+    {
+        if (other is null)
+            return 1;
+
+        // ReSharper disable once ConvertIfStatementToReturnStatement, PatternAlwaysMatches
+        if (Value.CompareTo(other.Value) is int result and not 0)
+            return result;
+
+        return string.CompareOrdinal(Name, other.Name);
+    }
 
     /// <inheritdoc/>
     public int CompareTo(object? obj) => this.CompareToObject(obj);

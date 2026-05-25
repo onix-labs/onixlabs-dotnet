@@ -21,30 +21,28 @@ public readonly partial struct NumberInfo
     /// <summary>
     /// Gets a <see cref="NumberInfo"/> instance representing zero.
     /// </summary>
+    /// <value>The <see cref="NumberInfo"/> instance representing zero.</value>
     public static NumberInfo Zero => new(0, 0);
 
     /// <summary>
     /// Gets a <see cref="NumberInfo"/> instance representing one.
     /// </summary>
+    /// <value>The <see cref="NumberInfo"/> instance representing one.</value>
     public static NumberInfo One => new(1, 0);
 
     /// <summary>
     /// Gets a <see cref="NumberInfo"/> instance representing negative one.
     /// </summary>
+    /// <value>The <see cref="NumberInfo"/> instance representing negative one.</value>
     public static NumberInfo NegativeOne => new(-1, 0);
 
     /// <summary>
-    /// Gets the default number format.
+    /// The default number format.
     /// </summary>
     private const string DefaultNumberFormat = "G";
 
     /// <summary>
-    /// Gets the default number styles for parsing decimal values.
+    /// The default number styles for parsing decimal values.
     /// </summary>
     private const NumberStyles DefaultNumberStyles = NumberStyles.Any;
-
-    /// <summary>
-    /// Gets the default culture for formatting and parsing operations.
-    /// </summary>
-    private static readonly CultureInfo DefaultCulture = CultureInfo.CurrentCulture;
 }

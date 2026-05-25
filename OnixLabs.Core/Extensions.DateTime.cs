@@ -36,7 +36,7 @@ public static class DateTimeExtensions
         public DateOnly ToDateOnly() => DateOnly.FromDateTime(receiver);
 
         /// <summary>
-        /// Obtains a <see cref="TimeOnly"/> instance from the current <see cref="TimeOnly"/> instance.
+        /// Obtains a <see cref="TimeOnly"/> instance from the current <see cref="DateTime"/> instance.
         /// </summary>
         /// <returns>Returns the <see cref="TimeOnly"/> instance obtained from the current <see cref="DateTime"/> instance.</returns>
         public TimeOnly ToTimeOnly() => TimeOnly.FromDateTime(receiver);

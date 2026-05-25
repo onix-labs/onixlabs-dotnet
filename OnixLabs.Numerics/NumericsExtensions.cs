@@ -30,14 +30,19 @@ public static class NumericsExtensions
     private const int MaxScale = 28;
 
     /// <summary>
-    /// Gets the minimum value of a <see cref="decimal"/> value as a <see cref="BigInteger"/>.
+    /// The minimum value of a <see cref="decimal"/> as a <see cref="BigInteger"/>.
     /// </summary>
     private static readonly BigInteger MinDecimal = new(decimal.MinValue);
 
     /// <summary>
-    /// Gets the maximum value of a <see cref="decimal"/> value as a <see cref="BigInteger"/>.
+    /// The maximum value of a <see cref="decimal"/> as a <see cref="BigInteger"/>.
     /// </summary>
     private static readonly BigInteger MaxDecimal = new(decimal.MaxValue);
+
+    /// <summary>
+    /// The largest unsigned significand a <see cref="decimal"/> can hold, equal to <c>2^96 - 1</c>.
+    /// </summary>
+    private static readonly BigInteger MaxSignificand = (BigInteger.One << 96) - BigInteger.One;
 
     /// <summary>
     /// Gets the unscaled value of the current <see cref="decimal"/>.
@@ -57,29 +62,45 @@ public static class NumericsExtensions
     }
 
     /// <summary>
+    /// Computes the largest scale in the inclusive range 0 to 28 to which a <see cref="decimal"/> with the specified
+    /// absolute unscaled value and current scale can be set without overflowing decimal's 96-bit significand.
+    /// </summary>
+    /// <param name="absoluteUnscaledValue">The absolute unscaled value of the decimal.</param>
+    /// <param name="currentScale">The current scale of the decimal.</param>
+    /// <returns>Returns the largest representable scale for the specified value.</returns>
+    /// <remarks>
+    /// A zero significand fits at any scale. Otherwise the largest power of ten that keeps the significand within 96 bits
+    /// is derived from <c>MaxSignificand / absoluteUnscaledValue</c>, and the result is capped at decimal's maximum scale of 28.
+    /// </remarks>
+    private static int GetMaxPossibleScale(BigInteger absoluteUnscaledValue, int currentScale)
+    {
+        int maxPadding = absoluteUnscaledValue.IsZero
+            ? MaxScale
+            : (MaxSignificand / absoluteUnscaledValue).ToString().Length - 1;
+
+        return int.Min(MaxScale, currentScale + maxPadding);
+    }
+
+    /// <summary>
     /// Sets the scale (number of digits after the decimal point) of the current <see cref="decimal"/> value.
+    /// </summary>
     /// <remarks>
     /// If the scale of the current <see cref="decimal"/> value is less than the specified scale, then the scale will be padded with zeroes.
     /// If the scale of the current <see cref="decimal"/> value is greater that the specified scale, then the scale will be truncated,
     /// provided that there is no loss of precision; otherwise, <see cref="InvalidOperationException"/> will be thrown.
     /// </remarks>
-    /// </summary>
     /// <param name="value">The decimal value to adjust.</param>
     /// <param name="scale">The desired, non-negative scale.</param>
-    /// <returns>A new <see cref="decimal"/> with the exact specified scale.</returns>
-    /// <exception cref="InvalidOperationException"> if reducing the scale would result in a loss of precision.</exception>
-    /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
+    /// <returns>Returns a new <see cref="decimal"/> with the exact specified scale.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when reducing the scale would result in a loss of precision.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="scale"/> is outside the inclusive range of 0 to 28.</exception>
     public static decimal SetScale(this decimal value, int scale)
     {
         RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.");
 
-        // Determine maximum representable scale given the integer part length
+        // Determine the maximum representable scale from decimal's 96-bit significand limit.
         BigInteger unscaledValue = value.GetUnscaledValue();
-        BigInteger absUnscaled = BigInteger.Abs(unscaledValue);
-        BigInteger factorCurrent = BigInteger.Pow(10, value.Scale);
-        BigInteger integerPart = BigInteger.DivRem(absUnscaled, factorCurrent, out _);
-        int integerDigits = integerPart.IsZero ? 1 : integerPart.ToString().Length;
-        int maxPossibleScale = MaxScale - integerDigits;
+        int maxPossibleScale = GetMaxPossibleScale(BigInteger.Abs(unscaledValue), value.Scale);
 
         Require(scale <= maxPossibleScale, $"Maximum possible scale for the specified value is {maxPossibleScale}.", nameof(scale));
 
@@ -107,29 +128,25 @@ public static class NumericsExtensions
     }
 
     /// <summary>
-    /// Sets the scale (number of digits after the decimal point) of the current <see cref="decimal"/> value.
+    /// Sets the scale (number of digits after the decimal point) of the current <see cref="decimal"/> value, rounding away any precision loss.
+    /// </summary>
     /// <remarks>
     /// If the scale of the current <see cref="decimal"/> value is less than the specified scale, then the scale will be padded with zeroes.
     /// If the scale of the current <see cref="decimal"/> value is greater that the specified scale, then the scale will be truncated,
     /// provided that there is no loss of precision; otherwise, the value is rounded using the specified <see cref="MidpointRounding"/> mode.
     /// </remarks>
-    /// </summary>
     /// <param name="value">The decimal value to adjust.</param>
     /// <param name="scale">The desired scale (number of decimal digits). Must be non-negative.</param>
     /// <param name="mode">The rounding strategy to apply if the scale must be reduced with precision loss.</param>
-    /// <returns>A new <see cref="decimal"/> with the exact specified scale.</returns>
-    /// <exception cref="ArgumentException"> if <paramref name="scale"/> is negative.</exception>
+    /// <returns>Returns a new <see cref="decimal"/> with the exact specified scale.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="scale"/> is outside the inclusive range of 0 to 28.</exception>
     public static decimal SetScale(this decimal value, int scale, MidpointRounding mode)
     {
         RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.");
 
-        // Determine maximum representable scale
+        // Determine the maximum representable scale from decimal's 96-bit significand limit.
         BigInteger unscaledValue = value.GetUnscaledValue();
-        BigInteger absUnscaled = BigInteger.Abs(unscaledValue);
-        BigInteger factorCurrent = BigInteger.Pow(10, value.Scale);
-        BigInteger integerPart = BigInteger.DivRem(absUnscaled, factorCurrent, out _);
-        int integerDigits = integerPart.IsZero ? 1 : integerPart.ToString().Length;
-        int maxPossibleScale = MaxScale - integerDigits;
+        int maxPossibleScale = GetMaxPossibleScale(BigInteger.Abs(unscaledValue), value.Scale);
 
         Require(scale <= maxPossibleScale, $"Maximum possible scale for the specified value is {maxPossibleScale}.", nameof(scale));
 
@@ -169,7 +186,7 @@ public static class NumericsExtensions
     /// <returns>Returns an unscaled integer representation of the current value.</returns>
     private static BigInteger GetUnscaledInteger<T>(this T value, int scale, ScaleMode mode) where T : IBinaryInteger<T>
     {
-        Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(value));
+        Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
         RequireIsDefined(mode);
 
         BigInteger integer = value.ToBigInteger();
@@ -236,6 +253,9 @@ public static class NumericsExtensions
     /// <param name="mode">The scale mode that determines how the current value should be scaled.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type of the value to convert.</typeparam>
     /// <returns>Returns a new <see cref="decimal"/> representing the current value.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="scale"/> is outside the inclusive range of 0 to 28.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ScaleMode"/> value.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the scaled value falls outside the representable range of <see cref="decimal"/>.</exception>
     public static decimal ToDecimal<T>(this T value, int scale = 0, ScaleMode mode = default) where T : IBinaryInteger<T>
     {
         Require(scale.IsBetween(0, 28), "Scale must be between 0 and 28.");
@@ -260,6 +280,8 @@ public static class NumericsExtensions
     /// <param name="mode">The scale mode that determines how the specified value should be scaled.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type.</typeparam>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="scale"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ScaleMode"/> value.</exception>
     public static NumberInfo ToNumberInfo<T>(this T value, int scale = 0, ScaleMode mode = default) where T : IBinaryInteger<T>
     {
         Require(scale >= 0, "Scale must be greater than or equal to zero", nameof(scale));
@@ -274,6 +296,7 @@ public static class NumericsExtensions
     /// <param name="value">The value to convert.</param>
     /// <param name="mode">The conversion mode that determines whether the current <see cref="float"/> value should be converted from its binary or decimal representation.</param>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ConversionMode"/> value.</exception>
     public static NumberInfo ToNumberInfo(this float value, ConversionMode mode = default)
     {
         RequireIsDefined(mode);
@@ -286,7 +309,34 @@ public static class NumericsExtensions
     /// <param name="value">The value to convert.</param>
     /// <param name="mode">The conversion mode that determines whether the current <see cref="double"/> value should be converted from its binary or decimal representation.</param>
     /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ConversionMode"/> value.</exception>
     public static NumberInfo ToNumberInfo(this double value, ConversionMode mode = default)
+    {
+        RequireIsDefined(mode);
+        return Ieee754Converter.Convert(value, mode);
+    }
+
+    /// <summary>
+    /// Converts the current <see cref="Float128"/> value to a <see cref="NumberInfo"/> value.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="mode">The conversion mode that determines whether the current <see cref="Float128"/> value should be converted from its binary or decimal representation.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ConversionMode"/> value.</exception>
+    public static NumberInfo ToNumberInfo(this Float128 value, ConversionMode mode = default)
+    {
+        RequireIsDefined(mode);
+        return Ieee754Converter.Convert(value, mode);
+    }
+
+    /// <summary>
+    /// Converts the current <see cref="Float256"/> value to a <see cref="NumberInfo"/> value.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="mode">The conversion mode that determines whether the current <see cref="Float256"/> value should be converted from its binary or decimal representation.</param>
+    /// <returns>Returns a <see cref="NumberInfo"/> representing the current value.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="ConversionMode"/> value.</exception>
+    public static NumberInfo ToNumberInfo(this Float256 value, ConversionMode mode = default)
     {
         RequireIsDefined(mode);
         return Ieee754Converter.Convert(value, mode);

@@ -23,5 +23,5 @@ public readonly partial struct Secret
     /// Because <see cref="Secret"/> is a struct, all copies share the same underlying <see cref="ProtectedData"/> instance.
     /// Disposing any copy will invalidate all copies of this <see cref="Secret"/>.
     /// </remarks>
-    public void Dispose() => protectedData.Dispose();
+    public void Dispose() => protectedData?.Dispose();
 }

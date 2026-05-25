@@ -26,6 +26,8 @@ public readonly partial struct BigDecimal
     /// <param name="scale">The scale to apply to the value.</param>
     /// <param name="mode">The <see cref="MidpointRounding"/> mode to be used when the specified scale is less than the current scale.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value with the specified scale.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="scale"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="MidpointRounding"/> value.</exception>
     // ReSharper disable once MemberCanBePrivate.Global
     public static BigDecimal SetScale(BigDecimal value, int scale, MidpointRounding mode = default)
     {
@@ -45,19 +47,25 @@ public readonly partial struct BigDecimal
     /// <param name="scale">The scale to apply to the value.</param>
     /// <param name="mode">The <see cref="MidpointRounding"/> mode to be used when the specified scale is less than the current scale.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value with the specified scale.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="scale"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="mode"/> is not a defined <see cref="MidpointRounding"/> value.</exception>
     public BigDecimal SetScale(int scale, MidpointRounding mode = default) => SetScale(this, scale, mode);
 
     /// <summary>
     /// Normalizes the unscaled values of the specified <see cref="BigDecimal"/> values.
     /// </summary>
-    /// <param name="left">The left-hand value to normalize.</param>
-    /// <param name="right">The right-hand value to normalize.</param>
+    /// <param name="left">The <paramref name="left"/> value to normalize.</param>
+    /// <param name="right">The <paramref name="right"/> value to normalize.</param>
     /// <returns>Returns the normalized unscaled values of the specified <see cref="BigDecimal"/> values.</returns>
     public static (BigInteger Left, BigInteger Right) NormalizeUnscaledValues(BigDecimal left, BigDecimal right)
     {
-        BigInteger minOrderOfMagnitude = BigInteger.Min(left.number.ScaleFactor, right.number.ScaleFactor);
-        BigInteger leftNormalized = left.UnscaledValue * right.number.ScaleFactor / minOrderOfMagnitude;
-        BigInteger rightNormalized = right.UnscaledValue * left.number.ScaleFactor / minOrderOfMagnitude;
+        BigInteger leftNormalized = left.UnscaledValue;
+        BigInteger rightNormalized = right.UnscaledValue;
+
+        // Align both values to the larger scale by raising the value with the smaller scale. This needs a single
+        // power-of-ten factor, rather than scaling both sides by their full scale factor and dividing by the smaller.
+        if (left.Scale < right.Scale) leftNormalized *= BigInteger.Pow(10, right.Scale - left.Scale);
+        else if (right.Scale < left.Scale) rightNormalized *= BigInteger.Pow(10, left.Scale - right.Scale);
 
         return (leftNormalized, rightNormalized);
     }

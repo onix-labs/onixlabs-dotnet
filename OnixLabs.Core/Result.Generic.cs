@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,11 +38,13 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result{T}"/> is in a successful state.
     /// </summary>
+    /// <value><see langword="true"/> if the current <see cref="Result{T}"/> is in a successful state; otherwise, <see langword="false"/>.</value>
     public bool IsSuccess => this is Success<T>;
 
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Result{T}"/> is in a failed state.
     /// </summary>
+    /// <value><see langword="true"/> if the current <see cref="Result{T}"/> is in a failed state; otherwise, <see langword="false"/>.</value>
     public bool IsFailure => this is Failure<T>;
 
     /// <summary>
@@ -161,17 +164,17 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// <summary>
     /// Performs an equality comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is equal to the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(Result<T>? left, Result<T>? right) => Equals(left, right);
 
     /// <summary>
     /// Performs an inequality comparison between two object instances.
     /// </summary>
-    /// <param name="left">The left-hand instance to compare.</param>
-    /// <param name="right">The right-hand instance to compare.</param>
-    /// <returns>Returns <see langword="true"/> if the left-hand instance is not equal to the right-hand instance; otherwise, <see langword="false"/>.</returns>
+    /// <param name="left">The <paramref name="left"/> instance to compare.</param>
+    /// <param name="right">The <paramref name="right"/> instance to compare.</param>
+    /// <returns>Returns <see langword="true"/> if the <paramref name="left"/> instance is not equal to the <paramref name="right"/> instance; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Result<T>? left, Result<T>? right) => !Equals(left, right);
 
     /// <inheritdoc/>
@@ -189,7 +192,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
         if (this is Success<T> { Value: IAsyncDisposable disposable })
-            await disposable.DisposeAsync();
+            await disposable.DisposeAsync().ConfigureAwait(false);
 
         GC.SuppressFinalize(this);
     }
@@ -225,10 +228,10 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// </summary>
     /// <param name="defaultException">The default exception to return in the event that the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</param>
     /// <returns>
-    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure"/> state,
+    /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or the specified default exception if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    public Exception GetExceptionOrDefault(Exception defaultException) => this is Failure<T> failure ? failure.Exception : defaultException;
+    public Exception GetExceptionOrDefault(Exception defaultException) => GetExceptionOrDefault() ?? defaultException;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
@@ -238,7 +241,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or <see cref="None{T}"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    public Optional<Exception> GetExceptionOrNone() => this is Failure<T> failure ? failure.Exception : Optional<Exception>.None;
+    public Optional<Exception> GetExceptionOrNone() => GetExceptionOrDefault();
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
@@ -248,8 +251,8 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    /// <exception cref="InvalidOperationException">If the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
-    public Exception GetExceptionOrThrow() => this is Failure<T> failure ? failure.Exception : throw new InvalidOperationException("The current result is not in a failure state.");
+    /// <exception cref="InvalidOperationException">Thrown when the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
+    public Exception GetExceptionOrThrow() => CheckNotNull(GetExceptionOrDefault(), "The current result is in a success state; no exception to retrieve.");
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance, if the underlying value is present;
@@ -280,7 +283,14 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying value of the current <see cref="Result{T}"/> instance;
     /// otherwise throws the underlying exception if the current <see cref="Result{T}"/> is in a failed stated.
     /// </returns>
-    public T GetValueOrThrow() => this is Success<T> success ? success.Value : throw GetExceptionOrThrow();
+    public T GetValueOrThrow()
+    {
+        if (this is Success<T> success)
+            return success.Value;
+
+        Throw(); // We know this is Failure<T>; preserves the original stack trace via ExceptionDispatchInfo.
+        return default!; // unreachable
+    }
 
     /// <summary>
     /// Gets the underlying value of the current <see cref="Result{T}"/> instance as an <see langword="out"/> parameter.
@@ -829,12 +839,15 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
 
     /// <summary>
     /// Throws the underlying exception if the current <see cref="Result{T}"/> is in a failure state.
-    /// <remarks>Throwing the underlying exception from a location where it was not generated will yield an incorrect stack trace.</remarks>
     /// </summary>
+    /// <remarks>
+    /// The original stack trace of the underlying exception is preserved via
+    /// <see cref="ExceptionDispatchInfo"/>; the rethrow point is recorded as a continuation.
+    /// </remarks>
     public void Throw()
     {
         if (this is Failure<T> failure)
-            throw failure.Exception;
+            ExceptionDispatchInfo.Capture(failure.Exception).Throw();
     }
 
     /// <inheritdoc/>
@@ -862,6 +875,7 @@ public sealed class Success<T> : Result<T>
     /// <summary>
     /// Gets the underlying result value.
     /// </summary>
+    /// <value>The underlying value representing the successful result.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public T Value { get; }
 }
@@ -881,6 +895,7 @@ public sealed class Failure<T> : Result<T>
     /// <summary>
     /// Gets the underlying result exception.
     /// </summary>
+    /// <value>The underlying exception representing the failed result.</value>
     public Exception Exception { get; }
 
     /// <summary>

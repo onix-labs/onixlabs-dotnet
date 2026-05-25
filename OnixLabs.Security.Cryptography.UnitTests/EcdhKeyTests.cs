@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
@@ -165,5 +166,104 @@ public sealed class EcdhKeyTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "EcdhPrivateKey.ImportPem should throw CryptographicException for malformed PEM")]
+    public void EcdhPrivateKeyImportPemShouldThrowCryptographicExceptionForMalformedPem()
+    {
+        // When / Then
+        Assert.Throws<CryptographicException>(() => EcdhPrivateKey.ImportPem("not a pem"));
+    }
+
+    [Fact(DisplayName = "EC Diffie-Hellman a third party's shared secret should differ from the agreeing pair")]
+    public void EcdhThirdPartySecretShouldDiffer()
+    {
+        // Given
+        IEcdhPrivateKey alice = EcdhPrivateKey.Create();
+        IEcdhPrivateKey bob = EcdhPrivateKey.Create();
+        IEcdhPrivateKey eve = EcdhPrivateKey.Create();
+
+        // When
+        Secret aliceSecret = alice.DeriveSharedSecret(bob.GetPublicKey());
+        Secret bobSecret = bob.DeriveSharedSecret(alice.GetPublicKey());
+        Secret eveSecret = eve.DeriveSharedSecret(alice.GetPublicKey());
+
+        // Then
+        Assert.Equal(aliceSecret, bobSecret);
+        Assert.NotEqual(aliceSecret, eveSecret);
+        Assert.NotEqual(bobSecret, eveSecret);
+    }
+
+    [Theory(DisplayName = "EC Diffie-Hellman Create(ECCurve) parties on the same curve should agree")]
+    [InlineData(nameof(ECCurve.NamedCurves.nistP256))]
+    [InlineData(nameof(ECCurve.NamedCurves.nistP384))]
+    [InlineData(nameof(ECCurve.NamedCurves.nistP521))]
+    public void EcdhCreateFromCurvePartiesShouldAgree(string curveName)
+    {
+        // Given
+        ECCurve curve = ECCurve.CreateFromFriendlyName(curveName);
+        IEcdhPrivateKey alice = EcdhPrivateKey.Create(curve);
+        IEcdhPrivateKey bob = EcdhPrivateKey.Create(curve);
+
+        // When
+        Secret aliceSecret = alice.DeriveSharedSecret(bob.GetPublicKey());
+        Secret bobSecret = bob.DeriveSharedSecret(alice.GetPublicKey());
+
+        // Then
+        Assert.Equal(aliceSecret, bobSecret);
+    }
+
+    [Fact(DisplayName = "EC Diffie-Hellman Create(ECParameters) should produce a usable key")]
+    public void EcdhCreateFromParametersShouldProduceUsableKey()
+    {
+        // Given: alice's parameters are generated independently by the BCL.
+        using ECDiffieHellman source = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
+        ECParameters parameters = source.ExportParameters(includePrivateParameters: true);
+        IEcdhPrivateKey alice = EcdhPrivateKey.Create(parameters);
+        IEcdhPrivateKey bob = EcdhPrivateKey.Create(ECCurve.NamedCurves.nistP256);
+
+        // When
+        Secret aliceSecret = alice.DeriveSharedSecret(bob.GetPublicKey());
+        Secret bobSecret = bob.DeriveSharedSecret(alice.GetPublicKey());
+
+        // Then
+        Assert.Equal(aliceSecret, bobSecret);
+    }
+
+    [Fact(DisplayName = "EC Diffie-Hellman raw round-trip re-imported key should still agree with the original counterparty")]
+    public void EcdhRawRoundTripShouldStillAgree()
+    {
+        // Given
+        IEcdhPrivateKey alice = EcdhPrivateKey.Create();
+        IEcdhPrivateKey bob = EcdhPrivateKey.Create();
+        Secret expected = alice.DeriveSharedSecret(bob.GetPublicKey());
+
+        // When: alice is round-tripped through raw export/import and PEM export/import.
+        IEcdhPrivateKey aliceFromRaw = EcdhPrivateKey.Import(alice.Export());
+        IEcdhPrivateKey aliceFromPem = EcdhPrivateKey.ImportPem(alice.ExportPem());
+
+        // Then: each re-imported alice agrees with the original bob, matching the original secret.
+        Assert.Equal(expected, aliceFromRaw.DeriveSharedSecret(bob.GetPublicKey()));
+        Assert.Equal(expected, aliceFromPem.DeriveSharedSecret(bob.GetPublicKey()));
+        Assert.Equal(expected, bob.DeriveSharedSecret(aliceFromRaw.GetPublicKey()));
+    }
+
+    [Fact(DisplayName = "EC Diffie-Hellman shared secret should match a BCL-derived secret over the same keys")]
+    public void EcdhSharedSecretShouldMatchBcl()
+    {
+        // Given: alice (library) and bob (library) on the same curve.
+        IEcdhPrivateKey alice = EcdhPrivateKey.Create(ECCurve.NamedCurves.nistP256);
+        IEcdhPrivateKey bob = EcdhPrivateKey.Create(ECCurve.NamedCurves.nistP256);
+        Secret librarySecret = alice.DeriveSharedSecret(bob.GetPublicKey());
+
+        // When: an independent BCL ECDiffieHellman reproduces alice's derivation from the exported key material.
+        using ECDiffieHellman bclAlice = ECDiffieHellman.Create();
+        bclAlice.ImportECPrivateKey(alice.Export(), out int _);
+        using ECDiffieHellman bclBobPublic = ECDiffieHellman.Create();
+        bclBobPublic.ImportSubjectPublicKeyInfo(bob.GetPublicKey().AsReadOnlySpan(), out int _);
+        byte[] bclSecret = bclAlice.DeriveKeyMaterial(bclBobPublic.PublicKey);
+
+        // Then: the library's shared secret equals the BCL's default (SHA-256) key-material derivation.
+        Assert.Equal(bclSecret, librarySecret.AsReadOnlySpan().ToArray());
     }
 }

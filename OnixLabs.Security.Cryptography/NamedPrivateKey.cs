@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
@@ -21,27 +23,32 @@ public readonly partial record struct NamedPrivateKey : ICryptoPrimitive<NamedPr
 {
     private const string Separator = ":";
     private const string KeyAlgorithmNameNullOrWhiteSpace = "Key algorithm name must not be null or whitespace.";
+    private const string PrivateKeyNull = "Private key must not be null.";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NamedPrivateKey"/> struct.
     /// </summary>
     /// <param name="privateKey">The underlying private key value.</param>
     /// <param name="algorithmName">The name of the key algorithm that was used to produce the associated private key.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="privateKey"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="algorithmName"/> is <see langword="null"/>, empty, or consists only of whitespace.</exception>
     public NamedPrivateKey(PrivateKey privateKey, string algorithmName)
     {
-        PrivateKey = privateKey;
+        PrivateKey = RequireNotNull(privateKey, PrivateKeyNull);
         AlgorithmName = RequireNotNullOrWhiteSpace(algorithmName, KeyAlgorithmNameNullOrWhiteSpace);
     }
 
     /// <summary>
     /// Gets the underlying private key value.
     /// </summary>
+    /// <value>The underlying <see cref="PrivateKey"/> value.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public PrivateKey PrivateKey { get; }
 
     /// <summary>
     /// Gets the name of the key algorithm that was used to produce the associated private key.
     /// </summary>
+    /// <value>The name of the key algorithm that was used to produce the associated private key.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public string AlgorithmName { get; }
 }

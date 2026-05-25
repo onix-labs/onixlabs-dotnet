@@ -20,8 +20,10 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial record struct NamedPrivateKey
 {
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the underlying <see cref="PrivateKey"/> has been disposed.</exception>
     public string ToString(IFormatProvider provider) => string.Concat(AlgorithmName, Separator, IBaseCodec.GetString(AsReadOnlySpan(), provider));
 
     /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">Thrown when the underlying <see cref="PrivateKey"/> has been disposed.</exception>
     public override string ToString() => ToString(Base16FormatProvider.Invariant);
 }

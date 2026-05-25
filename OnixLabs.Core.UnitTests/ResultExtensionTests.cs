@@ -59,7 +59,7 @@ public sealed class ResultExtensionTests
             await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
-        Assert.Equal("The current result is not in a failure state.", exception.Message);
+        Assert.Equal("The current result is in a success state; no exception to retrieve.", exception.Message);
     }
 
     [Fact(DisplayName = "Result Failure.GetExceptionOrDefaultAsync should produce the expected result.")]
@@ -138,7 +138,7 @@ public sealed class ResultExtensionTests
             await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken));
 
         // Then
-        Assert.Equal("The current result is not in a failure state.", exception.Message);
+        Assert.Equal("The current result is in a success state; no exception to retrieve.", exception.Message);
     }
 
     [Fact(DisplayName = "Result<T> Failure.GetExceptionOrDefaultAsync should produce the expected result.")]
@@ -314,19 +314,34 @@ public sealed class ResultExtensionTests
         Assert.Equal(Optional<string>.Of(expectedText), actualText);
     }
 
-    [Fact(DisplayName = "Result<T>.GetValueOrNone should return None when the result is Success and the value is None")]
-    public void ResultGetValueOrNoneShouldReturnNoneWhenResultIsSuccessAndValueIsNone()
+    [Fact(DisplayName = "Result<T>.GetValueOrNone should return Some(default) when the result is Success and the value is the default of a value type")]
+    public void ResultGetValueOrNoneShouldReturnSomeDefaultWhenResultIsSuccessAndValueIsValueTypeDefault()
     {
         // Given
         Result<int> numberResult = Result<int>.Success(0);
-        Result<string> textResult = Result<string>.Success(null!);
+        Result<bool> boolResult = Result<bool>.Success(false);
 
         // When
         Optional<int> actualNumber = numberResult.GetValueOrNone();
+        Optional<bool> actualBool = boolResult.GetValueOrNone();
+
+        // Then
+        Assert.True(Optional<int>.IsSome(actualNumber));
+        Assert.Equal(0, actualNumber);
+        Assert.True(Optional<bool>.IsSome(actualBool));
+        Assert.Equal(false, actualBool);
+    }
+
+    [Fact(DisplayName = "Result<T>.GetValueOrNone should return None when the result is Success and the underlying value is null")]
+    public void ResultGetValueOrNoneShouldReturnNoneWhenResultIsSuccessAndUnderlyingValueIsNull()
+    {
+        // Given
+        Result<string> textResult = Result<string>.Success(null!);
+
+        // When
         Optional<string> actualText = textResult.GetValueOrNone();
 
         // Then
-        Assert.Equal(Optional<int>.None, actualNumber);
         Assert.Equal(Optional<string>.None, actualText);
     }
 
@@ -364,19 +379,30 @@ public sealed class ResultExtensionTests
         Assert.Equal(Optional<string>.Of(expectedText), actualText);
     }
 
-    [Fact(DisplayName = "Result<T>.GetValueOrNoneAsync should return None when the result is Success and the value is None")]
-    public async Task ResultGetValueOrNoneAsyncShouldReturnNoneWhenResultIsSuccessAndValueIsNone()
+    [Fact(DisplayName = "Result<T>.GetValueOrNoneAsync should return Some(default) when the result is Success and the value is the default of a value type")]
+    public async Task ResultGetValueOrNoneAsyncShouldReturnSomeDefaultWhenResultIsSuccessAndValueIsValueTypeDefault()
     {
         // Given
         Result<int> numberResult = Result<int>.Success(0);
-        Result<string> textResult = Result<string>.Success(null!);
 
         // When
         Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(Optional<int>.IsSome(actualNumber));
+        Assert.Equal(0, actualNumber);
+    }
+
+    [Fact(DisplayName = "Result<T>.GetValueOrNoneAsync should return None when the result is Success and the underlying value is null")]
+    public async Task ResultGetValueOrNoneAsyncShouldReturnNoneWhenResultIsSuccessAndUnderlyingValueIsNull()
+    {
+        // Given
+        Result<string> textResult = Result<string>.Success(null!);
+
+        // When
         Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
 
         // Then
-        Assert.Equal(Optional<int>.None, actualNumber);
         Assert.Equal(Optional<string>.None, actualText);
     }
 

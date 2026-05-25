@@ -232,6 +232,90 @@ public sealed class HashTests
         Assert.Equal(1, right.Length);
     }
 
+    [Fact(DisplayName = "Hashes should compare lexicographically in big-endian byte order")]
+    public void HashesShouldCompareLexicographicallyInBigEndianByteOrder()
+    {
+        // Given
+        Hash left = new([0x00, 0x01]);
+        Hash right = new([0x01, 0x00]);
+
+        // When
+        int actual = left.CompareTo(right);
+
+        // Then
+        Assert.True(actual < 0);
+    }
+
+    [Fact(DisplayName = "Hashes should compare bytes as unsigned values")]
+    public void HashesShouldCompareBytesAsUnsignedValues()
+    {
+        // Given
+        Hash left = new([0x80]);
+        Hash right = new([0x7F]);
+
+        // When
+        int actual = left.CompareTo(right);
+
+        // Then
+        Assert.True(actual > 0);
+    }
+
+    [Fact(DisplayName = "Default hash should compare as lesser than a non-empty hash without throwing")]
+    public void DefaultHashShouldCompareAsLesserThanANonEmptyHashWithoutThrowing()
+    {
+        // Given
+        Hash left = default;
+        Hash right = new([1]);
+
+        // When
+        int actual = left.CompareTo(right);
+
+        // Then
+        Assert.True(actual < 0);
+    }
+
+    [Fact(DisplayName = "Hash comparison operators should produce the expected results when the left-hand hash is lesser")]
+    public void HashComparisonOperatorsShouldProduceTheExpectedResultsWhenTheLeftHandHashIsLesser()
+    {
+        // Given
+        Hash left = new([1]);
+        Hash right = new([2]);
+
+        // Then
+        Assert.True(left < right);
+        Assert.True(left <= right);
+        Assert.False(left > right);
+        Assert.False(left >= right);
+    }
+
+    [Fact(DisplayName = "Hash comparison operators should produce the expected results when the left-hand hash is greater")]
+    public void HashComparisonOperatorsShouldProduceTheExpectedResultsWhenTheLeftHandHashIsGreater()
+    {
+        // Given
+        Hash left = new([2]);
+        Hash right = new([1]);
+
+        // Then
+        Assert.True(left > right);
+        Assert.True(left >= right);
+        Assert.False(left < right);
+        Assert.False(left <= right);
+    }
+
+    [Fact(DisplayName = "Hash comparison operators should produce the expected results when both hashes are equal")]
+    public void HashComparisonOperatorsShouldProduceTheExpectedResultsWhenBothHashesAreEqual()
+    {
+        // Given
+        Hash left = new([1]);
+        Hash right = new([1]);
+
+        // Then
+        Assert.True(left <= right);
+        Assert.True(left >= right);
+        Assert.False(left < right);
+        Assert.False(left > right);
+    }
+
     [Theory(DisplayName = "Hash.Compute should produce the expected hash using a byte array")]
     [InlineData("abc123", "MD5", "e99a18c428cb38d5f260853678922e03")]
     [InlineData("abc123", "SHA1", "6367c48dd193d56ea7b0baad25b19455e529f5ee")]

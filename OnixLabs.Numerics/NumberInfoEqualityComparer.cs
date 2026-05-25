@@ -24,13 +24,13 @@ namespace OnixLabs.Numerics;
 public abstract class NumberInfoEqualityComparer : IEqualityComparer<NumberInfo>, IEqualityComparer
 {
     /// <summary>
-    /// Gets a <see cref="NumberInfoEqualityComparer"/> that strictly compares <see cref="NumberInfo"/> values.
+    /// A <see cref="NumberInfoEqualityComparer"/> that strictly compares <see cref="NumberInfo"/> values, including their scale.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly NumberInfoEqualityComparer Strict = new NumberInfoStrictEqualityComparer();
 
     /// <summary>
-    /// Gets a <see cref="NumberInfoEqualityComparer"/> that semantically compares <see cref="NumberInfo"/> values.
+    /// A <see cref="NumberInfoEqualityComparer"/> that semantically compares <see cref="NumberInfo"/> values, treating numerically equivalent values as equal regardless of scale.
     /// </summary>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static readonly NumberInfoEqualityComparer Semantic = new NumberInfoSemanticEqualityComparer();
@@ -61,7 +61,7 @@ public abstract class NumberInfoEqualityComparer : IEqualityComparer<NumberInfo>
 
     /// <summary>Returns a hash code for the specified object.</summary>
     /// <param name="obj">The <see cref="object" /> for which a hash code is to be returned.</param>
-    /// <returns>A hash code for the specified object.</returns>
+    /// <returns>Returns a hash code for the specified object.</returns>
     public int GetHashCode(object obj) => obj is NumberInfo value ? GetHashCode(value) : obj.GetHashCode();
 
     /// <summary>

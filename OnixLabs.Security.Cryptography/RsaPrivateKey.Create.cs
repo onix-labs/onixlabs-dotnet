@@ -27,7 +27,15 @@ public sealed partial class RsaPrivateKey
     {
         using RSA key = RSA.Create();
         byte[] keyData = key.ExportRSAPrivateKey();
-        return new RsaPrivateKey(keyData);
+
+        try
+        {
+            return new RsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 
     /// <summary>
@@ -35,10 +43,19 @@ public sealed partial class RsaPrivateKey
     /// </summary>
     /// <param name="parameters">The RSA parameters from which to create a new RSA cryptographic private key.</param>
     /// <returns>Returns a new <see cref="RsaPrivateKey"/> instance.</returns>
+    /// <exception cref="CryptographicException">Thrown when <paramref name="parameters"/> does not represent a valid RSA private key.</exception>
     public static RsaPrivateKey Create(RSAParameters parameters)
     {
         using RSA key = RSA.Create(parameters);
         byte[] keyData = key.ExportRSAPrivateKey();
-        return new RsaPrivateKey(keyData);
+
+        try
+        {
+            return new RsaPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

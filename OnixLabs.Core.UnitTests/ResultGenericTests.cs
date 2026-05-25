@@ -349,7 +349,7 @@ public sealed class ResultGenericTests
         Exception exception = Assert.Throws<InvalidOperationException>(() => result.GetExceptionOrThrow());
 
         // Then
-        Assert.Equal("The current result is not in a failure state.", exception.Message);
+        Assert.Equal("The current result is in a success state; no exception to retrieve.", exception.Message);
     }
 
     [Fact(DisplayName = "Result.GetExceptionOrThrow from failure should produce the expected result.")]

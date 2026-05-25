@@ -23,18 +23,23 @@ namespace OnixLabs.Core.Text;
 // ReSharper disable StringLiteralTypo
 public sealed class Base16Codec : IBaseCodec
 {
+    /// <summary>
+    /// The set of uppercase Base-16 alphabetic characters, used to reject input that violates a lowercase format provider.
+    /// </summary>
     private static readonly SearchValues<char> Base16UppercaseValues = SearchValues.Create("ABCDEF");
+
+    /// <summary>
+    /// The set of lowercase Base-16 alphabetic characters, used to reject input that violates an uppercase format provider.
+    /// </summary>
     private static readonly SearchValues<char> Base16LowercaseValues = SearchValues.Create("abcdef");
 
     /// <inheritdoc/>
-    public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null) => TryEncode(value, provider, out string result)
-        ? result
-        : throw new FormatException(IBaseCodec.EncodingFormatException);
+    public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null) =>
+        TryEncode(value, provider, out string result) ? result : throw new FormatException(IBaseCodec.EncodingFormatException);
 
     /// <inheritdoc/>
-    public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null) => TryDecode(value, provider, out byte[] result)
-        ? result
-        : throw new FormatException(IBaseCodec.DecodingFormatException);
+    public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null) =>
+        TryDecode(value, provider, out byte[] result) ? result : throw new FormatException(IBaseCodec.DecodingFormatException);
 
     /// <inheritdoc/>
     public bool TryEncode(ReadOnlySpan<byte> value, IFormatProvider? provider, out string result)
@@ -55,7 +60,7 @@ public sealed class Base16Codec : IBaseCodec
 
             result = formatProvider == Base16FormatProvider.Uppercase
                 ? Convert.ToHexString(value)
-                : Convert.ToHexString(value).ToLower();
+                : Convert.ToHexString(value).ToLowerInvariant();
 
             return true;
         }

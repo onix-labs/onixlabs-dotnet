@@ -30,6 +30,7 @@ public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, I
     /// </summary>
     /// <param name="hash">The underlying hash value.</param>
     /// <param name="algorithmName">The name of the hash algorithm that was used to produce the associated hash.</param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="algorithmName"/> is <see langword="null"/>, empty, or consists only of whitespace.</exception>
     public NamedHash(Hash hash, string algorithmName)
     {
         Hash = hash;
@@ -41,6 +42,7 @@ public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, I
     /// </summary>
     /// <param name="hash">The underlying hash value.</param>
     /// <param name="algorithmName">The name of the hash algorithm that was used to produce the associated hash.</param>
+    /// <exception cref="ArgumentException">Thrown when the name of <paramref name="algorithmName"/> is <see langword="null"/>, empty, or consists only of whitespace.</exception>
     public NamedHash(Hash hash, HashAlgorithmName algorithmName)
     {
         Hash = hash;
@@ -50,12 +52,14 @@ public readonly partial record struct NamedHash : ICryptoPrimitive<NamedHash>, I
     /// <summary>
     /// Gets the underlying hash value.
     /// </summary>
+    /// <value>The underlying <see cref="Hash"/> value.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public Hash Hash { get; }
 
     /// <summary>
-    /// Gets name of the hash algorithm that was used to produce the associated hash.
+    /// Gets the name of the hash algorithm that was used to produce the associated hash.
     /// </summary>
+    /// <value>The name of the hash algorithm that was used to produce the associated hash.</value>
     // ReSharper disable once MemberCanBePrivate.Global
     public string AlgorithmName { get; }
 }

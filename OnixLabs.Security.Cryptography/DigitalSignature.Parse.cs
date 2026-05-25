@@ -35,8 +35,13 @@ public readonly partial struct DigitalSignature
     /// <inheritdoc/>
     public static bool TryParse(ReadOnlySpan<char> value, IFormatProvider? provider, out DigitalSignature result)
     {
-        bool isDecoded = IBaseCodec.TryGetBytes(value, provider ?? Base16FormatProvider.Invariant, out byte[] bytes);
-        result = new DigitalSignature(bytes);
-        return isDecoded;
+        if (IBaseCodec.TryGetBytes(value, provider ?? Base16FormatProvider.Invariant, out byte[] bytes))
+        {
+            result = new DigitalSignature(bytes);
+            return true;
+        }
+
+        result = default;
+        return false;
     }
 }

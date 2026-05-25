@@ -24,6 +24,9 @@ namespace OnixLabs.Core.Text;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class StringBuilderExtensions
 {
+    /// <summary>
+    /// The backslash character prepended by <see cref="AppendEscaped"/> to escape the following character.
+    /// </summary>
     private const char EscapeSequence = '\\';
 
     /// <summary>
@@ -43,27 +46,27 @@ public static class StringBuilderExtensions
     internal static StringBuilder AppendEscaped(this StringBuilder receiver, char value) => receiver.Append(EscapeSequence).Append(value);
 
     /// <summary>
-    /// Prepends the specified value to the current <see cref="StringBuilder"/>
+    /// Prepends the specified <see cref="object"/> value to the current <see cref="StringBuilder"/>.
     /// </summary>
     /// <param name="value">The value to prepend.</param>
     /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
-    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified value prepended.</returns>
     public static StringBuilder Prepend(this StringBuilder receiver, object value) => receiver.Insert(0, value);
 
     /// <summary>
-    /// Prepends the specified value to the current <see cref="StringBuilder"/>
+    /// Prepends the specified <see cref="char"/> value to the current <see cref="StringBuilder"/>.
     /// </summary>
     /// <param name="value">The value to prepend.</param>
     /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
-    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified value prepended.</returns>
     public static StringBuilder Prepend(this StringBuilder receiver, char value) => receiver.Insert(0, value);
 
     /// <summary>
-    /// Prepends the specified value to the current <see cref="StringBuilder"/>
+    /// Prepends the specified <see cref="string"/> value to the current <see cref="StringBuilder"/>.
     /// </summary>
     /// <param name="value">The value to prepend.</param>
     /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
-    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified values prepended.</returns>
+    /// <returns>Returns the current <see cref="StringBuilder"/> with the specified value prepended.</returns>
     public static StringBuilder Prepend(this StringBuilder receiver, string value) => receiver.Insert(0, value);
 
     /// <summary>

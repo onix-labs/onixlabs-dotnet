@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Buffers;
+
 namespace OnixLabs.Security.Cryptography.UnitTests;
 
 public sealed class DigitalSignatureTests
@@ -135,5 +138,65 @@ public sealed class DigitalSignatureTests
 
         // Then
         Assert.NotEqual(leftHashCode, rightHashCode);
+    }
+
+    [Fact(DisplayName = "DigitalSignature constructed from ReadOnlyMemory and ReadOnlySequence should equal the byte-array form")]
+    public void DigitalSignatureFromMemoryAndSequenceShouldEqualByteArrayForm()
+    {
+        // Given
+        byte[] value = [1, 2, 3, 4, 5, 6, 7, 8];
+        DigitalSignature expected = new(value);
+
+        // When
+        DigitalSignature fromMemory = new(new ReadOnlyMemory<byte>(value));
+        DigitalSignature fromSequence = new(new ReadOnlySequence<byte>(value));
+
+        // Then
+        Assert.Equal(expected, fromMemory);
+        Assert.Equal(expected, fromSequence);
+    }
+
+    [Fact(DisplayName = "DigitalSignature.Parse should round-trip through ToString")]
+    public void DigitalSignatureParseShouldRoundTripThroughToString()
+    {
+        // Given
+        DigitalSignature expected = new([10, 20, 30, 40, 50, 60, 70, 80]);
+
+        // When
+        DigitalSignature fromString = DigitalSignature.Parse(expected.ToString());
+        DigitalSignature fromSpan = DigitalSignature.Parse(expected.ToString().AsSpan());
+
+        // Then
+        Assert.Equal(expected, fromString);
+        Assert.Equal(expected, fromSpan);
+    }
+
+    [Fact(DisplayName = "DigitalSignature.TryParse should succeed for a valid value and fail for an invalid value")]
+    public void DigitalSignatureTryParseShouldProduceExpectedResult()
+    {
+        // Given
+        DigitalSignature expected = new([1, 2, 3, 4]);
+
+        // When
+        bool valid = DigitalSignature.TryParse(expected.ToString(), null, out DigitalSignature parsed);
+        bool invalid = DigitalSignature.TryParse("not-hex!", null, out DigitalSignature defaulted);
+
+        // Then
+        Assert.True(valid);
+        Assert.Equal(expected, parsed);
+        Assert.False(invalid);
+        Assert.Equal(default, defaulted);
+    }
+
+    [Fact(DisplayName = "DigitalSignature.AsReadOnlyMemory and AsReadOnlySpan should expose the underlying value")]
+    public void DigitalSignatureAsReadOnlyShouldExposeUnderlyingValue()
+    {
+        // Given
+        byte[] value = [9, 8, 7, 6, 5];
+        DigitalSignature candidate = new(value);
+
+        // When / Then
+        Assert.True(candidate.AsReadOnlyMemory().Span.SequenceEqual(value));
+        Assert.True(candidate.AsReadOnlySpan().SequenceEqual(value));
     }
 }

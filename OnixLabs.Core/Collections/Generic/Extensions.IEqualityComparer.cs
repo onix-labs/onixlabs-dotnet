@@ -25,7 +25,7 @@ namespace OnixLabs.Core.Collections.Generic;
 public static class IEqualityComparerExtensions
 {
     /// <summary>
-    /// Provides extension methods for <see cref="IEqualityComparer{T}"/> instances.
+    /// Defines instance-style extensions over an <see cref="IEqualityComparer{T}"/>, including the receiving comparer that may be <see langword="null"/>.
     /// </summary>
     /// <param name="receiver">The current <see cref="IEqualityComparer{T}"/> instance.</param>
     /// <typeparam name="T">The underlying type of the current <see cref="IEqualityComparer{T}"/> instance.</typeparam>

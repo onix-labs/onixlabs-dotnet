@@ -23,52 +23,52 @@ namespace OnixLabs.Core.Text;
 public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IFormatProvider
 {
     /// <summary>
-    /// Gets the RFC 4648 Base-32 format provider.
+    /// The unpadded RFC 4648 Base-32 format provider.
     /// </summary>
     public static readonly Base32FormatProvider Rfc4648 = new(0, nameof(Rfc4648), "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", false);
 
     /// <summary>
-    /// Gets the Z-Base-32 format provider.
+    /// The unpadded Z-Base-32 format provider.
     /// </summary>
     public static readonly Base32FormatProvider ZBase32 = new(1, nameof(ZBase32), "ybndrfg8ejkmcpqxot1uwisza345h769", false);
 
     /// <summary>
-    /// Gets the GeoHash Base-32 format provider.
+    /// The unpadded GeoHash Base-32 format provider.
     /// </summary>
     public static readonly Base32FormatProvider GeoHash = new(2, nameof(GeoHash), "0123456789bcdefghjkmnpqrstuvwxyz", false);
 
     /// <summary>
-    /// Gets the Crockford Base-32 format provider.
+    /// The unpadded Crockford Base-32 format provider.
     /// </summary>
     public static readonly Base32FormatProvider Crockford = new(3, nameof(Crockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", false);
 
     /// <summary>
-    /// Gets the Base-32 Hex format provider.
+    /// The unpadded Base-32 Hex format provider.
     /// </summary>
     public static readonly Base32FormatProvider Base32Hex = new(4, nameof(Base32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV", false);
 
     /// <summary>
-    /// Gets the RFC 4648 Base-32 format provider.
+    /// The padded RFC 4648 Base-32 format provider.
     /// </summary>
     public static readonly Base32FormatProvider PaddedRfc4648 = new(5, nameof(PaddedRfc4648), "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", true);
 
     /// <summary>
-    /// Gets the Z-Base-32 format provider.
+    /// The padded Z-Base-32 format provider.
     /// </summary>
     public static readonly Base32FormatProvider PaddedZBase32 = new(6, nameof(PaddedZBase32), "ybndrfg8ejkmcpqxot1uwisza345h769", true);
 
     /// <summary>
-    /// Gets the GeoHash Base-32 format provider.
+    /// The padded GeoHash Base-32 format provider.
     /// </summary>
     public static readonly Base32FormatProvider PaddedGeoHash = new(7, nameof(PaddedGeoHash), "0123456789bcdefghjkmnpqrstuvwxyz", true);
 
     /// <summary>
-    /// Gets the Crockford Base-32 format provider.
+    /// The padded Crockford Base-32 format provider.
     /// </summary>
     public static readonly Base32FormatProvider PaddedCrockford = new(8, nameof(PaddedCrockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", true);
 
     /// <summary>
-    /// Gets the Base-32 Hex format provider.
+    /// The padded Base-32 Hex format provider.
     /// </summary>
     public static readonly Base32FormatProvider PaddedBase32Hex = new(9, nameof(PaddedBase32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV", true);
 
@@ -84,11 +84,13 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base32FormatProvider"/> instance.
     /// </summary>
+    /// <value>The Base-32 alphabet associated with the current format provider.</value>
     public string Alphabet { get; }
 
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Base32FormatProvider"/> instance uses padding.
     /// </summary>
+    /// <value><see langword="true"/> if the current format provider uses padding; otherwise, <see langword="false"/>.</value>
     public bool IsPadded { get; }
 
     /// <inheritdoc/>

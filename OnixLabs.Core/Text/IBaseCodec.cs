@@ -35,37 +35,39 @@ public interface IBaseCodec
     /// <summary>
     /// Gets a new <see cref="Base16Codec"/> instance.
     /// </summary>
+    /// <value>A newly-allocated <see cref="Base16Codec"/> instance.</value>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Base16Codec Base16 => new();
 
     /// <summary>
     /// Gets a new <see cref="Base32Codec"/> instance.
     /// </summary>
+    /// <value>A newly-allocated <see cref="Base32Codec"/> instance.</value>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Base32Codec Base32 => new();
 
     /// <summary>
     /// Gets a new <see cref="Base58Codec"/> instance.
     /// </summary>
+    /// <value>A newly-allocated <see cref="Base58Codec"/> instance.</value>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Base58Codec Base58 => new();
 
     /// <summary>
     /// Gets a new <see cref="Base64Codec"/> instance.
     /// </summary>
+    /// <value>A newly-allocated <see cref="Base64Codec"/> instance.</value>
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     public static Base64Codec Base64 => new();
 
     /// <summary>
     /// Obtains a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
+    /// <remarks>Allowed values for the <paramref name="provider"/> parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
     /// <param name="value">The value to convert.</param>
-    /// <param name="provider">
-    /// The <see cref="IFormatProvider"/> which will be used to obtain the base representation.
-    /// <remarks> Allowed values for this parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
-    /// </param>
+    /// <param name="provider">The <see cref="IFormatProvider"/> which will be used to obtain the base representation.</param>
     /// <returns>Returns a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
-    /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
+    /// <exception cref="FormatException">Thrown when the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
     public static string GetString(ReadOnlySpan<byte> value, IFormatProvider provider)
     {
         if (TryGetString(value, provider, out string result)) return result;
@@ -73,15 +75,13 @@ public interface IBaseCodec
     }
 
     /// <summary>
-    /// Obtains a new <see cref="byte"/> array array by converting the specified <see cref="ReadOnlySpan{T}"/> value.
+    /// Obtains a new <see cref="byte"/> array by converting the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
+    /// <remarks>Allowed values for the <paramref name="provider"/> parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
     /// <param name="value">The value to convert.</param>
-    /// <param name="provider">
-    /// The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/> value.
-    /// <remarks> Allowed values for this parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
-    /// </param>
-    /// <returns>Returns a new <see cref="byte"/> array array by converting the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
-    /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
+    /// <param name="provider">The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/> value.</param>
+    /// <returns>Returns a new <see cref="byte"/> array by converting the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
+    /// <exception cref="FormatException">Thrown when the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
     public static byte[] GetBytes(ReadOnlySpan<char> value, IFormatProvider provider)
     {
         if (TryGetBytes(value, provider, out byte[] result)) return result;
@@ -91,12 +91,10 @@ public interface IBaseCodec
     /// <summary>
     /// Tries to obtain a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
+    /// <remarks>Allowed values for the <paramref name="provider"/> parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
     /// <param name="value">The value to convert.</param>
-    /// <param name="provider">
-    /// The <see cref="IFormatProvider"/> which will be used to obtain the base representation.
-    /// <remarks> Allowed values for this parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
-    /// </param>
-    /// <param name="result"> A base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value, or an empty string if the value cannot be converted.</param>
+    /// <param name="provider">The <see cref="IFormatProvider"/> which will be used to obtain the base representation.</param>
+    /// <param name="result">A base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value, or an empty string if the value cannot be converted.</param>
     /// <returns>Returns <see langword="true"/> if the conversion was successful; otherwise, <see langword="false"/>.</returns>
     public static bool TryGetString(ReadOnlySpan<byte> value, IFormatProvider provider, out string result)
     {
@@ -113,14 +111,12 @@ public interface IBaseCodec
     }
 
     /// <summary>
-    /// Tries to obtain a new <see cref="byte"/> array array by converting the specified <see cref="ReadOnlySpan{T}"/> value.
+    /// Tries to obtain a new <see cref="byte"/> array by converting the specified <see cref="ReadOnlySpan{T}"/> value.
     /// </summary>
+    /// <remarks>Allowed values for the <paramref name="provider"/> parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
     /// <param name="value">The value to convert.</param>
-    /// <param name="provider">
-    /// The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/> value.
-    /// <remarks> Allowed values for this parameter are <see cref="Base16FormatProvider"/>, <see cref="Base32FormatProvider"/>, <see cref="Base58FormatProvider"/>, and <see cref="Base64FormatProvider"/>.</remarks>
-    /// </param>
-    /// <param name="result">A new <see cref="byte"/> array array by converting the specified <see cref="ReadOnlySpan{T}"/> value, or an empty <see cref="byte"/> array array if the value cannot be converted.</param>
+    /// <param name="provider">The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/> value.</param>
+    /// <param name="result">A new <see cref="byte"/> array obtained by converting the specified <see cref="ReadOnlySpan{T}"/> value, or an empty <see cref="byte"/> array if the value cannot be converted.</param>
     /// <returns>Returns <see langword="true"/> if the conversion was successful; otherwise, <see langword="false"/>.</returns>
     public static bool TryGetBytes(ReadOnlySpan<char> value, IFormatProvider provider, out byte[] result)
     {
@@ -137,11 +133,11 @@ public interface IBaseCodec
     }
 
     /// <summary>
-    /// Tries to get the correct format provider, or the default provider is no format provider is present, or if the format provider is a culture info format provider.
+    /// Tries to get the correct format provider, or the default provider when no format provider is present, or if the format provider is a culture info format provider.
     /// </summary>
     /// <param name="provider">The format provider to check.</param>
-    /// <param name="defaultProvider">The default format provider to use if no format provider is present.</param>
-    /// <param name="result">The correct format provider, or the default provider is no format provider is present.</param>
+    /// <param name="defaultProvider">The default format provider to use when no format provider is present.</param>
+    /// <param name="result">The correct format provider, or the default provider when no format provider is present.</param>
     /// <typeparam name="T">The underlying type of the expected format provider.</typeparam>
     /// <returns>Returns <see langword="true"/> if the format provider is correct or not present; otherwise, <see langword="false"/> if the format provider is not of the correct type.</returns>
     protected static bool TryGetFormatProvider<T>(IFormatProvider? provider, T defaultProvider, out T result) where T : IFormatProvider
@@ -167,6 +163,7 @@ public interface IBaseCodec
     /// <param name="value">The value to encode into a Base-N <see cref="String"/> representation.</param>
     /// <param name="provider">The format provider that will be used to encode the specified value.</param>
     /// <returns>Returns a new Base-N <see cref="String"/> representation encoded from the specified value.</returns>
+    /// <exception cref="FormatException">Thrown when the specified value cannot be encoded.</exception>
     string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null);
 
     /// <summary>
@@ -175,6 +172,7 @@ public interface IBaseCodec
     /// <param name="value">The Base-N value to decode into a <see cref="byte"/> array.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <returns>Returns a new <see cref="byte"/> array decoded from the specified value.</returns>
+    /// <exception cref="FormatException">Thrown when the specified value cannot be decoded.</exception>
     byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null);
 
     /// <summary>

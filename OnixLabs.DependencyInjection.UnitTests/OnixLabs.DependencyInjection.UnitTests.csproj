@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
-        <ProjectReference Include="..\OnixLabs.DependencyInjection\OnixLabs.DependencyInjection.csproj"/>
-        <ProjectReference Include="..\OnixLabs.DependencyInjection.UnitTests.Data\OnixLabs.DependencyInjection.UnitTests.Data.csproj"/>
+        <ProjectReference Include="..\OnixLabs.DependencyInjection\OnixLabs.DependencyInjection.csproj" />
+        <ProjectReference Include="..\OnixLabs.DependencyInjection.UnitTests.Data\OnixLabs.DependencyInjection.UnitTests.Data.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.13.1" />
     </ItemGroup>
 </Project>

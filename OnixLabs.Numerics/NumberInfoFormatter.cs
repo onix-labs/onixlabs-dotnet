@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -24,10 +25,7 @@ namespace OnixLabs.Numerics;
 /// <summary>
 /// Represents a formatter for formatting <see cref="NumberInfo"/> values.
 /// </summary>
-/// <param name="value">The <see cref="NumberInfo"/> value to format.</param>
-/// <param name="formatProvider">The format provider, which should be a <see cref="CultureInfo"/> containing the desired format details.</param>
-/// <param name="allowedFormats">Specifies which formats are allowed for formatting.</param>
-internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvider formatProvider, IEnumerable<char> allowedFormats)
+internal sealed partial class NumberInfoFormatter
 {
     internal const char DefaultFormat = 'G';
     private const char LeadingParenthesis = '(';
@@ -36,8 +34,22 @@ internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvi
 
     // ReSharper disable once HeapView.ObjectAllocation.Evident
     private readonly StringBuilder builder = new();
-    private readonly NumberFormatInfo numberFormat = NumberFormatInfo.GetInstance(formatProvider);
-    private readonly IEnumerable<char> allowedFormats = allowedFormats.Select(char.ToUpperInvariant);
+    private readonly NumberFormatInfo numberFormat;
+    private readonly SearchValues<char> allowedFormats;
+    private NumberInfo value;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NumberInfoFormatter"/> class.
+    /// </summary>
+    /// <param name="value">The <see cref="NumberInfo"/> value to format.</param>
+    /// <param name="formatProvider">The format provider, which should be a <see cref="CultureInfo"/> containing the desired format details.</param>
+    /// <param name="allowedFormats">Specifies which formats are allowed for formatting.</param>
+    public NumberInfoFormatter(NumberInfo value, IFormatProvider formatProvider, IEnumerable<char> allowedFormats)
+    {
+        this.value = value;
+        numberFormat = NumberFormatInfo.GetInstance(formatProvider);
+        this.allowedFormats = SearchValues.Create(allowedFormats.Select(char.ToUpperInvariant).ToArray());
+    }
 
     /// <summary>
     /// Formats the current <see cref="NumberInfo"/> value using the specified format.
@@ -50,6 +62,7 @@ internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvi
         char specifierUpperInvariant = char.ToUpperInvariant(specifier);
 
         if (!allowedFormats.Contains(specifierUpperInvariant)) return format.ToString();
+        if (!TryApplyFormatScale(specifierUpperInvariant, format)) return format.ToString();
 
         switch (specifierUpperInvariant)
         {
@@ -73,6 +86,12 @@ internal sealed partial class NumberInfoFormatter(NumberInfo value, IFormatProvi
                 break;
             case 'P':
                 FormatPercent();
+                break;
+            case 'R':
+                FormatRoundTrip();
+                break;
+            case 'X':
+                if (!FormatHexadecimal(specifier, format)) return format.ToString();
                 break;
             default:
                 return format.ToString();

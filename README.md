@@ -60,6 +60,8 @@ Lightweight extensions for Microsoft’s dependency injection abstractions, focu
 High-precision numeric types and generic math utilities for scenarios where built-in numeric types are insufficient. This package emphasizes correctness, precision, and introspection of numeric values.
 
 -   Arbitrary-precision `BigDecimal` based on generic math (`IFloatingPoint<T>`)
+-   Extended-width integer types (`Int256`, `UInt256`, `Int512`, `UInt512`)
+-   Extended-precision floating-point types (`Float128`, `Float256`)
 -   `NumberInfo` for dissecting rational numbers into constituent parts
 -   Generic numeric abstractions (`IBaseNumber<T>`, `INumber<T>`)
 -   Extension methods for `Decimal`, `BigDecimal`, `BigInteger`, and other numeric types

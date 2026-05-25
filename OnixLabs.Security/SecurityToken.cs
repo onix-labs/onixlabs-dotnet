@@ -28,5 +28,6 @@ public readonly partial struct SecurityToken(ReadOnlySpan<char> value) : IValueE
     /// <summary>
     /// Gets the length of the underlying security token value.
     /// </summary>
-    public int Length => value.Length;
+    /// <value>The number of characters in the underlying security token value.</value>
+    public int Length => value?.Length ?? 0;
 }

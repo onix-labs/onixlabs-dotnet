@@ -17,12 +17,13 @@ namespace OnixLabs.Security.Cryptography;
 internal readonly partial struct Ed25519FieldElement
 {
     /// <summary>
-    /// Returns <paramref name="a"/> if <paramref name="condition"/> is false (0), or <paramref name="b"/>
-    /// if <paramref name="condition"/> is true (any non-zero value). Implemented branch-free.
+    /// Returns <paramref name="a"/> if the low bit of <paramref name="condition"/> is 0, or <paramref name="b"/>
+    /// if the low bit of <paramref name="condition"/> is 1. Selection is driven solely by the low bit, so
+    /// <paramref name="condition"/> must be 0 or 1; higher bits are ignored. Implemented branch-free.
     /// </summary>
-    /// <param name="a">The field element returned when <paramref name="condition"/> is zero.</param>
-    /// <param name="b">The field element returned when <paramref name="condition"/> is non-zero.</param>
-    /// <param name="condition">The selection condition; zero selects <paramref name="a"/>, non-zero selects <paramref name="b"/>.</param>
+    /// <param name="a">The field element returned when the low bit of <paramref name="condition"/> is 0.</param>
+    /// <param name="b">The field element returned when the low bit of <paramref name="condition"/> is 1.</param>
+    /// <param name="condition">The selection condition; expected to be 0 or 1. The low bit selects: 0 selects <paramref name="a"/>, 1 selects <paramref name="b"/>.</param>
     /// <returns>Returns either <paramref name="a"/> or <paramref name="b"/> selected in constant time without branching on <paramref name="condition"/>.</returns>
     public static Ed25519FieldElement ConditionalSelect(in Ed25519FieldElement a, in Ed25519FieldElement b, ulong condition)
     {

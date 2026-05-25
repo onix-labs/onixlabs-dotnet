@@ -40,6 +40,11 @@ public static class NumericsExtensions
     private static readonly BigInteger MaxDecimal = new(decimal.MaxValue);
 
     /// <summary>
+    /// The largest unsigned significand a <see cref="decimal"/> can hold, equal to <c>2^96 - 1</c>.
+    /// </summary>
+    private static readonly BigInteger MaxSignificand = (BigInteger.One << 96) - BigInteger.One;
+
+    /// <summary>
     /// Gets the unscaled value of the current <see cref="decimal"/>.
     /// </summary>
     /// <param name="value">The <see cref="decimal"/> from which to obtain an unscaled value.</param>
@@ -54,6 +59,27 @@ public static class NumericsExtensions
         BigInteger result = new(significandBytes);
 
         return decimal.IsPositive(value) ? result : -result;
+    }
+
+    /// <summary>
+    /// Computes the largest scale in the inclusive range 0 to 28 to which a <see cref="decimal"/> with the specified
+    /// absolute unscaled value and current scale can be set without overflowing decimal's 96-bit significand.
+    /// </summary>
+    /// <param name="absoluteUnscaledValue">The absolute unscaled value of the decimal.</param>
+    /// <param name="currentScale">The current scale of the decimal.</param>
+    /// <returns>Returns the largest representable scale for the specified value.</returns>
+    /// <remarks>
+    /// A zero significand fits at any scale. Otherwise the significand may be padded with as many factors of ten as keep
+    /// it within 96 bits: <c>MaxSignificand / absoluteUnscaledValue</c> is the largest such multiplier, and its decimal
+    /// length minus one is the largest power of ten that still fits. The result is capped at decimal's maximum scale of 28.
+    /// </remarks>
+    private static int GetMaxPossibleScale(BigInteger absoluteUnscaledValue, int currentScale)
+    {
+        int maxPadding = absoluteUnscaledValue.IsZero
+            ? MaxScale
+            : (MaxSignificand / absoluteUnscaledValue).ToString().Length - 1;
+
+        return int.Min(MaxScale, currentScale + maxPadding);
     }
 
     /// <summary>
@@ -73,13 +99,9 @@ public static class NumericsExtensions
     {
         RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.");
 
-        // Determine maximum representable scale given the integer part length
+        // Determine the maximum representable scale from decimal's 96-bit significand limit.
         BigInteger unscaledValue = value.GetUnscaledValue();
-        BigInteger absUnscaled = BigInteger.Abs(unscaledValue);
-        BigInteger factorCurrent = BigInteger.Pow(10, value.Scale);
-        BigInteger integerPart = BigInteger.DivRem(absUnscaled, factorCurrent, out _);
-        int integerDigits = integerPart.IsZero ? 1 : integerPart.ToString().Length;
-        int maxPossibleScale = MaxScale - integerDigits;
+        int maxPossibleScale = GetMaxPossibleScale(BigInteger.Abs(unscaledValue), value.Scale);
 
         Require(scale <= maxPossibleScale, $"Maximum possible scale for the specified value is {maxPossibleScale}.", nameof(scale));
 
@@ -123,13 +145,9 @@ public static class NumericsExtensions
     {
         RequireWithinRangeInclusive(scale, 0, MaxScale, "Scale must be within the inclusive range of 0 to 28.");
 
-        // Determine maximum representable scale
+        // Determine the maximum representable scale from decimal's 96-bit significand limit.
         BigInteger unscaledValue = value.GetUnscaledValue();
-        BigInteger absUnscaled = BigInteger.Abs(unscaledValue);
-        BigInteger factorCurrent = BigInteger.Pow(10, value.Scale);
-        BigInteger integerPart = BigInteger.DivRem(absUnscaled, factorCurrent, out _);
-        int integerDigits = integerPart.IsZero ? 1 : integerPart.ToString().Length;
-        int maxPossibleScale = MaxScale - integerDigits;
+        int maxPossibleScale = GetMaxPossibleScale(BigInteger.Abs(unscaledValue), value.Scale);
 
         Require(scale <= maxPossibleScale, $"Maximum possible scale for the specified value is {maxPossibleScale}.", nameof(scale));
 

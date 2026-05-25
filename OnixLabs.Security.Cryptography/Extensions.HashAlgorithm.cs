@@ -171,7 +171,7 @@ public static class HashAlgorithmExtensions
                         return false;
                     }
 
-                    source = destination;
+                    source = destination[..result];
                 }
 
                 bytesWritten = result;

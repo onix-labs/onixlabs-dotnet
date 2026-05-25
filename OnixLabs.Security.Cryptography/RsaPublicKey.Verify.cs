@@ -67,7 +67,6 @@ public sealed partial class RsaPublicKey
     public bool IsDataValid(DigitalSignature signature, Stream data, HashAlgorithmName algorithm, RSASignaturePadding padding)
     {
         using RSA key = ImportKeyData();
-        // TODO : Span for signature is inefficiently converted back to an array.
         return key.VerifyData(data, signature.AsReadOnlySpan().ToArray(), algorithm, padding);
     }
 

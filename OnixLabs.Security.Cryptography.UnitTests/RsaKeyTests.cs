@@ -174,4 +174,11 @@ public sealed class RsaKeyTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "RsaPrivateKey.ImportPem should throw CryptographicException for malformed PEM")]
+    public void RsaPrivateKeyImportPemShouldThrowCryptographicExceptionForMalformedPem()
+    {
+        // When / Then
+        Assert.Throws<CryptographicException>(() => RsaPrivateKey.ImportPem("not a pem"));
+    }
 }

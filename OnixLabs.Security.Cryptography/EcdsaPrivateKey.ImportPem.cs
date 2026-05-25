@@ -24,7 +24,7 @@ public sealed partial class EcdsaPrivateKey
     public static EcdsaPrivateKey ImportPem(ReadOnlySpan<char> data)
     {
         using ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportFromPem(data);
+        PemKeyImporter.Import(algorithm, data);
         return new EcdsaPrivateKey(algorithm);
     }
 
@@ -32,7 +32,7 @@ public sealed partial class EcdsaPrivateKey
     public static EcdsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         return new EcdsaPrivateKey(algorithm);
     }
 
@@ -40,7 +40,7 @@ public sealed partial class EcdsaPrivateKey
     public static EcdsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         return new EcdsaPrivateKey(algorithm);
     }
 }

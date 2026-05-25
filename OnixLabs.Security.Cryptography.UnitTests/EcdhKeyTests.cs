@@ -166,4 +166,11 @@ public sealed class EcdhKeyTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "EcdhPrivateKey.ImportPem should throw CryptographicException for malformed PEM")]
+    public void EcdhPrivateKeyImportPemShouldThrowCryptographicExceptionForMalformedPem()
+    {
+        // When / Then
+        Assert.Throws<CryptographicException>(() => EcdhPrivateKey.ImportPem("not a pem"));
+    }
 }

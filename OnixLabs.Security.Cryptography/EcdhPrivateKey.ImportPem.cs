@@ -23,7 +23,7 @@ public sealed partial class EcdhPrivateKey
     public static EcdhPrivateKey ImportPem(ReadOnlySpan<char> data)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
-        algorithm.ImportFromPem(data);
+        PemKeyImporter.Import(algorithm, data);
         // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new EcdhPrivateKey(algorithm);
     }
@@ -32,7 +32,7 @@ public sealed partial class EcdhPrivateKey
     public static EcdhPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new EcdhPrivateKey(algorithm);
     }
@@ -41,7 +41,7 @@ public sealed partial class EcdhPrivateKey
     public static EcdhPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         // ReSharper disable once HeapView.ObjectAllocation.Evident
         return new EcdhPrivateKey(algorithm);
     }

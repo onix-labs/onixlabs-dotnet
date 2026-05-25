@@ -24,7 +24,7 @@ public sealed partial class EcdhPublicKey
     public static EcdhPublicKey ImportPem(ReadOnlySpan<char> data)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
-        algorithm.ImportFromPem(data);
+        PemKeyImporter.Import(algorithm, data);
         return new EcdhPublicKey(algorithm);
     }
 
@@ -32,7 +32,7 @@ public sealed partial class EcdhPublicKey
     public static EcdhPublicKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         return new EcdhPublicKey(algorithm);
     }
 
@@ -40,7 +40,7 @@ public sealed partial class EcdhPublicKey
     public static EcdhPublicKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using ECDiffieHellman algorithm = ECDiffieHellman.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         return new EcdhPublicKey(algorithm);
     }
 }

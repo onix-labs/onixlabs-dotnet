@@ -24,7 +24,7 @@ public sealed partial class RsaPrivateKey
     public static RsaPrivateKey ImportPem(ReadOnlySpan<char> data)
     {
         using RSA algorithm = RSA.Create();
-        algorithm.ImportFromPem(data);
+        PemKeyImporter.Import(algorithm, data);
         return new RsaPrivateKey(algorithm);
     }
 
@@ -32,7 +32,7 @@ public sealed partial class RsaPrivateKey
     public static RsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<char> password)
     {
         using RSA algorithm = RSA.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         return new RsaPrivateKey(algorithm);
     }
 
@@ -40,7 +40,7 @@ public sealed partial class RsaPrivateKey
     public static RsaPrivateKey ImportPem(ReadOnlySpan<char> data, ReadOnlySpan<byte> password)
     {
         using RSA algorithm = RSA.Create();
-        algorithm.ImportFromEncryptedPem(data, password);
+        PemKeyImporter.Import(algorithm, data, password);
         return new RsaPrivateKey(algorithm);
     }
 }

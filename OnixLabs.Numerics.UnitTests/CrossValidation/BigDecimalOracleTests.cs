@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 using System.Numerics;
 using OnixLabs.Numerics.UnitTests.Data.CrossValidation;
 using static OnixLabs.Numerics.UnitTests.Data.CrossValidation.BigDecimalRationalOracle;
@@ -139,4 +140,13 @@ public sealed class BigDecimalOracleTests
     [Theory(DisplayName = "BigDecimal: Abs(-a) equals Abs(a)")]
     [BigDecimalUnaryData]
     public void AbsOfNegationEqualsAbs(BigDecimal a) => Assert.True(BigDecimal.Abs(-a) == BigDecimal.Abs(a));
+
+    [Theory(DisplayName = "BigDecimal: Parse(ToString(x)) round-trips the value across arbitrary precision and scale")]
+    [BigDecimalUnaryData]
+    public void StringRoundTripPreservesValue(BigDecimal a)
+    {
+        string text = a.ToString("G", CultureInfo.InvariantCulture);
+        BigDecimal parsed = BigDecimal.Parse(text, CultureInfo.InvariantCulture);
+        Assert.True(a == parsed, $"round-trip failed for \"{text}\"");
+    }
 }

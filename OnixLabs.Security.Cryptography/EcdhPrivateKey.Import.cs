@@ -46,8 +46,17 @@ public sealed partial class EcdhPrivateKey
     /// <returns>Returns a new <see cref="ECDiffieHellman"/> instance containing the imported key data.</returns>
     private ECDiffieHellman ImportKeyData()
     {
-        ECDiffieHellman algorithm = ECDiffieHellman.Create();
-        algorithm.ImportECPrivateKey(KeyData, out int _);
-        return algorithm;
+        byte[] keyData = KeyData;
+
+        try
+        {
+            ECDiffieHellman algorithm = ECDiffieHellman.Create();
+            algorithm.ImportECPrivateKey(keyData, out int _);
+            return algorithm;
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
     }
 }

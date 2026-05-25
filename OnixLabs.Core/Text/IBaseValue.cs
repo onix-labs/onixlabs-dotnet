@@ -42,6 +42,7 @@ public interface IBaseValue : IBinaryConvertible, ISpanFormattable
 /// <summary>
 /// Defines a generic base encoding representation.
 /// </summary>
+/// <typeparam name="T">The underlying type implementing the base encoding representation.</typeparam>
 public interface IBaseValue<T> : IValueEquatable<T>, ISpanParsable<T>, IBaseValue where T : struct, IBaseValue<T>
 {
     /// <summary>

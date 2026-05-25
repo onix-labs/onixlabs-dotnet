@@ -40,6 +40,7 @@ public sealed class SecurityTokenBuilder
     /// </summary>
     /// <param name="length">The desired length of the generated security token.</param>
     /// <param name="provider">The <see cref="RandomNumberProvider"/> that will be used to randomly select security token characters.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
     private SecurityTokenBuilder(int length, RandomNumberProvider provider)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(length);
@@ -56,6 +57,7 @@ public sealed class SecurityTokenBuilder
     /// <param name="length">The desired length of the generated security token.</param>
     /// <param name="random">The underlying <see cref="Random"/> pseudo-random instance.</param>
     /// <returns>Returns a new <see cref="SecurityTokenBuilder"/> instance using a pseudo-random number provider.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
     public static SecurityTokenBuilder CreatePseudoRandom(int length, Random? random = null) =>
         new(length, RandomNumberProvider.CreatePseudoRandomNumberProvider(random ?? new Random()));
 
@@ -69,6 +71,7 @@ public sealed class SecurityTokenBuilder
     /// <param name="length">The desired length of the generated security token.</param>
     /// <param name="seed">The seed for the pseudo-random number provider.</param>
     /// <returns>Returns a new <see cref="SecurityTokenBuilder"/> instance using a pseudo-random number provider.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
     public static SecurityTokenBuilder CreatePseudoRandom(int length, int seed) =>
         new(length, RandomNumberProvider.CreatePseudoRandomNumberProvider(new Random(seed)));
 
@@ -77,6 +80,7 @@ public sealed class SecurityTokenBuilder
     /// </summary>
     /// <param name="length">The desired length of the generated security token.</param>
     /// <returns>Returns a new <see cref="SecurityTokenBuilder"/> instance using a secure random number provider.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
     public static SecurityTokenBuilder CreateSecureRandom(int length) =>
         new(length, RandomNumberProvider.CreateSecureRandomNumberProvider());
 
@@ -131,6 +135,7 @@ public sealed class SecurityTokenBuilder
     /// Creates a new <see cref="SecurityToken"/> instance from the current <see cref="SecurityTokenBuilder"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="SecurityToken"/> instance.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when no character set has been specified.</exception>
     public SecurityToken ToSecurityToken()
     {
         if (characters.Count == 0)

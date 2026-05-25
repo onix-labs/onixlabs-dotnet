@@ -59,6 +59,7 @@ public abstract class Specification<T>
     /// Gets the compiled criteria delegate, caching it for subsequent invocations.
     /// The underlying <see cref="Lazy{T}"/> uses double-checked locking, so the expression is compiled exactly once even under concurrent access.
     /// </summary>
+    /// <value>The compiled form of <see cref="Criteria"/>, evaluated against a candidate value.</value>
     private Func<T, bool> CompiledCriteria => compiledCriteria.Value;
 
     /// <summary>

@@ -30,9 +30,7 @@ public readonly partial struct Base16 : IBaseValue<Base16>
     /// Initializes a new instance of the <see cref="Base16"/> struct.
     /// </summary>
     /// <remarks>
-    /// This constructor is intentionally marked <see langword="private"/> and is used exclusively to initialize the underlying <see cref="byte"/> array.
-    /// Because <see cref="Base16"/> is designed to be immutable, external array references are not permitted.
-    /// The overloaded constructors below ensure immutability by creating defensive copies of the provided arrays.
+    /// Stores the supplied array by reference; the public constructors pass defensive copies to preserve immutability.
     /// </remarks>
     /// <param name="value">The value from which to initialize the new <see cref="Base16"/> instance.</param>
     private Base16(byte[] value) => this.value = value;

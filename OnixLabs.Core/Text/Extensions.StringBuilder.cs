@@ -24,6 +24,9 @@ namespace OnixLabs.Core.Text;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class StringBuilderExtensions
 {
+    /// <summary>
+    /// The backslash character prepended by <see cref="AppendEscaped"/> to escape the following character.
+    /// </summary>
     private const char EscapeSequence = '\\';
 
     /// <summary>

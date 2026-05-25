@@ -150,6 +150,8 @@ public sealed class StringExtensionTests
     [Theory(DisplayName = "String.SubstringAfterLast should return the the string after the last string delimiter")]
     [InlineData("First:Second:Third", "Third", ":")]
     [InlineData("12345+678910+12345", "12345", "+")]
+    [InlineData("First::Second::Third", "Third", "::")]
+    [InlineData("a-->b-->c", "c", "-->")]
     public void SubstringAfterLastShouldProduceExpectedResultString(string value, string expected, string delimiter)
     {
         // When

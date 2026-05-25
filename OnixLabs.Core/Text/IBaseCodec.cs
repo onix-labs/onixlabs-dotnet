@@ -67,7 +67,7 @@ public interface IBaseCodec
     /// <param name="value">The value to convert.</param>
     /// <param name="provider">The <see cref="IFormatProvider"/> which will be used to obtain the base representation.</param>
     /// <returns>Returns a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
-    /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
+    /// <exception cref="FormatException">Thrown when the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
     public static string GetString(ReadOnlySpan<byte> value, IFormatProvider provider)
     {
         if (TryGetString(value, provider, out string result)) return result;
@@ -81,7 +81,7 @@ public interface IBaseCodec
     /// <param name="value">The value to convert.</param>
     /// <param name="provider">The <see cref="IFormatProvider"/> which will be used to convert the specified <see cref="ReadOnlySpan{T}"/> value.</param>
     /// <returns>Returns a new <see cref="byte"/> array by converting the specified <see cref="ReadOnlySpan{T}"/> value.</returns>
-    /// <exception cref="FormatException">If the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
+    /// <exception cref="FormatException">Thrown when the specified <see cref="ReadOnlySpan{T}"/> value cannot be converted.</exception>
     public static byte[] GetBytes(ReadOnlySpan<char> value, IFormatProvider provider)
     {
         if (TryGetBytes(value, provider, out byte[] result)) return result;
@@ -163,6 +163,7 @@ public interface IBaseCodec
     /// <param name="value">The value to encode into a Base-N <see cref="String"/> representation.</param>
     /// <param name="provider">The format provider that will be used to encode the specified value.</param>
     /// <returns>Returns a new Base-N <see cref="String"/> representation encoded from the specified value.</returns>
+    /// <exception cref="FormatException">Thrown when the specified value cannot be encoded.</exception>
     string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null);
 
     /// <summary>
@@ -171,6 +172,7 @@ public interface IBaseCodec
     /// <param name="value">The Base-N value to decode into a <see cref="byte"/> array.</param>
     /// <param name="provider">The format provider that will be used to decode the specified value.</param>
     /// <returns>Returns a new <see cref="byte"/> array decoded from the specified value.</returns>
+    /// <exception cref="FormatException">Thrown when the specified value cannot be decoded.</exception>
     byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null);
 
     /// <summary>

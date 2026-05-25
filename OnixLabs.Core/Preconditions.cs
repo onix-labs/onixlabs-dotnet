@@ -44,7 +44,7 @@ public static class Preconditions
         /// </summary>
         /// <param name="condition">The condition to check.</param>
         /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
-        /// <exception cref="InvalidOperationException">If the specified condition is <see langword="false"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified condition is <see langword="false"/>.</exception>
         public static void Check(bool condition, string message = ArgumentFailed)
         {
             if (!condition) throw new InvalidOperationException(message);
@@ -56,7 +56,7 @@ public static class Preconditions
         /// <param name="result">The current <see cref="Result"/> to check.</param>
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</param>
         /// <returns>Returns the current <see cref="Result"/> as a <see cref="Failure"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</exception>
         public static Failure CheckIsFailure(Result result, string message = ArgumentIsNotFailure) =>
             result as Failure ?? throw new InvalidOperationException(message);
 
@@ -66,7 +66,7 @@ public static class Preconditions
         /// <param name="result">The current <see cref="Result"/> to check.</param>
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Result"/> is not of type <see cref="Success"/>.</param>
         /// <returns>Returns the current <see cref="Result"/> as a <see cref="Success"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Result"/> is not of type <see cref="Success"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified <see cref="Result"/> is not of type <see cref="Success"/>.</exception>
         public static Success CheckIsSuccess(Result result, string message = ArgumentIsNotSuccess) =>
             result as Success ?? throw new InvalidOperationException(message);
 
@@ -77,7 +77,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Result{T}"/> is not of type <see cref="Failure{T}"/>.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Result{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Result{T}"/> as a <see cref="Failure{T}"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Result{T}"/> is not of type <see cref="Failure{T}"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified <see cref="Result{T}"/> is not of type <see cref="Failure{T}"/>.</exception>
         public static Failure<T> CheckIsFailure<T>(Result<T> result, string message = ArgumentIsNotFailure) =>
             result as Failure<T> ?? throw new InvalidOperationException(message);
 
@@ -88,7 +88,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Result{T}"/> is not of type <see cref="Success{T}"/>.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Result{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Result{T}"/> as a <see cref="Success{T}"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Result{T}"/> is not of type <see cref="Success{T}"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified <see cref="Result{T}"/> is not of type <see cref="Success{T}"/>.</exception>
         public static Success<T> CheckIsSuccess<T>(Result<T> result, string message = ArgumentIsNotSuccess) =>
             result as Success<T> ?? throw new InvalidOperationException(message);
 
@@ -99,7 +99,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Optional{T}"/> is not of type <see cref="None{T}"/>.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Optional{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Optional{T}"/> as a <see cref="None{T}"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Optional{T}"/> is not of type <see cref="None{T}"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified <see cref="Optional{T}"/> is not of type <see cref="None{T}"/>.</exception>
         public static None<T> CheckIsNone<T>(Optional<T> optional, string message = ArgumentIsNotNone) where T : notnull =>
             optional as None<T> ?? throw new InvalidOperationException(message);
 
@@ -110,7 +110,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Optional{T}"/> is not of type <see cref="Some{T}"/>.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Optional{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Optional{T}"/> as a <see cref="Some{T}"/> instance.</returns>
-        /// <exception cref="InvalidOperationException">If the specified <see cref="Optional{T}"/> is not of type <see cref="Some{T}"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified <see cref="Optional{T}"/> is not of type <see cref="Some{T}"/>.</exception>
         public static Some<T> CheckIsSome<T>(Optional<T> optional, string message = ArgumentIsNotSome) where T : notnull =>
             optional as Some<T> ?? throw new InvalidOperationException(message);
 
@@ -121,7 +121,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/>.</param>
         /// <typeparam name="T">The underlying type of the value.</typeparam>
         /// <returns>Returns a non-null value of the specified type.</returns>
-        /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified value is <see langword="null"/>.</exception>
         public static T CheckNotNull<T>([NotNull] T? value, string message = ArgumentNull) =>
             value ?? throw new InvalidOperationException(message);
 
@@ -132,7 +132,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/>.</param>
         /// <typeparam name="T">The underlying type of the value.</typeparam>
         /// <returns>Returns a non-null value of the specified type.</returns>
-        /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified value is <see langword="null"/>.</exception>
         public static T CheckNotNull<T>([NotNull] T? value, string message = ArgumentNull) where T : struct =>
             value ?? throw new InvalidOperationException(message);
 
@@ -142,7 +142,7 @@ public static class Preconditions
         /// <param name="value">The <see cref="String"/> value to check.</param>
         /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or an empty string.</param>
         /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
-        /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/> or an empty string.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified value is <see langword="null"/> or an empty string.</exception>
         public static string CheckNotNullOrEmpty([NotNull] string? value, string message = ArgumentNullOrEmpty) =>
             !string.IsNullOrEmpty(value) ? value : throw new InvalidOperationException(message);
 
@@ -152,7 +152,7 @@ public static class Preconditions
         /// <param name="value">The <see cref="String"/> value to check.</param>
         /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or a whitespace string.</param>
         /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
-        /// <exception cref="InvalidOperationException">If the specified value is <see langword="null"/> or a whitespace string.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the specified value is <see langword="null"/> or a whitespace string.</exception>
         public static string CheckNotNullOrWhiteSpace([NotNull] string? value, string message = ArgumentNullOrWhiteSpace) =>
             !string.IsNullOrWhiteSpace(value) ? value : throw new InvalidOperationException(message);
     }
@@ -168,7 +168,7 @@ public static class Preconditions
         /// <param name="condition">The condition to check.</param>
         /// <param name="message">The exception message to throw in the event that the specified condition is <see langword="false"/>.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
-        /// <exception cref="ArgumentException">If the specified condition is <see langword="false"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified condition is <see langword="false"/>.</exception>
         public static void Require(bool condition, string message = ArgumentFailed, string? parameterName = null)
         {
             if (!condition) throw new ArgumentException(message, parameterName);
@@ -181,7 +181,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <returns>Returns the current <see cref="Result"/> as a <see cref="Failure"/> instance.</returns>
-        /// <exception cref="ArgumentException">If the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified <see cref="Result"/> is not of type <see cref="Failure"/>.</exception>
         public static Failure RequireIsFailure(
             Result result,
             string message = ArgumentIsNotFailure,
@@ -196,7 +196,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified <see cref="Result"/> is not of type <see cref="Success"/>.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <returns>Returns the current <see cref="Result"/> as a <see cref="Success"/> instance.</returns>
-        /// <exception cref="ArgumentException">If the specified <see cref="Result"/> is not of type <see cref="Success"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified <see cref="Result"/> is not of type <see cref="Success"/>.</exception>
         public static Success RequireIsSuccess(
             Result result,
             string message = ArgumentIsNotSuccess,
@@ -212,7 +212,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Result{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Result{T}"/> as a <see cref="Failure{T}"/> instance.</returns>
-        /// <exception cref="ArgumentException">If the specified <see cref="Result{T}"/> is not of type <see cref="Failure{T}"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified <see cref="Result{T}"/> is not of type <see cref="Failure{T}"/>.</exception>
         public static Failure<T> RequireIsFailure<T>(
             Result<T> result,
             string message = ArgumentIsNotFailure,
@@ -228,7 +228,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Result{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Result{T}"/> as a <see cref="Success{T}"/> instance.</returns>
-        /// <exception cref="ArgumentException">If the specified <see cref="Result{T}"/> is not of type <see cref="Success{T}"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified <see cref="Result{T}"/> is not of type <see cref="Success{T}"/>.</exception>
         public static Success<T> RequireIsSuccess<T>(
             Result<T> result,
             string message = ArgumentIsNotSuccess,
@@ -244,7 +244,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Optional{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Optional{T}"/> as a <see cref="None{T}"/> instance.</returns>
-        /// <exception cref="ArgumentException">If the specified <see cref="Optional{T}"/> is not of type <see cref="None{T}"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified <see cref="Optional{T}"/> is not of type <see cref="None{T}"/>.</exception>
         public static None<T> RequireIsNone<T>(
             Optional<T> optional,
             string message = ArgumentIsNotNone,
@@ -260,7 +260,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the current <see cref="Optional{T}"/> instance.</typeparam>
         /// <returns>Returns the current <see cref="Optional{T}"/> as a <see cref="Some{T}"/> instance.</returns>
-        /// <exception cref="ArgumentException">If the specified <see cref="Optional{T}"/> is not of type <see cref="Some{T}"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified <see cref="Optional{T}"/> is not of type <see cref="Some{T}"/>.</exception>
         public static Some<T> RequireIsSome<T>(
             Optional<T> optional,
             string message = ArgumentIsNotSome,
@@ -275,7 +275,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or an empty string.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
-        /// <exception cref="ArgumentException">If the specified value is <see langword="null"/> or an empty string.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified value is <see langword="null"/> or an empty string.</exception>
         public static string RequireNotNullOrEmpty(
             [NotNull] string? value,
             string message = ArgumentNullOrEmpty,
@@ -290,7 +290,7 @@ public static class Preconditions
         /// <param name="message">The exception message to throw in the event that the specified value is <see langword="null"/> or a whitespace string.</param>
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <returns>Returns a non-null, non-empty <see cref="String"/> value.</returns>
-        /// <exception cref="ArgumentException">If the specified value is <see langword="null"/> or a whitespace string.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified value is <see langword="null"/> or a whitespace string.</exception>
         public static string RequireNotNullOrWhiteSpace(
             [NotNull] string? value,
             string message = ArgumentNullOrWhiteSpace,
@@ -312,7 +312,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the value.</typeparam>
         /// <returns>Returns a non-null value of the specified type.</returns>
-        /// <exception cref="ArgumentNullException">If the specified value is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when the specified value is <see langword="null"/>.</exception>
         public static T RequireNotNull<T>(
             [NotNull] T? value,
             string message = ArgumentNull,
@@ -328,7 +328,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the value.</typeparam>
         /// <returns>Returns a non-null value of the specified type.</returns>
-        /// <exception cref="ArgumentNullException">If the specified value is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when the specified value is <see langword="null"/>.</exception>
         public static T RequireNotNull<T>(
             [NotNull] T? value,
             string message = ArgumentNull,
@@ -352,7 +352,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the value to check.</typeparam>
         /// <returns>Returns the specified value if it falls within the inclusive minimum and maximum range.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified value falls inclusively outside the specified minimum and maximum values.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified value falls inclusively outside the specified minimum and maximum values.</exception>
         public static T RequireWithinRangeInclusive<T>(
             T value,
             T minimum,
@@ -374,7 +374,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the value to check.</typeparam>
         /// <returns>Returns the specified value if it falls within the exclusive minimum and maximum range.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified value falls exclusively outside the specified minimum and maximum values.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified value falls exclusively outside the specified minimum and maximum values.</exception>
         public static T RequireWithinRangeExclusive<T>(
             T value,
             T minimum,
@@ -393,7 +393,7 @@ public static class Preconditions
         /// <param name="parameterName">The name of the invalid parameter.</param>
         /// <typeparam name="T">The underlying type of the <see cref="Enum"/>.</typeparam>
         /// <returns>Returns the specified value if it is defined by the specified <see cref="Enum"/> type.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the specified value is not defined by the specified <see cref="Enum"/> type.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified value is not defined by the specified <see cref="Enum"/> type.</exception>
         public static T RequireIsDefined<T>(
             T value,
             [CallerArgumentExpression(nameof(value))]

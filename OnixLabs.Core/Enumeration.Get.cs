@@ -51,6 +51,9 @@ public abstract partial class Enumeration<T>
     /// </summary>
     private static class EnumerationCache
     {
+        /// <summary>
+        /// The set of all enumeration entries declared by <typeparamref name="T"/>, discovered once per concrete type.
+        /// </summary>
         public static readonly FrozenSet<T> All = typeof(T)
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
             .Select(field => field.GetValue(null))

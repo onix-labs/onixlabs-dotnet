@@ -725,4 +725,22 @@ public sealed class SecurityTokenBuilderTests
         // Then
         Assert.Equal(length, token.Length);
     }
+
+    [Fact(DisplayName = "SecurityTokenBuilder.ToSecurityToken with a secure random provider should produce a token drawn from the allowed character set")]
+    public void SecurityTokenBuilderToSecurityTokenWithSecureRandomShouldProduceExpectedResult()
+    {
+        // Given
+        const int length = 256;
+        const string allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        SecurityTokenBuilder builder = SecurityTokenBuilder
+            .CreateSecureRandom(length)
+            .UseAlphaNumericCharacters();
+
+        // When
+        string actual = builder.ToSecurityToken().ToString();
+
+        // Then
+        Assert.Equal(length, actual.Length);
+        Assert.All(actual, character => Assert.Contains(character, allowedCharacters));
+    }
 }

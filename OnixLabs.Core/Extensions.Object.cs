@@ -48,9 +48,10 @@ public static class ObjectExtensions
     /// <param name="action">The action into which the current <paramref name="value"/> will be passed.</param>
     /// <typeparam name="T">The underlying type of the current value.</typeparam>
     /// <returns>Returns the current <paramref name="value"/> once the specified <see cref="Action{T}"/> has been executed.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="action"/> is <see langword="null"/>.</exception>
     public static T Apply<T>(this T value, Action<T> action) where T : class
     {
-        ArgumentNullException.RequireNotNull(action, "Action must not be null.");
+        RequireNotNull(action, "Action must not be null.");
         action(value);
         return value;
     }
@@ -62,9 +63,10 @@ public static class ObjectExtensions
     /// <param name="function">The function into which the current <paramref name="value"/> will be passed.</param>
     /// <typeparam name="T">The underlying type of the current value.</typeparam>
     /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> is <see langword="null"/>.</exception>
     public static T Apply<T>(this T value, Func<T, T> function) where T : struct
     {
-        ArgumentNullException.RequireNotNull(function, "Function must not be null.");
+        RequireNotNull(function, "Function must not be null.");
         return function(value);
     }
 
@@ -76,9 +78,10 @@ public static class ObjectExtensions
     /// <typeparam name="TSource">The underlying type of the current value.</typeparam>
     /// <typeparam name="TResult">The underlying type of the result value.</typeparam>
     /// <returns>Returns the result of the specified <see cref="Func{T, TResult}"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="function"/> is <see langword="null"/>.</exception>
     public static TResult Let<TSource, TResult>(this TSource value, Func<TSource, TResult> function)
     {
-        ArgumentNullException.RequireNotNull(function, "Function must not be null.");
+        RequireNotNull(function, "Function must not be null.");
         return function(value);
     }
 

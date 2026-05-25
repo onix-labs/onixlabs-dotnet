@@ -211,7 +211,7 @@ public abstract class Result : IValueEquatable<Result>
     /// Returns the underlying exception if the current <see cref="Result"/> is in a <see cref="Failure"/> state,
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result"/> is in a <see cref="Success"/> state.
     /// </returns>
-    /// <exception cref="InvalidOperationException">If the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the current <see cref="Result"/> is in a <see cref="Success"/> state.</exception>
     public Exception GetExceptionOrThrow() => CheckNotNull(GetExceptionOrDefault(), "The current result is in a success state; no exception to retrieve.");
 
     /// <summary>

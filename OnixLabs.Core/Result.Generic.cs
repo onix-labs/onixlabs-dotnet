@@ -192,7 +192,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
         if (this is Success<T> { Value: IAsyncDisposable disposable })
-            await disposable.DisposeAsync();
+            await disposable.DisposeAsync().ConfigureAwait(false);
 
         GC.SuppressFinalize(this);
     }
@@ -251,7 +251,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     /// Returns the underlying exception if the current <see cref="Result{T}"/> is in a <see cref="Failure{T}"/> state,
     /// or throws <see cref="InvalidOperationException"/> if the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.
     /// </returns>
-    /// <exception cref="InvalidOperationException">If the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the current <see cref="Result{T}"/> is in a <see cref="Success{T}"/> state.</exception>
     public Exception GetExceptionOrThrow() => CheckNotNull(GetExceptionOrDefault(), "The current result is in a success state; no exception to retrieve.");
 
     /// <summary>

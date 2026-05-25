@@ -105,6 +105,19 @@ public sealed class SecurityTokenTests
         Assert.NotEqual(leftHashCode, rightHashCode);
     }
 
+    [Fact(DisplayName = "SecurityToken.Equals(object) should produce the expected result")]
+    public void SecurityTokenEqualsObjectShouldProduceExpectedResult()
+    {
+        // Given
+        SecurityToken token = new("abc123");
+
+        // Then
+        Assert.True(token.Equals((object)new SecurityToken("abc123")));
+        Assert.False(token.Equals((object)new SecurityToken("xyz789")));
+        Assert.False(token.Equals("abc123"));
+        Assert.False(token.Equals(null));
+    }
+
     [Theory(DisplayName = "SecurityToken.Length should produce the expected result")]
     [InlineData("a", 1)]
     [InlineData("ab", 2)]

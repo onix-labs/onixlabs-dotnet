@@ -2,6 +2,8 @@
     <PropertyGroup>
         <Title>OnixLabs.Security.Cryptography</Title>
         <Description>ONIXLabs Cryptography API for .NET</Description>
+        <IsPackable>true</IsPackable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>

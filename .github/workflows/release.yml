@@ -1,0 +1,116 @@
+name: Release
+
+# Publishes the opted-in (IsPackable) projects when a version tag is pushed.
+# The tag must point at a commit on the release branch and must match <Version> in Directory.Build.props.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  USE_FULL_NUMERIC_PROVIDER: "true"
+  MSBUILDDISABLENODEREUSE: "1"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+
+jobs:
+  build:
+    name: Build, test and pack
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+      with:
+        dotnet-version: |
+          8.0.x
+          9.0.x
+        global-json-file: global.json
+
+    - name: Verify tag is on the release branch
+      run: |
+        if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/release; then
+          echo "::error::Tag $GITHUB_REF_NAME ($GITHUB_SHA) is not on the release branch."
+          exit 1
+        fi
+
+    - name: Verify tag matches project version
+      run: |
+        version=$(dotnet msbuild OnixLabs.Core/OnixLabs.Core.csproj -getProperty:Version)
+        if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+          echo "::error::Tag $GITHUB_REF_NAME does not match project version v$version."
+          exit 1
+        fi
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity quiet
+
+    - name: Pack
+      run: dotnet pack --configuration Release --no-build --output artifacts
+
+    - name: Upload packages
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: packages
+        path: artifacts/*.nupkg
+        if-no-files-found: error
+
+  publish:
+    name: Publish
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      id-token: write
+
+    steps:
+    - name: Download packages
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        name: packages
+        path: artifacts
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Push to GitHub Packages
+      run: >
+        dotnet nuget push "artifacts/*.nupkg"
+        --source "https://nuget.pkg.github.com/onix-labs/index.json"
+        --api-key "${{ secrets.GITHUB_TOKEN }}"
+        --skip-duplicate
+
+    # Why: trusted publishing exchanges this workflow's OIDC token for a short-lived NuGet.org API key,
+    # so no long-lived key is stored in the repository. Requires a trusted publishing policy on NuGet.org.
+    - name: Log in to NuGet.org
+      id: nuget-login
+      uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
+    - name: Push to NuGet.org
+      run: >
+        dotnet nuget push "artifacts/*.nupkg"
+        --source "https://api.nuget.org/v3/index.json"
+        --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
+        --skip-duplicate

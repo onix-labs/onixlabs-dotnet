@@ -1,50 +1,36 @@
 <Project>
 
+    <!--
+        Projects are not packable by default. A project opts in to NuGet packaging by setting the following in its .csproj:
+
+        <IsPackable>true</IsPackable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+        Package metadata for opted-in projects lives in Directory.Build.targets, which is evaluated after the .csproj.
+    -->
+
     <!--GLOBAL-->
     <PropertyGroup>
         <Version>15.0.0</Version>
-        <PackageVersion>15.0.0</PackageVersion>
-        <AssemblyVersion>15.0.0</AssemblyVersion>
         <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
         <LangVersion>14</LangVersion>
         <Nullable>enable</Nullable>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IsPackable>false</IsPackable>
         <Authors>ONIXLabs</Authors>
         <NeutralLanguage>en</NeutralLanguage>
         <Copyright>Copyright © ONIXLabs 2020</Copyright>
         <RepositoryUrl>https://github.com/onix-labs/onixlabs-dotnet</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <DebugType>embedded</DebugType>
         <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
     </PropertyGroup>
-
-    <!--NUGET PACKAGES-->
-    <PropertyGroup Condition="!$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests')) and !$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
-        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-        <DebugType>embedded</DebugType>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <IncludeSymbols>true</IncludeSymbols>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/onix-labs/onixlabs-dotnet</PackageProjectUrl>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-    </PropertyGroup>
-
-    <ItemGroup  Condition="!$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests')) and !$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
-    </ItemGroup>
 
     <!--UNIT TESTS-->
     <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests'))">
         <OutputType>Exe</OutputType>
         <IsTestProject>true</IsTestProject>
-        <IsPackable>false</IsPackable>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
     </PropertyGroup>
 
@@ -56,8 +42,6 @@
     <!--UNIT TEST DATA-->
     <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
         <IsTestProject>false</IsTestProject>
-        <IsPackable>false</IsPackable>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
@@ -70,11 +54,5 @@
         <Using Include="Xunit.Sdk"/>
         <Using Include="Xunit.v3"/>
     </ItemGroup>
-
-    <!--PLAYGROUND-->
-    <PropertyGroup Condition="'$(OutputType)' == 'Exe'">
-        <IsPackable>false</IsPackable>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    </PropertyGroup>
 
 </Project>

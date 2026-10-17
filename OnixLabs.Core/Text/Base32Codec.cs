@@ -53,7 +53,7 @@ public sealed class Base32Codec : IBaseCodec
                 return true;
             }
 
-            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.Rfc4648, out Base32FormatProvider formatProvider))
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.UnpaddedRfc4648, out Base32FormatProvider formatProvider))
             {
                 result = string.Empty;
                 return false;
@@ -123,7 +123,7 @@ public sealed class Base32Codec : IBaseCodec
                 return true;
             }
 
-            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.Rfc4648, out Base32FormatProvider formatProvider))
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.UnpaddedRfc4648, out Base32FormatProvider formatProvider))
             {
                 result = [];
                 return false;

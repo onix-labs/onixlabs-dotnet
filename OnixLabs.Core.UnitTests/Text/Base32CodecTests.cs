@@ -21,12 +21,12 @@ namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base32CodecTests
 {
-    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (Rfc4648)")]
+    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (UnpaddedRfc4648)")]
     [InlineData("", "")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI")]
     [InlineData("0123456789", "GAYTEMZUGU3DOOBZ")]
-    public void Base32CodecEncodeShouldProduceExpectedResultRfc4648(string value, string expected)
+    public void Base32CodecEncodeShouldProduceExpectedResultUnpaddedRfc4648(string value, string expected)
     {
         // Given
         IBaseCodec codec = IBaseCodec.Base32;
@@ -39,12 +39,12 @@ public sealed class Base32CodecTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (Rfc4648)")]
+    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (UnpaddedRfc4648)")]
     [InlineData("", "")]
     [InlineData("IFBEGRCFIZDUQSKKJNGE2TSPKBIVEU2UKVLFOWCZLI", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("MFRGGZDFMZTWQ2LKNNWG23TPOBYXE43UOV3HO6DZPI", "abcdefghijklmnopqrstuvwxyz")]
     [InlineData("GAYTEMZUGU3DOOBZ", "0123456789")]
-    public void Base32CodecDecodeShouldProduceExpectedResultRfc4648(string value, string expected)
+    public void Base32CodecDecodeShouldProduceExpectedResultUnpaddedRfc4648(string value, string expected)
     {
         // Given
         IBaseCodec codec = IBaseCodec.Base32;
@@ -445,7 +445,7 @@ public sealed class Base32CodecTests
         byte[] bytes = new byte[int.MaxValue / 4];
 
         // When
-        bool result = codec.TryEncode(bytes, Base32FormatProvider.Rfc4648, out string _);
+        bool result = codec.TryEncode(bytes, Base32FormatProvider.UnpaddedRfc4648, out string _);
 
         // Then
         Assert.False(result);
@@ -485,7 +485,7 @@ public sealed class Base32CodecTests
         string value = new('A', int.MaxValue / 4);
 
         // When
-        bool result = codec.TryDecode(value, Base32FormatProvider.Rfc4648, out byte[] _);
+        bool result = codec.TryDecode(value, Base32FormatProvider.UnpaddedRfc4648, out byte[] _);
 
         // Then
         Assert.False(result);

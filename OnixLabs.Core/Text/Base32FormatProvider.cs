@@ -25,7 +25,7 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <summary>
     /// The unpadded RFC 4648 Base-32 format provider.
     /// </summary>
-    public static readonly Base32FormatProvider Rfc4648 = new(0, nameof(Rfc4648), "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", false);
+    public static readonly Base32FormatProvider UnpaddedRfc4648 = new(0, nameof(UnpaddedRfc4648), "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", false);
 
     /// <summary>
     /// The unpadded Z-Base-32 format provider.

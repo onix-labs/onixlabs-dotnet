@@ -19,20 +19,20 @@ namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base32FormatProviderTests
 {
-    [Fact(DisplayName = "Base32FormatProvider.Rfc4648 should produce the expected result")]
-    public void Base32FormatProviderRfc4648ShouldProduceExpectedAlphabet()
+    [Fact(DisplayName = "Base32FormatProvider.UnpaddedRfc4648 should produce the expected result")]
+    public void Base32FormatProviderUnpaddedRfc4648ShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 0;
-        const string expectedName = "Rfc4648";
+        const string expectedName = "UnpaddedRfc4648";
         const string expectedAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
         const bool expectedPadding = false;
 
         // When
-        int actualValue = Base32FormatProvider.Rfc4648.Value;
-        string actualName = Base32FormatProvider.Rfc4648.Name;
-        string actualAlphabet = Base32FormatProvider.Rfc4648.Alphabet;
-        bool actualPadding = Base32FormatProvider.Rfc4648.IsPadded;
+        int actualValue = Base32FormatProvider.UnpaddedRfc4648.Value;
+        string actualName = Base32FormatProvider.UnpaddedRfc4648.Name;
+        string actualAlphabet = Base32FormatProvider.UnpaddedRfc4648.Alphabet;
+        bool actualPadding = Base32FormatProvider.UnpaddedRfc4648.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -246,7 +246,7 @@ public sealed class Base32FormatProviderTests
         Type type = typeof(Base32FormatProvider);
 
         // When
-        object? result = Base32FormatProvider.Rfc4648.GetFormat(type);
+        object? result = Base32FormatProvider.UnpaddedRfc4648.GetFormat(type);
 
         // Then
         Assert.NotNull(result);
@@ -260,7 +260,7 @@ public sealed class Base32FormatProviderTests
         Type type = typeof(object);
 
         // When
-        object? result = Base32FormatProvider.Rfc4648.GetFormat(type);
+        object? result = Base32FormatProvider.UnpaddedRfc4648.GetFormat(type);
 
         // Then
         Assert.Null(result);

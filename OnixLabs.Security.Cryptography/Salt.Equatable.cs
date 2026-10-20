@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using OnixLabs.Core.Linq;
 
@@ -39,8 +38,8 @@ public readonly partial struct Salt
     public override int GetHashCode() => value.GetContentHashCode();
 
     /// <inheritdoc/>
-    public static bool operator ==(Salt left, Salt right) => EqualityComparer<Salt>.Default.Equals(left, right);
+    public static bool operator ==(Salt left, Salt right) => left.Equals(right);
 
     /// <inheritdoc/>
-    public static bool operator !=(Salt left, Salt right) => !EqualityComparer<Salt>.Default.Equals(left, right);
+    public static bool operator !=(Salt left, Salt right) => !left.Equals(right);
 }

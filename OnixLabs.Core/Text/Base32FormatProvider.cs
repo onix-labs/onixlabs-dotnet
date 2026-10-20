@@ -45,7 +45,7 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <summary>
     /// The unpadded Base-32 Hex format provider.
     /// </summary>
-    public static readonly Base32FormatProvider Base32Hex = new(4, nameof(Base32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV", false);
+    public static readonly Base32FormatProvider UnpaddedBase32Hex = new(4, nameof(UnpaddedBase32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV", false);
 
     /// <summary>
     /// The padded RFC 4648 Base-32 format provider.

@@ -107,20 +107,20 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.Base32Hex should produce the expected result")]
+    [Fact(DisplayName = "Base32FormatProvider.UnpaddedBase32Hex should produce the expected result")]
     public void Base32FormatProviderBase32HexShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 4;
-        const string expectedName = "Base32Hex";
+        const string expectedName = "UnpaddedBase32Hex";
         const string expectedAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
         const bool expectedPadding = false;
 
         // When
-        int actualValue = Base32FormatProvider.Base32Hex.Value;
-        string actualName = Base32FormatProvider.Base32Hex.Name;
-        string actualAlphabet = Base32FormatProvider.Base32Hex.Alphabet;
-        bool actualPadding = Base32FormatProvider.Base32Hex.IsPadded;
+        int actualValue = Base32FormatProvider.UnpaddedBase32Hex.Value;
+        string actualName = Base32FormatProvider.UnpaddedBase32Hex.Name;
+        string actualAlphabet = Base32FormatProvider.UnpaddedBase32Hex.Alphabet;
+        bool actualPadding = Base32FormatProvider.UnpaddedBase32Hex.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);

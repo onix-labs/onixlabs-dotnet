@@ -57,7 +57,7 @@ public sealed class Base32CodecTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (Base32Hex)")]
+    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (UnpaddedBase32Hex)")]
     [InlineData("", "")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "C5H66P35CPJMGQBADDM6QRJFE1ON4SRKELR7EU3PF8")]
@@ -69,13 +69,13 @@ public sealed class Base32CodecTests
         byte[] bytes = value.ToByteArray();
 
         // When
-        string actual = codec.Encode(bytes, Base32FormatProvider.Base32Hex);
+        string actual = codec.Encode(bytes, Base32FormatProvider.UnpaddedBase32Hex);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (Base32Hex)")]
+    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (UnpaddedBase32Hex)")]
     [InlineData("", "")]
     [InlineData("85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("C5H66P35CPJMGQBADDM6QRJFE1ON4SRKELR7EU3PF8", "abcdefghijklmnopqrstuvwxyz")]
@@ -86,7 +86,7 @@ public sealed class Base32CodecTests
         IBaseCodec codec = IBaseCodec.Base32;
 
         // When
-        byte[] bytes = codec.Decode(value, Base32FormatProvider.Base32Hex);
+        byte[] bytes = codec.Decode(value, Base32FormatProvider.UnpaddedBase32Hex);
         string actual = Encoding.UTF8.GetString(bytes);
 
         // Then

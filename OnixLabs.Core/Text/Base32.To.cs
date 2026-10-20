@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base32
 {
     /// <inheritdoc/>
-    public override string ToString() => ToString(Base32FormatProvider.UnpaddedRfc4648);
+    public override string ToString() => ToString(Base32FormatProvider.UnpaddedRfc4648Uppercase);
 
     /// <inheritdoc/>
     public string ToString(IFormatProvider? formatProvider) => ToString(null, formatProvider);

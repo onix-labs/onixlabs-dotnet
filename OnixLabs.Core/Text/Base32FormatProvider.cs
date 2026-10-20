@@ -30,17 +30,17 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <summary>
     /// The unpadded Z-Base-32 format provider.
     /// </summary>
-    public static readonly Base32FormatProvider ZBase32 = new(1, nameof(ZBase32), "ybndrfg8ejkmcpqxot1uwisza345h769", false);
+    public static readonly Base32FormatProvider UnpaddedZBase32 = new(1, nameof(UnpaddedZBase32), "ybndrfg8ejkmcpqxot1uwisza345h769", false);
 
     /// <summary>
     /// The unpadded GeoHash Base-32 format provider.
     /// </summary>
-    public static readonly Base32FormatProvider GeoHash = new(2, nameof(GeoHash), "0123456789bcdefghjkmnpqrstuvwxyz", false);
+    public static readonly Base32FormatProvider UnpaddedGeoHash = new(2, nameof(UnpaddedGeoHash), "0123456789bcdefghjkmnpqrstuvwxyz", false);
 
     /// <summary>
     /// The unpadded Crockford Base-32 format provider.
     /// </summary>
-    public static readonly Base32FormatProvider Crockford = new(3, nameof(Crockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", false);
+    public static readonly Base32FormatProvider UnpaddedCrockford = new(3, nameof(UnpaddedCrockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", false);
 
     /// <summary>
     /// The unpadded Base-32 Hex format provider.

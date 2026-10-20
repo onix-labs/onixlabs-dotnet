@@ -93,7 +93,7 @@ public sealed class Base32CodecTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (Crockford)")]
+    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (UnpaddedCrockford)")]
     [InlineData("", "")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8")]
@@ -105,13 +105,13 @@ public sealed class Base32CodecTests
         byte[] bytes = value.ToByteArray();
 
         // When
-        string actual = codec.Encode(bytes, Base32FormatProvider.Crockford);
+        string actual = codec.Encode(bytes, Base32FormatProvider.UnpaddedCrockford);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (Crockford)")]
+    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (UnpaddedCrockford)")]
     [InlineData("", "")]
     [InlineData("85146H258S3MGJAA9D64TKJFA18N4MTMANB5EP2SB8", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("C5H66S35CSKPGTBADDP6TVKFE1RQ4WVMENV7EY3SF8", "abcdefghijklmnopqrstuvwxyz")]
@@ -122,14 +122,14 @@ public sealed class Base32CodecTests
         IBaseCodec codec = IBaseCodec.Base32;
 
         // When
-        byte[] bytes = codec.Decode(value, Base32FormatProvider.Crockford);
+        byte[] bytes = codec.Decode(value, Base32FormatProvider.UnpaddedCrockford);
         string actual = Encoding.UTF8.GetString(bytes);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (GeoHash)")]
+    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (UnpaddedGeoHash)")]
     [InlineData("", "")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "85146j258t3nhkbb9e64umkgb18p4nunbpc5fq2tc8")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "d5j66t35dtmqhucbeeq6uvmgf1sr4wvnfpv7fy3tg8")]
@@ -141,13 +141,13 @@ public sealed class Base32CodecTests
         byte[] bytes = value.ToByteArray();
 
         // When
-        string actual = codec.Encode(bytes, Base32FormatProvider.GeoHash);
+        string actual = codec.Encode(bytes, Base32FormatProvider.UnpaddedGeoHash);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (GeoHash)")]
+    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (UnpaddedGeoHash)")]
     [InlineData("", "")]
     [InlineData("85146j258t3nhkbb9e64umkgb18p4nunbpc5fq2tc8", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("d5j66t35dtmqhucbeeq6uvmgf1sr4wvnfpv7fy3tg8", "abcdefghijklmnopqrstuvwxyz")]
@@ -158,14 +158,14 @@ public sealed class Base32CodecTests
         IBaseCodec codec = IBaseCodec.Base32;
 
         // When
-        byte[] bytes = codec.Decode(value, Base32FormatProvider.GeoHash);
+        byte[] bytes = codec.Decode(value, Base32FormatProvider.UnpaddedGeoHash);
         string actual = Encoding.UTF8.GetString(bytes);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (ZBase32)")]
+    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (UnpaddedZBase32)")]
     [InlineData("", "")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe")]
@@ -177,13 +177,13 @@ public sealed class Base32CodecTests
         byte[] bytes = value.ToByteArray();
 
         // When
-        string actual = codec.Encode(bytes, Base32FormatProvider.ZBase32);
+        string actual = codec.Encode(bytes, Base32FormatProvider.UnpaddedZBase32);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (ZBase32)")]
+    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (UnpaddedZBase32)")]
     [InlineData("", "")]
     [InlineData("efbrgtnfe3dwo1kkjpgr4u1xkbeirw4wkimfqsn3me", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("cftgg3dfc3uso4mkppsg45uxqbazrh5wqi58q6d3xe", "abcdefghijklmnopqrstuvwxyz")]
@@ -194,7 +194,7 @@ public sealed class Base32CodecTests
         IBaseCodec codec = IBaseCodec.Base32;
 
         // When
-        byte[] bytes = codec.Decode(value, Base32FormatProvider.ZBase32);
+        byte[] bytes = codec.Decode(value, Base32FormatProvider.UnpaddedZBase32);
         string actual = Encoding.UTF8.GetString(bytes);
 
         // Then

@@ -19,7 +19,7 @@ namespace OnixLabs.Core.Text;
 public readonly partial struct Base64
 {
     /// <inheritdoc/>
-    public override string ToString() => ToString(null);
+    public override string ToString() => ToString(Base64FormatProvider.PaddedRfc4648);
 
     /// <inheritdoc/>
     public string ToString(IFormatProvider? formatProvider) => ToString(null, formatProvider);

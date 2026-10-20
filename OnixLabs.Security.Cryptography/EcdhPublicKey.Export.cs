@@ -32,4 +32,11 @@ public sealed partial class EcdhPublicKey
         using ECDiffieHellman algorithm = ImportKeyData();
         return algorithm.ExportSubjectPublicKeyInfoPem();
     }
+
+    /// <inheritdoc/>
+    public byte[] ExportCompressed()
+    {
+        using ECDiffieHellman algorithm = ImportKeyData();
+        return EcPointCompression.Compress(algorithm.ExportParameters(false));
+    }
 }

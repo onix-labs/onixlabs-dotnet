@@ -31,4 +31,11 @@ public sealed partial class EcdsaPublicKey
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportSubjectPublicKeyInfoPem();
     }
+
+    /// <inheritdoc/>
+    public byte[] ExportCompressed()
+    {
+        using ECDsa algorithm = ImportKeyData();
+        return EcPointCompression.Compress(algorithm.ExportParameters(false));
+    }
 }

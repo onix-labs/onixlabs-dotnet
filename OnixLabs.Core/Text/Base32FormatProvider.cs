@@ -19,6 +19,11 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-32 format provider.
 /// </summary>
+/// <remarks>
+/// Decoding is strict for every provider: missing or unexpected padding, characters outside the alphabet,
+/// impossible lengths, and non-zero trailing bits are rejected, so that every byte sequence has exactly one valid encoding.
+/// The Crockford providers are the exception: as their specification requires, decoding accepts either case, reads I and L as 1 and O as 0, and ignores hyphens.
+/// </remarks>
 // ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IFormatProvider
 {
@@ -40,6 +45,9 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <summary>
     /// The unpadded Crockford Base-32 format provider.
     /// </summary>
+    /// <remarks>
+    /// Encoding produces uppercase. Decoding accepts either case, reads I and L as 1 and O as 0, and ignores hyphens. Check symbols are not supported.
+    /// </remarks>
     public static readonly Base32FormatProvider UnpaddedCrockford = new(3, nameof(UnpaddedCrockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", false);
 
     /// <summary>
@@ -65,6 +73,9 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <summary>
     /// The padded Crockford Base-32 format provider.
     /// </summary>
+    /// <remarks>
+    /// Encoding produces uppercase. Decoding accepts either case, reads I and L as 1 and O as 0, and ignores hyphens. Check symbols are not supported.
+    /// </remarks>
     public static readonly Base32FormatProvider PaddedCrockford = new(8, nameof(PaddedCrockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", true);
 
     /// <summary>

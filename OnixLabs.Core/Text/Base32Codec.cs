@@ -32,6 +32,16 @@ public sealed class Base32Codec : IBaseCodec
     /// </summary>
     private const int OutputSize = 5;
 
+    /// <summary>
+    /// The character used to pad a Base-32 value to a whole number of quanta.
+    /// </summary>
+    private const char Padding = '=';
+
+    /// <summary>
+    /// The character that Crockford Base-32 decoders ignore, so that it can be inserted to aid readability.
+    /// </summary>
+    private const char Hyphen = '-';
+
     /// <inheritdoc/>
     public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null) => TryEncode(value, provider, out string result)
         ? result
@@ -100,7 +110,7 @@ public sealed class Base32Codec : IBaseCodec
             outputPosition &= 0x1F;
             builder.Append(formatProvider.Alphabet[outputPosition]);
 
-            while (formatProvider.IsPadded && builder.Length % InputSize != 0) builder.Append('=');
+            while (formatProvider.IsPadded && builder.Length % InputSize != 0) builder.Append(Padding);
 
             result = builder.ToString();
             return true;
@@ -129,13 +139,16 @@ public sealed class Base32Codec : IBaseCodec
                 return false;
             }
 
-            if (formatProvider.IsPadded && value.Length % InputSize != 0)
+            bool isCrockford = formatProvider == Base32FormatProvider.UnpaddedCrockford || formatProvider == Base32FormatProvider.PaddedCrockford;
+
+            // Why: Crockford's specification requires decoders to ignore hyphens, which may be inserted to aid readability.
+            ReadOnlySpan<char> characters = isCrockford && value.Contains(Hyphen) ? value.ToString().Replace(Hyphen.ToString(), string.Empty) : value;
+
+            if (!TryRemovePadding(characters, formatProvider.IsPadded, out ReadOnlySpan<char> valueWithoutPadding) || !IsValidLength(valueWithoutPadding.Length))
             {
                 result = [];
                 return false;
             }
-
-            ReadOnlySpan<char> valueWithoutPadding = formatProvider.IsPadded ? value.TrimEnd('=') : value;
 
             // ReSharper disable once HeapView.ObjectAllocation.Evident
             byte[] outputBytes = new byte[valueWithoutPadding.Length * OutputSize / InputSize];
@@ -153,8 +166,7 @@ public sealed class Base32Codec : IBaseCodec
 
             while (outputPosition < outputBytes.Length)
             {
-                char character = valueWithoutPadding[inputPosition];
-                int index = formatProvider.Alphabet.IndexOf(character);
+                int index = GetIndex(valueWithoutPadding[inputPosition], formatProvider, isCrockford);
 
                 if (index < 0)
                 {
@@ -182,6 +194,12 @@ public sealed class Base32Codec : IBaseCodec
                 inputSubPosition = 0;
             }
 
+            if (!HasZeroTrailingBits(valueWithoutPadding, outputBytes.Length, formatProvider, isCrockford))
+            {
+                result = [];
+                return false;
+            }
+
             result = outputBytes;
             return true;
         }
@@ -190,5 +208,69 @@ public sealed class Base32Codec : IBaseCodec
             result = [];
             return false;
         }
+    }
+
+    /// <summary>
+    /// Gets the index of the specified character in the alphabet of the specified format provider.
+    /// </summary>
+    /// <param name="character">The character to find.</param>
+    /// <param name="formatProvider">The format provider whose alphabet will be searched.</param>
+    /// <param name="isCrockford">A value indicating whether the format provider is a Crockford format provider.</param>
+    /// <returns>Returns the index of the specified character in the alphabet, or -1 if the character is not in the alphabet.</returns>
+    private static int GetIndex(char character, Base32FormatProvider formatProvider, bool isCrockford)
+    {
+        if (!isCrockford) return formatProvider.Alphabet.IndexOf(character);
+
+        // Why: Crockford's specification requires decoders to accept either case, and to read I and L as 1, and O as 0.
+        char normalized = char.ToUpperInvariant(character) switch
+        {
+            'I' or 'L' => '1',
+            'O' => '0',
+            var other => other
+        };
+
+        return formatProvider.Alphabet.IndexOf(normalized);
+    }
+
+    /// <summary>
+    /// Determines whether the specified number of unpadded characters can be produced by encoding a whole number of bytes.
+    /// </summary>
+    /// <param name="length">The number of unpadded characters.</param>
+    /// <returns>Returns <see langword="true"/> if the specified length is possible; otherwise, <see langword="false"/>.</returns>
+    private static bool IsValidLength(int length) => length % InputSize is not (1 or 3 or 6);
+
+    /// <summary>
+    /// Determines whether the bits of the final character beyond the final decoded byte are zero.
+    /// </summary>
+    /// <param name="value">The unpadded value that was decoded.</param>
+    /// <param name="byteCount">The number of bytes that were decoded from the specified value.</param>
+    /// <param name="formatProvider">The format provider whose alphabet was used to decode the specified value.</param>
+    /// <param name="isCrockford">A value indicating whether the format provider is a Crockford format provider.</param>
+    /// <returns>Returns <see langword="true"/> if the trailing bits are zero; otherwise, <see langword="false"/>.</returns>
+    private static bool HasZeroTrailingBits(ReadOnlySpan<char> value, int byteCount, Base32FormatProvider formatProvider, bool isCrockford)
+    {
+        // Why: the final character carries more bits than the final byte needs. RFC 4648 §3.5 lets decoders ignore them,
+        // but accepting non-zero values would give each byte sequence several encodings, which breaks identifiers and signed bytes.
+        int trailingBits = value.Length * OutputSize - byteCount * InputSize;
+        int index = GetIndex(value[^1], formatProvider, isCrockford);
+        return (index & ((1 << trailingBits) - 1)) == 0;
+    }
+
+    /// <summary>
+    /// Tries to remove the padding from the specified value, rejecting padding that is missing, misplaced, or excessive.
+    /// </summary>
+    /// <param name="value">The value from which to remove padding.</param>
+    /// <param name="isPadded">A value indicating whether the specified value is expected to be padded.</param>
+    /// <param name="result">The specified value without its padding.</param>
+    /// <returns>Returns <see langword="true"/> if the padding of the specified value is valid; otherwise, <see langword="false"/>.</returns>
+    private static bool TryRemovePadding(ReadOnlySpan<char> value, bool isPadded, out ReadOnlySpan<char> result)
+    {
+        result = value;
+
+        if (!isPadded) return true;
+        if (value.Length % InputSize != 0) return false;
+
+        result = value.TrimEnd(Padding);
+        return value.Length - result.Length <= 6;
     }
 }

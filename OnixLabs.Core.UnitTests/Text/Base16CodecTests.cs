@@ -214,4 +214,22 @@ public sealed class Base16CodecTests
         // Then
         Assert.False(result);
     }
+
+    [Theory(DisplayName = "Base16Codec.TryDecode should return false when the value mixes uppercase and lowercase")]
+    [InlineData("Invariant", "aB")]
+    [InlineData("Invariant", "4142434445464748494a4B4c4d4e4f")]
+    [InlineData("Uppercase", "aB")]
+    [InlineData("Lowercase", "aB")]
+    public void Base16CodecTryDecodeShouldReturnFalseWhenValueMixesUppercaseAndLowercase(string providerName, string value)
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base16;
+        Base16FormatProvider provider = Base16FormatProvider.FromName(providerName);
+
+        // When
+        bool result = codec.TryDecode(value, provider, out byte[] _);
+
+        // Then
+        Assert.False(result);
+    }
 }

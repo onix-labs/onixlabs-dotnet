@@ -490,4 +490,152 @@ public sealed class Base32CodecTests
         // Then
         Assert.False(result);
     }
+
+    [Theory(DisplayName = "Base32Codec should produce the RFC 4648 §10 test vectors for each format provider")]
+    [InlineData("PaddedRfc4648", "", "")]
+    [InlineData("PaddedRfc4648", "66", "MY======")]
+    [InlineData("PaddedRfc4648", "666F", "MZXQ====")]
+    [InlineData("PaddedRfc4648", "666F6F", "MZXW6===")]
+    [InlineData("PaddedRfc4648", "666F6F62", "MZXW6YQ=")]
+    [InlineData("PaddedRfc4648", "666F6F6261", "MZXW6YTB")]
+    [InlineData("PaddedRfc4648", "666F6F626172", "MZXW6YTBOI======")]
+    [InlineData("UnpaddedRfc4648", "", "")]
+    [InlineData("UnpaddedRfc4648", "66", "MY")]
+    [InlineData("UnpaddedRfc4648", "666F", "MZXQ")]
+    [InlineData("UnpaddedRfc4648", "666F6F", "MZXW6")]
+    [InlineData("UnpaddedRfc4648", "666F6F62", "MZXW6YQ")]
+    [InlineData("UnpaddedRfc4648", "666F6F6261", "MZXW6YTB")]
+    [InlineData("UnpaddedRfc4648", "666F6F626172", "MZXW6YTBOI")]
+    [InlineData("PaddedBase32Hex", "", "")]
+    [InlineData("PaddedBase32Hex", "66", "CO======")]
+    [InlineData("PaddedBase32Hex", "666F", "CPNG====")]
+    [InlineData("PaddedBase32Hex", "666F6F", "CPNMU===")]
+    [InlineData("PaddedBase32Hex", "666F6F62", "CPNMUOG=")]
+    [InlineData("PaddedBase32Hex", "666F6F6261", "CPNMUOJ1")]
+    [InlineData("PaddedBase32Hex", "666F6F626172", "CPNMUOJ1E8======")]
+    [InlineData("UnpaddedBase32Hex", "", "")]
+    [InlineData("UnpaddedBase32Hex", "66", "CO")]
+    [InlineData("UnpaddedBase32Hex", "666F", "CPNG")]
+    [InlineData("UnpaddedBase32Hex", "666F6F", "CPNMU")]
+    [InlineData("UnpaddedBase32Hex", "666F6F62", "CPNMUOG")]
+    [InlineData("UnpaddedBase32Hex", "666F6F6261", "CPNMUOJ1")]
+    [InlineData("UnpaddedBase32Hex", "666F6F626172", "CPNMUOJ1E8")]
+    public void Base32CodecShouldProduceRfc4648TestVectorsForEachFormatProvider(string providerName, string bytes, string encoded)
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base32;
+        Base32FormatProvider provider = Base32FormatProvider.FromName(providerName);
+
+        // When
+        string actualEncoded = codec.Encode(Convert.FromHexString(bytes), provider);
+        string actualBytes = Convert.ToHexString(codec.Decode(encoded, provider));
+
+        // Then
+        Assert.Equal(encoded, actualEncoded);
+        Assert.Equal(bytes, actualBytes);
+    }
+
+    [Theory(DisplayName = "Base32Codec.TryDecode should reject non-canonical values for each format provider")]
+    [InlineData("UnpaddedRfc4648", "MZ")]
+    [InlineData("UnpaddedRfc4648", "MZXR")]
+    [InlineData("UnpaddedRfc4648", "MZXW7")]
+    [InlineData("UnpaddedRfc4648", "M")]
+    [InlineData("UnpaddedRfc4648", "MYA")]
+    [InlineData("UnpaddedRfc4648", "MZXW6Y")]
+    [InlineData("UnpaddedRfc4648", "MY======")]
+    [InlineData("UnpaddedRfc4648", "MY==")]
+    [InlineData("UnpaddedRfc4648", "my")]
+    [InlineData("UnpaddedRfc4648", "MZXW 6YTB")]
+    [InlineData("UnpaddedRfc4648", "MZXW-6YTB")]
+    [InlineData("PaddedRfc4648", "MY")]
+    [InlineData("PaddedRfc4648", "MY=====")]
+    [InlineData("PaddedRfc4648", "MZ======")]
+    [InlineData("PaddedRfc4648", "M=======")]
+    [InlineData("PaddedRfc4648", "MYA=====")]
+    [InlineData("PaddedRfc4648", "MZXW6Y==")]
+    [InlineData("PaddedRfc4648", "MY==============")]
+    [InlineData("PaddedRfc4648", "MY=A====")]
+    [InlineData("PaddedRfc4648", "MY======MY======")]
+    [InlineData("UnpaddedBase32Hex", "CP")]
+    [InlineData("UnpaddedBase32Hex", "COA")]
+    [InlineData("PaddedBase32Hex", "CP======")]
+    [InlineData("UnpaddedZBase32", "c3")]
+    [InlineData("UnpaddedGeoHash", "dt")]
+    [InlineData("UnpaddedCrockford", "CS")]
+    [InlineData("UnpaddedCrockford", "CU")]
+    [InlineData("UnpaddedCrockford", "C=")]
+    [InlineData("PaddedCrockford", "CS======")]
+    [InlineData("PaddedCrockford", "CR")]
+    public void Base32CodecTryDecodeShouldRejectNonCanonicalValuesForEachFormatProvider(string providerName, string value)
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base32;
+        Base32FormatProvider provider = Base32FormatProvider.FromName(providerName);
+
+        // When
+        bool success = codec.TryDecode(value, provider, out byte[] _);
+
+        // Then
+        Assert.False(success);
+    }
+
+    [Theory(DisplayName = "Base32Codec should only accept values that re-encode to themselves for each format provider")]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void Base32CodecShouldOnlyAcceptValuesThatReEncodeToThemselves(int seed)
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base32;
+        Random random = new(seed);
+
+        foreach (Base32FormatProvider provider in Base32FormatProvider.GetAll())
+        {
+            for (int length = 1; length <= 64; length++)
+            {
+                byte[] bytes = new byte[length];
+                random.NextBytes(bytes);
+                string encoded = codec.Encode(bytes, provider);
+                int lastIndex = encoded.TrimEnd('=').Length - 1;
+
+                // When
+                byte[] decoded = codec.Decode(encoded, provider);
+
+                // Then
+                Assert.Equal(bytes, decoded);
+
+                foreach (char character in provider.Alphabet)
+                {
+                    string candidate = string.Concat(encoded.AsSpan(0, lastIndex), [character], encoded.AsSpan(lastIndex + 1));
+                    if (codec.TryDecode(candidate, provider, out byte[] candidateBytes)) Assert.Equal(candidate, codec.Encode(candidateBytes, provider));
+                }
+            }
+        }
+    }
+
+    [Theory(DisplayName = "Base32Codec.Decode should apply the Crockford decoding rules")]
+    [InlineData("UnpaddedCrockford", "60rk4csm6mv3ee1s", "0123456789")]
+    [InlineData("UnpaddedCrockford", "6ORK4CSM6MV3EE1S", "0123456789")]
+    [InlineData("UnpaddedCrockford", "6oRK4CSM6MV3EE1S", "0123456789")]
+    [InlineData("UnpaddedCrockford", "60RK4CSM6MV3EEIS", "0123456789")]
+    [InlineData("UnpaddedCrockford", "60RK4CSM6MV3EEiS", "0123456789")]
+    [InlineData("UnpaddedCrockford", "60RK4CSM6MV3EELS", "0123456789")]
+    [InlineData("UnpaddedCrockford", "60RK4CSM6MV3EElS", "0123456789")]
+    [InlineData("UnpaddedCrockford", "60RK-4CSM-6MV3-EE1S", "0123456789")]
+    [InlineData("PaddedCrockford", "60rk-4csm-6mv3-ee1s", "0123456789")]
+    [InlineData("PaddedCrockford", "85146h258s3mgjaa9d64tkjfa18n4mtmanb5ep2sb8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [InlineData("PaddedCrockford", "85146-H258S-3MGJA-A9D64-TKJFA-18N4M-TMANB-5EP2S-B8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    public void Base32CodecDecodeShouldApplyTheCrockfordDecodingRules(string providerName, string value, string expected)
+    {
+        // Given
+        IBaseCodec codec = IBaseCodec.Base32;
+        Base32FormatProvider provider = Base32FormatProvider.FromName(providerName);
+
+        // When
+        byte[] bytes = codec.Decode(value, provider);
+        string actual = Encoding.UTF8.GetString(bytes);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
 }

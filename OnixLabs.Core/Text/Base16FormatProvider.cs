@@ -26,7 +26,7 @@ public sealed class Base16FormatProvider : Enumeration<Base16FormatProvider>, IF
     /// The invariant Base-16 format provider.
     /// </summary>
     /// <remarks>
-    /// The invariant format provider favors lowercase for Base-16 encoding, and decodes either case, but rejects a value that mixes both.
+    /// The invariant format provider favors lowercase for Base-16 encoding.
     /// The alphabet provided by this format provider is not a strict Base-16 alphabet as it contains all uppercase and lowercase values.
     /// </remarks>
     public static readonly Base16FormatProvider Invariant = new(0, nameof(Invariant), "0123456789ABCDEFabcdef");

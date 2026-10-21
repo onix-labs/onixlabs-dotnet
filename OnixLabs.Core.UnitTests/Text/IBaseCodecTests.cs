@@ -97,7 +97,7 @@ public sealed class IBaseCodecTests
         byte[] value = "Hello, World!".ToByteArray();
 
         // When
-        bool result = IBaseCodec.TryGetString(value, Base32FormatProvider.UnpaddedRfc4648, out string _);
+        bool result = IBaseCodec.TryGetString(value, Base32FormatProvider.Rfc4648, out string _);
 
         // Then
         Assert.True(result);
@@ -123,7 +123,7 @@ public sealed class IBaseCodecTests
         byte[] value = "Hello, World!".ToByteArray();
 
         // When
-        bool result = IBaseCodec.TryGetString(value, Base64FormatProvider.PaddedRfc4648, out string _);
+        bool result = IBaseCodec.TryGetString(value, Base64FormatProvider.Rfc4648, out string _);
 
         // Then
         Assert.True(result);
@@ -162,7 +162,7 @@ public sealed class IBaseCodecTests
         const string value = "JBSWY3DPFQQFO33SNRSCC";
 
         // When
-        bool result = IBaseCodec.TryGetBytes(value, Base32FormatProvider.UnpaddedRfc4648, out byte[] _);
+        bool result = IBaseCodec.TryGetBytes(value, Base32FormatProvider.Rfc4648, out byte[] _);
 
         // Then
         Assert.True(result);
@@ -188,7 +188,7 @@ public sealed class IBaseCodecTests
         const string value = "SGVsbG8sIFdvcmxkIQ==";
 
         // When
-        bool result = IBaseCodec.TryGetBytes(value, Base64FormatProvider.PaddedRfc4648, out byte[] _);
+        bool result = IBaseCodec.TryGetBytes(value, Base64FormatProvider.Rfc4648, out byte[] _);
 
         // Then
         Assert.True(result);

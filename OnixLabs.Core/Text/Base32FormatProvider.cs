@@ -19,41 +19,33 @@ namespace OnixLabs.Core.Text;
 /// <summary>
 /// Represents a Base-32 format provider.
 /// </summary>
-/// <remarks>
-/// Decoding is strict for every provider: missing or unexpected padding, characters outside the alphabet,
-/// impossible lengths, and non-zero trailing bits are rejected, so that every byte sequence has exactly one valid encoding.
-/// The Crockford providers are the exception: as their specification requires, decoding accepts either case, reads I and L as 1 and O as 0, and ignores hyphens.
-/// </remarks>
 // ReSharper disable HeapView.ObjectAllocation.Evident
 public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IFormatProvider
 {
     /// <summary>
     /// The unpadded RFC 4648 Base-32 format provider.
     /// </summary>
-    public static readonly Base32FormatProvider UnpaddedRfc4648 = new(0, nameof(UnpaddedRfc4648), "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", false);
+    public static readonly Base32FormatProvider Rfc4648 = new(0, nameof(Rfc4648), "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", false);
 
     /// <summary>
     /// The unpadded Z-Base-32 format provider.
     /// </summary>
-    public static readonly Base32FormatProvider UnpaddedZBase32 = new(1, nameof(UnpaddedZBase32), "ybndrfg8ejkmcpqxot1uwisza345h769", false);
+    public static readonly Base32FormatProvider ZBase32 = new(1, nameof(ZBase32), "ybndrfg8ejkmcpqxot1uwisza345h769", false);
 
     /// <summary>
     /// The unpadded GeoHash Base-32 format provider.
     /// </summary>
-    public static readonly Base32FormatProvider UnpaddedGeoHash = new(2, nameof(UnpaddedGeoHash), "0123456789bcdefghjkmnpqrstuvwxyz", false);
+    public static readonly Base32FormatProvider GeoHash = new(2, nameof(GeoHash), "0123456789bcdefghjkmnpqrstuvwxyz", false);
 
     /// <summary>
     /// The unpadded Crockford Base-32 format provider.
     /// </summary>
-    /// <remarks>
-    /// Encoding produces uppercase. Decoding accepts either case, reads I and L as 1 and O as 0, and ignores hyphens. Check symbols are not supported.
-    /// </remarks>
-    public static readonly Base32FormatProvider UnpaddedCrockford = new(3, nameof(UnpaddedCrockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", false);
+    public static readonly Base32FormatProvider Crockford = new(3, nameof(Crockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", false);
 
     /// <summary>
     /// The unpadded Base-32 Hex format provider.
     /// </summary>
-    public static readonly Base32FormatProvider UnpaddedBase32Hex = new(4, nameof(UnpaddedBase32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV", false);
+    public static readonly Base32FormatProvider Base32Hex = new(4, nameof(Base32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV", false);
 
     /// <summary>
     /// The padded RFC 4648 Base-32 format provider.
@@ -73,9 +65,6 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <summary>
     /// The padded Crockford Base-32 format provider.
     /// </summary>
-    /// <remarks>
-    /// Encoding produces uppercase. Decoding accepts either case, reads I and L as 1 and O as 0, and ignores hyphens. Check symbols are not supported.
-    /// </remarks>
     public static readonly Base32FormatProvider PaddedCrockford = new(8, nameof(PaddedCrockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", true);
 
     /// <summary>

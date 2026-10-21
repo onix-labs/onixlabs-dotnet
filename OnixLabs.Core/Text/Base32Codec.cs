@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Buffers;
 using System.Text;
 
 namespace OnixLabs.Core.Text;
@@ -43,16 +42,6 @@ public sealed class Base32Codec : IBaseCodec
     /// </summary>
     private const char Hyphen = '-';
 
-    /// <summary>
-    /// The set of uppercase Base-32 alphabetic characters, used to reject input that mixes cases for an invariant format provider.
-    /// </summary>
-    private static readonly SearchValues<char> UppercaseValues = SearchValues.Create("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-
-    /// <summary>
-    /// The set of lowercase Base-32 alphabetic characters, used to reject input that mixes cases for an invariant format provider.
-    /// </summary>
-    private static readonly SearchValues<char> LowercaseValues = SearchValues.Create("abcdefghijklmnopqrstuvwxyz");
-
     /// <inheritdoc/>
     public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null) => TryEncode(value, provider, out string result)
         ? result
@@ -74,7 +63,7 @@ public sealed class Base32Codec : IBaseCodec
                 return true;
             }
 
-            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.UnpaddedRfc4648Uppercase, out Base32FormatProvider formatProvider))
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.UnpaddedRfc4648, out Base32FormatProvider formatProvider))
             {
                 result = string.Empty;
                 return false;
@@ -144,7 +133,7 @@ public sealed class Base32Codec : IBaseCodec
                 return true;
             }
 
-            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.UnpaddedRfc4648Uppercase, out Base32FormatProvider formatProvider))
+            if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.UnpaddedRfc4648, out Base32FormatProvider formatProvider))
             {
                 result = [];
                 return false;
@@ -156,12 +145,6 @@ public sealed class Base32Codec : IBaseCodec
             ReadOnlySpan<char> characters = isCrockford && value.Contains(Hyphen) ? value.ToString().Replace(Hyphen.ToString(), string.Empty) : value;
 
             if (!TryRemovePadding(characters, formatProvider.IsPadded, out ReadOnlySpan<char> valueWithoutPadding) || !IsValidLength(valueWithoutPadding.Length))
-            {
-                result = [];
-                return false;
-            }
-
-            if (formatProvider.IsInvariant && valueWithoutPadding.ContainsAny(UppercaseValues) && valueWithoutPadding.ContainsAny(LowercaseValues))
             {
                 result = [];
                 return false;
@@ -236,7 +219,6 @@ public sealed class Base32Codec : IBaseCodec
     /// <returns>Returns the index of the specified character in the alphabet, or -1 if the character is not in the alphabet.</returns>
     private static int GetIndex(char character, Base32FormatProvider formatProvider, bool isCrockford)
     {
-        if (formatProvider.IsInvariant) return formatProvider.Alphabet.IndexOf(char.ToUpperInvariant(character));
         if (!isCrockford) return formatProvider.Alphabet.IndexOf(character);
 
         // Why: Crockford's specification requires decoders to accept either case, and to read I and L as 1, and O as 0.

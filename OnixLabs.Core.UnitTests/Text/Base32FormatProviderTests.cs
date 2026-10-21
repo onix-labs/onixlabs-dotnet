@@ -19,20 +19,20 @@ namespace OnixLabs.Core.UnitTests.Text;
 
 public sealed class Base32FormatProviderTests
 {
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedRfc4648Uppercase should produce the expected result")]
-    public void Base32FormatProviderUnpaddedRfc4648UppercaseShouldProduceExpectedAlphabet()
+    [Fact(DisplayName = "Base32FormatProvider.Rfc4648 should produce the expected result")]
+    public void Base32FormatProviderRfc4648ShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 0;
-        const string expectedName = "UnpaddedRfc4648Uppercase";
+        const string expectedName = "Rfc4648";
         const string expectedAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
         const bool expectedPadding = false;
 
         // When
-        int actualValue = Base32FormatProvider.UnpaddedRfc4648Uppercase.Value;
-        string actualName = Base32FormatProvider.UnpaddedRfc4648Uppercase.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedRfc4648Uppercase.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedRfc4648Uppercase.IsPadded;
+        int actualValue = Base32FormatProvider.Rfc4648.Value;
+        string actualName = Base32FormatProvider.Rfc4648.Name;
+        string actualAlphabet = Base32FormatProvider.Rfc4648.Alphabet;
+        bool actualPadding = Base32FormatProvider.Rfc4648.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -41,20 +41,20 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedZBase32 should produce the expected result")]
+    [Fact(DisplayName = "Base32FormatProvider.ZBase32 should produce the expected result")]
     public void Base32FormatProviderZBase32ShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 1;
-        const string expectedName = "UnpaddedZBase32";
+        const string expectedName = "ZBase32";
         const string expectedAlphabet = "ybndrfg8ejkmcpqxot1uwisza345h769";
         const bool expectedPadding = false;
 
         // When
-        int actualValue = Base32FormatProvider.UnpaddedZBase32.Value;
-        string actualName = Base32FormatProvider.UnpaddedZBase32.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedZBase32.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedZBase32.IsPadded;
+        int actualValue = Base32FormatProvider.ZBase32.Value;
+        string actualName = Base32FormatProvider.ZBase32.Name;
+        string actualAlphabet = Base32FormatProvider.ZBase32.Alphabet;
+        bool actualPadding = Base32FormatProvider.ZBase32.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -63,20 +63,20 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedGeoHash should produce the expected result")]
+    [Fact(DisplayName = "Base32FormatProvider.GeoHash should produce the expected result")]
     public void Base32FormatProviderGeoHashShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 2;
-        const string expectedName = "UnpaddedGeoHash";
+        const string expectedName = "GeoHash";
         const string expectedAlphabet = "0123456789bcdefghjkmnpqrstuvwxyz";
         const bool expectedPadding = false;
 
         // When
-        int actualValue = Base32FormatProvider.UnpaddedGeoHash.Value;
-        string actualName = Base32FormatProvider.UnpaddedGeoHash.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedGeoHash.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedGeoHash.IsPadded;
+        int actualValue = Base32FormatProvider.GeoHash.Value;
+        string actualName = Base32FormatProvider.GeoHash.Name;
+        string actualAlphabet = Base32FormatProvider.GeoHash.Alphabet;
+        bool actualPadding = Base32FormatProvider.GeoHash.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -85,20 +85,20 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedCrockford should produce the expected result")]
+    [Fact(DisplayName = "Base32FormatProvider.Crockford should produce the expected result")]
     public void Base32FormatProviderCrockfordShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 3;
-        const string expectedName = "UnpaddedCrockford";
+        const string expectedName = "Crockford";
         const string expectedAlphabet = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
         const bool expectedPadding = false;
 
         // When
-        int actualValue = Base32FormatProvider.UnpaddedCrockford.Value;
-        string actualName = Base32FormatProvider.UnpaddedCrockford.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedCrockford.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedCrockford.IsPadded;
+        int actualValue = Base32FormatProvider.Crockford.Value;
+        string actualName = Base32FormatProvider.Crockford.Name;
+        string actualAlphabet = Base32FormatProvider.Crockford.Alphabet;
+        bool actualPadding = Base32FormatProvider.Crockford.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -107,20 +107,20 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedBase32HexUppercase should produce the expected result")]
+    [Fact(DisplayName = "Base32FormatProvider.Base32Hex should produce the expected result")]
     public void Base32FormatProviderBase32HexShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 4;
-        const string expectedName = "UnpaddedBase32HexUppercase";
+        const string expectedName = "Base32Hex";
         const string expectedAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
         const bool expectedPadding = false;
 
         // When
-        int actualValue = Base32FormatProvider.UnpaddedBase32HexUppercase.Value;
-        string actualName = Base32FormatProvider.UnpaddedBase32HexUppercase.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedBase32HexUppercase.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedBase32HexUppercase.IsPadded;
+        int actualValue = Base32FormatProvider.Base32Hex.Value;
+        string actualName = Base32FormatProvider.Base32Hex.Name;
+        string actualAlphabet = Base32FormatProvider.Base32Hex.Alphabet;
+        bool actualPadding = Base32FormatProvider.Base32Hex.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -129,20 +129,20 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.PaddedRfc4648Uppercase should produce the expected result")]
-    public void Base32FormatProviderPaddedRfc4648UppercaseShouldProduceExpectedAlphabet()
+    [Fact(DisplayName = "Base32FormatProvider.PaddedRfc4648 should produce the expected result")]
+    public void Base32FormatProviderPaddedRfc4648ShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 5;
-        const string expectedName = "PaddedRfc4648Uppercase";
+        const string expectedName = "PaddedRfc4648";
         const string expectedAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
         const bool expectedPadding = true;
 
         // When
-        int actualValue = Base32FormatProvider.PaddedRfc4648Uppercase.Value;
-        string actualName = Base32FormatProvider.PaddedRfc4648Uppercase.Name;
-        string actualAlphabet = Base32FormatProvider.PaddedRfc4648Uppercase.Alphabet;
-        bool actualPadding = Base32FormatProvider.PaddedRfc4648Uppercase.IsPadded;
+        int actualValue = Base32FormatProvider.PaddedRfc4648.Value;
+        string actualName = Base32FormatProvider.PaddedRfc4648.Name;
+        string actualAlphabet = Base32FormatProvider.PaddedRfc4648.Alphabet;
+        bool actualPadding = Base32FormatProvider.PaddedRfc4648.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -217,196 +217,20 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.PaddedBase32HexUppercase should produce the expected result")]
-    public void Base32FormatProviderPaddedBase32HexUppercaseShouldProduceExpectedAlphabet()
+    [Fact(DisplayName = "Base32FormatProvider.PaddedBase32Hex should produce the expected result")]
+    public void Base32FormatProviderPaddedBase32HexShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 9;
-        const string expectedName = "PaddedBase32HexUppercase";
+        const string expectedName = "PaddedBase32Hex";
         const string expectedAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
         const bool expectedPadding = true;
 
         // When
-        int actualValue = Base32FormatProvider.PaddedBase32HexUppercase.Value;
-        string actualName = Base32FormatProvider.PaddedBase32HexUppercase.Name;
-        string actualAlphabet = Base32FormatProvider.PaddedBase32HexUppercase.Alphabet;
-        bool actualPadding = Base32FormatProvider.PaddedBase32HexUppercase.IsPadded;
-
-        // Then
-        Assert.Equal(expectedValue, actualValue);
-        Assert.Equal(expectedName, actualName);
-        Assert.Equal(expectedAlphabet, actualAlphabet);
-        Assert.Equal(expectedPadding, actualPadding);
-    }
-
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedRfc4648Lowercase should produce the expected result")]
-    public void Base32FormatProviderUnpaddedRfc4648LowercaseShouldProduceExpectedAlphabet()
-    {
-        // Given
-        const int expectedValue = 10;
-        const string expectedName = "UnpaddedRfc4648Lowercase";
-        const string expectedAlphabet = "abcdefghijklmnopqrstuvwxyz234567";
-        const bool expectedPadding = false;
-
-        // When
-        int actualValue = Base32FormatProvider.UnpaddedRfc4648Lowercase.Value;
-        string actualName = Base32FormatProvider.UnpaddedRfc4648Lowercase.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedRfc4648Lowercase.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedRfc4648Lowercase.IsPadded;
-
-        // Then
-        Assert.Equal(expectedValue, actualValue);
-        Assert.Equal(expectedName, actualName);
-        Assert.Equal(expectedAlphabet, actualAlphabet);
-        Assert.Equal(expectedPadding, actualPadding);
-    }
-
-    [Fact(DisplayName = "Base32FormatProvider.PaddedRfc4648Lowercase should produce the expected result")]
-    public void Base32FormatProviderPaddedRfc4648LowercaseShouldProduceExpectedAlphabet()
-    {
-        // Given
-        const int expectedValue = 11;
-        const string expectedName = "PaddedRfc4648Lowercase";
-        const string expectedAlphabet = "abcdefghijklmnopqrstuvwxyz234567";
-        const bool expectedPadding = true;
-
-        // When
-        int actualValue = Base32FormatProvider.PaddedRfc4648Lowercase.Value;
-        string actualName = Base32FormatProvider.PaddedRfc4648Lowercase.Name;
-        string actualAlphabet = Base32FormatProvider.PaddedRfc4648Lowercase.Alphabet;
-        bool actualPadding = Base32FormatProvider.PaddedRfc4648Lowercase.IsPadded;
-
-        // Then
-        Assert.Equal(expectedValue, actualValue);
-        Assert.Equal(expectedName, actualName);
-        Assert.Equal(expectedAlphabet, actualAlphabet);
-        Assert.Equal(expectedPadding, actualPadding);
-    }
-
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedRfc4648Invariant should produce the expected result")]
-    public void Base32FormatProviderUnpaddedRfc4648InvariantShouldProduceExpectedAlphabet()
-    {
-        // Given
-        const int expectedValue = 12;
-        const string expectedName = "UnpaddedRfc4648Invariant";
-        const string expectedAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-        const bool expectedPadding = false;
-
-        // When
-        int actualValue = Base32FormatProvider.UnpaddedRfc4648Invariant.Value;
-        string actualName = Base32FormatProvider.UnpaddedRfc4648Invariant.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedRfc4648Invariant.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedRfc4648Invariant.IsPadded;
-
-        // Then
-        Assert.Equal(expectedValue, actualValue);
-        Assert.Equal(expectedName, actualName);
-        Assert.Equal(expectedAlphabet, actualAlphabet);
-        Assert.Equal(expectedPadding, actualPadding);
-    }
-
-    [Fact(DisplayName = "Base32FormatProvider.PaddedRfc4648Invariant should produce the expected result")]
-    public void Base32FormatProviderPaddedRfc4648InvariantShouldProduceExpectedAlphabet()
-    {
-        // Given
-        const int expectedValue = 13;
-        const string expectedName = "PaddedRfc4648Invariant";
-        const string expectedAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-        const bool expectedPadding = true;
-
-        // When
-        int actualValue = Base32FormatProvider.PaddedRfc4648Invariant.Value;
-        string actualName = Base32FormatProvider.PaddedRfc4648Invariant.Name;
-        string actualAlphabet = Base32FormatProvider.PaddedRfc4648Invariant.Alphabet;
-        bool actualPadding = Base32FormatProvider.PaddedRfc4648Invariant.IsPadded;
-
-        // Then
-        Assert.Equal(expectedValue, actualValue);
-        Assert.Equal(expectedName, actualName);
-        Assert.Equal(expectedAlphabet, actualAlphabet);
-        Assert.Equal(expectedPadding, actualPadding);
-    }
-
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedBase32HexLowercase should produce the expected result")]
-    public void Base32FormatProviderUnpaddedBase32HexLowercaseShouldProduceExpectedAlphabet()
-    {
-        // Given
-        const int expectedValue = 14;
-        const string expectedName = "UnpaddedBase32HexLowercase";
-        const string expectedAlphabet = "0123456789abcdefghijklmnopqrstuv";
-        const bool expectedPadding = false;
-
-        // When
-        int actualValue = Base32FormatProvider.UnpaddedBase32HexLowercase.Value;
-        string actualName = Base32FormatProvider.UnpaddedBase32HexLowercase.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedBase32HexLowercase.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedBase32HexLowercase.IsPadded;
-
-        // Then
-        Assert.Equal(expectedValue, actualValue);
-        Assert.Equal(expectedName, actualName);
-        Assert.Equal(expectedAlphabet, actualAlphabet);
-        Assert.Equal(expectedPadding, actualPadding);
-    }
-
-    [Fact(DisplayName = "Base32FormatProvider.PaddedBase32HexLowercase should produce the expected result")]
-    public void Base32FormatProviderPaddedBase32HexLowercaseShouldProduceExpectedAlphabet()
-    {
-        // Given
-        const int expectedValue = 15;
-        const string expectedName = "PaddedBase32HexLowercase";
-        const string expectedAlphabet = "0123456789abcdefghijklmnopqrstuv";
-        const bool expectedPadding = true;
-
-        // When
-        int actualValue = Base32FormatProvider.PaddedBase32HexLowercase.Value;
-        string actualName = Base32FormatProvider.PaddedBase32HexLowercase.Name;
-        string actualAlphabet = Base32FormatProvider.PaddedBase32HexLowercase.Alphabet;
-        bool actualPadding = Base32FormatProvider.PaddedBase32HexLowercase.IsPadded;
-
-        // Then
-        Assert.Equal(expectedValue, actualValue);
-        Assert.Equal(expectedName, actualName);
-        Assert.Equal(expectedAlphabet, actualAlphabet);
-        Assert.Equal(expectedPadding, actualPadding);
-    }
-
-    [Fact(DisplayName = "Base32FormatProvider.UnpaddedBase32HexInvariant should produce the expected result")]
-    public void Base32FormatProviderUnpaddedBase32HexInvariantShouldProduceExpectedAlphabet()
-    {
-        // Given
-        const int expectedValue = 16;
-        const string expectedName = "UnpaddedBase32HexInvariant";
-        const string expectedAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
-        const bool expectedPadding = false;
-
-        // When
-        int actualValue = Base32FormatProvider.UnpaddedBase32HexInvariant.Value;
-        string actualName = Base32FormatProvider.UnpaddedBase32HexInvariant.Name;
-        string actualAlphabet = Base32FormatProvider.UnpaddedBase32HexInvariant.Alphabet;
-        bool actualPadding = Base32FormatProvider.UnpaddedBase32HexInvariant.IsPadded;
-
-        // Then
-        Assert.Equal(expectedValue, actualValue);
-        Assert.Equal(expectedName, actualName);
-        Assert.Equal(expectedAlphabet, actualAlphabet);
-        Assert.Equal(expectedPadding, actualPadding);
-    }
-
-    [Fact(DisplayName = "Base32FormatProvider.PaddedBase32HexInvariant should produce the expected result")]
-    public void Base32FormatProviderPaddedBase32HexInvariantShouldProduceExpectedAlphabet()
-    {
-        // Given
-        const int expectedValue = 17;
-        const string expectedName = "PaddedBase32HexInvariant";
-        const string expectedAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
-        const bool expectedPadding = true;
-
-        // When
-        int actualValue = Base32FormatProvider.PaddedBase32HexInvariant.Value;
-        string actualName = Base32FormatProvider.PaddedBase32HexInvariant.Name;
-        string actualAlphabet = Base32FormatProvider.PaddedBase32HexInvariant.Alphabet;
-        bool actualPadding = Base32FormatProvider.PaddedBase32HexInvariant.IsPadded;
+        int actualValue = Base32FormatProvider.PaddedBase32Hex.Value;
+        string actualName = Base32FormatProvider.PaddedBase32Hex.Name;
+        string actualAlphabet = Base32FormatProvider.PaddedBase32Hex.Alphabet;
+        bool actualPadding = Base32FormatProvider.PaddedBase32Hex.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -422,7 +246,7 @@ public sealed class Base32FormatProviderTests
         Type type = typeof(Base32FormatProvider);
 
         // When
-        object? result = Base32FormatProvider.UnpaddedRfc4648Uppercase.GetFormat(type);
+        object? result = Base32FormatProvider.Rfc4648.GetFormat(type);
 
         // Then
         Assert.NotNull(result);
@@ -436,7 +260,7 @@ public sealed class Base32FormatProviderTests
         Type type = typeof(object);
 
         // When
-        object? result = Base32FormatProvider.UnpaddedRfc4648Uppercase.GetFormat(type);
+        object? result = Base32FormatProvider.Rfc4648.GetFormat(type);
 
         // Then
         Assert.Null(result);

@@ -34,14 +34,12 @@ public sealed class Base16Codec : IBaseCodec
     private static readonly SearchValues<char> Base16LowercaseValues = SearchValues.Create("abcdef");
 
     /// <inheritdoc/>
-    public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null) => TryEncode(value, provider, out string result)
-        ? result
-        : throw new FormatException(IBaseCodec.EncodingFormatException);
+    public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null) =>
+        TryEncode(value, provider, out string result) ? result : throw new FormatException(IBaseCodec.EncodingFormatException);
 
     /// <inheritdoc/>
-    public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null) => TryDecode(value, provider, out byte[] result)
-        ? result
-        : throw new FormatException(IBaseCodec.DecodingFormatException);
+    public byte[] Decode(ReadOnlySpan<char> value, IFormatProvider? provider = null) =>
+        TryDecode(value, provider, out byte[] result) ? result : throw new FormatException(IBaseCodec.DecodingFormatException);
 
     /// <inheritdoc/>
     public bool TryEncode(ReadOnlySpan<byte> value, IFormatProvider? provider, out string result)
@@ -90,22 +88,13 @@ public sealed class Base16Codec : IBaseCodec
                 return false;
             }
 
-            bool hasUppercase = value.ContainsAny(Base16UppercaseValues);
-            bool hasLowercase = value.ContainsAny(Base16LowercaseValues);
-
-            if (formatProvider == Base16FormatProvider.Uppercase && hasLowercase)
+            if (formatProvider == Base16FormatProvider.Uppercase && value.ContainsAny(Base16LowercaseValues))
             {
                 result = [];
                 return false;
             }
 
-            if (formatProvider == Base16FormatProvider.Lowercase && hasUppercase)
-            {
-                result = [];
-                return false;
-            }
-
-            if (hasUppercase && hasLowercase)
+            if (formatProvider == Base16FormatProvider.Lowercase && value.ContainsAny(Base16UppercaseValues))
             {
                 result = [];
                 return false;

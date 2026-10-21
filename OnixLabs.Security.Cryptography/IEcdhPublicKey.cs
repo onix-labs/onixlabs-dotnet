@@ -19,9 +19,4 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Defines an EC Diffie-Hellman cryptographic public key.
 /// </summary>
-public interface IEcdhPublicKey :
-    IPublicKeyImportable<EcdhPublicKey>,
-    IPublicKeyCompressedImportable<EcdhPublicKey>,
-    IPublicKeyExportable,
-    IPublicKeyCompressedExportable,
-    IBinaryConvertible;
+public interface IEcdhPublicKey : IPublicKeyImportable<EcdhPublicKey>, IPublicKeyExportable, IBinaryConvertible;

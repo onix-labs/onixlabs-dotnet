@@ -9,6 +9,7 @@
         <InternalsVisibleTo Include="OnixLabs.Numerics"/>
         <InternalsVisibleTo Include="OnixLabs.Security"/>
         <InternalsVisibleTo Include="OnixLabs.Security.Cryptography"/>
+        <InternalsVisibleTo Include="OnixLabs.Core.UnitTests"/>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
     </ItemGroup>
 </Project>

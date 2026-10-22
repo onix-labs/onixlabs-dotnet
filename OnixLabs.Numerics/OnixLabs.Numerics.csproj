@@ -2,6 +2,8 @@
     <PropertyGroup>
         <Title>OnixLabs.Numerics</Title>
         <Description>ONIXLabs Numerics API for .NET</Description>
+        <IsPackable>true</IsPackable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>

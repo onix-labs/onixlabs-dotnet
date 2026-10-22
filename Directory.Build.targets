@@ -1,0 +1,15 @@
+<Project>
+
+    <!--NUGET PACKAGES (opt-in via IsPackable in the .csproj; see Directory.Build.props)-->
+    <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/onix-labs/onixlabs-dotnet</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(IsPackable)' == 'true'">
+        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+</Project>

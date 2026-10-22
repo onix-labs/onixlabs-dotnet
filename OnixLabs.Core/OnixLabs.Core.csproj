@@ -2,6 +2,8 @@
     <PropertyGroup>
         <Title>OnixLabs.Core</Title>
         <Description>ONIXLabs Core API for .NET</Description>
+        <IsPackable>true</IsPackable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="OnixLabs.Numerics"/>

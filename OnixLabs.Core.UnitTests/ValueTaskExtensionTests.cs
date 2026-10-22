@@ -15,6 +15,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Sources;
 
 namespace OnixLabs.Core.UnitTests;
 
@@ -199,5 +200,58 @@ public sealed class ValueTaskExtensionTests
 
         // Then
         Assert.Same(expected, actual);
+    }
+
+    [Fact(DisplayName = "ValueTask.WaitAsync should return the current ValueTask when the token cannot be cancelled.")]
+    public async Task ValueTaskWaitAsyncShouldReturnCurrentValueTaskWhenTokenCannotBeCancelled()
+    {
+        // Given
+        ManualValueTaskSource<int> source = new();
+        ValueTask<int> pending = source.ValueTask;
+
+        // When
+        ValueTask<int> waiting = pending.WaitAsync(CancellationToken.None);
+        source.SetResult(123);
+
+        // Then
+        Assert.Equal(pending, waiting);
+        Assert.Equal(123, await waiting);
+    }
+
+    [Fact(DisplayName = "ValueTask.WaitAsync (non-generic) should return the current ValueTask when the token cannot be cancelled.")]
+    public async Task NonGenericValueTaskWaitAsyncShouldReturnCurrentValueTaskWhenTokenCannotBeCancelled()
+    {
+        // Given
+        ManualValueTaskSource<bool> source = new();
+        ValueTask pending = source.NonGenericValueTask;
+
+        // When
+        ValueTask waiting = pending.WaitAsync(CancellationToken.None);
+        source.SetResult(true);
+
+        // Then
+        Assert.Equal(pending, waiting);
+        await waiting;
+    }
+
+    // A ValueTask source that is not backed by a Task, so that converting its ValueTask to a Task allocates.
+    private sealed class ManualValueTaskSource<T> : IValueTaskSource<T>, IValueTaskSource
+    {
+        private ManualResetValueTaskSourceCore<T> core;
+
+        public ValueTask<T> ValueTask => new(this, core.Version);
+
+        public ValueTask NonGenericValueTask => new(this, core.Version);
+
+        public void SetResult(T result) => core.SetResult(result);
+
+        public T GetResult(short token) => core.GetResult(token);
+
+        void IValueTaskSource.GetResult(short token) => core.GetResult(token);
+
+        public ValueTaskSourceStatus GetStatus(short token) => core.GetStatus(token);
+
+        public void OnCompleted(Action<object?> continuation, object? state, short token, ValueTaskSourceOnCompletedFlags flags) =>
+            core.OnCompleted(continuation, state, token, flags);
     }
 }

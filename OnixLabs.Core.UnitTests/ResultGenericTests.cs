@@ -427,6 +427,30 @@ public sealed class ResultGenericTests
         Assert.False(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, Task> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(
+            success: _ =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedTask();
+            },
+            failure: _ => isFailure = true,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -441,6 +465,30 @@ public sealed class ResultGenericTests
             {
                 isSuccess = true;
                 return ValueTask.CompletedTask;
+            },
+            failure: _ => isFailure = true,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(
+            success: _ =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedValueTask();
             },
             failure: _ => isFailure = true,
             cancellationToken: TestContext.Current.CancellationToken
@@ -475,6 +523,30 @@ public sealed class ResultGenericTests
         Assert.True(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, Task> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(
+            success: _ =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedTask();
+            },
+            failure: _ => isFailure = true,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -489,6 +561,30 @@ public sealed class ResultGenericTests
             {
                 isSuccess = true;
                 return ValueTask.CompletedTask;
+            },
+            failure: _ => isFailure = true,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(
+            success: _ =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedValueTask();
             },
             failure: _ => isFailure = true,
             cancellationToken: TestContext.Current.CancellationToken
@@ -524,6 +620,31 @@ public sealed class ResultGenericTests
         Assert.False(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, Task> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: (_, _) =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedTask();
+            },
+            failure: _ => isFailure = true,
+            cancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTCancellationTokenTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -539,6 +660,31 @@ public sealed class ResultGenericTests
             {
                 isSuccess = true;
                 return ValueTask.CompletedTask;
+            },
+            failure: _ => isFailure = true,
+            cancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: (_, _) =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedValueTask();
             },
             failure: _ => isFailure = true,
             cancellationToken
@@ -574,6 +720,31 @@ public sealed class ResultGenericTests
         Assert.True(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, Task> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: (_, _) =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedTask();
+            },
+            failure: _ => isFailure = true,
+            cancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTCancellationTokenTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -589,6 +760,31 @@ public sealed class ResultGenericTests
             {
                 isSuccess = true;
                 return ValueTask.CompletedTask;
+            },
+            failure: _ => isFailure = true,
+            cancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: (_, _) =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedValueTask();
             },
             failure: _ => isFailure = true,
             cancellationToken
@@ -623,6 +819,30 @@ public sealed class ResultGenericTests
         Assert.False(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, Task> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncActionTFuncExceptionTaskFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(
+            success: _ => isSuccess = true,
+            failure: _ =>
+            {
+                isFailure = true;
+                return Yielding.CompletedTask();
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, ValueTask> from success should produce the expected result.")]
     public async Task ResultMatchAsyncActionTFuncExceptionTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -638,6 +858,30 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return ValueTask.CompletedTask;
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, ValueTask> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncActionTFuncExceptionTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(
+            success: _ => isSuccess = true,
+            failure: _ =>
+            {
+                isFailure = true;
+                return Yielding.CompletedValueTask();
             },
             cancellationToken: TestContext.Current.CancellationToken
         );
@@ -671,6 +915,30 @@ public sealed class ResultGenericTests
         Assert.True(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, Task> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncActionTFuncExceptionTaskFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(
+            success: _ => isSuccess = true,
+            failure: _ =>
+            {
+                isFailure = true;
+                return Yielding.CompletedTask();
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, ValueTask> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncActionTFuncExceptionTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -686,6 +954,30 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return ValueTask.CompletedTask;
+            },
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, ValueTask> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncActionTFuncExceptionTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+
+        // When
+        await result.MatchAsync(
+            success: _ => isSuccess = true,
+            failure: _ =>
+            {
+                isFailure = true;
+                return Yielding.CompletedValueTask();
             },
             cancellationToken: TestContext.Current.CancellationToken
         );
@@ -720,6 +1012,31 @@ public sealed class ResultGenericTests
         Assert.False(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, CancellationToken, Task> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncActionTFuncExceptionCancellationTokenTaskFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: _ => isSuccess = true,
+            failure: (_, _) =>
+            {
+                isFailure = true;
+                return Yielding.CompletedTask();
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, CancellationToken, ValueTask> from success should produce the expected result.")]
     public async Task ResultMatchAsyncActionTFuncExceptionCancellationTokenTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -736,6 +1053,31 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return ValueTask.CompletedTask;
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, CancellationToken, ValueTask> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncActionTFuncExceptionCancellationTokenTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: _ => isSuccess = true,
+            failure: (_, _) =>
+            {
+                isFailure = true;
+                return Yielding.CompletedValueTask();
             },
             cancellationToken
         );
@@ -770,6 +1112,31 @@ public sealed class ResultGenericTests
         Assert.True(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, CancellationToken, Task> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncActionTFuncExceptionCancellationTokenTaskFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: _ => isSuccess = true,
+            failure: (_, _) =>
+            {
+                isFailure = true;
+                return Yielding.CompletedTask();
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, CancellationToken, ValueTask> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncActionTFuncExceptionCancellationTokenTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -786,6 +1153,31 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return ValueTask.CompletedTask;
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Action<T>, Func<Exception, CancellationToken, ValueTask> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncActionTFuncExceptionCancellationTokenTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: _ => isSuccess = true,
+            failure: (_, _) =>
+            {
+                isFailure = true;
+                return Yielding.CompletedValueTask();
             },
             cancellationToken
         );
@@ -824,6 +1216,35 @@ public sealed class ResultGenericTests
         Assert.False(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, Task>, Func<Exception, Task> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskFuncExceptionTaskFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: _ =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedTask();
+            },
+            failure: _ =>
+            {
+                isFailure = true;
+                return Yielding.CompletedTask();
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask>, Func<Exception, ValueTask> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTTaskFuncExceptionTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -844,6 +1265,35 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return ValueTask.CompletedTask;
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask>, Func<Exception, ValueTask> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskFuncExceptionTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: _ =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedValueTask();
+            },
+            failure: _ =>
+            {
+                isFailure = true;
+                return Yielding.CompletedValueTask();
             },
             cancellationToken
         );
@@ -882,6 +1332,35 @@ public sealed class ResultGenericTests
         Assert.True(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, Task>, Func<Exception, Task> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskFuncExceptionTaskFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: _ =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedTask();
+            },
+            failure: _ =>
+            {
+                isFailure = true;
+                return Yielding.CompletedTask();
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask>, Func<Exception, ValueTask> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTTaskFuncExceptionTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -902,6 +1381,35 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return ValueTask.CompletedTask;
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask>, Func<Exception, ValueTask> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskFuncExceptionTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: _ =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedValueTask();
+            },
+            failure: _ =>
+            {
+                isFailure = true;
+                return Yielding.CompletedValueTask();
             },
             cancellationToken
         );
@@ -940,6 +1448,35 @@ public sealed class ResultGenericTests
         Assert.False(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, Task>, Func<Exception, CancellationToken, Task> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskFuncExceptionCancellationTokenTaskFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: (_, _) =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedTask();
+            },
+            failure: (_, _) =>
+            {
+                isFailure = true;
+                return Yielding.CompletedTask();
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask>, Func<Exception, CancellationToken, ValueTask> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTCancellationTokenTaskFuncExceptionCancellationTokenTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -960,6 +1497,35 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return ValueTask.CompletedTask;
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.True(isSuccess);
+        Assert.False(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask>, Func<Exception, CancellationToken, ValueTask> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskFuncExceptionCancellationTokenTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: (_, _) =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedValueTask();
+            },
+            failure: (_, _) =>
+            {
+                isFailure = true;
+                return Yielding.CompletedValueTask();
             },
             cancellationToken
         );
@@ -998,6 +1564,35 @@ public sealed class ResultGenericTests
         Assert.True(isFailure);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, Task>, Func<Exception, CancellationToken, Task> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskFuncExceptionCancellationTokenTaskFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: (_, _) =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedTask();
+            },
+            failure: (_, _) =>
+            {
+                isFailure = true;
+                return Yielding.CompletedTask();
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask>, Func<Exception, CancellationToken, ValueTask> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTCancellationTokenTaskFuncExceptionCancellationTokenTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1018,6 +1613,35 @@ public sealed class ResultGenericTests
             {
                 isFailure = true;
                 return ValueTask.CompletedTask;
+            },
+            cancellationToken
+        );
+
+        // Then
+        Assert.False(isSuccess);
+        Assert.True(isFailure);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask>, Func<Exception, CancellationToken, ValueTask> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskFuncExceptionCancellationTokenTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool isSuccess = false;
+        bool isFailure = false;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        await result.MatchAsync(
+            success: (_, _) =>
+            {
+                isSuccess = true;
+                return Yielding.CompletedValueTask();
+            },
+            failure: (_, _) =>
+            {
+                isFailure = true;
+                return Yielding.CompletedValueTask();
             },
             cancellationToken
         );
@@ -1079,6 +1703,24 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, Task<TResult>>, Func<Exception, TResult> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTResultFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => Yielding.TaskOf(1),
+            failure: _ => 0,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask<TResult>>, Func<Exception, TResult> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1089,6 +1731,24 @@ public sealed class ResultGenericTests
         // When
         int actual = await result.MatchAsync(
             success: _ => ValueTask.FromResult(1),
+            failure: _ => 0,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask<TResult>>, Func<Exception, TResult> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => Yielding.ValueTaskOf(1),
             failure: _ => 0,
             cancellationToken: TestContext.Current.CancellationToken
         );
@@ -1115,6 +1775,24 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, Task<TResult>>, Func<Exception, TResult> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTResultFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => Yielding.TaskOf(0),
+            failure: _ => 1,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask<TResult>>, Func<Exception, TResult> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1125,6 +1803,24 @@ public sealed class ResultGenericTests
         // When
         int actual = await result.MatchAsync(
             success: _ => ValueTask.FromResult(0),
+            failure: _ => 1,
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask<TResult>>, Func<Exception, TResult> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => Yielding.ValueTaskOf(0),
             failure: _ => 1,
             cancellationToken: TestContext.Current.CancellationToken
         );
@@ -1152,6 +1848,25 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, Task<TResult>>, Func<Exception, TResult> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionTResultFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: (_, _) => Yielding.TaskOf(1),
+            failure: _ => 0,
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, TResult> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1163,6 +1878,25 @@ public sealed class ResultGenericTests
         // When
         int actual = await result.MatchAsync(
             success: (_, _) => ValueTask.FromResult(1),
+            failure: _ => 0,
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, TResult> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: (_, _) => Yielding.ValueTaskOf(1),
             failure: _ => 0,
             cancellationToken
         );
@@ -1190,6 +1924,25 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, Task<TResult>>, Func<Exception, TResult> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionTResultFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: (_, _) => Yielding.TaskOf(0),
+            failure: _ => 1,
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, TResult> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1201,6 +1954,25 @@ public sealed class ResultGenericTests
         // When
         int actual = await result.MatchAsync(
             success: (_, _) => ValueTask.FromResult(0),
+            failure: _ => 1,
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, TResult> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: (_, _) => Yielding.ValueTaskOf(0),
             failure: _ => 1,
             cancellationToken
         );
@@ -1227,6 +1999,24 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, Task<TResult>> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionTaskTResultFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => 1,
+            failure: _ => Yielding.TaskOf(0),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, ValueTask<TResult>> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTResultFuncExceptionTaskTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1238,6 +2028,24 @@ public sealed class ResultGenericTests
         int actual = await result.MatchAsync(
             success: _ => 1,
             failure: _ => ValueTask.FromResult(0),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, ValueTask<TResult>> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionTaskTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => 1,
+            failure: _ => Yielding.ValueTaskOf(0),
             cancellationToken: TestContext.Current.CancellationToken
         );
 
@@ -1263,6 +2071,24 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, Task<TResult>> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionTaskTResultFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => 0,
+            failure: _ => Yielding.TaskOf(1),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, ValueTask<TResult>> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTResultFuncExceptionTaskTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1274,6 +2100,24 @@ public sealed class ResultGenericTests
         int actual = await result.MatchAsync(
             success: _ => 0,
             failure: _ => ValueTask.FromResult(1),
+            cancellationToken: TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, ValueTask<TResult>> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionTaskTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => 0,
+            failure: _ => Yielding.ValueTaskOf(1),
             cancellationToken: TestContext.Current.CancellationToken
         );
 
@@ -1300,6 +2144,25 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, CancellationToken, Task<TResult>> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionCancellationTokenTaskTResultFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => 1,
+            failure: (_, _) => Yielding.TaskOf(0),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, CancellationToken, ValueTask<TResult>> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTResultFuncExceptionCancellationTokenTaskTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1312,6 +2175,25 @@ public sealed class ResultGenericTests
         int actual = await result.MatchAsync(
             success: _ => 1,
             failure: (_, _) => ValueTask.FromResult(0),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, CancellationToken, ValueTask<TResult>> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionCancellationTokenTaskTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => 1,
+            failure: (_, _) => Yielding.ValueTaskOf(0),
             cancellationToken
         );
 
@@ -1338,6 +2220,25 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, CancellationToken, Task<TResult>> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionCancellationTokenTaskTResultFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => 0,
+            failure: (_, _) => Yielding.TaskOf(1),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, CancellationToken, ValueTask<TResult>> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTResultFuncExceptionCancellationTokenTaskTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1350,6 +2251,25 @@ public sealed class ResultGenericTests
         int actual = await result.MatchAsync(
             success: _ => 0,
             failure: (_, _) => ValueTask.FromResult(1),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, TResult>, Func<Exception, CancellationToken, ValueTask<TResult>> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTResultFuncExceptionCancellationTokenTaskTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => 0,
+            failure: (_, _) => Yielding.ValueTaskOf(1),
             cancellationToken
         );
 
@@ -1376,6 +2296,25 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, Task<TResult>>, Func<Exception, Task<TResult>> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTaskTResultFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => Yielding.TaskOf(1),
+            failure: _ => Yielding.TaskOf(0),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask<TResult>>, Func<Exception, ValueTask<TResult>> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTaskTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1388,6 +2327,25 @@ public sealed class ResultGenericTests
         int actual = await result.MatchAsync(
             success: _ => ValueTask.FromResult(1),
             failure: _ => ValueTask.FromResult(0),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask<TResult>>, Func<Exception, ValueTask<TResult>> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTaskTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => Yielding.ValueTaskOf(1),
+            failure: _ => Yielding.ValueTaskOf(0),
             cancellationToken
         );
 
@@ -1414,6 +2372,25 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, Task<TResult>>, Func<Exception, Task<TResult>> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTaskTResultFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => Yielding.TaskOf(0),
+            failure: _ => Yielding.TaskOf(1),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask<TResult>>, Func<Exception, ValueTask<TResult>> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTaskTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1426,6 +2403,25 @@ public sealed class ResultGenericTests
         int actual = await result.MatchAsync(
             success: _ => ValueTask.FromResult(0),
             failure: _ => ValueTask.FromResult(1),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, ValueTask<TResult>>, Func<Exception, ValueTask<TResult>> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTTaskTResultFuncExceptionTaskTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: _ => Yielding.ValueTaskOf(0),
+            failure: _ => Yielding.ValueTaskOf(1),
             cancellationToken
         );
 
@@ -1452,6 +2448,25 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionCancellationTokenTaskTResultFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: (_, _) => Yielding.TaskOf(1),
+            failure: (_, _) => Yielding.TaskOf(0),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, CancellationToken, ValueTask<TResult>> from success should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionCancellationTokenTaskTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1464,6 +2479,25 @@ public sealed class ResultGenericTests
         int actual = await result.MatchAsync(
             success: (_, _) => ValueTask.FromResult(1),
             failure: (_, _) => ValueTask.FromResult(0),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, CancellationToken, ValueTask<TResult>> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionCancellationTokenTaskTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: (_, _) => Yielding.ValueTaskOf(1),
+            failure: (_, _) => Yielding.ValueTaskOf(0),
             cancellationToken
         );
 
@@ -1490,6 +2524,25 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionCancellationTokenTaskTResultFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: (_, _) => Yielding.TaskOf(0),
+            failure: (_, _) => Yielding.TaskOf(1),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, CancellationToken, ValueTask<TResult>> from failure should produce the expected result.")]
     public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionCancellationTokenTaskTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1502,6 +2555,25 @@ public sealed class ResultGenericTests
         int actual = await result.MatchAsync(
             success: (_, _) => ValueTask.FromResult(0),
             failure: (_, _) => ValueTask.FromResult(1),
+            cancellationToken
+        );
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.MatchAsync Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, CancellationToken, ValueTask<TResult>> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultMatchAsyncFuncTCancellationTokenTaskTResultFuncExceptionCancellationTokenTaskTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const int expected = 1;
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        int actual = await result.MatchAsync(
+            success: (_, _) => Yielding.ValueTaskOf(0),
+            failure: (_, _) => Yielding.ValueTaskOf(1),
             cancellationToken
         );
 
@@ -1565,6 +2637,20 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync Func<T, Task> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFuncTTaskFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = await result.SelectAsync(_ => Yielding.CompletedTask(), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectAsync Func<T, ValueTask> from failure should produce the expected result.")]
     public async Task ResultSelectAsyncFuncTTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1574,6 +2660,20 @@ public sealed class ResultGenericTests
 
         // When
         Result actual = await result.SelectAsync(_ => ValueTask.CompletedTask, TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync Func<T, ValueTask> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFuncTTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = await result.SelectAsync(_ => Yielding.CompletedValueTask(), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1593,6 +2693,20 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync Func<T, Task> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFuncTTaskFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        Result expected = Result.Success();
+
+        // When
+        Result actual = await result.SelectAsync(_ => Yielding.CompletedTask(), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectAsync Func<T, ValueTask> from success should produce the expected result.")]
     public async Task ResultSelectAsyncFuncTTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1602,6 +2716,20 @@ public sealed class ResultGenericTests
 
         // When
         Result actual = await result.SelectAsync(_ => ValueTask.CompletedTask, TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync Func<T, ValueTask> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFuncTTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        Result expected = Result.Success();
+
+        // When
+        Result actual = await result.SelectAsync(_ => Yielding.CompletedValueTask(), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1650,6 +2778,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync Func<T, CancellationToken, Task> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFuncTCancellationTokenTaskFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result actual = await result.SelectAsync((_, _) => Yielding.CompletedTask(), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectAsync Func<T, CancellationToken, ValueTask> from failure should produce the expected result.")]
     public async Task ResultSelectAsyncFuncTCancellationTokenTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1660,6 +2803,21 @@ public sealed class ResultGenericTests
 
         // When
         Result actual = await result.SelectAsync((_, _) => ValueTask.CompletedTask, cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync Func<T, CancellationToken, ValueTask> from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFuncTCancellationTokenTaskFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result actual = await result.SelectAsync((_, _) => Yielding.CompletedValueTask(), cancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1680,6 +2838,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync Func<T, CancellationToken, Task> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFuncTCancellationTokenTaskFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        Result expected = Result.Success();
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result actual = await result.SelectAsync((_, _) => Yielding.CompletedTask(), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectAsync Func<T, CancellationToken, ValueTask> from success should produce the expected result.")]
     public async Task ResultSelectAsyncFuncTCancellationTokenTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1690,6 +2863,21 @@ public sealed class ResultGenericTests
 
         // When
         Result actual = await result.SelectAsync((_, _) => ValueTask.CompletedTask, cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync Func<T, CancellationToken, ValueTask> from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFuncTCancellationTokenTaskFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        Result expected = Result.Success();
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result actual = await result.SelectAsync((_, _) => Yielding.CompletedValueTask(), cancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1781,6 +2969,20 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync function of TResult from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFunctionOfTResultFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // When
+        Result<int> actual = await result.SelectAsync(_ => Yielding.TaskOf(1), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectAsync function of TResult from failure should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectAsyncFunctionOfTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1790,6 +2992,20 @@ public sealed class ResultGenericTests
 
         // When
         Result<int> actual = await result.SelectAsync(_ => ValueTask.FromResult(1), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult from failure should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFunctionOfTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // When
+        Result<int> actual = await result.SelectAsync(_ => Yielding.ValueTaskOf(1), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1809,6 +3025,20 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync function of TResult from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFunctionOfTResultFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(2);
+        Result<int> expected = Result<int>.Success(1);
+
+        // When
+        Result<int> actual = await result.SelectAsync(_ => Yielding.TaskOf(1), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectAsync function of TResult from success should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectAsyncFunctionOfTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1818,6 +3048,20 @@ public sealed class ResultGenericTests
 
         // When
         Result<int> actual = await result.SelectAsync(_ => ValueTask.FromResult(1), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult from success should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFunctionOfTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(2);
+        Result<int> expected = Result<int>.Success(1);
+
+        // When
+        Result<int> actual = await result.SelectAsync(_ => Yielding.ValueTaskOf(1), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1866,6 +3110,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result<int> actual = await result.SelectAsync((_, _) => Yielding.TaskOf(1), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from failure should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1876,6 +3135,21 @@ public sealed class ResultGenericTests
 
         // When
         Result<int> actual = await result.SelectAsync((_, _) => ValueTask.FromResult(1), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from failure should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result<int> actual = await result.SelectAsync((_, _) => Yielding.ValueTaskOf(1), cancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1896,6 +3170,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(2);
+        Result<int> expected = Result<int>.Success(1);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result<int> actual = await result.SelectAsync((_, _) => Yielding.TaskOf(1), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from success should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -1906,6 +3195,21 @@ public sealed class ResultGenericTests
 
         // When
         Result<int> actual = await result.SelectAsync((_, _) => ValueTask.FromResult(1), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectAsync function of TResult with CancellationToken from success should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectAsyncFunctionOfTResultWithCancellationTokenFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(2);
+        Result<int> expected = Result<int>.Success(1);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result<int> actual = await result.SelectAsync((_, _) => Yielding.ValueTaskOf(1), cancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1998,6 +3302,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = await result.SelectManyAsync(async Task<Result> (_) =>
+            await Yielding.TaskOf(Result.Success()), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectManyAsync function from failure should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectManyAsyncFunctionFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -2008,6 +3327,21 @@ public sealed class ResultGenericTests
         // When
         Result actual = await result.SelectManyAsync(async ValueTask<Result> (_) =>
             await ValueTask.FromResult(Result.Success()), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function from failure should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+
+        // When
+        Result actual = await result.SelectManyAsync(async ValueTask<Result> (_) =>
+            await Yielding.ValueTaskOf(Result.Success()), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -2028,6 +3362,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        Result expected = Result.Success();
+
+        // When
+        Result actual = await result.SelectManyAsync(async Task<Result> (_) =>
+            await Yielding.TaskOf(Result.Success()), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectManyAsync function from success should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectManyAsyncFunctionFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -2038,6 +3387,21 @@ public sealed class ResultGenericTests
         // When
         Result actual = await result.SelectManyAsync(async ValueTask<Result> (_) =>
             await ValueTask.FromResult(Result.Success()), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function from success should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        Result expected = Result.Success();
+
+        // When
+        Result actual = await result.SelectManyAsync(async ValueTask<Result> (_) =>
+            await Yielding.ValueTaskOf(Result.Success()), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -2086,6 +3450,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result actual = await result.SelectManyAsync(async Task<Result> (_, _) => await Yielding.TaskOf(Result.Success()), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from failure should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -2096,6 +3475,21 @@ public sealed class ResultGenericTests
 
         // When
         Result actual = await result.SelectManyAsync(async ValueTask<Result> (_, _) => await ValueTask.FromResult(Result.Success()), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from failure should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result expected = Result.Failure(FailureException);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result actual = await result.SelectManyAsync(async ValueTask<Result> (_, _) => await Yielding.ValueTaskOf(Result.Success()), cancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -2116,6 +3510,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        Result expected = Result.Success();
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result actual = await result.SelectManyAsync(async Task<Result> (_, _) => await Yielding.TaskOf(Result.Success()), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from success should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -2126,6 +3535,21 @@ public sealed class ResultGenericTests
 
         // When
         Result actual = await result.SelectManyAsync(async ValueTask<Result> (_, _) => await ValueTask.FromResult(Result.Success()), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function with CancellationToken from success should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionWithCancellationTokenFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(1);
+        Result expected = Result.Success();
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result actual = await result.SelectManyAsync(async ValueTask<Result> (_, _) => await Yielding.ValueTaskOf(Result.Success()), cancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -2218,6 +3642,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async Task<Result<int>> (_) =>
+            await Yielding.TaskOf(Result<int>.Success(1)), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectManyAsync function of TResult from failure should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectManyAsyncFunctionOfTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -2228,6 +3667,21 @@ public sealed class ResultGenericTests
         // When
         Result<int> actual = await result.SelectManyAsync<int>(async ValueTask<Result<int>> (_) =>
             await ValueTask.FromResult(Result<int>.Success(1)), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult from failure should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async ValueTask<Result<int>> (_) =>
+            await Yielding.ValueTaskOf(Result<int>.Success(1)), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -2248,6 +3702,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(2);
+        Result<int> expected = Result<int>.Success(1);
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async Task<Result<int>> (_) =>
+            await Yielding.TaskOf(Result<int>.Success(1)), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectManyAsync function of TResult from success should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectManyAsyncFunctionOfTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -2258,6 +3727,21 @@ public sealed class ResultGenericTests
         // When
         Result<int> actual = await result.SelectManyAsync<int>(async ValueTask<Result<int>> (_) =>
             await ValueTask.FromResult(Result<int>.Success(1)), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult from success should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(2);
+        Result<int> expected = Result<int>.Success(1);
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async ValueTask<Result<int>> (_) =>
+            await Yielding.ValueTaskOf(Result<int>.Success(1)), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -2306,6 +3790,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from failure should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromFailureShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async Task<Result<int>> (_, _) => await Yielding.TaskOf(Result<int>.Success(1)), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from failure should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromFailureShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -2316,6 +3815,21 @@ public sealed class ResultGenericTests
 
         // When
         Result<int> actual = await result.SelectManyAsync<int>(async ValueTask<Result<int>> (_, _) => await ValueTask.FromResult(Result<int>.Success(1)), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from failure should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromFailureShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        Result<int> expected = Result<int>.Failure(FailureException);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async ValueTask<Result<int>> (_, _) => await Yielding.ValueTaskOf(Result<int>.Success(1)), cancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -2336,6 +3850,21 @@ public sealed class ResultGenericTests
         Assert.Equal(expected, actual);
     }
 
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from success should produce the expected result when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromSuccessShouldProduceExpectedResultWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(2);
+        Result<int> expected = Result<int>.Success(1);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async Task<Result<int>> (_, _) => await Yielding.TaskOf(Result<int>.Success(1)), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
     [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from success should produce the expected result with ValueTask delegates.")]
     public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromSuccessShouldProduceExpectedResultWithValueTaskDelegates()
     {
@@ -2346,6 +3875,21 @@ public sealed class ResultGenericTests
 
         // When
         Result<int> actual = await result.SelectManyAsync<int>(async ValueTask<Result<int>> (_, _) => await ValueTask.FromResult(Result<int>.Success(1)), cancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Result.SelectManyAsync function of TResult with CancellationToken from success should produce the expected result with ValueTask delegates when the delegates complete asynchronously.")]
+    public async Task ResultSelectManyAsyncFunctionOfTResultWithCancellationTokenFromSuccessShouldProduceExpectedResultWithValueTaskDelegatesWhenDelegatesCompleteAsynchronously()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(2);
+        Result<int> expected = Result<int>.Success(1);
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        // When
+        Result<int> actual = await result.SelectManyAsync<int>(async ValueTask<Result<int>> (_, _) => await Yielding.ValueTaskOf(Result<int>.Success(1)), cancellationToken);
 
         // Then
         Assert.Equal(expected, actual);

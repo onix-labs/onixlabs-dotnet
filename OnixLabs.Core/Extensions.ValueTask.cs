@@ -34,11 +34,14 @@ internal static class ValueTaskExtensions
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>
-        /// Returns the current <see cref="ValueTask"/> if it has already completed, without allocating;
+        /// Returns the current <see cref="ValueTask"/> if it has already completed, or if the specified
+        /// <see cref="CancellationToken"/> can never be cancelled, without allocating;
         /// otherwise, returns a <see cref="ValueTask"/> that represents the asynchronous wait.
         /// </returns>
         public ValueTask WaitAsync(CancellationToken cancellationToken) =>
-            receiver.IsCompleted ? receiver : new ValueTask(receiver.AsTask().WaitAsync(cancellationToken));
+            receiver.IsCompleted || !cancellationToken.CanBeCanceled
+                ? receiver
+                : new ValueTask(receiver.AsTask().WaitAsync(cancellationToken));
     }
 
     /// <summary>
@@ -53,10 +56,13 @@ internal static class ValueTaskExtensions
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>
-        /// Returns the current <see cref="ValueTask{TResult}"/> if it has already completed, without allocating;
+        /// Returns the current <see cref="ValueTask{TResult}"/> if it has already completed, or if the specified
+        /// <see cref="CancellationToken"/> can never be cancelled, without allocating;
         /// otherwise, returns a <see cref="ValueTask{TResult}"/> that represents the asynchronous wait.
         /// </returns>
         public ValueTask<TResult> WaitAsync(CancellationToken cancellationToken) =>
-            receiver.IsCompleted ? receiver : new ValueTask<TResult>(receiver.AsTask().WaitAsync(cancellationToken));
+            receiver.IsCompleted || !cancellationToken.CanBeCanceled
+                ? receiver
+                : new ValueTask<TResult>(receiver.AsTask().WaitAsync(cancellationToken));
     }
 }

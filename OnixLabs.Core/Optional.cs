@@ -14,6 +14,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OnixLabs.Core;
 
@@ -207,6 +209,250 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     }
 
     /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async Task MatchAsync(Func<T, Task>? some = null, Action? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                if (some is not null)
+                    await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false);
+                break;
+            default:
+                none?.Invoke();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async ValueTask MatchAsync(Func<T, ValueTask>? some = null, Action? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                if (some is not null)
+                    await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false);
+                break;
+            default:
+                none?.Invoke();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async Task MatchAsync(Func<T, CancellationToken, Task>? some = null, Action? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                if (some is not null)
+                    await some(someOptional.Value, cancellationToken).ConfigureAwait(false);
+                break;
+            default:
+                none?.Invoke();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async ValueTask MatchAsync(Func<T, CancellationToken, ValueTask>? some = null, Action? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                if (some is not null)
+                    await some(someOptional.Value, cancellationToken).ConfigureAwait(false);
+                break;
+            default:
+                none?.Invoke();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async Task MatchAsync(Action<T>? some = null, Func<Task>? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                some?.Invoke(someOptional.Value);
+                break;
+            default:
+                if (none is not null)
+                    await none().WaitAsync(cancellationToken).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async ValueTask MatchAsync(Action<T>? some = null, Func<ValueTask>? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                some?.Invoke(someOptional.Value);
+                break;
+            default:
+                if (none is not null)
+                    await none().WaitAsync(cancellationToken).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async Task MatchAsync(Action<T>? some = null, Func<CancellationToken, Task>? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                some?.Invoke(someOptional.Value);
+                break;
+            default:
+                if (none is not null)
+                    await none(cancellationToken).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async ValueTask MatchAsync(Action<T>? some = null, Func<CancellationToken, ValueTask>? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                some?.Invoke(someOptional.Value);
+                break;
+            default:
+                if (none is not null)
+                    await none(cancellationToken).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async Task MatchAsync(Func<T, Task>? some = null, Func<Task>? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                if (some is not null)
+                    await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false);
+                break;
+            default:
+                if (none is not null)
+                    await none().WaitAsync(cancellationToken).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async ValueTask MatchAsync(Func<T, ValueTask>? some = null, Func<ValueTask>? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                if (some is not null)
+                    await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false);
+                break;
+            default:
+                if (none is not null)
+                    await none().WaitAsync(cancellationToken).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async Task MatchAsync(Func<T, CancellationToken, Task>? some = null, Func<CancellationToken, Task>? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                if (some is not null)
+                    await some(someOptional.Value, cancellationToken).ConfigureAwait(false);
+                break;
+            default:
+                if (none is not null)
+                    await none(cancellationToken).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    public async ValueTask MatchAsync(Func<T, CancellationToken, ValueTask>? some = null, Func<CancellationToken, ValueTask>? none = null, CancellationToken cancellationToken = default)
+    {
+        switch (this)
+        {
+            case Some<T> someOptional:
+                if (some is not null)
+                    await some(someOptional.Value, cancellationToken).ConfigureAwait(false);
+                break;
+            default:
+                if (none is not null)
+                    await none(cancellationToken).ConfigureAwait(false);
+                break;
+        }
+    }
+
+    /// <summary>
     /// Executes the function that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
     /// </summary>
     /// <param name="some">The function to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
@@ -220,6 +466,210 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     {
         Some<T> someOptional => some.Invoke(someOptional.Value),
         _ => none.Invoke()
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<T, Task<TResult>> some, Func<TResult> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
+        _ => none()
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(Func<T, ValueTask<TResult>> some, Func<TResult> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
+        _ => none()
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<T, CancellationToken, Task<TResult>> some, Func<TResult> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => await some(someOptional.Value, cancellationToken).ConfigureAwait(false),
+        _ => none()
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(Func<T, CancellationToken, ValueTask<TResult>> some, Func<TResult> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => await some(someOptional.Value, cancellationToken).ConfigureAwait(false),
+        _ => none()
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<T, TResult> some, Func<Task<TResult>> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => some(someOptional.Value),
+        _ => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(Func<T, TResult> some, Func<ValueTask<TResult>> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => some(someOptional.Value),
+        _ => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<T, TResult> some, Func<CancellationToken, Task<TResult>> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => some(someOptional.Value),
+        _ => await none(cancellationToken).ConfigureAwait(false)
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(Func<T, TResult> some, Func<CancellationToken, ValueTask<TResult>> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => some(someOptional.Value),
+        _ => await none(cancellationToken).ConfigureAwait(false)
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<T, Task<TResult>> some, Func<Task<TResult>> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
+        _ => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(Func<T, ValueTask<TResult>> some, Func<ValueTask<TResult>> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
+        _ => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(Func<T, CancellationToken, Task<TResult>> some, Func<CancellationToken, Task<TResult>> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => await some(someOptional.Value, cancellationToken).ConfigureAwait(false),
+        _ => await none(cancellationToken).ConfigureAwait(false)
+    };
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the value of the current <see cref="Optional{T}"/> instance and returns its result.
+    /// </summary>
+    /// <param name="some">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is present.</param>
+    /// <param name="none">The delegate to execute when the underlying value of the current <see cref="Optional{T}"/> instance is absent.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="some"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is present;
+    /// otherwise, returns the result of the <paramref name="none"/> delegate if the underlying value of the current <see cref="Optional{T}"/> instance is absent.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(Func<T, CancellationToken, ValueTask<TResult>> some, Func<CancellationToken, ValueTask<TResult>> none, CancellationToken cancellationToken = default) => this switch
+    {
+        Some<T> someOptional => await some(someOptional.Value, cancellationToken).ConfigureAwait(false),
+        _ => await none(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -238,6 +688,70 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     };
 
     /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the delegate if the current
+    /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
+    /// </returns>
+    public async Task<Optional<TResult>> SelectAsync<TResult>(Func<T, Task<TResult>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => await selector(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
+        _ => Optional<TResult>.None
+    };
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the delegate if the current
+    /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
+    /// </returns>
+    public async ValueTask<Optional<TResult>> SelectAsync<TResult>(Func<T, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => await selector(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
+        _ => Optional<TResult>.None
+    };
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the delegate if the current
+    /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
+    /// </returns>
+    public async Task<Optional<TResult>> SelectAsync<TResult>(Func<T, CancellationToken, Task<TResult>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => await selector(someOptional.Value, cancellationToken).ConfigureAwait(false),
+        _ => Optional<TResult>.None
+    };
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the delegate if the current
+    /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
+    /// </returns>
+    public async ValueTask<Optional<TResult>> SelectAsync<TResult>(Func<T, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => await selector(someOptional.Value, cancellationToken).ConfigureAwait(false),
+        _ => Optional<TResult>.None
+    };
+
+    /// <summary>
     /// Applies the provided selector function to the value of the current <see cref="Optional{T}"/> instance.
     /// </summary>
     /// <param name="selector">The function to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
@@ -249,6 +763,70 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public Optional<TResult> SelectMany<TResult>(Func<T, Optional<TResult>> selector) where TResult : notnull => this switch
     {
         Some<T> someOptional => selector(someOptional.Value),
+        _ => Optional<TResult>.None
+    };
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the delegate if the current
+    /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
+    /// </returns>
+    public async Task<Optional<TResult>> SelectManyAsync<TResult>(Func<T, Task<Optional<TResult>>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => await selector(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
+        _ => Optional<TResult>.None
+    };
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the delegate if the current
+    /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
+    /// </returns>
+    public async ValueTask<Optional<TResult>> SelectManyAsync<TResult>(Func<T, ValueTask<Optional<TResult>>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => await selector(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
+        _ => Optional<TResult>.None
+    };
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the delegate if the current
+    /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
+    /// </returns>
+    public async Task<Optional<TResult>> SelectManyAsync<TResult>(Func<T, CancellationToken, Task<Optional<TResult>>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => await selector(someOptional.Value, cancellationToken).ConfigureAwait(false),
+        _ => Optional<TResult>.None
+    };
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate to the value of the current <see cref="Optional{T}"/> instance.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the value of the current <see cref="Optional{T}"/> instance.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a new <see cref="Optional{TResult}"/> instance containing the result of the delegate if the current
+    /// <see cref="Optional{T}"/> instance has an underlying value; otherwise, <see cref="Optional{TResult}.None"/>.
+    /// </returns>
+    public async ValueTask<Optional<TResult>> SelectManyAsync<TResult>(Func<T, CancellationToken, ValueTask<Optional<TResult>>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
+    {
+        Some<T> someOptional => await selector(someOptional.Value, cancellationToken).ConfigureAwait(false),
         _ => Optional<TResult>.None
     };
 

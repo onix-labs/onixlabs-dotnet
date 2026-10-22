@@ -460,7 +460,7 @@ public sealed class ObjectExtensionTests
         const string expected = "abc";
 
         // When
-        Optional<string> optional = await Task.FromResult<string?>(expected).ToOptionalAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> optional = await Task.FromResult<string?>(expected).ToOptionalAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Some<string> some = Assert.IsType<Some<string>>(optional);
@@ -474,7 +474,7 @@ public sealed class ObjectExtensionTests
         const string? expected = null;
 
         // When
-        Optional<string> optional = await Task.FromResult(expected).ToOptionalAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> optional = await Task.FromResult(expected).ToOptionalAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<None<string>>(optional);
@@ -487,7 +487,7 @@ public sealed class ObjectExtensionTests
         const int expected = 123;
 
         // When
-        Optional<int> optional = await Task.FromResult(expected).ToOptionalAsync(token: TestContext.Current.CancellationToken);
+        Optional<int> optional = await Task.FromResult(expected).ToOptionalAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Some<int> some = Assert.IsType<Some<int>>(optional);
@@ -501,7 +501,7 @@ public sealed class ObjectExtensionTests
         int? expected = null;
 
         // When
-        Optional<int> optional = await Task.FromResult(expected).ToOptionalAsync(token: TestContext.Current.CancellationToken);
+        Optional<int> optional = await Task.FromResult(expected).ToOptionalAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<None<int>>(optional);
@@ -529,7 +529,7 @@ public sealed class ObjectExtensionTests
 
         // When
         Task<string> task = Task.FromResult(expected);
-        Result<string> result = await task.ToSuccessAsync(token: TestContext.Current.CancellationToken);
+        Result<string> result = await task.ToSuccessAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Success<string> success = Assert.IsType<Success<string>>(result);

@@ -29,7 +29,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Success();
 
         // When
-        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(token: TestContext.Current.CancellationToken);
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Null(actual);
@@ -42,7 +42,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Success();
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException, token: TestContext.Current.CancellationToken);
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -56,7 +56,7 @@ public sealed class ResultExtensionTests
 
         // When
         Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken));
+            await Task.FromResult(result).GetExceptionOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal("The current result is in a success state; no exception to retrieve.", exception.Message);
@@ -69,7 +69,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Failure(FailureException);
 
         // When
-        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(token: TestContext.Current.CancellationToken);
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -82,7 +82,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Failure(FailureException);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"), token: TestContext.Current.CancellationToken);
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -95,7 +95,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Failure(FailureException);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken);
+        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -108,7 +108,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Success(123);
 
         // When
-        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(token: TestContext.Current.CancellationToken);
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Null(actual);
@@ -121,7 +121,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Success(123);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException, token: TestContext.Current.CancellationToken);
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(FailureException, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -135,7 +135,7 @@ public sealed class ResultExtensionTests
 
         // When
         Exception exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken));
+            await Task.FromResult(result).GetExceptionOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal("The current result is in a success state; no exception to retrieve.", exception.Message);
@@ -148,7 +148,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Failure(FailureException);
 
         // When
-        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(token: TestContext.Current.CancellationToken);
+        Exception? actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -161,7 +161,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Failure(FailureException);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"), token: TestContext.Current.CancellationToken);
+        Exception actual = await Task.FromResult(result).GetExceptionOrDefaultAsync(new Exception("unexpected exception"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -174,7 +174,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Failure(FailureException);
 
         // When
-        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync(token: TestContext.Current.CancellationToken);
+        Exception actual = await Task.FromResult(result).GetExceptionOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(FailureException, actual);
@@ -190,8 +190,8 @@ public sealed class ResultExtensionTests
         Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText), TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrDefaultAsync(token: TestContext.Current.CancellationToken);
-        string? actualText = await textTask.GetValueOrDefaultAsync(token: TestContext.Current.CancellationToken);
+        int actualNumber = await numberTask.GetValueOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
+        string? actualText = await textTask.GetValueOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -208,8 +208,8 @@ public sealed class ResultExtensionTests
         Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrDefaultAsync(token: TestContext.Current.CancellationToken);
-        string? actualText = await textTask.GetValueOrDefaultAsync(token: TestContext.Current.CancellationToken);
+        int actualNumber = await numberTask.GetValueOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
+        string? actualText = await textTask.GetValueOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, actualNumber);
@@ -226,9 +226,9 @@ public sealed class ResultExtensionTests
         Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText), TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrDefaultAsync(456, token: TestContext.Current.CancellationToken);
+        int actualNumber = await numberTask.GetValueOrDefaultAsync(456, cancellationToken: TestContext.Current.CancellationToken);
         // ReSharper disable once VariableCanBeNotNullable
-        string? actualText = await textTask.GetValueOrDefaultAsync("xyz", token: TestContext.Current.CancellationToken);
+        string? actualText = await textTask.GetValueOrDefaultAsync("xyz", cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -247,8 +247,8 @@ public sealed class ResultExtensionTests
         Task<Result<string>> textTask = Result<string>.OfAsync(() => throw FailureException, TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrDefaultAsync(expectedNumber, token: TestContext.Current.CancellationToken);
-        string actualText = await textTask.GetValueOrDefaultAsync(expectedText, token: TestContext.Current.CancellationToken);
+        int actualNumber = await numberTask.GetValueOrDefaultAsync(expectedNumber, cancellationToken: TestContext.Current.CancellationToken);
+        string actualText = await textTask.GetValueOrDefaultAsync(expectedText, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -267,8 +267,8 @@ public sealed class ResultExtensionTests
         Task<Result<string>> textTask = Result<string>.OfAsync(async () => await Task.FromResult(expectedText), TestContext.Current.CancellationToken);
 
         // When
-        int actualNumber = await numberTask.GetValueOrThrowAsync(token: TestContext.Current.CancellationToken);
-        string actualText = await textTask.GetValueOrThrowAsync(token: TestContext.Current.CancellationToken);
+        int actualNumber = await numberTask.GetValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken);
+        string actualText = await textTask.GetValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -286,10 +286,10 @@ public sealed class ResultExtensionTests
 
         // When
         Exception numberException = await Assert.ThrowsAsync<Exception>(async () =>
-            await numberTask.GetValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+            await numberTask.GetValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         Exception textException = await Assert.ThrowsAsync<Exception>(async () =>
-            await textTask.GetValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+            await textTask.GetValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal(numberException, FailureException);
@@ -371,8 +371,8 @@ public sealed class ResultExtensionTests
         Result<string> textResult = expectedText;
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.Of(expectedNumber), actualNumber);
@@ -386,7 +386,7 @@ public sealed class ResultExtensionTests
         Result<int> numberResult = Result<int>.Success(0);
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(Optional<int>.IsSome(actualNumber));
@@ -400,7 +400,7 @@ public sealed class ResultExtensionTests
         Result<string> textResult = Result<string>.Success(null!);
 
         // When
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<string>.None, actualText);
@@ -414,8 +414,8 @@ public sealed class ResultExtensionTests
         Result<string> textResult = Result<string>.Failure(FailureException);
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.None, actualNumber);
@@ -486,8 +486,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = expectedText;
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -504,8 +504,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = expectedText;
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -522,8 +522,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Result<Optional<string>>.Failure(FailureException);
 
         // When
-        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
-        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(token: TestContext.Current.CancellationToken);
+        Optional<int> actualNumber = await Task.FromResult(numberResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Optional<string> actualText = await Task.FromResult(textResult).GetValueOrNoneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -590,8 +590,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Optional<string>.Some(expectedText);
 
         // When
-        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken);
-        string actualText = await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken);
+        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken);
+        string actualText = await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -607,10 +607,10 @@ public sealed class ResultExtensionTests
 
         // When
         Exception numberException = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+            await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         Exception textException = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+            await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal("Optional value of type System.Int32 is not present.", numberException.Message);
@@ -626,10 +626,10 @@ public sealed class ResultExtensionTests
 
         // When
         Exception numberException = await Assert.ThrowsAsync<Exception>(async () =>
-            await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+            await Task.FromResult(numberResult).GetOptionalValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         Exception textException = await Assert.ThrowsAsync<Exception>(async () =>
-            await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(token: TestContext.Current.CancellationToken));
+            await Task.FromResult(textResult).GetOptionalValueOrThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
 
         // Then
         Assert.Equal("Result has failed.", numberException.Message);
@@ -690,7 +690,6 @@ public sealed class ResultExtensionTests
         Assert.Equal(expectedText, actualText);
     }
 
-
     [Fact(DisplayName = "Result.GetOptionalValueOrDefaultAsync should return the Optional value when the Result is Success and the Optional value is not None")]
     public async Task ResultGetOptionalValueOrDefaultAsyncShouldReturnOptionalValueWhenResultIsSuccessAndOptionalValueIsNotNone()
     {
@@ -701,8 +700,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Optional<string>.Some(expectedText);
 
         // When
-        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(456, token: TestContext.Current.CancellationToken);
-        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync("xyz", token: TestContext.Current.CancellationToken);
+        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(456, cancellationToken: TestContext.Current.CancellationToken);
+        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync("xyz", cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -719,8 +718,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Optional<string>.None;
 
         // When
-        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(expectedNumber, token: TestContext.Current.CancellationToken);
-        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync(expectedText, token: TestContext.Current.CancellationToken);
+        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(expectedNumber, cancellationToken: TestContext.Current.CancellationToken);
+        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync(expectedText, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -737,8 +736,8 @@ public sealed class ResultExtensionTests
         Result<Optional<string>> textResult = Result<Optional<string>>.Failure(new Exception("Result has failed."));
 
         // When
-        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(expectedNumber, token: TestContext.Current.CancellationToken);
-        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync(expectedText, token: TestContext.Current.CancellationToken);
+        int actualNumber = await Task.FromResult(numberResult).GetOptionalValueOrDefaultAsync(expectedNumber, cancellationToken: TestContext.Current.CancellationToken);
+        string actualText = await Task.FromResult(textResult).GetOptionalValueOrDefaultAsync(expectedText, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expectedNumber, actualNumber);
@@ -754,7 +753,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -774,7 +773,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -794,7 +793,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -802,6 +801,26 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SuccessAsync() => await Task.Run(() => successCalled = true);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<ValueTask>, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTaskActionExceptionWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync() => await Task.Run(() => successCalled = true);
         void Failure(Exception exception) => failureCalled = true;
     }
 
@@ -814,7 +833,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -822,6 +841,26 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SuccessAsync() => await Task.Run(() => successCalled = true);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<ValueTask>, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTaskActionExceptionWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync() => await Task.Run(() => successCalled = true);
         void Failure(Exception exception) => failureCalled = true;
     }
 
@@ -834,7 +873,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -842,6 +881,26 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<CancellationToken, ValueTask>, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncCancellationTokenTaskActionExceptionWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
         void Failure(Exception exception) => failureCalled = true;
     }
 
@@ -854,7 +913,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -862,6 +921,26 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<CancellationToken, ValueTask>, Action<Exception>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateFuncCancellationTokenTaskActionExceptionWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
         void Failure(Exception exception) => failureCalled = true;
     }
 
@@ -874,7 +953,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -883,6 +962,26 @@ public sealed class ResultExtensionTests
         return;
         void Success() => successCalled = true;
         async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Action, Func<Exception, ValueTask>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionFuncExceptionTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        async ValueTask FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Action, Func<Exception, Task>)")]
@@ -894,7 +993,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -903,6 +1002,26 @@ public sealed class ResultExtensionTests
         return;
         void Success() => successCalled = true;
         async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Action, Func<Exception, ValueTask>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateActionFuncExceptionTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        async ValueTask FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Action, Func<Exception, CancellationToken, Task>)")]
@@ -914,7 +1033,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -923,6 +1042,26 @@ public sealed class ResultExtensionTests
         return;
         void Success() => successCalled = true;
         async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Action, Func<Exception, CancellationToken, ValueTask>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionFuncExceptionCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        async ValueTask FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Action, Func<Exception, CancellationToken, Task>)")]
@@ -934,7 +1073,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -943,6 +1082,26 @@ public sealed class ResultExtensionTests
         return;
         void Success() => successCalled = true;
         async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Action, Func<Exception, CancellationToken, ValueTask>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateActionFuncExceptionCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success() => successCalled = true;
+        async ValueTask FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<Task>, Func<Exception, Task>)")]
@@ -954,7 +1113,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -963,6 +1122,26 @@ public sealed class ResultExtensionTests
         return;
         async Task SuccessAsync() => await Task.Run(() => successCalled = true);
         async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<ValueTask>, Func<Exception, ValueTask>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTaskFuncExceptionTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync() => await Task.Run(() => successCalled = true);
+        async ValueTask FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<Task>, Func<Exception, Task>)")]
@@ -974,7 +1153,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -983,6 +1162,26 @@ public sealed class ResultExtensionTests
         return;
         async Task SuccessAsync() => await Task.Run(() => successCalled = true);
         async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<ValueTask>, Func<Exception, ValueTask>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTaskFuncExceptionTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync() => await Task.Run(() => successCalled = true);
+        async ValueTask FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<CancellationToken, Task>, Func<Exception, CancellationToken, Task>)")]
@@ -994,7 +1193,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1003,6 +1202,26 @@ public sealed class ResultExtensionTests
         return;
         async Task SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
         async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Success should invoke the success delegate (Func<CancellationToken, ValueTask>, Func<Exception, CancellationToken, ValueTask>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncCancellationTokenTaskFuncExceptionCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        async ValueTask FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<CancellationToken, Task>, Func<Exception, CancellationToken, Task>)")]
@@ -1014,7 +1233,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1025,6 +1244,26 @@ public sealed class ResultExtensionTests
         async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
     }
 
+    [Fact(DisplayName = "Task<Result>.MatchAsync of Failure should invoke the failure delegate (Func<CancellationToken, ValueTask>, Func<Exception, CancellationToken, ValueTask>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldInvokeFailureDelegateFuncCancellationTokenTaskFuncExceptionCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        async ValueTask FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
     [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<TResult>, Func<Exception, TResult>)")]
     public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncResultFuncExceptionResult()
     {
@@ -1033,7 +1272,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1051,7 +1290,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1069,13 +1308,31 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
 
         return;
         async Task<string> SuccessAsync() => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<ValueTask<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTaskResultFuncExceptionResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync() => await ValueTask.FromResult("Success");
         string Failure(Exception exception) => "Failure";
     }
 
@@ -1087,13 +1344,31 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
 
         return;
         async Task<string> SuccessAsync() => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<ValueTask<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTaskResultFuncExceptionResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync() => await ValueTask.FromResult("Success");
         string Failure(Exception exception) => "Failure";
     }
 
@@ -1105,13 +1380,31 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
 
         return;
         async Task<string> SuccessAsync(CancellationToken ct) => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<CancellationToken, ValueTask<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncCancellationTokenTaskResultFuncExceptionResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(CancellationToken ct) => await ValueTask.FromResult("Success");
         string Failure(Exception exception) => "Failure";
     }
 
@@ -1123,13 +1416,31 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
 
         return;
         async Task<string> SuccessAsync(CancellationToken ct) => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<CancellationToken, ValueTask<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncCancellationTokenTaskResultFuncExceptionResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(CancellationToken ct) => await ValueTask.FromResult("Success");
         string Failure(Exception exception) => "Failure";
     }
 
@@ -1141,7 +1452,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1149,6 +1460,24 @@ public sealed class ResultExtensionTests
         return;
         string Success() => "Success";
         async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<TResult>, Func<Exception, ValueTask<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncResultFuncExceptionTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        async ValueTask<string> FailureAsync(Exception exception) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<TResult>, Func<Exception, Task<TResult>>>)")]
@@ -1159,7 +1488,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1167,6 +1496,24 @@ public sealed class ResultExtensionTests
         return;
         string Success() => "Success";
         async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<TResult>, Func<Exception, ValueTask<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncResultFuncExceptionTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        async ValueTask<string> FailureAsync(Exception exception) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<TResult>, Func<Exception, CancellationToken, Task<TResult>>>)")]
@@ -1177,7 +1524,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1185,6 +1532,24 @@ public sealed class ResultExtensionTests
         return;
         string Success() => "Success";
         async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<TResult>, Func<Exception, CancellationToken, ValueTask<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncResultFuncExceptionCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        async ValueTask<string> FailureAsync(Exception exception, CancellationToken ct) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<TResult>, Func<Exception, CancellationToken, Task<TResult>>>)")]
@@ -1195,7 +1560,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1203,6 +1568,24 @@ public sealed class ResultExtensionTests
         return;
         string Success() => "Success";
         async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<TResult>, Func<Exception, CancellationToken, ValueTask<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncResultFuncExceptionCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success() => "Success";
+        async ValueTask<string> FailureAsync(Exception exception, CancellationToken ct) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<Task<TResult>>, Func<Exception, Task<TResult>>>)")]
@@ -1213,7 +1596,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1221,6 +1604,24 @@ public sealed class ResultExtensionTests
         return;
         async Task<string> SuccessAsync() => await Task.FromResult("Success");
         async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<ValueTask<TResult>>, Func<Exception, ValueTask<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTaskResultFuncExceptionTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync() => await ValueTask.FromResult("Success");
+        async ValueTask<string> FailureAsync(Exception exception) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<Task<TResult>>, Func<Exception, Task<TResult>>>)")]
@@ -1231,7 +1632,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1239,6 +1640,24 @@ public sealed class ResultExtensionTests
         return;
         async Task<string> SuccessAsync() => await Task.FromResult("Success");
         async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<ValueTask<TResult>>, Func<Exception, ValueTask<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTaskResultFuncExceptionTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync() => await ValueTask.FromResult("Success");
+        async ValueTask<string> FailureAsync(Exception exception) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>>)")]
@@ -1249,7 +1668,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1257,6 +1676,24 @@ public sealed class ResultExtensionTests
         return;
         async Task<string> SuccessAsync(CancellationToken ct) => await Task.FromResult("Success");
         async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Success should return the result from success delegate (Func<CancellationToken, ValueTask<TResult>>, Func<Exception, CancellationToken, ValueTask<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncCancellationTokenTaskResultFuncExceptionCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(CancellationToken ct) => await ValueTask.FromResult("Success");
+        async ValueTask<string> FailureAsync(Exception exception, CancellationToken ct) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>>)")]
@@ -1267,7 +1704,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1275,6 +1712,24 @@ public sealed class ResultExtensionTests
         return;
         async Task<string> SuccessAsync(CancellationToken ct) => await Task.FromResult("Success");
         async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result>.MatchAsync<TResult> of Failure should return the result from failure delegate (Func<CancellationToken, ValueTask<TResult>>, Func<Exception, CancellationToken, ValueTask<TResult>>>)")]
+    public async Task TaskResultMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncCancellationTokenTaskResultFuncExceptionCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(CancellationToken ct) => await ValueTask.FromResult("Success");
+        async ValueTask<string> FailureAsync(Exception exception, CancellationToken ct) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Action<T>, Action<Exception>)")]
@@ -1286,7 +1741,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1306,7 +1761,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1326,7 +1781,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1334,6 +1789,26 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SuccessAsync(int value) => await Task.Run(() => successCalled = value == 42);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, ValueTask>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTTaskActionExceptionWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(int value) => await Task.Run(() => successCalled = value == 42);
         void Failure(Exception exception) => failureCalled = true;
     }
 
@@ -1346,7 +1821,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1354,6 +1829,26 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SuccessAsync(int value) => await Task.Run(() => successCalled = true);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, ValueTask>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTTaskActionExceptionWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(int value) => await Task.Run(() => successCalled = true);
         void Failure(Exception exception) => failureCalled = true;
     }
 
@@ -1366,7 +1861,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1374,6 +1869,26 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = value == 42, ct);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, CancellationToken, ValueTask>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTCancellationTokenTaskActionExceptionWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = value == 42, ct);
         void Failure(Exception exception) => failureCalled = true;
     }
 
@@ -1386,7 +1901,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1394,6 +1909,26 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        void Failure(Exception exception) => failureCalled = true;
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, CancellationToken, ValueTask>, Action<Exception>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTCancellationTokenTaskActionExceptionWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
         void Failure(Exception exception) => failureCalled = true;
     }
 
@@ -1406,7 +1941,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1415,6 +1950,26 @@ public sealed class ResultExtensionTests
         return;
         void Success(int value) => successCalled = value == 42;
         async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Action<T>, Func<Exception, ValueTask>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionTFuncExceptionTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = value == 42;
+        async ValueTask FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Action<T>, Func<Exception, Task>)")]
@@ -1426,7 +1981,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1435,6 +1990,26 @@ public sealed class ResultExtensionTests
         return;
         void Success(int value) => successCalled = true;
         async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Action<T>, Func<Exception, ValueTask>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateActionTFuncExceptionTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = true;
+        async ValueTask FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Action<T>, Func<Exception, CancellationToken, Task>)")]
@@ -1446,7 +2021,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1455,6 +2030,26 @@ public sealed class ResultExtensionTests
         return;
         void Success(int value) => successCalled = value == 42;
         async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Action<T>, Func<Exception, CancellationToken, ValueTask>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateActionTFuncExceptionCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = value == 42;
+        async ValueTask FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Action<T>, Func<Exception, CancellationToken, Task>)")]
@@ -1466,7 +2061,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1475,6 +2070,26 @@ public sealed class ResultExtensionTests
         return;
         void Success(int value) => successCalled = true;
         async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Action<T>, Func<Exception, CancellationToken, ValueTask>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateActionTFuncExceptionCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        void Success(int value) => successCalled = true;
+        async ValueTask FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, Task>, Func<Exception, Task>)")]
@@ -1486,7 +2101,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1495,6 +2110,26 @@ public sealed class ResultExtensionTests
         return;
         async Task SuccessAsync(int value) => await Task.Run(() => successCalled = value == 42);
         async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, ValueTask>, Func<Exception, ValueTask>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTTaskFuncExceptionTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(int value) => await Task.Run(() => successCalled = value == 42);
+        async ValueTask FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, Task>, Func<Exception, Task>)")]
@@ -1506,7 +2141,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1515,6 +2150,26 @@ public sealed class ResultExtensionTests
         return;
         async Task SuccessAsync(int value) => await Task.Run(() => successCalled = true);
         async Task FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, ValueTask>, Func<Exception, ValueTask>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTTaskFuncExceptionTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(int value) => await Task.Run(() => successCalled = true);
+        async ValueTask FailureAsync(Exception exception) => await Task.Run(() => failureCalled = true);
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, CancellationToken, Task>, Func<Exception, CancellationToken, Task>)")]
@@ -1526,7 +2181,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(successCalled);
@@ -1535,6 +2190,26 @@ public sealed class ResultExtensionTests
         return;
         async Task SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = value == 42, ct);
         async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Success should invoke the success delegate (Func<T, CancellationToken, ValueTask>, Func<Exception, CancellationToken, ValueTask>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldInvokeSuccessDelegateFuncTCancellationTokenTaskFuncExceptionCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(successCalled);
+        Assert.False(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = value == 42, ct);
+        async ValueTask FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, CancellationToken, Task>, Func<Exception, CancellationToken, Task>)")]
@@ -1546,7 +2221,7 @@ public sealed class ResultExtensionTests
         bool failureCalled = false;
 
         // When
-        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.False(successCalled);
@@ -1557,6 +2232,26 @@ public sealed class ResultExtensionTests
         async Task FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync of Failure should invoke the failure delegate (Func<T, CancellationToken, ValueTask>, Func<Exception, CancellationToken, ValueTask>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldInvokeFailureDelegateFuncTCancellationTokenTaskFuncExceptionCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool successCalled = false;
+        bool failureCalled = false;
+
+        // When
+        await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.False(successCalled);
+        Assert.True(failureCalled);
+
+        return;
+        async ValueTask SuccessAsync(int value, CancellationToken ct) => await Task.Run(() => successCalled = true, ct);
+        async ValueTask FailureAsync(Exception exception, CancellationToken ct) => await Task.Run(() => failureCalled = true, ct);
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, TResult>, Func<Exception, TResult>)")]
     public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTResultFuncExceptionResult()
     {
@@ -1565,7 +2260,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1583,7 +2278,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1601,13 +2296,31 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
 
         return;
         async Task<string> SuccessAsync(int value) => await Task.FromResult(value == 42 ? "Success" : "Failure");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, ValueTask<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTTaskResultFuncExceptionResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(int value) => await ValueTask.FromResult(value == 42 ? "Success" : "Failure");
         string Failure(Exception exception) => "Failure";
     }
 
@@ -1619,13 +2332,31 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
 
         return;
         async Task<string> SuccessAsync(int value) => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, ValueTask<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTTaskResultFuncExceptionResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(int value) => await ValueTask.FromResult("Success");
         string Failure(Exception exception) => "Failure";
     }
 
@@ -1637,13 +2368,31 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
 
         return;
         async Task<string> SuccessAsync(int value, CancellationToken ct) => await Task.FromResult(value == 42 ? "Success" : "Failure");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTCancellationTokenTaskResultFuncExceptionResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(int value, CancellationToken ct) => await ValueTask.FromResult(value == 42 ? "Success" : "Failure");
         string Failure(Exception exception) => "Failure";
     }
 
@@ -1655,13 +2404,31 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
 
         return;
         async Task<string> SuccessAsync(int value, CancellationToken ct) => await Task.FromResult("Success");
+        string Failure(Exception exception) => "Failure";
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, TResult>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTCancellationTokenTaskResultFuncExceptionResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, Failure, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(int value, CancellationToken ct) => await ValueTask.FromResult("Success");
         string Failure(Exception exception) => "Failure";
     }
 
@@ -1673,7 +2440,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1681,6 +2448,24 @@ public sealed class ResultExtensionTests
         return;
         string Success(int value) => value == 42 ? "Success" : "Failure";
         async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, TResult>, Func<Exception, ValueTask<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTResultFuncExceptionTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => value == 42 ? "Success" : "Failure";
+        async ValueTask<string> FailureAsync(Exception exception) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, TResult>, Func<Exception, Task<TResult>>>)")]
@@ -1691,7 +2476,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1699,6 +2484,24 @@ public sealed class ResultExtensionTests
         return;
         string Success(int value) => "Success";
         async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, TResult>, Func<Exception, ValueTask<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTResultFuncExceptionTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => "Success";
+        async ValueTask<string> FailureAsync(Exception exception) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, TResult>, Func<Exception, CancellationToken, Task<TResult>>>)")]
@@ -1709,7 +2512,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1717,6 +2520,24 @@ public sealed class ResultExtensionTests
         return;
         string Success(int value) => value == 42 ? "Success" : "Failure";
         async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, TResult>, Func<Exception, CancellationToken, ValueTask<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTResultFuncExceptionCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => value == 42 ? "Success" : "Failure";
+        async ValueTask<string> FailureAsync(Exception exception, CancellationToken ct) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, TResult>, Func<Exception, CancellationToken, Task<TResult>>>)")]
@@ -1727,7 +2548,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1735,6 +2556,24 @@ public sealed class ResultExtensionTests
         return;
         string Success(int value) => "Success";
         async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, TResult>, Func<Exception, CancellationToken, ValueTask<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTResultFuncExceptionCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(Success, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        string Success(int value) => "Success";
+        async ValueTask<string> FailureAsync(Exception exception, CancellationToken ct) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, Task<TResult>>, Func<Exception, Task<TResult>>>)")]
@@ -1745,7 +2584,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1753,6 +2592,24 @@ public sealed class ResultExtensionTests
         return;
         async Task<string> SuccessAsync(int value) => await Task.FromResult(value == 42 ? "Success" : "Failure");
         async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, ValueTask<TResult>>, Func<Exception, ValueTask<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTTaskResultFuncExceptionTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(int value) => await ValueTask.FromResult(value == 42 ? "Success" : "Failure");
+        async ValueTask<string> FailureAsync(Exception exception) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, Task<TResult>>, Func<Exception, Task<TResult>>>)")]
@@ -1763,7 +2620,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1771,6 +2628,24 @@ public sealed class ResultExtensionTests
         return;
         async Task<string> SuccessAsync(int value) => await Task.FromResult("Success");
         async Task<string> FailureAsync(Exception exception) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, ValueTask<TResult>>, Func<Exception, ValueTask<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTTaskResultFuncExceptionTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(int value) => await ValueTask.FromResult("Success");
+        async ValueTask<string> FailureAsync(Exception exception) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>>)")]
@@ -1781,7 +2656,7 @@ public sealed class ResultExtensionTests
         const string expected = "Success";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1789,6 +2664,24 @@ public sealed class ResultExtensionTests
         return;
         async Task<string> SuccessAsync(int value, CancellationToken ct) => await Task.FromResult(value == 42 ? "Success" : "Failure");
         async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Success should return result from success delegate (Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, CancellationToken, ValueTask<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfSuccessShouldReturnResultFromSuccessDelegateFuncTCancellationTokenTaskResultFuncExceptionCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        const string expected = "Success";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(int value, CancellationToken ct) => await ValueTask.FromResult(value == 42 ? "Success" : "Failure");
+        async ValueTask<string> FailureAsync(Exception exception, CancellationToken ct) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, CancellationToken, Task<TResult>>, Func<Exception, CancellationToken, Task<TResult>>>)")]
@@ -1799,7 +2692,7 @@ public sealed class ResultExtensionTests
         const string expected = "Failure";
 
         // When
-        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, token: TestContext.Current.CancellationToken);
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(expected, actual);
@@ -1807,6 +2700,24 @@ public sealed class ResultExtensionTests
         return;
         async Task<string> SuccessAsync(int value, CancellationToken ct) => await Task.FromResult("Success");
         async Task<string> FailureAsync(Exception exception, CancellationToken ct) => await Task.FromResult("Failure");
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.MatchAsync<TResult> of Failure should return result from failure delegate (Func<T, CancellationToken, ValueTask<TResult>>, Func<Exception, CancellationToken, ValueTask<TResult>>>)")]
+    public async Task TaskResultOfTMatchAsyncOfFailureShouldReturnResultFromFailureDelegateFuncTCancellationTokenTaskResultFuncExceptionCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        const string expected = "Failure";
+
+        // When
+        string actual = await Task.FromResult(result).MatchAsync(SuccessAsync, FailureAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(expected, actual);
+
+        return;
+        async ValueTask<string> SuccessAsync(int value, CancellationToken ct) => await ValueTask.FromResult("Success");
+        async ValueTask<string> FailureAsync(Exception exception, CancellationToken ct) => await ValueTask.FromResult("Failure");
     }
 
     [Fact(DisplayName = "Task<Result>.SelectAsync of Success should invoke the selector delegate (Action)")]
@@ -1817,7 +2728,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -1835,7 +2746,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -1853,7 +2764,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -1861,6 +2772,24 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SelectorAsync() => await Task.Run(() => selectorInvoked = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Success should invoke the selector delegate (Func<ValueTask>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+        async ValueTask SelectorAsync() => await Task.Run(() => selectorInvoked = true);
     }
 
     [Fact(DisplayName = "Task<Result>.SelectAsync of Failure should not invoke the selector delegate (Func<Task>)")]
@@ -1871,7 +2800,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -1879,6 +2808,24 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SelectorAsync() => await Task.Run(() => selectorInvoked = true);
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Failure should not invoke the selector delegate (Func<ValueTask>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+        async ValueTask SelectorAsync() => await Task.Run(() => selectorInvoked = true);
     }
 
     [Fact(DisplayName = "Task<Result>.SelectAsync of Success should invoke the selector delegate (Func<CancellationToken, Task>)")]
@@ -1889,7 +2836,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -1897,6 +2844,24 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SelectorAsync(CancellationToken ct) => await Task.Run(() => selectorInvoked = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Success should invoke the selector delegate (Func<CancellationToken, ValueTask>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+        async ValueTask SelectorAsync(CancellationToken ct) => await Task.Run(() => selectorInvoked = true, ct);
     }
 
     [Fact(DisplayName = "Task<Result>.SelectAsync of Failure should not invoke the selector delegate (Func<CancellationToken, Task>)")]
@@ -1907,7 +2872,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -1915,6 +2880,24 @@ public sealed class ResultExtensionTests
 
         return;
         async Task SelectorAsync(CancellationToken ct) => await Task.Run(() => selectorInvoked = true, ct);
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync of Failure should not invoke the selector delegate (Func<CancellationToken, ValueTask>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+        async ValueTask SelectorAsync(CancellationToken ct) => await Task.Run(() => selectorInvoked = true, ct);
     }
 
     [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<TResult>)")]
@@ -1925,7 +2908,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -1949,7 +2932,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -1972,7 +2955,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -1985,6 +2968,30 @@ public sealed class ResultExtensionTests
         {
             selectorInvoked = true;
             return await Task.FromResult("Success Result");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<ValueTask<TResult>>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        async ValueTask<string> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult("Success Result");
         }
     }
 
@@ -1996,7 +3003,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2011,6 +3018,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<ValueTask<TResult>>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<string> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult("Success Result");
+        }
+    }
+
     [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<CancellationToken, Task<TResult>>)")]
     public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskTResult()
     {
@@ -2019,7 +3049,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2035,6 +3065,30 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<CancellationToken, ValueTask<TResult>>)")]
+    public async Task TaskResultSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        async ValueTask<string> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult("Success Result");
+        }
+    }
+
     [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<CancellationToken, Task<TResult>>)")]
     public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskTResult()
     {
@@ -2043,7 +3097,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2058,6 +3112,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<CancellationToken, ValueTask<TResult>>)")]
+    public async Task TaskResultSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<string> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult("Success Result");
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Success should invoke the selector delegate (Action<T>)")]
     public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateActionT()
     {
@@ -2066,7 +3143,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2088,7 +3165,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2110,7 +3187,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2122,6 +3199,29 @@ public sealed class ResultExtensionTests
         {
             selectorInvoked = value == 42;
             await Task.CompletedTask;
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Success should invoke the selector delegate (Func<T, ValueTask>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        async ValueTask SelectorAsync(int value)
+        {
+            selectorInvoked = value == 42;
+            await ValueTask.CompletedTask;
         }
     }
 
@@ -2133,7 +3233,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2148,6 +3248,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Failure should not invoke the selector delegate (Func<T, ValueTask>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask SelectorAsync(int value)
+        {
+            selectorInvoked = true;
+            await ValueTask.CompletedTask;
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Success should invoke the selector delegate (Func<T, CancellationToken, Task>)")]
     public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTask()
     {
@@ -2156,7 +3279,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2171,6 +3294,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Success should invoke the selector delegate (Func<T, CancellationToken, ValueTask>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        async ValueTask SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = value == 42;
+            await ValueTask.CompletedTask;
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Failure should not invoke the selector delegate (Func<T, CancellationToken, Task>)")]
     public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTask()
     {
@@ -2179,7 +3325,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2194,6 +3340,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync of Failure should not invoke the selector delegate (Func<T, CancellationToken, ValueTask>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = true;
+            await ValueTask.CompletedTask;
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<T, TResult>)")]
     public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTResult()
     {
@@ -2202,7 +3371,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2226,7 +3395,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2249,7 +3418,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2262,6 +3431,30 @@ public sealed class ResultExtensionTests
         {
             selectorInvoked = value == 42;
             return await Task.FromResult($"Value is {value}");
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<T, ValueTask<TResult>>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Value is 42", actual.GetValueOrThrow());
+
+        return;
+
+        async ValueTask<string> SelectorAsync(int value)
+        {
+            selectorInvoked = value == 42;
+            return await ValueTask.FromResult($"Value is {value}");
         }
     }
 
@@ -2273,7 +3466,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2288,6 +3481,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<T, ValueTask<TResult>>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<string> SelectorAsync(int value)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult($"Value is {value}");
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<T, CancellationToken, Task<TResult>>)")]
     public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResult()
     {
@@ -2296,7 +3512,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2312,6 +3528,30 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Success should invoke the selector delegate (Func<T, CancellationToken, ValueTask<TResult>>)")]
+    public async Task TaskResultOfTSelectAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Value is 42", actual.GetValueOrThrow());
+
+        return;
+
+        async ValueTask<string> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = value == 42;
+            return await ValueTask.FromResult($"Value is {value}");
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<T, CancellationToken, Task<TResult>>)")]
     public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResult()
     {
@@ -2320,7 +3560,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2335,6 +3575,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectAsync<TResult> of Failure should not invoke the selector delegate (Func<T, CancellationToken, ValueTask<TResult>>)")]
+    public async Task TaskResultOfTSelectAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<string> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult($"Value is {value}");
+        }
+    }
+
     [Fact(DisplayName = "Task<Result>.SelectManyAsync of Success should invoke the selector delegate (Func<Result>) and return its result")]
     public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncResult()
     {
@@ -2343,7 +3606,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2365,7 +3628,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2387,7 +3650,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2398,6 +3661,28 @@ public sealed class ResultExtensionTests
         {
             selectorInvoked = true;
             return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Success should invoke the selector delegate (Func<ValueTask<Result>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+        return;
+
+        async ValueTask<Result> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result.Success());
         }
     }
 
@@ -2409,7 +3694,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2423,6 +3708,28 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Failure should not invoke the selector delegate (Func<ValueTask<Result>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+        return;
+
+        async ValueTask<Result> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result.Success());
+        }
+    }
+
     [Fact(DisplayName = "Task<Result>.SelectManyAsync of Success should invoke the selector delegate (Func<CancellationToken, Task<Result>>) and return its result")]
     public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskResult()
     {
@@ -2431,7 +3738,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2445,6 +3752,28 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Success should invoke the selector delegate (Func<CancellationToken, ValueTask<Result>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+        return;
+
+        async ValueTask<Result> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result.Success());
+        }
+    }
+
     [Fact(DisplayName = "Task<Result>.SelectManyAsync of Failure should not invoke the selector delegate (Func<CancellationToken, Task<Result>>)")]
     public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskResult()
     {
@@ -2453,7 +3782,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2467,6 +3796,28 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync of Failure should not invoke the selector delegate (Func<CancellationToken, ValueTask<Result>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+        return;
+
+        async ValueTask<Result> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result.Success());
+        }
+    }
+
     [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<Result<TResult>>) and return its result")]
     public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncResultTResult()
     {
@@ -2475,7 +3826,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2499,7 +3850,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2522,7 +3873,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2535,6 +3886,30 @@ public sealed class ResultExtensionTests
         {
             selectorInvoked = true;
             return await Task.FromResult(Result<string>.Success("Success Result"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<ValueTask<Result<TResult>>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTaskResultTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        async ValueTask<Result<string>> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result<string>.Success("Success Result"));
         }
     }
 
@@ -2546,7 +3921,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2561,6 +3936,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<ValueTask<Result<TResult>>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTaskResultTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<Result<string>> SelectorAsync()
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result<string>.Success("Success Result"));
+        }
+    }
+
     [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<CancellationToken, Task<Result<TResult>>>) and return its result")]
     public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskResultTResult()
     {
@@ -2569,7 +3967,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2585,6 +3983,30 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<CancellationToken, ValueTask<Result<TResult>>>) and return its result")]
+    public async Task TaskResultSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncCancellationTokenTaskResultTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Success();
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Success Result", actual.GetValueOrThrow());
+
+        return;
+
+        async ValueTask<Result<string>> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result<string>.Success("Success Result"));
+        }
+    }
+
     [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<CancellationToken, Task<Result<TResult>>>)")]
     public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskResultTResult()
     {
@@ -2593,7 +4015,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2608,6 +4030,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<CancellationToken, ValueTask<Result<TResult>>>)")]
+    public async Task TaskResultSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncCancellationTokenTaskResultTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result result = Result.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<Result<string>> SelectorAsync(CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result<string>.Success("Success Result"));
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Success should invoke the selector delegate (Func<T, Result>) and return its result")]
     public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTResult()
     {
@@ -2616,7 +4061,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2639,7 +4084,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2662,7 +4107,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2674,6 +4119,29 @@ public sealed class ResultExtensionTests
         {
             selectorInvoked = value == 42;
             return await Task.FromResult(Result.Success());
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Success should invoke the selector delegate (Func<T, ValueTask<Result>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        async ValueTask<Result> SelectorAsync(int value)
+        {
+            selectorInvoked = value == 42;
+            return await ValueTask.FromResult(Result.Success());
         }
     }
 
@@ -2685,7 +4153,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2700,6 +4168,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Failure should not invoke the selector delegate (Func<T, ValueTask<Result>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<Result> SelectorAsync(int value)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result.Success());
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Success should invoke the selector delegate (Func<T, CancellationToken, Task<Result>>) and return its result")]
     public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResult()
     {
@@ -2708,7 +4199,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success>(actual);
@@ -2723,6 +4214,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Success should invoke the selector delegate (Func<T, CancellationToken, ValueTask<Result>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success>(actual);
+        Assert.True(selectorInvoked);
+
+        return;
+
+        async ValueTask<Result> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = value == 42;
+            return await ValueTask.FromResult(Result.Success());
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Failure should not invoke the selector delegate (Func<T, CancellationToken, Task<Result>>)")]
     public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResult()
     {
@@ -2731,7 +4245,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);
@@ -2746,6 +4260,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync of Failure should not invoke the selector delegate (Func<T, CancellationToken, ValueTask<Result>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<Result> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result.Success());
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<T, Result<TResult>>) and return its result")]
     public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTResultTResult()
     {
@@ -2754,7 +4291,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2778,7 +4315,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(Selector, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2801,7 +4338,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2814,6 +4351,30 @@ public sealed class ResultExtensionTests
         {
             selectorInvoked = value == 42;
             return await Task.FromResult(Result<string>.Success($"Result is {value}"));
+        }
+    }
+
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<T, ValueTask<Result<TResult>>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTTaskResultTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Result is 42", actual.GetValueOrThrow());
+
+        return;
+
+        async ValueTask<Result<string>> SelectorAsync(int value)
+        {
+            selectorInvoked = value == 42;
+            return await ValueTask.FromResult(Result<string>.Success($"Result is {value}"));
         }
     }
 
@@ -2825,7 +4386,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2840,6 +4401,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<T, ValueTask<Result<TResult>>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTTaskResultTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<Result<string>> SelectorAsync(int value)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result<string>.Success($"Result is {value}"));
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<T, CancellationToken, Task<Result<TResult>>>) and return its result")]
     public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResultTResult()
     {
@@ -2848,7 +4432,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Success<string>>(actual);
@@ -2864,6 +4448,30 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Success should invoke the selector delegate (Func<T, CancellationToken, ValueTask<Result<TResult>>>) and return its result")]
+    public async Task TaskResultOfTSelectManyAsyncOfSuccessShouldInvokeSelectorDelegateFuncTCancellationTokenTaskResultTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Success(42);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Success<string>>(actual);
+        Assert.True(selectorInvoked);
+        Assert.Equal("Result is 42", actual.GetValueOrThrow());
+
+        return;
+
+        async ValueTask<Result<string>> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = value == 42;
+            return await ValueTask.FromResult(Result<string>.Success($"Result is {value}"));
+        }
+    }
+
     [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<T, CancellationToken, Task<Result<TResult>>>)")]
     public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResultTResult()
     {
@@ -2872,7 +4480,7 @@ public sealed class ResultExtensionTests
         bool selectorInvoked = false;
 
         // When
-        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, token: TestContext.Current.CancellationToken);
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<string>>(actual);
@@ -2887,6 +4495,29 @@ public sealed class ResultExtensionTests
         }
     }
 
+    [Fact(DisplayName = "Task<Result<T>>.SelectManyAsync<TResult> of Failure should not invoke the selector delegate (Func<T, CancellationToken, ValueTask<Result<TResult>>>)")]
+    public async Task TaskResultOfTSelectManyAsyncOfFailureShouldNotInvokeSelectorDelegateFuncTCancellationTokenTaskResultTResultWithValueTaskDelegates()
+    {
+        // Given
+        Result<int> result = Result<int>.Failure(FailureException);
+        bool selectorInvoked = false;
+
+        // When
+        Result<string> actual = await Task.FromResult(result).SelectManyAsync(SelectorAsync, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.IsType<Failure<string>>(actual);
+        Assert.False(selectorInvoked);
+
+        return;
+
+        async ValueTask<Result<string>> SelectorAsync(int value, CancellationToken ct)
+        {
+            selectorInvoked = true;
+            return await ValueTask.FromResult(Result<string>.Success($"Result is {value}"));
+        }
+    }
+
     [Fact(DisplayName = "Result Success.ThrowAsync should do nothing")]
     public async Task ResultSuccessThrowAsyncShouldDoNothing()
     {
@@ -2894,7 +4525,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Success();
 
         // When / Then
-        await Task.FromResult(result).ThrowAsync(token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).ThrowAsync(cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "Result Failure.Throw should throw Exception")]
@@ -2904,7 +4535,7 @@ public sealed class ResultExtensionTests
         Result result = Result.Failure(FailureException);
 
         // When / Then
-        await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync(token: TestContext.Current.CancellationToken));
+        await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact(DisplayName = "Result<T> Success.ThrowAsync should do nothing")]
@@ -2914,7 +4545,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Success(123);
 
         // When / Then
-        await Task.FromResult(result).ThrowAsync(token: TestContext.Current.CancellationToken);
+        await Task.FromResult(result).ThrowAsync(cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact(DisplayName = "Result<T> Failure.ThrowAsync should throw Exception")]
@@ -2924,7 +4555,7 @@ public sealed class ResultExtensionTests
         Result<int> result = Result<int>.Failure(FailureException);
 
         // When / Then
-        await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync(token: TestContext.Current.CancellationToken));
+        await Assert.ThrowsAsync<Exception>(async () => await Task.FromResult(result).ThrowAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact(DisplayName = "Result Failure.ToTypedResultAsync should produce the expected result.")]
@@ -2934,7 +4565,7 @@ public sealed class ResultExtensionTests
         Failure result = Result.Failure(FailureException);
 
         // When
-        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<int>(token: TestContext.Current.CancellationToken);
+        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<int>(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<int>>(actual);
@@ -2948,7 +4579,7 @@ public sealed class ResultExtensionTests
         Failure<string> result = Result<string>.Failure(FailureException);
 
         // When
-        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<string, int>(token: TestContext.Current.CancellationToken);
+        Result<int> actual = await Task.FromResult(result).ToTypedResultAsync<string, int>(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure<int>>(actual);
@@ -2962,7 +4593,7 @@ public sealed class ResultExtensionTests
         Failure<string> result = Result<string>.Failure(FailureException);
 
         // When
-        Result actual = await Task.FromResult(result).ToUntypedResultAsync(token: TestContext.Current.CancellationToken);
+        Result actual = await Task.FromResult(result).ToUntypedResultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.IsType<Failure>(actual);

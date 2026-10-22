@@ -107,7 +107,7 @@ public sealed class OptionalValueTaskExtensionTests
         bool noneCalled = false;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => noneCalled = true, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(21, someValue);
@@ -123,7 +123,7 @@ public sealed class OptionalValueTaskExtensionTests
         bool noneCalled = false;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => noneCalled = true, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, someValue);
@@ -139,7 +139,23 @@ public sealed class OptionalValueTaskExtensionTests
         bool noneCalled = false;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return Task.CompletedTask; }, none: () => noneCalled = true, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return Task.CompletedTask; }, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(21, someValue);
+        Assert.False(noneCalled);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of Some should invoke the some delegate (Func<T, ValueTask>, Action).")]
+    public async Task ValueTaskOptionalMatchAsyncOfSomeShouldInvokeSomeDelegateFuncTTaskActionWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        int someValue = 0;
+        bool noneCalled = false;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return ValueTask.CompletedTask; }, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(21, someValue);
@@ -155,7 +171,23 @@ public sealed class OptionalValueTaskExtensionTests
         bool noneCalled = false;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return Task.CompletedTask; }, none: () => noneCalled = true, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return Task.CompletedTask; }, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(0, someValue);
+        Assert.True(noneCalled);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of None should invoke the none delegate (Func<T, ValueTask>, Action).")]
+    public async Task ValueTaskOptionalMatchAsyncOfNoneShouldInvokeNoneDelegateFuncTTaskActionWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        int someValue = 0;
+        bool noneCalled = false;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return ValueTask.CompletedTask; }, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, someValue);
@@ -172,7 +204,25 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken someToken = CancellationToken.None;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return Task.CompletedTask; }, none: () => noneCalled = true, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return Task.CompletedTask; }, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(21, someValue);
+        Assert.False(noneCalled);
+        Assert.Equal(TestContext.Current.CancellationToken, someToken);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of Some should invoke the some delegate (Func<T, CancellationToken, ValueTask>, Action).")]
+    public async Task ValueTaskOptionalMatchAsyncOfSomeShouldInvokeSomeDelegateFuncTCancellationTokenTaskActionWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        int someValue = 0;
+        bool noneCalled = false;
+        CancellationToken someToken = CancellationToken.None;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return ValueTask.CompletedTask; }, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(21, someValue);
@@ -190,7 +240,24 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken someToken = CancellationToken.None;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return Task.CompletedTask; }, none: () => noneCalled = true, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return Task.CompletedTask; }, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(0, someValue);
+        Assert.True(noneCalled);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of None should invoke the none delegate (Func<T, CancellationToken, ValueTask>, Action).")]
+    public async Task ValueTaskOptionalMatchAsyncOfNoneShouldInvokeNoneDelegateFuncTCancellationTokenTaskActionWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        int someValue = 0;
+        bool noneCalled = false;
+        CancellationToken someToken = CancellationToken.None;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return ValueTask.CompletedTask; }, none: () => noneCalled = true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, someValue);
@@ -206,7 +273,23 @@ public sealed class OptionalValueTaskExtensionTests
         bool noneCalled = false;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => { noneCalled = true; return Task.CompletedTask; }, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => { noneCalled = true; return Task.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(21, someValue);
+        Assert.False(noneCalled);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of Some should invoke the some delegate (Action<T>, Func<ValueTask>).")]
+    public async Task ValueTaskOptionalMatchAsyncOfSomeShouldInvokeSomeDelegateActionTFuncTaskWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        int someValue = 0;
+        bool noneCalled = false;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => { noneCalled = true; return ValueTask.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(21, someValue);
@@ -222,7 +305,23 @@ public sealed class OptionalValueTaskExtensionTests
         bool noneCalled = false;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => { noneCalled = true; return Task.CompletedTask; }, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => { noneCalled = true; return Task.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(0, someValue);
+        Assert.True(noneCalled);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of None should invoke the none delegate (Action<T>, Func<ValueTask>).")]
+    public async Task ValueTaskOptionalMatchAsyncOfNoneShouldInvokeNoneDelegateActionTFuncTaskWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        int someValue = 0;
+        bool noneCalled = false;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: () => { noneCalled = true; return ValueTask.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, someValue);
@@ -239,7 +338,24 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken noneToken = CancellationToken.None;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: ct => { noneCalled = true; noneToken = ct; return Task.CompletedTask; }, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: ct => { noneCalled = true; noneToken = ct; return Task.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(21, someValue);
+        Assert.False(noneCalled);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of Some should invoke the some delegate (Action<T>, Func<CancellationToken, ValueTask>).")]
+    public async Task ValueTaskOptionalMatchAsyncOfSomeShouldInvokeSomeDelegateActionTFuncCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        int someValue = 0;
+        bool noneCalled = false;
+        CancellationToken noneToken = CancellationToken.None;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: ct => { noneCalled = true; noneToken = ct; return ValueTask.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(21, someValue);
@@ -256,7 +372,25 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken noneToken = CancellationToken.None;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: ct => { noneCalled = true; noneToken = ct; return Task.CompletedTask; }, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: ct => { noneCalled = true; noneToken = ct; return Task.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(0, someValue);
+        Assert.True(noneCalled);
+        Assert.Equal(TestContext.Current.CancellationToken, noneToken);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of None should invoke the none delegate (Action<T>, Func<CancellationToken, ValueTask>).")]
+    public async Task ValueTaskOptionalMatchAsyncOfNoneShouldInvokeNoneDelegateActionTFuncCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        int someValue = 0;
+        bool noneCalled = false;
+        CancellationToken noneToken = CancellationToken.None;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: value => someValue = value, none: ct => { noneCalled = true; noneToken = ct; return ValueTask.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, someValue);
@@ -273,7 +407,23 @@ public sealed class OptionalValueTaskExtensionTests
         bool noneCalled = false;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return Task.CompletedTask; }, none: () => { noneCalled = true; return Task.CompletedTask; }, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return Task.CompletedTask; }, none: () => { noneCalled = true; return Task.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(21, someValue);
+        Assert.False(noneCalled);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of Some should invoke the some delegate (Func<T, ValueTask>, Func<ValueTask>).")]
+    public async Task ValueTaskOptionalMatchAsyncOfSomeShouldInvokeSomeDelegateFuncTTaskFuncTaskWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        int someValue = 0;
+        bool noneCalled = false;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return ValueTask.CompletedTask; }, none: () => { noneCalled = true; return ValueTask.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(21, someValue);
@@ -289,7 +439,23 @@ public sealed class OptionalValueTaskExtensionTests
         bool noneCalled = false;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return Task.CompletedTask; }, none: () => { noneCalled = true; return Task.CompletedTask; }, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return Task.CompletedTask; }, none: () => { noneCalled = true; return Task.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(0, someValue);
+        Assert.True(noneCalled);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of None should invoke the none delegate (Func<T, ValueTask>, Func<ValueTask>).")]
+    public async Task ValueTaskOptionalMatchAsyncOfNoneShouldInvokeNoneDelegateFuncTTaskFuncTaskWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        int someValue = 0;
+        bool noneCalled = false;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: value => { someValue = value; return ValueTask.CompletedTask; }, none: () => { noneCalled = true; return ValueTask.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, someValue);
@@ -307,7 +473,26 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken noneToken = CancellationToken.None;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return Task.CompletedTask; }, none: ct => { noneCalled = true; noneToken = ct; return Task.CompletedTask; }, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return Task.CompletedTask; }, none: ct => { noneCalled = true; noneToken = ct; return Task.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(21, someValue);
+        Assert.False(noneCalled);
+        Assert.Equal(TestContext.Current.CancellationToken, someToken);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of Some should invoke the some delegate (Func<T, CancellationToken, ValueTask>, Func<CancellationToken, ValueTask>).")]
+    public async Task ValueTaskOptionalMatchAsyncOfSomeShouldInvokeSomeDelegateFuncTCancellationTokenTaskFuncCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        int someValue = 0;
+        bool noneCalled = false;
+        CancellationToken someToken = CancellationToken.None;
+        CancellationToken noneToken = CancellationToken.None;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return ValueTask.CompletedTask; }, none: ct => { noneCalled = true; noneToken = ct; return ValueTask.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(21, someValue);
@@ -326,7 +511,26 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken noneToken = CancellationToken.None;
 
         // When
-        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return Task.CompletedTask; }, none: ct => { noneCalled = true; noneToken = ct; return Task.CompletedTask; }, token: TestContext.Current.CancellationToken);
+        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return Task.CompletedTask; }, none: ct => { noneCalled = true; noneToken = ct; return Task.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(0, someValue);
+        Assert.True(noneCalled);
+        Assert.Equal(TestContext.Current.CancellationToken, noneToken);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync of None should invoke the none delegate (Func<T, CancellationToken, ValueTask>, Func<CancellationToken, ValueTask>).")]
+    public async Task ValueTaskOptionalMatchAsyncOfNoneShouldInvokeNoneDelegateFuncTCancellationTokenTaskFuncCancellationTokenTaskWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        int someValue = 0;
+        bool noneCalled = false;
+        CancellationToken someToken = CancellationToken.None;
+        CancellationToken noneToken = CancellationToken.None;
+
+        // When
+        await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someValue = value; someToken = ct; return ValueTask.CompletedTask; }, none: ct => { noneCalled = true; noneToken = ct; return ValueTask.CompletedTask; }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(0, someValue);
@@ -341,7 +545,7 @@ public sealed class OptionalValueTaskExtensionTests
         Optional<int> optional = 21;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => "None", token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("Some 21", actual);
@@ -354,7 +558,7 @@ public sealed class OptionalValueTaskExtensionTests
         Optional<int> optional = Optional<int>.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => "None", token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("None", actual);
@@ -367,7 +571,20 @@ public sealed class OptionalValueTaskExtensionTests
         Optional<int> optional = 21;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => Task.FromResult($"Some {value}"), none: () => "None", token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => Task.FromResult($"Some {value}"), none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("Some 21", actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of Some should return the result of the some delegate (Func<T, ValueTask<TResult>>, Func<TResult>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfSomeShouldReturnResultOfSomeDelegateFuncTTaskTResultFuncTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => ValueTask.FromResult($"Some {value}"), none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("Some 21", actual);
@@ -380,7 +597,20 @@ public sealed class OptionalValueTaskExtensionTests
         Optional<int> optional = Optional<int>.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => Task.FromResult($"Some {value}"), none: () => "None", token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => Task.FromResult($"Some {value}"), none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("None", actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of None should return the result of the none delegate (Func<T, ValueTask<TResult>>, Func<TResult>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfNoneShouldReturnResultOfNoneDelegateFuncTTaskTResultFuncTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => ValueTask.FromResult($"Some {value}"), none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("None", actual);
@@ -394,7 +624,22 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken someToken = CancellationToken.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return Task.FromResult($"Some {value}"); }, none: () => "None", token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return Task.FromResult($"Some {value}"); }, none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("Some 21", actual);
+        Assert.Equal(TestContext.Current.CancellationToken, someToken);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of Some should return the result of the some delegate (Func<T, CancellationToken, ValueTask<TResult>>, Func<TResult>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfSomeShouldReturnResultOfSomeDelegateFuncTCancellationTokenTaskTResultFuncTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        CancellationToken someToken = CancellationToken.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return ValueTask.FromResult($"Some {value}"); }, none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("Some 21", actual);
@@ -409,7 +654,21 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken someToken = CancellationToken.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return Task.FromResult($"Some {value}"); }, none: () => "None", token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return Task.FromResult($"Some {value}"); }, none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("None", actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of None should return the result of the none delegate (Func<T, CancellationToken, ValueTask<TResult>>, Func<TResult>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfNoneShouldReturnResultOfNoneDelegateFuncTCancellationTokenTaskTResultFuncTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        CancellationToken someToken = CancellationToken.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return ValueTask.FromResult($"Some {value}"); }, none: () => "None", cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("None", actual);
@@ -422,7 +681,20 @@ public sealed class OptionalValueTaskExtensionTests
         Optional<int> optional = 21;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => Task.FromResult("None"), token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => Task.FromResult("None"), cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("Some 21", actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of Some should return the result of the some delegate (Func<T, TResult>, Func<ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfSomeShouldReturnResultOfSomeDelegateFuncTTResultFuncTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => ValueTask.FromResult("None"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("Some 21", actual);
@@ -435,7 +707,20 @@ public sealed class OptionalValueTaskExtensionTests
         Optional<int> optional = Optional<int>.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => Task.FromResult("None"), token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => Task.FromResult("None"), cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("None", actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of None should return the result of the none delegate (Func<T, TResult>, Func<ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfNoneShouldReturnResultOfNoneDelegateFuncTTResultFuncTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: () => ValueTask.FromResult("None"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("None", actual);
@@ -449,7 +734,21 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken noneToken = CancellationToken.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: ct => { noneToken = ct; return Task.FromResult("None"); }, token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: ct => { noneToken = ct; return Task.FromResult("None"); }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("Some 21", actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of Some should return the result of the some delegate (Func<T, TResult>, Func<CancellationToken, ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfSomeShouldReturnResultOfSomeDelegateFuncTTResultFuncCancellationTokenTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        CancellationToken noneToken = CancellationToken.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: ct => { noneToken = ct; return ValueTask.FromResult("None"); }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("Some 21", actual);
@@ -463,7 +762,22 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken noneToken = CancellationToken.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: ct => { noneToken = ct; return Task.FromResult("None"); }, token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: ct => { noneToken = ct; return Task.FromResult("None"); }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("None", actual);
+        Assert.Equal(TestContext.Current.CancellationToken, noneToken);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of None should return the result of the none delegate (Func<T, TResult>, Func<CancellationToken, ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfNoneShouldReturnResultOfNoneDelegateFuncTTResultFuncCancellationTokenTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        CancellationToken noneToken = CancellationToken.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => $"Some {value}", none: ct => { noneToken = ct; return ValueTask.FromResult("None"); }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("None", actual);
@@ -477,7 +791,20 @@ public sealed class OptionalValueTaskExtensionTests
         Optional<int> optional = 21;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => Task.FromResult($"Some {value}"), none: () => Task.FromResult("None"), token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => Task.FromResult($"Some {value}"), none: () => Task.FromResult("None"), cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("Some 21", actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of Some should return the result of the some delegate (Func<T, ValueTask<TResult>>, Func<ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfSomeShouldReturnResultOfSomeDelegateFuncTTaskTResultFuncTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => ValueTask.FromResult($"Some {value}"), none: () => ValueTask.FromResult("None"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("Some 21", actual);
@@ -490,7 +817,20 @@ public sealed class OptionalValueTaskExtensionTests
         Optional<int> optional = Optional<int>.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => Task.FromResult($"Some {value}"), none: () => Task.FromResult("None"), token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => Task.FromResult($"Some {value}"), none: () => Task.FromResult("None"), cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("None", actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of None should return the result of the none delegate (Func<T, ValueTask<TResult>>, Func<ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfNoneShouldReturnResultOfNoneDelegateFuncTTaskTResultFuncTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: value => ValueTask.FromResult($"Some {value}"), none: () => ValueTask.FromResult("None"), cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("None", actual);
@@ -505,7 +845,23 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken noneToken = CancellationToken.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return Task.FromResult($"Some {value}"); }, none: ct => { noneToken = ct; return Task.FromResult("None"); }, token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return Task.FromResult($"Some {value}"); }, none: ct => { noneToken = ct; return Task.FromResult("None"); }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("Some 21", actual);
+        Assert.Equal(TestContext.Current.CancellationToken, someToken);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of Some should return the result of the some delegate (Func<T, CancellationToken, ValueTask<TResult>>, Func<CancellationToken, ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfSomeShouldReturnResultOfSomeDelegateFuncTCancellationTokenTaskTResultFuncCancellationTokenTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        CancellationToken someToken = CancellationToken.None;
+        CancellationToken noneToken = CancellationToken.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return ValueTask.FromResult($"Some {value}"); }, none: ct => { noneToken = ct; return ValueTask.FromResult("None"); }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("Some 21", actual);
@@ -521,7 +877,23 @@ public sealed class OptionalValueTaskExtensionTests
         CancellationToken noneToken = CancellationToken.None;
 
         // When
-        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return Task.FromResult($"Some {value}"); }, none: ct => { noneToken = ct; return Task.FromResult("None"); }, token: TestContext.Current.CancellationToken);
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return Task.FromResult($"Some {value}"); }, none: ct => { noneToken = ct; return Task.FromResult("None"); }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal("None", actual);
+        Assert.Equal(TestContext.Current.CancellationToken, noneToken);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.MatchAsync<TResult> of None should return the result of the none delegate (Func<T, CancellationToken, ValueTask<TResult>>, Func<CancellationToken, ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalMatchAsyncTResultOfNoneShouldReturnResultOfNoneDelegateFuncTCancellationTokenTaskTResultFuncCancellationTokenTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        CancellationToken someToken = CancellationToken.None;
+        CancellationToken noneToken = CancellationToken.None;
+
+        // When
+        string actual = await ValueTask.FromResult(optional).MatchAsync(some: (value, ct) => { someToken = ct; return ValueTask.FromResult($"Some {value}"); }, none: ct => { noneToken = ct; return ValueTask.FromResult("None"); }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal("None", actual);
@@ -567,6 +939,19 @@ public sealed class OptionalValueTaskExtensionTests
         Assert.Equal(Optional<int>.Some(42), actual);
     }
 
+    [Fact(DisplayName = "ValueTask<Optional<T>>.SelectAsync of Some should produce the expected result (Func<T, ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalSelectAsyncOfSomeShouldProduceExpectedResultFuncTTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+
+        // When
+        Optional<int> actual = await ValueTask.FromResult(optional).SelectAsync(value => ValueTask.FromResult(value * 2), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(Optional<int>.Some(42), actual);
+    }
+
     [Fact(DisplayName = "ValueTask<Optional<T>>.SelectAsync of None should produce the expected result (Func<T, Task<TResult>>).")]
     public async Task ValueTaskOptionalSelectAsyncOfNoneShouldProduceExpectedResultFuncTTaskTResult()
     {
@@ -575,6 +960,19 @@ public sealed class OptionalValueTaskExtensionTests
 
         // When
         Optional<int> actual = await ValueTask.FromResult(optional).SelectAsync(value => Task.FromResult(value * 2), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(Optional<int>.None, actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.SelectAsync of None should produce the expected result (Func<T, ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalSelectAsyncOfNoneShouldProduceExpectedResultFuncTTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        Optional<int> actual = await ValueTask.FromResult(optional).SelectAsync(value => ValueTask.FromResult(value * 2), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.None, actual);
@@ -595,6 +993,21 @@ public sealed class OptionalValueTaskExtensionTests
         Assert.Equal(TestContext.Current.CancellationToken, selectorToken);
     }
 
+    [Fact(DisplayName = "ValueTask<Optional<T>>.SelectAsync of Some should produce the expected result (Func<T, CancellationToken, ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalSelectAsyncOfSomeShouldProduceExpectedResultFuncTCancellationTokenTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        CancellationToken selectorToken = CancellationToken.None;
+
+        // When
+        Optional<int> actual = await ValueTask.FromResult(optional).SelectAsync((value, ct) => { selectorToken = ct; return ValueTask.FromResult(value * 2); }, TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(Optional<int>.Some(42), actual);
+        Assert.Equal(TestContext.Current.CancellationToken, selectorToken);
+    }
+
     [Fact(DisplayName = "ValueTask<Optional<T>>.SelectAsync of None should produce the expected result (Func<T, CancellationToken, Task<TResult>>).")]
     public async Task ValueTaskOptionalSelectAsyncOfNoneShouldProduceExpectedResultFuncTCancellationTokenTaskTResult()
     {
@@ -604,6 +1017,20 @@ public sealed class OptionalValueTaskExtensionTests
 
         // When
         Optional<int> actual = await ValueTask.FromResult(optional).SelectAsync((value, ct) => { selectorToken = ct; return Task.FromResult(value * 2); }, TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(Optional<int>.None, actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.SelectAsync of None should produce the expected result (Func<T, CancellationToken, ValueTask<TResult>>).")]
+    public async Task ValueTaskOptionalSelectAsyncOfNoneShouldProduceExpectedResultFuncTCancellationTokenTaskTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        CancellationToken selectorToken = CancellationToken.None;
+
+        // When
+        Optional<int> actual = await ValueTask.FromResult(optional).SelectAsync((value, ct) => { selectorToken = ct; return ValueTask.FromResult(value * 2); }, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.None, actual);
@@ -648,6 +1075,19 @@ public sealed class OptionalValueTaskExtensionTests
         Assert.Equal(Optional<int>.Some(42), actual);
     }
 
+    [Fact(DisplayName = "ValueTask<Optional<T>>.SelectManyAsync of Some should produce the expected result (Func<T, ValueTask<Optional<TResult>>>).")]
+    public async Task ValueTaskOptionalSelectManyAsyncOfSomeShouldProduceExpectedResultFuncTTaskOptionalTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+
+        // When
+        Optional<int> actual = await ValueTask.FromResult(optional).SelectManyAsync(value => ValueTask.FromResult<Optional<int>>(value * 2), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(Optional<int>.Some(42), actual);
+    }
+
     [Fact(DisplayName = "ValueTask<Optional<T>>.SelectManyAsync of None should produce the expected result (Func<T, Task<Optional<TResult>>>).")]
     public async Task ValueTaskOptionalSelectManyAsyncOfNoneShouldProduceExpectedResultFuncTTaskOptionalTResult()
     {
@@ -656,6 +1096,19 @@ public sealed class OptionalValueTaskExtensionTests
 
         // When
         Optional<int> actual = await ValueTask.FromResult(optional).SelectManyAsync(value => Task.FromResult<Optional<int>>(value * 2), TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(Optional<int>.None, actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.SelectManyAsync of None should produce the expected result (Func<T, ValueTask<Optional<TResult>>>).")]
+    public async Task ValueTaskOptionalSelectManyAsyncOfNoneShouldProduceExpectedResultFuncTTaskOptionalTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+
+        // When
+        Optional<int> actual = await ValueTask.FromResult(optional).SelectManyAsync(value => ValueTask.FromResult<Optional<int>>(value * 2), TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.None, actual);
@@ -676,6 +1129,21 @@ public sealed class OptionalValueTaskExtensionTests
         Assert.Equal(TestContext.Current.CancellationToken, selectorToken);
     }
 
+    [Fact(DisplayName = "ValueTask<Optional<T>>.SelectManyAsync of Some should produce the expected result (Func<T, CancellationToken, ValueTask<Optional<TResult>>>).")]
+    public async Task ValueTaskOptionalSelectManyAsyncOfSomeShouldProduceExpectedResultFuncTCancellationTokenTaskOptionalTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = 21;
+        CancellationToken selectorToken = CancellationToken.None;
+
+        // When
+        Optional<int> actual = await ValueTask.FromResult(optional).SelectManyAsync((value, ct) => { selectorToken = ct; return ValueTask.FromResult<Optional<int>>(value * 2); }, TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(Optional<int>.Some(42), actual);
+        Assert.Equal(TestContext.Current.CancellationToken, selectorToken);
+    }
+
     [Fact(DisplayName = "ValueTask<Optional<T>>.SelectManyAsync of None should produce the expected result (Func<T, CancellationToken, Task<Optional<TResult>>>).")]
     public async Task ValueTaskOptionalSelectManyAsyncOfNoneShouldProduceExpectedResultFuncTCancellationTokenTaskOptionalTResult()
     {
@@ -685,6 +1153,20 @@ public sealed class OptionalValueTaskExtensionTests
 
         // When
         Optional<int> actual = await ValueTask.FromResult(optional).SelectManyAsync((value, ct) => { selectorToken = ct; return Task.FromResult<Optional<int>>(value * 2); }, TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(Optional<int>.None, actual);
+    }
+
+    [Fact(DisplayName = "ValueTask<Optional<T>>.SelectManyAsync of None should produce the expected result (Func<T, CancellationToken, ValueTask<Optional<TResult>>>).")]
+    public async Task ValueTaskOptionalSelectManyAsyncOfNoneShouldProduceExpectedResultFuncTCancellationTokenTaskOptionalTResultWithValueTaskDelegates()
+    {
+        // Given
+        Optional<int> optional = Optional<int>.None;
+        CancellationToken selectorToken = CancellationToken.None;
+
+        // When
+        Optional<int> actual = await ValueTask.FromResult(optional).SelectManyAsync((value, ct) => { selectorToken = ct; return ValueTask.FromResult<Optional<int>>(value * 2); }, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(Optional<int>.None, actual);

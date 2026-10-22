@@ -39,10 +39,10 @@ public sealed class ValueTaskExtensionTests
     {
         // Given
         ValueTask<int> completed = ValueTask.FromResult(123);
-        CancellationToken token = new(canceled: true);
+        CancellationToken cancellationToken = new(canceled: true);
 
         // When
-        int actual = await completed.WaitAsync(token);
+        int actual = await completed.WaitAsync(cancellationToken);
 
         // Then
         Assert.Equal(123, actual);
@@ -84,10 +84,11 @@ public sealed class ValueTaskExtensionTests
     {
         // Given
         TaskCompletionSource<int> source = new();
-        CancellationToken token = new(canceled: true);
+        CancellationToken cancellationToken = new(canceled: true);
 
         // When
-        ValueTask<int> waiting = new ValueTask<int>(source.Task).WaitAsync(token);
+        ValueTask<int> waiting = new ValueTask<int>(source.Task).WaitAsync(cancellationToken);
+        source.SetResult(123);
 
         // Then
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await waiting);
@@ -100,6 +101,97 @@ public sealed class ValueTaskExtensionTests
         TaskCompletionSource<int> source = new();
         Exception expected = new InvalidOperationException("Faulted");
         ValueTask<int> waiting = new ValueTask<int>(source.Task).WaitAsync(TestContext.Current.CancellationToken);
+
+        // When
+        source.SetException(expected);
+        Exception actual = await Assert.ThrowsAsync<InvalidOperationException>(async () => await waiting);
+
+        // Then
+        Assert.Same(expected, actual);
+    }
+
+    [Fact(DisplayName = "ValueTask.WaitAsync (non-generic) should complete when the ValueTask has already completed.")]
+    public async Task NonGenericValueTaskWaitAsyncShouldCompleteWhenValueTaskHasAlreadyCompleted()
+    {
+        // Given
+        ValueTask completed = ValueTask.CompletedTask;
+
+        // When
+        ValueTask waiting = completed.WaitAsync(TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.True(waiting.IsCompletedSuccessfully);
+        await waiting;
+    }
+
+    [Fact(DisplayName = "ValueTask.WaitAsync (non-generic) should complete when the ValueTask has already completed and the token is cancelled.")]
+    public async Task NonGenericValueTaskWaitAsyncShouldCompleteWhenValueTaskHasAlreadyCompletedAndTokenIsCancelled()
+    {
+        // Given
+        ValueTask completed = ValueTask.CompletedTask;
+        CancellationToken cancellationToken = new(canceled: true);
+
+        // When
+        ValueTask waiting = completed.WaitAsync(cancellationToken);
+
+        // Then
+        Assert.True(waiting.IsCompletedSuccessfully);
+        await waiting;
+    }
+
+    [Fact(DisplayName = "ValueTask.WaitAsync (non-generic) should complete when the ValueTask completes after waiting begins.")]
+    public async Task NonGenericValueTaskWaitAsyncShouldCompleteWhenValueTaskCompletesAfterWaitingBegins()
+    {
+        // Given
+        TaskCompletionSource source = new();
+        ValueTask waiting = new ValueTask(source.Task).WaitAsync(TestContext.Current.CancellationToken);
+
+        // When
+        source.SetResult();
+        await waiting;
+
+        // Then
+        Assert.True(waiting.IsCompletedSuccessfully);
+    }
+
+    [Fact(DisplayName = "ValueTask.WaitAsync (non-generic) should throw OperationCanceledException when cancelled before the ValueTask completes.")]
+    public async Task NonGenericValueTaskWaitAsyncShouldThrowOperationCanceledExceptionWhenCancelledBeforeValueTaskCompletes()
+    {
+        // Given
+        TaskCompletionSource source = new();
+        using CancellationTokenSource cancellation = new();
+        ValueTask waiting = new ValueTask(source.Task).WaitAsync(cancellation.Token);
+
+        // When
+        await cancellation.CancelAsync();
+        source.SetResult();
+
+        // Then
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await waiting);
+    }
+
+    [Fact(DisplayName = "ValueTask.WaitAsync (non-generic) should throw OperationCanceledException when the token is cancelled and the ValueTask has not completed.")]
+    public async Task NonGenericValueTaskWaitAsyncShouldThrowOperationCanceledExceptionWhenTokenIsCancelledAndValueTaskHasNotCompleted()
+    {
+        // Given
+        TaskCompletionSource source = new();
+        CancellationToken cancellationToken = new(canceled: true);
+
+        // When
+        ValueTask waiting = new ValueTask(source.Task).WaitAsync(cancellationToken);
+        source.SetResult();
+
+        // Then
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await waiting);
+    }
+
+    [Fact(DisplayName = "ValueTask.WaitAsync (non-generic) should propagate the exception when the ValueTask faults after waiting begins.")]
+    public async Task NonGenericValueTaskWaitAsyncShouldPropagateExceptionWhenValueTaskFaultsAfterWaitingBegins()
+    {
+        // Given
+        TaskCompletionSource source = new();
+        Exception expected = new InvalidOperationException("Faulted");
+        ValueTask waiting = new ValueTask(source.Task).WaitAsync(TestContext.Current.CancellationToken);
 
         // When
         source.SetException(expected);

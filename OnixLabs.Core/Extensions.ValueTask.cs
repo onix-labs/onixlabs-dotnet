@@ -23,6 +23,25 @@ namespace OnixLabs.Core;
 internal static class ValueTaskExtensions
 {
     /// <summary>
+    /// Provides internal extension methods for <see cref="ValueTask"/> instances.
+    /// </summary>
+    /// <param name="receiver">The current <see cref="ValueTask"/> instance.</param>
+    extension(ValueTask receiver)
+    {
+        /// <summary>
+        /// Gets a <see cref="ValueTask"/> that will complete when the current <see cref="ValueTask"/> completes,
+        /// or when the specified <see cref="CancellationToken"/> has cancellation requested.
+        /// </summary>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>
+        /// Returns the current <see cref="ValueTask"/> if it has already completed, without allocating;
+        /// otherwise, returns a <see cref="ValueTask"/> that represents the asynchronous wait.
+        /// </returns>
+        public ValueTask WaitAsync(CancellationToken cancellationToken) =>
+            receiver.IsCompleted ? receiver : new ValueTask(receiver.AsTask().WaitAsync(cancellationToken));
+    }
+
+    /// <summary>
     /// Provides internal extension methods for <see cref="ValueTask{TResult}"/> instances.
     /// </summary>
     /// <param name="receiver">The current <see cref="ValueTask{TResult}"/> instance.</param>
@@ -32,12 +51,12 @@ internal static class ValueTaskExtensions
         /// Gets a <see cref="ValueTask{TResult}"/> that will complete when the current <see cref="ValueTask{TResult}"/> completes,
         /// or when the specified <see cref="CancellationToken"/> has cancellation requested.
         /// </summary>
-        /// <param name="token">The cancellation token that can be used to cancel long-running tasks.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>
         /// Returns the current <see cref="ValueTask{TResult}"/> if it has already completed, without allocating;
         /// otherwise, returns a <see cref="ValueTask{TResult}"/> that represents the asynchronous wait.
         /// </returns>
-        public ValueTask<TResult> WaitAsync(CancellationToken token) =>
-            receiver.IsCompleted ? receiver : new ValueTask<TResult>(receiver.AsTask().WaitAsync(token));
+        public ValueTask<TResult> WaitAsync(CancellationToken cancellationToken) =>
+            receiver.IsCompleted ? receiver : new ValueTask<TResult>(receiver.AsTask().WaitAsync(cancellationToken));
     }
 }

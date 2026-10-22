@@ -59,8 +59,13 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
+    # Run one target framework at a time, as the CI matrix does: running all three
+    # framework suites concurrently on a single runner stalls the Numerics tests.
     - name: Test
-      run: dotnet test --configuration Release --no-build --verbosity quiet
+      run: |
+        for framework in net8.0 net9.0 net10.0; do
+          dotnet test --configuration Release --no-build --framework "$framework" --verbosity quiet
+        done
 
     - name: Pack
       run: dotnet pack --configuration Release --no-build --output artifacts

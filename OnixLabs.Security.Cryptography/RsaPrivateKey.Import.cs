@@ -48,13 +48,20 @@ public sealed partial class RsaPrivateKey
     /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid RSA private key.</exception>
     private RSA ImportKeyData()
     {
-        byte[] keyData = KeyData;
+        Span<byte> keyData = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
+        keyData = keyData[..Length];
+        RSA algorithm = RSA.Create();
 
         try
         {
-            RSA algorithm = RSA.Create();
+            CopyTo(keyData);
             algorithm.ImportRSAPrivateKey(keyData, out int _);
             return algorithm;
+        }
+        catch
+        {
+            algorithm.Dispose();
+            throw;
         }
         finally
         {

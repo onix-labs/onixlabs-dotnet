@@ -22,11 +22,19 @@ namespace OnixLabs.Security.Cryptography;
 public readonly partial struct Secret
 {
     /// <inheritdoc/>
+    /// <remarks>
+    /// Each call decrypts the secret value into a new array, which stays on the heap until it is collected and cannot be zeroed through the
+    /// returned value. To keep plaintext off the heap, use <see cref="CopyTo"/> with a buffer you zero after use.
+    /// </remarks>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="Secret"/> has been disposed.</exception>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() =>
         protectedData is null ? ReadOnlyMemory<byte>.Empty : protectedData.Decrypt(encryptedValue);
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Each call decrypts the secret value into a new array, which stays on the heap until it is collected and cannot be zeroed through the
+    /// returned value. To keep plaintext off the heap, use <see cref="CopyTo"/> with a buffer you zero after use.
+    /// </remarks>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="Secret"/> has been disposed.</exception>
     public ReadOnlySpan<byte> AsReadOnlySpan() =>
         protectedData is null ? ReadOnlySpan<byte>.Empty : protectedData.Decrypt(encryptedValue);

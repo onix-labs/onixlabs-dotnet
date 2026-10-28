@@ -13,20 +13,27 @@
 // limitations under the License.
 
 using System;
-using System.Security.Cryptography;
-using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
 public abstract partial class PrivateKey
 {
     /// <inheritdoc/>
+    /// <remarks>
+    /// Keys are compared by the SHA-256 digest of their key data, computed once at construction, in constant time.
+    /// Why: comparing the key data itself would decrypt both keys on every call.
+    /// </remarks>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> or <paramref name="other"/> has been disposed.</exception>
-    public bool Equals(PrivateKey? other) =>
-        ReferenceEquals(this, other)
-        || other is not null
-        && other.GetType() == GetType()
-        && CryptographicOperations.FixedTimeEquals(other.KeyData, KeyData);
+    public bool Equals(PrivateKey? other)
+    {
+        if (ReferenceEquals(this, other)) return true;
+        if (other is null || other.GetType() != GetType()) return false;
+
+        ObjectDisposedException.ThrowIf(isDisposed, this);
+        ObjectDisposedException.ThrowIf(other.isDisposed, other);
+
+        return digest == other.digest;
+    }
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> or <paramref name="obj"/> has been disposed.</exception>
@@ -34,7 +41,11 @@ public abstract partial class PrivateKey
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
-    public override int GetHashCode() => HashCode.Combine(GetType(), AsReadOnlySpan().GetContentHashCode());
+    public override int GetHashCode()
+    {
+        ObjectDisposedException.ThrowIf(isDisposed, this);
+        return HashCode.Combine(GetType(), digest);
+    }
 
     /// <inheritdoc/>
     public static bool operator ==(PrivateKey? left, PrivateKey? right) => Equals(left, right);

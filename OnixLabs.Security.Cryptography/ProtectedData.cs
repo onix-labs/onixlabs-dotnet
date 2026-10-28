@@ -73,6 +73,30 @@ internal sealed partial class ProtectedData : IDisposable
     }
 
     /// <summary>
+    /// Decrypts the specified data into the specified destination, without allocating plaintext on the heap.
+    /// </summary>
+    /// <param name="data">The data to decrypt.</param>
+    /// <param name="destination">
+    /// The buffer that receives the decrypted data, which must be at least as long as the decrypted data.
+    /// </param>
+    /// <returns>Returns the number of bytes written to <paramref name="destination"/>.</returns>
+    /// <exception cref="ObjectDisposedException">Thrown when the current instance has been disposed.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="destination"/> is shorter than the decrypted data.</exception>
+    public int Decrypt(byte[] data, Span<byte> destination)
+    {
+        ObjectDisposedException.ThrowIf(isDisposed, this);
+
+        if (data.IsEmpty()) return 0;
+
+        using Aes algorithm = CreateAlgorithm();
+
+        if (!algorithm.TryDecryptCbc(data, iv, destination, out int bytesWritten, PaddingMode.PKCS7))
+            throw new ArgumentException("The destination is shorter than the decrypted data.", nameof(destination));
+
+        return bytesWritten;
+    }
+
+    /// <summary>
     /// Creates a new <see cref="Aes"/> instance keyed with the current instance's key.
     /// </summary>
     /// <returns>Returns a new <see cref="Aes"/> instance keyed with the current instance's key.</returns>

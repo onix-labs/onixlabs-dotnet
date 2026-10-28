@@ -111,7 +111,7 @@ public readonly partial struct Float256
     /// <param name="significantDigits">The maximum number of significant decimal digits to retain in the result.</param>
     /// <returns>Returns a <see cref="NumberInfo"/> whose unscaled value contains the rounded decimal digits and whose scale positions the decimal point.</returns>
     /// <remarks>
-    /// The conversion goes binary → decimal natively: it estimates the decimal exponent via <see cref="Log10(Float256)"/>,
+    /// The conversion goes binary → decimal natively: it estimates the decimal exponent from the binary exponent,
     /// scales the value by chunked exact <see cref="PowersOfTen"/> entries so the result lands in <c>[10^(N-1), 10^N)</c>, then
     /// rounds to an integer that fits losslessly in Float256's 237-bit significand. The intermediate
     /// multiplications introduce at most ~1 ULP of binary error per chunk, so the last decimal digit can
@@ -123,10 +123,20 @@ public readonly partial struct Float256
         Float256 absValue = Abs(value);
 
         // Estimate the decimal exponent D such that 10^D ≤ |value| < 10^(D+1).
-        int decimalExponent = (int)Floor(Log10(absValue));
+        // Why: Log10 costs a full logarithm series, about fifty Float256 divisions per ToString. The binary exponent e gives
+        // floor(e · log10(2)), which is never above D and at most one below it. A low estimate leaves the scaled value at or above
+        // 10^N, so it is corrected before rounding, and the value is rounded once rather than rounded and then divided and rounded again.
+        const double log10Of2 = 0.30102999566398119521373889472449302676818988146211;
+        int decimalExponent = (int)Math.Floor(ILogB(absValue) * log10Of2);
         int decimalScale = significantDigits - 1 - decimalExponent;
 
         Float256 scaled = ScaleByPowerOfTen(absValue, decimalScale);
+
+        if (scaled >= PowerOfTenForRound(significantDigits))
+        {
+            decimalScale--;
+            scaled = ScaleByPowerOfTen(absValue, decimalScale);
+        }
         Float256 rounded = Round(scaled, MidpointRounding.ToEven);
         BigInteger unscaledValue = (BigInteger)rounded;
 
@@ -156,6 +166,14 @@ public readonly partial struct Float256
         {
             unscaledValue /= 10;
             decimalScale--;
+        }
+
+        // Why: a value at or above 10^N leaves a negative decimal scale, which the general and round-trip formats cannot represent, so
+        // ToString() threw for every such value (#169). Expanding to scale zero gives the digits that smaller values already produce.
+        if (decimalScale < 0)
+        {
+            unscaledValue *= BigIntegerPowersOfTen.Get(-decimalScale);
+            decimalScale = 0;
         }
 
         return new NumberInfo(unscaledValue, decimalScale);

@@ -119,13 +119,17 @@ public static class StringExtensions
         /// </summary>
         /// <param name="count">The number of repetitions of the current <see cref="String"/> instance.</param>
         /// <returns>Returns a new <see cref="String"/> instance representing the repetition of the current <see cref="String"/> instance.</returns>
-        public string Repeat(int count) => count > 0
-            ? string.Create(checked(receiver.Length * count), receiver, static (destination, value) =>
+        public string Repeat(int count)
+        {
+            if (count <= 0) return string.Empty;
+            return string.Create(checked(receiver.Length * count), receiver, CopyString);
+
+            static void CopyString(Span<char> destination, string value)
             {
                 for (int offset = 0; offset < destination.Length; offset += value.Length)
                     value.CopyTo(destination[offset..]);
-            })
-            : string.Empty;
+            }
+        }
 
         /// <summary>
         /// Obtains a sub-string before the specified index within the current <see cref="String"/> instance.

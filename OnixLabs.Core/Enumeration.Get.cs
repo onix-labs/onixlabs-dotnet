@@ -81,16 +81,22 @@ public abstract partial class Enumeration<T>
         /// <summary>
         /// The value and name of every enumeration entry.
         /// </summary>
-        public static readonly FrozenSet<(int Value, string Name)> Entries = All.Select(entry => entry.ToEntry()).ToFrozenSet();
+        public static readonly FrozenSet<(int Value, string Name)> Entries = All
+            .Select(entry => entry.ToEntry())
+            .ToFrozenSet();
 
         /// <summary>
         /// The name of every enumeration entry.
         /// </summary>
-        public static readonly FrozenSet<string> Names = All.Select(entry => entry.Name).ToFrozenSet();
+        public static readonly FrozenSet<string> Names = All
+            .Select(entry => entry.Name)
+            .ToFrozenSet();
 
         /// <summary>
         /// The value of every enumeration entry.
         /// </summary>
-        public static readonly FrozenSet<int> Values = All.Select(entry => entry.Value).ToFrozenSet();
+        public static readonly FrozenSet<int> Values = All
+            .Select(entry => entry.Value)
+            .ToFrozenSet();
     }
 }

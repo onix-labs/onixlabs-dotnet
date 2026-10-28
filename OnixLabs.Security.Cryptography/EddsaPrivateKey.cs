@@ -24,6 +24,15 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EddsaPrivateKey : PrivateKey, IEddsaPrivateKey, ISpanParsable<EddsaPrivateKey>
 {
     /// <summary>
+    /// The encoded public key derived from the current private key, or <see langword="null"/> until it is first needed.
+    /// </summary>
+    /// <remarks>
+    /// Why: deriving the public key is a full scalar multiplication, and signing needs it for every signature. It is not secret, the seed
+    /// it derives from never changes, and it is only ever derived from this key's own seed, never accepted from a caller.
+    /// </remarks>
+    private byte[]? publicKey;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="EddsaPrivateKey"/> class.
     /// </summary>
     /// <param name="keyData">The underlying key data of the EdDSA cryptographic private key.</param>

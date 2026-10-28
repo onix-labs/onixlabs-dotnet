@@ -29,7 +29,7 @@ public sealed partial class EddsaPrivateKey
         try
         {
             byte[] signature = new byte[Ed25519.SignatureLength];
-            Ed25519.Sign(seed, data, signature);
+            Ed25519.Sign(seed, GetOrDerivePublicKey(seed), data, signature);
             return signature;
         }
         finally

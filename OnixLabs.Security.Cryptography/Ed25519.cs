@@ -65,14 +65,19 @@ internal static class Ed25519
     /// from <paramref name="seed"/> per RFC 8032 §5.1.6.
     /// </summary>
     /// <param name="seed">The 32-byte Ed25519 seed of the signing key.</param>
+    /// <param name="publicKey">The 32-byte public key derived from <paramref name="seed"/> by <see cref="DerivePublicKey"/>.</param>
     /// <param name="message">The message to sign.</param>
     /// <param name="signature">The 64-byte destination buffer that receives the resulting signature.</param>
-    public static void Sign(ReadOnlySpan<byte> seed, ReadOnlySpan<byte> message, Span<byte> signature)
+    /// <remarks>
+    /// Why: accepting the public key lets callers derive it once per key rather than once per signature, removing one of the two scalar
+    /// multiplications from signing. It must be the key derived from <paramref name="seed"/> and must never come from outside the library:
+    /// signing the same message under a mismatched public key yields two signatures that together reveal the secret scalar.
+    /// </remarks>
+    public static void Sign(ReadOnlySpan<byte> seed, ReadOnlySpan<byte> publicKey, ReadOnlySpan<byte> message, Span<byte> signature)
     {
         Span<byte> hash = stackalloc byte[64];
         Span<byte> secretScalar = stackalloc byte[32];
         Span<byte> prefix = stackalloc byte[32];
-        Span<byte> publicKey = stackalloc byte[32];
         Span<byte> rBytesWide = stackalloc byte[64];
         Span<byte> rScalar = stackalloc byte[32];
         Span<byte> kBytesWide = stackalloc byte[64];
@@ -81,9 +86,6 @@ internal static class Ed25519
         try
         {
             ExpandSeed(seed, hash, secretScalar, prefix);
-
-            Ed25519Point a = secretScalar * Ed25519Point.BasePoint;
-            a.Encode(publicKey);
 
             // r = SHA512(prefix || message) reduced mod L
             using (IncrementalHash sha = IncrementalHash.CreateHash(HashAlgorithmName.SHA512))

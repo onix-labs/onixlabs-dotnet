@@ -232,6 +232,54 @@ public sealed class EddsaKeyTests
         Assert.True(publicKey.IsDataValid(expectedSignature, message));
     }
 
+    [Theory(DisplayName = "EdDSA signatures should match RFC 8032 whether or not the public key has been derived yet")]
+    [InlineData(
+        "4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb",
+        "3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c",
+        "72",
+        "92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00")]
+    [InlineData(
+        "c5aa8df43f9f837bedb7442f31dcb7b166d38535076f094b85ce3a2e0b4458f7",
+        "fc51cd8e6218a1a38da47ed00230f0580816ed13ba3303ac5deb911548908025",
+        "af82",
+        "6291d657deec24024827e69c3abe01a30ce548a284743a445e3680d7db5ac3ac18ff9b538d16f290ae67f760984dc6594a7c15e9716ed28dc027beceea1ec40a")]
+    public void EddsaSignaturesShouldMatchRfc8032WhetherOrNotThePublicKeyHasBeenDerivedYet(
+        string seedHex,
+        string publicKeyHex,
+        string messageHex,
+        string signatureHex)
+    {
+        // Given
+        byte[] message = DecodeHex(messageHex);
+        byte[] expectedSignature = DecodeHex(signatureHex);
+        using EddsaPrivateKey privateKey = EddsaPrivateKey.Import(DecodeHex(seedHex));
+
+        // When
+        byte[] firstSignature = privateKey.SignData(message);
+        byte[] secondSignature = privateKey.SignData(message);
+        byte[] publicKey = privateKey.GetPublicKey().Export();
+
+        // Then
+        Assert.Equal(expectedSignature, firstSignature);
+        Assert.Equal(expectedSignature, secondSignature);
+        Assert.Equal(DecodeHex(publicKeyHex), publicKey);
+    }
+
+    [Fact(DisplayName = "EddsaPrivateKey should throw ObjectDisposedException after disposal even once its public key is derived")]
+    public void EddsaPrivateKeyGetPublicKeyShouldThrowObjectDisposedExceptionAfterDisposal()
+    {
+        // Given
+        EddsaPrivateKey privateKey = EddsaPrivateKey.Create();
+        privateKey.GetPublicKey();
+
+        // When
+        privateKey.Dispose();
+
+        // Then
+        Assert.Throws<ObjectDisposedException>(() => privateKey.GetPublicKey());
+        Assert.Throws<ObjectDisposedException>(() => privateKey.SignData([1, 2, 3]));
+    }
+
     [Theory(DisplayName = "EdDSA must satisfy Project Wycheproof Ed25519 test vectors")]
     [WycheproofEd25519Data]
     public void EddsaMustSatisfyWycheproofEd25519TestVectors(int tcId, byte[] publicKeyBytes, byte[] message, byte[] signature, bool expected)

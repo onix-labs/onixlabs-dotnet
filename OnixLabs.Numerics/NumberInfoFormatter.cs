@@ -16,7 +16,6 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Numerics;
 using System.Text;
 
@@ -33,22 +32,28 @@ internal sealed partial class NumberInfoFormatter
     private const char Whitespace = ' ';
 
     // ReSharper disable once HeapView.ObjectAllocation.Evident
+    /// <summary>
+    /// The format specifiers supported when formatting a wide integer type: round-trip and hexadecimal.
+    /// </summary>
+    internal static readonly SearchValues<char> RoundTripAndHexadecimalFormats = SearchValues.Create("RX");
+
     private readonly StringBuilder builder = new();
     private readonly NumberFormatInfo numberFormat;
     private readonly SearchValues<char> allowedFormats;
     private NumberInfo value;
+    private string? absoluteDigits;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NumberInfoFormatter"/> class.
     /// </summary>
     /// <param name="value">The <see cref="NumberInfo"/> value to format.</param>
     /// <param name="formatProvider">The format provider, which should be a <see cref="CultureInfo"/> containing the desired format details.</param>
-    /// <param name="allowedFormats">Specifies which formats are allowed for formatting.</param>
-    public NumberInfoFormatter(NumberInfo value, IFormatProvider formatProvider, IEnumerable<char> allowedFormats)
+    /// <param name="allowedFormats">Specifies which formats are allowed for formatting, as uppercase format specifiers.</param>
+    public NumberInfoFormatter(NumberInfo value, IFormatProvider formatProvider, SearchValues<char> allowedFormats)
     {
         this.value = value;
         numberFormat = NumberFormatInfo.GetInstance(formatProvider);
-        this.allowedFormats = SearchValues.Create(allowedFormats.Select(char.ToUpperInvariant).ToArray());
+        this.allowedFormats = allowedFormats;
     }
 
     /// <summary>
@@ -107,7 +112,11 @@ internal sealed partial class NumberInfoFormatter
     /// <param name="separator">The separator that separates each number group.</param>
     private void FormatInteger(IReadOnlyList<int> grouping, string separator = "")
     {
-        builder.Append(BigInteger.Abs(value.Integer).ToString());
+        string digits = AbsoluteDigits;
+        int integerLength = digits.Length - value.Scale;
+
+        if (integerLength > 0) builder.Append(digits, 0, integerLength);
+        else builder.Append('0');
 
         if (grouping.Count == 0) return;
 
@@ -137,6 +146,24 @@ internal sealed partial class NumberInfoFormatter
     /// <param name="separator">The separator that separates the integral and fractional components.</param>
     private void FormatFraction(string separator)
     {
-        if (value.Scale > 0) builder.Append(separator).Append(value.Fraction.ToString().PadLeft(value.Scale, '0'));
+        if (value.Scale <= 0) return;
+
+        string digits = AbsoluteDigits;
+        builder.Append(separator);
+
+        if (digits.Length >= value.Scale) builder.Append(digits, digits.Length - value.Scale, value.Scale);
+        else builder.Append('0', value.Scale - digits.Length).Append(digits);
     }
+
+    /// <summary>
+    /// Gets the decimal digits of the absolute unscaled value: the integer part followed by exactly <see cref="NumberInfo.Scale"/>
+    /// fraction digits, once leading zeros are restored.
+    /// </summary>
+    /// <value>The decimal digits of the absolute unscaled value, computed once per format after any format scaling.</value>
+    /// <remarks>
+    /// Why: the integer and fraction parts are the leading and trailing digits of the same string, so one conversion replaces a
+    /// division, a remainder and two conversions. Every reassignment of the value happens while applying the format scale, before
+    /// the first read.
+    /// </remarks>
+    private string AbsoluteDigits => absoluteDigits ??= BigInteger.Abs(value.UnscaledValue).ToString(CultureInfo.InvariantCulture);
 }

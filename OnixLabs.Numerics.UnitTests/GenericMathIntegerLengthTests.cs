@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
+using System.Globalization;
+using System.Numerics;
+
 namespace OnixLabs.Numerics.UnitTests;
 
 public sealed class GenericMathIntegerLengthTests
@@ -263,5 +267,55 @@ public sealed class GenericMathIntegerLengthTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "GenericMath.IntegerLength should match the decimal string length at every power-of-ten boundary up to 1,000 digits")]
+    public void GenericMathIntegerLengthShouldMatchTheDecimalStringLengthAtEveryPowerOfTenBoundary()
+    {
+        // Given
+        List<string> failures = [];
+
+        // When
+        for (int exponent = 0; exponent <= 1000; exponent++)
+        {
+            BigInteger power = BigInteger.Pow(10, exponent);
+
+            foreach (BigInteger candidate in new[] { power - 1, power, power + 1, -power, -(power - 1) })
+            {
+                int expected = BigInteger.Abs(candidate).ToString(CultureInfo.InvariantCulture).Length;
+                int actual = GenericMath.IntegerLength(candidate);
+
+                if (expected != actual)
+                    failures.Add($"10^{exponent} candidate {candidate}: expected {expected} but was {actual}");
+            }
+        }
+
+        // Then
+        Assert.Empty(failures);
+    }
+
+    [Fact(DisplayName = "GenericMath.IntegerLength should match the decimal string length at every power-of-two boundary up to 4,000 bits")]
+    public void GenericMathIntegerLengthShouldMatchTheDecimalStringLengthAtEveryPowerOfTwoBoundary()
+    {
+        // Given
+        List<string> failures = [];
+
+        // When
+        for (int exponent = 0; exponent <= 4000; exponent++)
+        {
+            BigInteger power = BigInteger.One << exponent;
+
+            foreach (BigInteger candidate in new[] { power - 1, power, power + 1 })
+            {
+                int expected = candidate.ToString(CultureInfo.InvariantCulture).Length;
+                int actual = GenericMath.IntegerLength(candidate);
+
+                if (expected != actual)
+                    failures.Add($"2^{exponent} candidate: expected {expected} but was {actual}");
+            }
+        }
+
+        // Then
+        Assert.Empty(failures);
     }
 }

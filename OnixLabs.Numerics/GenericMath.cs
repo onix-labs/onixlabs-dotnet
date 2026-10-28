@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Globalization;
 using System.Numerics;
 
 namespace OnixLabs.Numerics;
@@ -23,6 +22,8 @@ namespace OnixLabs.Numerics;
 /// </summary>
 public static class GenericMath
 {
+    private const double Log10Of2 = 0.30102999566398119521373889472449302676818988146211;
+
     /// <summary>
     /// Computes the delta, or absolute difference, between the specified numbers.
     /// </summary>
@@ -68,7 +69,17 @@ public static class GenericMath
     public static int IntegerLength<T>(T value) where T : INumberBase<T>
     {
         BigInteger integer = BigInteger.Abs(BigInteger.CreateTruncating(value));
-        return integer.ToString("G", CultureInfo.InvariantCulture).Length;
+
+        if (integer.IsZero) return 1;
+
+        // Why: formatting the integer to count its digits costs a full conversion and a string. A value of b bits has
+        // floor((b - 1) · log10(2)) + 1 or one more digits; the estimate is corrected exactly against the cached powers of ten.
+        int digits = (int)((integer.GetBitLength() - 1) * Log10Of2) + 1;
+
+        if (integer < BigIntegerPowersOfTen.Get(digits - 1)) return digits - 1;
+        if (integer >= BigIntegerPowersOfTen.Get(digits)) return digits + 1;
+
+        return digits;
     }
 
     /// <summary>

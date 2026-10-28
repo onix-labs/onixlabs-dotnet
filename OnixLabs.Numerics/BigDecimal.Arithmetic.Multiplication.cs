@@ -28,10 +28,14 @@ public readonly partial struct BigDecimal
     {
         int scale = left.Scale + right.Scale;
 
-        if (IsZero(left) || IsZero(right)) return new BigDecimal(0, scale);
+        // Why: results are built with the unvalidated constructor, so the one way a scale could go negative, int overflow, is still
+        // reported the way the validating constructor reported it.
+        Require(scale >= 0, "Scale must be greater than or equal to zero.", nameof(scale));
+
+        if (IsZero(left) || IsZero(right)) return new BigDecimal(new NumberInfo(0, scale));
         BigInteger product = left.UnscaledValue * right.UnscaledValue;
 
-        return new BigDecimal(product, scale);
+        return new BigDecimal(new NumberInfo(product, scale));
     }
 
     /// <summary>

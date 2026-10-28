@@ -31,7 +31,7 @@ public readonly partial struct BigDecimal
         (BigInteger dividend, BigInteger divisor) = NormalizeUnscaledValues(left, right);
         BigInteger remainder = BigInteger.Remainder(dividend, divisor);
 
-        return new BigDecimal(remainder, scale);
+        return new BigDecimal(new NumberInfo(remainder, scale));
     }
 
     /// <summary>

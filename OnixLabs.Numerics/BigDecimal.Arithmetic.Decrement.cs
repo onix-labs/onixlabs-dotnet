@@ -23,14 +23,14 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value to decrement.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value decremented by one integral unit.</returns>
-    public static BigDecimal Decrement(BigDecimal value) => new(value.UnscaledValue - value.number.ScaleFactor, value.Scale);
+    public static BigDecimal Decrement(BigDecimal value) => new(new NumberInfo(value.UnscaledValue - value.number.ScaleFactor, value.Scale));
 
     /// <summary>
     /// Decrements the fractional component of the specified <see cref="BigDecimal"/> value by one.
     /// </summary>
     /// <param name="value">The value to decrement.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value decremented by one fractional unit.</returns>
-    public static BigDecimal DecrementFraction(BigDecimal value) => new(value.UnscaledValue - BigInteger.One, value.Scale);
+    public static BigDecimal DecrementFraction(BigDecimal value) => new(new NumberInfo(value.UnscaledValue - BigInteger.One, value.Scale));
 
     /// <summary>
     /// Decrements the integral component of the specified <see cref="BigDecimal"/> value by one.

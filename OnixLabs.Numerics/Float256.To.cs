@@ -132,7 +132,7 @@ public readonly partial struct Float256
 
         // Post-check: the rounded integer should have exactly `significantDigits` decimal digits
         // (i.e. lie in [10^(N-1), 10^N)). The Log10 estimate can be off by 1 — adjust here.
-        BigInteger lowerLimit = BigInteger.Pow(10, significantDigits - 1);
+        BigInteger lowerLimit = BigIntegerPowersOfTen.Get(significantDigits - 1);
         BigInteger upperLimit = lowerLimit * 10;
 
         while (unscaledValue >= upperLimit)

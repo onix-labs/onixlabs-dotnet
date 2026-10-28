@@ -46,8 +46,7 @@ public readonly partial struct UInt256
             UInt128 divisor = right.LowerBits;
             if (left.UpperBits == UInt128.Zero)
             {
-                UInt128 quotientSmall = left.LowerBits / divisor;
-                UInt128 remainderSmall = left.LowerBits % divisor;
+                (UInt128 quotientSmall, UInt128 remainderSmall) = UInt128.DivRem(left.LowerBits, divisor);
                 return (new UInt256(UInt128.Zero, quotientSmall), new UInt256(UInt128.Zero, remainderSmall));
             }
 
@@ -56,65 +55,99 @@ public readonly partial struct UInt256
             return (new UInt256(quotientHigh, quotientLow), new UInt256(UInt128.Zero, remainder128));
         }
 
-        UInt256 working = Zero;
-        UInt256 quotient = Zero;
+        // The divisor is wider than 128 bits, so the quotient fits in 128 bits. Hacker's Delight divdu: estimate the quotient by dividing
+        // by the divisor's normalized top 128 bits, which can only overestimate the true quotient by at most one after the adjustment below.
+        int shift = (int)UInt128.LeadingZeroCount(right.UpperBits);
+        UInt128 normalizedDivisor = (right << shift).UpperBits;
 
-        for (int bitIndex = BitWidth - 1; bitIndex >= 0; bitIndex--)
+        // Why: halving the dividend guarantees that its upper half is below the normalized divisor, as the two-word division requires.
+        UInt256 halved = left >>> 1;
+        UInt128 estimate = DivideTwoWords(halved.UpperBits, halved.LowerBits, normalizedDivisor, out UInt128 _);
+        UInt256 quotient = ((UInt256)estimate << shift) >>> (HalfBitWidth - 1);
+
+        if (!IsZero(quotient)) quotient--;
+
+        UInt256 remainder = left - quotient * right;
+
+        if (remainder >= right)
         {
-            UInt256 nextBit = (left >>> bitIndex) & One;
-            working = (working << 1) | nextBit;
-
-            if (working >= right)
-            {
-                working = working - right;
-                quotient = quotient | (One << bitIndex);
-            }
+            quotient++;
+            remainder -= right;
         }
 
-        return (quotient, working);
+        return (quotient, remainder);
     }
 
-    /// <summary>Divides a 256-bit dividend by a 128-bit divisor and returns the 128-bit quotient and remainder.</summary>
+    /// <summary>Divides a 256-bit dividend by a 128-bit divisor and returns the low 128 bits of the quotient and the remainder.</summary>
     /// <param name="dividend">The 256-bit dividend.</param>
     /// <param name="divisor">The 128-bit divisor.</param>
     /// <param name="remainder">When this method returns, contains the 128-bit remainder.</param>
-    /// <returns>Returns the 128-bit quotient.</returns>
+    /// <returns>Returns the low 128 bits of the quotient, which is the whole quotient when <c>dividend.Upper &lt; divisor</c>.</returns>
     /// <exception cref="DivideByZeroException">Thrown when <paramref name="divisor"/> is zero.</exception>
-    /// <remarks>The caller is responsible for ensuring the quotient fits in 128 bits (i.e. <c>dividend.Upper &lt; divisor</c>).</remarks>
     public static UInt128 DivRemBy128(UInt256 dividend, UInt128 divisor, out UInt128 remainder)
     {
         if (divisor == UInt128.Zero) throw new DivideByZeroException();
 
-        UInt128 quotientLow = UInt128.Zero;
-        UInt128 working = UInt128.Zero;
-        UInt128 numHigh = dividend.UpperBits;
-        UInt128 numLow = dividend.LowerBits;
+        // Why: reducing the upper half modulo the divisor leaves the low 128 bits of the quotient and the remainder unchanged,
+        // because dividend = (upper div divisor)·divisor·2^128 + ((upper mod divisor)·2^128 + lower).
+        UInt128 upper = dividend.UpperBits;
+        if (upper >= divisor) upper %= divisor;
 
-        for (int bitIndex = HalfBitWidth - 1; bitIndex >= 0; bitIndex--)
+        return DivideTwoWords(upper, dividend.LowerBits, divisor, out remainder);
+    }
+
+    /// <summary>
+    /// Divides the 256-bit value <paramref name="high"/>·2^128 + <paramref name="low"/> by a 128-bit divisor, where
+    /// <paramref name="high"/> is less than the divisor so that the quotient fits in 128 bits.
+    /// </summary>
+    /// <param name="high">The upper 128 bits of the dividend, which must be less than <paramref name="divisor"/>.</param>
+    /// <param name="low">The lower 128 bits of the dividend.</param>
+    /// <param name="divisor">The non-zero 128-bit divisor.</param>
+    /// <param name="remainder">When this method returns, contains the 128-bit remainder.</param>
+    /// <returns>Returns the 128-bit quotient.</returns>
+    /// <remarks>
+    /// Why: this replaces a bit-at-a-time long division of 256 iterations. It is Hacker's Delight divlu with 128-bit words and 64-bit
+    /// half-words (Knuth's Algorithm D for a two-digit divisor): after normalizing the divisor so that its top bit is set, each 64-bit
+    /// quotient half is estimated from a single division by the divisor's top half and corrected at most twice. Every intermediate
+    /// value either fits in 128 bits or is correct modulo 2^128, as in the original.
+    /// </remarks>
+    private static UInt128 DivideTwoWords(UInt128 high, UInt128 low, UInt128 divisor, out UInt128 remainder)
+    {
+        UInt128 halfBase = UInt128.One << 64;
+        int shift = (int)UInt128.LeadingZeroCount(divisor);
+
+        divisor <<= shift;
+        ulong divisorHigh = (ulong)(divisor >> 64);
+        ulong divisorLow = (ulong)divisor;
+
+        // A shift of zero must not compute low >> 128, which UInt128 treats as low >> 0.
+        UInt128 numeratorHigh = shift == 0 ? high : (high << shift) | (low >> (128 - shift));
+        UInt128 numeratorLow = low << shift;
+        ulong numeratorLow1 = (ulong)(numeratorLow >> 64);
+        ulong numeratorLow0 = (ulong)numeratorLow;
+
+        UInt128 quotient1 = numeratorHigh / divisorHigh;
+        UInt128 remainderEstimate = numeratorHigh - quotient1 * divisorHigh;
+
+        while (quotient1 >= halfBase || quotient1 * divisorLow > ((remainderEstimate << 64) | numeratorLow1))
         {
-            UInt128 nextBit = (numHigh >> bitIndex) & UInt128.One;
-            // Capture the top bit before shifting so values whose true magnitude is in [2^128, 2*divisor)
-            // — which can happen when divisor is close to 2^128 — are still recognised as >= divisor.
-            bool workingOverflow = (working >> (HalfBitWidth - 1)) != UInt128.Zero;
-            working = (working << 1) | nextBit;
-
-            if (workingOverflow || working >= divisor) working -= divisor;
+            quotient1--;
+            remainderEstimate += divisorHigh;
+            if (remainderEstimate >= halfBase) break;
         }
 
-        for (int bitIndex = HalfBitWidth - 1; bitIndex >= 0; bitIndex--)
-        {
-            UInt128 nextBit = (numLow >> bitIndex) & UInt128.One;
-            bool workingOverflow = (working >> (HalfBitWidth - 1)) != UInt128.Zero;
-            working = (working << 1) | nextBit;
+        UInt128 numeratorMiddle = ((numeratorHigh << 64) | numeratorLow1) - quotient1 * divisor;
+        UInt128 quotient0 = numeratorMiddle / divisorHigh;
+        remainderEstimate = numeratorMiddle - quotient0 * divisorHigh;
 
-            if (workingOverflow || working >= divisor)
-            {
-                working -= divisor;
-                quotientLow |= UInt128.One << bitIndex;
-            }
+        while (quotient0 >= halfBase || quotient0 * divisorLow > ((remainderEstimate << 64) | numeratorLow0))
+        {
+            quotient0--;
+            remainderEstimate += divisorHigh;
+            if (remainderEstimate >= halfBase) break;
         }
 
-        remainder = working;
-        return quotientLow;
+        remainder = (((numeratorMiddle << 64) | numeratorLow0) - quotient0 * divisor) >> shift;
+        return (quotient1 << 64) | quotient0;
     }
 }

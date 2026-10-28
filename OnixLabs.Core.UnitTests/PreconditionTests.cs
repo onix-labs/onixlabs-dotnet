@@ -697,4 +697,69 @@ public sealed class PreconditionTests
         // Given / When / Then
         RequireIsDefined((Shape)1);
     }
+
+    [Fact(DisplayName = "Require should not format an interpolated message when the condition is true")]
+    public void RequireShouldNotFormatAnInterpolatedMessageWhenTheConditionIsTrue()
+    {
+        // Given
+        int formatCount = 0;
+
+        // When
+        Require(true, $"Formatted {CountFormat(ref formatCount)} times.", "value");
+
+        // Then
+        Assert.Equal(0, formatCount);
+    }
+
+    [Fact(DisplayName = "Require should throw ArgumentException with the formatted interpolated message when the condition is false")]
+    public void RequireShouldThrowArgumentExceptionWithTheFormattedInterpolatedMessageWhenTheConditionIsFalse()
+    {
+        // Given
+        int formatCount = 0;
+        const int scale = 7;
+
+        // When
+        ArgumentException exception = Assert.Throws<ArgumentException>(() =>
+            Require(false, $"Scale {scale,3:D2} in {nameof(Preconditions)} formatted {CountFormat(ref formatCount)} times.", "value"));
+
+        // Then
+        Assert.Equal(1, formatCount);
+        Assert.Equal("value", exception.ParamName);
+        Assert.StartsWith("Scale  07 in Preconditions formatted 1 times.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Check should not format an interpolated message when the condition is true")]
+    public void CheckShouldNotFormatAnInterpolatedMessageWhenTheConditionIsTrue()
+    {
+        // Given
+        int formatCount = 0;
+
+        // When
+        Check(true, $"Formatted {CountFormat(ref formatCount)} times.");
+
+        // Then
+        Assert.Equal(0, formatCount);
+    }
+
+    [Fact(DisplayName = "Check should throw InvalidOperationException with the formatted interpolated message when the condition is false")]
+    public void CheckShouldThrowInvalidOperationExceptionWithTheFormattedInterpolatedMessageWhenTheConditionIsFalse()
+    {
+        // Given
+        int formatCount = 0;
+
+        // When
+        InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() =>
+            Check(false, $"Formatted {CountFormat(ref formatCount)} times."));
+
+        // Then
+        Assert.Equal(1, formatCount);
+        Assert.Equal("Formatted 1 times.", exception.Message);
+    }
+
+    /// <summary>
+    /// Increments the specified counter, to detect whether an interpolated message hole was evaluated.
+    /// </summary>
+    /// <param name="count">The counter to increment.</param>
+    /// <returns>Returns the counter after it has been incremented.</returns>
+    private static int CountFormat(ref int count) => ++count;
 }

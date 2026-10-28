@@ -383,4 +383,29 @@ public sealed class StringExtensionTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Theory(DisplayName = "String.Repeat should handle empty strings and non-positive counts")]
+    [InlineData("", 5, "")]
+    [InlineData("ab", 0, "")]
+    [InlineData("ab", -3, "")]
+    [InlineData("ab", 1, "ab")]
+    [InlineData("xyz", 4, "xyzxyzxyzxyz")]
+    public void StringRepeatShouldHandleEmptyStringsAndNonPositiveCounts(string value, int count, string expected)
+    {
+        // When
+        string actual = value.Repeat(count);
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "String.Wrap should wrap the current string value between the before and after char values")]
+    public void StringWrapShouldWrapBetweenTheBeforeAndAfterCharValues()
+    {
+        // When
+        string actual = "value".Wrap('[', ']');
+
+        // Then
+        Assert.Equal("[value]", actual);
+    }
 }

@@ -24,7 +24,8 @@ public sealed partial class EcdhPrivateKey
         using ECDiffieHellman ourKey = ImportKeyData();
         using ECDiffieHellman theirKey = ECDiffieHellman.Create();
         theirKey.ImportSubjectPublicKeyInfo(publicKey.AsReadOnlySpan(), out int _);
-        byte[] secretData = ourKey.DeriveKeyMaterial(theirKey.PublicKey);
+        using ECDiffieHellmanPublicKey theirPublicKey = theirKey.PublicKey;
+        byte[] secretData = ourKey.DeriveKeyMaterial(theirPublicKey);
 
         try
         {

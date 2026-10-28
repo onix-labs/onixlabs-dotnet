@@ -24,14 +24,14 @@ public sealed partial class EcdsaPrivateKey
     /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToArray());
+        byte[] hash = algorithm.ComputeHash(data);
         return SignHash(hash, format);
     }
 
     /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data, int offset, int count, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToArray(), offset, count);
+        byte[] hash = algorithm.ComputeHash(data, offset, count);
         return SignHash(hash, format);
     }
 
@@ -60,7 +60,7 @@ public sealed partial class EcdsaPrivateKey
     public byte[] SignData(ReadOnlySpan<byte> data, int offset, int count, HashAlgorithmName algorithm, DSASignatureFormat format = default)
     {
         using ECDsa key = ImportKeyData();
-        return key.SignData(data.ToArray(), offset, count, algorithm, format);
+        return key.SignData(data.Slice(offset, count), algorithm, format);
     }
 
     /// <inheritdoc/>

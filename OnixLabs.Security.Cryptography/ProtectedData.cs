@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.IO;
 using System.Security.Cryptography;
 using OnixLabs.Core.Linq;
 
@@ -22,11 +21,23 @@ namespace OnixLabs.Security.Cryptography;
 /// <summary>
 /// Represents an in-memory data protection mechanism for sensitive, long-lived cryptographic data.
 /// </summary>
+/// <remarks>
+/// Each instance owns a random AES-256 key and IV, and is expected to encrypt exactly one value, which it may then decrypt any number of times.
+/// Instances are safe for concurrent use.
+/// </remarks>
 // ReSharper disable HeapView.ObjectAllocation.Evident
 internal sealed partial class ProtectedData : IDisposable
 {
-    private readonly byte[] key = Salt.CreateNonZero(32).AsReadOnlySpan().ToArray();
-    private readonly byte[] iv = Salt.CreateNonZero(16).AsReadOnlySpan().ToArray();
+    private const int KeyLength = 32;
+    private const int IvLength = 16;
+
+    private readonly byte[] key = RandomNumberGenerator.GetBytes(KeyLength);
+
+    // Why: a fixed IV for the lifetime of the key is acceptable only because each instance encrypts a single value.
+    // Encrypting a second value under the same key and IV would leak equality of their leading blocks; if that is ever
+    // needed, generate a fresh IV per call and store it alongside the ciphertext instead.
+    private readonly byte[] iv = RandomNumberGenerator.GetBytes(IvLength);
+
     private bool isDisposed;
 
     /// <summary>
@@ -41,21 +52,8 @@ internal sealed partial class ProtectedData : IDisposable
 
         if (data.IsEmpty()) return data;
 
-        using Aes algorithm = Aes.Create();
-
-        algorithm.Key = key;
-        algorithm.IV = iv;
-        algorithm.Padding = PaddingMode.PKCS7;
-
-        ICryptoTransform transform = algorithm.CreateEncryptor(algorithm.Key, algorithm.IV);
-
-        using MemoryStream memoryStream = new();
-        using CryptoStream cryptoStream = new(memoryStream, transform, CryptoStreamMode.Write);
-
-        cryptoStream.Write(data, 0, data.Length);
-        cryptoStream.FlushFinalBlock();
-
-        return memoryStream.ToArray();
+        using Aes algorithm = CreateAlgorithm();
+        return algorithm.EncryptCbc(data, iv, PaddingMode.PKCS7);
     }
 
     /// <summary>
@@ -70,20 +68,27 @@ internal sealed partial class ProtectedData : IDisposable
 
         if (data.IsEmpty()) return data;
 
-        using Aes algorithm = Aes.Create();
+        using Aes algorithm = CreateAlgorithm();
+        return algorithm.DecryptCbc(data, iv, PaddingMode.PKCS7);
+    }
 
-        algorithm.Key = key;
-        algorithm.IV = iv;
-        algorithm.Padding = PaddingMode.PKCS7;
-
-        ICryptoTransform transform = algorithm.CreateDecryptor(algorithm.Key, algorithm.IV);
-
-        using MemoryStream memoryStream = new(data);
-        using CryptoStream cryptoStream = new(memoryStream, transform, CryptoStreamMode.Read);
-        using MemoryStream resultStream = new();
-
-        cryptoStream.CopyTo(resultStream);
-
-        return resultStream.ToArray();
+    /// <summary>
+    /// Creates a new <see cref="Aes"/> instance keyed with the current instance's key.
+    /// </summary>
+    /// <returns>Returns a new <see cref="Aes"/> instance keyed with the current instance's key.</returns>
+    /// <remarks>
+    /// Why: an <see cref="Aes"/> instance per call, rather than one per <see cref="ProtectedData"/>, for two measured reasons (GH #156).
+    /// First, a keyed <see cref="Aes"/> owns a native key handle, so holding one would leave a finalizer behind for every
+    /// <see cref="PrivateKey"/> or <see cref="Secret"/> that is not disposed; scoping it to the call releases it deterministically.
+    /// Second, from .NET 11 a shared <see cref="Aes"/> throws <see cref="CryptographicException"/> on concurrent use instead of waiting.
+    /// The one-shot <see cref="SymmetricAlgorithm.EncryptCbc(ReadOnlySpan{byte}, ReadOnlySpan{byte}, PaddingMode)"/> and
+    /// <see cref="SymmetricAlgorithm.DecryptCbc(ReadOnlySpan{byte}, ReadOnlySpan{byte}, PaddingMode)"/> methods create no
+    /// <see cref="ICryptoTransform"/>, so nothing is left for the finalizer; a CryptoStream-based pipeline must dispose its transform explicitly.
+    /// </remarks>
+    private Aes CreateAlgorithm()
+    {
+        Aes result = Aes.Create();
+        result.Key = key;
+        return result;
     }
 }

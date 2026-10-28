@@ -68,11 +68,11 @@ internal sealed partial class NumberInfoFormatter
 
         if (targetScale > value.Scale)
         {
-            BigInteger magnitude = BigInteger.Pow(10, targetScale - value.Scale);
+            BigInteger magnitude = BigIntegerPowersOfTen.Get(targetScale - value.Scale);
             return new NumberInfo(value.UnscaledValue * magnitude, targetScale);
         }
 
-        BigInteger divisor = BigInteger.Pow(10, value.Scale - targetScale);
+        BigInteger divisor = BigIntegerPowersOfTen.Get(value.Scale - targetScale);
         BigInteger absValue = BigInteger.Abs(value.UnscaledValue);
         BigInteger quotient = absValue / divisor;
         BigInteger remainder = absValue % divisor;

@@ -46,7 +46,7 @@ public readonly partial struct Int256
         {
             BigInteger unscaled = upperSpecifier == 'X' ? (BigInteger)ReinterpretAsUnsigned(this) : (BigInteger)this;
             // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-            NumberInfoFormatter formatter = new(new NumberInfo(unscaled, 0), formatProvider ?? CultureInfo.CurrentCulture, ['R', 'X']);
+            NumberInfoFormatter formatter = new(new NumberInfo(unscaled, 0), formatProvider ?? CultureInfo.CurrentCulture, NumberInfoFormatter.RoundTripAndHexadecimalFormats);
             return formatter.Format(formatSpan);
         }
 

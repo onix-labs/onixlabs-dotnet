@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 using System.Globalization;
 
 namespace OnixLabs.Numerics;
@@ -22,7 +23,7 @@ public readonly partial struct BigDecimal
     /// <summary>
     /// The set of format specifiers supported when formatting a <see cref="BigDecimal"/> value.
     /// </summary>
-    private static readonly char[] SupportedFormats = ['C', 'D', 'E', 'F', 'G', 'N', 'P', 'R', 'X'];
+    private static readonly SearchValues<char> SupportedFormats = SearchValues.Create("CDEFGNPRX");
 
     /// <summary>
     /// Gets a <see cref="NumberInfo"/> representing the current <see cref="BigDecimal"/>.

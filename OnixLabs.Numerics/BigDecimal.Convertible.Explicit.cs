@@ -20,6 +20,15 @@ namespace OnixLabs.Numerics;
 
 public readonly partial struct BigDecimal
 {
+    // Why: these bounds are constants, but converting a float, double or decimal to a BigDecimal formats and parses it, so the bounds
+    // that the narrowing conversions check against are converted once rather than on every conversion.
+    private static readonly BigDecimal SingleMinValue = float.MinValue;
+    private static readonly BigDecimal SingleMaxValue = float.MaxValue;
+    private static readonly BigDecimal DoubleMinValue = double.MinValue;
+    private static readonly BigDecimal DoubleMaxValue = double.MaxValue;
+    private static readonly BigDecimal DecimalMinValue = decimal.MinValue;
+    private static readonly BigDecimal DecimalMaxValue = decimal.MaxValue;
+
     /// <summary>
     /// Converts the integral value of the specified <see cref="BigDecimal"/> value to a <see cref="BigInteger"/> value.
     /// </summary>
@@ -35,8 +44,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="sbyte"/>.</exception>
     public static explicit operator sbyte(BigDecimal value)
     {
-        CheckIntegerOverflow(value, sbyte.MinValue, sbyte.MaxValue);
-        return (sbyte)value.number.Integer;
+        return (sbyte)GetCheckedInteger(value, sbyte.MinValue, sbyte.MaxValue);
     }
 
     /// <summary>
@@ -47,8 +55,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="byte"/>.</exception>
     public static explicit operator byte(BigDecimal value)
     {
-        CheckIntegerOverflow(value, byte.MinValue, byte.MaxValue);
-        return (byte)value.number.Integer;
+        return (byte)GetCheckedInteger(value, byte.MinValue, byte.MaxValue);
     }
 
     /// <summary>
@@ -59,8 +66,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="short"/>.</exception>
     public static explicit operator short(BigDecimal value)
     {
-        CheckIntegerOverflow(value, short.MinValue, short.MaxValue);
-        return (short)value.number.Integer;
+        return (short)GetCheckedInteger(value, short.MinValue, short.MaxValue);
     }
 
     /// <summary>
@@ -71,8 +77,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="ushort"/>.</exception>
     public static explicit operator ushort(BigDecimal value)
     {
-        CheckIntegerOverflow(value, ushort.MinValue, ushort.MaxValue);
-        return (ushort)value.number.Integer;
+        return (ushort)GetCheckedInteger(value, ushort.MinValue, ushort.MaxValue);
     }
 
     /// <summary>
@@ -83,8 +88,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="int"/>.</exception>
     public static explicit operator int(BigDecimal value)
     {
-        CheckIntegerOverflow(value, int.MinValue, int.MaxValue);
-        return (int)value.number.Integer;
+        return (int)GetCheckedInteger(value, int.MinValue, int.MaxValue);
     }
 
     /// <summary>
@@ -95,8 +99,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="uint"/>.</exception>
     public static explicit operator uint(BigDecimal value)
     {
-        CheckIntegerOverflow(value, uint.MinValue, uint.MaxValue);
-        return (uint)value.number.Integer;
+        return (uint)GetCheckedInteger(value, uint.MinValue, uint.MaxValue);
     }
 
     /// <summary>
@@ -107,8 +110,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="long"/>.</exception>
     public static explicit operator long(BigDecimal value)
     {
-        CheckIntegerOverflow(value, long.MinValue, long.MaxValue);
-        return (long)value.number.Integer;
+        return (long)GetCheckedInteger(value, long.MinValue, long.MaxValue);
     }
 
     /// <summary>
@@ -119,8 +121,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="ulong"/>.</exception>
     public static explicit operator ulong(BigDecimal value)
     {
-        CheckIntegerOverflow(value, ulong.MinValue, ulong.MaxValue);
-        return (ulong)value.number.Integer;
+        return (ulong)GetCheckedInteger(value, ulong.MinValue, ulong.MaxValue);
     }
 
     /// <summary>
@@ -131,8 +132,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="Int128"/>.</exception>
     public static explicit operator Int128(BigDecimal value)
     {
-        CheckIntegerOverflow(value, Int128.MinValue, Int128.MaxValue);
-        return (Int128)value.number.Integer;
+        return (Int128)GetCheckedInteger(value, Int128.MinValue, Int128.MaxValue);
     }
 
     /// <summary>
@@ -143,8 +143,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="UInt128"/>.</exception>
     public static explicit operator UInt128(BigDecimal value)
     {
-        CheckIntegerOverflow(value, UInt128.MinValue, UInt128.MaxValue);
-        return (UInt128)value.number.Integer;
+        return (UInt128)GetCheckedInteger(value, UInt128.MinValue, UInt128.MaxValue);
     }
 
     /// <summary>
@@ -155,7 +154,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="float"/>.</exception>
     public static explicit operator float(BigDecimal value)
     {
-        if (value < float.MinValue || value > float.MaxValue)
+        if (value < SingleMinValue || value > SingleMaxValue)
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Single)}.");
 
         // Why: this is an internal machine round-trip; InvariantCulture for both format and parse keeps it locale-immune. NumberStyles.Float accepts the "E" exponent.
@@ -170,7 +169,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="double"/>.</exception>
     public static explicit operator double(BigDecimal value)
     {
-        if (value < double.MinValue || value > double.MaxValue)
+        if (value < DoubleMinValue || value > DoubleMaxValue)
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Double)}.");
 
         // Why: this is an internal machine round-trip; InvariantCulture for both format and parse keeps it locale-immune. NumberStyles.Float accepts the "E" exponent.
@@ -185,7 +184,7 @@ public readonly partial struct BigDecimal
     /// <exception cref="OverflowException">Thrown when the specified <see cref="BigDecimal"/> value falls outside the range of <see cref="decimal"/>.</exception>
     public static explicit operator decimal(BigDecimal value)
     {
-        if (value < decimal.MinValue || value > decimal.MaxValue)
+        if (value < DecimalMinValue || value > DecimalMaxValue)
             throw new OverflowException($"Value was either too large or too small for the specified type: {nameof(Decimal)}.");
 
         // Why: this is an internal machine round-trip; InvariantCulture for both format and parse keeps it locale-immune.
@@ -194,20 +193,23 @@ public readonly partial struct BigDecimal
     }
 
     /// <summary>
-    /// Checks whether the integral value of the specified <see cref="BigDecimal"/>
-    /// is within the bounds of the specified minimum and maximum values.
+    /// Gets the integral value of the specified <see cref="BigDecimal"/>, checking that it is within the bounds of the specified minimum
+    /// and maximum values.
     /// </summary>
     /// <param name="value">The <see cref="BigDecimal"/> value to check.</param>
     /// <param name="min">The minimum bound value.</param>
     /// <param name="max">The maximum bound value.</param>
     /// <typeparam name="T">The underlying <see cref="IBinaryInteger{TSelf}"/> type.</typeparam>
+    /// <returns>Returns the integral value of the specified <see cref="BigDecimal"/>.</returns>
     /// <exception cref="OverflowException">Thrown when the integral value of the specified <see cref="BigDecimal"/> value is not within the bounds of the specified minimum and maximum values.</exception>
-    private static void CheckIntegerOverflow<T>(in BigDecimal value, T min, T max) where T : IBinaryInteger<T>
+    private static BigInteger GetCheckedInteger<T>(in BigDecimal value, T min, T max) where T : IBinaryInteger<T>
     {
-        BigInteger checkedMin = BigInteger.CreateChecked(min);
-        BigInteger checkedMax = BigInteger.CreateChecked(max);
+        // Why: the integral value costs a division, so it is computed once for both the check and the conversion.
+        BigInteger integer = value.number.Integer;
 
-        if (value.number.Integer < checkedMin || value.number.Integer > checkedMax)
+        if (integer < BigInteger.CreateChecked(min) || integer > BigInteger.CreateChecked(max))
             throw new OverflowException($"Value was either too large or too small for the specified type: {typeof(T).Name}.");
+
+        return integer;
     }
 }

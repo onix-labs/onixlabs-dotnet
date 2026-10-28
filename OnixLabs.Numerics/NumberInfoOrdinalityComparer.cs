@@ -55,8 +55,8 @@ public sealed class NumberInfoOrdinalityComparer : IComparer<NumberInfo>, ICompa
         BigInteger xUnscaled = x.UnscaledValue;
         BigInteger yUnscaled = y.UnscaledValue;
 
-        if (x.Scale < y.Scale) xUnscaled *= BigInteger.Pow(10, y.Scale - x.Scale);
-        else if (y.Scale < x.Scale) yUnscaled *= BigInteger.Pow(10, x.Scale - y.Scale);
+        if (x.Scale < y.Scale) xUnscaled *= BigIntegerPowersOfTen.Get(y.Scale - x.Scale);
+        else if (y.Scale < x.Scale) yUnscaled *= BigIntegerPowersOfTen.Get(x.Scale - y.Scale);
 
         return xUnscaled.CompareTo(yUnscaled);
     }

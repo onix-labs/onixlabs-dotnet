@@ -34,7 +34,7 @@ public readonly partial struct BigDecimal
         (BigInteger leftAddend, BigInteger rightAddend) = NormalizeUnscaledValues(left, right);
         BigInteger sum = leftAddend + rightAddend;
 
-        return new BigDecimal(sum, scale);
+        return new BigDecimal(new NumberInfo(sum, scale));
     }
 
     /// <summary>

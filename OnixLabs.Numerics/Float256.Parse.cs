@@ -178,7 +178,7 @@ public readonly partial struct Float256
             int remainingExponent = decimalExponent - absorbedScale;
 
             BigInteger newUnscaledValue = remainingExponent > 0
-                ? mantissa.UnscaledValue * BigInteger.Pow(10, remainingExponent)
+                ? mantissa.UnscaledValue * BigIntegerPowersOfTen.Get(remainingExponent)
                 : mantissa.UnscaledValue;
 
             return new BigDecimal(newUnscaledValue, newScale);

@@ -51,12 +51,10 @@ public static class NumericsExtensions
     /// <returns>Returns the unscaled value of the current <see cref="decimal"/> as a <see cref="BigInteger"/>.</returns>
     public static BigInteger GetUnscaledValue(this decimal value)
     {
-        const int significandSize = 13;
-        int[] significandBits = decimal.GetBits(value);
-        // ReSharper disable once HeapView.ObjectAllocation.Evident
-        byte[] significandBytes = new byte[significandSize];
-        Buffer.BlockCopy(significandBits, 0, significandBytes, 0, significandSize);
-        BigInteger result = new(significandBytes);
+        // Why: the 96-bit significand is read into a stack buffer rather than through two heap arrays.
+        Span<int> bits = stackalloc int[4];
+        decimal.GetBits(value, bits);
+        BigInteger result = ((UInt128)(uint)bits[2] << 64) | ((UInt128)(uint)bits[1] << 32) | (uint)bits[0];
 
         return decimal.IsPositive(value) ? result : -result;
     }
@@ -112,13 +110,13 @@ public static class NumericsExtensions
         if (value.Scale < scale)
         {
             int diff = scale - value.Scale;
-            BigInteger padded = unscaledValue * BigInteger.Pow(10, diff);
+            BigInteger padded = unscaledValue * BigIntegerPowersOfTen.Get(diff);
             return padded.ToDecimal(scale);
         }
 
         // Decrease scale: drop extra digits
         int drop = value.Scale - scale;
-        BigInteger divisor = BigInteger.Pow(10, drop);
+        BigInteger divisor = BigIntegerPowersOfTen.Get(drop);
         BigInteger quotient = BigInteger.DivRem(unscaledValue, divisor, out BigInteger remainder);
 
         // If there is any remainder, dropping would lose precision
@@ -158,13 +156,13 @@ public static class NumericsExtensions
         if (value.Scale < scale)
         {
             int diff = scale - value.Scale;
-            BigInteger padded = unscaledValue * BigInteger.Pow(10, diff);
+            BigInteger padded = unscaledValue * BigIntegerPowersOfTen.Get(diff);
             return padded.ToDecimal(scale);
         }
 
         // Decrease scale: drop or round extra digits
         int drop = value.Scale - scale;
-        BigInteger divisor = BigInteger.Pow(10, drop);
+        BigInteger divisor = BigIntegerPowersOfTen.Get(drop);
         BigInteger.DivRem(unscaledValue, divisor, out BigInteger remainder);
 
         // If fractional remainder, then rounding required
@@ -190,7 +188,7 @@ public static class NumericsExtensions
         RequireIsDefined(mode);
 
         BigInteger integer = value.ToBigInteger();
-        return scale == 0 || mode == ScaleMode.Fractional ? integer : integer * BigInteger.Pow(10, scale);
+        return scale == 0 || mode == ScaleMode.Fractional ? integer : integer * BigIntegerPowersOfTen.Get(scale);
     }
 
     /// <summary>

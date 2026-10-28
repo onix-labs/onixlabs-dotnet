@@ -25,10 +25,11 @@ public abstract partial class MerkleTree
     /// <returns>Returns a new <see cref="IReadOnlyList{T}"/> instance containing the leaf hashes from the current <see cref="MerkleTree"/> instance.</returns>
     public IReadOnlyList<Hash> GetLeafHashes()
     {
+        // Why: an immutable array keeps the result read-only with a single backing array, where an immutable list allocates a node per leaf.
         // ReSharper disable once HeapView.ObjectAllocation
-        List<Hash> result = [];
+        ImmutableArray<Hash>.Builder result = ImmutableArray.CreateBuilder<Hash>();
         CollectLeafHashes(this, result);
-        return result.ToImmutableList();
+        return result.DrainToImmutable();
     }
 
     /// <summary>

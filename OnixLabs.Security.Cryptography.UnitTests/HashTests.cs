@@ -14,6 +14,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using OnixLabs.Core;
 using OnixLabs.Security.Cryptography.UnitTests.Data;
@@ -682,5 +683,56 @@ public sealed class HashTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "Hash should throw ArgumentOutOfRangeException when constructed with a negative length")]
+    public void HashShouldThrowArgumentOutOfRangeExceptionWhenConstructedWithANegativeLength()
+    {
+        // Given / When / Then
+        Assert.Throws<ArgumentOutOfRangeException>(() => new Hash(0x00, -1));
+    }
+
+    [Fact(DisplayName = "Hash.Concatenate should match SHA-256 of the concatenated bytes when they exceed the stack buffer")]
+    public void HashConcatenateShouldMatchSha256OfTheConcatenatedBytesWhenTheyExceedTheStackBuffer()
+    {
+        // Given
+        using HashAlgorithm algorithm = SHA256.Create();
+        byte[] leftBytes = Enumerable.Range(0, 200).Select(index => (byte)index).ToArray();
+        byte[] rightBytes = Enumerable.Range(0, 300).Select(index => (byte)(255 - index % 256)).ToArray();
+        byte[] expected = SHA256.HashData([..leftBytes, ..rightBytes]);
+
+        // When
+        Hash actual = Hash.Concatenate(algorithm, new Hash(leftBytes), new Hash(rightBytes));
+
+        // Then
+        Assert.Equal(expected, actual.AsReadOnlySpan().ToArray());
+    }
+
+    [Fact(DisplayName = "Hash.Compute overloads should match one-shot SHA-256")]
+    public void HashComputeOverloadsShouldMatchOneShotSha256()
+    {
+        // Given
+        using HashAlgorithm algorithm = SHA256.Create();
+        byte[] data = Enumerable.Range(0, 1000).Select(index => (byte)(index * 7)).ToArray();
+        byte[] expected = SHA256.HashData(data);
+        byte[] expectedSlice = SHA256.HashData(data.AsSpan(100, 500));
+        byte[] expectedTwoRounds = SHA256.HashData(expected);
+        using MemoryStream stream = new(data);
+
+        // When
+        Hash fromArray = Hash.Compute(algorithm, data);
+        Hash fromArraySlice = Hash.Compute(algorithm, data, 100, 500);
+        Hash fromSpan = Hash.Compute(algorithm, data.AsSpan());
+        Hash fromSpanSlice = Hash.Compute(algorithm, data.AsSpan(), 100, 500);
+        Hash fromStream = Hash.Compute(algorithm, stream);
+        Hash fromTwoRounds = Hash.Compute(algorithm, data, rounds: 2);
+
+        // Then
+        Assert.Equal(expected, fromArray.AsReadOnlySpan().ToArray());
+        Assert.Equal(expectedSlice, fromArraySlice.AsReadOnlySpan().ToArray());
+        Assert.Equal(expected, fromSpan.AsReadOnlySpan().ToArray());
+        Assert.Equal(expectedSlice, fromSpanSlice.AsReadOnlySpan().ToArray());
+        Assert.Equal(expected, fromStream.AsReadOnlySpan().ToArray());
+        Assert.Equal(expectedTwoRounds, fromTwoRounds.AsReadOnlySpan().ToArray());
     }
 }

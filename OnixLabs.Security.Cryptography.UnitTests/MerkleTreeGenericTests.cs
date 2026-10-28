@@ -144,4 +144,44 @@ public sealed class MerkleTreeGenericTests
         Assert.True(aEqualsB);
         Assert.True(bEqualsA);
     }
+
+    [Theory(DisplayName = "Generic MerkleTree root should match a reference SHA-256 Merkle root over the leaf hashes")]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(5)]
+    [InlineData(6)]
+    [InlineData(7)]
+    [InlineData(13)]
+    public void GenericMerkleTreeRootShouldMatchReferenceRoot(int leafCount)
+    {
+        // Given
+        MerkleNode[] leaves = Enumerable
+            .Range(0, leafCount)
+            .Select(index => new MerkleNode($"node{index}", index, DateTime.UnixEpoch.AddDays(index), Guid.Empty))
+            .ToArray();
+
+        byte[] expected = MerkleTreeReference.ComputeSha256Root(leaves.Select(leaf => leaf.ComputeHash(Algorithm).AsReadOnlySpan().ToArray()));
+
+        // When
+        MerkleTree<MerkleNode> tree = MerkleTree.Create(leaves, Algorithm);
+
+        // Then
+        Assert.Equal(expected, tree.Hash.AsReadOnlySpan().ToArray());
+        Assert.Equal(leaves, tree.GetLeafValues());
+    }
+
+    [Fact(DisplayName = "MerkleTree.GetLeafValues should return a list that cannot be modified")]
+    public void MerkleTreeGetLeafValuesShouldReturnAListThatCannotBeModified()
+    {
+        // Given
+        MerkleTree<MerkleNode> tree = MerkleTree.Create(setA, Algorithm);
+
+        // When
+        IList<MerkleNode> leafValues = Assert.IsAssignableFrom<IList<MerkleNode>>(tree.GetLeafValues());
+
+        // Then
+        Assert.Throws<NotSupportedException>(() => leafValues[0] = leafValues[1]);
+        Assert.Throws<NotSupportedException>(() => leafValues.Add(leafValues[1]));
+    }
 }

@@ -14,7 +14,7 @@
 
 using System;
 using System.Security.Cryptography;
-using OnixLabs.Core.Linq;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -31,7 +31,7 @@ public abstract partial class PublicKey
     public override bool Equals(object? obj) => Equals(obj as PublicKey);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => HashCode.Combine(GetType(), KeyData.GetContentHashCode());
+    public override int GetHashCode() => HashCode.Combine(GetType(), AsReadOnlySpan().GetContentHashCode());
 
     /// <inheritdoc/>
     public static bool operator ==(PublicKey? left, PublicKey? right) => Equals(left, right);

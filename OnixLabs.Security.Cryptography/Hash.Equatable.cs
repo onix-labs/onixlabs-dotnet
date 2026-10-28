@@ -14,7 +14,6 @@
 
 using System.Security.Cryptography;
 using OnixLabs.Core;
-using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -36,7 +35,7 @@ public readonly partial struct Hash
     public override bool Equals(object? obj) => obj is Hash other && Equals(other);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => value.GetContentHashCode();
+    public override int GetHashCode() => AsReadOnlySpan().GetContentHashCode();
 
     /// <inheritdoc cref="IValueEquatable{T}.op_Equality"/>
     public static bool operator ==(Hash left, Hash right) => left.Equals(right);

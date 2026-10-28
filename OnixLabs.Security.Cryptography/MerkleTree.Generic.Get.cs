@@ -39,10 +39,11 @@ public abstract partial class MerkleTree<T>
     /// <returns>Returns a new <see cref="IReadOnlyList{T}"/> containing the leaf values from the current <see cref="MerkleTree{T}"/> instance.</returns>
     public IReadOnlyList<T> GetLeafValues()
     {
+        // Why: an immutable array keeps the result read-only with a single backing array, where an immutable list allocates a node per leaf.
         // ReSharper disable once HeapView.ObjectAllocation
-        List<T> result = [];
+        ImmutableArray<T>.Builder result = ImmutableArray.CreateBuilder<T>();
         CollectLeafValues(this, result);
-        return result.ToImmutableList();
+        return result.DrainToImmutable();
     }
 
     /// <summary>

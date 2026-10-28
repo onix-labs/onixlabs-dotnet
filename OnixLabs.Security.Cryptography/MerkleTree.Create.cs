@@ -14,9 +14,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -38,7 +36,7 @@ public abstract partial class MerkleTree
         // ReSharper disable once LoopCanBeConvertedToQuery, HeapView.ObjectAllocation.Possible, HeapView.ObjectAllocation.Evident
         foreach (Hash leaf in leaves) nodes.Add(new MerkleTreeLeafNode(leaf));
 
-        Require(nodes.IsNotEmpty(), "Cannot construct a Merkle tree from an empty list.", nameof(leaves));
+        Require(nodes.Count > 0, "Cannot construct a Merkle tree from an empty list.", nameof(leaves));
         return BuildMerkleTree(nodes, algorithm);
     }
 
@@ -56,29 +54,34 @@ public abstract partial class MerkleTree
     /// <summary>
     /// Builds a Merkle tree from the specified <see cref="MerkleTree"/> nodes.
     /// </summary>
-    /// <param name="nodes">The Merkle tree nodes from which to build a Merkle tree.</param>
+    /// <param name="nodes">The Merkle tree nodes from which to build a Merkle tree, which are consumed in the process.</param>
     /// <param name="algorithm">The hash algorithm that will be used to hash together left-hand and right-hand <see cref="MerkleTree"/> nodes.</param>
     /// <returns>Returns a new <see cref="MerkleTree"/> node that represents the Merkle root.</returns>
-    private static MerkleTree BuildMerkleTree(IReadOnlyList<MerkleTree> nodes, HashAlgorithm algorithm)
+    /// <remarks>
+    /// Why: each level is reduced in place, so building a tree of n leaves allocates only the n - 1 branch nodes and at most one empty node,
+    /// rather than a new list or array per level. Every node is immutable, so a single empty node is shared by every odd-length level.
+    /// </remarks>
+    private static MerkleTree BuildMerkleTree(List<MerkleTree> nodes, HashAlgorithm algorithm)
     {
-        while (true)
+        MerkleTreeEmptyNode? emptyNode = null;
+
+        while (nodes.Count > 1)
         {
-            if (nodes.IsSingle()) return nodes.Single();
             // ReSharper disable once HeapView.ObjectAllocation.Evident
-            if (nodes.IsCountOdd()) nodes = nodes.Append(new MerkleTreeEmptyNode(algorithm)).ToArray();
+            if (nodes.Count % 2 is not 0) nodes.Add(emptyNode ??= new MerkleTreeEmptyNode(algorithm));
 
-            // ReSharper disable once HeapView.ObjectAllocation
-            List<MerkleTree> mergedNodes = [];
+            int mergedCount = nodes.Count / 2;
 
-            for (int index = 0; index < nodes.Count; index += 2)
+            // Why: writing branch i to position i is safe, because it reads positions 2i and 2i + 1, which are never earlier than i.
+            for (int index = 0; index < mergedCount; index++)
             {
-                MerkleTree left = nodes[index];
-                MerkleTree right = nodes[index + 1];
                 // ReSharper disable once HeapView.ObjectAllocation.Evident
-                mergedNodes.Add(new MerkleTreeBranchNode(left, right, algorithm));
+                nodes[index] = new MerkleTreeBranchNode(nodes[2 * index], nodes[2 * index + 1], algorithm);
             }
 
-            nodes = mergedNodes.ToArray();
+            nodes.RemoveRange(mergedCount, nodes.Count - mergedCount);
         }
+
+        return nodes[0];
     }
 }

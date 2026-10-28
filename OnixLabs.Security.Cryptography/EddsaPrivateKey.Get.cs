@@ -24,9 +24,12 @@ public sealed partial class EddsaPrivateKey
     /// <inheritdoc/>
     public EddsaPublicKey GetPublicKey()
     {
-        byte[] seed = KeyData;
+        Span<byte> seed = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
+        seed = seed[..Length];
+
         try
         {
+            CopyTo(seed);
             return new EddsaPublicKey(GetOrDerivePublicKey(seed));
         }
         finally

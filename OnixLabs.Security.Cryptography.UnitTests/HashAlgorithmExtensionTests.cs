@@ -15,6 +15,7 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 using OnixLabs.Core;
 using OnixLabs.Security.Cryptography.UnitTests.Data;
 
@@ -194,5 +195,32 @@ public sealed class HashAlgorithmExtensionTests
         Assert.True(result);
         Assert.Equal(32, bytesWritten);
         Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "HashAlgorithm.ComputeHash of text should match SHA-256 of the encoded bytes on the stack and pooled paths")]
+    [InlineData(1)]
+    [InlineData(100)]
+    [InlineData(256)]
+    [InlineData(257)]
+    [InlineData(5000)]
+    public void ComputeHashOfTextShouldMatchSha256OfTheEncodedBytes(int length)
+    {
+        // Given
+        using HashAlgorithm algorithm = SHA256.Create();
+        string text = string.Create(length, 0, static (span, _) =>
+        {
+            for (int index = 0; index < span.Length; index++)
+                span[index] = (char)('a' + index % 26);
+        });
+
+        // When
+        byte[] utf8 = algorithm.ComputeHash(text.AsSpan());
+        byte[] utf16 = algorithm.ComputeHash(text.AsSpan(), Encoding.Unicode);
+        byte[] utf8TwoRounds = algorithm.ComputeHash(text.AsSpan(), rounds: 2);
+
+        // Then
+        Assert.Equal(SHA256.HashData(Encoding.UTF8.GetBytes(text)), utf8);
+        Assert.Equal(SHA256.HashData(Encoding.Unicode.GetBytes(text)), utf16);
+        Assert.Equal(SHA256.HashData(SHA256.HashData(Encoding.UTF8.GetBytes(text))), utf8TwoRounds);
     }
 }

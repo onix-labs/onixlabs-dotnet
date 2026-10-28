@@ -48,13 +48,20 @@ public sealed partial class EcdsaPrivateKey
     /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid ECDSA private key.</exception>
     private ECDsa ImportKeyData()
     {
-        byte[] keyData = KeyData;
+        Span<byte> keyData = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
+        keyData = keyData[..Length];
+        ECDsa algorithm = ECDsa.Create();
 
         try
         {
-            ECDsa algorithm = ECDsa.Create();
+            CopyTo(keyData);
             algorithm.ImportECPrivateKey(keyData, out int _);
             return algorithm;
+        }
+        catch
+        {
+            algorithm.Dispose();
+            throw;
         }
         finally
         {

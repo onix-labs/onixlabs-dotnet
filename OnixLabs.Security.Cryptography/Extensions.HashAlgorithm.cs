@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 using System.ComponentModel;
 using System.IO;
 using System.Security.Cryptography;
@@ -81,8 +82,31 @@ public static class HashAlgorithmExtensions
         /// <param name="rounds">The number of rounds that the input data should be hashed.</param>
         /// <returns>Returns the computed hash value.</returns>
         /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
-        public byte[] ComputeHash(ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
-            algorithm.ComputeHash(encoding.GetOrDefault().GetBytes(data), rounds);
+        /// <remarks>
+        /// Why: text passed here is often a password, so it is encoded into a stack or pooled buffer that is zeroed after hashing,
+        /// rather than into a new array that would stay on the heap until collected.
+        /// </remarks>
+        public byte[] ComputeHash(ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1)
+        {
+            const int maxStackSize = 256;
+
+            Encoding resolvedEncoding = encoding.GetOrDefault();
+            int byteCount = resolvedEncoding.GetByteCount(data);
+            byte[]? rented = byteCount > maxStackSize ? ArrayPool<byte>.Shared.Rent(byteCount) : null;
+            Span<byte> bytes = rented is null ? stackalloc byte[maxStackSize] : rented;
+            bytes = bytes[..byteCount];
+
+            try
+            {
+                resolvedEncoding.GetBytes(data, bytes);
+                return algorithm.ComputeHash(bytes, rounds);
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(bytes);
+                if (rented is not null) ArrayPool<byte>.Shared.Return(rented);
+            }
+        }
 
         /// <summary>
         /// Computes the hash value for the specified <see cref="IBinaryConvertible"/> value.

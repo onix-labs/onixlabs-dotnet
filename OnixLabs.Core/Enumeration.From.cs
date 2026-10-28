@@ -14,8 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Core;
 
@@ -32,12 +30,12 @@ public abstract partial class Enumeration<T>
     /// </exception>
     public static T FromName(string name)
     {
-        T[] results = GetAll().Where(entry => entry.Name == name).ToArray();
+        T[] results = name is null ? [] : EnumerationCache.ByName.GetValueOrDefault(name, []);
 
-        Require(results.IsNotEmpty(), $"Enumeration entry for name '{name}' not found in {typeof(T).Name}.", nameof(name));
-        Require(results.IsSingle(), $"Multiple enumeration entries for name '{name}' found in {typeof(T).Name}.", nameof(name));
+        Require(results.Length > 0, $"Enumeration entry for name '{name}' not found in {typeof(T).Name}.", nameof(name));
+        Require(results.Length == 1, $"Multiple enumeration entries for name '{name}' found in {typeof(T).Name}.", nameof(name));
 
-        return results.Single();
+        return results[0];
     }
 
     /// <summary>
@@ -50,11 +48,11 @@ public abstract partial class Enumeration<T>
     /// </exception>
     public static T FromValue(int value)
     {
-        T[] results = GetAll().Where(entry => entry.Value == value).ToArray();
+        T[] results = EnumerationCache.ByValue.GetValueOrDefault(value, []);
 
-        Require(results.IsNotEmpty(), $"Enumeration entry for value '{value}' not found in {typeof(T).Name}.", nameof(value));
-        Require(results.IsSingle(), $"Multiple enumeration entries for value '{value}' found in {typeof(T).Name}.", nameof(value));
+        Require(results.Length > 0, $"Enumeration entry for value '{value}' not found in {typeof(T).Name}.", nameof(value));
+        Require(results.Length == 1, $"Multiple enumeration entries for value '{value}' found in {typeof(T).Name}.", nameof(value));
 
-        return results.Single();
+        return results[0];
     }
 }

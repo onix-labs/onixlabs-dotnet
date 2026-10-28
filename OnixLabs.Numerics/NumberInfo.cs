@@ -101,17 +101,17 @@ public readonly partial struct NumberInfo : IValueEquatable<NumberInfo>, IValueC
     /// Gets the scale factor of the represented number.
     /// </summary>
     /// <value>The scale factor, computed as ten raised to the power of <see cref="Scale"/>.</value>
-    internal BigInteger ScaleFactor => BigInteger.Pow(10, Scale);
+    internal BigInteger ScaleFactor => BigIntegerPowersOfTen.Get(Scale);
 
     /// <summary>
     /// Gets the integral component of the represented number.
     /// </summary>
     /// <value>The integral part of the represented number.</value>
-    internal BigInteger Integer => UnscaledValue / ScaleFactor;
+    internal BigInteger Integer => Scale == 0 ? UnscaledValue : UnscaledValue / ScaleFactor;
 
     /// <summary>
     /// Gets the fractional component of the represented number.
     /// </summary>
     /// <value>The non-negative fractional part of the represented number.</value>
-    internal BigInteger Fraction => BigInteger.Abs(UnscaledValue - Integer * ScaleFactor);
+    internal BigInteger Fraction => Scale == 0 ? BigInteger.Zero : BigInteger.Abs(BigInteger.Remainder(UnscaledValue, ScaleFactor));
 }

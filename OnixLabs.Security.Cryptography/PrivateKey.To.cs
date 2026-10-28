@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Security.Cryptography;
 using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography;
@@ -27,7 +28,21 @@ public abstract partial class PrivateKey
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
-    public string ToString(IFormatProvider provider) => IBaseCodec.GetString(AsReadOnlySpan(), provider);
+    public string ToString(IFormatProvider provider)
+    {
+        Span<byte> keyData = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
+        keyData = keyData[..Length];
+
+        try
+        {
+            CopyTo(keyData);
+            return IBaseCodec.GetString(keyData, provider);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
+    }
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>

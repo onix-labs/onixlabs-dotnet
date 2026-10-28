@@ -11,7 +11,7 @@
 
     <!--GLOBAL-->
     <PropertyGroup>
-        <Version>16.0.1</Version>
+        <Version>16.1.0</Version>
         <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
         <LangVersion>14</LangVersion>
         <Nullable>enable</Nullable>
@@ -37,6 +37,15 @@
     <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests'))">
         <PackageReference Include="xunit.v3" Version="3.2.0"/>
         <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <!--BENCHMARKS-->
+    <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.Benchmarks'))">
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.Benchmarks'))">
+        <PackageReference Include="BenchmarkDotNet" Version="0.15.8"/>
     </ItemGroup>
 
     <!--UNIT TEST DATA-->

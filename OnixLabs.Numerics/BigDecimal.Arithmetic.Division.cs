@@ -32,14 +32,15 @@ public readonly partial struct BigDecimal
     {
         RequireIsDefined(mode);
 
-        if (right == Zero) throw new DivideByZeroException();
-        if (right == One) return left;
-        if (left == Zero) return Zero;
+        // Why: comparing against Zero and One semantically aligns scales with a power of ten; testing the unscaled value is exact and free.
+        if (right.UnscaledValue.IsZero) throw new DivideByZeroException();
+        if (right.UnscaledValue == BigIntegerPowersOfTen.Get(right.Scale)) return left;
+        if (left.UnscaledValue.IsZero) return Zero;
 
-        BigInteger dividend = left.UnscaledValue * BigInteger.Pow(10, right.Scale);
+        BigInteger dividend = left.UnscaledValue * BigIntegerPowersOfTen.Get(right.Scale);
         BigInteger quotient = DivideAndRound(dividend, right.UnscaledValue, mode);
 
-        return new BigDecimal(quotient, left.Scale);
+        return new BigDecimal(new NumberInfo(quotient, left.Scale));
     }
 
     /// <summary>

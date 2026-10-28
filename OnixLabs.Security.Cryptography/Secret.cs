@@ -34,6 +34,7 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<
     private readonly ProtectedData protectedData = new();
     private readonly byte[] encryptedValue;
     private readonly Hash hash;
+    private readonly int length;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Secret"/> struct.
@@ -43,12 +44,24 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<
     /// Because <see cref="Secret"/> is designed to be immutable, external array references are not permitted.
     /// The overloaded constructors below ensure immutability by creating defensive copies of the provided arrays.
     /// </remarks>
-    /// <param name="value">The value from which to initialize a new <see cref="Secret"/> instance.</param>
+    /// <param name="value">
+    /// The value from which to initialize a new <see cref="Secret"/> instance, which is zeroed once it has been encrypted.
+    /// </param>
     private Secret(byte[] value)
     {
-        using SHA256 algorithm = SHA256.Create();
-        encryptedValue = protectedData.Encrypt(value);
-        hash = Hash.Compute(algorithm, value);
+        try
+        {
+            Span<byte> digest = stackalloc byte[SHA256.HashSizeInBytes];
+            SHA256.HashData(value, digest);
+
+            encryptedValue = protectedData.Encrypt(value);
+            hash = new Hash(digest);
+            length = value.Length;
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(value);
+        }
     }
 
     /// <summary>
@@ -76,5 +89,31 @@ public readonly partial struct Secret : ICryptoPrimitive<Secret>, ISpanParsable<
     /// <exception cref="CryptographicException">Thrown when the hash of the secret value could not be computed.</exception>
     public Secret(ReadOnlySequence<byte> value) : this(value.ToArray())
     {
+    }
+
+    /// <summary>
+    /// Gets the length of the secret value, in bytes.
+    /// </summary>
+    /// <value>The length of the secret value, in bytes, or zero for a default <see cref="Secret"/>.</value>
+    public int Length => length;
+
+    /// <summary>
+    /// Copies the decrypted secret value into the specified destination, without placing plaintext on the heap.
+    /// </summary>
+    /// <param name="destination">The buffer that receives the secret value, which must be at least <see cref="Length"/> bytes long.</param>
+    /// <remarks>
+    /// Only the first <see cref="Length"/> bytes of <paramref name="destination"/> are written. Unlike <see cref="AsReadOnlySpan"/> and
+    /// <see cref="AsReadOnlyMemory"/>, which return a new array that stays on the heap until it is collected, the plaintext exists only in
+    /// <paramref name="destination"/>. Zero it with <see cref="CryptographicOperations.ZeroMemory"/> when done.
+    /// </remarks>
+    /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="Secret"/> has been disposed.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="destination"/> is shorter than <see cref="Length"/>.</exception>
+    public void CopyTo(Span<byte> destination)
+    {
+        if (destination.Length < Length)
+            throw new ArgumentException($"The destination must be at least {Length} bytes long.", nameof(destination));
+
+        // Why: decrypting into a destination longer than the plaintext also writes the padding block past it, so the slice is required.
+        protectedData?.Decrypt(encryptedValue, destination[..Length]);
     }
 }

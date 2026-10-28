@@ -24,5 +24,5 @@ public readonly partial struct Base64
         out int charsWritten,
         ReadOnlySpan<char> format,
         IFormatProvider? provider
-    ) => ToString(format, provider).TryCopyTo(destination, out charsWritten);
+    ) => Base64Codec.TryFormat(value, provider, destination, out charsWritten);
 }

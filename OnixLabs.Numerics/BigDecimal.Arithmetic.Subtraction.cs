@@ -34,7 +34,7 @@ public readonly partial struct BigDecimal
         (BigInteger minuend, BigInteger subtrahend) = NormalizeUnscaledValues(left, right);
         BigInteger difference = minuend - subtrahend;
 
-        return new BigDecimal(difference, scale);
+        return new BigDecimal(new NumberInfo(difference, scale));
     }
 
     /// <summary>

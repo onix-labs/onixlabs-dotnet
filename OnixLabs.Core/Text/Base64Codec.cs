@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Buffers;
 
 namespace OnixLabs.Core.Text;
 
@@ -75,13 +76,66 @@ public sealed class Base64Codec : IBaseCodec
                 return false;
             }
 
-            result = Convert.FromBase64String(value.ToString());
-            return true;
+            return TryDecodeCore(value, out result);
         }
         catch
         {
             result = [];
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Tries to format the specified value as Base-64 into the specified destination, as <see cref="ISpanFormattable"/> requires.
+    /// </summary>
+    /// <param name="value">The value to encode.</param>
+    /// <param name="provider">The format provider, which must be a <see cref="Base64FormatProvider"/>, a culture, or <see langword="null"/>.</param>
+    /// <param name="destination">The destination for the encoded characters.</param>
+    /// <param name="charsWritten">When this method returns, contains the number of characters written to <paramref name="destination"/>.</param>
+    /// <returns>Returns <see langword="true"/> if the encoding fits in <paramref name="destination"/>; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="provider"/> is not a supported format provider.</exception>
+    internal static bool TryFormat(ReadOnlySpan<byte> value, IFormatProvider? provider, Span<char> destination, out int charsWritten)
+    {
+        if (!IBaseCodec.TryGetFormatProvider(provider, Base64FormatProvider.Rfc4648, out Base64FormatProvider _))
+            throw new FormatException(IBaseCodec.EncodingFormatException);
+
+        return Convert.TryToBase64Chars(value, destination, out charsWritten);
+    }
+
+    /// <summary>
+    /// Decodes the specified Base-64 characters with the same rules as <see cref="Convert.FromBase64String"/>, which ignores whitespace.
+    /// </summary>
+    /// <param name="value">The characters to decode.</param>
+    /// <param name="result">When this method returns, contains the decoded bytes, or an empty array if decoding failed.</param>
+    /// <returns>Returns <see langword="true"/> if <paramref name="value"/> is valid Base-64; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    /// Why: <see cref="Convert.FromBase64String"/> needs a string copy of the input and reports invalid input by throwing.
+    /// <see cref="Convert.TryFromBase64Chars"/> applies the same rules to a span and reports failure with a return value.
+    /// </remarks>
+    private static bool TryDecodeCore(ReadOnlySpan<char> value, out byte[] result)
+    {
+        const int maxStackSize = 256;
+
+        int maxLength = (value.Length + 3) / 4 * 3;
+        byte[]? rented = maxLength > maxStackSize ? ArrayPool<byte>.Shared.Rent(maxLength) : null;
+        Span<byte> buffer = rented is null ? stackalloc byte[maxStackSize] : rented;
+
+        try
+        {
+            if (!Convert.TryFromBase64Chars(value, buffer, out int bytesWritten))
+            {
+                result = [];
+                return false;
+            }
+
+            result = buffer[..bytesWritten].ToArray();
+            return true;
+        }
+        finally
+        {
+            // Why: the decoded value may be key material.
+            buffer.Clear();
+            if (rented is not null) ArrayPool<byte>.Shared.Return(rented);
         }
     }
 }

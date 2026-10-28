@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using OnixLabs.Core.Text;
 using OnixLabs.Core.UnitTests.Data;
@@ -247,5 +248,93 @@ public sealed class Base58CodecTests
         // Then
         Assert.True(result);
         Assert.Equal(expected, actual);
+    }
+
+    public static TheoryData<string> Alphabets() => new()
+    {
+        Base58FormatProvider.Bitcoin.Name,
+        Base58FormatProvider.Flickr.Name,
+        Base58FormatProvider.Ripple.Name
+    };
+
+    [Theory(DisplayName = "Base58Codec should match the BigInteger reference encoder and decoder for random inputs")]
+    [MemberData(nameof(Alphabets))]
+    public void Base58CodecShouldMatchTheBigIntegerReferenceForRandomInputs(string providerName)
+    {
+        // Given
+        Base58FormatProvider provider = Base58FormatProvider.FromName(providerName);
+        Random random = new(Seed: 58);
+        List<string> failures = [];
+        List<byte[]> inputs = [[], [0], [0, 0, 0], [255], [0, 0, 1], [..new byte[64]]];
+
+        for (int length = 1; length <= 300; length++)
+            inputs.Add(CreateRandomInput(random, length));
+
+        inputs.Add(CreateRandomInput(random, 1024));
+        inputs.Add(CreateRandomInput(random, 3000));
+
+        // When
+        foreach (byte[] input in inputs)
+        {
+            string expected = Base58Reference.Encode(input, provider.Alphabet);
+            string actual = IBaseCodec.Base58.Encode(input, provider);
+            byte[] roundTrip = IBaseCodec.Base58.Decode(actual, provider);
+
+            if (expected != actual)
+                failures.Add($"encode of {input.Length} bytes: expected {expected} but was {actual}");
+
+            if (!roundTrip.AsSpan().SequenceEqual(input))
+                failures.Add($"round trip of {input.Length} bytes did not reproduce the input");
+        }
+
+        // Then
+        Assert.Empty(failures);
+    }
+
+    [Theory(DisplayName = "Base58Codec should reject exactly the inputs the BigInteger reference rejects")]
+    [MemberData(nameof(Alphabets))]
+    public void Base58CodecShouldRejectExactlyTheInputsTheReferenceRejects(string providerName)
+    {
+        // Given
+        Base58FormatProvider provider = Base58FormatProvider.FromName(providerName);
+        Random random = new(Seed: 85);
+        char[] candidates = ['0', 'O', 'I', 'l', '+', '/', '=', ' ', '\u00e9', '\u0141', provider.Alphabet[0], provider.Alphabet[57]];
+        List<string> failures = [];
+
+        // When
+        for (int index = 0; index < 500; index++)
+        {
+            string valid = IBaseCodec.Base58.Encode(CreateRandomInput(random, random.Next(1, 40)), provider);
+            int position = random.Next(valid.Length + 1);
+            string candidate = valid.Insert(position, candidates[random.Next(candidates.Length)].ToString());
+
+            byte[]? expected = Base58Reference.Decode(candidate, provider.Alphabet);
+            bool succeeded = IBaseCodec.Base58.TryDecode(candidate, provider, out byte[] actual);
+
+            if (succeeded != expected is not null)
+                failures.Add($"{candidate}: reference {(expected is null ? "rejected" : "accepted")} but codec {(succeeded ? "accepted" : "rejected")}");
+            else if (expected is not null && !actual.AsSpan().SequenceEqual(expected))
+                failures.Add($"{candidate}: decoded bytes differ from the reference");
+        }
+
+        // Then
+        Assert.Empty(failures);
+    }
+
+    /// <summary>
+    /// Creates random input of the specified length, sometimes with leading zero bytes.
+    /// </summary>
+    /// <param name="random">The random number generator.</param>
+    /// <param name="length">The length of the input.</param>
+    /// <returns>Returns random input of the specified length.</returns>
+    private static byte[] CreateRandomInput(Random random, int length)
+    {
+        byte[] result = new byte[length];
+        random.NextBytes(result);
+
+        int leadingZeroCount = Math.Min(length, random.Next(4));
+        result.AsSpan(0, leadingZeroCount).Clear();
+
+        return result;
     }
 }

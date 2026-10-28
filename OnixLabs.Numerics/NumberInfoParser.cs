@@ -60,7 +60,7 @@ internal sealed partial class NumberInfoParser(NumberStyles style, IFormatProvid
         // must grow accordingly, since the scale itself cannot be negative. A non-negative scale needs no change.
         if (scale < 0)
         {
-            unscaledValue *= BigInteger.Pow(10, -scale);
+            unscaledValue *= BigIntegerPowersOfTen.Get(-scale);
             scale = 0;
         }
 
@@ -72,7 +72,12 @@ internal sealed partial class NumberInfoParser(NumberStyles style, IFormatProvid
     {
         result = default;
 
+        // Why: multiplying a BigInteger by ten and adding each digit allocates twice per digit and is quadratic in the digit count.
+        // Digits are gathered into a ulong eighteen at a time, which cannot overflow, and folded into the BigInteger once per chunk.
+        const int digitsPerChunk = 18;
         BigInteger unscaledValue = BigInteger.Zero;
+        ulong pendingValue = 0;
+        int pendingDigits = 0;
         int scale = 0;
         bool hasDecimalPoint = false;
 
@@ -80,9 +85,14 @@ internal sealed partial class NumberInfoParser(NumberStyles style, IFormatProvid
         {
             if (char.IsAsciiDigit(value[0]))
             {
-                int digit = value[0] - '0';
-                unscaledValue *= 10;
-                unscaledValue += digit;
+                pendingValue = pendingValue * 10 + (ulong)(value[0] - '0');
+
+                if (++pendingDigits == digitsPerChunk)
+                {
+                    unscaledValue = unscaledValue * BigIntegerPowersOfTen.Get(digitsPerChunk) + pendingValue;
+                    pendingValue = 0;
+                    pendingDigits = 0;
+                }
 
                 if (hasDecimalPoint) scale++;
 
@@ -124,6 +134,8 @@ internal sealed partial class NumberInfoParser(NumberStyles style, IFormatProvid
             // If we reach this point, the start of the string isn't an ascii digit, thousands or decimal separator, therefore false.
             return false;
         }
+
+        if (pendingDigits > 0) unscaledValue = unscaledValue * BigIntegerPowersOfTen.Get(pendingDigits) + pendingValue;
 
         result = new NumberInfo(unscaledValue, scale);
         return true;

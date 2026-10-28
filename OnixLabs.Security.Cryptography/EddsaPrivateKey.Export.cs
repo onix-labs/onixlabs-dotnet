@@ -36,10 +36,12 @@ public sealed partial class EddsaPrivateKey
     /// <inheritdoc/>
     public byte[] ExportPkcs8()
     {
-        byte[] seed = KeyData;
+        Span<byte> seed = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
+        seed = seed[..Length];
 
         try
         {
+            CopyTo(seed);
             return Ed25519Pkcs8.EncodePrivateKey(seed);
         }
         finally

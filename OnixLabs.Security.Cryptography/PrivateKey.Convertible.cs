@@ -19,10 +19,18 @@ namespace OnixLabs.Security.Cryptography;
 public abstract partial class PrivateKey
 {
     /// <inheritdoc/>
+    /// <remarks>
+    /// Each call decrypts the key data into a new array, which stays on the heap until it is collected and cannot be zeroed through the
+    /// returned value. To keep plaintext off the heap, use <see cref="CopyTo"/> with a buffer you zero after use.
+    /// </remarks>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
     public ReadOnlyMemory<byte> AsReadOnlyMemory() => KeyData;
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Each call decrypts the key data into a new array, which stays on the heap until it is collected and cannot be zeroed through the
+    /// returned value. To keep plaintext off the heap, use <see cref="CopyTo"/> with a buffer you zero after use.
+    /// </remarks>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
     public ReadOnlySpan<byte> AsReadOnlySpan() => KeyData;
 }

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System.Security.Cryptography;
-using OnixLabs.Core.Linq;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -35,7 +35,7 @@ public readonly partial struct DigitalSignature
     public override bool Equals(object? obj) => obj is DigitalSignature other && Equals(other);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => value.GetContentHashCode();
+    public override int GetHashCode() => AsReadOnlySpan().GetContentHashCode();
 
     /// <inheritdoc/>
     public static bool operator ==(DigitalSignature left, DigitalSignature right) => left.Equals(right);

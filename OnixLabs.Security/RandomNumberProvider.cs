@@ -44,12 +44,11 @@ internal abstract class RandomNumberProvider
     public static RandomNumberProvider CreateSecureRandomNumberProvider() => new SecureRandomNumberProvider();
 
     /// <summary>
-    /// Gets the next random <see cref="int"/> value.
+    /// Fills the specified destination with items chosen at random from the specified choices.
     /// </summary>
-    /// <param name="minimum">The minimum random value.</param>
-    /// <param name="maximum">The maximum random value.</param>
-    /// <returns>Returns the next random <see cref="int"/> value.</returns>
-    internal abstract int GetNextInt(int minimum, int maximum);
+    /// <param name="choices">The items from which to choose.</param>
+    /// <param name="destination">The span to fill with randomly chosen items.</param>
+    internal abstract void GetItems(ReadOnlySpan<char> choices, Span<char> destination);
 }
 
 /// <summary>
@@ -59,7 +58,16 @@ internal abstract class RandomNumberProvider
 file sealed class PseudoRandomNumberProvider(Random random) : RandomNumberProvider
 {
     /// <inheritdoc/>
-    internal override int GetNextInt(int minimum, int maximum) => random.Next(minimum, maximum);
+    /// <remarks>
+    /// Why: this deliberately draws one <see cref="Random.Next(int, int)"/> per item rather than calling
+    /// <see cref="Random.GetItems{T}(ReadOnlySpan{T}, Span{T})"/>, whose sequence can differ, so that a seeded builder keeps producing
+    /// the same tokens it always has.
+    /// </remarks>
+    internal override void GetItems(ReadOnlySpan<char> choices, Span<char> destination)
+    {
+        for (int index = 0; index < destination.Length; index++)
+            destination[index] = choices[random.Next(0, choices.Length)];
+    }
 }
 
 /// <summary>
@@ -68,5 +76,6 @@ file sealed class PseudoRandomNumberProvider(Random random) : RandomNumberProvid
 file sealed class SecureRandomNumberProvider : RandomNumberProvider
 {
     /// <inheritdoc/>
-    internal override int GetNextInt(int minimum, int maximum) => RandomNumberGenerator.GetInt32(minimum, maximum);
+    internal override void GetItems(ReadOnlySpan<char> choices, Span<char> destination) =>
+        RandomNumberGenerator.GetItems(choices, destination);
 }

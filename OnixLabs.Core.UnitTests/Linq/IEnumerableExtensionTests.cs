@@ -1243,4 +1243,30 @@ public sealed class IEnumerableExtensionTests
         // Then
         Assert.Equal(expected, actual);
     }
+
+    [Fact(DisplayName = "IEnumerable.JoinToString should strip every trailing separator, including those produced by trailing empty elements")]
+    public void JoinToStringShouldStripEveryTrailingSeparatorIncludingThoseProducedByTrailingEmptyElements()
+    {
+        // Given
+        IEnumerable<string> values = ["a", "b", "", ""];
+
+        // When
+        string actual = values.JoinToString();
+
+        // Then
+        Assert.Equal("a, b", actual);
+    }
+
+    [Fact(DisplayName = "IEnumerable.IsCountEven without a predicate should count every element")]
+    public void IsCountEvenWithoutAPredicateShouldCountEveryElement()
+    {
+        // Given
+        IEnumerable<int> collection = new List<int> { 1, 2, 3, 4 };
+        IEnumerable<int> sequence = Enumerable.Range(0, 5).Select(value => value);
+
+        // When / Then
+        Assert.True(collection.IsCountEven());
+        Assert.False(sequence.IsCountEven());
+        Assert.True(sequence.IsCountOdd());
+    }
 }

@@ -47,13 +47,20 @@ public sealed partial class EcdhPrivateKey
     /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid EC Diffie-Hellman private key.</exception>
     private ECDiffieHellman ImportKeyData()
     {
-        byte[] keyData = KeyData;
+        Span<byte> keyData = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
+        keyData = keyData[..Length];
+        ECDiffieHellman algorithm = ECDiffieHellman.Create();
 
         try
         {
-            ECDiffieHellman algorithm = ECDiffieHellman.Create();
+            CopyTo(keyData);
             algorithm.ImportECPrivateKey(keyData, out int _);
             return algorithm;
+        }
+        catch
+        {
+            algorithm.Dispose();
+            throw;
         }
         finally
         {

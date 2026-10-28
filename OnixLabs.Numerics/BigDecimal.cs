@@ -99,6 +99,16 @@ public readonly partial struct BigDecimal : IFloatingPoint<BigDecimal>, IValueEq
     public BigDecimal(decimal value) => number = value.ToNumberInfo();
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="BigDecimal"/> struct from an already valid <see cref="NumberInfo"/> value.
+    /// </summary>
+    /// <param name="number">The number, whose scale must not be negative.</param>
+    /// <remarks>
+    /// Why: arithmetic results and constants already have a valid, non-negative scale. Routing them through the public constructor
+    /// validated the scale and scale mode three times and converted the <see cref="BigInteger"/> to itself, on every operation.
+    /// </remarks>
+    private BigDecimal(NumberInfo number) => this.number = number;
+
+    /// <summary>
     /// Gets the unscaled value of the current <see cref="BigDecimal"/> value.
     /// </summary>
     /// <value>The unscaled <see cref="BigInteger"/> significand of the current <see cref="BigDecimal"/> value.</value>

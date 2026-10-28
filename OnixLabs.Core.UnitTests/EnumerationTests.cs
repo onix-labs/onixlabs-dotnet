@@ -219,4 +219,58 @@ public sealed class EnumerationTests
     {
         Assert.Throws<ArgumentException>(() => new TestEnumeration(1, null!));
     }
+
+    [Fact(DisplayName = "Enumeration.FromName should throw ArgumentException when no entry has the name")]
+    public void EnumerationFromNameShouldThrowArgumentExceptionWhenNoEntryHasTheName()
+    {
+        // When
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => Color.FromName("Purple"));
+
+        // Then
+        Assert.StartsWith("Enumeration entry for name 'Purple' not found in Color.", exception.Message);
+        Assert.Equal("name", exception.ParamName);
+    }
+
+    [Fact(DisplayName = "Enumeration.FromName should throw ArgumentException when the name is null")]
+    public void EnumerationFromNameShouldThrowArgumentExceptionWhenTheNameIsNull()
+    {
+        // When
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => Color.FromName(null!));
+
+        // Then
+        Assert.StartsWith("Enumeration entry for name '' not found in Color.", exception.Message);
+    }
+
+    [Fact(DisplayName = "Enumeration.FromName should match names ordinally")]
+    public void EnumerationFromNameShouldMatchNamesOrdinally()
+    {
+        // When / Then
+        Assert.Throws<ArgumentException>(() => Color.FromName("red"));
+    }
+
+    [Fact(DisplayName = "Enumeration.FromValue should throw ArgumentException when no entry has the value")]
+    public void EnumerationFromValueShouldThrowArgumentExceptionWhenNoEntryHasTheValue()
+    {
+        // When
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => Color.FromValue(99));
+
+        // Then
+        Assert.StartsWith("Enumeration entry for value '99' not found in Color.", exception.Message);
+        Assert.Equal("value", exception.ParamName);
+    }
+
+    [Fact(DisplayName = "Enumeration lookups should throw ArgumentException when several entries share the name or value")]
+    public void EnumerationLookupsShouldThrowArgumentExceptionWhenSeveralEntriesShareTheNameOrValue()
+    {
+        // When
+        ArgumentException byName = Assert.Throws<ArgumentException>(() => ClashingEnumeration.FromName("Alpha"));
+        ArgumentException byValue = Assert.Throws<ArgumentException>(() => ClashingEnumeration.FromValue(1));
+
+        // Then
+        Assert.StartsWith("Multiple enumeration entries for name 'Alpha' found in ClashingEnumeration.", byName.Message);
+        Assert.StartsWith("Multiple enumeration entries for value '1' found in ClashingEnumeration.", byValue.Message);
+        Assert.Same(ClashingEnumeration.Bravo, ClashingEnumeration.FromName("Bravo"));
+        Assert.Same(ClashingEnumeration.AlphaAgain, ClashingEnumeration.FromValue(2));
+        Assert.Same(ClashingEnumeration.Charlie, ClashingEnumeration.FromName("Charlie"));
+    }
 }

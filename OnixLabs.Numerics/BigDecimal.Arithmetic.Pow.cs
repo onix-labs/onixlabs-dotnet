@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Numerics;
 
 namespace OnixLabs.Numerics;
 
@@ -40,9 +41,12 @@ public readonly partial struct BigDecimal
             case 1: return value;
         }
 
-        BigDecimal result = Abs(value);
+        // Why: multiplying by |value| once per unit of the exponent is linear in the exponent and rebuilds |value| every time.
+        // |value|^n is exactly |unscaled|^n at n times the scale, which BigInteger.Pow computes by repeated squaring.
         int absExponent = int.Abs(exponent);
-        while (--absExponent > 0) result *= Abs(value);
+        long scale = (long)value.Scale * absExponent;
+        Require(scale <= int.MaxValue, "Scale must be greater than or equal to zero.", nameof(scale));
+        BigDecimal result = new(new NumberInfo(BigInteger.Pow(BigInteger.Abs(value.UnscaledValue), absExponent), (int)scale));
 
         BigDecimal magnitude = exponent < 0 ? Divide(One.SetScale(value.Scale), result, mode) : result;
 

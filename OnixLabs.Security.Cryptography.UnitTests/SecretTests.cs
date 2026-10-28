@@ -319,4 +319,101 @@ public sealed class SecretTests
         Assert.Equal(20_000, results.Count);
         Assert.All(results, actual => Assert.Equal(expected, actual));
     }
+
+    [Theory(DisplayName = "Secret.CopyTo should write exactly the original value for lengths around the AES block size")]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(15)]
+    [InlineData(16)]
+    [InlineData(17)]
+    [InlineData(32)]
+    [InlineData(300)]
+    public void SecretCopyToShouldWriteExactlyTheOriginalValue(int length)
+    {
+        // Given
+        byte[] expected = CreateValue(length);
+        Secret candidate = new(expected);
+        byte[] larger = new byte[length + 40];
+        larger.AsSpan().Fill(0xAA);
+
+        // When
+        candidate.CopyTo(larger);
+
+        // Then
+        Assert.Equal(length, candidate.Length);
+        Assert.Equal(expected, larger[..length]);
+        Assert.All(larger[length..], value => Assert.Equal(0xAA, value));
+    }
+
+    [Fact(DisplayName = "Default Secret should have zero length and copy nothing")]
+    public void DefaultSecretShouldHaveZeroLengthAndCopyNothing()
+    {
+        // Given
+        Secret candidate = default;
+        byte[] destination = [0xAA];
+
+        // When
+        candidate.CopyTo(destination);
+
+        // Then
+        Assert.Equal(0, candidate.Length);
+        Assert.Equal(0xAA, destination[0]);
+    }
+
+    [Fact(DisplayName = "Secret.CopyTo should throw ArgumentException when the destination is too short")]
+    public void SecretCopyToShouldThrowArgumentExceptionWhenTheDestinationIsTooShort()
+    {
+        // Given
+        Secret candidate = new(CreateValue(32));
+
+        // When / Then
+        Assert.Throws<ArgumentException>(() => candidate.CopyTo(new byte[31]));
+    }
+
+    [Fact(DisplayName = "Secret construction should not modify the caller's value")]
+    public void SecretConstructionShouldNotModifyTheCallersValue()
+    {
+        // Given
+        byte[] value = CreateValue(32);
+        byte[] expected = [..value];
+
+        // When
+        Secret candidate = new(value);
+
+        // Then
+        Assert.Equal(expected, value);
+        Assert.Equal(expected, candidate.AsReadOnlySpan().ToArray());
+    }
+
+    [Fact(DisplayName = "Secret.ToString should produce the original text and Base16 for values longer than the stack buffer")]
+    public void SecretToStringShouldProduceTheOriginalTextAndBase16ForValuesLongerThanTheStackBuffer()
+    {
+        // Given
+        string text = new('x', 300);
+        Secret candidate = text.AsSpan();
+        string expectedBase16 = Convert.ToHexString(Encoding.UTF8.GetBytes(text)).ToLowerInvariant();
+
+        // When
+        string actualText = candidate.ToString(Encoding.UTF8);
+        string actualBase16 = candidate.ToString();
+
+        // Then
+        Assert.Equal(text, actualText);
+        Assert.Equal(expectedBase16, actualBase16);
+    }
+
+    /// <summary>
+    /// Creates a deterministic value of the specified length.
+    /// </summary>
+    /// <param name="length">The length of the value.</param>
+    /// <returns>Returns a value of the specified length, where byte i is (i * 11 + 5) mod 256.</returns>
+    private static byte[] CreateValue(int length)
+    {
+        byte[] result = new byte[length];
+
+        for (int index = 0; index < length; index++)
+            result[index] = (byte)((index * 11 + 5) & 0xFF);
+
+        return result;
+    }
 }

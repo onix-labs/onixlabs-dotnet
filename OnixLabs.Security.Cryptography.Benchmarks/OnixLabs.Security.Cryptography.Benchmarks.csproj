@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\OnixLabs.Security.Cryptography\OnixLabs.Security.Cryptography.csproj"/>
+    </ItemGroup>
+</Project>

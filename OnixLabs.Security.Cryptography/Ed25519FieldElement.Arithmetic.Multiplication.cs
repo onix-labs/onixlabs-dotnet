@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.Runtime.CompilerServices;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -41,21 +41,48 @@ internal readonly partial struct Ed25519FieldElement
         ulong b319 = 19 * b.h3;
         ulong b419 = 19 * b.h4;
 
-        UInt128 c0 = (UInt128)a.h0 * b.h0 + (UInt128)a.h1 * b419 + (UInt128)a.h2 * b319 + (UInt128)a.h3 * b219 + (UInt128)a.h4 * b119;
-        UInt128 c1 = (UInt128)a.h0 * b.h1 + (UInt128)a.h1 * b.h0 + (UInt128)a.h2 * b419 + (UInt128)a.h3 * b319 + (UInt128)a.h4 * b219;
-        UInt128 c2 = (UInt128)a.h0 * b.h2 + (UInt128)a.h1 * b.h1 + (UInt128)a.h2 * b.h0 + (UInt128)a.h3 * b419 + (UInt128)a.h4 * b319;
-        UInt128 c3 = (UInt128)a.h0 * b.h3 + (UInt128)a.h1 * b.h2 + (UInt128)a.h2 * b.h1 + (UInt128)a.h3 * b.h0 + (UInt128)a.h4 * b419;
-        UInt128 c4 = (UInt128)a.h0 * b.h4 + (UInt128)a.h1 * b.h3 + (UInt128)a.h2 * b.h2 + (UInt128)a.h3 * b.h1 + (UInt128)a.h4 * b.h0;
+        Accumulator c0 = default;
+        c0.MultiplyAdd(a.h0, b.h0);
+        c0.MultiplyAdd(a.h1, b419);
+        c0.MultiplyAdd(a.h2, b319);
+        c0.MultiplyAdd(a.h3, b219);
+        c0.MultiplyAdd(a.h4, b119);
 
-        return CarryReduce(c0, c1, c2, c3, c4);
+        Accumulator c1 = default;
+        c1.MultiplyAdd(a.h0, b.h1);
+        c1.MultiplyAdd(a.h1, b.h0);
+        c1.MultiplyAdd(a.h2, b419);
+        c1.MultiplyAdd(a.h3, b319);
+        c1.MultiplyAdd(a.h4, b219);
+
+        Accumulator c2 = default;
+        c2.MultiplyAdd(a.h0, b.h2);
+        c2.MultiplyAdd(a.h1, b.h1);
+        c2.MultiplyAdd(a.h2, b.h0);
+        c2.MultiplyAdd(a.h3, b419);
+        c2.MultiplyAdd(a.h4, b319);
+
+        Accumulator c3 = default;
+        c3.MultiplyAdd(a.h0, b.h3);
+        c3.MultiplyAdd(a.h1, b.h2);
+        c3.MultiplyAdd(a.h2, b.h1);
+        c3.MultiplyAdd(a.h3, b.h0);
+        c3.MultiplyAdd(a.h4, b419);
+
+        Accumulator c4 = default;
+        c4.MultiplyAdd(a.h0, b.h4);
+        c4.MultiplyAdd(a.h1, b.h3);
+        c4.MultiplyAdd(a.h2, b.h2);
+        c4.MultiplyAdd(a.h3, b.h1);
+        c4.MultiplyAdd(a.h4, b.h0);
+
+        return CarryReduce(ref c0, ref c1, ref c2, ref c3, ref c4);
     }
 
     /// <summary>
     /// Propagates carries through five 128-bit accumulators and returns a 51-bit-limbed field element.
-    /// The final low-limb reduction handles the wrap from limb 4's overflow back into limb 0 via × 19.
-    /// All arithmetic stays in <see cref="UInt128"/> until the masked limbs are guaranteed to fit in
-    /// <see cref="ulong"/> — a worst-case <c>(c4 &gt;&gt; 51) * 19</c> can exceed 2^64 and must not be
-    /// performed in <see cref="ulong"/>.
+    /// The carry out of the top limb wraps around to the bottom limb multiplied by 19, because 2^255 ≡ 19 (mod p).
+    /// That wrapped carry can exceed 64 bits, so it is computed in 128 bits before the bottom limb's own carry is propagated once more.
     /// </summary>
     /// <param name="c0">The least significant 128-bit limb accumulator.</param>
     /// <param name="c1">The second 128-bit limb accumulator.</param>
@@ -63,21 +90,25 @@ internal readonly partial struct Ed25519FieldElement
     /// <param name="c3">The fourth 128-bit limb accumulator.</param>
     /// <param name="c4">The most significant 128-bit limb accumulator.</param>
     /// <returns>Returns a new <see cref="Ed25519FieldElement"/> whose limbs are bounded by ~2^52.</returns>
-    private static Ed25519FieldElement CarryReduce(UInt128 c0, UInt128 c1, UInt128 c2, UInt128 c3, UInt128 c4)
+    /// <remarks>
+    /// Why: this must be inlined. Passing the accumulators by reference to a separate call forces them into memory, which made signing 50%
+    /// and verification 50% slower than inlining, and slower than the <see cref="System.UInt128"/> code the accumulators replaced.
+    /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Ed25519FieldElement CarryReduce(
+        ref Accumulator c0,
+        ref Accumulator c1,
+        ref Accumulator c2,
+        ref Accumulator c3,
+        ref Accumulator c4)
     {
-        c1 += c0 >> 51;
-        c0 &= Mask51;
-        c2 += c1 >> 51;
-        c1 &= Mask51;
-        c3 += c2 >> 51;
-        c2 &= Mask51;
-        c4 += c3 >> 51;
-        c3 &= Mask51;
-        c0 += 19 * (c4 >> 51);
-        c4 &= Mask51;
-        c1 += c0 >> 51;
-        c0 &= Mask51;
+        c1.AddCarry(c0);
+        c2.AddCarry(c1);
+        c3.AddCarry(c2);
+        c4.AddCarry(c3);
 
-        return new Ed25519FieldElement((ulong)c0, (ulong)c1, (ulong)c2, (ulong)c3, (ulong)c4);
+        Accumulator wrapped = Accumulator.WrapCarry(c4, c0.Limb);
+
+        return new Ed25519FieldElement(wrapped.Limb, wrapped.AddCarryTo(c1.Limb), c2.Limb, c3.Limb, c4.Limb);
     }
 }

@@ -14,6 +14,7 @@
 
 using System;
 using System.Security.Cryptography;
+using System.Threading;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -23,16 +24,39 @@ public sealed partial class EddsaPrivateKey
     /// <inheritdoc/>
     public EddsaPublicKey GetPublicKey()
     {
-        byte[] seed = KeyData;
+        Span<byte> seed = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
+        seed = seed[..Length];
+
         try
         {
-            Span<byte> publicKey = stackalloc byte[Ed25519.PublicKeyLength];
-            Ed25519.DerivePublicKey(seed, publicKey);
-            return new EddsaPublicKey(publicKey);
+            CopyTo(seed);
+            return new EddsaPublicKey(GetOrDerivePublicKey(seed));
         }
         finally
         {
             CryptographicOperations.ZeroMemory(seed);
         }
+    }
+
+    /// <summary>
+    /// Gets the encoded public key of the current private key, deriving it from the specified seed the first time it is needed.
+    /// </summary>
+    /// <param name="seed">The decrypted seed of the current private key.</param>
+    /// <returns>Returns the 32-byte encoded public key of the current private key.</returns>
+    /// <remarks>
+    /// Concurrent first calls may each derive the key, which is harmless because they derive identical bytes; the array is fully written
+    /// before it is published, so no caller can observe a partially written key.
+    /// </remarks>
+    private ReadOnlySpan<byte> GetOrDerivePublicKey(ReadOnlySpan<byte> seed)
+    {
+        byte[]? result = Volatile.Read(ref publicKey);
+
+        if (result is not null) return result;
+
+        result = new byte[Ed25519.PublicKeyLength];
+        Ed25519.DerivePublicKey(seed, result);
+        Volatile.Write(ref publicKey, result);
+
+        return result;
     }
 }

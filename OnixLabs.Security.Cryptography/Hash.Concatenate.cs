@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
@@ -28,9 +29,20 @@ public readonly partial struct Hash
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the concatenated hash values.</exception>
     public static Hash Concatenate(HashAlgorithm algorithm, Hash left, Hash right)
     {
-        byte[] data = [..left.AsReadOnlySpan(), ..right.AsReadOnlySpan()];
-        byte[] hash = algorithm.ComputeHash(data);
-        return new Hash(hash);
+        const int maxStackSize = 256;
+
+        ReadOnlySpan<byte> leftValue = left.AsReadOnlySpan();
+        ReadOnlySpan<byte> rightValue = right.AsReadOnlySpan();
+        int length = leftValue.Length + rightValue.Length;
+
+        // Why: this is the inner step of Merkle tree construction. Two concatenated digests fit comfortably on the stack, but hash length is
+        // caller-controlled, so larger inputs fall back to the heap.
+        Span<byte> data = length <= maxStackSize ? stackalloc byte[length] : new byte[length];
+
+        leftValue.CopyTo(data);
+        rightValue.CopyTo(data[leftValue.Length..]);
+
+        return new Hash(algorithm.ComputeHash(data));
     }
 
     /// <summary>

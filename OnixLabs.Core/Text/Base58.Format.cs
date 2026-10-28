@@ -24,5 +24,5 @@ public readonly partial struct Base58
         out int charsWritten,
         ReadOnlySpan<char> format,
         IFormatProvider? provider
-    ) => ToString(format, provider).TryCopyTo(destination, out charsWritten);
+    ) => Base58Codec.TryFormat(value, provider, destination, out charsWritten);
 }

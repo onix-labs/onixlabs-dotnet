@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Text;
+using System.Buffers;
 
 namespace OnixLabs.Core.Text;
 
@@ -31,6 +31,7 @@ public sealed class Base32Codec : IBaseCodec
     /// The Base-32 output data size.
     /// </summary>
     private const int OutputSize = 5;
+    private const int MaxStackChars = 256;
 
     /// <inheritdoc/>
     public string Encode(ReadOnlySpan<byte> value, IFormatProvider? provider = null) => TryEncode(value, provider, out string result)
@@ -59,51 +60,22 @@ public sealed class Base32Codec : IBaseCodec
                 return false;
             }
 
-            // ReSharper disable once HeapView.ObjectAllocation.Evident
-            StringBuilder builder = new(value.Length * InputSize / OutputSize);
+            int length = GetEncodedLength(value.Length, formatProvider.IsPadded);
+            char[]? rented = length > MaxStackChars ? ArrayPool<char>.Shared.Rent(length) : null;
+            Span<char> buffer = (rented is null ? stackalloc char[MaxStackChars] : rented)[..length];
 
-            int inputPosition = 0;
-            int inputSubPosition = 0;
-            byte outputPosition = 0;
-            int outputSubPosition = 0;
-
-            while (inputPosition < value.Length)
+            try
             {
-                int availableBits = Math.Min(InputSize - inputSubPosition, OutputSize - outputSubPosition);
-
-                outputPosition <<= availableBits;
-                outputPosition |= (byte)(value[inputPosition] >> (InputSize - (inputSubPosition + availableBits)));
-                inputSubPosition += availableBits;
-
-                if (inputSubPosition >= InputSize)
-                {
-                    inputPosition++;
-                    inputSubPosition = 0;
-                }
-
-                outputSubPosition += availableBits;
-
-                if (outputSubPosition < OutputSize) continue;
-
-                outputPosition &= 0x1F;
-                builder.Append(formatProvider.Alphabet[outputPosition]);
-                outputSubPosition = 0;
-            }
-
-            if (outputSubPosition <= 0)
-            {
-                result = builder.ToString();
+                EncodeCore(value, formatProvider, buffer);
+                result = new string(buffer);
                 return true;
             }
-
-            outputPosition <<= OutputSize - outputSubPosition;
-            outputPosition &= 0x1F;
-            builder.Append(formatProvider.Alphabet[outputPosition]);
-
-            while (formatProvider.IsPadded && builder.Length % InputSize != 0) builder.Append('=');
-
-            result = builder.ToString();
-            return true;
+            finally
+            {
+                // Why: the value may be key material, for example a private key formatted as Base-32.
+                buffer.Clear();
+                if (rented is not null) ArrayPool<char>.Shared.Return(rented);
+            }
         }
         catch
         {
@@ -154,7 +126,7 @@ public sealed class Base32Codec : IBaseCodec
             while (outputPosition < outputBytes.Length)
             {
                 char character = valueWithoutPadding[inputPosition];
-                int index = formatProvider.Alphabet.IndexOf(character);
+                int index = formatProvider.Index.IndexOf(character);
 
                 if (index < 0)
                 {
@@ -190,5 +162,92 @@ public sealed class Base32Codec : IBaseCodec
             result = [];
             return false;
         }
+    }
+
+    /// <summary>
+    /// Tries to format the specified value as Base-32 into the specified destination, as <see cref="ISpanFormattable"/> requires.
+    /// </summary>
+    /// <param name="value">The value to encode.</param>
+    /// <param name="provider">The format provider, which must be a <see cref="Base32FormatProvider"/>, a culture, or <see langword="null"/>.</param>
+    /// <param name="destination">The destination for the encoded characters.</param>
+    /// <param name="charsWritten">When this method returns, contains the number of characters written to <paramref name="destination"/>.</param>
+    /// <returns>Returns <see langword="true"/> if the encoding fits in <paramref name="destination"/>; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="provider"/> is not a supported format provider.</exception>
+    internal static bool TryFormat(ReadOnlySpan<byte> value, IFormatProvider? provider, Span<char> destination, out int charsWritten)
+    {
+        if (!IBaseCodec.TryGetFormatProvider(provider, Base32FormatProvider.Rfc4648, out Base32FormatProvider formatProvider))
+            throw new FormatException(IBaseCodec.EncodingFormatException);
+
+        int length = GetEncodedLength(value.Length, formatProvider.IsPadded);
+
+        if (destination.Length < length)
+        {
+            charsWritten = 0;
+            return false;
+        }
+
+        EncodeCore(value, formatProvider, destination[..length]);
+        charsWritten = length;
+        return true;
+    }
+
+    /// <summary>
+    /// Gets the number of characters needed to encode the specified number of bytes.
+    /// </summary>
+    /// <param name="byteCount">The number of bytes to encode.</param>
+    /// <param name="isPadded">A value indicating whether the encoding is padded to a multiple of eight characters.</param>
+    /// <returns>Returns the number of characters needed to encode <paramref name="byteCount"/> bytes.</returns>
+    private static int GetEncodedLength(int byteCount, bool isPadded)
+    {
+        int length = (byteCount * InputSize + OutputSize - 1) / OutputSize;
+        return isPadded ? (length + InputSize - 1) / InputSize * InputSize : length;
+    }
+
+    /// <summary>
+    /// Encodes the specified non-empty value as Base-32 into the specified destination.
+    /// </summary>
+    /// <param name="value">The value to encode.</param>
+    /// <param name="formatProvider">The format provider that supplies the alphabet and padding.</param>
+    /// <param name="destination">The destination, exactly as long as <see cref="GetEncodedLength"/> returns.</param>
+    private static void EncodeCore(ReadOnlySpan<byte> value, Base32FormatProvider formatProvider, Span<char> destination)
+    {
+        int inputPosition = 0;
+        int inputSubPosition = 0;
+        byte outputPosition = 0;
+        int outputSubPosition = 0;
+        int written = 0;
+
+        while (inputPosition < value.Length)
+        {
+            int availableBits = Math.Min(InputSize - inputSubPosition, OutputSize - outputSubPosition);
+
+            outputPosition <<= availableBits;
+            outputPosition |= (byte)(value[inputPosition] >> (InputSize - (inputSubPosition + availableBits)));
+            inputSubPosition += availableBits;
+
+            if (inputSubPosition >= InputSize)
+            {
+                inputPosition++;
+                inputSubPosition = 0;
+            }
+
+            outputSubPosition += availableBits;
+
+            if (outputSubPosition < OutputSize) continue;
+
+            outputPosition &= 0x1F;
+            destination[written++] = formatProvider.Alphabet[outputPosition];
+            outputSubPosition = 0;
+        }
+
+        if (outputSubPosition > 0)
+        {
+            outputPosition <<= OutputSize - outputSubPosition;
+            outputPosition &= 0x1F;
+            destination[written++] = formatProvider.Alphabet[outputPosition];
+        }
+
+        // The remaining characters, if any, are padding: GetEncodedLength only adds them for padded providers.
+        destination[written..].Fill('=');
     }
 }

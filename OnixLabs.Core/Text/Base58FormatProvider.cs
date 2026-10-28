@@ -43,13 +43,23 @@ public sealed class Base58FormatProvider : Enumeration<Base58FormatProvider>, IF
     /// <param name="value">The value of the enumeration entry.</param>
     /// <param name="name">The name of the enumeration entry.</param>
     /// <param name="alphabet">The alphabet of the format provider.</param>
-    private Base58FormatProvider(int value, string name, string alphabet) : base(value, name) => Alphabet = alphabet;
+    private Base58FormatProvider(int value, string name, string alphabet) : base(value, name)
+    {
+        Alphabet = alphabet;
+        Index = new AlphabetIndex(alphabet);
+    }
 
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base58FormatProvider"/> instance.
     /// </summary>
     /// <value>The Base-58 alphabet associated with the current format provider.</value>
     public string Alphabet { get; }
+
+    /// <summary>
+    /// Gets the reverse lookup from the characters of the current alphabet to their positions in it.
+    /// </summary>
+    /// <value>The reverse lookup from the characters of the current alphabet to their positions in it.</value>
+    internal AlphabetIndex Index { get; }
 
     /// <inheritdoc/>
     public object? GetFormat(Type? formatType) => formatType == typeof(Base58FormatProvider) ? this : null;

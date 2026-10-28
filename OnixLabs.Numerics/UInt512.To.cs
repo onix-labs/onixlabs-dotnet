@@ -44,7 +44,7 @@ public readonly partial struct UInt512
         // Route X (hex) and R (round-trip) through NumberInfoFormatter so the output matches .NET integer
         // conventions and avoids BigInteger's positive-sign-disambiguation leading '0' on top-bit-set values.
         // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-        NumberInfoFormatter formatter = new(new NumberInfo(this, 0), formatProvider ?? CultureInfo.CurrentCulture, ['R', 'X']);
+        NumberInfoFormatter formatter = new(new NumberInfo(this, 0), formatProvider ?? CultureInfo.CurrentCulture, NumberInfoFormatter.RoundTripAndHexadecimalFormats);
         return formatter.Format(formatSpan);
     }
 }

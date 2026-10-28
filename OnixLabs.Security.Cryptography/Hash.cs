@@ -14,7 +14,6 @@
 
 using System;
 using System.Buffers;
-using System.Linq;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -67,7 +66,8 @@ public readonly partial struct Hash : ICryptoPrimitive<Hash>, IValueComparable<H
     /// </summary>
     /// <param name="value">The underlying value of the cryptographic hash.</param>
     /// <param name="length">The length of the cryptographic hash in bytes.</param>
-    public Hash(byte value, int length) : this(Enumerable.Repeat(value, length).ToArray())
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
+    public Hash(byte value, int length) : this(CreateFilledArray(value, length))
     {
     }
 
@@ -76,4 +76,20 @@ public readonly partial struct Hash : ICryptoPrimitive<Hash>, IValueComparable<H
     /// </summary>
     /// <value>The number of bytes in the underlying hash value.</value>
     public int Length => value?.Length ?? 0;
+
+    /// <summary>
+    /// Creates a new <see cref="byte"/> array of the specified length, with every element set to the specified value.
+    /// </summary>
+    /// <param name="value">The value of every element.</param>
+    /// <param name="length">The length of the array.</param>
+    /// <returns>Returns a new <see cref="byte"/> array of the specified length, with every element set to the specified value.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="length"/> is negative.</exception>
+    private static byte[] CreateFilledArray(byte value, int length)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(length);
+
+        byte[] result = new byte[length];
+        result.AsSpan().Fill(value);
+        return result;
+    }
 }

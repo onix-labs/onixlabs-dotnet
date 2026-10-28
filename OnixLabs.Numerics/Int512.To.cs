@@ -47,7 +47,7 @@ public readonly partial struct Int512
         // (e.g. -1 → "FFFF...FF"), matching how System.Int32 and friends format X.
         BigInteger unscaled = upperSpecifier == 'X' ? ReinterpretAsUnsigned(this) : this;
         // ReSharper disable once HeapView.ObjectAllocation.Evident, HeapView.ObjectAllocation
-        NumberInfoFormatter formatter = new(new NumberInfo(unscaled, 0), formatProvider ?? CultureInfo.CurrentCulture, ['R', 'X']);
+        NumberInfoFormatter formatter = new(new NumberInfo(unscaled, 0), formatProvider ?? CultureInfo.CurrentCulture, NumberInfoFormatter.RoundTripAndHexadecimalFormats);
         return formatter.Format(formatSpan);
     }
 }

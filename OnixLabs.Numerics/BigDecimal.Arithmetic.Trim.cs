@@ -40,7 +40,7 @@ public readonly partial struct BigDecimal
             scale--;
         }
 
-        return new BigDecimal(unscaledValue, scale);
+        return new BigDecimal(new NumberInfo(unscaledValue, scale));
     }
 
     /// <summary>

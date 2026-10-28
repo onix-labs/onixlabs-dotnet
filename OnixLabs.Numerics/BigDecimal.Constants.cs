@@ -23,31 +23,31 @@ public readonly partial struct BigDecimal
     /// Gets a negative one <c>-1</c> <see cref="BigDecimal"/> value.
     /// </summary>
     /// <value>The <see cref="BigDecimal"/> value representing negative one.</value>
-    public static BigDecimal NegativeOne => -1;
+    public static BigDecimal NegativeOne => new(new NumberInfo(BigInteger.MinusOne, 0));
 
     /// <summary>
     /// Gets a zero <c>0</c> <see cref="BigDecimal"/> value.
     /// </summary>
     /// <value>The <see cref="BigDecimal"/> value representing zero.</value>
-    public static BigDecimal Zero => 0;
+    public static BigDecimal Zero => default;
 
     /// <summary>
     /// Gets a one <c>1</c> <see cref="BigDecimal"/> value.
     /// </summary>
     /// <value>The <see cref="BigDecimal"/> value representing one.</value>
-    public static BigDecimal One => 1;
+    public static BigDecimal One => new(new NumberInfo(BigInteger.One, 0));
 
     /// <summary>
     /// Gets a two <c>2</c> <see cref="BigDecimal"/> value.
     /// </summary>
     /// <value>The <see cref="BigDecimal"/> value representing two.</value>
-    public static BigDecimal Two => 2;
+    public static BigDecimal Two => new(new NumberInfo(2, 0));
 
     /// <summary>
     /// Gets a ten <c>10</c> <see cref="BigDecimal"/> value.
     /// </summary>
     /// <value>The <see cref="BigDecimal"/> value representing ten.</value>
-    public static BigDecimal Ten => 10;
+    public static BigDecimal Ten => new(new NumberInfo(10, 0));
 
     /// <summary>Gets the natural logarithmic base, specified by the constant, e.</summary>
     /// <remarks>This value is accurate to a precision of 1001 decimal digits.</remarks>

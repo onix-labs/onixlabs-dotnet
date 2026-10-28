@@ -21,14 +21,14 @@ public readonly partial struct BigDecimal
     /// </summary>
     /// <param name="value">The value to increment.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value incremented by one integral unit.</returns>
-    public static BigDecimal Increment(BigDecimal value) => new(value.UnscaledValue + value.number.ScaleFactor, value.Scale);
+    public static BigDecimal Increment(BigDecimal value) => new(new NumberInfo(value.UnscaledValue + value.number.ScaleFactor, value.Scale));
 
     /// <summary>
     /// Increments the fractional component of the specified <see cref="BigDecimal"/> value by one.
     /// </summary>
     /// <param name="value">The value to increment.</param>
     /// <returns>Returns a new <see cref="BigDecimal"/> value incremented by one fractional unit.</returns>
-    public static BigDecimal IncrementFraction(BigDecimal value) => new(value.UnscaledValue + 1, value.Scale);
+    public static BigDecimal IncrementFraction(BigDecimal value) => new(new NumberInfo(value.UnscaledValue + 1, value.Scale));
 
     /// <summary>
     /// Increments the integral component of the specified <see cref="BigDecimal"/> value by one.

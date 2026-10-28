@@ -37,8 +37,8 @@ public readonly partial struct BigDecimal
         if (scale == value.Scale) return value;
         if (scale < value.Scale) return Round(value, scale, mode);
 
-        BigInteger magnitude = BigInteger.Pow(10, scale - value.Scale);
-        return new BigDecimal(value.UnscaledValue * magnitude, scale);
+        BigInteger magnitude = BigIntegerPowersOfTen.Get(scale - value.Scale);
+        return new BigDecimal(new NumberInfo(value.UnscaledValue * magnitude, scale));
     }
 
     /// <summary>
@@ -64,8 +64,8 @@ public readonly partial struct BigDecimal
 
         // Align both values to the larger scale by raising the value with the smaller scale. This needs a single
         // power-of-ten factor, rather than scaling both sides by their full scale factor and dividing by the smaller.
-        if (left.Scale < right.Scale) leftNormalized *= BigInteger.Pow(10, right.Scale - left.Scale);
-        else if (right.Scale < left.Scale) rightNormalized *= BigInteger.Pow(10, left.Scale - right.Scale);
+        if (left.Scale < right.Scale) leftNormalized *= BigIntegerPowersOfTen.Get(right.Scale - left.Scale);
+        else if (right.Scale < left.Scale) rightNormalized *= BigIntegerPowersOfTen.Get(left.Scale - right.Scale);
 
         return (leftNormalized, rightNormalized);
     }

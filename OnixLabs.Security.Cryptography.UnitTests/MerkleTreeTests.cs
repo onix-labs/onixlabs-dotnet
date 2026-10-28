@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using OnixLabs.Security.Cryptography.UnitTests.Data;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 
@@ -86,5 +88,43 @@ public sealed class MerkleTreeTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "MerkleTree root should match a reference SHA-256 Merkle root")]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
+    [InlineData(6)]
+    [InlineData(7)]
+    [InlineData(8)]
+    [InlineData(9)]
+    [InlineData(13)]
+    public void MerkleTreeRootShouldMatchReferenceRoot(int leafCount)
+    {
+        // Given
+        byte[][] leaves = Enumerable.Range(0, leafCount).Select(index => SHA256.HashData(BitConverter.GetBytes(index))).ToArray();
+        byte[] expected = MerkleTreeReference.ComputeSha256Root(leaves);
+
+        // When
+        MerkleTree tree = MerkleTree.Create(leaves.Select(leaf => new Hash(leaf)), Algorithm);
+
+        // Then
+        Assert.Equal(expected, tree.Hash.AsReadOnlySpan().ToArray());
+    }
+
+    [Fact(DisplayName = "MerkleTree.GetLeafHashes should return a list that cannot be modified")]
+    public void MerkleTreeGetLeafHashesShouldReturnAListThatCannotBeModified()
+    {
+        // Given
+        MerkleTree tree = MerkleTree.Create(setA, Algorithm);
+
+        // When
+        IList<Hash> leafHashes = Assert.IsAssignableFrom<IList<Hash>>(tree.GetLeafHashes());
+
+        // Then
+        Assert.Throws<NotSupportedException>(() => leafHashes[0] = default);
+        Assert.Throws<NotSupportedException>(() => leafHashes.Add(default));
     }
 }

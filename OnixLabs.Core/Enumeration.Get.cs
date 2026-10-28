@@ -31,19 +31,19 @@ public abstract partial class Enumeration<T>
     /// Gets all the enumeration entries, as value/name tuples, for the current type.
     /// </summary>
     /// <returns>Returns all the enumeration entries, as value/name tuples, for the current type.</returns>
-    public static IReadOnlySet<(int Value, string Name)> GetEntries() => GetAll().Select(entry => entry.ToEntry()).ToFrozenSet();
+    public static IReadOnlySet<(int Value, string Name)> GetEntries() => EnumerationCache.Entries;
 
     /// <summary>
     /// Gets all the enumeration names for the current type.
     /// </summary>
     /// <returns>Returns all the enumeration names for the current type.</returns>
-    public static IReadOnlySet<string> GetNames() => GetAll().Select(entry => entry.Name).ToFrozenSet();
+    public static IReadOnlySet<string> GetNames() => EnumerationCache.Names;
 
     /// <summary>
     /// Gets all the enumeration values for the current type.
     /// </summary>
     /// <returns>Returns all the enumeration values for the current type.</returns>
-    public static IReadOnlySet<int> GetValues() => GetAll().Select(entry => entry.Value).ToFrozenSet();
+    public static IReadOnlySet<int> GetValues() => EnumerationCache.Values;
 
     /// <summary>
     /// Represents a per-enumeration type cache of the discovered enumeration entries.
@@ -58,6 +58,45 @@ public abstract partial class Enumeration<T>
             .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
             .Select(field => field.GetValue(null))
             .OfType<T>()
+            .ToFrozenSet();
+
+        // Why: the entries never change, so every lookup and projection is computed once per enumeration type rather than on every call.
+
+        /// <summary>
+        /// The enumeration entries grouped by name. A name normally has one entry; more than one is reported as an error by
+        /// <see cref="FromName"/>.
+        /// </summary>
+        public static readonly FrozenDictionary<string, T[]> ByName = All
+            .GroupBy(entry => entry.Name)
+            .ToFrozenDictionary(group => group.Key, group => group.ToArray());
+
+        /// <summary>
+        /// The enumeration entries grouped by value. A value normally has one entry; more than one is reported as an error by
+        /// <see cref="FromValue"/>.
+        /// </summary>
+        public static readonly FrozenDictionary<int, T[]> ByValue = All
+            .GroupBy(entry => entry.Value)
+            .ToFrozenDictionary(group => group.Key, group => group.ToArray());
+
+        /// <summary>
+        /// The value and name of every enumeration entry.
+        /// </summary>
+        public static readonly FrozenSet<(int Value, string Name)> Entries = All
+            .Select(entry => entry.ToEntry())
+            .ToFrozenSet();
+
+        /// <summary>
+        /// The name of every enumeration entry.
+        /// </summary>
+        public static readonly FrozenSet<string> Names = All
+            .Select(entry => entry.Name)
+            .ToFrozenSet();
+
+        /// <summary>
+        /// The value of every enumeration entry.
+        /// </summary>
+        public static readonly FrozenSet<int> Values = All
+            .Select(entry => entry.Value)
             .ToFrozenSet();
     }
 }

@@ -15,7 +15,6 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using OnixLabs.Core.Text;
 
@@ -120,7 +119,17 @@ public static class StringExtensions
         /// </summary>
         /// <param name="count">The number of repetitions of the current <see cref="String"/> instance.</param>
         /// <returns>Returns a new <see cref="String"/> instance representing the repetition of the current <see cref="String"/> instance.</returns>
-        public string Repeat(int count) => count > 0 ? string.Join(string.Empty, Enumerable.Repeat(receiver, count)) : string.Empty;
+        public string Repeat(int count)
+        {
+            if (count <= 0) return string.Empty;
+            return string.Create(checked(receiver.Length * count), receiver, CopyString);
+
+            static void CopyString(Span<char> destination, string value)
+            {
+                for (int offset = 0; offset < destination.Length; offset += value.Length)
+                    value.CopyTo(destination[offset..]);
+            }
+        }
 
         /// <summary>
         /// Obtains a sub-string before the specified index within the current <see cref="String"/> instance.
@@ -481,7 +490,7 @@ public static class StringExtensions
         /// <param name="before">The <see cref="Char"/> that should precede the current <see cref="String"/> instance.</param>
         /// <param name="after">The <see cref="Char"/> that should succeed the current <see cref="String"/> instance.</param>
         /// <returns>Returns a new <see cref="String"/> instance representing the current <see cref="String"/> instance, wrapped between the specified before and after <see cref="Char"/> instances.</returns>
-        public string Wrap(char before, char after) => string.Concat(before.ToString(), receiver, after.ToString());
+        public string Wrap(char before, char after) => string.Concat([before], receiver, [after]);
 
         /// <summary>
         /// Wraps the current <see cref="String"/> instance between the specified before and after <see cref="String"/> instances.

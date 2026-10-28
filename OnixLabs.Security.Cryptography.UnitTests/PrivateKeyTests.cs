@@ -158,4 +158,140 @@ public sealed class PrivateKeyTests
         candidate.Dispose();
         candidate.Dispose();
     }
+
+    [Theory(DisplayName = "PrivateKey.CopyTo should write exactly the original key data for lengths around the AES block size")]
+    [InlineData(1)]
+    [InlineData(15)]
+    [InlineData(16)]
+    [InlineData(17)]
+    [InlineData(31)]
+    [InlineData(32)]
+    [InlineData(33)]
+    [InlineData(300)]
+    public void PrivateKeyCopyToShouldWriteExactlyTheOriginalKeyData(int length)
+    {
+        // Given
+        byte[] expected = CreateKeyData(length);
+        using PrivateKey candidate = new TestPrivateKey(expected);
+        byte[] exact = new byte[length];
+        byte[] larger = new byte[length + 40];
+        larger.AsSpan().Fill(0xAA);
+
+        // When
+        candidate.CopyTo(exact);
+        candidate.CopyTo(larger);
+
+        // Then
+        Assert.Equal(length, candidate.Length);
+        Assert.Equal(expected, exact);
+        Assert.Equal(expected, larger[..length]);
+        Assert.All(larger[length..], value => Assert.Equal(0xAA, value));
+    }
+
+    [Fact(DisplayName = "PrivateKey.CopyTo should throw ArgumentException when the destination is too short")]
+    public void PrivateKeyCopyToShouldThrowArgumentExceptionWhenTheDestinationIsTooShort()
+    {
+        // Given
+        using PrivateKey candidate = new TestPrivateKey(CreateKeyData(32));
+
+        // When / Then
+        Assert.Throws<ArgumentException>(() => candidate.CopyTo(new byte[31]));
+    }
+
+    [Fact(DisplayName = "PrivateKey.CopyTo should throw ObjectDisposedException after disposal")]
+    public void PrivateKeyCopyToShouldThrowObjectDisposedExceptionAfterDisposal()
+    {
+        // Given
+        PrivateKey candidate = new TestPrivateKey(CreateKeyData(32));
+
+        // When
+        candidate.Dispose();
+
+        // Then
+        Assert.Throws<ObjectDisposedException>(() => candidate.CopyTo(new byte[32]));
+    }
+
+    [Fact(DisplayName = "PrivateKey construction should not modify the caller's key data")]
+    public void PrivateKeyConstructionShouldNotModifyTheCallersKeyData()
+    {
+        // Given
+        byte[] keyData = CreateKeyData(32);
+        byte[] expected = [..keyData];
+
+        // When
+        using PrivateKey candidate = new TestPrivateKey(keyData);
+
+        // Then
+        Assert.Equal(expected, keyData);
+    }
+
+    [Fact(DisplayName = "PrivateKey.ToString should produce the Base16 key data for keys longer than the stack buffer")]
+    public void PrivateKeyToStringShouldProduceTheBase16KeyDataForKeysLongerThanTheStackBuffer()
+    {
+        // Given
+        byte[] keyData = CreateKeyData(300);
+        using PrivateKey candidate = new TestPrivateKey(keyData);
+        string expected = Convert.ToHexString(keyData).ToLowerInvariant();
+
+        // When
+        string actual = candidate.ToString();
+
+        // Then
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact(DisplayName = "PrivateKey equality should hold for distinct instances of the same key and type")]
+    public void PrivateKeyEqualityShouldHoldForDistinctInstancesOfTheSameKeyAndType()
+    {
+        // Given
+        using PrivateKey left = new TestPrivateKey(CreateKeyData(48));
+        using PrivateKey right = new TestPrivateKey(CreateKeyData(48));
+
+        // When / Then
+        Assert.True(left.Equals(right));
+        Assert.True(left == right);
+        Assert.Equal(left.GetHashCode(), right.GetHashCode());
+    }
+
+    [Fact(DisplayName = "PrivateKey equality should not hold for different private key types with the same key data")]
+    public void PrivateKeyEqualityShouldNotHoldForDifferentTypesWithTheSameKeyData()
+    {
+        // Given
+        using PrivateKey left = new TestPrivateKey(CreateKeyData(32));
+        using PrivateKey right = new EcdsaPrivateKey(CreateKeyData(32));
+
+        // When / Then
+        Assert.False(left.Equals(right));
+        Assert.True(left != right);
+    }
+
+    [Fact(DisplayName = "PrivateKey equality and hash codes should throw ObjectDisposedException after disposal")]
+    public void PrivateKeyEqualityAndHashCodesShouldThrowObjectDisposedExceptionAfterDisposal()
+    {
+        // Given
+        PrivateKey disposed = new TestPrivateKey(CreateKeyData(32));
+        using PrivateKey other = new TestPrivateKey(CreateKeyData(32));
+        disposed.Dispose();
+
+        // When / Then
+        Assert.Throws<ObjectDisposedException>(() => disposed.Equals(other));
+        Assert.Throws<ObjectDisposedException>(() => other.Equals(disposed));
+        Assert.Throws<ObjectDisposedException>(() => disposed.GetHashCode());
+        Assert.True(disposed.Equals(disposed));
+    }
+
+    /// <summary>
+    /// Creates deterministic key data of the specified length.
+    /// </summary>
+    /// <param name="length">The length of the key data.</param>
+    /// <returns>Returns key data of the specified length, where byte i is (i * 7 + 3) mod 256.</returns>
+    private static byte[] CreateKeyData(int length)
+    {
+        byte[] result = new byte[length];
+
+        for (int index = 0; index < length; index++)
+            result[index] = (byte)((index * 7 + 3) & 0xFF);
+
+        return result;
+    }
 }

@@ -20,6 +20,8 @@ using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
+// Why: every ComputeHash overload returns a newly allocated array that nothing else references, so each result is wrapped with the private
+// array-owning constructor rather than converted through ReadOnlySpan<byte>, which would copy the digest a second time.
 public readonly partial struct Hash
 {
     /// <summary>
@@ -31,7 +33,7 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, byte[] data, int rounds = 1) =>
-        algorithm.ComputeHash(data, rounds);
+        new(algorithm.ComputeHash(data, rounds));
 
     /// <summary>
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
@@ -44,7 +46,7 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, byte[] data, int offset, int count, int rounds = 1) =>
-        algorithm.ComputeHash(data, offset, count, rounds);
+        new(algorithm.ComputeHash(data, offset, count, rounds));
 
     /// <summary>
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
@@ -55,7 +57,7 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<byte> data, int rounds = 1) =>
-        algorithm.ComputeHash(data, rounds);
+        new(algorithm.ComputeHash(data, rounds));
 
     /// <summary>
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
@@ -68,7 +70,7 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<byte> data, int offset, int count, int rounds = 1) =>
-        algorithm.ComputeHash(data, offset, count, rounds);
+        new(algorithm.ComputeHash(data, offset, count, rounds));
 
     /// <summary>
     /// Computes the hash of the specified <see cref="Stream"/>, using the specified <see cref="HashAlgorithm"/>.
@@ -79,7 +81,7 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, Stream stream, int rounds = 1) =>
-        algorithm.ComputeHash(stream, rounds);
+        new(algorithm.ComputeHash(stream, rounds));
 
     /// <summary>
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
@@ -90,7 +92,7 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, IBinaryConvertible data, int rounds = 1) =>
-        algorithm.ComputeHash(data, rounds);
+        new(algorithm.ComputeHash(data, rounds));
 
     /// <summary>
     /// Computes the hash of the specified data, using the specified <see cref="HashAlgorithm"/>.
@@ -101,7 +103,7 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, ISpanBinaryConvertible data, int rounds = 1) =>
-        algorithm.ComputeHash(data.AsReadOnlySpan(), rounds);
+        new(algorithm.ComputeHash(data.AsReadOnlySpan(), rounds));
 
     /// <summary>
     /// Computes the hash value for the specified <see cref="ReadOnlySpan{T}"/>.
@@ -113,5 +115,5 @@ public readonly partial struct Hash
     /// <returns>Returns a cryptographic hash of the specified data.</returns>
     /// <exception cref="CryptographicException">Thrown when the hash could not be computed for the specified input data.</exception>
     public static Hash Compute(HashAlgorithm algorithm, ReadOnlySpan<char> data, Encoding? encoding = null, int rounds = 1) =>
-        algorithm.ComputeHash(data, encoding, rounds);
+        new(algorithm.ComputeHash(data, encoding, rounds));
 }

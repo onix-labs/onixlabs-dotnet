@@ -357,7 +357,8 @@ public static class IEnumerableExtensions
         public bool IsCountEven(Func<T, bool>? predicate = null)
         {
             RequireNotNull(enumerable, EnumerableNullExceptionMessage);
-            return (enumerable.LongCount(predicate ?? (_ => true)) & 1) is 0;
+            long count = predicate is null ? enumerable.LongCount() : enumerable.LongCount(predicate);
+            return (count & 1) is 0;
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ public readonly partial struct Base58
     public override bool Equals(object? obj) => obj is Base58 other && Equals(other);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => value.GetContentHashCode();
+    public override int GetHashCode() => AsReadOnlySpan().GetContentHashCode();
 
     /// <inheritdoc/>
     public static bool operator ==(Base58 left, Base58 right) => left.Equals(right);

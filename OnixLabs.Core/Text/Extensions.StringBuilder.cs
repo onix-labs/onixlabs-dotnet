@@ -102,9 +102,11 @@ public static class StringBuilderExtensions
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="char"/> value trimmed from the end.</returns>
     public static StringBuilder TrimEnd(this StringBuilder receiver, char value)
     {
-        while (receiver.Length > 0 && receiver[^1] == value)
-            receiver.Remove(receiver.Length - 1, 1);
+        int length = receiver.Length;
 
+        while (length > 0 && receiver[length - 1] == value) length--;
+
+        receiver.Length = length;
         return receiver;
     }
 
@@ -116,10 +118,12 @@ public static class StringBuilderExtensions
     /// <returns>Returns the current <see cref="StringBuilder"/> with the specified <see cref="char"/> value trimmed from the start.</returns>
     public static StringBuilder TrimStart(this StringBuilder receiver, char value)
     {
-        while (receiver.Length > 0 && receiver[0] == value)
-            receiver.Remove(0, 1);
+        // Why: count the leading characters first and remove them once; removing one at a time shifts the whole buffer every time.
+        int count = 0;
 
-        return receiver;
+        while (count < receiver.Length && receiver[count] == value) count++;
+
+        return receiver.Remove(0, count);
     }
 
     /// <summary>
@@ -140,9 +144,12 @@ public static class StringBuilderExtensions
     {
         if (string.IsNullOrEmpty(value)) return receiver;
 
-        while (receiver.Length >= value.Length && receiver.ToString(receiver.Length - value.Length, value.Length) == value)
-            receiver.Remove(receiver.Length - value.Length, value.Length);
+        // Why: compare characters in place; extracting a substring to compare allocated on every iteration.
+        int length = receiver.Length;
 
+        while (length >= value.Length && receiver.Matches(length - value.Length, value)) length -= value.Length;
+
+        receiver.Length = length;
         return receiver;
     }
 
@@ -156,10 +163,12 @@ public static class StringBuilderExtensions
     {
         if (string.IsNullOrEmpty(value)) return receiver;
 
-        while (receiver.Length >= value.Length && receiver.ToString(0, value.Length) == value)
-            receiver.Remove(0, value.Length);
+        // Why: compare characters in place and remove once; extracting a substring to compare allocated on every iteration.
+        int count = 0;
 
-        return receiver;
+        while (receiver.Length - count >= value.Length && receiver.Matches(count, value)) count += value.Length;
+
+        return receiver.Remove(0, count);
     }
 
     /// <summary>
@@ -179,4 +188,19 @@ public static class StringBuilderExtensions
     /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
     /// <returns>Returns the current <see cref="StringBuilder"/> wrapped between the specified start and end <see cref="string"/> values.</returns>
     public static StringBuilder Wrap(this StringBuilder receiver, string start, string end) => receiver.Prepend(start).Append(end);
+
+    /// <summary>
+    /// Determines whether the specified value occurs in the current <see cref="StringBuilder"/> at the specified index, using ordinal comparison.
+    /// </summary>
+    /// <param name="receiver">The current <see cref="StringBuilder"/> instance.</param>
+    /// <param name="index">The index at which to compare.</param>
+    /// <param name="value">The value to compare, which must fit within the builder from <paramref name="index"/>.</param>
+    /// <returns>Returns <see langword="true"/> if <paramref name="value"/> occurs at <paramref name="index"/>; otherwise, <see langword="false"/>.</returns>
+    private static bool Matches(this StringBuilder receiver, int index, string value)
+    {
+        for (int offset = 0; offset < value.Length; offset++)
+            if (receiver[index + offset] != value[offset]) return false;
+
+        return true;
+    }
 }

@@ -35,10 +35,10 @@ public readonly partial struct BigDecimal
 
         if (scale >= value.Scale) return value;
 
-        BigInteger divisor = BigInteger.Pow(10, value.Scale - scale);
+        BigInteger divisor = BigIntegerPowersOfTen.Get(value.Scale - scale);
         BigInteger quotient = DivideAndRound(value.UnscaledValue, divisor, mode);
 
-        return new BigDecimal(quotient, scale);
+        return new BigDecimal(new NumberInfo(quotient, scale));
     }
 
     /// <summary>

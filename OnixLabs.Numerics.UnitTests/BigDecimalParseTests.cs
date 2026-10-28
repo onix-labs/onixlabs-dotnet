@@ -13,7 +13,10 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Numerics;
 using OnixLabs.Numerics.UnitTests.Data;
 
 namespace OnixLabs.Numerics.UnitTests;
@@ -92,5 +95,51 @@ public sealed class BigDecimalParseTests
 
         // Then
         Assert.Equal(expected, actual, BigDecimalEqualityComparer.Semantic);
+    }
+
+    [Fact(DisplayName = "BigDecimal.Parse should match BigInteger.Parse of the digits for every length and decimal point position around the 18-digit chunks")]
+    public void BigDecimalParseShouldMatchBigIntegerParseOfTheDigitsAroundTheChunkBoundaries()
+    {
+        // Given
+        Random random = new(Seed: 18);
+        List<string> failures = [];
+        List<int> lengths = [..Enumerable.Range(1, 60), 1001];
+
+        // When
+        foreach (int length in lengths)
+        {
+            string digits = new(Enumerable.Range(0, length).Select(_ => (char)('0' + random.Next(10))).ToArray());
+
+            foreach (int fractionDigits in new[] { 0, 1, length / 2, length - 1, length }.Distinct())
+            {
+                string text = fractionDigits is 0 ? digits : $"{digits[..^fractionDigits]}.{digits[^fractionDigits..]}";
+
+                if (text.StartsWith('.')) text = "0" + text;
+
+                BigDecimal expected = new(BigInteger.Parse(digits, CultureInfo.InvariantCulture), fractionDigits);
+                BigDecimal actual = BigDecimal.Parse(text, CultureInfo.InvariantCulture);
+
+                if (actual.UnscaledValue != expected.UnscaledValue || actual.Scale != expected.Scale)
+                    failures.Add($"'{text}': expected {expected.UnscaledValue}e-{expected.Scale} but was {actual.UnscaledValue}e-{actual.Scale}");
+            }
+        }
+
+        // Then
+        Assert.Empty(failures);
+    }
+
+    [Fact(DisplayName = "BigDecimal.Parse should ignore thousands separators that fall inside an 18-digit chunk")]
+    public void BigDecimalParseShouldIgnoreThousandsSeparatorsThatFallInsideAChunk()
+    {
+        // Given
+        const string text = "123,456,789,012,345,678,901,234,567,890.123456789012345678901";
+        BigInteger expectedUnscaled = BigInteger.Parse("123456789012345678901234567890123456789012345678901", CultureInfo.InvariantCulture);
+
+        // When
+        BigDecimal actual = BigDecimal.Parse(text, CultureInfo.InvariantCulture);
+
+        // Then
+        Assert.Equal(expectedUnscaled, actual.UnscaledValue);
+        Assert.Equal(21, actual.Scale);
     }
 }

@@ -24,14 +24,14 @@ public sealed partial class EcdsaPublicKey
     /// <inheritdoc/>
     public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToArray());
+        byte[] hash = algorithm.ComputeHash(data);
         return IsHashValid(signature, hash, format);
     }
 
     /// <inheritdoc/>
     public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToArray(), offset, count);
+        byte[] hash = algorithm.ComputeHash(data, offset, count);
         return IsHashValid(signature, hash, format);
     }
 
@@ -80,14 +80,14 @@ public sealed partial class EcdsaPublicKey
     /// <inheritdoc/>
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToArray());
+        byte[] hash = algorithm.ComputeHash(data);
         return IsHashValid(signature, hash, format);
     }
 
     /// <inheritdoc/>
     public bool IsDataValid(DigitalSignature signature, ReadOnlySpan<byte> data, int offset, int count, HashAlgorithm algorithm, DSASignatureFormat format = default)
     {
-        byte[] hash = algorithm.ComputeHash(data.ToArray(), offset, count);
+        byte[] hash = algorithm.ComputeHash(data, offset, count);
         return IsHashValid(signature, hash, format);
     }
 

@@ -14,7 +14,7 @@
 
 using System;
 using System.Security.Cryptography;
-using OnixLabs.Core.Linq;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -34,7 +34,7 @@ public abstract partial class PrivateKey
 
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">Thrown when the current <see cref="PrivateKey"/> has been disposed.</exception>
-    public override int GetHashCode() => HashCode.Combine(GetType(), KeyData.GetContentHashCode());
+    public override int GetHashCode() => HashCode.Combine(GetType(), AsReadOnlySpan().GetContentHashCode());
 
     /// <inheritdoc/>
     public static bool operator ==(PrivateKey? left, PrivateKey? right) => Equals(left, right);

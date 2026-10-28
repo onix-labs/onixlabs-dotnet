@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using OnixLabs.Core.Linq;
+using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
 
@@ -36,7 +36,7 @@ public readonly partial struct Salt
     public override bool Equals(object? obj) => obj is Salt other && Equals(other);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => value.GetContentHashCode();
+    public override int GetHashCode() => AsReadOnlySpan().GetContentHashCode();
 
     /// <inheritdoc/>
     public static bool operator ==(Salt left, Salt right) => EqualityComparer<Salt>.Default.Equals(left, right);

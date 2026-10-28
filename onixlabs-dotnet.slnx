@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Core/">
+    <Project Path="OnixLabs.Core.Benchmarks/OnixLabs.Core.Benchmarks.csproj" />
     <Project Path="OnixLabs.Core.UnitTests.Data/OnixLabs.Core.UnitTests.Data.csproj" />
     <Project Path="OnixLabs.Core.UnitTests/OnixLabs.Core.UnitTests.csproj" />
     <Project Path="OnixLabs.Core/OnixLabs.Core.csproj" />
@@ -10,11 +11,13 @@
     <Project Path="OnixLabs.DependencyInjection/OnixLabs.DependencyInjection.csproj" />
   </Folder>
   <Folder Name="/Numerics/">
+    <Project Path="OnixLabs.Numerics.Benchmarks/OnixLabs.Numerics.Benchmarks.csproj" />
     <Project Path="OnixLabs.Numerics.UnitTests.Data/OnixLabs.Numerics.UnitTests.Data.csproj" />
     <Project Path="OnixLabs.Numerics.UnitTests/OnixLabs.Numerics.UnitTests.csproj" />
     <Project Path="OnixLabs.Numerics/OnixLabs.Numerics.csproj" />
   </Folder>
   <Folder Name="/Security.Cryptography/">
+    <Project Path="OnixLabs.Security.Cryptography.Benchmarks/OnixLabs.Security.Cryptography.Benchmarks.csproj" />
     <Project Path="OnixLabs.Security.Cryptography.UnitTests.Data/OnixLabs.Security.Cryptography.UnitTests.Data.csproj" />
     <Project Path="OnixLabs.Security.Cryptography.UnitTests/OnixLabs.Security.Cryptography.UnitTests.csproj" />
     <Project Path="OnixLabs.Security.Cryptography/OnixLabs.Security.Cryptography.csproj" />

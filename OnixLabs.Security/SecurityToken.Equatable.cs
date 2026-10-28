@@ -14,14 +14,13 @@
 
 using System;
 using OnixLabs.Core;
-using OnixLabs.Core.Linq;
 
 namespace OnixLabs.Security;
 
 public readonly partial struct SecurityToken
 {
     /// <inheritdoc/>
-    public bool Equals(SecurityToken other) => value.SequenceEqualOrNull(other.value);
+    public bool Equals(SecurityToken other) => string.Equals(value, other.value, StringComparison.Ordinal);
 
     /// <inheritdoc/>
     public override bool Equals(object? obj) => obj is SecurityToken other && Equals(other);

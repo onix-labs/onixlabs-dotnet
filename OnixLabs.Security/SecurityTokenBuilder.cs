@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OnixLabs.Security;
 
@@ -142,13 +141,12 @@ public sealed class SecurityTokenBuilder
             throw new InvalidOperationException("At least one character set must be specified before building a security token.");
 
         const int maxStackSize = 256;
-        List<char> allowedCharacters = characters.ToList();
+        char[] allowedCharacters = new char[characters.Count];
+        characters.CopyTo(allowedCharacters);
 
         // Why: length is caller-supplied and unbounded; stackalloc only for small buffers to avoid a stack overflow.
         Span<char> result = length <= maxStackSize ? stackalloc char[length] : new char[length];
-
-        for (int index = 0; index < length; index++)
-            result[index] = allowedCharacters[provider.GetNextInt(0, allowedCharacters.Count)];
+        provider.GetItems(allowedCharacters, result);
 
         return new SecurityToken(result);
     }

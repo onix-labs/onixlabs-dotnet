@@ -13,8 +13,10 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 
@@ -437,5 +439,23 @@ public sealed class EcdsaKeyTests
         // Then: both re-imported public keys verify the original signature.
         Assert.True(fromDer.IsDataValid(signature, data, HashAlgorithmName.SHA256));
         Assert.True(fromPem.IsDataValid(signature, data, HashAlgorithmName.SHA256));
+    }
+
+    [Fact(DisplayName = "ECDSA signing with one private key from many threads should produce valid signatures")]
+    public void EcdsaSigningWithOnePrivateKeyFromManyThreadsShouldProduceValidSignatures()
+    {
+        // Given
+        byte[] data = Salt.CreateNonZero(1024).AsReadOnlySpan().ToArray();
+        using EcdsaPrivateKey privateKey = EcdsaPrivateKey.Create(ECCurve.NamedCurves.nistP256);
+        EcdsaPublicKey publicKey = privateKey.GetPublicKey();
+        ParallelOptions options = new() { MaxDegreeOfParallelism = Math.Max(8, Environment.ProcessorCount) };
+        ConcurrentBag<byte[]> signatures = [];
+
+        // When
+        Parallel.For(fromInclusive: 0, toExclusive: 256, options, _ => signatures.Add(privateKey.SignData(data, HashAlgorithmName.SHA256)));
+
+        // Then
+        Assert.Equal(256, signatures.Count);
+        Assert.All(signatures, signature => Assert.True(publicKey.IsDataValid(signature, data, HashAlgorithmName.SHA256)));
     }
 }

@@ -14,7 +14,9 @@
 
 using System;
 using System.Buffers;
+using System.Collections.Concurrent;
 using System.Text;
+using System.Threading.Tasks;
 using OnixLabs.Core;
 using OnixLabs.Core.Text;
 
@@ -286,5 +288,35 @@ public sealed class SecretTests
 
         // Then
         Assert.Equal(string.Empty, actual);
+    }
+
+    [Fact(DisplayName = "Secret should throw ObjectDisposedException when read after being disposed")]
+    public void SecretShouldThrowObjectDisposedExceptionWhenReadAfterBeingDisposed()
+    {
+        // Given
+        Secret candidate = new([1, 2, 3, 4]);
+
+        // When
+        candidate.Dispose();
+
+        // Then
+        Assert.Throws<ObjectDisposedException>(() => candidate.AsReadOnlyMemory());
+    }
+
+    [Fact(DisplayName = "Secret should return the original value when read concurrently from many threads")]
+    public void SecretShouldReturnTheOriginalValueWhenReadConcurrentlyFromManyThreads()
+    {
+        // Given
+        byte[] expected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+        Secret candidate = new(expected);
+        ParallelOptions options = new() { MaxDegreeOfParallelism = Math.Max(8, Environment.ProcessorCount) };
+        ConcurrentBag<byte[]> results = [];
+
+        // When
+        Parallel.For(fromInclusive: 0, toExclusive: 20_000, options, _ => results.Add(candidate.AsReadOnlySpan().ToArray()));
+
+        // Then
+        Assert.Equal(20_000, results.Count);
+        Assert.All(results, actual => Assert.Equal(expected, actual));
     }
 }

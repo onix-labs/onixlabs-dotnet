@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using OnixLabs.Security.Cryptography.UnitTests.Data;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
@@ -132,5 +133,29 @@ public sealed class PrivateKeyTests
         // Then
         Assert.Equal("TEST", namedPrivateKey.AlgorithmName);
         Assert.Equal(privateKey, namedPrivateKey.PrivateKey);
+    }
+
+    [Fact(DisplayName = "PrivateKey should throw ObjectDisposedException when read after being disposed")]
+    public void PrivateKeyShouldThrowObjectDisposedExceptionWhenReadAfterBeingDisposed()
+    {
+        // Given
+        PrivateKey candidate = new TestPrivateKey([1, 2, 3, 4]);
+
+        // When
+        candidate.Dispose();
+
+        // Then
+        Assert.Throws<ObjectDisposedException>(() => candidate.AsReadOnlyMemory());
+    }
+
+    [Fact(DisplayName = "PrivateKey should not throw when disposed more than once")]
+    public void PrivateKeyShouldNotThrowWhenDisposedMoreThanOnce()
+    {
+        // Given
+        PrivateKey candidate = new TestPrivateKey([1, 2, 3, 4]);
+
+        // When / Then
+        candidate.Dispose();
+        candidate.Dispose();
     }
 }

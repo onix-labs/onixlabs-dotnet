@@ -51,6 +51,22 @@ public static class Preconditions
         }
 
         /// <summary>
+        /// Performs a general pre-condition check that fails when the specified condition is <see langword="false"/>.
+        /// </summary>
+        /// <param name="condition">The condition to check.</param>
+        /// <param name="message">
+        /// The interpolated exception message to throw in the event that the specified condition is <see langword="false"/>,
+        /// which is only formatted when the condition is <see langword="false"/>.
+        /// </param>
+        /// <exception cref="InvalidOperationException">Thrown when the specified condition is <see langword="false"/>.</exception>
+        public static void Check(
+            bool condition,
+            [InterpolatedStringHandlerArgument(nameof(condition))] ref PreconditionInterpolatedStringHandler message)
+        {
+            if (!condition) throw new InvalidOperationException(message.ToStringAndClear());
+        }
+
+        /// <summary>
         /// Performs a general pre-condition check that fails when the specified <see cref="Result"/> is not of type <see cref="Failure"/>.
         /// </summary>
         /// <param name="result">The current <see cref="Result"/> to check.</param>
@@ -172,6 +188,24 @@ public static class Preconditions
         public static void Require(bool condition, string message = ArgumentFailed, string? parameterName = null)
         {
             if (!condition) throw new ArgumentException(message, parameterName);
+        }
+
+        /// <summary>
+        /// Performs a general pre-condition requirement that fails when the specified condition is <see langword="false"/>.
+        /// </summary>
+        /// <param name="condition">The condition to check.</param>
+        /// <param name="message">
+        /// The interpolated exception message to throw in the event that the specified condition is <see langword="false"/>,
+        /// which is only formatted when the condition is <see langword="false"/>.
+        /// </param>
+        /// <param name="parameterName">The name of the invalid parameter.</param>
+        /// <exception cref="ArgumentException">Thrown when the specified condition is <see langword="false"/>.</exception>
+        public static void Require(
+            bool condition,
+            [InterpolatedStringHandlerArgument(nameof(condition))] ref PreconditionInterpolatedStringHandler message,
+            string? parameterName = null)
+        {
+            if (!condition) throw new ArgumentException(message.ToStringAndClear(), parameterName);
         }
 
         /// <summary>

@@ -174,4 +174,38 @@ public sealed class StringBuilderExtensionTests
         // Then
         Assert.Equal("123ABCXYZ", builder.ToString());
     }
+
+    [Theory(DisplayName = "StringBuilder.TrimEnd and TrimStart should remove every repetition of a string value, and only whole repetitions")]
+    [InlineData("ababab", "ab", "", "")]
+    [InlineData("aababx", "ab", "aababx", "aababx")]
+    [InlineData("abxab", "ab", "abx", "xab")]
+    [InlineData("aaab", "ab", "aa", "aaab")]
+    [InlineData("baaa", "aa", "ba", "baaa")]
+    [InlineData("x", "xyz", "x", "x")]
+    public void StringBuilderTrimShouldRemoveEveryWholeRepetitionOfAStringValue(string value, string trim, string expectedEnd, string expectedStart)
+    {
+        // When
+        string actualEnd = new StringBuilder(value).TrimEnd(trim).ToString();
+        string actualStart = new StringBuilder(value).TrimStart(trim).ToString();
+
+        // Then
+        Assert.Equal(expectedEnd, actualEnd);
+        Assert.Equal(expectedStart, actualStart);
+    }
+
+    [Theory(DisplayName = "StringBuilder.TrimEnd and TrimStart should remove every repetition of a char value")]
+    [InlineData("aaaa", 'a', "", "")]
+    [InlineData("aabaa", 'a', "aab", "baa")]
+    [InlineData("", 'a', "", "")]
+    [InlineData("b", 'a', "b", "b")]
+    public void StringBuilderTrimShouldRemoveEveryRepetitionOfACharValue(string value, char trim, string expectedEnd, string expectedStart)
+    {
+        // When
+        string actualEnd = new StringBuilder(value).TrimEnd(trim).ToString();
+        string actualStart = new StringBuilder(value).TrimStart(trim).ToString();
+
+        // Then
+        Assert.Equal(expectedEnd, actualEnd);
+        Assert.Equal(expectedStart, actualStart);
+    }
 }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Text;
 
 namespace OnixLabs.Core.UnitTests;
@@ -75,5 +76,19 @@ public sealed class ArrayExtensionTests
 
         // Then
         Assert.Equal(expected, actual);
+    }
+
+    [Theory(DisplayName = "Array.Copy with index and count parameters should throw ArgumentOutOfRangeException outside the bounds of the array")]
+    [InlineData(-1, 2)]
+    [InlineData(4, 2)]
+    [InlineData(0, 6)]
+    [InlineData(2, -1)]
+    public void CopyWithParametersShouldThrowArgumentOutOfRangeExceptionOutsideTheBoundsOfTheArray(int index, int count)
+    {
+        // Given
+        int[] array = [1, 2, 3, 4, 5];
+
+        // When / Then
+        Assert.Throws<ArgumentOutOfRangeException>(() => array.Copy(index, count));
     }
 }

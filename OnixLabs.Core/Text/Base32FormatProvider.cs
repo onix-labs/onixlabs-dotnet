@@ -79,13 +79,24 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     /// <param name="name">The name of the enumeration entry.</param>
     /// <param name="alphabet">The alphabet of the format provider.</param>
     /// <param name="isPadded">A value indicating whether the format provider uses padding.</param>
-    private Base32FormatProvider(int value, string name, string alphabet, bool isPadded) : base(value, name) => (Alphabet, IsPadded) = (alphabet, isPadded);
+    private Base32FormatProvider(int value, string name, string alphabet, bool isPadded) : base(value, name)
+    {
+        Alphabet = alphabet;
+        IsPadded = isPadded;
+        Index = new AlphabetIndex(alphabet);
+    }
 
     /// <summary>
     /// Gets the alphabet of the current <see cref="Base32FormatProvider"/> instance.
     /// </summary>
     /// <value>The Base-32 alphabet associated with the current format provider.</value>
     public string Alphabet { get; }
+
+    /// <summary>
+    /// Gets the reverse lookup from the characters of the current alphabet to their positions in it.
+    /// </summary>
+    /// <value>The reverse lookup from the characters of the current alphabet to their positions in it.</value>
+    internal AlphabetIndex Index { get; }
 
     /// <summary>
     /// Gets a value indicating whether the current <see cref="Base32FormatProvider"/> instance uses padding.

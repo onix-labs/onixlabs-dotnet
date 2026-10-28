@@ -33,32 +33,32 @@ public interface IBaseCodec
     protected const string DecodingFormatException = "Decoding operation failed due to an invalid value or format provider.";
 
     /// <summary>
-    /// Gets a new <see cref="Base16Codec"/> instance.
+    /// Gets the shared <see cref="Base16Codec"/> instance.
     /// </summary>
-    /// <value>A newly-allocated <see cref="Base16Codec"/> instance.</value>
-    // ReSharper disable once HeapView.ObjectAllocation.Evident
-    public static Base16Codec Base16 => new();
+    /// <value>The shared <see cref="Base16Codec"/> instance, which is stateless and safe for concurrent use.</value>
+    /// <remarks>Why: every Base-16 encode, decode and format goes through this property, so it no longer allocates a codec per call.</remarks>
+    public static Base16Codec Base16 { get; } = new();
 
     /// <summary>
-    /// Gets a new <see cref="Base32Codec"/> instance.
+    /// Gets the shared <see cref="Base32Codec"/> instance.
     /// </summary>
-    /// <value>A newly-allocated <see cref="Base32Codec"/> instance.</value>
-    // ReSharper disable once HeapView.ObjectAllocation.Evident
-    public static Base32Codec Base32 => new();
+    /// <value>The shared <see cref="Base32Codec"/> instance, which is stateless and safe for concurrent use.</value>
+    /// <remarks>Why: every Base-32 encode, decode and format goes through this property, so it no longer allocates a codec per call.</remarks>
+    public static Base32Codec Base32 { get; } = new();
 
     /// <summary>
-    /// Gets a new <see cref="Base58Codec"/> instance.
+    /// Gets the shared <see cref="Base58Codec"/> instance.
     /// </summary>
-    /// <value>A newly-allocated <see cref="Base58Codec"/> instance.</value>
-    // ReSharper disable once HeapView.ObjectAllocation.Evident
-    public static Base58Codec Base58 => new();
+    /// <value>The shared <see cref="Base58Codec"/> instance, which is stateless and safe for concurrent use.</value>
+    /// <remarks>Why: every Base-58 encode, decode and format goes through this property, so it no longer allocates a codec per call.</remarks>
+    public static Base58Codec Base58 { get; } = new();
 
     /// <summary>
-    /// Gets a new <see cref="Base64Codec"/> instance.
+    /// Gets the shared <see cref="Base64Codec"/> instance.
     /// </summary>
-    /// <value>A newly-allocated <see cref="Base64Codec"/> instance.</value>
-    // ReSharper disable once HeapView.ObjectAllocation.Evident
-    public static Base64Codec Base64 => new();
+    /// <value>The shared <see cref="Base64Codec"/> instance, which is stateless and safe for concurrent use.</value>
+    /// <remarks>Why: every Base-64 encode, decode and format goes through this property, so it no longer allocates a codec per call.</remarks>
+    public static Base64Codec Base64 { get; } = new();
 
     /// <summary>
     /// Obtains a base <see cref="string"/> representation of the specified <see cref="ReadOnlySpan{T}"/> value.

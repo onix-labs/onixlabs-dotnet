@@ -290,17 +290,17 @@ public readonly partial struct Float128
     public static explicit operator double(Float128 value) => ConvertToDouble(value);
 
     /// <summary>
-    /// Converts the specified <see cref="Float128"/> value to a <see cref="decimal"/> via <see cref="double"/>.
+    /// Converts the specified <see cref="Float128"/> value to a <see cref="decimal"/>, rounding to nearest, ties-to-even.
     /// </summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>Returns the <see cref="decimal"/> closest to <paramref name="value"/>, computed through a <see cref="double"/> intermediate.</returns>
+    /// <returns>Returns the <see cref="decimal"/> closest to <paramref name="value"/>, computed exactly from its binary significand and exponent and carrying the largest scale whose mantissa fits in 96 bits, with trailing fractional zeros removed.</returns>
     /// <exception cref="OverflowException">Thrown when the value is NaN, infinite, or outside the range of <see cref="decimal"/>.</exception>
-    /// <remarks>This conversion is doubly-rounded (binary128 -> binary64 -> decimal). A native conversion will replace this once parsing is in place.</remarks>
+    /// <remarks>Values whose magnitude is below half of <c>1E-28</c> round to zero, and negative zero converts to <see cref="decimal.Zero"/>.</remarks>
     public static explicit operator decimal(Float128 value)
     {
         if (IsNaN(value)) throw new OverflowException($"Cannot convert NaN to {nameof(Decimal)}.");
         if (IsInfinity(value)) throw new OverflowException($"Cannot convert infinity to {nameof(Decimal)}.");
-        return (decimal)(double)value;
+        return Ieee754Converter.ToDecimal(value);
     }
 
     /// <summary>

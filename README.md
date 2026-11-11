@@ -14,7 +14,7 @@ At a high level, ONIXLabs provides:
 -   Security and cryptography APIs with strong typing and value semantics
 -   Infrastructure helpers that reduce boilerplate while preserving clarity
 
-Current .NET Support includes .NET 8.0, 9.0 and 10.0, and all packages are published to [Nuget](https://www.nuget.org/packages?q=onixlabs).
+Current .NET Support includes .NET 8.0, 9.0, 10.0 and 11.0, and all packages are published to [Nuget](https://www.nuget.org/packages?q=onixlabs).
 
 ## Package Overview
 

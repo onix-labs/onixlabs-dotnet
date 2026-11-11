@@ -22,7 +22,7 @@ namespace OnixLabs.Numerics.Benchmarks;
 /// Represents the entry point for the OnixLabs.Numerics benchmarks.
 /// </summary>
 /// <remarks>
-/// Run with <c>dotnet run -c Release -f net10.0 --project OnixLabs.Numerics.Benchmarks -- [arguments]</c>; arguments are passed to BenchmarkDotNet,
+/// Run with <c>dotnet run -c Release -f net11.0 --project OnixLabs.Numerics.Benchmarks -- [arguments]</c>; arguments are passed to BenchmarkDotNet,
 /// for example <c>--filter *</c> or <c>--list tree</c>. Every benchmark reports allocations as well as time. See this project's README.
 /// </remarks>
 internal static class Program

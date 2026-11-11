@@ -24,7 +24,7 @@ namespace OnixLabs.Security.Cryptography.Benchmarks;
 /// Represents the entry point for the OnixLabs.Security.Cryptography benchmarks.
 /// </summary>
 /// <remarks>
-/// Run with <c>dotnet run -c Release -f net10.0 --project OnixLabs.Security.Cryptography.Benchmarks -- [arguments]</c>. See this project's README.
+/// Run with <c>dotnet run -c Release -f net11.0 --project OnixLabs.Security.Cryptography.Benchmarks -- [arguments]</c>. See this project's README.
 /// <list type="bullet">
 /// <item><description><c>finalizers</c> prints how many finalizers run per operation for native-resource-owning paths.</description></item>
 /// <item><description>Any other arguments are passed to BenchmarkDotNet, for example <c>--filter *Ecdsa*</c> or <c>--list tree</c>.</description></item>

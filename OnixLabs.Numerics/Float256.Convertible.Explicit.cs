@@ -281,16 +281,16 @@ public readonly partial struct Float256
     /// <returns>Returns the <see cref="double"/> closest to <paramref name="value"/>, rounded to nearest, ties-to-even, saturating to ±infinity on overflow and tapering to a subnormal or signed zero on underflow.</returns>
     public static explicit operator double(Float256 value) => ConvertToDouble(value);
 
-    /// <summary>Converts the specified <see cref="Float256"/> value to a <see cref="decimal"/> via a <see cref="double"/> intermediate.</summary>
+    /// <summary>Converts the specified <see cref="Float256"/> value to a <see cref="decimal"/>, rounding to nearest, ties-to-even.</summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>Returns the <see cref="decimal"/> closest to <paramref name="value"/>, computed through a <see cref="double"/> intermediate.</returns>
+    /// <returns>Returns the <see cref="decimal"/> closest to <paramref name="value"/>, computed exactly from its binary significand and exponent and carrying the largest scale whose mantissa fits in 96 bits, with trailing fractional zeros removed.</returns>
     /// <exception cref="OverflowException">Thrown when <paramref name="value"/> is NaN, infinite, or outside the range of <see cref="decimal"/>.</exception>
-    /// <remarks>This conversion is doubly-rounded (binary256 → binary64 → decimal). A native binary-to-decimal printer will replace this once available.</remarks>
+    /// <remarks>Values whose magnitude is below half of <c>1E-28</c> round to zero, and negative zero converts to <see cref="decimal.Zero"/>.</remarks>
     public static explicit operator decimal(Float256 value)
     {
         if (IsNaN(value)) throw new OverflowException($"Cannot convert NaN to {nameof(Decimal)}.");
         if (IsInfinity(value)) throw new OverflowException($"Cannot convert infinity to {nameof(Decimal)}.");
-        return (decimal)(double)value;
+        return Ieee754Converter.ToDecimal(value);
     }
 
     /// <summary>Converts the specified <see cref="Float256"/> value to a <see cref="Float128"/> by reducing precision and rounding to nearest, ties-to-even.</summary>

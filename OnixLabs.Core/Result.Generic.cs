@@ -23,15 +23,12 @@ namespace OnixLabs.Core;
 /// Represents a result value, which signifies the presence of a value or an exception.
 /// </summary>
 /// <typeparam name="T">The type of the underlying result value.</typeparam>
-public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyncDisposable
+public closed class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyncDisposable
 {
-    // ReSharper disable once StaticMemberInGenericType, HeapView.ObjectAllocation.Evident
-    private static readonly InvalidOperationException UnrecognisedResultType = new("The type of the current result is unrecognised.");
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{T}"/> class.
     /// </summary>
-    internal Result()
+    private protected Result()
     {
     }
 
@@ -208,8 +205,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
         Success<T> success => success.Value?.GetHashCode() ?? 0,
-        Failure<T> failure => failure.Exception.GetHashCode(),
-        _ => throw UnrecognisedResultType
+        Failure<T> failure => failure.Exception.GetHashCode()
     };
 
     /// <summary>
@@ -578,8 +574,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public TResult Match<TResult>(Func<T, TResult> success, Func<Exception, TResult> failure) => this switch
     {
         Success<T> successResult => success(successResult.Value),
-        Failure<T> failureResult => failure(failureResult.Exception),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => failure(failureResult.Exception)
     };
 
     /// <summary>
@@ -596,8 +591,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async Task<TResult> MatchAsync<TResult>(Func<T, Task<TResult>> success, Func<Exception, TResult> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => await success(successResult.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        Failure<T> failureResult => failure(failureResult.Exception),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => failure(failureResult.Exception)
     };
 
     /// <summary>
@@ -614,8 +608,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, ValueTask<TResult>> success, Func<Exception, TResult> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => await success(successResult.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        Failure<T> failureResult => failure(failureResult.Exception),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => failure(failureResult.Exception)
     };
 
     /// <summary>
@@ -632,8 +625,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async Task<TResult> MatchAsync<TResult>(Func<T, CancellationToken, Task<TResult>> success, Func<Exception, TResult> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => await success(successResult.Value, cancellationToken).ConfigureAwait(false),
-        Failure<T> failureResult => failure(failureResult.Exception),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => failure(failureResult.Exception)
     };
 
     /// <summary>
@@ -650,8 +642,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, CancellationToken, ValueTask<TResult>> success, Func<Exception, TResult> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => await success(successResult.Value, cancellationToken).ConfigureAwait(false),
-        Failure<T> failureResult => failure(failureResult.Exception),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => failure(failureResult.Exception)
     };
 
     /// <summary>
@@ -668,8 +659,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async Task<TResult> MatchAsync<TResult>(Func<T, TResult> success, Func<Exception, Task<TResult>> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => success(successResult.Value),
-        Failure<T> failureResult => await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -686,8 +676,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, TResult> success, Func<Exception, ValueTask<TResult>> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => success(successResult.Value),
-        Failure<T> failureResult => await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -704,8 +693,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async Task<TResult> MatchAsync<TResult>(Func<T, TResult> success, Func<Exception, CancellationToken, Task<TResult>> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => success(successResult.Value),
-        Failure<T> failureResult => await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -722,8 +710,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, TResult> success, Func<Exception, CancellationToken, ValueTask<TResult>> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => success(successResult.Value),
-        Failure<T> failureResult => await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -740,8 +727,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async Task<TResult> MatchAsync<TResult>(Func<T, Task<TResult>> success, Func<Exception, Task<TResult>> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => await success(successResult.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        Failure<T> failureResult => await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -758,8 +744,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, ValueTask<TResult>> success, Func<Exception, ValueTask<TResult>> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => await success(successResult.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        Failure<T> failureResult => await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -776,8 +761,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async Task<TResult> MatchAsync<TResult>(Func<T, CancellationToken, Task<TResult>> success, Func<Exception, CancellationToken, Task<TResult>> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => await success(successResult.Value, cancellationToken).ConfigureAwait(false),
-        Failure<T> failureResult => await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -794,8 +778,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, CancellationToken, ValueTask<TResult>> success, Func<Exception, CancellationToken, ValueTask<TResult>> failure, CancellationToken cancellationToken = default) => this switch
     {
         Success<T> successResult => await success(successResult.Value, cancellationToken).ConfigureAwait(false),
-        Failure<T> failureResult => await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false),
-        _ => throw UnrecognisedResultType
+        Failure<T> failureResult => await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -1267,8 +1250,7 @@ public abstract class Result<T> : IValueEquatable<Result<T>>, IDisposable, IAsyn
     {
         // ReSharper disable once HeapView.PossibleBoxingAllocation
         Success<T> success => success.Value?.ToString() ?? string.Empty,
-        Failure<T> failure => failure.Exception.Message,
-        _ => throw UnrecognisedResultType
+        Failure<T> failure => failure.Exception.Message
     };
 }
 

@@ -23,7 +23,7 @@ namespace OnixLabs.Core;
 /// Represents an optional value, which signifies the presence or absence of a value.
 /// </summary>
 /// <typeparam name="T">The type of the underlying optional value.</typeparam>
-public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnull
+public closed class Optional<T> : IValueEquatable<Optional<T>> where T : notnull
 {
     /// <summary>
     /// The shared <see cref="None{T}"/> singleton instance representing an absent optional value.
@@ -34,7 +34,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     /// <summary>
     /// Initializes a new instance of the <see cref="Optional{T}"/> class.
     /// </summary>
-    internal Optional()
+    private protected Optional()
     {
     }
 
@@ -202,7 +202,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
             case Some<T> someOptional:
                 some?.Invoke(someOptional.Value);
                 break;
-            default:
+            case None<T>:
                 none?.Invoke();
                 break;
         }
@@ -222,7 +222,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
                 if (some is not null)
                     await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case None<T>:
                 none?.Invoke();
                 break;
         }
@@ -242,7 +242,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
                 if (some is not null)
                     await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case None<T>:
                 none?.Invoke();
                 break;
         }
@@ -262,7 +262,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
                 if (some is not null)
                     await some(someOptional.Value, cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case None<T>:
                 none?.Invoke();
                 break;
         }
@@ -282,7 +282,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
                 if (some is not null)
                     await some(someOptional.Value, cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case None<T>:
                 none?.Invoke();
                 break;
         }
@@ -301,7 +301,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
             case Some<T> someOptional:
                 some?.Invoke(someOptional.Value);
                 break;
-            default:
+            case None<T>:
                 if (none is not null)
                     await none().WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
@@ -321,7 +321,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
             case Some<T> someOptional:
                 some?.Invoke(someOptional.Value);
                 break;
-            default:
+            case None<T>:
                 if (none is not null)
                     await none().WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
@@ -341,7 +341,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
             case Some<T> someOptional:
                 some?.Invoke(someOptional.Value);
                 break;
-            default:
+            case None<T>:
                 if (none is not null)
                     await none(cancellationToken).ConfigureAwait(false);
                 break;
@@ -361,7 +361,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
             case Some<T> someOptional:
                 some?.Invoke(someOptional.Value);
                 break;
-            default:
+            case None<T>:
                 if (none is not null)
                     await none(cancellationToken).ConfigureAwait(false);
                 break;
@@ -382,7 +382,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
                 if (some is not null)
                     await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case None<T>:
                 if (none is not null)
                     await none().WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
@@ -403,7 +403,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
                 if (some is not null)
                     await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case None<T>:
                 if (none is not null)
                     await none().WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
@@ -424,7 +424,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
                 if (some is not null)
                     await some(someOptional.Value, cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case None<T>:
                 if (none is not null)
                     await none(cancellationToken).ConfigureAwait(false);
                 break;
@@ -445,7 +445,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
                 if (some is not null)
                     await some(someOptional.Value, cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case None<T>:
                 if (none is not null)
                     await none(cancellationToken).ConfigureAwait(false);
                 break;
@@ -465,7 +465,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public TResult Match<TResult>(Func<T, TResult> some, Func<TResult> none) => this switch
     {
         Some<T> someOptional => some.Invoke(someOptional.Value),
-        _ => none.Invoke()
+        None<T> => none.Invoke()
     };
 
     /// <summary>
@@ -482,7 +482,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<TResult> MatchAsync<TResult>(Func<T, Task<TResult>> some, Func<TResult> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => none()
+        None<T> => none()
     };
 
     /// <summary>
@@ -499,7 +499,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, ValueTask<TResult>> some, Func<TResult> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => none()
+        None<T> => none()
     };
 
     /// <summary>
@@ -516,7 +516,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<TResult> MatchAsync<TResult>(Func<T, CancellationToken, Task<TResult>> some, Func<TResult> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => await some(someOptional.Value, cancellationToken).ConfigureAwait(false),
-        _ => none()
+        None<T> => none()
     };
 
     /// <summary>
@@ -533,7 +533,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, CancellationToken, ValueTask<TResult>> some, Func<TResult> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => await some(someOptional.Value, cancellationToken).ConfigureAwait(false),
-        _ => none()
+        None<T> => none()
     };
 
     /// <summary>
@@ -550,7 +550,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<TResult> MatchAsync<TResult>(Func<T, TResult> some, Func<Task<TResult>> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => some(someOptional.Value),
-        _ => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
+        None<T> => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -567,7 +567,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, TResult> some, Func<ValueTask<TResult>> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => some(someOptional.Value),
-        _ => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
+        None<T> => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -584,7 +584,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<TResult> MatchAsync<TResult>(Func<T, TResult> some, Func<CancellationToken, Task<TResult>> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => some(someOptional.Value),
-        _ => await none(cancellationToken).ConfigureAwait(false)
+        None<T> => await none(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -601,7 +601,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, TResult> some, Func<CancellationToken, ValueTask<TResult>> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => some(someOptional.Value),
-        _ => await none(cancellationToken).ConfigureAwait(false)
+        None<T> => await none(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -618,7 +618,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<TResult> MatchAsync<TResult>(Func<T, Task<TResult>> some, Func<Task<TResult>> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
+        None<T> => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -635,7 +635,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, ValueTask<TResult>> some, Func<ValueTask<TResult>> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => await some(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
+        None<T> => await none().WaitAsync(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -652,7 +652,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<TResult> MatchAsync<TResult>(Func<T, CancellationToken, Task<TResult>> some, Func<CancellationToken, Task<TResult>> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => await some(someOptional.Value, cancellationToken).ConfigureAwait(false),
-        _ => await none(cancellationToken).ConfigureAwait(false)
+        None<T> => await none(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -669,7 +669,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<TResult> MatchAsync<TResult>(Func<T, CancellationToken, ValueTask<TResult>> some, Func<CancellationToken, ValueTask<TResult>> none, CancellationToken cancellationToken = default) => this switch
     {
         Some<T> someOptional => await some(someOptional.Value, cancellationToken).ConfigureAwait(false),
-        _ => await none(cancellationToken).ConfigureAwait(false)
+        None<T> => await none(cancellationToken).ConfigureAwait(false)
     };
 
     /// <summary>
@@ -684,7 +684,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public Optional<TResult> Select<TResult>(Func<T, TResult> selector) where TResult : notnull => this switch
     {
         Some<T> someOptional => selector(someOptional.Value),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -700,7 +700,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<Optional<TResult>> SelectAsync<TResult>(Func<T, Task<TResult>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
     {
         Some<T> someOptional => await selector(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -716,7 +716,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<Optional<TResult>> SelectAsync<TResult>(Func<T, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
     {
         Some<T> someOptional => await selector(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -732,7 +732,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<Optional<TResult>> SelectAsync<TResult>(Func<T, CancellationToken, Task<TResult>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
     {
         Some<T> someOptional => await selector(someOptional.Value, cancellationToken).ConfigureAwait(false),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -748,7 +748,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<Optional<TResult>> SelectAsync<TResult>(Func<T, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
     {
         Some<T> someOptional => await selector(someOptional.Value, cancellationToken).ConfigureAwait(false),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -763,7 +763,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public Optional<TResult> SelectMany<TResult>(Func<T, Optional<TResult>> selector) where TResult : notnull => this switch
     {
         Some<T> someOptional => selector(someOptional.Value),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -779,7 +779,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<Optional<TResult>> SelectManyAsync<TResult>(Func<T, Task<Optional<TResult>>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
     {
         Some<T> someOptional => await selector(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -795,7 +795,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<Optional<TResult>> SelectManyAsync<TResult>(Func<T, ValueTask<Optional<TResult>>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
     {
         Some<T> someOptional => await selector(someOptional.Value).WaitAsync(cancellationToken).ConfigureAwait(false),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -811,7 +811,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async Task<Optional<TResult>> SelectManyAsync<TResult>(Func<T, CancellationToken, Task<Optional<TResult>>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
     {
         Some<T> someOptional => await selector(someOptional.Value, cancellationToken).ConfigureAwait(false),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>
@@ -827,7 +827,7 @@ public abstract class Optional<T> : IValueEquatable<Optional<T>> where T : notnu
     public async ValueTask<Optional<TResult>> SelectManyAsync<TResult>(Func<T, CancellationToken, ValueTask<Optional<TResult>>> selector, CancellationToken cancellationToken = default) where TResult : notnull => this switch
     {
         Some<T> someOptional => await selector(someOptional.Value, cancellationToken).ConfigureAwait(false),
-        _ => Optional<TResult>.None
+        None<T> => Optional<TResult>.None
     };
 
     /// <summary>

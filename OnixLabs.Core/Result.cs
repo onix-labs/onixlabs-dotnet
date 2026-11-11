@@ -22,12 +22,12 @@ namespace OnixLabs.Core;
 /// <summary>
 /// Represents a result value, which signifies the presence of a value or an exception.
 /// </summary>
-public abstract class Result : IValueEquatable<Result>
+public closed class Result : IValueEquatable<Result>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> class.
     /// </summary>
-    internal Result()
+    private protected Result()
     {
     }
 
@@ -226,7 +226,7 @@ public abstract class Result : IValueEquatable<Result>
             case Failure failureResult:
                 failure?.Invoke(failureResult.Exception);
                 break;
-            default:
+            case Success _:
                 success?.Invoke();
                 break;
         }
@@ -245,7 +245,7 @@ public abstract class Result : IValueEquatable<Result>
             case Failure failureResult:
                 failure?.Invoke(failureResult.Exception);
                 break;
-            default:
+            case Success _:
                 if (success is not null)
                     await success().WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
@@ -265,7 +265,7 @@ public abstract class Result : IValueEquatable<Result>
             case Failure failureResult:
                 failure?.Invoke(failureResult.Exception);
                 break;
-            default:
+            case Success _:
                 if (success is not null)
                     await success().WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
@@ -285,7 +285,7 @@ public abstract class Result : IValueEquatable<Result>
             case Failure failureResult:
                 failure?.Invoke(failureResult.Exception);
                 break;
-            default:
+            case Success _:
                 if (success is not null)
                     await success(cancellationToken).ConfigureAwait(false);
                 break;
@@ -305,7 +305,7 @@ public abstract class Result : IValueEquatable<Result>
             case Failure failureResult:
                 failure?.Invoke(failureResult.Exception);
                 break;
-            default:
+            case Success _:
                 if (success is not null)
                     await success(cancellationToken).ConfigureAwait(false);
                 break;
@@ -326,7 +326,7 @@ public abstract class Result : IValueEquatable<Result>
                 if (failure is not null)
                     await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case Success _:
                 success?.Invoke();
                 break;
         }
@@ -346,7 +346,7 @@ public abstract class Result : IValueEquatable<Result>
                 if (failure is not null)
                     await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case Success _:
                 success?.Invoke();
                 break;
         }
@@ -366,7 +366,7 @@ public abstract class Result : IValueEquatable<Result>
                 if (failure is not null)
                     await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case Success _:
                 success?.Invoke();
                 break;
         }
@@ -386,7 +386,7 @@ public abstract class Result : IValueEquatable<Result>
                 if (failure is not null)
                     await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case Success _:
                 success?.Invoke();
                 break;
         }
@@ -406,7 +406,7 @@ public abstract class Result : IValueEquatable<Result>
                 if (failure is not null)
                     await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case Success _:
                 if (success is not null)
                     await success().WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
@@ -427,7 +427,7 @@ public abstract class Result : IValueEquatable<Result>
                 if (failure is not null)
                     await failure(failureResult.Exception).WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case Success _:
                 if (success is not null)
                     await success().WaitAsync(cancellationToken).ConfigureAwait(false);
                 break;
@@ -448,7 +448,7 @@ public abstract class Result : IValueEquatable<Result>
                 if (failure is not null)
                     await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case Success _:
                 if (success is not null)
                     await success(cancellationToken).ConfigureAwait(false);
                 break;
@@ -469,7 +469,7 @@ public abstract class Result : IValueEquatable<Result>
                 if (failure is not null)
                     await failure(failureResult.Exception, cancellationToken).ConfigureAwait(false);
                 break;
-            default:
+            case Success _:
                 if (success is not null)
                     await success(cancellationToken).ConfigureAwait(false);
                 break;

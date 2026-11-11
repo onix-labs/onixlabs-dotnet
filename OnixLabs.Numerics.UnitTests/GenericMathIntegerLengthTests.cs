@@ -44,7 +44,6 @@ public sealed class GenericMathIntegerLengthTests
     [InlineData(1, 1)]
     [InlineData(10, 2)]
     [InlineData(100, 3)]
-    [InlineData(byte.MinValue, 1)]
     [InlineData(byte.MaxValue, 3)]
     public void GenericMathIntegerLengthShouldProduceExpectedResultByte(byte value, int expected)
     {
@@ -85,7 +84,6 @@ public sealed class GenericMathIntegerLengthTests
     [InlineData(100, 3)]
     [InlineData(1000, 4)]
     [InlineData(10000, 5)]
-    [InlineData(ushort.MinValue, 1)]
     [InlineData(ushort.MaxValue, 5)]
     public void GenericMathIntegerLengthShouldProduceExpectedResultUInt16(ushort value, int expected)
     {
@@ -141,7 +139,6 @@ public sealed class GenericMathIntegerLengthTests
     [InlineData(10000000, 8)]
     [InlineData(100000000, 9)]
     [InlineData(1000000000, 10)]
-    [InlineData(uint.MinValue, 1)]
     [InlineData(uint.MaxValue, 10)]
     public void GenericMathIntegerLengthShouldProduceExpectedResultUInt32(uint value, int expected)
     {
@@ -225,7 +222,6 @@ public sealed class GenericMathIntegerLengthTests
     [InlineData(100000000000000000, 18)]
     [InlineData(1000000000000000000, 19)]
     [InlineData(10000000000000000000, 20)]
-    [InlineData(ulong.MinValue, 1)]
     [InlineData(ulong.MaxValue, 20)]
     public void GenericMathIntegerLengthShouldProduceExpectedResultUInt64(ulong value, int expected)
     {

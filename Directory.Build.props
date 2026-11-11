@@ -35,7 +35,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests'))">
-        <PackageReference Include="xunit.v3" Version="3.2.0"/>
+        <PackageReference Include="xunit.v3" Version="4.0.2"/>
         <Using Include="Xunit"/>
     </ItemGroup>
 
@@ -54,7 +54,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
-        <PackageReference Include="xunit.v3.extensibility.core" Version="3.2.0"/>
+        <PackageReference Include="xunit.v3.extensibility.core" Version="4.0.2"/>
         <Using Include="System"/>
         <Using Include="System.Collections.Generic"/>
         <Using Include="System.Reflection"/>

@@ -10,16 +10,16 @@ Always run in Release, for one target framework:
 
 ```sh
 # Everything
-dotnet run -c Release -f net10.0 --project OnixLabs.Core.Benchmarks -- --filter '*'
+dotnet run -c Release -f net11.0 --project OnixLabs.Core.Benchmarks -- --filter '*'
 
 # One class or method
-dotnet run -c Release -f net10.0 --project OnixLabs.Core.Benchmarks -- --filter '*Codec*'
+dotnet run -c Release -f net11.0 --project OnixLabs.Core.Benchmarks -- --filter '*Codec*'
 
 # Compare runtimes
-dotnet run -c Release -f net10.0 --project OnixLabs.Core.Benchmarks -- --filter '*Codec*' --runtimes net8.0 net10.0
+dotnet run -c Release -f net11.0 --project OnixLabs.Core.Benchmarks -- --filter '*Codec*' --runtimes net8.0 net10.0
 
 # List what exists
-dotnet run -c Release -f net10.0 --project OnixLabs.Core.Benchmarks -- --list tree
+dotnet run -c Release -f net11.0 --project OnixLabs.Core.Benchmarks -- --list tree
 ```
 
 Benchmark on a quiet machine. Other CPU-heavy work, including another project's benchmarks, changes clock speed, cache and memory bandwidth enough to skew results. Discard a run that overlapped other load rather than patching it.

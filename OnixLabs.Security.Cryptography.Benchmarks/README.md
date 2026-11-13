@@ -10,16 +10,16 @@ Always run in Release, for one target framework:
 
 ```sh
 # Everything
-dotnet run -c Release -f net10.0 --project OnixLabs.Security.Cryptography.Benchmarks -- --filter '*'
+dotnet run -c Release -f net11.0 --project OnixLabs.Security.Cryptography.Benchmarks -- --filter '*'
 
 # One class or method
-dotnet run -c Release -f net10.0 --project OnixLabs.Security.Cryptography.Benchmarks -- --filter '*Ecdsa*'
+dotnet run -c Release -f net11.0 --project OnixLabs.Security.Cryptography.Benchmarks -- --filter '*Ecdsa*'
 
 # Compare runtimes
-dotnet run -c Release -f net10.0 --project OnixLabs.Security.Cryptography.Benchmarks -- --filter '*Ecdsa*' --runtimes net8.0 net10.0
+dotnet run -c Release -f net11.0 --project OnixLabs.Security.Cryptography.Benchmarks -- --filter '*Ecdsa*' --runtimes net8.0 net10.0
 
 # List what exists
-dotnet run -c Release -f net10.0 --project OnixLabs.Security.Cryptography.Benchmarks -- --list tree
+dotnet run -c Release -f net11.0 --project OnixLabs.Security.Cryptography.Benchmarks -- --list tree
 ```
 
 Benchmark on a quiet machine. Other CPU-heavy work, including another project's benchmarks, changes clock speed, cache and memory bandwidth enough to skew results. Discard a run that overlapped other load rather than patching it.
@@ -27,7 +27,7 @@ Benchmark on a quiet machine. Other CPU-heavy work, including another project's 
 ## Finalizer report
 
 ```sh
-dotnet run -c Release -f net10.0 --project OnixLabs.Security.Cryptography.Benchmarks -- finalizers
+dotnet run -c Release -f net11.0 --project OnixLabs.Security.Cryptography.Benchmarks -- finalizers
 ```
 
 This prints how many finalizers run per operation for each scenario that owns native resources: signing, verification, key import, key agreement and secrets. It counts the runtime's own `GCFinalizersEnd` events. Every scenario should read **0.00**. Anything else means a native handle reached the finalizer instead of being disposed, which costs CPU on the finalizer thread under load (see [#156](https://github.com/onix-labs/onixlabs-dotnet/issues/156)).

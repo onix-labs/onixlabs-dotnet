@@ -4,6 +4,6 @@
         <ProjectReference Include="..\OnixLabs.DependencyInjection.UnitTests.Data\OnixLabs.DependencyInjection.UnitTests.Data.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.13.1" />
+      <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.7.0" />
     </ItemGroup>
 </Project>

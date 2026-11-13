@@ -171,4 +171,12 @@ public sealed class Float256ConvertibleImplicitTests
         Assert.Equal(doubleWide.Bits.UpperBits, actual.Bits.UpperBits);
         Assert.Equal(doubleWide.Bits.LowerBits, actual.Bits.LowerBits);
     }
+
+    [Fact(DisplayName = "Float256 implicit conversion from decimal should round-trip a non-dyadic decimal value")]
+    public void Float256ImplicitFromDecimalShouldRoundTripNonDyadicValue()
+    {
+        const decimal value = 0.1m;
+        Float256 wide = value;
+        Assert.Equal(value, (decimal)wide);
+    }
 }

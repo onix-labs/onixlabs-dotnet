@@ -22,34 +22,39 @@ namespace OnixLabs.Numerics.UnitTests;
 public sealed class NumericExtensionsTests
 {
     [Theory(DisplayName = "Decimal.GetUnscaledValue should produce the expected result (decimal values)")]
-    [InlineData(0, 0)]
-    [InlineData(1, 1)]
-    [InlineData(-1, -1)]
-    [InlineData(0.000000001, 1)]
-    [InlineData(-0.000000001, -1)]
-    [InlineData(123456789, 123456789)]
-    [InlineData(12345678.9, 123456789)]
-    [InlineData(1234567.89, 123456789)]
-    [InlineData(123456.789, 123456789)]
-    [InlineData(12345.6789, 123456789)]
-    [InlineData(1234.56789, 123456789)]
-    [InlineData(123.456789, 123456789)]
-    [InlineData(12.3456789, 123456789)]
-    [InlineData(1.23456789, 123456789)]
-    [InlineData(-123456789, -123456789)]
-    [InlineData(-12345678.9, -123456789)]
-    [InlineData(-1234567.89, -123456789)]
-    [InlineData(-123456.789, -123456789)]
-    [InlineData(-12345.6789, -123456789)]
-    [InlineData(-1234.56789, -123456789)]
-    [InlineData(-123.456789, -123456789)]
-    [InlineData(-12.3456789, -123456789)]
-    [InlineData(-1.23456789, -123456789)]
-    [InlineData(1.000000001, 1000000001)]
-    public void DecimalGetUnscaledValueShouldProduceExpectedResultDecimal(decimal value, BigInteger expected)
+    [InlineData("0", 0)]
+    [InlineData("1", 1)]
+    [InlineData("-1", -1)]
+    [InlineData("0.000000001", 1)]
+    [InlineData("-0.000000001", -1)]
+    [InlineData("123456789", 123456789)]
+    [InlineData("12345678.9", 123456789)]
+    [InlineData("1234567.89", 123456789)]
+    [InlineData("123456.789", 123456789)]
+    [InlineData("12345.6789", 123456789)]
+    [InlineData("1234.56789", 123456789)]
+    [InlineData("123.456789", 123456789)]
+    [InlineData("12.3456789", 123456789)]
+    [InlineData("1.23456789", 123456789)]
+    [InlineData("-123456789", -123456789)]
+    [InlineData("-12345678.9", -123456789)]
+    [InlineData("-1234567.89", -123456789)]
+    [InlineData("-123456.789", -123456789)]
+    [InlineData("-12345.6789", -123456789)]
+    [InlineData("-1234.56789", -123456789)]
+    [InlineData("-123.456789", -123456789)]
+    [InlineData("-12.3456789", -123456789)]
+    [InlineData("-1.23456789", -123456789)]
+    [InlineData("1.000000001", 1000000001)]
+    public void DecimalGetUnscaledValueShouldProduceExpectedResultDecimal(string value, BigInteger expected)
     {
+        // Why: the rows are strings so that each one is the decimal literal it reads as. Passed as doubles, xunit would convert them
+        // at run time, and .NET 11 makes that conversion exact, turning 1.23456789 into 1.2345678899999998900938180668.
+        // Given
+        decimal parsed = decimal.Parse(value, CultureInfo.InvariantCulture);
+
         // When
-        BigInteger actual = value.GetUnscaledValue();
+        BigInteger actual = parsed.GetUnscaledValue();
 
         // Then
         Assert.Equal(expected, actual);

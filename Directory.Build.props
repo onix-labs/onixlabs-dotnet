@@ -11,9 +11,9 @@
 
     <!--GLOBAL-->
     <PropertyGroup>
-        <Version>16.1.0</Version>
-        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-        <LangVersion>14</LangVersion>
+        <Version>16.2.0</Version>
+        <TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
+        <LangVersion>15</LangVersion>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <Authors>ONIXLabs</Authors>
@@ -35,7 +35,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests'))">
-        <PackageReference Include="xunit.v3" Version="3.2.0"/>
+        <PackageReference Include="xunit.v3" Version="4.0.2"/>
         <Using Include="Xunit"/>
     </ItemGroup>
 
@@ -54,7 +54,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.UnitTests.Data'))">
-        <PackageReference Include="xunit.v3.extensibility.core" Version="3.2.0"/>
+        <PackageReference Include="xunit.v3.extensibility.core" Version="4.0.2"/>
         <Using Include="System"/>
         <Using Include="System.Collections.Generic"/>
         <Using Include="System.Reflection"/>

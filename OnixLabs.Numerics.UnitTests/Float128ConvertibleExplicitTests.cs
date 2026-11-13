@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Globalization;
 using System.Numerics;
 
 namespace OnixLabs.Numerics.UnitTests;
@@ -234,5 +235,94 @@ public sealed class Float128ConvertibleExplicitTests
     {
         Assert.Throws<OverflowException>(() => (decimal)Float128.NaN);
         Assert.Throws<OverflowException>(() => (decimal)Float128.PositiveInfinity);
+    }
+
+    [Theory(DisplayName = "Float128 to decimal should round-trip decimal values with up to 29 significant digits and keep their shortest scale")]
+    [InlineData("0.1")]
+    [InlineData("-0.1")]
+    [InlineData("0.5")]
+    [InlineData("123.456")]
+    [InlineData("0.3333333333333333333333333333")]
+    [InlineData("7.9228162514264337593543950335")]
+    [InlineData("12345678901234567890.123456789")]
+    [InlineData("0.0000000000000000000000000001")]
+    [InlineData("79228162514264337593543950335")]
+    [InlineData("-79228162514264337593543950335")]
+    public void Float128ToDecimalShouldRoundTripDecimalValues(string text)
+    {
+        // Oracle: decimal.Parse of the literal. A decimal with at most 29 significant digits lies within 2^-113 relative of its
+        // nearest binary128 value, far inside half a unit of its own last place, so the exact conversion must recover it.
+        decimal expected = decimal.Parse(text, CultureInfo.InvariantCulture);
+        Float128 wide = expected;
+
+        decimal actual = (decimal)wide;
+
+        Assert.Equal(expected, actual);
+        Assert.Equal(text, actual.ToString(CultureInfo.InvariantCulture));
+    }
+
+    [Fact(DisplayName = "Float128 to decimal should expose the exact binary value of a double rather than its shortest representation")]
+    public void Float128ToDecimalShouldUseExactBinaryValueOfDouble()
+    {
+        // Oracle: the binary64 nearest to 0.1 is exactly 0.1000000000000000055511151231257827021181583404541015625;
+        // at decimal's 28 fractional digits the 29th digit (2) rounds down.
+        Float128 wide = 0.1;
+
+        decimal actual = (decimal)wide;
+
+        Assert.Equal(decimal.Parse("0.1000000000000000055511151231", CultureInfo.InvariantCulture), actual);
+    }
+
+    [Theory(DisplayName = "Float128 to decimal should round to nearest at 28 fractional digits")]
+    [InlineData(1, 3, "0.3333333333333333333333333333")]
+    [InlineData(2, 3, "0.6666666666666666666666666667")]
+    [InlineData(1, 7, "0.1428571428571428571428571429")]
+    public void Float128ToDecimalShouldRoundQuotientsToNearest(int numerator, int denominator, string expected)
+    {
+        // Oracle: the exact quotients 1/3, 2/3 and 1/7 are 0.333…, 0.666… and 0.142857 142857 142857 142857 1428|57…;
+        // the binary128 quotient differs from them by less than 1E-33, which cannot move the 28th digit.
+        Float128 quotient = (Float128)numerator / denominator;
+
+        decimal actual = (decimal)quotient;
+
+        Assert.Equal(decimal.Parse(expected, CultureInfo.InvariantCulture), actual);
+    }
+
+    [Theory(DisplayName = "Float128 to decimal should round magnitudes below half of 1E-28 to zero and above it to 1E-28")]
+    [InlineData(1E-30, "0")]
+    [InlineData(4E-29, "0")]
+    [InlineData(6E-29, "0.0000000000000000000000000001")]
+    [InlineData(-6E-29, "-0.0000000000000000000000000001")]
+    public void Float128ToDecimalShouldRoundTinyMagnitudes(double value, string expected)
+    {
+        Float128 wide = value;
+
+        decimal actual = (decimal)wide;
+
+        Assert.Equal(decimal.Parse(expected, CultureInfo.InvariantCulture), actual);
+    }
+
+    [Fact(DisplayName = "Float128 to decimal should convert negative zero and the smallest subnormals to zero")]
+    public void Float128ToDecimalShouldConvertNegativeZeroAndEpsilonToZero()
+    {
+        Assert.Equal(decimal.Zero, (decimal)Float128.NegativeZero);
+        Assert.Equal(decimal.Zero, (decimal)Float128.Epsilon);
+        Assert.Equal(decimal.Zero, (decimal)(-Float128.Epsilon));
+    }
+
+    [Fact(DisplayName = "Float128 to decimal should fit values that round below 2^96 and throw once the magnitude rounds to 2^96")]
+    public void Float128ToDecimalShouldThrowWhenMagnitudeRoundsToTwoToThe96()
+    {
+        Float128 limit = Float128.ScaleB(Float128.One, 96);
+        Float128 largestDecimal = decimal.MaxValue;
+        Float128 roundsDown = limit - (Float128)0.75;
+        Float128 tiesToEven = limit - (Float128)0.5;
+
+        Assert.Equal(decimal.MaxValue, (decimal)largestDecimal);
+        Assert.Equal(decimal.MaxValue, (decimal)roundsDown);
+        Assert.Throws<OverflowException>(() => (decimal)tiesToEven);
+        Assert.Throws<OverflowException>(() => (decimal)limit);
+        Assert.Throws<OverflowException>(() => (decimal)(-limit));
+        Assert.Throws<OverflowException>(() => (decimal)Float128.MaxValue);
     }
 }

@@ -227,6 +227,41 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
     }
 
     /// <summary>
+    /// Applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <typeparam name="TResult">The underlying type of the value produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult{T}"/> holding the value produced by the delegate if the current <see cref="ValueResult"/> is in a
+    /// successful state, and the delegate invocation is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public ValueResult<TResult> Select<TResult>(Func<TResult> selector) =>
+        exception is null ? ValueResult<TResult>.Of(selector) : ValueResult<TResult>.Failure(exception);
+
+    /// <summary>
+    /// Applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state, and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <typeparam name="TResult">The underlying type of the value of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public ValueResult<TResult> SelectMany<TResult>(Func<ValueResult<TResult>> selector)
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return selector();
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
+
+    /// <summary>
     /// Throws the underlying exception if the current <see cref="ValueResult"/> is in a failed state.
     /// </summary>
     /// <remarks>

@@ -232,9 +232,9 @@ public sealed class ValueResultTests
         int invocations = 0;
 
         // When
-        ValueResult successThenSuccess = success.Select(() => invocations++);
+        ValueResult successThenSuccess = success.Select(() => { invocations++; });
         ValueResult successThenFailure = success.Select(() => throw FailureException);
-        ValueResult failureThenSuccess = failure.Select(() => invocations++);
+        ValueResult failureThenSuccess = failure.Select(() => { invocations++; });
 
         // Then
         Assert.True(successThenSuccess.IsSuccess);

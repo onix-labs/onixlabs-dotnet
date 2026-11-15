@@ -40,7 +40,7 @@ public static class ValueResultExtensions
         /// or <see cref="ValueOptional{T}.None"/> if the result is in a failed state.
         /// </returns>
         public ValueOptional<T> GetValueOrNone() =>
-            receiver.GetValue(out T value).IsSuccess ? ValueOptional<T>.Of(value) : ValueOptional<T>.None;
+            receiver.IsSuccess ? receiver.GetValueOrDefault() : ValueOptional<T>.None;
     }
 
     /// <summary>

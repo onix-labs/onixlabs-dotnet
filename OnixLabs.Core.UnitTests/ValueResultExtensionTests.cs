@@ -314,7 +314,7 @@ public sealed class ValueResultExtensionTests
         Assert.Equal(ValueOptional<string>.Of(expectedText), actualText);
     }
 
-    [Fact(DisplayName = "ValueResult<T>.GetValueOrNone should return Some(default) when the result is Success and the value is the default of a value type", Skip = "Source bug: ValueResultExtensions.GetValueOrNone uses ValueOptional<T>.Of, which maps a successful default value (0, false) to None; ResultExtensions returns Some.")]
+    [Fact(DisplayName = "ValueResult<T>.GetValueOrNone should return Some(default) when the result is Success and the value is the default of a value type")]
     public void ValueResultGetValueOrNoneShouldReturnSomeDefaultWhenResultIsSuccessAndValueIsValueTypeDefault()
     {
         // Given
@@ -379,7 +379,7 @@ public sealed class ValueResultExtensionTests
         Assert.Equal(ValueOptional<string>.Of(expectedText), actualText);
     }
 
-    [Fact(DisplayName = "ValueResult<T>.GetValueOrNoneAsync should return Some(default) when the result is Success and the value is the default of a value type", Skip = "Source bug: ValueResultExtensions.GetValueOrNone uses ValueOptional<T>.Of, which maps a successful default value (0, false) to None; ResultExtensions returns Some.")]
+    [Fact(DisplayName = "ValueResult<T>.GetValueOrNoneAsync should return Some(default) when the result is Success and the value is the default of a value type")]
     public async Task ValueResultGetValueOrNoneAsyncShouldReturnSomeDefaultWhenResultIsSuccessAndValueIsValueTypeDefault()
     {
         // Given

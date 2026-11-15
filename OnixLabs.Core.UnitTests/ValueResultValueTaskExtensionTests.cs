@@ -314,7 +314,7 @@ public sealed class ValueResultValueTaskExtensionTests
         Assert.Equal(ValueOptional<string>.Of(expectedText), actualText);
     }
 
-    [Fact(DisplayName = "ValueTask of ValueResult<T>.GetValueOrNoneAsync should return Some(default) when the result is Success and the value is the default of a value type", Skip = "Source bug: ValueResult<T>.GetValueOrNone uses ValueOptional<T>.Of, which maps a default value to None; Result<T>.GetValueOrNone returns Some(default).")]
+    [Fact(DisplayName = "ValueTask of ValueResult<T>.GetValueOrNoneAsync should return Some(default) when the result is Success and the value is the default of a value type")]
     public async Task ValueTaskValueResultGetValueOrNoneAsyncShouldReturnSomeDefaultWhenResultIsSuccessAndValueIsValueTypeDefault()
     {
         // Given

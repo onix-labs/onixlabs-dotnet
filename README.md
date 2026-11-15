@@ -2,7 +2,7 @@
 
 # ONIXLabs .NET Library
 
-[![NET](https://github.com/onix-labs/onixlabs-dotnet/actions/workflows/dotnet.yml/badge.svg)](https://github.com/onix-labs/onixlabs-dotnet/actions/workflows/dotnet.yml)
+[![.NET](https://github.com/onix-labs/onixlabs-dotnet/actions/workflows/dotnet.yml/badge.svg)](https://github.com/onix-labs/onixlabs-dotnet/actions/workflows/dotnet.yml) [![.NET 8.0 | 9.0 | 10.0 | 11.0](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0%20%7C%2011.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet) [![C# 15](https://img.shields.io/badge/C%23-15-239120)](https://learn.microsoft.com/dotnet/csharp/whats-new/) [![NuGet](https://img.shields.io/nuget/v/OnixLabs.Core?label=NuGet&logo=nuget)](https://www.nuget.org/packages?q=onixlabs) [![License](https://img.shields.io/github/license/onix-labs/onixlabs-dotnet?label=License)](https://github.com/onix-labs/onixlabs-dotnet/blob/main/LICENSE)
 
 The ONIXLabs .NET Library is a suite of general-purpose, production-ready libraries designed to support modern application development with a strong emphasis on correctness, composability, and value semantics. They are designed to integrate cleanly into both small utilities and large-scale systems, without imposing architectural constraints or framework lock-in.
 

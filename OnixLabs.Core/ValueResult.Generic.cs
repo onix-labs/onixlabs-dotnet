@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -170,9 +169,7 @@ public readonly struct ValueResult<T> : IValueEquatable<ValueResult<T>>, ValueRe
     public static bool operator !=(ValueResult<T> left, ValueResult<T> right) => !left.Equals(right);
 
     /// <inheritdoc/>
-    public bool Equals(ValueResult<T> other) => isSuccess == other.isSuccess && (isSuccess
-        ? EqualityComparer<T>.Default.Equals(value, other.value)
-        : Equals(FailureException, other.FailureException));
+    public bool Equals(ValueResult<T> other) => ValueResultEqualityComparer<T>.Default.Equals(this, other);
 
     /// <inheritdoc/>
     public override bool Equals(object? obj) => obj is ValueResult<T> other && Equals(other);
@@ -204,13 +201,13 @@ public readonly struct ValueResult<T> : IValueEquatable<ValueResult<T>>, ValueRe
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="ValueResult{T}"/> is in a failed state,
-    /// or <see cref="None{T}"/> if the current <see cref="ValueResult{T}"/> is in a successful state.
+    /// or <see cref="ValueOptional{T}.None"/> if the current <see cref="ValueResult{T}"/> is in a successful state.
     /// </summary>
     /// <returns>
     /// Returns the underlying exception if the current <see cref="ValueResult{T}"/> is in a failed state,
-    /// or <see cref="None{T}"/> if the current <see cref="ValueResult{T}"/> is in a successful state.
+    /// or <see cref="ValueOptional{T}.None"/> if the current <see cref="ValueResult{T}"/> is in a successful state.
     /// </returns>
-    public Optional<Exception> GetExceptionOrNone() => ExceptionOrDefault;
+    public ValueOptional<Exception> GetExceptionOrNone() => ExceptionOrDefault;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="ValueResult{T}"/> is in a failed state,
@@ -250,6 +247,21 @@ public readonly struct ValueResult<T> : IValueEquatable<ValueResult<T>>, ValueRe
     {
         Throw();
         return value;
+    }
+
+    /// <summary>
+    /// Gets the underlying value of the current <see cref="ValueResult{T}"/> as an <see langword="out"/> parameter.
+    /// </summary>
+    /// <param name="value">
+    /// When this method returns, contains the value of the current <see cref="ValueResult{T}"/> if it is in a successful state;
+    /// otherwise, the default value of <typeparamref name="T"/>.
+    /// </param>
+    /// <returns>Returns the current <see cref="ValueResult{T}"/>.</returns>
+    public ValueResult<T> GetValue(out T value)
+    {
+        // Why: matches Result<T>.GetValue, which also reports default(T) for a failure through a non-nullable out parameter.
+        value = isSuccess ? this.value : default!;
+        return this;
     }
 
     /// <summary>

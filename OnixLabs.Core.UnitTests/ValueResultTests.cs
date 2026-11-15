@@ -137,8 +137,8 @@ public sealed class ValueResultTests
         ValueResult failure = ValueResult.Failure(FailureException);
 
         // When / Then
-        Assert.Equal(Optional<Exception>.None, success.GetExceptionOrNone());
-        Assert.Equal(Optional<Exception>.Some(FailureException), failure.GetExceptionOrNone());
+        Assert.Equal(ValueOptional<Exception>.None, success.GetExceptionOrNone());
+        Assert.Equal(ValueOptional<Exception>.Some(FailureException), failure.GetExceptionOrNone());
     }
 
     [Fact(DisplayName = "ValueResult.GetExceptionOrThrow should produce the expected result")]

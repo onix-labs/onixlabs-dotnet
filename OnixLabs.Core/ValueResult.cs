@@ -153,13 +153,13 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="ValueResult"/> is in a failed state,
-    /// or <see cref="None{T}"/> if the current <see cref="ValueResult"/> is in a successful state.
+    /// or <see cref="ValueOptional{T}.None"/> if the current <see cref="ValueResult"/> is in a successful state.
     /// </summary>
     /// <returns>
     /// Returns the underlying exception if the current <see cref="ValueResult"/> is in a failed state,
-    /// or <see cref="None{T}"/> if the current <see cref="ValueResult"/> is in a successful state.
+    /// or <see cref="ValueOptional{T}.None"/> if the current <see cref="ValueResult"/> is in a successful state.
     /// </returns>
-    public Optional<Exception> GetExceptionOrNone() => exception;
+    public ValueOptional<Exception> GetExceptionOrNone() => exception;
 
     /// <summary>
     /// Gets the underlying exception if the current <see cref="ValueResult"/> is in a failed state,

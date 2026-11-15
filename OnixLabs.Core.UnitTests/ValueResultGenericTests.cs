@@ -146,8 +146,8 @@ public sealed class ValueResultGenericTests
         Assert.Same(FailureException, failure.GetExceptionOrDefault());
         Assert.Same(defaultException, success.GetExceptionOrDefault(defaultException));
         Assert.Same(FailureException, failure.GetExceptionOrDefault(defaultException));
-        Assert.Equal(Optional<Exception>.None, success.GetExceptionOrNone());
-        Assert.Equal(Optional<Exception>.Some(FailureException), failure.GetExceptionOrNone());
+        Assert.Equal(ValueOptional<Exception>.None, success.GetExceptionOrNone());
+        Assert.Equal(ValueOptional<Exception>.Some(FailureException), failure.GetExceptionOrNone());
         Assert.Same(FailureException, failure.GetExceptionOrThrow());
         Assert.Throws<InvalidOperationException>(() => success.GetExceptionOrThrow());
     }

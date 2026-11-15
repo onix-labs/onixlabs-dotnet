@@ -17,6 +17,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OnixLabs.Core;
 
@@ -77,6 +79,52 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
         try
         {
             action();
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously creates a new <see cref="ValueResult"/>, which is successful if the task returned by the specified function completes;
+    /// otherwise, a failed result containing the exception thrown by the specified function.
+    /// </summary>
+    /// <param name="func">The function to invoke to obtain a successful or failed result.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult"/> if the task returned by the specified function completes;
+    /// otherwise, a failed <see cref="ValueResult"/> containing the exception thrown by the specified function.
+    /// </returns>
+    public static async Task<ValueResult> OfAsync(Func<Task> func, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await func().WaitAsync(cancellationToken).ConfigureAwait(false);
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously creates a new <see cref="ValueResult"/>, which is successful if the task returned by the specified function completes;
+    /// otherwise, a failed result containing the exception thrown by the specified function.
+    /// </summary>
+    /// <param name="func">The function to invoke to obtain a successful or failed result.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests, which is passed to the invoked function.</param>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult"/> if the task returned by the specified function completes;
+    /// otherwise, a failed <see cref="ValueResult"/> containing the exception thrown by the specified function.
+    /// </returns>
+    public static async Task<ValueResult> OfAsync(Func<CancellationToken, Task> func, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await func(cancellationToken).ConfigureAwait(false);
             return Success();
         }
         catch (Exception exception)
@@ -183,6 +231,278 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
     }
 
     /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="Task"/> that represents the asynchronous operation.</returns>
+    public async Task MatchAsync(Func<Task>? success = null, Action<Exception>? failure = null, CancellationToken cancellationToken = default)
+    {
+        if (exception is null)
+        {
+            if (success is not null)
+                await success().WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            failure?.Invoke(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="ValueTask"/> that represents the asynchronous operation.</returns>
+    public async ValueTask MatchAsync(Func<ValueTask>? success = null, Action<Exception>? failure = null, CancellationToken cancellationToken = default)
+    {
+        if (exception is null)
+        {
+            if (success is not null)
+                await success().WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            failure?.Invoke(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="Task"/> that represents the asynchronous operation.</returns>
+    public async Task MatchAsync(
+        Func<CancellationToken, Task>? success = null,
+        Action<Exception>? failure = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is null)
+        {
+            if (success is not null)
+                await success(cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            failure?.Invoke(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="ValueTask"/> that represents the asynchronous operation.</returns>
+    public async ValueTask MatchAsync(
+        Func<CancellationToken, ValueTask>? success = null,
+        Action<Exception>? failure = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is null)
+        {
+            if (success is not null)
+                await success(cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            failure?.Invoke(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="Task"/> that represents the asynchronous operation.</returns>
+    public async Task MatchAsync(Action? success = null, Func<Exception, Task>? failure = null, CancellationToken cancellationToken = default)
+    {
+        if (exception is null)
+        {
+            success?.Invoke();
+        }
+        else
+        {
+            if (failure is not null)
+                await failure(exception).WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="ValueTask"/> that represents the asynchronous operation.</returns>
+    public async ValueTask MatchAsync(Action? success = null, Func<Exception, ValueTask>? failure = null, CancellationToken cancellationToken = default)
+    {
+        if (exception is null)
+        {
+            success?.Invoke();
+        }
+        else
+        {
+            if (failure is not null)
+                await failure(exception).WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="Task"/> that represents the asynchronous operation.</returns>
+    public async Task MatchAsync(
+        Action? success = null,
+        Func<Exception, CancellationToken, Task>? failure = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is null)
+        {
+            success?.Invoke();
+        }
+        else
+        {
+            if (failure is not null)
+                await failure(exception, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="ValueTask"/> that represents the asynchronous operation.</returns>
+    public async ValueTask MatchAsync(
+        Action? success = null,
+        Func<Exception, CancellationToken, ValueTask>? failure = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is null)
+        {
+            success?.Invoke();
+        }
+        else
+        {
+            if (failure is not null)
+                await failure(exception, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="Task"/> that represents the asynchronous operation.</returns>
+    public async Task MatchAsync(Func<Task>? success = null, Func<Exception, Task>? failure = null, CancellationToken cancellationToken = default)
+    {
+        if (exception is null)
+        {
+            if (success is not null)
+                await success().WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            if (failure is not null)
+                await failure(exception).WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="ValueTask"/> that represents the asynchronous operation.</returns>
+    public async ValueTask MatchAsync(
+        Func<ValueTask>? success = null,
+        Func<Exception, ValueTask>? failure = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is null)
+        {
+            if (success is not null)
+                await success().WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            if (failure is not null)
+                await failure(exception).WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="Task"/> that represents the asynchronous operation.</returns>
+    public async Task MatchAsync(
+        Func<CancellationToken, Task>? success = null,
+        Func<Exception, CancellationToken, Task>? failure = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is null)
+        {
+            if (success is not null)
+                await success(cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            if (failure is not null)
+                await failure(exception, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously executes the action that matches the state of the current <see cref="ValueResult"/>.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Returns a <see cref="ValueTask"/> that represents the asynchronous operation.</returns>
+    public async ValueTask MatchAsync(
+        Func<CancellationToken, ValueTask>? success = null,
+        Func<Exception, CancellationToken, ValueTask>? failure = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is null)
+        {
+            if (success is not null)
+                await success(cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            if (failure is not null)
+                await failure(exception, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
     /// Executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
     /// </summary>
     /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
@@ -195,6 +515,226 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
     public TResult Match<TResult>(Func<TResult> success, Func<Exception, TResult> failure) => exception is null ? success() : failure(exception);
 
     /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(
+        Func<Task<TResult>> success,
+        Func<Exception, TResult> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? failure(exception) : await success().WaitAsync(cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(
+        Func<ValueTask<TResult>> success,
+        Func<Exception, TResult> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? failure(exception) : await success().WaitAsync(cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(
+        Func<CancellationToken, Task<TResult>> success,
+        Func<Exception, TResult> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? failure(exception) : await success(cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(
+        Func<CancellationToken, ValueTask<TResult>> success,
+        Func<Exception, TResult> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? failure(exception) : await success(cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(
+        Func<TResult> success,
+        Func<Exception, Task<TResult>> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? await failure(exception).WaitAsync(cancellationToken).ConfigureAwait(false) : success();
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(
+        Func<TResult> success,
+        Func<Exception, ValueTask<TResult>> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? await failure(exception).WaitAsync(cancellationToken).ConfigureAwait(false) : success();
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(
+        Func<TResult> success,
+        Func<Exception, CancellationToken, Task<TResult>> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? await failure(exception, cancellationToken).ConfigureAwait(false) : success();
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(
+        Func<TResult> success,
+        Func<Exception, CancellationToken, ValueTask<TResult>> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? await failure(exception, cancellationToken).ConfigureAwait(false) : success();
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(
+        Func<Task<TResult>> success,
+        Func<Exception, Task<TResult>> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null
+            ? await failure(exception).WaitAsync(cancellationToken).ConfigureAwait(false)
+            : await success().WaitAsync(cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(
+        Func<ValueTask<TResult>> success,
+        Func<Exception, ValueTask<TResult>> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null
+            ? await failure(exception).WaitAsync(cancellationToken).ConfigureAwait(false)
+            : await success().WaitAsync(cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async Task<TResult> MatchAsync<TResult>(
+        Func<CancellationToken, Task<TResult>> success,
+        Func<Exception, CancellationToken, Task<TResult>> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? await failure(exception, cancellationToken).ConfigureAwait(false) : await success(cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// Asynchronously executes the delegate that matches the state of the current <see cref="ValueResult"/> and returns its result.
+    /// </summary>
+    /// <param name="success">The delegate to execute when the current <see cref="ValueResult"/> is in a successful state.</param>
+    /// <param name="failure">The delegate to execute when the current <see cref="ValueResult"/> is in a failed state.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the result produced by the matching delegate.</typeparam>
+    /// <returns>
+    /// Returns the result of the <paramref name="success"/> delegate if the current <see cref="ValueResult"/> is in a successful state;
+    /// otherwise, returns the result of the <paramref name="failure"/> delegate.
+    /// </returns>
+    public async ValueTask<TResult> MatchAsync<TResult>(
+        Func<CancellationToken, ValueTask<TResult>> success,
+        Func<Exception, CancellationToken, ValueTask<TResult>> failure,
+        CancellationToken cancellationToken = default
+    ) =>
+        exception is not null ? await failure(exception, cancellationToken).ConfigureAwait(false) : await success(cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
     /// Applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
     /// </summary>
     /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
@@ -203,6 +743,102 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
     /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
     /// </returns>
     public ValueResult Select(Action selector) => IsFailure ? this : Of(selector);
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult"/> if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
+    /// </returns>
+    public async Task<ValueResult> SelectAsync(Func<Task> selector, CancellationToken cancellationToken = default)
+    {
+        if (IsFailure) return this;
+
+        try
+        {
+            await selector().WaitAsync(cancellationToken).ConfigureAwait(false);
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult"/> if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
+    /// </returns>
+    public async ValueTask<ValueResult> SelectAsync(Func<ValueTask> selector, CancellationToken cancellationToken = default)
+    {
+        if (IsFailure) return this;
+
+        try
+        {
+            await selector().WaitAsync(cancellationToken).ConfigureAwait(false);
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult"/> if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
+    /// </returns>
+    public async Task<ValueResult> SelectAsync(Func<CancellationToken, Task> selector, CancellationToken cancellationToken = default)
+    {
+        if (IsFailure) return this;
+
+        try
+        {
+            await selector(cancellationToken).ConfigureAwait(false);
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult"/> if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
+    /// </returns>
+    public async ValueTask<ValueResult> SelectAsync(Func<CancellationToken, ValueTask> selector, CancellationToken cancellationToken = default)
+    {
+        if (IsFailure) return this;
+
+        try
+        {
+            await selector(cancellationToken).ConfigureAwait(false);
+            return Success();
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state, and returns the result it produces.
@@ -227,6 +863,102 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
     }
 
     /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state,
+    /// and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
+    /// </returns>
+    public async Task<ValueResult> SelectManyAsync(Func<Task<ValueResult>> selector, CancellationToken cancellationToken = default)
+    {
+        if (IsFailure) return this;
+
+        try
+        {
+            return await selector().WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state,
+    /// and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
+    /// </returns>
+    public async ValueTask<ValueResult> SelectManyAsync(Func<ValueTask<ValueResult>> selector, CancellationToken cancellationToken = default)
+    {
+        if (IsFailure) return this;
+
+        try
+        {
+            return await selector().WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state,
+    /// and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
+    /// </returns>
+    public async Task<ValueResult> SelectManyAsync(Func<CancellationToken, Task<ValueResult>> selector, CancellationToken cancellationToken = default)
+    {
+        if (IsFailure) return this;
+
+        try
+        {
+            return await selector(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state,
+    /// and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult"/>.
+    /// </returns>
+    public async ValueTask<ValueResult> SelectManyAsync(Func<CancellationToken, ValueTask<ValueResult>> selector, CancellationToken cancellationToken = default)
+    {
+        if (IsFailure) return this;
+
+        try
+        {
+            return await selector(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return Failure(exception);
+        }
+    }
+
+    /// <summary>
     /// Applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
     /// </summary>
     /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
@@ -237,6 +969,105 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
     /// </returns>
     public ValueResult<TResult> Select<TResult>(Func<TResult> selector) =>
         exception is null ? ValueResult<TResult>.Of(selector) : ValueResult<TResult>.Failure(exception);
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the value produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult{T}"/> holding the value produced by the delegate if the current <see cref="ValueResult"/> is in a
+    /// successful state, and the delegate invocation is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public async Task<ValueResult<TResult>> SelectAsync<TResult>(Func<Task<TResult>> selector, CancellationToken cancellationToken = default)
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return ValueResult<TResult>.Success(await selector().WaitAsync(cancellationToken).ConfigureAwait(false));
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the value produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult{T}"/> holding the value produced by the delegate if the current <see cref="ValueResult"/> is in a
+    /// successful state, and the delegate invocation is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public async ValueTask<ValueResult<TResult>> SelectAsync<TResult>(Func<ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return ValueResult<TResult>.Success(await selector().WaitAsync(cancellationToken).ConfigureAwait(false));
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the value produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult{T}"/> holding the value produced by the delegate if the current <see cref="ValueResult"/> is in a
+    /// successful state, and the delegate invocation is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public async Task<ValueResult<TResult>> SelectAsync<TResult>(Func<CancellationToken, Task<TResult>> selector, CancellationToken cancellationToken = default)
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return ValueResult<TResult>.Success(await selector(cancellationToken).ConfigureAwait(false));
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the value produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns a successful <see cref="ValueResult{T}"/> holding the value produced by the delegate if the current <see cref="ValueResult"/> is in a
+    /// successful state, and the delegate invocation is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public async ValueTask<ValueResult<TResult>> SelectAsync<TResult>(
+        Func<CancellationToken, ValueTask<TResult>> selector,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return ValueResult<TResult>.Success(await selector(cancellationToken).ConfigureAwait(false));
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
 
     /// <summary>
     /// Applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state, and returns the result it produces.
@@ -254,6 +1085,115 @@ public readonly struct ValueResult : IValueEquatable<ValueResult>, ValueResult.I
         try
         {
             return selector();
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state,
+    /// and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the value of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public async Task<ValueResult<TResult>> SelectManyAsync<TResult>(Func<Task<ValueResult<TResult>>> selector, CancellationToken cancellationToken = default)
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return await selector().WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state,
+    /// and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the value of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public async ValueTask<ValueResult<TResult>> SelectManyAsync<TResult>(
+        Func<ValueTask<ValueResult<TResult>>> selector,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return await selector().WaitAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state,
+    /// and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the value of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public async Task<ValueResult<TResult>> SelectManyAsync<TResult>(
+        Func<CancellationToken, Task<ValueResult<TResult>>> selector,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return await selector(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception exception)
+        {
+            return ValueResult<TResult>.Failure(exception);
+        }
+    }
+
+    /// <summary>
+    /// Asynchronously applies the provided selector delegate if the current <see cref="ValueResult"/> is in a successful state,
+    /// and returns the result it produces.
+    /// </summary>
+    /// <param name="selector">The delegate to apply to the current <see cref="ValueResult"/>.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The underlying type of the value of the result produced by the selector delegate.</typeparam>
+    /// <returns>
+    /// Returns the result produced by the delegate if the current <see cref="ValueResult"/> is in a successful state, and the delegate invocation
+    /// is also successful; otherwise, a failed <see cref="ValueResult{T}"/>.
+    /// </returns>
+    public async ValueTask<ValueResult<TResult>> SelectManyAsync<TResult>(
+        Func<CancellationToken, ValueTask<ValueResult<TResult>>> selector,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (exception is not null) return ValueResult<TResult>.Failure(exception);
+
+        try
+        {
+            return await selector(cancellationToken).ConfigureAwait(false);
         }
         catch (Exception exception)
         {

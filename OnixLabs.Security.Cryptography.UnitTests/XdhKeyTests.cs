@@ -19,6 +19,8 @@ using OnixLabs.Security.Cryptography.UnitTests.Data;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 
+// Why: failures are checked as any CryptographicException, not exactly that type, because .NET's X25519 on Linux throws a type derived
+// from it.
 public sealed class XdhKeyTests
 {
     [Fact(DisplayName = "X25519 DeriveSharedSecret should produce identical secrets")]
@@ -162,7 +164,7 @@ public sealed class XdhKeyTests
         Assert.Equal(shared, actual);
 
         if (flags.Contains("ZeroSharedSecret"))
-            Assert.Throws<CryptographicException>(() => key.DeriveRawSharedSecret(otherKey));
+            Assert.ThrowsAny<CryptographicException>(() => key.DeriveRawSharedSecret(otherKey));
         else
             Assert.Equal(shared, key.DeriveRawSharedSecret(otherKey).AsReadOnlySpan().ToArray());
 
@@ -172,7 +174,7 @@ public sealed class XdhKeyTests
 
             if (flags.Contains("ZeroSharedSecret"))
             {
-                Assert.Throws<CryptographicException>(() => algorithm.DeriveRawSecretAgreement(publicKey));
+                Assert.ThrowsAny<CryptographicException>(() => algorithm.DeriveRawSecretAgreement(publicKey));
             }
             else
             {
@@ -213,11 +215,11 @@ public sealed class XdhKeyTests
             using X25519 key = X25519.GenerateKey(usePlatform);
             using X25519 publicOnly = X25519.ImportPublicKey(key.ExportPublicKey(), usePlatform);
 
-            Assert.Throws<CryptographicException>(() => key.DeriveRawSecretAgreement(new byte[32]));
+            Assert.ThrowsAny<CryptographicException>(() => key.DeriveRawSecretAgreement(new byte[32]));
             Assert.Throws<ArgumentException>(() => key.DeriveRawSecretAgreement(new byte[31]));
             Assert.Throws<ArgumentException>(() => key.DeriveRawSecretAgreement(key.ExportPublicKey(), new byte[31]));
-            Assert.Throws<CryptographicException>(() => publicOnly.ExportPrivateKey());
-            Assert.Throws<CryptographicException>(() => publicOnly.DeriveRawSecretAgreement(key));
+            Assert.ThrowsAny<CryptographicException>(() => publicOnly.ExportPrivateKey());
+            Assert.ThrowsAny<CryptographicException>(() => publicOnly.DeriveRawSecretAgreement(key));
             Assert.Throws<ArgumentException>(() => X25519.ImportPrivateKey(new byte[31], usePlatform));
             Assert.Throws<ArgumentException>(() => X25519.ImportPublicKey(new byte[33], usePlatform));
 
@@ -254,8 +256,8 @@ public sealed class XdhKeyTests
         Exception? getPublicKey = Record.Exception(() => key.GetPublicKey());
 
         // Then
-        Assert.IsType<CryptographicException>(derive);
-        Assert.IsType<CryptographicException>(getPublicKey);
+        Assert.IsAssignableFrom<CryptographicException>(derive);
+        Assert.IsAssignableFrom<CryptographicException>(getPublicKey);
     }
 
     [Fact(DisplayName = "X25519 shared secret derivation should throw CryptographicException for an all-zero public key")]
@@ -270,8 +272,8 @@ public sealed class XdhKeyTests
         Exception? rawException = Record.Exception(() => key.DeriveRawSharedSecret(zero));
 
         // Then
-        Assert.IsType<CryptographicException>(hashedException);
-        Assert.IsType<CryptographicException>(rawException);
+        Assert.IsAssignableFrom<CryptographicException>(hashedException);
+        Assert.IsAssignableFrom<CryptographicException>(rawException);
     }
 
     [Fact(DisplayName = "X25519 shared secret derivation should throw CryptographicException for a public key of the wrong length")]
@@ -286,8 +288,8 @@ public sealed class XdhKeyTests
         Exception? rawException = Record.Exception(() => key.DeriveRawSharedSecret(wrongLength));
 
         // Then
-        Assert.IsType<CryptographicException>(hashedException);
-        Assert.IsType<CryptographicException>(rawException);
+        Assert.IsAssignableFrom<CryptographicException>(hashedException);
+        Assert.IsAssignableFrom<CryptographicException>(rawException);
     }
 
     [Fact(DisplayName = "X25519 shared secret derivation should throw ArgumentNullException for a null public key")]
@@ -319,8 +321,8 @@ public sealed class XdhKeyTests
         Exception? publicException = Record.Exception(() => XdhPublicKey.Import(data));
 
         // Then
-        Assert.IsType<CryptographicException>(privateException);
-        Assert.IsType<CryptographicException>(publicException);
+        Assert.IsAssignableFrom<CryptographicException>(privateException);
+        Assert.IsAssignableFrom<CryptographicException>(publicException);
     }
 
     [Fact(DisplayName = "XdhPrivateKey should be exportable and importable")]
@@ -455,7 +457,7 @@ public sealed class XdhKeyTests
         Exception? exception = Record.Exception(() => XdhPrivateKey.ImportPkcs8(ed25519));
 
         // Then
-        Assert.IsType<CryptographicException>(exception);
+        Assert.IsAssignableFrom<CryptographicException>(exception);
     }
 
     [Fact(DisplayName = "XdhPrivateKey.ImportPem should throw CryptographicException for malformed PEM")]
@@ -465,7 +467,7 @@ public sealed class XdhKeyTests
         Exception? exception = Record.Exception(() => XdhPrivateKey.ImportPem("not a PEM document"));
 
         // Then
-        Assert.IsType<CryptographicException>(exception);
+        Assert.IsAssignableFrom<CryptographicException>(exception);
     }
 
     [Fact(DisplayName = "XdhPrivateKey.GetPublicKey should return the same key each time, and throw once the key is disposed")]

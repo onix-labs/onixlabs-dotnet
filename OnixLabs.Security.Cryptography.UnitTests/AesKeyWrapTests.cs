@@ -22,6 +22,10 @@ namespace OnixLabs.Security.Cryptography.UnitTests;
 /// Tests AES Key Wrap (RFC 3394) through <see cref="Aes"/>'s key wrap methods: the library's own on .NET 8, 9 and 10, and .NET's on .NET
 /// 11. The same tests run on every target, so they show that both behave alike.
 /// </summary>
+/// <remarks>
+/// Why: failures are checked as any <see cref="CryptographicException"/>, not exactly that type, because .NET's implementation on Linux
+/// throws a type derived from it.
+/// </remarks>
 public sealed class AesKeyWrapTests
 {
     /// <summary>
@@ -111,7 +115,7 @@ public sealed class AesKeyWrapTests
             return;
         }
 
-        if (isValidLength) Assert.IsType<CryptographicException>(exception);
+        if (isValidLength) Assert.IsAssignableFrom<CryptographicException>(exception);
         else Assert.IsType<ArgumentException>(exception);
 
         Assert.All(destination, value => Assert.Equal(0, value));
@@ -133,7 +137,7 @@ public sealed class AesKeyWrapTests
         Exception? exception = Record.Exception(() => aes.TryDecryptKeyWrap(wrapped, destination, out int _));
 
         // Then
-        Assert.IsType<CryptographicException>(exception);
+        Assert.IsAssignableFrom<CryptographicException>(exception);
         Assert.Equal(new byte[key.Length], destination);
     }
 
@@ -146,7 +150,7 @@ public sealed class AesKeyWrapTests
         byte[] wrapped = sender.EncryptKeyWrap(Salt.CreateNonZero(32).AsReadOnlySpan().ToArray());
 
         // When / Then
-        Assert.Throws<CryptographicException>(() => recipient.DecryptKeyWrap(wrapped));
+        Assert.ThrowsAny<CryptographicException>(() => recipient.DecryptKeyWrap(wrapped));
     }
 
     [Theory(DisplayName = "Aes.GetKeyWrapLength should throw ArgumentOutOfRangeException for a length that cannot be wrapped")]

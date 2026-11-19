@@ -373,3 +373,4 @@ docs/
 nuget.config
 
 docs/
+.studio/*.user.json

@@ -64,6 +64,21 @@ public abstract partial class Sha3 : HashAlgorithm
     private readonly ulong[] state = new ulong[StateLanes];
 
     /// <summary>
+    /// The name of the platform's hash algorithm, if the platform's implementation is used.
+    /// </summary>
+    private readonly HashAlgorithmName platformName;
+
+    /// <summary>
+    /// The platform's implementation, or <see langword="null"/> if the managed code is used.
+    /// </summary>
+    private IncrementalHash? platform;
+
+    /// <summary>
+    /// A value indicating whether data has been appended to the platform's implementation since it was last reset.
+    /// </summary>
+    private bool isPlatformDirty;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Sha3"/> class.
     /// </summary>
     /// <param name="rateBytes">The rate in bytes of the sponge state.</param>
@@ -77,6 +92,27 @@ public abstract partial class Sha3 : HashAlgorithm
     }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="Sha3"/> class, which uses the specified platform hash algorithm where it is supported.
+    /// </summary>
+    /// <param name="rateBytes">The rate in bytes of the sponge state.</param>
+    /// <param name="delimiter">The state delimiter.</param>
+    /// <param name="bitLength">The output length of the hash in bits.</param>
+    /// <param name="platformName">The name of the platform's equivalent hash algorithm.</param>
+    /// <param name="usePlatform">Whether to use the platform's implementation; the caller has checked that it is supported.</param>
+    /// <remarks>
+    /// Why: .NET's own SHA-3 depends on the operating system's cryptography and is not available everywhere, for example on macOS. Where it
+    /// is, it is faster, so it is used; elsewhere the managed code is. Both are FIPS 202, so the results are identical.
+    /// </remarks>
+    private protected Sha3(int rateBytes, int delimiter, int bitLength, HashAlgorithmName platformName, bool usePlatform)
+        : this(rateBytes, delimiter, bitLength)
+    {
+        if (!usePlatform) return;
+
+        this.platformName = platformName;
+        platform = IncrementalHash.CreateHash(platformName);
+    }
+
+    /// <summary>
     /// Gets the sponge state as bytes, in memory order.
     /// </summary>
     /// <value>The sponge state as bytes, in memory order.</value>
@@ -87,6 +123,13 @@ public abstract partial class Sha3 : HashAlgorithm
     {
         blockSize = 0;
         Array.Clear(state);
+
+        if (platform is null || !isPlatformDirty) return;
+
+        // Why: IncrementalHash has no reset other than producing a hash, so a hash abandoned part-way is restarted with a new instance.
+        platform.Dispose();
+        platform = IncrementalHash.CreateHash(platformName);
+        isPlatformDirty = false;
     }
 
     /// <inheritdoc/>
@@ -95,6 +138,13 @@ public abstract partial class Sha3 : HashAlgorithm
     /// <inheritdoc/>
     protected override void HashCore(ReadOnlySpan<byte> source)
     {
+        if (platform is not null)
+        {
+            platform.AppendData(source);
+            isPlatformDirty = true;
+            return;
+        }
+
         Span<byte> stateBytes = StateBytes;
 
         while (!source.IsEmpty)
@@ -132,6 +182,12 @@ public abstract partial class Sha3 : HashAlgorithm
             return false;
         }
 
+        if (platform is not null)
+        {
+            isPlatformDirty = false;
+            return platform.TryGetHashAndReset(destination, out bytesWritten);
+        }
+
         Span<byte> stateBytes = StateBytes;
 
         // Apply padding to the current block
@@ -160,6 +216,18 @@ public abstract partial class Sha3 : HashAlgorithm
 
         bytesWritten = hashSizeBytes;
         return true;
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            platform?.Dispose();
+            platform = null;
+        }
+
+        base.Dispose(disposing);
     }
 
     /// <summary>

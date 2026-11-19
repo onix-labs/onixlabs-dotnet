@@ -38,6 +38,25 @@ public sealed class Base64FormatProviderTests
         Assert.Equal(expectedAlphabet, actualAlphabet);
     }
 
+    [Fact(DisplayName = "Base64FormatProvider.Url should produce the expected result")]
+    public void Base64FormatProviderUrlShouldProduceExpectedAlphabet()
+    {
+        // Given
+        const int expectedValue = 1;
+        const string expectedName = "Url";
+        const string expectedAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+        // When
+        int actualValue = Base64FormatProvider.Url.Value;
+        string actualName = Base64FormatProvider.Url.Name;
+        string actualAlphabet = Base64FormatProvider.Url.Alphabet;
+
+        // Then
+        Assert.Equal(expectedValue, actualValue);
+        Assert.Equal(expectedName, actualName);
+        Assert.Equal(expectedAlphabet, actualAlphabet);
+    }
+
     [Fact(DisplayName = "Base64FormatProvider.GetFormat should return Base64FormatProvider when the given type is Base64FormatProvider")]
     public void Base64FormatProviderShouldReturnBase64FormatProviderWhenGivenTypeIsBase64FormatProvider()
     {

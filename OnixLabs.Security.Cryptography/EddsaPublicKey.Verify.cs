@@ -22,8 +22,13 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class EddsaPublicKey
 {
     /// <inheritdoc/>
-    public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data) =>
-        Ed25519.Verify(KeyData, data, signature);
+    public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data)
+    {
+        if (KeyData.Length != Ed25519.PublicKeySizeInBytes) return false;
+
+        using Ed25519 algorithm = Ed25519.ImportPublicKey(KeyData);
+        return algorithm.VerifyData(data, signature);
+    }
 
     /// <inheritdoc/>
     public bool IsDataValid(ReadOnlySpan<byte> signature, ReadOnlySpan<byte> data, int offset, int count) =>

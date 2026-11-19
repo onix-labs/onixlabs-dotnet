@@ -8,5 +8,13 @@
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="wycheproof_eddsa_test.json"/>
+        <EmbeddedResource Include="wycheproof_x25519_test.json"/>
+        <EmbeddedResource Include="wycheproof_ecdh_secp256r1_test.json"/>
+        <EmbeddedResource Include="wycheproof_ecdh_secp384r1_test.json"/>
+        <EmbeddedResource Include="wycheproof_ecdh_secp521r1_test.json"/>
+        <EmbeddedResource Include="wycheproof_aes_wrap_test.json"/>
+        <EmbeddedResource Include="wycheproof_ecdsa_secp256k1_sha256_test.json"/>
+        <EmbeddedResource Include="wycheproof_ecdsa_secp256k1_sha256_p1363_test.json"/>
+        <EmbeddedResource Include="Jose\*.json"/>
     </ItemGroup>
 </Project>

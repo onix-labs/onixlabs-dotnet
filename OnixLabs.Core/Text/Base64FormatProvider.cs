@@ -28,6 +28,15 @@ public sealed class Base64FormatProvider : Enumeration<Base64FormatProvider>, IF
     public static readonly Base64FormatProvider Rfc4648 = new(0, nameof(Rfc4648), "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=");
 
     /// <summary>
+    /// The unpadded RFC 4648 §5 "base64url" format provider, with the URL and filename safe alphabet, as JOSE uses (RFC 7515 §2).
+    /// </summary>
+    /// <remarks>
+    /// Why: decoding is strict. Padding, whitespace, characters outside the alphabet, and unused bits that are not zero are all rejected,
+    /// so that each value has exactly one accepted encoding, as JOSE needs when it compares encoded values.
+    /// </remarks>
+    public static readonly Base64FormatProvider Url = new(1, nameof(Url), "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_");
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Base64FormatProvider"/> class.
     /// </summary>
     /// <param name="value">The value of the enumeration entry.</param>

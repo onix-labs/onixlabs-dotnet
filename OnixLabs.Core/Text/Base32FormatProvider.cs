@@ -43,9 +43,19 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     public static readonly Base32FormatProvider Crockford = new(3, nameof(Crockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", false);
 
     /// <summary>
+    /// The unpadded RFC 4648 §7 "base32hex" format provider, with the extended hex alphabet.
+    /// </summary>
+    /// <remarks>
+    /// Why: this is the same entry as <see cref="Base32Hex"/>, and keeps its name, "Base32Hex", so that looking it up by name still works.
+    /// The name becomes "ExtendedHex" in 17.0.0, when <see cref="Base32Hex"/> is removed.
+    /// </remarks>
+    public static readonly Base32FormatProvider ExtendedHex = new(4, "Base32Hex", "0123456789ABCDEFGHIJKLMNOPQRSTUV", false);
+
+    /// <summary>
     /// The unpadded Base-32 Hex format provider.
     /// </summary>
-    public static readonly Base32FormatProvider Base32Hex = new(4, nameof(Base32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV", false);
+    [Obsolete("Use Base32FormatProvider.ExtendedHex instead. Base32Hex will be removed in 17.0.0.")]
+    public static readonly Base32FormatProvider Base32Hex = ExtendedHex;
 
     /// <summary>
     /// The padded RFC 4648 Base-32 format provider.
@@ -68,9 +78,19 @@ public sealed class Base32FormatProvider : Enumeration<Base32FormatProvider>, IF
     public static readonly Base32FormatProvider PaddedCrockford = new(8, nameof(PaddedCrockford), "0123456789ABCDEFGHJKMNPQRSTVWXYZ", true);
 
     /// <summary>
+    /// The padded RFC 4648 §7 "base32hex" format provider, with the extended hex alphabet.
+    /// </summary>
+    /// <remarks>
+    /// Why: this is the same entry as <see cref="PaddedBase32Hex"/>, and keeps its name, "PaddedBase32Hex", so that looking it up by name
+    /// still works. The name becomes "PaddedExtendedHex" in 17.0.0, when <see cref="PaddedBase32Hex"/> is removed.
+    /// </remarks>
+    public static readonly Base32FormatProvider PaddedExtendedHex = new(9, "PaddedBase32Hex", "0123456789ABCDEFGHIJKLMNOPQRSTUV", true);
+
+    /// <summary>
     /// The padded Base-32 Hex format provider.
     /// </summary>
-    public static readonly Base32FormatProvider PaddedBase32Hex = new(9, nameof(PaddedBase32Hex), "0123456789ABCDEFGHIJKLMNOPQRSTUV", true);
+    [Obsolete("Use Base32FormatProvider.PaddedExtendedHex instead. PaddedBase32Hex will be removed in 17.0.0.")]
+    public static readonly Base32FormatProvider PaddedBase32Hex = PaddedExtendedHex;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Base32FormatProvider"/> class.

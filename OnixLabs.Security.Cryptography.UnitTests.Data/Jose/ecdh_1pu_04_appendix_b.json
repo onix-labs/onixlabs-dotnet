@@ -1,0 +1,53 @@
+{
+  "source": "draft-madden-jose-ecdh-1pu-04 Appendix B, https://www.ietf.org/archive/id/draft-madden-jose-ecdh-1pu-04.txt",
+  "aliceStatic": {
+    "kty": "OKP",
+    "crv": "X25519",
+    "x": "Knbm_BcdQr7WIoz-uqit9M0wbcfEr6y-9UfIZ8QnBD4",
+    "d": "i9KuFhSzEBsiv3PKVL5115OCdsqQai5nj_Flzfkw5jU"
+  },
+  "bob": {
+    "kty": "OKP",
+    "crv": "X25519",
+    "x": "BT7aR0ItXfeDAldeeOlXL_wXqp-j5FltT0vRSG16kRw",
+    "d": "1gDirl_r_Y3-qUa3WXHgEXrrEHngWThU3c9zj9A2uBg"
+  },
+  "charlie": {
+    "kty": "OKP",
+    "crv": "X25519",
+    "x": "q-LsvU772uV_2sPJhfAIq-3vnKNVefNoIlvyvg1hrnE",
+    "d": "Jcv8gklhMjC0b-lsk5onBbppWAx5ncNtbM63Jr9xBQE"
+  },
+  "aliceEphemeral": {
+    "kty": "OKP",
+    "crv": "X25519",
+    "x": "k9of_cpAajy0poW5gaixXGs9nHkwg1AFqUAFa39dyBc",
+    "d": "x8EVZH4Fwk673_mUujnliJoSrLz0zYzzCWp5GUX2fc8"
+  },
+  "cek": "__79_Pv6-fj39vX08_Lx8O_u7ezr6uno5-bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwA",
+  "iv": "AAECAwQFBgcICQoLDA0ODw",
+  "plaintext": "VGhyZWUgaXMgYSBtYWdpYyBudW1iZXIu",
+  "jwe": {
+    "protected": "eyJhbGciOiJFQ0RILTFQVStBMTI4S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYXB1IjoiUVd4cFkyVSIsImFwdiI6IlFtOWlJR0Z1WkNCRGFHRnliR2xsIiwiZXBrIjp7Imt0eSI6Ik9LUCIsImNydiI6IlgyNTUxOSIsIngiOiJrOW9mX2NwQWFqeTBwb1c1Z2FpeFhHczluSGt3ZzFBRnFVQUZhMzlkeUJjIn19",
+    "unprotected": {
+      "jku": "https://alice.example.com/keys.jwks"
+    },
+    "recipients": [
+      {
+        "header": {
+          "kid": "bob-key-2"
+        },
+        "encrypted_key": "pOMVA9_PtoRe7xXW1139NzzN1UhiFoio8lGto9cf0t8PyU-sjNXH8-LIRLycq8CHJQbDwvQeU1cSl55cQ0hGezJu2N9IY0QN"
+      },
+      {
+        "header": {
+          "kid": "2021-05-06"
+        },
+        "encrypted_key": "56GVudgRLIMEElQ7DpXsijJVRSWUSDNdbWkdV3g0GUNq6hcT_GkxwnxlPIWrTXCqRpVKQC8fe4z3PQ2YH2afvjQ28aiCTWFE"
+      }
+    ],
+    "iv": "AAECAwQFBgcICQoLDA0ODw",
+    "ciphertext": "Az2IWsISEMDJvyc5XRL-3-d-RgNBOGolCsxFFoUXFYw",
+    "tag": "HLb4fTlm8spGmij3RyOs2gJ4DpHM4hhVRwdF_hGb3WQ"
+  }
+}

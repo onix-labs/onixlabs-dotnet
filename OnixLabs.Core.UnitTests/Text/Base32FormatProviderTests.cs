@@ -107,8 +107,8 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.Base32Hex should produce the expected result")]
-    public void Base32FormatProviderBase32HexShouldProduceExpectedAlphabet()
+    [Fact(DisplayName = "Base32FormatProvider.ExtendedHex should produce the expected result")]
+    public void Base32FormatProviderExtendedHexShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 4;
@@ -117,10 +117,10 @@ public sealed class Base32FormatProviderTests
         const bool expectedPadding = false;
 
         // When
-        int actualValue = Base32FormatProvider.Base32Hex.Value;
-        string actualName = Base32FormatProvider.Base32Hex.Name;
-        string actualAlphabet = Base32FormatProvider.Base32Hex.Alphabet;
-        bool actualPadding = Base32FormatProvider.Base32Hex.IsPadded;
+        int actualValue = Base32FormatProvider.ExtendedHex.Value;
+        string actualName = Base32FormatProvider.ExtendedHex.Name;
+        string actualAlphabet = Base32FormatProvider.ExtendedHex.Alphabet;
+        bool actualPadding = Base32FormatProvider.ExtendedHex.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
@@ -217,8 +217,8 @@ public sealed class Base32FormatProviderTests
         Assert.Equal(expectedPadding, actualPadding);
     }
 
-    [Fact(DisplayName = "Base32FormatProvider.PaddedBase32Hex should produce the expected result")]
-    public void Base32FormatProviderPaddedBase32HexShouldProduceExpectedAlphabet()
+    [Fact(DisplayName = "Base32FormatProvider.PaddedExtendedHex should produce the expected result")]
+    public void Base32FormatProviderPaddedExtendedHexShouldProduceExpectedAlphabet()
     {
         // Given
         const int expectedValue = 9;
@@ -227,16 +227,33 @@ public sealed class Base32FormatProviderTests
         const bool expectedPadding = true;
 
         // When
-        int actualValue = Base32FormatProvider.PaddedBase32Hex.Value;
-        string actualName = Base32FormatProvider.PaddedBase32Hex.Name;
-        string actualAlphabet = Base32FormatProvider.PaddedBase32Hex.Alphabet;
-        bool actualPadding = Base32FormatProvider.PaddedBase32Hex.IsPadded;
+        int actualValue = Base32FormatProvider.PaddedExtendedHex.Value;
+        string actualName = Base32FormatProvider.PaddedExtendedHex.Name;
+        string actualAlphabet = Base32FormatProvider.PaddedExtendedHex.Alphabet;
+        bool actualPadding = Base32FormatProvider.PaddedExtendedHex.IsPadded;
 
         // Then
         Assert.Equal(expectedValue, actualValue);
         Assert.Equal(expectedName, actualName);
         Assert.Equal(expectedAlphabet, actualAlphabet);
         Assert.Equal(expectedPadding, actualPadding);
+    }
+
+    [Fact(DisplayName = "Base32FormatProvider.Base32Hex and PaddedBase32Hex should be the same entries as ExtendedHex and PaddedExtendedHex")]
+    public void Base32FormatProviderObsoleteHexNamesShouldBeTheSameEntriesAsExtendedHex()
+    {
+        // When
+#pragma warning disable CS0618
+        Base32FormatProvider unpadded = Base32FormatProvider.Base32Hex;
+        Base32FormatProvider padded = Base32FormatProvider.PaddedBase32Hex;
+#pragma warning restore CS0618
+
+        // Then
+        Assert.Same(Base32FormatProvider.ExtendedHex, unpadded);
+        Assert.Same(Base32FormatProvider.PaddedExtendedHex, padded);
+        Assert.Same(Base32FormatProvider.ExtendedHex, Base32FormatProvider.FromName("Base32Hex"));
+        Assert.Same(Base32FormatProvider.PaddedExtendedHex, Base32FormatProvider.FromName("PaddedBase32Hex"));
+        Assert.Equal(10, Base32FormatProvider.GetAll().Count);
     }
 
     [Fact(DisplayName = "Base32FormatProvider.GetFormat should return Base32FormatProvider when the given type is Base32FormatProvider")]

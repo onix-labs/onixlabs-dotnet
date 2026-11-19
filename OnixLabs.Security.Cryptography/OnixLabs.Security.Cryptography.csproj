@@ -8,6 +8,7 @@
     <ItemGroup>
         <ProjectReference Include="..\OnixLabs.Core\OnixLabs.Core.csproj"/>
         <InternalsVisibleTo Include="OnixLabs.Security.Cryptography.UnitTests"/>
+        <InternalsVisibleTo Include="OnixLabs.Security.Cryptography.Benchmarks"/>
         <Using Include="OnixLabs.Core.Preconditions" Static="True"/>
     </ItemGroup>
     <!-- Why: Pkcs8PrivateKeyInfo is not in the shared framework on any target, so each target takes the package from its own runtime's servicing line. -->

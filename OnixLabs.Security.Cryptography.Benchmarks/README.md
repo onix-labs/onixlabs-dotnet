@@ -1,6 +1,6 @@
 # OnixLabs.Security.Cryptography.Benchmarks
 
-BenchmarkDotNet benchmarks for OnixLabs.Security.Cryptography: ECDSA and Ed25519 signing and verification, hashing, and Merkle trees, plus a finalizer report for native-resource hygiene. Every benchmark reports allocations as well as time.
+BenchmarkDotNet benchmarks for OnixLabs.Security.Cryptography: ECDSA and Ed25519 signing and verification, X25519 and ECDH key agreement, secp256k1 verification, the JOSE symmetric primitives (Concat KDF, ECDH-1PU, AES Key Wrap, AES-CBC-HMAC-SHA2), JOSE itself (base64url, JWK, JWS and JWE), hashing, and Merkle trees, plus a finalizer report for native-resource hygiene. Every benchmark reports allocations as well as time.
 
 `Directory.Build.props` configures any project ending in `.Benchmarks` as an executable that references BenchmarkDotNet. It is neither packed nor run as a test. CI builds it, so it cannot rot, but never runs it.
 

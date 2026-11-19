@@ -24,8 +24,8 @@ public sealed partial class EddsaPrivateKey
     /// <inheritdoc/>
     public EddsaPublicKey GetPublicKey()
     {
-        Span<byte> seed = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
-        seed = seed[..Length];
+        Span<byte> seed = stackalloc byte[Ed25519.PrivateKeySizeInBytes];
+        RequireSeedLength();
 
         try
         {
@@ -53,10 +53,24 @@ public sealed partial class EddsaPrivateKey
 
         if (result is not null) return result;
 
-        result = new byte[Ed25519.PublicKeyLength];
-        Ed25519.DerivePublicKey(seed, result);
+        using Ed25519 algorithm = Ed25519.ImportPrivateKey(seed);
+        result = algorithm.ExportPublicKey();
         Volatile.Write(ref publicKey, result);
 
         return result;
+    }
+
+    /// <summary>
+    /// Checks that the current private key is a 32-byte Ed25519 seed.
+    /// </summary>
+    /// <exception cref="CryptographicException">Thrown when the current private key is not 32 bytes.</exception>
+    /// <remarks>
+    /// Why: <see cref="Ed25519"/> reports a wrong-length key as <see cref="ArgumentException"/>, but the key-type API reports invalid keys
+    /// as <see cref="CryptographicException"/>.
+    /// </remarks>
+    private void RequireSeedLength()
+    {
+        if (Length != Ed25519.PrivateKeySizeInBytes)
+            throw new CryptographicException($"Ed25519 private key must be exactly {Ed25519.PrivateKeySizeInBytes} bytes.");
     }
 }

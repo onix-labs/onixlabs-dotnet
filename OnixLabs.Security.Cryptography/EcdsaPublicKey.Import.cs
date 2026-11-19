@@ -33,8 +33,19 @@ public sealed partial class EcdsaPublicKey
         Import(data, out int _);
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// A secp256k1 SubjectPublicKeyInfo is decoded and validated by managed code on every platform, since not every platform supports the
+    /// curve; the point may be compressed, and is stored uncompressed.
+    /// </remarks>
     public static EcdsaPublicKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
+        if (Secp256k1.IsSecp256k1SubjectPublicKeyInfo(data))
+        {
+            return Secp256k1.TryDecodeSubjectPublicKeyInfo(data, out Secp256k1Point point, out bytesRead)
+                ? new EcdsaPublicKey(Secp256k1.EncodeSubjectPublicKeyInfo(point))
+                : throw new CryptographicException("The secp256k1 public key is not a valid point on the curve.");
+        }
+
         using ECDsa algorithm = ECDsa.Create();
         algorithm.ImportSubjectPublicKeyInfo(data, out bytesRead);
         return new EcdsaPublicKey(algorithm);
@@ -44,11 +55,25 @@ public sealed partial class EcdsaPublicKey
     /// Imports the key data into a new <see cref="ECDsa"/> instance.
     /// </summary>
     /// <returns>Returns a new <see cref="ECDsa"/> instance containing the imported key data.</returns>
-    /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid ECDSA public key.</exception>
+    /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid ECDSA public
+    /// key.</exception>
+    /// <remarks>
+    /// Why: macOS supports only the NIST curves, so a secp256k1 key (JOSE's <c>ES256K</c>) is imported into <see cref="Secp256k1"/>,
+    /// which is an <see cref="ECDsa"/> that uses the platform's implementation where it supports the curve, and managed code elsewhere.
+    /// </remarks>
     private ECDsa ImportKeyData()
     {
-        ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportSubjectPublicKeyInfo(KeyData, out int _);
-        return algorithm;
+        ECDsa algorithm = Secp256k1.IsSecp256k1SubjectPublicKeyInfo(KeyData) ? new Secp256k1() : ECDsa.Create();
+
+        try
+        {
+            algorithm.ImportSubjectPublicKeyInfo(KeyData, out int _);
+            return algorithm;
+        }
+        catch
+        {
+            algorithm.Dispose();
+            throw;
+        }
     }
 }

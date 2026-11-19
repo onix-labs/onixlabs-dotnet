@@ -24,15 +24,14 @@ public sealed partial class EddsaPrivateKey
     /// <inheritdoc/>
     public byte[] SignData(ReadOnlySpan<byte> data)
     {
-        Span<byte> seed = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
-        seed = seed[..Length];
+        Span<byte> seed = stackalloc byte[Ed25519.PrivateKeySizeInBytes];
+        RequireSeedLength();
 
         try
         {
             CopyTo(seed);
-            byte[] signature = new byte[Ed25519.SignatureLength];
-            Ed25519.Sign(seed, GetOrDerivePublicKey(seed), data, signature);
-            return signature;
+            using Ed25519 algorithm = Ed25519.ImportPrivateKey(seed, GetOrDerivePublicKey(seed));
+            return algorithm.SignData(data);
         }
         finally
         {

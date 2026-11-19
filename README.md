@@ -2,7 +2,7 @@
 
 # ONIXLabs .NET Library
 
-[![NET](https://github.com/onix-labs/onixlabs-dotnet/actions/workflows/dotnet.yml/badge.svg)](https://github.com/onix-labs/onixlabs-dotnet/actions/workflows/dotnet.yml)
+[![.NET](https://github.com/onix-labs/onixlabs-dotnet/actions/workflows/dotnet.yml/badge.svg)](https://github.com/onix-labs/onixlabs-dotnet/actions/workflows/dotnet.yml) [![.NET 8.0 | 9.0 | 10.0 | 11.0](https://img.shields.io/badge/.NET-8.0%20%7C%209.0%20%7C%2010.0%20%7C%2011.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download/dotnet) [![C# 15](https://img.shields.io/badge/C%23-15-239120)](https://learn.microsoft.com/dotnet/csharp/whats-new/) [![NuGet](https://img.shields.io/nuget/v/OnixLabs.Core?label=NuGet&logo=nuget)](https://www.nuget.org/packages?q=onixlabs) [![License](https://img.shields.io/github/license/onix-labs/onixlabs-dotnet?label=License)](https://github.com/onix-labs/onixlabs-dotnet/blob/main/LICENSE)
 
 The ONIXLabs .NET Library is a suite of general-purpose, production-ready libraries designed to support modern application development with a strong emphasis on correctness, composability, and value semantics. They are designed to integrate cleanly into both small utilities and large-scale systems, without imposing architectural constraints or framework lock-in.
 
@@ -40,7 +40,7 @@ Foundational primitives, patterns, and extensions that address common gaps in th
 -   Extension methods for arrays, objects, strings, comparables, random, and more
 -   Extensions for `IEnumerable`, `IEnumerable<T>`, and `IQueryable<T>`
 -   Reflection helpers for `Type`
--   Strongly typed `Base16`, `Base32`, `Base58`, and `Base64` text types
+-   Strongly typed `Base16`, `Base32`, `Base58`, and `Base64` text types, including unpadded RFC 4648 base64url (`Base64FormatProvider.Url`)
 -   Extensions for `StringBuilder` and `Encoding`
 
 ## OnixLabs.DependencyInjection
@@ -84,10 +84,20 @@ Strongly typed cryptographic primitives and structures with value semantics, des
 
 -   Public and private key abstractions (`PublicKey`, `PrivateKey`)
 -   ECDH, ECDSA, and RSA key implementations
+-   Fully managed EdDSA (Ed25519) key implementation (`EddsaPrivateKey`, `EddsaPublicKey`)
+-   X25519 Diffie-Hellman key implementation (`XdhPrivateKey`, `XdhPublicKey`) on every target framework, using .NET's own X25519 where it is supported and managed code elsewhere
+-   Raw shared secrets for key derivation (`DeriveRawSharedSecret`) as well as hashed ones (`DeriveSharedSecret`), on both ECDH and X25519 keys, with public key validation
+-   secp256k1 ECDSA signature verification (JOSE `ES256K`) through `EcdsaPublicKey` on every platform, using the platform's implementation where it supports the curve and managed code elsewhere
+-   JOSE, in the `OnixLabs.Security.Cryptography.Jose` namespace, with exactly what DIDComm Messaging v2.1 needs to sign and encrypt messages:
+    -   JSON Web Keys (`JsonWebKey`): OKP (X25519, Ed25519) and EC (P-256, P-384, P-521, secp256k1), converted to and from the library's key types, with RFC 7638 thumbprints
+    -   JSON Web Signatures (`JsonWebSignature`) in the General and Flattened JSON serializations, signing with EdDSA, ES256, ES384 and ES512, and verifying those and ES256K
+    -   JSON Web Encryption (`JsonWebEncryption`) in the General JSON serialization, with `ECDH-ES+A256KW` (anoncrypt) and `ECDH-1PU+A256KW` (authcrypt) on X25519, P-256, P-384 and P-521, and `A256CBC-HS512` or `A256GCM` content encryption, including the Concat KDF, ECDH-1PU, AES Key Wrap (RFC 3394) and AES-CBC-HMAC-SHA2 they rely on
+    -   Signing (`IJwsSigner`) and key agreement (`IJweKeyAgreement`) through interfaces, so that private keys can stay inside a key store
+    -   The JOSE Concat KDF `OtherInfo` (`JweOtherInfo`), and the DIDComm `apu` and `apv` values (`JweAgreementInfo`)
 -   Digital signature types (`DigitalSignature`, `DigitalSignatureAndPublicKey`)
 -   Cryptographic hash value types (`Hash`, `NamedHash`)
 -   Extensions for `HashAlgorithm`
--   Fully managed FIPS-202 SHA-3 implementation (SHA3-224/256/384/512, SHAKE128/256)
+-   FIPS-202 SHA-3 implementation (SHA3-224/256/384/512, SHAKE128/256) on every platform, with .NET's static `HashData` methods, using .NET's own SHA-3 where it is supported and managed code elsewhere
 -   Merkle tree implementations (`MerkleTree`, `MerkleTree<T>`)
 -   Cryptographic salt value type (`Salt`)
 -   Encrypted-in-memory secret handling (`Secret`)

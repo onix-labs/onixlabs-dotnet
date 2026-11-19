@@ -14,6 +14,7 @@
 
 using System;
 using System.Buffers;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
@@ -24,6 +25,21 @@ namespace OnixLabs.Security.Cryptography;
 // ReSharper disable MemberCanBePrivate.Global
 public sealed partial class EcdsaPublicKey : PublicKey, IEcdsaPublicKey, ISpanParsable<EcdsaPublicKey>
 {
+    /// <summary>
+    /// The marker stored in <see cref="secp256k1PublicKey"/> once the key data is known not to be a secp256k1 public key.
+    /// </summary>
+    private static readonly object NotSecp256k1 = new();
+
+    /// <summary>
+    /// The decoded secp256k1 point, as a <see cref="StrongBox{T}"/>; or <see cref="NotSecp256k1"/>; or <see langword="null"/> until the key
+    /// data is first examined.
+    /// </summary>
+    /// <remarks>
+    /// Why: decoding and validating the point would otherwise run on every verification. The key data never changes, and a reference is
+    /// published atomically, so concurrent first calls at worst decode the same point twice.
+    /// </remarks>
+    private object? secp256k1PublicKey;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="EcdsaPublicKey"/> class.
     /// </summary>
@@ -51,7 +67,8 @@ public sealed partial class EcdsaPublicKey : PublicKey, IEcdsaPublicKey, ISpanPa
     /// <summary>
     /// Initializes a new instance of the <see cref="EcdsaPublicKey"/> class.
     /// </summary>
-    /// <param name="algorithm">The <see cref="ECDsa"/> algorithm with which to initialize the <see cref="EcdsaPublicKey"/> instance.</param>
+    /// <param name="algorithm">The <see cref="ECDsa"/> algorithm with which to initialize the <see cref="EcdsaPublicKey"/>
+    /// instance.</param>
     private EcdsaPublicKey(ECDsa algorithm) : this(algorithm.ExportSubjectPublicKeyInfo())
     {
     }

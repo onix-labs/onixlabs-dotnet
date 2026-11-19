@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Formats.Asn1;
 using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
@@ -30,38 +29,16 @@ internal static class Ed25519Pkcs8
     private const string Ed25519Oid = "1.3.101.112";
 
     /// <summary>
+    /// The name of the algorithm, used in exception messages.
+    /// </summary>
+    private const string Name = "Ed25519";
+
+    /// <summary>
     /// Encodes the 32-byte Ed25519 seed as a PKCS#8 <c>PrivateKeyInfo</c> per RFC 8410 §7.
     /// </summary>
     /// <param name="seed">The 32-byte Ed25519 seed to encode.</param>
     /// <returns>Returns a new <see cref="byte"/> array containing the DER-encoded PKCS#8 PrivateKeyInfo.</returns>
-    public static byte[] EncodePrivateKey(ReadOnlySpan<byte> seed)
-    {
-        // RFC 8410: inside the outer privateKey OCTET STRING, the actual key material is itself
-        // wrapped as a DER OCTET STRING (CurvePrivateKey ::= OCTET STRING).
-        AsnWriter inner = new(AsnEncodingRules.DER);
-        inner.WriteOctetString(seed);
-        byte[] innerEncoded = inner.Encode();
-
-        AsnWriter writer = new(AsnEncodingRules.DER);
-        using (writer.PushSequence())
-        {
-            writer.WriteInteger(0); // version v1
-
-            using (writer.PushSequence())
-                writer.WriteObjectIdentifier(Ed25519Oid);
-
-            writer.WriteOctetString(innerEncoded);
-        }
-
-        try
-        {
-            return writer.Encode();
-        }
-        finally
-        {
-            CryptographicOperations.ZeroMemory(innerEncoded);
-        }
-    }
+    public static byte[] EncodePrivateKey(ReadOnlySpan<byte> seed) => Rfc8410KeyEncoding.EncodePrivateKey(Ed25519Oid, seed);
 
     /// <summary>
     /// Decodes a PKCS#8 <c>PrivateKeyInfo</c> for Ed25519 and returns the 32-byte seed.
@@ -69,63 +46,17 @@ internal static class Ed25519Pkcs8
     /// <param name="data">The DER-encoded PKCS#8 PrivateKeyInfo to decode.</param>
     /// <param name="bytesRead">When this method returns, contains the number of bytes consumed from <paramref name="data"/>.</param>
     /// <returns>Returns a new <see cref="byte"/> array containing the 32-byte Ed25519 seed.</returns>
-    /// <exception cref="CryptographicException">Thrown when the algorithm OID is not Ed25519, the structure is malformed, or the seed length is incorrect.</exception>
-    public static byte[] DecodePrivateKey(ReadOnlySpan<byte> data, out int bytesRead)
-    {
-        try
-        {
-            ReadOnlyMemory<byte> source = data.ToArray();
-            AsnReader reader = new(source, AsnEncodingRules.BER);
-            ReadOnlyMemory<byte> encodedSequence = reader.PeekEncodedValue();
-            AsnReader sequence = reader.ReadSequence();
-            bytesRead = encodedSequence.Length;
-
-            if (!sequence.TryReadInt32(out int version) || version is not (0 or 1))
-                throw new CryptographicException("PKCS#8 PrivateKeyInfo has unsupported version.");
-
-            AsnReader algorithm = sequence.ReadSequence();
-            string oid = algorithm.ReadObjectIdentifier();
-
-            if (oid != Ed25519Oid)
-                throw new CryptographicException($"PKCS#8 PrivateKeyInfo algorithm OID is not Ed25519 (got {oid}).");
-
-            if (algorithm.HasData)
-                throw new CryptographicException("Ed25519 algorithm identifier must have no parameters.");
-
-            byte[] outer = sequence.ReadOctetString();
-            AsnReader innerReader = new(outer, AsnEncodingRules.BER);
-            byte[] seed = innerReader.ReadOctetString();
-            innerReader.ThrowIfNotEmpty();
-
-            return seed.Length == Ed25519.SeedLength
-                ? seed
-                : throw new CryptographicException($"Ed25519 seed must be {Ed25519.SeedLength} bytes (got {seed.Length}).");
-        }
-        catch (AsnContentException e)
-        {
-            throw new CryptographicException("Failed to decode PKCS#8 PrivateKeyInfo.", e);
-        }
-    }
+    /// <exception cref="CryptographicException">Thrown when the algorithm OID is not Ed25519, the structure is malformed, or the seed
+    /// length is incorrect.</exception>
+    public static byte[] DecodePrivateKey(ReadOnlySpan<byte> data, out int bytesRead) =>
+        Rfc8410KeyEncoding.DecodePrivateKey(Ed25519Oid, Name, Ed25519.SeedLength, data, out bytesRead);
 
     /// <summary>
     /// Encodes the 32-byte Ed25519 public key as a SubjectPublicKeyInfo per RFC 5280 and RFC 8410.
     /// </summary>
     /// <param name="publicKey">The 32-byte Ed25519 public key to encode.</param>
     /// <returns>Returns a new <see cref="byte"/> array containing the DER-encoded SubjectPublicKeyInfo.</returns>
-    public static byte[] EncodePublicKey(ReadOnlySpan<byte> publicKey)
-    {
-        AsnWriter writer = new(AsnEncodingRules.DER);
-
-        using (writer.PushSequence())
-        {
-            using (writer.PushSequence())
-                writer.WriteObjectIdentifier(Ed25519Oid);
-
-            writer.WriteBitString(publicKey);
-        }
-
-        return writer.Encode();
-    }
+    public static byte[] EncodePublicKey(ReadOnlySpan<byte> publicKey) => Rfc8410KeyEncoding.EncodePublicKey(Ed25519Oid, publicKey);
 
     /// <summary>
     /// Decodes a SubjectPublicKeyInfo for Ed25519 and returns the 32-byte public key.
@@ -133,38 +64,8 @@ internal static class Ed25519Pkcs8
     /// <param name="data">The DER-encoded SubjectPublicKeyInfo to decode.</param>
     /// <param name="bytesRead">When this method returns, contains the number of bytes consumed from <paramref name="data"/>.</param>
     /// <returns>Returns a new <see cref="byte"/> array containing the 32-byte Ed25519 public key.</returns>
-    /// <exception cref="CryptographicException">Thrown when the algorithm OID is not Ed25519, the structure is malformed, or the public-key length is incorrect.</exception>
-    public static byte[] DecodePublicKey(ReadOnlySpan<byte> data, out int bytesRead)
-    {
-        try
-        {
-            ReadOnlyMemory<byte> source = data.ToArray();
-            AsnReader reader = new(source, AsnEncodingRules.BER);
-            ReadOnlyMemory<byte> encodedSequence = reader.PeekEncodedValue();
-            AsnReader sequence = reader.ReadSequence();
-            bytesRead = encodedSequence.Length;
-
-            AsnReader algorithm = sequence.ReadSequence();
-            string oid = algorithm.ReadObjectIdentifier();
-
-            if (oid != Ed25519Oid)
-                throw new CryptographicException($"SubjectPublicKeyInfo algorithm OID is not Ed25519 (got {oid}).");
-
-            if (algorithm.HasData)
-                throw new CryptographicException("Ed25519 algorithm identifier must have no parameters.");
-
-            byte[] publicKey = sequence.ReadBitString(out int unusedBitCount);
-
-            if (unusedBitCount != 0)
-                throw new CryptographicException("Ed25519 public-key BIT STRING must have zero unused bits.");
-
-            return publicKey.Length == Ed25519.PublicKeyLength
-                ? publicKey
-                : throw new CryptographicException($"Ed25519 public key must be {Ed25519.PublicKeyLength} bytes (got {publicKey.Length}).");
-        }
-        catch (AsnContentException e)
-        {
-            throw new CryptographicException("Failed to decode SubjectPublicKeyInfo.", e);
-        }
-    }
+    /// <exception cref="CryptographicException">Thrown when the algorithm OID is not Ed25519, the structure is malformed, or the public-key
+    /// length is incorrect.</exception>
+    public static byte[] DecodePublicKey(ReadOnlySpan<byte> data, out int bytesRead) =>
+        Rfc8410KeyEncoding.DecodePublicKey(Ed25519Oid, Name, Ed25519.PublicKeyLength, data, out bytesRead);
 }

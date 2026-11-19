@@ -18,9 +18,16 @@ namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EcdsaPublicKey
 {
+    /// <summary>
+    /// The RFC 7468 PEM label used for SubjectPublicKeyInfo-encoded public keys.
+    /// </summary>
+    private const string PublicKeyLabel = "PUBLIC KEY";
+
     /// <inheritdoc/>
     public byte[] Export()
     {
+        if (TryGetSecp256k1PublicKey(out Secp256k1Point point)) return Secp256k1.EncodeSubjectPublicKeyInfo(point);
+
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportSubjectPublicKeyInfo();
     }
@@ -28,6 +35,9 @@ public sealed partial class EcdsaPublicKey
     /// <inheritdoc/>
     public string ExportPem()
     {
+        if (TryGetSecp256k1PublicKey(out Secp256k1Point point))
+            return PemEncoding.WriteString(PublicKeyLabel, Secp256k1.EncodeSubjectPublicKeyInfo(point));
+
         using ECDsa algorithm = ImportKeyData();
         return algorithm.ExportSubjectPublicKeyInfoPem();
     }

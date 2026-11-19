@@ -139,6 +139,53 @@ public sealed class Ed25519FieldElementTests
         Assert.Empty(failures);
     }
 
+    [Theory(DisplayName = "Ed25519FieldElement.ConditionalSwap should exchange the elements only when the swap bit is set")]
+    [InlineData(0UL)]
+    [InlineData(1UL)]
+    public void ConditionalSwapShouldExchangeOnlyWhenTheSwapBitIsSet(ulong swap)
+    {
+        // Given
+        Random random = new(Seed: 7748);
+        byte[] aBytes = RandomBytes(random);
+        byte[] bBytes = RandomBytes(random);
+        Ed25519FieldElement a = Ed25519FieldElement.FromBytes(aBytes);
+        Ed25519FieldElement b = Ed25519FieldElement.FromBytes(bBytes);
+
+        // When
+        Ed25519FieldElement.ConditionalSwap(ref a, ref b, swap);
+
+        // Then
+        Assert.Equal(ToInteger(swap == 1 ? bBytes : aBytes), ToInteger(a));
+        Assert.Equal(ToInteger(swap == 1 ? aBytes : bBytes), ToInteger(b));
+    }
+
+    [Fact(DisplayName = "Ed25519FieldElement.MultiplyA24 should match BigInteger multiplication by 121665 modulo p")]
+    public void A24MultiplicationShouldMatchBigInteger()
+    {
+        // Given
+        Random random = new(Seed: 121665);
+        List<string> failures = [];
+
+        // When
+        for (int index = 0; index < RandomCaseCount; index++)
+        {
+            byte[] aBytes = RandomBytes(random);
+            byte[] bBytes = RandomBytes(random);
+            Ed25519FieldElement a = Ed25519FieldElement.FromBytes(aBytes);
+            Ed25519FieldElement b = Ed25519FieldElement.FromBytes(bBytes);
+            BigInteger ai = ToInteger(aBytes);
+            BigInteger bi = ToInteger(bBytes);
+
+            // Why: the X25519 ladder computes AA + a24 * E, where AA is a product and E a difference, so this checks the widest limbs.
+            Check(failures, index, "a24*(a-b)", 121665 * (ai - bi), Ed25519FieldElement.MultiplyA24(a - b));
+            Ed25519FieldElement ladderTerm = Ed25519FieldElement.Square(a) + Ed25519FieldElement.MultiplyA24(a - b);
+            Check(failures, index, "a^2+a24*(a-b)", ai * ai + 121665 * (ai - bi), ladderTerm);
+        }
+
+        // Then
+        Assert.Empty(failures);
+    }
+
     /// <summary>
     /// Records a failure when the specified field element does not equal the specified integer modulo p.
     /// </summary>

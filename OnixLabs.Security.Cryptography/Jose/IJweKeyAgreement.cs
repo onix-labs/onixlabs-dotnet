@@ -19,8 +19,7 @@ namespace OnixLabs.Security.Cryptography.Jose;
 
 /// <summary>
 /// Defines one party's side of an ECDH key agreement, which lets the agreement be computed wherever the private key is kept, such as inside
-/// a
-/// key store.
+/// a key store.
 /// </summary>
 public interface IJweKeyAgreement
 {
@@ -37,8 +36,7 @@ public interface IJweKeyAgreement
     /// <param name="cancellationToken">A token used to cancel the operation.</param>
     /// <returns>
     /// Returns the raw X25519 output, or the x-coordinate of the shared point for a NIST curve. Implementations must reject a public key
-    /// that
-    /// is not on the curve, and an all-zero X25519 output.
+    /// that is not on the curve, and an all-zero X25519 output.
     /// </returns>
     ValueTask<Secret> DeriveSharedSecretAsync(JsonWebKey otherPartyPublicKey, CancellationToken cancellationToken = default);
 }

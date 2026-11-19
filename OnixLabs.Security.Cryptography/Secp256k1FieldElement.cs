@@ -158,9 +158,8 @@ internal readonly struct Secp256k1FieldElement : IEquatable<Secp256k1FieldElemen
     /// <returns>Returns the product of the specified field elements modulo p.</returns>
     /// <remarks>
     /// Why: the 4 × 4 schoolbook product is unrolled, with <see cref="Math.BigMul(ulong, ulong, out ulong)"/> and explicit carries, so that
-    /// every
-    /// limb stays in a register. It is the inner operation of verification. The previous loop over spans of <see cref="UInt128"/> made
-    /// secp256k1 verification markedly slower; the result is the same 512-bit product.
+    /// every limb stays in a register. It is the inner operation of verification. The previous loop over spans of <see cref="UInt128"/>
+    /// made secp256k1 verification markedly slower; the result is the same 512-bit product.
     /// </remarks>
     public static Secp256k1FieldElement operator *(in Secp256k1FieldElement left, in Secp256k1FieldElement right)
     {
@@ -357,8 +356,7 @@ internal readonly struct Secp256k1FieldElement : IEquatable<Secp256k1FieldElemen
 
     /// <summary>
     /// Computes the 128-bit value <paramref name="left"/> · <paramref name="right"/> + <paramref name="first"/> +
-    /// <paramref name="second"/>,
-    /// which cannot overflow.
+    /// <paramref name="second"/>, which cannot overflow.
     /// </summary>
     /// <param name="left">The first factor.</param>
     /// <param name="right">The second factor.</param>

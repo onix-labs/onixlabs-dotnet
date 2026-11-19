@@ -23,9 +23,9 @@ public sealed partial class XdhPrivateKey
     /// <inheritdoc/>
     public static XdhPrivateKey Import(ReadOnlySpan<byte> data)
     {
-        if (data.Length != X25519.KeyLength)
+        if (data.Length != X25519.PrivateKeySizeInBytes)
         {
-            throw new CryptographicException($"X25519 private key must be exactly {X25519.KeyLength} bytes.");
+            throw new CryptographicException($"X25519 private key must be exactly {X25519.PrivateKeySizeInBytes} bytes.");
         }
         return new XdhPrivateKey(data);
     }
@@ -34,7 +34,7 @@ public sealed partial class XdhPrivateKey
     public static XdhPrivateKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
         XdhPrivateKey key = Import(data);
-        bytesRead = X25519.KeyLength;
+        bytesRead = X25519.PrivateKeySizeInBytes;
         return key;
     }
 
@@ -44,4 +44,33 @@ public sealed partial class XdhPrivateKey
     /// <inheritdoc/>
     public static XdhPrivateKey Import(IBinaryConvertible data, out int bytesRead) =>
         Import(data.AsReadOnlySpan(), out bytesRead);
+
+    /// <summary>
+    /// Imports the key data of the current private key into a new <see cref="X25519"/> instance.
+    /// </summary>
+    /// <returns>Returns a new <see cref="X25519"/> instance, which the caller must dispose.</returns>
+    /// <exception cref="CryptographicException">Thrown when the key data is not 32 bytes.</exception>
+    /// <remarks>
+    /// Why: as <c>EcdhPrivateKey</c> hands its work to <see cref="ECDiffieHellman"/>, this key hands its work to <see cref="X25519"/>,
+    /// which uses the platform's implementation where it is supported. The key-type API reports invalid keys as
+    /// <see cref="CryptographicException"/>, so the length is checked here, before <see cref="X25519"/> would report it as an
+    /// <see cref="ArgumentException"/>.
+    /// </remarks>
+    private X25519 ImportKeyData()
+    {
+        if (Length != X25519.PrivateKeySizeInBytes)
+            throw new CryptographicException($"X25519 private key must be exactly {X25519.PrivateKeySizeInBytes} bytes.");
+
+        Span<byte> keyData = stackalloc byte[X25519.PrivateKeySizeInBytes];
+
+        try
+        {
+            CopyTo(keyData);
+            return X25519.ImportPrivateKey(keyData);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(keyData);
+        }
+    }
 }

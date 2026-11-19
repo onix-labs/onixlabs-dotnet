@@ -23,9 +23,9 @@ public sealed partial class EddsaPrivateKey
     /// <inheritdoc/>
     public static EddsaPrivateKey Import(ReadOnlySpan<byte> data)
     {
-        if (data.Length != Ed25519.SeedLength)
+        if (data.Length != Ed25519.PrivateKeySizeInBytes)
         {
-            throw new CryptographicException($"Ed25519 private key must be exactly {Ed25519.SeedLength} bytes.");
+            throw new CryptographicException($"Ed25519 private key must be exactly {Ed25519.PrivateKeySizeInBytes} bytes.");
         }
         return new EddsaPrivateKey(data);
     }
@@ -34,7 +34,7 @@ public sealed partial class EddsaPrivateKey
     public static EddsaPrivateKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
         EddsaPrivateKey key = Import(data);
-        bytesRead = Ed25519.SeedLength;
+        bytesRead = Ed25519.PrivateKeySizeInBytes;
         return key;
     }
 

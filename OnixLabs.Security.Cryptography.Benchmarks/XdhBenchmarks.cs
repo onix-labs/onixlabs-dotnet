@@ -21,13 +21,17 @@ namespace OnixLabs.Security.Cryptography.Benchmarks;
 /// Represents benchmarks for X25519 key creation, public key derivation and key agreement.
 /// </summary>
 /// <remarks>
-/// On .NET 11, the same operations through the platform's <c>X25519DiffieHellman</c> are measured too, as a reference for the managed code.
+/// <see cref="XdhPrivateKey"/> uses the platform's <c>X25519DiffieHellman</c> where it is supported, on .NET 11, and the managed code
+/// everywhere else, so the managed code is also measured on its own. On .NET 11, the platform's implementation is measured directly too.
 /// </remarks>
 // Why: not sealed, because BenchmarkDotNet generates a class that derives from each benchmark class.
 public class XdhBenchmarks
 {
     private readonly XdhPrivateKey privateKey = XdhPrivateKey.Create();
     private readonly XdhPublicKey otherPublicKey = XdhPrivateKey.Create().GetPublicKey();
+    private readonly X25519 managedKey = X25519.GenerateKey(usePlatform: false);
+    private readonly byte[] managedOtherPublicKey = X25519.GenerateKey(usePlatform: false).ExportPublicKey();
+    private readonly byte[] sharedSecret = new byte[X25519.SecretAgreementSizeInBytes];
 #if NET11_0_OR_GREATER
     private readonly X25519DiffieHellman platformKey = X25519DiffieHellman.GenerateKey();
     private readonly byte[] platformOtherPublicKey = X25519DiffieHellman.GenerateKey().ExportPublicKey();
@@ -40,6 +44,7 @@ public class XdhBenchmarks
     public void Cleanup()
     {
         privateKey.Dispose();
+        managedKey.Dispose();
 #if NET11_0_OR_GREATER
         platformKey.Dispose();
 #endif
@@ -58,6 +63,12 @@ public class XdhBenchmarks
     /// <returns>Returns the hashed shared secret.</returns>
     [Benchmark]
     public Secret DeriveSharedSecret() => privateKey.DeriveSharedSecret(otherPublicKey);
+
+    /// <summary>
+    /// Derives the raw shared secret with the managed code alone, whatever the platform supports.
+    /// </summary>
+    [Benchmark]
+    public void ManagedDeriveRawSecretAgreement() => managedKey.DeriveRawSecretAgreement(managedOtherPublicKey, sharedSecret);
 
     /// <summary>
     /// Derives the public key from the private key.

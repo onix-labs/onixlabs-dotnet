@@ -95,8 +95,7 @@ internal readonly struct Secp256k1Point
     /// <param name="point">When this method returns, contains the decoded point, if the encoding is valid.</param>
     /// <returns>
     /// Returns <see langword="true"/> if the encoding is well formed, its coordinates are in [0, p), and the point lies on the curve;
-    /// otherwise,
-    /// <see langword="false"/>. The point at infinity (<c>00</c>) is not accepted.
+    /// otherwise, <see langword="false"/>. The point at infinity (<c>00</c>) is not accepted.
     /// </returns>
     public static bool TryDecode(ReadOnlySpan<byte> encoded, out Secp256k1Point point)
     {
@@ -223,8 +222,7 @@ internal readonly struct Secp256k1Point
     /// <param name="affineX">The field element to compare with.</param>
     /// <returns>
     /// Returns <see langword="true"/> if X / Z^2 = <paramref name="affineX"/>; otherwise, <see langword="false"/>, including for the point
-    /// at
-    /// infinity.
+    /// at infinity.
     /// </returns>
     /// <remarks>Why: X / Z^2 = x exactly when X = x · Z^2, which needs two multiplications instead of a field inversion.</remarks>
     public bool HasAffineX(in Secp256k1FieldElement affineX) => !IsInfinity && x == affineX * Secp256k1FieldElement.Square(z);

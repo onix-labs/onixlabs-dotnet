@@ -44,7 +44,8 @@ public sealed partial class EcdhPrivateKey
     /// <inheritdoc/>
     public Secret DeriveRawSharedSecret(IEcdhPublicKey publicKey)
     {
-        ArgumentNullException.ThrowIfNull(publicKey);
+        // Why: an interface with static abstract members cannot be a type argument, so the check is made on the key as an object.
+        RequireNotNull<object>(publicKey);
 
         using ECDiffieHellman ourKey = ImportKeyData();
         using ECDiffieHellman theirKey = ImportValidatedPublicKey(publicKey, ourKey.ExportParameters(false).Curve);

@@ -13,9 +13,7 @@
 // limitations under the License.
 
 using System;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
-using System.Threading;
 using OnixLabs.Core;
 
 namespace OnixLabs.Security.Cryptography;
@@ -59,48 +57,23 @@ public sealed partial class EcdsaPublicKey
     /// <returns>Returns a new <see cref="ECDsa"/> instance containing the imported key data.</returns>
     /// <exception cref="CryptographicException">Thrown when the underlying key data does not represent a valid ECDSA public
     /// key.</exception>
+    /// <remarks>
+    /// Why: macOS supports only the NIST curves, so a secp256k1 key (JOSE's <c>ES256K</c>) is imported into <see cref="Secp256k1"/>,
+    /// which is an <see cref="ECDsa"/> that uses the platform's implementation where it supports the curve, and managed code elsewhere.
+    /// </remarks>
     private ECDsa ImportKeyData()
     {
-        ECDsa algorithm = ECDsa.Create();
-        algorithm.ImportSubjectPublicKeyInfo(KeyData, out int _);
-        return algorithm;
-    }
+        ECDsa algorithm = Secp256k1.IsSecp256k1SubjectPublicKeyInfo(KeyData) ? new Secp256k1() : ECDsa.Create();
 
-    /// <summary>
-    /// Attempts to decode the key data as a secp256k1 public key, which is verified by managed code rather than by the platform.
-    /// </summary>
-    /// <param name="point">When this method returns, contains the public point, if the key data is a secp256k1 public key.</param>
-    /// <returns>Returns <see langword="true"/> if the key data names the secp256k1 curve; otherwise, <see langword="false"/>.</returns>
-    /// <exception cref="CryptographicException">Thrown when the key data names the secp256k1 curve, but is not a valid point on
-    /// it.</exception>
-    /// <remarks>
-    /// Why: macOS supports only the NIST curves, so secp256k1 (JOSE's <c>ES256K</c>) is verified in managed code. It is used on every
-    /// platform, so that a secp256k1 key behaves the same everywhere.
-    /// </remarks>
-    private bool TryGetSecp256k1PublicKey(out Secp256k1Point point)
-    {
-        object? cached = Volatile.Read(ref secp256k1PublicKey);
-
-        if (cached is StrongBox<Secp256k1Point> box)
+        try
         {
-            point = box.Value;
-            return true;
+            algorithm.ImportSubjectPublicKeyInfo(KeyData, out int _);
+            return algorithm;
         }
-
-        point = Secp256k1Point.Infinity;
-
-        if (cached == NotSecp256k1) return false;
-
-        if (!Secp256k1.IsSecp256k1SubjectPublicKeyInfo(KeyData))
+        catch
         {
-            Volatile.Write(ref secp256k1PublicKey, NotSecp256k1);
-            return false;
+            algorithm.Dispose();
+            throw;
         }
-
-        if (!Secp256k1.TryDecodeSubjectPublicKeyInfo(KeyData, out point, out int _))
-            throw new CryptographicException("The secp256k1 public key is not a valid point on the curve.");
-
-        Volatile.Write(ref secp256k1PublicKey, new StrongBox<Secp256k1Point>(point));
-        return true;
     }
 }

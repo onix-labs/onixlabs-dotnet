@@ -32,7 +32,7 @@ public static class JwsSigner
     /// <returns>Returns a new <see cref="IJwsSigner"/>.</returns>
     public static IJwsSigner Create(EddsaPrivateKey key, string? keyId = null)
     {
-        ArgumentNullException.ThrowIfNull(key);
+        RequireNotNull(key);
         return new EddsaSigner(key, keyId);
     }
 
@@ -47,7 +47,7 @@ public static class JwsSigner
     /// <exception cref="NotSupportedException">Thrown when the key is on secp256k1, for which only verification is supported.</exception>
     public static IJwsSigner Create(EcdsaPrivateKey key, string? keyId = null)
     {
-        ArgumentNullException.ThrowIfNull(key);
+        RequireNotNull(key);
 
         string curve;
         using (JsonWebKey jwk = JsonWebKey.Create(key)) curve = jwk.Curve!;

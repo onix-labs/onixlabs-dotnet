@@ -26,36 +26,34 @@ namespace OnixLabs.Security.Cryptography;
 /// ECDH-1PU combines two key agreements on the same curve. The sender computes Ze from its ephemeral private key and the recipient's public
 /// key, and Zs from its static private key and the recipient's public key. The recipient computes Ze from its private key and the ephemeral
 /// public key (<c>epk</c>), and Zs from its private key and the sender's static public key. Both then derive the key from Z = Ze ‖ Zs with
-/// the
-/// Concat KDF and SHA-256.
+/// the Concat KDF and SHA-256.
 /// </para>
 /// <para>
 /// Why: each half is taken as raw bytes, so that callers whose private keys never leave a key store can compute each agreement there, with
-/// <see cref="XdhPrivateKey.DeriveSharedSecret"/> or <see cref="EcdhPrivateKey.DeriveRawSharedSecret"/>, and pass the results in.
+/// <see cref="XdhPrivateKey.DeriveRawSharedSecret"/> or <see cref="EcdhPrivateKey.DeriveRawSharedSecret"/>, and pass the results in.
 /// </para>
 /// </remarks>
-public static class Ecdh1Pu
+internal static class Ecdh1Pu
 {
     /// <summary>
     /// Derives an ECDH-1PU key from the ephemeral and static shared secrets and the specified Concat KDF <c>OtherInfo</c>.
     /// </summary>
     /// <param name="ephemeralSharedSecret">The raw shared secret Ze of the ephemeral key agreement.</param>
     /// <param name="staticSharedSecret">The raw shared secret Zs of the static key agreement, which must be the same length as Ze.</param>
+    /// <param name="output">The buffer that receives the derived key; its length is the key length.</param>
     /// <param name="otherInfo">
     /// The Concat KDF <c>OtherInfo</c> (the draft's FixedInfo): <c>AlgorithmID ‖ PartyUInfo ‖ PartyVInfo ‖ SuppPubInfo ‖ SuppPrivInfo</c>,
-    /// where in
-    /// key wrapping mode SuppPubInfo carries the JWE authentication tag.
+    /// where in key wrapping mode SuppPubInfo carries the JWE authentication tag.
     /// </param>
-    /// <param name="destination">The buffer that receives the derived key; its length is the key length.</param>
     /// <exception cref="ArgumentException">
     /// Thrown when either shared secret is empty, the two are of different lengths (and so not from the same curve), or
-    /// <paramref name="destination"/> is empty.
+    /// <paramref name="output"/> is empty.
     /// </exception>
     public static void DeriveKey(
         ReadOnlySpan<byte> ephemeralSharedSecret,
         ReadOnlySpan<byte> staticSharedSecret,
-        ReadOnlySpan<byte> otherInfo,
-        Span<byte> destination)
+        Span<byte> output,
+        ReadOnlySpan<byte> otherInfo)
     {
         Require
         (
@@ -79,7 +77,7 @@ public static class Ecdh1Pu
         {
             ephemeralSharedSecret.CopyTo(z);
             staticSharedSecret.CopyTo(z[ephemeralSharedSecret.Length..]);
-            ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, z, otherInfo, destination);
+            ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, z, output, otherInfo);
         }
         finally
         {

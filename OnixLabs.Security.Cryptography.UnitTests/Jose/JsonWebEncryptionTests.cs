@@ -35,8 +35,7 @@ public sealed class JsonWebEncryptionTests
 
     /// <summary>
     /// Verifies that both recipients of draft-madden-jose-ecdh-1pu-04 Appendix B.11 (ECDH-1PU+A128KW, A256CBC-HS512, X25519) can decrypt
-    /// it,
-    /// given Alice's static public key.
+    /// it, given Alice's static public key.
     /// </summary>
     [Theory(DisplayName = "JsonWebEncryption must decrypt draft-madden-jose-ecdh-1pu-04 Appendix B for both recipients")]
     [InlineData("bob", "bob-key-2")]
@@ -61,8 +60,7 @@ public sealed class JsonWebEncryptionTests
 
     /// <summary>
     /// Verifies that encrypting the plaintext of draft-madden-jose-ecdh-1pu-04 Appendix B, with its ephemeral key, CEK and IV, reproduces
-    /// the
-    /// JWE of Appendix B.11 exactly: the protected header byte for byte, both encrypted keys, the ciphertext and the tag.
+    /// the JWE of Appendix B.11 exactly: the protected header byte for byte, both encrypted keys, the ciphertext and the tag.
     /// </summary>
     [Fact(DisplayName = "JsonWebEncryption must reproduce draft-madden-jose-ecdh-1pu-04 Appendix B.11 exactly")]
     public async Task JsonWebEncryptionMustReproduceEcdh1PuAppendixB()
@@ -111,8 +109,7 @@ public sealed class JsonWebEncryptionTests
 
     /// <summary>
     /// Verifies the ECDH-ES+A128KW and A128GCM example of RFC 7520 §5.4 (P-384) in both JSON serializations, and that the published
-    /// ephemeral
-    /// key and CEK reproduce its encrypted key.
+    /// ephemeral key and CEK reproduce its encrypted key.
     /// </summary>
     [Fact(DisplayName = "JsonWebEncryption must decrypt the RFC 7520 §5.4 example, and reproduce its encrypted key")]
     public async Task JsonWebEncryptionMustDecryptRfc7520Example()
@@ -173,8 +170,7 @@ public sealed class JsonWebEncryptionTests
 
     /// <summary>
     /// Verifies the encrypted messages of DIDComm Messaging v2.1 Appendix C.3 whose content encryption is supported, for every recipient
-    /// key:
-    /// the decrypted plaintext is the message of Appendix C.1, or for the fifth example a JWS of it signed with
+    /// key: the decrypted plaintext is the message of Appendix C.1, or for the fifth example a JWS of it signed with
     /// <c>did:example:alice#key-1</c>.
     /// </summary>
     /// <remarks>

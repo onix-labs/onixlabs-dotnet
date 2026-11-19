@@ -41,22 +41,21 @@ public sealed partial class JsonWebKey
     /// <remarks>
     /// The hash input is a JSON object of only the required public members, in lexicographic order and without whitespace: <c>crv</c>,
     /// <c>kty</c> and <c>x</c> for an octet key pair (RFC 8037 §2); <c>crv</c>, <c>kty</c>, <c>x</c> and <c>y</c> for an elliptic curve
-    /// key;
-    /// <c>e</c>, <c>kty</c> and <c>n</c> for an RSA key. The thumbprint of a private key is that of its public part (RFC 7638 §3.2.1).
+    /// key; <c>e</c>, <c>kty</c> and <c>n</c> for an RSA key. The thumbprint of a private key is that of its public part (RFC 7638 §3.2.1).
     /// </remarks>
     public byte[] ComputeThumbprint()
     {
         JsonObject canonical = KeyType switch
         {
-            OctetKeyPair => new JsonObject { ["crv"] = Curve, ["kty"] = KeyType, ["x"] = Base64Url.Encode(x) },
+            OctetKeyPair => new JsonObject { ["crv"] = Curve, ["kty"] = KeyType, ["x"] = JoseJson.EncodeBytes(x) },
             EllipticCurve => new JsonObject
             {
                 ["crv"] = Curve,
                 ["kty"] = KeyType,
-                ["x"] = Base64Url.Encode(x),
-                ["y"] = Base64Url.Encode(y)
+                ["x"] = JoseJson.EncodeBytes(x),
+                ["y"] = JoseJson.EncodeBytes(y)
             },
-            _ => new JsonObject { ["e"] = Base64Url.Encode(e), ["kty"] = KeyType, ["n"] = Base64Url.Encode(n) }
+            _ => new JsonObject { ["e"] = JoseJson.EncodeBytes(e), ["kty"] = KeyType, ["n"] = JoseJson.EncodeBytes(n) }
         };
 
         return SHA256.HashData(Encoding.UTF8.GetBytes(JoseJson.Write(canonical)));
@@ -74,14 +73,14 @@ public sealed partial class JsonWebKey
 
         if (KeyType == Rsa)
         {
-            result["n"] = Base64Url.Encode(n);
-            result["e"] = Base64Url.Encode(e);
+            result["n"] = JoseJson.EncodeBytes(n);
+            result["e"] = JoseJson.EncodeBytes(e);
         }
         else
         {
             result["crv"] = Curve;
-            result["x"] = Base64Url.Encode(x);
-            if (y is not null) result["y"] = Base64Url.Encode(y);
+            result["x"] = JoseJson.EncodeBytes(x);
+            if (y is not null) result["y"] = JoseJson.EncodeBytes(y);
         }
 
         if (includePrivateKey && d is not null)
@@ -91,7 +90,7 @@ public sealed partial class JsonWebKey
             try
             {
                 d.Value.CopyTo(privateKey);
-                result["d"] = Base64Url.Encode(privateKey);
+                result["d"] = JoseJson.EncodeBytes(privateKey);
             }
             finally
             {

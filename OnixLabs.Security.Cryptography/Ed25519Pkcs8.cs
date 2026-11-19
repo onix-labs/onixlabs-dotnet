@@ -49,7 +49,7 @@ internal static class Ed25519Pkcs8
     /// <exception cref="CryptographicException">Thrown when the algorithm OID is not Ed25519, the structure is malformed, or the seed
     /// length is incorrect.</exception>
     public static byte[] DecodePrivateKey(ReadOnlySpan<byte> data, out int bytesRead) =>
-        Rfc8410KeyEncoding.DecodePrivateKey(Ed25519Oid, Name, Ed25519.SeedLength, data, out bytesRead);
+        Rfc8410KeyEncoding.DecodePrivateKey(Ed25519Oid, Name, Ed25519.PrivateKeySizeInBytes, data, out bytesRead);
 
     /// <summary>
     /// Encodes the 32-byte Ed25519 public key as a SubjectPublicKeyInfo per RFC 5280 and RFC 8410.
@@ -67,5 +67,5 @@ internal static class Ed25519Pkcs8
     /// <exception cref="CryptographicException">Thrown when the algorithm OID is not Ed25519, the structure is malformed, or the public-key
     /// length is incorrect.</exception>
     public static byte[] DecodePublicKey(ReadOnlySpan<byte> data, out int bytesRead) =>
-        Rfc8410KeyEncoding.DecodePublicKey(Ed25519Oid, Name, Ed25519.PublicKeyLength, data, out bytesRead);
+        Rfc8410KeyEncoding.DecodePublicKey(Ed25519Oid, Name, Ed25519.PublicKeySizeInBytes, data, out bytesRead);
 }

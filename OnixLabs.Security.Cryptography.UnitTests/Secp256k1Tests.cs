@@ -57,6 +57,51 @@ public sealed class Secp256k1Tests
     }
 
     /// <summary>
+    /// Verifies the same Project Wycheproof cases through <see cref="Secp256k1"/> as an <see cref="ECDsa"/>, with the managed code and
+    /// with the platform's implementation, which must agree. Where the platform has no secp256k1, as on macOS, both runs use the managed
+    /// code.
+    /// </summary>
+    [Theory(DisplayName = "Secp256k1 as an ECDsa must satisfy Project Wycheproof secp256k1 test vectors with both implementations")]
+    [WycheproofSecp256k1Data(DSASignatureFormat.Rfc3279DerSequence)]
+    [WycheproofSecp256k1Data(DSASignatureFormat.IeeeP1363FixedFieldConcatenation)]
+    public void Secp256k1EcdsaMustSatisfyWycheproofTestVectors(
+        int tcId, DSASignatureFormat format, byte[] publicKey, byte[] message, byte[] signature, string result, string flags)
+    {
+        _ = (tcId, flags);
+
+        foreach (bool usePlatform in (bool[])[false, true])
+        {
+            // Given
+            using Secp256k1 algorithm = new(usePlatform);
+            algorithm.ImportSubjectPublicKeyInfo(publicKey, out int _);
+
+            // When
+            bool data = algorithm.VerifyData(message, signature, HashAlgorithmName.SHA256, format);
+            bool hash = algorithm.VerifyHash(SHA256.HashData(message), signature, format);
+
+            // Then
+            Assert.Equal(result == "valid", data);
+            Assert.Equal(result == "valid", hash);
+            Assert.Equal(publicKey, algorithm.ExportSubjectPublicKeyInfo());
+        }
+    }
+
+    [Fact(DisplayName = "Secp256k1 should refuse private keys, signing, key generation and other curves")]
+    public void Secp256k1ShouldRefuseUnsupportedOperations()
+    {
+        // Given
+        using Secp256k1 algorithm = new();
+        using ECDsa p256 = ECDsa.Create(ECCurve.NamedCurves.nistP256);
+
+        // When / Then
+        Assert.Throws<CryptographicException>(() => algorithm.VerifyHash(new byte[32], new byte[64]));
+        Assert.Throws<CryptographicException>(() => algorithm.ImportParameters(p256.ExportParameters(false)));
+        Assert.Throws<NotSupportedException>(() => algorithm.GenerateKey(ECCurve.CreateFromValue(Secp256k1.CurveOid)));
+        Assert.Throws<CryptographicException>(() => algorithm.SignHash(new byte[32]));
+        Assert.Equal(256, algorithm.KeySize);
+    }
+
+    /// <summary>
     /// Verifies the same Project Wycheproof cases through the public <see cref="EcdsaPublicKey"/> API, which recognises a secp256k1
     /// SubjectPublicKeyInfo and verifies it in managed code on every platform. Each key must also export unchanged.
     /// </summary>

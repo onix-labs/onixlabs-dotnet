@@ -26,10 +26,12 @@ public sealed partial class EddsaPrivateKey
     /// <returns>Returns a new <see cref="EddsaPrivateKey"/> instance.</returns>
     public static EddsaPrivateKey Create()
     {
-        Span<byte> seed = stackalloc byte[Ed25519.SeedLength];
+        using Ed25519 algorithm = Ed25519.GenerateKey();
+        Span<byte> seed = stackalloc byte[Ed25519.PrivateKeySizeInBytes];
+
         try
         {
-            RandomNumberGenerator.Fill(seed);
+            algorithm.ExportPrivateKey(seed);
             return new EddsaPrivateKey(seed);
         }
         finally

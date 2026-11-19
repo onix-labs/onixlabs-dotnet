@@ -39,29 +39,24 @@ public sealed partial class XdhPrivateKey
     /// <inheritdoc/>
     public Secret DeriveRawSharedSecret(IXdhPublicKey publicKey)
     {
-        ArgumentNullException.ThrowIfNull(publicKey);
+        // Why: an interface with static abstract members cannot be a type argument, so the check is made on the key as an object.
+        RequireNotNull<object>(publicKey);
 
         ReadOnlySpan<byte> publicKeyData = publicKey.AsReadOnlySpan();
 
-        if (publicKeyData.Length != X25519.KeyLength)
-            throw new CryptographicException($"X25519 public key must be exactly {X25519.KeyLength} bytes.");
+        if (publicKeyData.Length != X25519.PublicKeySizeInBytes)
+            throw new CryptographicException($"X25519 public key must be exactly {X25519.PublicKeySizeInBytes} bytes.");
 
-        Span<byte> keyData = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
-        keyData = keyData[..Length];
-        Span<byte> sharedSecret = stackalloc byte[X25519.KeyLength];
+        using X25519 algorithm = ImportKeyData();
+        Span<byte> sharedSecret = stackalloc byte[X25519.SecretAgreementSizeInBytes];
 
         try
         {
-            CopyTo(keyData);
-
-            if (!X25519.TryDeriveSharedSecret(keyData, publicKeyData, sharedSecret))
-                throw new CryptographicException("The X25519 shared secret is all zeros, so the public key is a point of small order.");
-
+            algorithm.DeriveRawSecretAgreement(publicKeyData, sharedSecret);
             return new Secret(sharedSecret);
         }
         finally
         {
-            CryptographicOperations.ZeroMemory(keyData);
             CryptographicOperations.ZeroMemory(sharedSecret);
         }
     }

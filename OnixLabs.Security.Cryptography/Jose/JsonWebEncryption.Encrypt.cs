@@ -38,8 +38,8 @@ public sealed partial class JsonWebEncryption
     /// <param name="cancellationToken">A token used to cancel the operation.</param>
     /// <returns>
     /// Returns a new <see cref="JsonWebEncryption"/>, whose protected header carries <c>typ</c> (if given), <c>alg</c>, <c>enc</c>,
-    /// <c>skid</c>
-    /// (for ECDH-1PU, if the sender's key has a <c>kid</c>), <c>apu</c> and <c>apv</c> (if given), and the shared ephemeral key <c>epk</c>.
+    /// <c>skid</c> (for ECDH-1PU, if the sender's key has a <c>kid</c>), <c>apu</c> and <c>apv</c> (if given), and the shared ephemeral key
+    /// <c>epk</c>.
     /// </returns>
     /// <exception cref="ArgumentException">
     /// Thrown when there are no recipients, the recipients are not all on the same curve, or the sender is missing for ECDH-1PU or present
@@ -59,8 +59,8 @@ public sealed partial class JsonWebEncryption
         JweEncryptionOptions options,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(recipients);
-        ArgumentNullException.ThrowIfNull(options);
+        RequireNotNull(recipients);
+        RequireNotNull(options);
         Require(recipients.Count > 0, "At least one recipient is required.", nameof(recipients));
 
         (bool isOnePassUnified, int keyWrapLength) = JweAlgorithm.GetKeyManagement(options.Algorithm);
@@ -90,7 +90,7 @@ public sealed partial class JsonWebEncryption
         try
         {
             string headerJson = JoseJson.Write(CreateProtectedHeader(options, ephemeral.PublicKey.ToPublicKey().WithKeyId(null)));
-            string encodedHeader = Base64Url.Encode(Encoding.UTF8.GetBytes(headerJson));
+            string encodedHeader = JoseJson.EncodeBytes(Encoding.UTF8.GetBytes(headerJson));
             byte[] associatedData = Encoding.ASCII.GetBytes(encodedHeader);
             (byte[] ciphertext, byte[] tag) =
                 JweContentEncryption.Encrypt(options.EncryptionAlgorithm, cek, iv, plaintext.Span, associatedData);
@@ -121,7 +121,8 @@ public sealed partial class JsonWebEncryption
                         ? null
                         : JoseJson.ParseObject(JoseJson.Write(new JsonObject { ["kid"] = recipient.KeyId }), "JWE recipient header");
 
-                    entries.Add(new JweRecipient(header, AesKeyWrap.Wrap(kek, cek)));
+                    using Aes keyWrap = CreateKeyWrap(kek);
+                    entries.Add(new JweRecipient(header, keyWrap.EncryptKeyWrap(cek)));
                 }
                 finally
                 {
@@ -173,7 +174,7 @@ public sealed partial class JsonWebEncryption
         {
             if (localStatic is null)
             {
-                ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, ze, otherInfo, kek);
+                ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, ze, kek, otherInfo);
                 return kek;
             }
 
@@ -182,7 +183,7 @@ public sealed partial class JsonWebEncryption
 
             try
             {
-                Ecdh1Pu.DeriveKey(ze, zs, otherInfo, kek);
+                Ecdh1Pu.DeriveKey(ze, zs, kek, otherInfo);
                 return kek;
             }
             finally
@@ -211,8 +212,8 @@ public sealed partial class JsonWebEncryption
         header["alg"] = options.Algorithm;
         header["enc"] = options.EncryptionAlgorithm;
         if (options.Sender?.PublicKey.KeyId is { } senderKeyId) header["skid"] = senderKeyId;
-        if (options.AgreementPartyUInfo is { } apu) header["apu"] = Base64Url.Encode(apu);
-        if (options.AgreementPartyVInfo is { } apv) header["apv"] = Base64Url.Encode(apv);
+        if (options.AgreementPartyUInfo is { } apu) header["apu"] = JoseJson.EncodeBytes(apu);
+        if (options.AgreementPartyVInfo is { } apv) header["apv"] = JoseJson.EncodeBytes(apv);
         header["epk"] = ephemeralPublicKey.ToJsonObject();
 
         return header;
@@ -256,7 +257,7 @@ public sealed partial class JsonWebEncryption
     /// curve.</exception>
     private static void RequireRecipientCurve(JsonWebKey curveKey, JsonWebKey recipient)
     {
-        ArgumentNullException.ThrowIfNull(recipient);
+        RequireNotNull(recipient);
         Require(
             recipient.Curve is "X25519" or "P-256" or "P-384" or "P-521",
             $"Key agreement on '{recipient.Curve}' is not supported.",

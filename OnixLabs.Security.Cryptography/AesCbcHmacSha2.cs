@@ -32,8 +32,14 @@ namespace OnixLabs.Security.Cryptography;
 /// Like <see cref="AesGcm"/>, an instance is not thread-safe, and the caller supplies the initialization vector, which must be 16 random
 /// bytes generated afresh for every encryption.
 /// </para>
+/// <para>
+/// Why: the shape follows <see cref="AesGcm"/>, .NET's other authenticated cipher, so its constructors, properties and the buffer forms of
+/// <c>Encrypt</c> and <c>Decrypt</c> match. It differs where AES-CBC does: the parameter is <c>iv</c>, as in
+/// <see cref="SymmetricAlgorithm.EncryptCbc(ReadOnlySpan{byte}, ReadOnlySpan{byte}, PaddingMode)"/>, and decryption returns the plaintext
+/// length, because padding makes the ciphertext longer than the plaintext.
+/// </para>
 /// </remarks>
-public sealed class AesCbcHmacSha2 : IDisposable
+internal sealed class AesCbcHmacSha2 : IDisposable
 {
     /// <summary>
     /// The length in bytes of the initialization vector, one AES block.
@@ -71,6 +77,18 @@ public sealed class AesCbcHmacSha2 : IDisposable
     /// <param name="key">
     /// The composite key: 32 bytes for <c>A128CBC-HS256</c>, 48 bytes for <c>A192CBC-HS384</c>, or 64 bytes for <c>A256CBC-HS512</c>.
     /// </param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="key"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="key"/> is not 32, 48 or 64 bytes.</exception>
+    public AesCbcHmacSha2(byte[] key) : this(new ReadOnlySpan<byte>(RequireNotNull(key)))
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AesCbcHmacSha2"/> class.
+    /// </summary>
+    /// <param name="key">
+    /// The composite key: 32 bytes for <c>A128CBC-HS256</c>, 48 bytes for <c>A192CBC-HS384</c>, or 64 bytes for <c>A256CBC-HS512</c>.
+    /// </param>
     /// <exception cref="ArgumentException">Thrown when <paramref name="key"/> is not 32, 48 or 64 bytes.</exception>
     public AesCbcHmacSha2(ReadOnlySpan<byte> key)
     {
@@ -85,11 +103,31 @@ public sealed class AesCbcHmacSha2 : IDisposable
             _ => HashAlgorithmName.SHA512
         };
 
+        KeySizeInBytes = key.Length;
         TagSizeInBytes = half;
         macKey = key[..half].ToArray();
         aes = Aes.Create();
         SetKey(aes, key[half..]);
     }
+
+    /// <summary>
+    /// Gets a value indicating whether the algorithm is supported on the current platform.
+    /// </summary>
+    /// <value>Always <see langword="true"/>, because the algorithm is built from AES-CBC and HMAC-SHA-2, which every platform
+    /// supports.</value>
+    public static bool IsSupported => true;
+
+    /// <summary>
+    /// Gets the tag sizes, in bytes, that the algorithm supports: 16, 24 and 32, half the length of each composite key.
+    /// </summary>
+    /// <value>The supported tag sizes, in bytes.</value>
+    public static KeySizes TagByteSizes { get; } = new(16, 32, 8);
+
+    /// <summary>
+    /// Gets the length in bytes of the composite key.
+    /// </summary>
+    /// <value>The length in bytes of the composite key: 32, 48 or 64.</value>
+    public int KeySizeInBytes { get; }
 
     /// <summary>
     /// Gets the length in bytes of the authentication tag, which is half the length of the composite key.
@@ -211,16 +249,14 @@ public sealed class AesCbcHmacSha2 : IDisposable
     /// </exception>
     /// <exception cref="AuthenticationTagMismatchException">
     /// Thrown when the tag does not match the IV, ciphertext and associated data, or the ciphertext is not a whole, non-zero number of
-    /// blocks.
-    /// Nothing is written to <paramref name="plaintext"/>.
+    /// blocks. Nothing is written to <paramref name="plaintext"/>.
     /// </exception>
     /// <exception cref="CryptographicException">Thrown when the tag matches but the PKCS #7 padding is invalid, which only the key holder
     /// can cause.</exception>
     /// <exception cref="ObjectDisposedException">Thrown when the current instance has been disposed.</exception>
     /// <remarks>
     /// Why: the tag is compared in constant time before any decryption, as RFC 7518 §5.2.2.2 requires, so that unauthenticated ciphertext
-    /// never
-    /// reaches the padding check and cannot be used as a padding oracle.
+    /// never reaches the padding check and cannot be used as a padding oracle.
     /// </remarks>
     public int Decrypt(
         ReadOnlySpan<byte> iv,

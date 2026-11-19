@@ -22,10 +22,16 @@ namespace OnixLabs.Security.Cryptography;
 public sealed partial class XdhPrivateKey
 {
     /// <inheritdoc/>
+    /// <remarks>
+    /// Why: the key data is copied out on every call, as in <see cref="EddsaPrivateKey.GetPublicKey"/>, even when the public key has
+    /// already been derived, so that a disposed key throws <see cref="ObjectDisposedException"/>.
+    /// </remarks>
     public XdhPublicKey GetPublicKey()
     {
-        Span<byte> keyData = Length <= MaxStackKeyDataLength ? stackalloc byte[MaxStackKeyDataLength] : new byte[Length];
-        keyData = keyData[..Length];
+        if (Length != X25519.PrivateKeySizeInBytes)
+            throw new CryptographicException($"X25519 private key must be exactly {X25519.PrivateKeySizeInBytes} bytes.");
+
+        Span<byte> keyData = stackalloc byte[X25519.PrivateKeySizeInBytes];
 
         try
         {
@@ -41,7 +47,7 @@ public sealed partial class XdhPrivateKey
     /// <summary>
     /// Gets the public key of the current private key, deriving it from the specified private key data the first time it is needed.
     /// </summary>
-    /// <param name="keyData">The decrypted private key data of the current private key.</param>
+    /// <param name="keyData">The 32-byte private key data of the current private key.</param>
     /// <returns>Returns the 32-byte public key of the current private key.</returns>
     /// <remarks>
     /// Concurrent first calls may each derive the key, which is harmless because they derive identical bytes; the array is fully written
@@ -53,8 +59,8 @@ public sealed partial class XdhPrivateKey
 
         if (result is not null) return result;
 
-        result = new byte[X25519.KeyLength];
-        X25519.DerivePublicKey(keyData, result);
+        using X25519 algorithm = X25519.ImportPrivateKey(keyData);
+        result = algorithm.ExportPublicKey();
         Volatile.Write(ref publicKey, result);
 
         return result;

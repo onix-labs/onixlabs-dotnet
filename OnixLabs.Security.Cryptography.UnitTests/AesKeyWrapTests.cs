@@ -18,12 +18,16 @@ using OnixLabs.Security.Cryptography.UnitTests.Data;
 
 namespace OnixLabs.Security.Cryptography.UnitTests;
 
+/// <summary>
+/// Tests AES Key Wrap (RFC 3394) through <see cref="Aes"/>'s key wrap methods: the library's own on .NET 8, 9 and 10, and .NET's on .NET
+/// 11. The same tests run on every target, so they show that both behave alike.
+/// </summary>
 public sealed class AesKeyWrapTests
 {
     /// <summary>
     /// Verifies the six test vectors of RFC 3394 §4.1 to §4.6, in both directions.
     /// </summary>
-    [Theory(DisplayName = "AesKeyWrap must satisfy the RFC 3394 §4 test vectors")]
+    [Theory(DisplayName = "Aes.EncryptKeyWrap and DecryptKeyWrap must satisfy the RFC 3394 §4 test vectors")]
     [InlineData( // §4.1: wrap 128 bits of key data with a 128-bit KEK.
         "000102030405060708090A0B0C0D0E0F",
         "00112233445566778899AABBCCDDEEFF",
@@ -51,27 +55,27 @@ public sealed class AesKeyWrapTests
     public void AesKeyWrapMustSatisfyRfc3394TestVectors(string keyEncryptionKey, string keyData, string ciphertext)
     {
         // Given
-        byte[] kek = Convert.FromHexString(keyEncryptionKey);
+        using Aes aes = CreateAes(Convert.FromHexString(keyEncryptionKey));
         byte[] key = Convert.FromHexString(keyData);
         byte[] expected = Convert.FromHexString(ciphertext);
 
         // When
-        byte[] wrapped = AesKeyWrap.Wrap(kek, key);
-        byte[] unwrapped = AesKeyWrap.Unwrap(kek, expected);
+        byte[] wrapped = aes.EncryptKeyWrap(key);
+        byte[] unwrapped = aes.DecryptKeyWrap(expected);
 
         // Then
         Assert.Equal(expected, wrapped);
         Assert.Equal(key, unwrapped);
+        Assert.Equal(expected.Length, Aes.GetKeyWrapLength(key.Length));
     }
 
     /// <summary>
     /// Verifies every case of Project Wycheproof's <c>testvectors_v1/aes_wrap_test.json</c>. Valid cases must wrap and unwrap to the
-    /// expected
-    /// values. Invalid cases must fail to unwrap, and keys that cannot be wrapped must be refused. Acceptable cases, which wrap 8-byte keys
-    /// that
-    /// RFC 3394 does not allow, may do either; this implementation refuses them.
+    /// expected values. Invalid cases must fail to unwrap: with <see cref="ArgumentException"/> if the wrapped key is not a valid length,
+    /// or <see cref="CryptographicException"/> if it fails the integrity check. Acceptable cases, which wrap 8-byte keys that RFC 3394 does
+    /// not allow, may do either; .NET refuses them, and so does the library.
     /// </summary>
-    [Theory(DisplayName = "AesKeyWrap must satisfy Project Wycheproof AES Key Wrap test vectors")]
+    [Theory(DisplayName = "Aes key wrap must satisfy Project Wycheproof AES Key Wrap test vectors")]
     [WycheproofAesKeyWrapData]
     public void AesKeyWrapMustSatisfyWycheproofTestVectors(
         int tcId,
@@ -83,109 +87,137 @@ public sealed class AesKeyWrapTests
     {
         // Given
         _ = (tcId, flags);
-        byte[] destination = new byte[Math.Max(0, ciphertext.Length - AesKeyWrap.SemiblockLength)];
-        bool canWrap = message.Length >= AesKeyWrap.MinimumKeyLength && message.Length % AesKeyWrap.SemiblockLength == 0;
+        using Aes aes = CreateAes(key);
+        byte[] destination = new byte[Math.Max(0, ciphertext.Length - 8)];
+        bool isValidLength = ciphertext.Length >= 24 && ciphertext.Length % 8 == 0;
+        bool canWrap = message.Length >= 16 && message.Length % 8 == 0;
 
         // When
-        bool unwrapped = AesKeyWrap.TryUnwrap(key, ciphertext, destination, out int bytesWritten);
+        Exception? exception = Record.Exception(() => aes.DecryptKeyWrap(ciphertext, destination));
 
         // Then
         if (result == "valid")
         {
-            Assert.True(unwrapped);
-            Assert.Equal(message, destination[..bytesWritten]);
-            Assert.Equal(ciphertext, AesKeyWrap.Wrap(key, message));
+            Assert.Null(exception);
+            Assert.Equal(message, destination);
+            Assert.Equal(ciphertext, aes.EncryptKeyWrap(message));
             return;
         }
 
-        if (unwrapped)
+        if (exception is null)
         {
             Assert.Equal("acceptable", result);
-            Assert.Equal(message, destination[..bytesWritten]);
+            Assert.Equal(message, destination);
             return;
         }
 
-        Assert.Equal(0, bytesWritten);
-        Assert.All(destination, value => Assert.Equal(0, value));
-        Assert.Throws<CryptographicException>(() => AesKeyWrap.Unwrap(key, ciphertext));
+        if (isValidLength) Assert.IsType<CryptographicException>(exception);
+        else Assert.IsType<ArgumentException>(exception);
 
-        if (!canWrap) Assert.Throws<ArgumentException>(() => AesKeyWrap.Wrap(key, message));
+        Assert.All(destination, value => Assert.Equal(0, value));
+
+        if (!canWrap) Assert.Throws<ArgumentException>(() => aes.EncryptKeyWrap(message));
     }
 
-    [Fact(DisplayName = "AesKeyWrap.TryUnwrap should fail and zero the destination when the wrapped key is modified")]
-    public void AesKeyWrapTryUnwrapShouldFailAndZeroDestinationWhenModified()
+    [Fact(DisplayName = "Aes.TryDecryptKeyWrap should throw and zero the destination when the wrapped key is modified")]
+    public void AesTryDecryptKeyWrapShouldThrowAndZeroDestinationWhenModified()
     {
         // Given
-        byte[] kek = Salt.CreateNonZero(32).AsReadOnlySpan().ToArray();
+        using Aes aes = CreateAes(Salt.CreateNonZero(32).AsReadOnlySpan().ToArray());
         byte[] key = Salt.CreateNonZero(64).AsReadOnlySpan().ToArray();
-        byte[] wrapped = AesKeyWrap.Wrap(kek, key);
+        byte[] wrapped = aes.EncryptKeyWrap(key);
         byte[] destination = new byte[key.Length];
         wrapped[^1] ^= 1;
 
         // When
-        bool result = AesKeyWrap.TryUnwrap(kek, wrapped, destination, out int bytesWritten);
+        Exception? exception = Record.Exception(() => aes.TryDecryptKeyWrap(wrapped, destination, out int _));
+
+        // Then
+        Assert.IsType<CryptographicException>(exception);
+        Assert.Equal(new byte[key.Length], destination);
+    }
+
+    [Fact(DisplayName = "Aes.DecryptKeyWrap should throw CryptographicException with the wrong key-encryption key")]
+    public void AesDecryptKeyWrapShouldThrowWithWrongKeyEncryptionKey()
+    {
+        // Given
+        using Aes sender = CreateAes(Salt.CreateNonZero(32).AsReadOnlySpan().ToArray());
+        using Aes recipient = CreateAes(Salt.CreateNonZero(32).AsReadOnlySpan().ToArray());
+        byte[] wrapped = sender.EncryptKeyWrap(Salt.CreateNonZero(32).AsReadOnlySpan().ToArray());
+
+        // When / Then
+        Assert.Throws<CryptographicException>(() => recipient.DecryptKeyWrap(wrapped));
+    }
+
+    [Theory(DisplayName = "Aes.GetKeyWrapLength should throw ArgumentOutOfRangeException for a length that cannot be wrapped")]
+    [InlineData(0)]
+    [InlineData(8)]
+    [InlineData(12)]
+    [InlineData(17)]
+    public void AesGetKeyWrapLengthShouldThrowForInvalidLength(int length)
+    {
+        // When / Then
+        Assert.Throws<ArgumentOutOfRangeException>(() => Aes.GetKeyWrapLength(length));
+    }
+
+    [Fact(DisplayName = "Aes.EncryptKeyWrap should throw ArgumentException unless the destination is exactly the wrapped length")]
+    public void AesEncryptKeyWrapShouldThrowForWrongDestinationLength()
+    {
+        // Given
+        using Aes aes = CreateAes(new byte[16]);
+
+        // When / Then
+        Assert.Throws<ArgumentException>(() => aes.EncryptKeyWrap(new byte[16], new byte[23]));
+        Assert.Throws<ArgumentException>(() => aes.EncryptKeyWrap(new byte[16], new byte[25]));
+    }
+
+    [Fact(DisplayName = "Aes.TryDecryptKeyWrap should return false when the destination is too short")]
+    public void AesTryDecryptKeyWrapShouldReturnFalseForShortDestination()
+    {
+        // Given
+        using Aes aes = CreateAes(new byte[16]);
+        byte[] wrapped = aes.EncryptKeyWrap(new byte[32]);
+
+        // When
+        bool result = aes.TryDecryptKeyWrap(wrapped, new byte[31], out int bytesWritten);
 
         // Then
         Assert.False(result);
         Assert.Equal(0, bytesWritten);
-        Assert.Equal(new byte[key.Length], destination);
+        Assert.Throws<ArgumentException>(() => aes.DecryptKeyWrap(wrapped, new byte[31]));
     }
 
-    [Fact(DisplayName = "AesKeyWrap.TryUnwrap should fail with the wrong key-encryption key")]
-    public void AesKeyWrapTryUnwrapShouldFailWithWrongKeyEncryptionKey()
+    [Fact(DisplayName = "Aes key wrap should leave the caller's cipher mode and padding unchanged")]
+    public void AesKeyWrapShouldLeaveCipherSettingsUnchanged()
     {
         // Given
-        byte[] key = Salt.CreateNonZero(32).AsReadOnlySpan().ToArray();
-        byte[] wrapped = AesKeyWrap.Wrap(Salt.CreateNonZero(32).AsReadOnlySpan(), key);
+        using Aes aes = CreateAes(new byte[16]);
+        aes.Mode = CipherMode.CBC;
+        aes.Padding = PaddingMode.PKCS7;
 
         // When
-        bool result = AesKeyWrap.TryUnwrap(Salt.CreateNonZero(32).AsReadOnlySpan(), wrapped, new byte[key.Length], out int _);
+        byte[] wrapped = aes.EncryptKeyWrap(new byte[16]);
+        _ = aes.DecryptKeyWrap(wrapped);
 
         // Then
-        Assert.False(result);
-    }
-
-    [Theory(DisplayName = "AesKeyWrap should throw ArgumentException for a key-encryption key that is not 16, 24 or 32 bytes")]
-    [InlineData(0)]
-    [InlineData(15)]
-    [InlineData(20)]
-    [InlineData(64)]
-    public void AesKeyWrapShouldThrowForInvalidKeyEncryptionKeyLength(int length)
-    {
-        // Given
-        byte[] kek = new byte[length];
-
-        // When / Then
-        Assert.Throws<ArgumentException>(() => AesKeyWrap.Wrap(kek, new byte[16]));
-        Assert.Throws<ArgumentException>(() => AesKeyWrap.Unwrap(kek, new byte[24]));
-    }
-
-    [Fact(DisplayName = "AesKeyWrap.TryUnwrap should throw ArgumentException when the destination is too short")]
-    public void AesKeyWrapTryUnwrapShouldThrowForShortDestination()
-    {
-        // Given
-        byte[] kek = new byte[16];
-        byte[] wrapped = AesKeyWrap.Wrap(kek, new byte[32]);
-
-        // When / Then
-        Assert.Throws<ArgumentException>(() => AesKeyWrap.TryUnwrap(kek, wrapped, new byte[31], out int _));
+        Assert.Equal(CipherMode.CBC, aes.Mode);
+        Assert.Equal(PaddingMode.PKCS7, aes.Padding);
     }
 
 #if NET10_0_OR_GREATER
     /// <summary>
-    /// Guards against replacing RFC 3394 with .NET's key wrap, which is RFC 5649 (padded) from .NET 10 and gives different output.
+    /// Guards against replacing RFC 3394 with .NET's padded key wrap, RFC 5649, which .NET has from .NET 10 and which gives different
+    /// output.
     /// </summary>
-    [Fact(DisplayName = "AesKeyWrap.Wrap must differ from Aes.EncryptKeyWrapPadded, which is RFC 5649 and not what JOSE requires")]
-    public void AesKeyWrapMustDifferFromEncryptKeyWrapPadded()
+    [Fact(DisplayName = "Aes.EncryptKeyWrap must differ from Aes.EncryptKeyWrapPadded, which is RFC 5649 and not what JOSE requires")]
+    public void AesEncryptKeyWrapMustDifferFromEncryptKeyWrapPadded()
     {
         // Given
-        byte[] kek = Convert.FromHexString("000102030405060708090A0B0C0D0E0F");
+        using Aes aes = CreateAes(Convert.FromHexString("000102030405060708090A0B0C0D0E0F"));
         byte[] key = Convert.FromHexString("00112233445566778899AABBCCDDEEFF");
-        using Aes aes = Aes.Create();
-        aes.Key = kek;
 
         // When
-        byte[] rfc3394 = AesKeyWrap.Wrap(kek, key);
+        byte[] rfc3394 = aes.EncryptKeyWrap(key);
         byte[] rfc5649 = aes.EncryptKeyWrapPadded(key);
 
         // Then
@@ -193,4 +225,16 @@ public sealed class AesKeyWrapTests
         Assert.NotEqual(rfc3394, rfc5649);
     }
 #endif
+
+    /// <summary>
+    /// Creates an <see cref="Aes"/> instance keyed with the specified key.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <returns>Returns a new <see cref="Aes"/> instance.</returns>
+    private static Aes CreateAes(byte[] key)
+    {
+        Aes aes = Aes.Create();
+        aes.Key = key;
+        return aes;
+    }
 }

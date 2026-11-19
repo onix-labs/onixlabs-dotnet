@@ -70,11 +70,17 @@ internal static class Rfc8410KeyEncoding
     /// <returns>Returns a new <see cref="byte"/> array containing the private key.</returns>
     /// <exception cref="CryptographicException">Thrown when the algorithm OID is not the expected one, the structure is malformed, or the
     /// key length is incorrect.</exception>
+    /// <remarks>
+    /// Why: the copy of <paramref name="data"/> and the outer OCTET STRING both hold the private key, so both are zeroed before returning,
+    /// as is the decoded key when it is the wrong length.
+    /// </remarks>
     public static byte[] DecodePrivateKey(string oid, string name, int keyLength, ReadOnlySpan<byte> data, out int bytesRead)
     {
+        byte[] source = data.ToArray();
+        byte[]? outer = null;
+
         try
         {
-            ReadOnlyMemory<byte> source = data.ToArray();
             AsnReader reader = new(source, AsnEncodingRules.BER);
             ReadOnlyMemory<byte> encodedSequence = reader.PeekEncodedValue();
             AsnReader sequence = reader.ReadSequence();
@@ -92,18 +98,26 @@ internal static class Rfc8410KeyEncoding
             if (algorithm.HasData)
                 throw new CryptographicException($"{name} algorithm identifier must have no parameters.");
 
-            byte[] outer = sequence.ReadOctetString();
+            outer = sequence.ReadOctetString();
             AsnReader innerReader = new(outer, AsnEncodingRules.BER);
             byte[] privateKey = innerReader.ReadOctetString();
-            innerReader.ThrowIfNotEmpty();
 
-            return privateKey.Length == keyLength
-                ? privateKey
-                : throw new CryptographicException($"{name} private key must be {keyLength} bytes (got {privateKey.Length}).");
+            if (!innerReader.HasData && privateKey.Length == keyLength) return privateKey;
+
+            CryptographicOperations.ZeroMemory(privateKey);
+
+            throw innerReader.HasData
+                ? new CryptographicException("Failed to decode PKCS#8 PrivateKeyInfo.")
+                : new CryptographicException($"{name} private key must be {keyLength} bytes (got {privateKey.Length}).");
         }
         catch (AsnContentException e)
         {
             throw new CryptographicException("Failed to decode PKCS#8 PrivateKeyInfo.", e);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(source);
+            if (outer is not null) CryptographicOperations.ZeroMemory(outer);
         }
     }
 

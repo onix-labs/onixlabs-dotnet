@@ -41,7 +41,7 @@ public sealed class ConcatKdfTests
         byte[] actual = new byte[16];
 
         // When
-        ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, z, otherInfo, actual);
+        ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, z, actual, otherInfo);
 
         // Then
         Assert.Equal(expected, actual);
@@ -86,23 +86,64 @@ public sealed class ConcatKdfTests
         }
 
         // When
-        ConcatKdf.DeriveKey(hashAlgorithm, z, otherInfo, actual);
+        ConcatKdf.DeriveKey(hashAlgorithm, z, actual, otherInfo);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Fact(DisplayName = "ConcatKdf.DeriveKey should throw ArgumentException for an empty destination")]
-    public void ConcatKdfShouldThrowForEmptyDestination()
+    [Fact(DisplayName = "ConcatKdf.DeriveKey should throw ArgumentException for an empty output")]
+    public void ConcatKdfShouldThrowForEmptyOutput()
     {
         // When / Then
         Assert.Throws<ArgumentException>(() => ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, [1, 2, 3], [], []));
     }
 
-    [Fact(DisplayName = "ConcatKdf.DeriveKey should throw ArgumentException for a hash algorithm without a name")]
-    public void ConcatKdfShouldThrowForUnnamedHashAlgorithm()
+    [Theory(DisplayName = "ConcatKdf.DeriveKey should throw ArgumentOutOfRangeException for an unsupported hash algorithm, as HKDF does")]
+    [InlineData("")]
+    [InlineData("SHA1")]
+    [InlineData("MD5")]
+    public void ConcatKdfShouldThrowForUnsupportedHashAlgorithm(string name)
+    {
+        // Given
+        HashAlgorithmName hashAlgorithmName = name.Length == 0 ? default : new HashAlgorithmName(name);
+
+        // When / Then
+        Assert.Throws<ArgumentOutOfRangeException>(() => ConcatKdf.DeriveKey(hashAlgorithmName, [1, 2, 3], new byte[16], []));
+        Assert.Throws<ArgumentOutOfRangeException>(() => ConcatKdf.DeriveKey(hashAlgorithmName, [1, 2, 3], 16));
+    }
+
+    [Fact(DisplayName = "ConcatKdf.DeriveKey with an output length should match the span overload")]
+    public void ConcatKdfArrayOverloadShouldMatchSpanOverload()
+    {
+        // Given
+        byte[] sharedSecret = [1, 2, 3, 4, 5, 6, 7, 8];
+        byte[] otherInfo = [9, 10, 11];
+        byte[] expected = new byte[40];
+        ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, sharedSecret, expected, otherInfo);
+
+        // When
+        byte[] actual = ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, sharedSecret, 40, otherInfo);
+        byte[] withoutOtherInfo = ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, sharedSecret, 40);
+
+        // Then
+        Assert.Equal(expected, actual);
+        Assert.NotEqual(expected, withoutOtherInfo);
+    }
+
+    [Theory(DisplayName = "ConcatKdf.DeriveKey should throw ArgumentOutOfRangeException for a non-positive output length, as HKDF does")]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void ConcatKdfShouldThrowForNonPositiveOutputLength(int outputLength)
     {
         // When / Then
-        Assert.Throws<ArgumentException>(() => ConcatKdf.DeriveKey(default, [1, 2, 3], [], new byte[16]));
+        Assert.Throws<ArgumentOutOfRangeException>(() => ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, [1, 2, 3], outputLength));
+    }
+
+    [Fact(DisplayName = "ConcatKdf.DeriveKey should throw ArgumentNullException for a null shared secret, as HKDF does")]
+    public void ConcatKdfShouldThrowForNullSharedSecret()
+    {
+        // When / Then
+        Assert.Throws<ArgumentNullException>(() => ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, null!, 16));
     }
 }

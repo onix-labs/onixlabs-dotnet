@@ -20,8 +20,7 @@ namespace OnixLabs.Security.Cryptography.Benchmarks;
 
 /// <summary>
 /// Represents benchmarks for secp256k1 ECDSA verification (ES256K), which is managed code on every platform, compared with P-256
-/// verification
-/// by the platform.
+/// verification by the platform.
 /// </summary>
 // Why: not sealed, because BenchmarkDotNet generates a class that derives from each benchmark class.
 public class Secp256k1Benchmarks

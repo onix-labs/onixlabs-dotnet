@@ -68,7 +68,7 @@ public sealed class XdhKeyTests
     public void X25519MustSatisfyRfc7748SingleStepTestVectors(string scalar, string uCoordinate, string expected)
     {
         // Given
-        byte[] actual = new byte[X25519.KeyLength];
+        byte[] actual = new byte[X25519.PublicKeySizeInBytes];
 
         // When
         X25519.ScalarMultiply(Convert.FromHexString(scalar), Convert.FromHexString(uCoordinate), actual);
@@ -150,7 +150,7 @@ public sealed class XdhKeyTests
     {
         // Given
         _ = tcId;
-        byte[] actual = new byte[X25519.KeyLength];
+        byte[] actual = new byte[X25519.PublicKeySizeInBytes];
         XdhPrivateKey key = XdhPrivateKey.Import(privateKey);
         XdhPublicKey otherKey = XdhPublicKey.Import(publicKey);
 
@@ -165,6 +165,97 @@ public sealed class XdhKeyTests
             Assert.Throws<CryptographicException>(() => key.DeriveRawSharedSecret(otherKey));
         else
             Assert.Equal(shared, key.DeriveRawSharedSecret(otherKey).AsReadOnlySpan().ToArray());
+
+        foreach (bool usePlatform in (bool[])[false, true])
+        {
+            using X25519 algorithm = X25519.ImportPrivateKey(privateKey, usePlatform);
+
+            if (flags.Contains("ZeroSharedSecret"))
+            {
+                Assert.Throws<CryptographicException>(() => algorithm.DeriveRawSecretAgreement(publicKey));
+            }
+            else
+            {
+                Assert.Equal(shared, algorithm.DeriveRawSecretAgreement(publicKey));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Verifies that the managed code and the platform's implementation behave alike: they derive the same public keys and shared secrets
+    /// for the same keys, in both directions, and report the same exceptions for the same faults. Where the platform has no X25519, both
+    /// runs use the managed code.
+    /// </summary>
+    [Fact(DisplayName = "X25519 should behave the same with the managed code and the platform's implementation")]
+    public void X25519ShouldBehaveTheSameWithBothImplementations()
+    {
+        for (int i = 0; i < 32; i++)
+        {
+            // Given
+            byte[] privateKey = RandomNumberGenerator.GetBytes(X25519.PrivateKeySizeInBytes);
+            byte[] otherPrivateKey = RandomNumberGenerator.GetBytes(X25519.PrivateKeySizeInBytes);
+            using X25519 managed = X25519.ImportPrivateKey(privateKey, usePlatform: false);
+            using X25519 platform = X25519.ImportPrivateKey(privateKey, usePlatform: true);
+            using X25519 otherManaged = X25519.ImportPrivateKey(otherPrivateKey, usePlatform: false);
+            using X25519 otherPlatform = X25519.ImportPrivateKey(otherPrivateKey, usePlatform: true);
+
+            // When / Then
+            Assert.Equal(managed.ExportPublicKey(), platform.ExportPublicKey());
+            Assert.Equal(managed.ExportPrivateKey(), platform.ExportPrivateKey());
+            Assert.Equal(managed.ExportPkcs8PrivateKey(), platform.ExportPkcs8PrivateKey());
+            Assert.Equal(managed.ExportSubjectPublicKeyInfo(), platform.ExportSubjectPublicKeyInfo());
+            Assert.Equal(managed.DeriveRawSecretAgreement(otherPlatform), platform.DeriveRawSecretAgreement(otherManaged));
+            Assert.Equal(otherManaged.DeriveRawSecretAgreement(managed), otherPlatform.DeriveRawSecretAgreement(platform));
+        }
+
+        foreach (bool usePlatform in (bool[])[false, true])
+        {
+            using X25519 key = X25519.GenerateKey(usePlatform);
+            using X25519 publicOnly = X25519.ImportPublicKey(key.ExportPublicKey(), usePlatform);
+
+            Assert.Throws<CryptographicException>(() => key.DeriveRawSecretAgreement(new byte[32]));
+            Assert.Throws<ArgumentException>(() => key.DeriveRawSecretAgreement(new byte[31]));
+            Assert.Throws<ArgumentException>(() => key.DeriveRawSecretAgreement(key.ExportPublicKey(), new byte[31]));
+            Assert.Throws<CryptographicException>(() => publicOnly.ExportPrivateKey());
+            Assert.Throws<CryptographicException>(() => publicOnly.DeriveRawSecretAgreement(key));
+            Assert.Throws<ArgumentException>(() => X25519.ImportPrivateKey(new byte[31], usePlatform));
+            Assert.Throws<ArgumentException>(() => X25519.ImportPublicKey(new byte[33], usePlatform));
+
+            key.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => key.ExportPublicKey());
+        }
+    }
+
+    [Fact(DisplayName = "X25519 should import and export PKCS#8 and SubjectPublicKeyInfo matching XdhPrivateKey and XdhPublicKey")]
+    public void X25519ShouldMatchKeyTypeEncodings()
+    {
+        // Given
+        XdhPrivateKey privateKey = XdhPrivateKey.Create();
+
+        // When
+        using X25519 fromPkcs8 = X25519.ImportPkcs8PrivateKey(privateKey.ExportPkcs8());
+        using X25519 fromSpki = X25519.ImportSubjectPublicKeyInfo(X25519Pkcs8.EncodePublicKey(privateKey.GetPublicKey().Export()));
+
+        // Then
+        Assert.Equal(privateKey.Export(), fromPkcs8.ExportPrivateKey());
+        Assert.Equal(privateKey.GetPublicKey().Export(), fromSpki.ExportPublicKey());
+        Assert.Equal(privateKey.ExportPkcs8(), fromPkcs8.ExportPkcs8PrivateKey());
+    }
+
+    [Fact(DisplayName = "XdhPrivateKey should throw CryptographicException for a private key that is not 32 bytes")]
+    public void XdhPrivateKeyShouldThrowForWrongLengthPrivateKey()
+    {
+        // Given
+        XdhPrivateKey key = new(new byte[31]);
+        XdhPublicKey otherKey = XdhPrivateKey.Create().GetPublicKey();
+
+        // When
+        Exception? derive = Record.Exception(() => key.DeriveRawSharedSecret(otherKey));
+        Exception? getPublicKey = Record.Exception(() => key.GetPublicKey());
+
+        // Then
+        Assert.IsType<CryptographicException>(derive);
+        Assert.IsType<CryptographicException>(getPublicKey);
     }
 
     [Fact(DisplayName = "X25519 shared secret derivation should throw CryptographicException for an all-zero public key")]
@@ -197,6 +288,21 @@ public sealed class XdhKeyTests
         // Then
         Assert.IsType<CryptographicException>(hashedException);
         Assert.IsType<CryptographicException>(rawException);
+    }
+
+    [Fact(DisplayName = "X25519 shared secret derivation should throw ArgumentNullException for a null public key")]
+    public void XdhDeriveSharedSecretShouldThrowForNullPublicKey()
+    {
+        // Given
+        XdhPrivateKey key = XdhPrivateKey.Create();
+
+        // When
+        ArgumentNullException hashedException = Assert.Throws<ArgumentNullException>(() => key.DeriveSharedSecret(null!));
+        ArgumentNullException rawException = Assert.Throws<ArgumentNullException>(() => key.DeriveRawSharedSecret(null!));
+
+        // Then
+        Assert.Equal("publicKey", hashedException.ParamName);
+        Assert.Equal("publicKey", rawException.ParamName);
     }
 
     [Theory(DisplayName = "XdhPrivateKey.Import and XdhPublicKey.Import should throw CryptographicException unless the key is 32 bytes")]
@@ -402,12 +508,12 @@ public sealed class XdhKeyTests
     {
         // Given
         Random random = new(Seed: 25519);
-        byte[] actual = new byte[X25519.KeyLength];
+        byte[] actual = new byte[X25519.PublicKeySizeInBytes];
 
         for (int i = 0; i < 200; i++)
         {
-            byte[] scalar = new byte[X25519.KeyLength];
-            byte[] uCoordinate = new byte[X25519.KeyLength];
+            byte[] scalar = new byte[X25519.PublicKeySizeInBytes];
+            byte[] uCoordinate = new byte[X25519.PublicKeySizeInBytes];
             random.NextBytes(scalar);
             random.NextBytes(uCoordinate);
 
@@ -508,9 +614,9 @@ public sealed class XdhKeyTests
     /// <returns>Returns the final value of k as lower-case hexadecimal.</returns>
     private static string Iterate(int iterations)
     {
-        byte[] k = new byte[X25519.KeyLength];
-        byte[] u = new byte[X25519.KeyLength];
-        byte[] output = new byte[X25519.KeyLength];
+        byte[] k = new byte[X25519.PublicKeySizeInBytes];
+        byte[] u = new byte[X25519.PublicKeySizeInBytes];
+        byte[] output = new byte[X25519.PublicKeySizeInBytes];
         k[0] = 9;
         u[0] = 9;
 

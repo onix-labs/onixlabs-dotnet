@@ -23,9 +23,9 @@ public sealed partial class XdhPublicKey
     /// <inheritdoc/>
     public static XdhPublicKey Import(ReadOnlySpan<byte> data)
     {
-        if (data.Length != X25519.KeyLength)
+        if (data.Length != X25519.PublicKeySizeInBytes)
         {
-            throw new CryptographicException($"X25519 public key must be exactly {X25519.KeyLength} bytes.");
+            throw new CryptographicException($"X25519 public key must be exactly {X25519.PublicKeySizeInBytes} bytes.");
         }
         return new XdhPublicKey(data);
     }
@@ -34,7 +34,7 @@ public sealed partial class XdhPublicKey
     public static XdhPublicKey Import(ReadOnlySpan<byte> data, out int bytesRead)
     {
         XdhPublicKey key = Import(data);
-        bytesRead = X25519.KeyLength;
+        bytesRead = X25519.PublicKeySizeInBytes;
         return key;
     }
 

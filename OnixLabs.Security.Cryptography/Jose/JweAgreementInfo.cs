@@ -35,7 +35,7 @@ public static class JweAgreementInfo
     /// order.</remarks>
     public static byte[] CreateDidCommApv(IEnumerable<string> recipientKeyIds)
     {
-        ArgumentNullException.ThrowIfNull(recipientKeyIds);
+        RequireNotNull(recipientKeyIds);
 
         string[] sorted = recipientKeyIds.Order(StringComparer.Ordinal).ToArray();
         Require(sorted.Length > 0, "At least one recipient key identifier is required.", nameof(recipientKeyIds));
@@ -50,7 +50,7 @@ public static class JweAgreementInfo
     /// <returns>Returns the decoded <c>apu</c> value, the UTF-8 bytes of <paramref name="senderKeyId"/>.</returns>
     public static byte[] CreateDidCommApu(string senderKeyId)
     {
-        ArgumentNullException.ThrowIfNull(senderKeyId);
+        RequireNotNull(senderKeyId);
         return Encoding.UTF8.GetBytes(senderKeyId);
     }
 }

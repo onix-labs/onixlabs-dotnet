@@ -26,10 +26,12 @@ public sealed partial class XdhPrivateKey
     /// <returns>Returns a new <see cref="XdhPrivateKey"/> instance.</returns>
     public static XdhPrivateKey Create()
     {
-        Span<byte> keyData = stackalloc byte[X25519.KeyLength];
+        using X25519 algorithm = X25519.GenerateKey();
+        Span<byte> keyData = stackalloc byte[X25519.PrivateKeySizeInBytes];
+
         try
         {
-            RandomNumberGenerator.Fill(keyData);
+            algorithm.ExportPrivateKey(keyData);
             return new XdhPrivateKey(keyData);
         }
         finally

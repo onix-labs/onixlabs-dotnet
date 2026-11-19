@@ -28,13 +28,11 @@ public sealed partial class JsonWebEncryption
     /// </summary>
     /// <param name="recipient">
     /// The recipient's key agreement. If its public key has a <c>kid</c>, the recipient entry with the same <c>kid</c> is used; otherwise
-    /// the
-    /// JWE must have exactly one recipient.
+    /// the JWE must have exactly one recipient.
     /// </param>
     /// <param name="senderPublicKey">
     /// For ECDH-1PU, the sender's static public key, which the recipient must already trust, for example by resolving
-    /// <see cref="SenderKeyId"/>;
-    /// for ECDH-ES, <see langword="null"/>.
+    /// <see cref="SenderKeyId"/>; for ECDH-ES, <see langword="null"/>.
     /// </param>
     /// <param name="cancellationToken">A token used to cancel the operation.</param>
     /// <returns>Returns the plaintext.</returns>
@@ -44,8 +42,7 @@ public sealed partial class JsonWebEncryption
     /// </exception>
     /// <exception cref="CryptographicException">
     /// Thrown when no recipient entry matches, the header is invalid or uses an unsupported key management algorithm, the key agreement
-    /// fails,
-    /// or the encrypted key fails its integrity check.
+    /// fails, or the encrypted key fails its integrity check.
     /// </exception>
     /// <exception cref="AuthenticationTagMismatchException">Thrown when the content fails authentication.</exception>
     /// <exception cref="NotSupportedException">Thrown when the content encryption algorithm is not supported, such as XC20P.</exception>
@@ -76,15 +73,14 @@ public sealed partial class JsonWebEncryption
     /// <returns>Returns the content encryption key, which the caller must zero.</returns>
     /// <remarks>
     /// Why: this is separate from <see cref="DecryptAsync"/> so that the key agreement and key unwrapping of a JWE whose content encryption
-    /// is
-    /// not supported, such as DIDComm's optional XC20P, can still be checked. The key wrap's integrity check authenticates the result.
+    /// is not supported, such as DIDComm's optional XC20P, can still be checked. The key wrap's integrity check authenticates the result.
     /// </remarks>
     internal async ValueTask<byte[]> UnwrapContentEncryptionKeyAsync(
         IJweKeyAgreement recipient,
         JsonWebKey? senderPublicKey,
         CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(recipient);
+        RequireNotNull(recipient);
 
         JweRecipient entry = FindRecipient(recipient);
         string algorithm = GetHeaderValue("alg", entry);
@@ -139,7 +135,11 @@ public sealed partial class JsonWebEncryption
 
         try
         {
-            byte[] cek = AesKeyWrap.Unwrap(kek, entry.EncryptedKey);
+            if (entry.EncryptedKey.Length < 24 || entry.EncryptedKey.Length % 8 != 0)
+                throw new CryptographicException("The encrypted key is not a valid length for AES Key Wrap.");
+
+            using Aes keyWrap = CreateKeyWrap(kek);
+            byte[] cek = keyWrap.DecryptKeyWrap(entry.EncryptedKey);
 
             if (keyLength < 0 || cek.Length == keyLength) return cek;
 
@@ -219,7 +219,7 @@ public sealed partial class JsonWebEncryption
 
         if (value is null) return [];
 
-        return Base64Url.TryDecode(value, out byte[] bytes) ? bytes
+        return JoseJson.TryDecodeBytes(value, out byte[] bytes) ? bytes
             : throw new CryptographicException($"The JWE header member '{name}' is not valid base64url.");
     }
 

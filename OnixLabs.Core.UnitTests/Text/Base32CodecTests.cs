@@ -57,36 +57,36 @@ public sealed class Base32CodecTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (Base32Hex)")]
+    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (ExtendedHex)")]
     [InlineData("", "")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "C5H66P35CPJMGQBADDM6QRJFE1ON4SRKELR7EU3PF8")]
     [InlineData("0123456789", "60OJ4CPK6KR3EE1P")]
-    public void Base32CodecEncodeShouldProduceExpectedResultBase32Hex(string value, string expected)
+    public void Base32CodecEncodeShouldProduceExpectedResultExtendedHex(string value, string expected)
     {
         // Given
         IBaseCodec codec = IBaseCodec.Base32;
         byte[] bytes = value.ToByteArray();
 
         // When
-        string actual = codec.Encode(bytes, Base32FormatProvider.Base32Hex);
+        string actual = codec.Encode(bytes, Base32FormatProvider.ExtendedHex);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (Base32Hex)")]
+    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (ExtendedHex)")]
     [InlineData("", "")]
     [InlineData("85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("C5H66P35CPJMGQBADDM6QRJFE1ON4SRKELR7EU3PF8", "abcdefghijklmnopqrstuvwxyz")]
     [InlineData("60OJ4CPK6KR3EE1P", "0123456789")]
-    public void Base32CodecDecodeShouldProduceExpectedResultBase32Hex(string value, string expected)
+    public void Base32CodecDecodeShouldProduceExpectedResultExtendedHex(string value, string expected)
     {
         // Given
         IBaseCodec codec = IBaseCodec.Base32;
 
         // When
-        byte[] bytes = codec.Decode(value, Base32FormatProvider.Base32Hex);
+        byte[] bytes = codec.Decode(value, Base32FormatProvider.ExtendedHex);
         string actual = Encoding.UTF8.GetString(bytes);
 
         // Then
@@ -237,36 +237,36 @@ public sealed class Base32CodecTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (PaddedBase32Hex)")]
+    [Theory(DisplayName = "Base32Codec.Encode should produce the expected result (PaddedExtendedHex)")]
     [InlineData("", "")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8======")]
     [InlineData("abcdefghijklmnopqrstuvwxyz", "C5H66P35CPJMGQBADDM6QRJFE1ON4SRKELR7EU3PF8======")]
     [InlineData("0123456789", "60OJ4CPK6KR3EE1P")]
-    public void Base32CodecEncodeShouldProduceExpectedResultPaddedBase32Hex(string value, string expected)
+    public void Base32CodecEncodeShouldProduceExpectedResultPaddedExtendedHex(string value, string expected)
     {
         // Given
         IBaseCodec codec = IBaseCodec.Base32;
         byte[] bytes = value.ToByteArray();
 
         // When
-        string actual = codec.Encode(bytes, Base32FormatProvider.PaddedBase32Hex);
+        string actual = codec.Encode(bytes, Base32FormatProvider.PaddedExtendedHex);
 
         // Then
         Assert.Equal(expected, actual);
     }
 
-    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (PaddedBase32Hex)")]
+    [Theory(DisplayName = "Base32Codec.Decode should produce the expected result (PaddedExtendedHex)")]
     [InlineData("", "")]
     [InlineData("85146H258P3KGIAA9D64QJIFA18L4KQKALB5EM2PB8======", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     [InlineData("C5H66P35CPJMGQBADDM6QRJFE1ON4SRKELR7EU3PF8======", "abcdefghijklmnopqrstuvwxyz")]
     [InlineData("60OJ4CPK6KR3EE1P", "0123456789")]
-    public void Base32CodecDecodeShouldProduceExpectedResultPaddedBase32Hex(string value, string expected)
+    public void Base32CodecDecodeShouldProduceExpectedResultPaddedExtendedHex(string value, string expected)
     {
         // Given
         IBaseCodec codec = IBaseCodec.Base32;
 
         // When
-        byte[] bytes = codec.Decode(value, Base32FormatProvider.PaddedBase32Hex);
+        byte[] bytes = codec.Decode(value, Base32FormatProvider.PaddedExtendedHex);
         string actual = Encoding.UTF8.GetString(bytes);
 
         // Then

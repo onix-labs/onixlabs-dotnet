@@ -206,4 +206,35 @@ public sealed class AesCbcHmacSha2Tests
         // Then
         Assert.Throws<ObjectDisposedException>(() => cipher.Encrypt(new byte[16], [1, 2, 3], new byte[16]));
     }
+
+    [Theory(DisplayName = "AesCbcHmacSha2 should report its key and tag sizes, as AesGcm does")]
+    [InlineData(32, 16)]
+    [InlineData(48, 24)]
+    [InlineData(64, 32)]
+    public void AesCbcHmacSha2ShouldReportKeyAndTagSizes(int keyLength, int tagLength)
+    {
+        // Given
+        byte[] key = new byte[keyLength];
+
+        // When
+        using AesCbcHmacSha2 fromArray = new(key);
+        using AesCbcHmacSha2 fromSpan = new(key.AsSpan());
+
+        // Then
+        Assert.True(AesCbcHmacSha2.IsSupported);
+        Assert.Equal(keyLength, fromArray.KeySizeInBytes);
+        Assert.Equal(tagLength, fromArray.TagSizeInBytes);
+        Assert.Equal(keyLength, fromSpan.KeySizeInBytes);
+        Assert.Equal(tagLength, fromSpan.TagSizeInBytes);
+        Assert.Equal(16, AesCbcHmacSha2.TagByteSizes.MinSize);
+        Assert.Equal(32, AesCbcHmacSha2.TagByteSizes.MaxSize);
+        Assert.Equal(8, AesCbcHmacSha2.TagByteSizes.SkipSize);
+    }
+
+    [Fact(DisplayName = "AesCbcHmacSha2 should throw ArgumentNullException for a null key")]
+    public void AesCbcHmacSha2ShouldThrowForNullKey()
+    {
+        // When / Then
+        Assert.Throws<ArgumentNullException>(() => new AesCbcHmacSha2((byte[])null!));
+    }
 }

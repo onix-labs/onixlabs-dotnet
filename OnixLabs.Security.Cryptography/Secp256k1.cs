@@ -15,24 +15,37 @@
 using System;
 using System.Formats.Asn1;
 using System.Numerics;
+using System.Security.Cryptography;
 
 namespace OnixLabs.Security.Cryptography;
 
 /// <summary>
-/// Represents ECDSA signature verification on the secp256k1 curve, as JOSE's <c>ES256K</c> requires (RFC 8812 §3.2), implemented in managed
-/// code because the platform cryptography on macOS, and on some other platforms, does not support the curve.
+/// Represents ECDSA signature verification on the secp256k1 curve, as JOSE's <c>ES256K</c> requires (RFC 8812 §3.2), as an
+/// <see cref="ECDsa"/> that holds a secp256k1 public key.
 /// </summary>
 /// <remarks>
+/// <para>
+/// Why: secp256k1 is an ordinary short Weierstrass curve, which <see cref="ECDsa"/> and <see cref="ECParameters"/> already describe, so
+/// this class derives from <see cref="ECDsa"/>, as <c>ECDsaCng</c> and <c>ECDsaOpenSsl</c> do. It overrides
+/// <see cref="VerifyHash(byte[], byte[])"/>,
+/// <see cref="ImportParameters"/> and <see cref="ExportParameters"/>; the base class provides <c>VerifyData</c>, streams, both signature
+/// formats, and SubjectPublicKeyInfo import and export. <see cref="EcdsaPublicKey"/> can therefore treat secp256k1 like any other curve.
+/// </para>
+/// <para>
+/// Where the platform supports secp256k1, as OpenSSL and Windows generally do, verification is handed to the platform's
+/// <see cref="ECDsa"/>, which is faster; elsewhere, as on macOS, the library's own managed code is used. Support is checked once, by trying
+/// to create a secp256k1 key, and the answer is remembered.
+/// </para>
 /// <para>
 /// The curve constants are those of SEC 2 v2 §2.4.1. Verification follows SEC 1 v2 §4.1.4. Signatures with a high S value are accepted,
 /// as RFC 8812 §3.2 neither requires nor forbids low S.
 /// </para>
 /// <para>
-/// Why: only verification is provided, and it handles only public values, so it is not constant time. Signing would need constant-time
-/// arithmetic on a secret scalar; this code must not be adapted to sign.
+/// Only verification is provided. <see cref="SignHash(byte[])"/> throws, as it does for any <see cref="ECDsa"/> that holds only a public
+/// key. The managed code handles only public values, so it is not constant time; it must not be adapted to sign.
 /// </para>
 /// </remarks>
-internal static class Secp256k1
+internal sealed class Secp256k1 : ECDsa
 {
     /// <summary>
     /// The length in bytes of a field element, a coordinate, and each of r and s.
@@ -69,6 +82,231 @@ internal static class Secp256k1
         "483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8"), out Secp256k1Point point)
         ? point
         : throw new InvalidOperationException("The secp256k1 base point is not on the curve.");
+
+    /// <summary>
+    /// The curve that this class supports: secp256k1, by its OID.
+    /// </summary>
+    private static readonly ECCurve Curve = ECCurve.CreateFromValue(CurveOid);
+
+    /// <summary>
+    /// A value indicating whether the platform's <see cref="ECDsa"/> supports secp256k1.
+    /// </summary>
+    private static readonly Lazy<bool> PlatformSupport = new(DetectPlatformSupport);
+
+    /// <summary>
+    /// A value indicating whether the platform's implementation may be used.
+    /// </summary>
+    private readonly bool usePlatform;
+
+    /// <summary>
+    /// The public point, or the point at infinity if no key has been imported.
+    /// </summary>
+    private Secp256k1Point publicKey = Secp256k1Point.Infinity;
+
+    /// <summary>
+    /// The platform's <see cref="ECDsa"/> holding the same public key, or <see langword="null"/> if the managed code is used.
+    /// </summary>
+    private ECDsa? platform;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Secp256k1"/> class, which uses the platform's implementation where it supports
+    /// secp256k1.
+    /// </summary>
+    public Secp256k1() : this(usePlatform: true)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Secp256k1"/> class, with the specified implementation.
+    /// </summary>
+    /// <param name="usePlatform">Whether to use the platform's implementation, where it supports secp256k1.</param>
+    /// <remarks>Why: the tests run every case through both implementations.</remarks>
+    internal Secp256k1(bool usePlatform)
+    {
+        this.usePlatform = usePlatform;
+        KeySizeValue = 256;
+        LegalKeySizesValue = [new KeySizes(256, 256, 0)];
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether the platform's <see cref="ECDsa"/> supports secp256k1.
+    /// </summary>
+    /// <value><see langword="true"/> if the platform can create a secp256k1 key; otherwise, <see langword="false"/>.</value>
+    internal static bool IsPlatformSupported => PlatformSupport.Value;
+
+    /// <summary>
+    /// Imports the specified secp256k1 public key.
+    /// </summary>
+    /// <param name="parameters">The public key parameters, whose curve must be secp256k1 by name, and which must not include a private
+    /// key.</param>
+    /// <exception cref="CryptographicException">
+    /// Thrown when the curve is not secp256k1, the parameters include a private key, or the point is not on the curve.
+    /// </exception>
+    public override void ImportParameters(ECParameters parameters)
+    {
+        if (!parameters.Curve.IsNamed || parameters.Curve.Oid.Value != CurveOid)
+            throw new CryptographicException("The parameters are not for the secp256k1 named curve.");
+
+        if (parameters.D is not null)
+            throw new CryptographicException("Only secp256k1 public keys are supported; signing is not.");
+
+        if (parameters.Q.X is null || parameters.Q.Y is null
+            || !Secp256k1FieldElement.TryFromBytes(parameters.Q.X, out Secp256k1FieldElement x)
+            || !Secp256k1FieldElement.TryFromBytes(parameters.Q.Y, out Secp256k1FieldElement y)
+            || !Secp256k1Point.TryFromAffine(x, y, out Secp256k1Point point))
+            throw new CryptographicException("The secp256k1 public key is not a valid point on the curve.");
+
+        ECDsa? replacement = null;
+
+        if (usePlatform && IsPlatformSupported)
+        {
+            replacement = Create();
+
+            try
+            {
+                replacement.ImportParameters(parameters);
+            }
+            catch
+            {
+                replacement.Dispose();
+                throw;
+            }
+        }
+
+        platform?.Dispose();
+        platform = replacement;
+        publicKey = point;
+    }
+
+    /// <summary>
+    /// Exports the secp256k1 public key.
+    /// </summary>
+    /// <param name="includePrivateParameters">Must be <see langword="false"/>, because only public keys are held.</param>
+    /// <returns>Returns the public key parameters, with the named secp256k1 curve.</returns>
+    /// <exception cref="CryptographicException">
+    /// Thrown when <paramref name="includePrivateParameters"/> is <see langword="true"/>, or no key has been imported.
+    /// </exception>
+    public override ECParameters ExportParameters(bool includePrivateParameters)
+    {
+        if (includePrivateParameters)
+            throw new CryptographicException("Object contains only the public half of a key pair. A private key must also be provided.");
+
+        RequirePublicKey();
+
+        byte[] x = new byte[ElementLength];
+        byte[] y = new byte[ElementLength];
+        publicKey.GetAffineX().WriteBytes(x);
+        publicKey.GetAffineY().WriteBytes(y);
+
+        return new ECParameters { Curve = Curve, Q = new ECPoint { X = x, Y = y } };
+    }
+
+    /// <summary>
+    /// Throws, because generating secp256k1 keys is not supported.
+    /// </summary>
+    /// <param name="curve">The curve.</param>
+    /// <exception cref="NotSupportedException">Always thrown.</exception>
+    public override void GenerateKey(ECCurve curve) =>
+        throw new NotSupportedException("Generating secp256k1 keys is not supported; only verification is.");
+
+    /// <summary>
+    /// Throws, because only public keys are held, as for any <see cref="ECDsa"/> that holds only a public key.
+    /// </summary>
+    /// <param name="hash">The hash to sign.</param>
+    /// <returns>Never returns.</returns>
+    /// <exception cref="CryptographicException">Always thrown.</exception>
+    public override byte[] SignHash(byte[] hash) =>
+        throw new CryptographicException("Object contains only the public half of a key pair. A private key must also be provided.");
+
+    /// <summary>
+    /// Verifies the specified IEEE P1363 signature (r ‖ s, 64 bytes) of the specified hash, per SEC 1 v2 §4.1.4.
+    /// </summary>
+    /// <param name="hash">The hash of the signed data.</param>
+    /// <param name="signature">The signature, in IEEE P1363 format.</param>
+    /// <returns>Returns <see langword="true"/> if the signature is valid; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="CryptographicException">Thrown when no key has been imported.</exception>
+    /// <remarks>The base class converts DER signatures to this format before calling this method.</remarks>
+    public override bool VerifyHash(byte[] hash, byte[] signature)
+    {
+        RequireNotNull(hash);
+        RequireNotNull(signature);
+        RequirePublicKey();
+
+        return platform?.VerifyHash(hash, signature)
+               ?? Verify(publicKey, hash, signature, DSASignatureFormat.IeeeP1363FixedFieldConcatenation);
+    }
+
+    /// <summary>
+    /// Verifies the specified signature of the specified hash, in the specified format.
+    /// </summary>
+    /// <param name="hash">The hash of the signed data.</param>
+    /// <param name="signature">The signature.</param>
+    /// <param name="signatureFormat">The signature format.</param>
+    /// <returns>Returns <see langword="true"/> if the signature is well formed and valid; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    /// Why: the base class accepts DER integers without the leading zero that keeps them positive, which Project Wycheproof's
+    /// <c>MissingZero</c> cases say must be rejected. A DER signature is therefore decoded strictly here, to the IEEE P1363 form, before
+    /// either implementation verifies it.
+    /// </remarks>
+    protected override bool VerifyHashCore(ReadOnlySpan<byte> hash, ReadOnlySpan<byte> signature, DSASignatureFormat signatureFormat)
+    {
+        if (signatureFormat != DSASignatureFormat.Rfc3279DerSequence)
+            return base.VerifyHashCore(hash, signature, signatureFormat);
+
+        if (!TryDecodeSignature(signature, signatureFormat, out BigInteger r, out BigInteger s)) return false;
+        if (r.Sign <= 0 || r >= N || s.Sign <= 0 || s >= N) return false;
+
+        byte[] p1363 = new byte[2 * ElementLength];
+        WriteScalar(r, p1363.AsSpan(0, ElementLength));
+        WriteScalar(s, p1363.AsSpan(ElementLength));
+
+        return VerifyHash(hash.ToArray(), p1363);
+    }
+
+    /// <summary>
+    /// Releases the platform's implementation, if one is used.
+    /// </summary>
+    /// <param name="disposing">Whether the method is called from <see cref="IDisposable.Dispose"/>.</param>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            platform?.Dispose();
+            platform = null;
+        }
+
+        base.Dispose(disposing);
+    }
+
+    /// <summary>
+    /// Determines whether the platform's <see cref="ECDsa"/> supports secp256k1, by trying to create a key on it.
+    /// </summary>
+    /// <returns>Returns <see langword="true"/> if the platform can create a secp256k1 key; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    /// Why: .NET has no <c>IsSupported</c> property for a curve. macOS reports an unsupported curve as
+    /// <see cref="PlatformNotSupportedException"/>, and other platforms as <see cref="CryptographicException"/>.
+    /// </remarks>
+    private static bool DetectPlatformSupport()
+    {
+        try
+        {
+            using ECDsa algorithm = Create(Curve);
+            return true;
+        }
+        catch (Exception exception) when (exception is PlatformNotSupportedException or CryptographicException or ArgumentException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks that a public key has been imported.
+    /// </summary>
+    /// <exception cref="CryptographicException">Thrown when no key has been imported.</exception>
+    private void RequirePublicKey()
+    {
+        if (publicKey.IsInfinity) throw new CryptographicException("No secp256k1 public key has been imported.");
+    }
 
     /// <summary>
     /// Determines whether the specified SubjectPublicKeyInfo names the secp256k1 curve.
@@ -139,11 +377,11 @@ internal static class Secp256k1
     /// <param name="signature">The signature, in the specified format.</param>
     /// <param name="format">The signature format: IEEE P1363 (r ‖ s, 64 bytes), as JOSE uses, or DER, per RFC 3279.</param>
     /// <returns>Returns <see langword="true"/> if the signature is well formed and valid; otherwise, <see langword="false"/>.</returns>
-    public static bool Verify(
+    internal static bool Verify(
         in Secp256k1Point publicKey,
         ReadOnlySpan<byte> hash,
         ReadOnlySpan<byte> signature,
-        System.Security.Cryptography.DSASignatureFormat format)
+        DSASignatureFormat format)
     {
         if (publicKey.IsInfinity || !TryDecodeSignature(signature, format, out BigInteger r, out BigInteger s)) return false;
 
@@ -244,12 +482,12 @@ internal static class Secp256k1
     /// trailing data (RFC 3279); otherwise, <see langword="false"/>.
     /// </returns>
     private static bool TryDecodeSignature(
-        ReadOnlySpan<byte> signature, System.Security.Cryptography.DSASignatureFormat format, out BigInteger r, out BigInteger s)
+        ReadOnlySpan<byte> signature, DSASignatureFormat format, out BigInteger r, out BigInteger s)
     {
         r = BigInteger.Zero;
         s = BigInteger.Zero;
 
-        if (format == System.Security.Cryptography.DSASignatureFormat.IeeeP1363FixedFieldConcatenation)
+        if (format == DSASignatureFormat.IeeeP1363FixedFieldConcatenation)
         {
             if (signature.Length != 2 * ElementLength) return false;
 
@@ -258,7 +496,7 @@ internal static class Secp256k1
             return true;
         }
 
-        if (format != System.Security.Cryptography.DSASignatureFormat.Rfc3279DerSequence) return false;
+        if (format != DSASignatureFormat.Rfc3279DerSequence) return false;
 
         try
         {

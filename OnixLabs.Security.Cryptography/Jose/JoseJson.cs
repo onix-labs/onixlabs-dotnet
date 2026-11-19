@@ -17,6 +17,7 @@ using System.Security.Cryptography;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using OnixLabs.Core.Text;
 
 namespace OnixLabs.Security.Cryptography.Jose;
 
@@ -101,6 +102,24 @@ internal static class JoseJson
         GetOptionalString(element, name) ?? throw new CryptographicException($"The JOSE member '{name}' is required.");
 
     /// <summary>
+    /// Encodes the specified bytes as unpadded base64url, as JOSE writes every binary value (RFC 7515 §2).
+    /// </summary>
+    /// <param name="value">The bytes to encode.</param>
+    /// <returns>Returns the unpadded base64url encoding of <paramref name="value"/>.</returns>
+    public static string EncodeBytes(ReadOnlySpan<byte> value) => IBaseCodec.Base64.Encode(value, Base64FormatProvider.Url);
+
+    /// <summary>
+    /// Attempts to decode the specified unpadded base64url text, strictly: padding, whitespace, characters outside the alphabet, and unused
+    /// bits that are not zero are all rejected.
+    /// </summary>
+    /// <param name="value">The text to decode.</param>
+    /// <param name="result">When this method returns, contains the decoded bytes, or an empty array on failure.</param>
+    /// <returns>Returns <see langword="true"/> if <paramref name="value"/> is valid unpadded base64url; otherwise,
+    /// <see langword="false"/>.</returns>
+    public static bool TryDecodeBytes(ReadOnlySpan<char> value, out byte[] result) =>
+        IBaseCodec.Base64.TryDecode(value, Base64FormatProvider.Url, out result);
+
+    /// <summary>
     /// Gets and decodes the specified base64url string member of the specified object, if it is present.
     /// </summary>
     /// <param name="element">The JSON object.</param>
@@ -113,7 +132,7 @@ internal static class JoseJson
 
         if (value is null) return null;
 
-        return Base64Url.TryDecode(value, out byte[] bytes)
+        return TryDecodeBytes(value, out byte[] bytes)
             ? bytes
             : throw new CryptographicException($"The JOSE member '{name}' is not valid base64url.");
     }

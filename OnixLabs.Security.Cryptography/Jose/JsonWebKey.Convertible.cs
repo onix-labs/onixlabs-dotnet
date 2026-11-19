@@ -321,8 +321,7 @@ public sealed partial class JsonWebKey
     /// <exception cref="CryptographicException">Thrown when the public keys differ.</exception>
     /// <remarks>
     /// Why: a JWK whose public part does not belong to its private part is malformed, and signing with such a pair can be dangerous;
-    /// Ed25519
-    /// signatures made under a mismatched public key can reveal the private key.
+    /// Ed25519 signatures made under a mismatched public key can reveal the private key.
     /// </remarks>
     private static void RequireMatchingPublicKey(ReadOnlySpan<byte> derived, ReadOnlySpan<byte> expected)
     {

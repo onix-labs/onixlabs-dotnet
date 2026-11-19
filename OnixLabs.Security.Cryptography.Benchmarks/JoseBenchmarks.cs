@@ -18,6 +18,8 @@ using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using OnixLabs.Security.Cryptography.Jose;
 
+using OnixLabs.Core.Text;
+
 namespace OnixLabs.Security.Cryptography.Benchmarks;
 
 /// <summary>
@@ -66,7 +68,7 @@ public class JoseBenchmarks
         anoncryptX25519 = (await JsonWebEncryption.EncryptAsync(payload, [x25519Recipient.PublicKey], anoncrypt)).ToJson();
         authcryptX25519 = (await JsonWebEncryption.EncryptAsync(payload, [x25519Recipient.PublicKey], authcrypt)).ToJson();
         anoncryptP256 = (await JsonWebEncryption.EncryptAsync(payload, [p256Recipient.PublicKey], anoncrypt)).ToJson();
-        encodedPayload = Base64Url.Encode(payload);
+        encodedPayload = IBaseCodec.Base64.Encode(payload, Base64FormatProvider.Url);
         privateJwk = JsonWebKey.Create(ecdsaKey).ToJson(includePrivateKey: true);
     }
 
@@ -85,14 +87,14 @@ public class JoseBenchmarks
     /// </summary>
     /// <returns>Returns the encoded payload.</returns>
     [Benchmark]
-    public string Base64UrlEncode() => Base64Url.Encode(payload);
+    public string Base64UrlEncode() => IBaseCodec.Base64.Encode(payload, Base64FormatProvider.Url);
 
     /// <summary>
     /// Decodes the payload from base64url.
     /// </summary>
     /// <returns>Returns the decoded payload.</returns>
     [Benchmark]
-    public byte[] Base64UrlDecode() => Base64Url.Decode(encodedPayload);
+    public byte[] Base64UrlDecode() => IBaseCodec.Base64.Decode(encodedPayload, Base64FormatProvider.Url);
 
     /// <summary>
     /// Encodes the payload as standard base64 with the platform, for reference.

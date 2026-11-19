@@ -204,15 +204,15 @@ public sealed partial class JsonWebEncryption
         {
             JsonObject entry = [];
             if (recipient.Header is { } header) entry["header"] = JsonNode.Parse(header.GetRawText());
-            entry["encrypted_key"] = Base64Url.Encode(recipient.EncryptedKey);
+            entry["encrypted_key"] = JoseJson.EncodeBytes(recipient.EncryptedKey);
             recipients.Add(entry);
         }
 
         result["recipients"] = recipients;
         if (EncodedAdditionalData is not null) result["aad"] = EncodedAdditionalData;
-        result["iv"] = Base64Url.Encode(iv);
-        result["ciphertext"] = Base64Url.Encode(ciphertext);
-        result["tag"] = Base64Url.Encode(tag);
+        result["iv"] = JoseJson.EncodeBytes(iv);
+        result["ciphertext"] = JoseJson.EncodeBytes(ciphertext);
+        result["tag"] = JoseJson.EncodeBytes(tag);
 
         return JoseJson.Write(result);
     }
@@ -244,4 +244,25 @@ public sealed partial class JsonWebEncryption
         Encoding.ASCII.GetBytes(EncodedAdditionalData is null
             ? EncodedProtectedHeader
             : $"{EncodedProtectedHeader}.{EncodedAdditionalData}");
+
+    /// <summary>
+    /// Creates an <see cref="Aes"/> instance keyed with the specified key-encryption key, for AES Key Wrap.
+    /// </summary>
+    /// <param name="keyEncryptionKey">The 16, 24 or 32-byte key-encryption key.</param>
+    /// <returns>Returns a new <see cref="Aes"/> instance, which the caller must dispose.</returns>
+    private static Aes CreateKeyWrap(byte[] keyEncryptionKey)
+    {
+        Aes aes = Aes.Create();
+
+        try
+        {
+            aes.Key = keyEncryptionKey;
+            return aes;
+        }
+        catch
+        {
+            aes.Dispose();
+            throw;
+        }
+    }
 }

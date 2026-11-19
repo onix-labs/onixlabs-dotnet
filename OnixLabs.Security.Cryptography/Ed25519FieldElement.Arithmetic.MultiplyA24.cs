@@ -28,8 +28,8 @@ internal readonly partial struct Ed25519FieldElement
     /// <returns>Returns the field element representing 121665 · <paramref name="a"/> modulo p.</returns>
     /// <remarks>
     /// Why: a24 fits in one limb, so this needs five limb products rather than the twenty-five of <see cref="Multiply"/>. It runs once per
-    /// bit
-    /// of the X25519 ladder. The products and the carry reduction are the same as <see cref="Multiply"/> by a field element holding a24.
+    /// bit of the X25519 ladder. The products and the carry reduction are the same as <see cref="Multiply"/> by a field element holding
+    /// a24.
     /// </remarks>
     public static Ed25519FieldElement MultiplyA24(in Ed25519FieldElement a)
     {

@@ -49,7 +49,7 @@ public static class JweOtherInfo
         int keyDataLengthInBits,
         ReadOnlySpan<byte> tag = default)
     {
-        ArgumentNullException.ThrowIfNull(algorithm);
+        RequireNotNull(algorithm);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(keyDataLengthInBits);
 
         byte[] algorithmId = Encoding.ASCII.GetBytes(algorithm);

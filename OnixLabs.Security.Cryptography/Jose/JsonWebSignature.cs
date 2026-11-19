@@ -84,10 +84,10 @@ public sealed class JsonWebSignature
         string? type = null,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(signers);
+        RequireNotNull(signers);
         Require(signers.Count > 0, "At least one signer is required.", nameof(signers));
 
-        string encodedPayload = Base64Url.Encode(payload.Span);
+        string encodedPayload = JoseJson.EncodeBytes(payload.Span);
         List<JwsSignature> signatures = [];
 
         foreach (IJwsSigner signer in signers)
@@ -98,7 +98,7 @@ public sealed class JsonWebSignature
             if (signer.KeyId is not null) header["kid"] = signer.KeyId;
 
             string headerJson = JoseJson.Write(header);
-            string encodedHeader = Base64Url.Encode(Encoding.UTF8.GetBytes(headerJson));
+            string encodedHeader = JoseJson.EncodeBytes(Encoding.UTF8.GetBytes(headerJson));
             byte[] signingInput = Encoding.ASCII.GetBytes($"{encodedHeader}.{encodedPayload}");
             byte[] signature = await signer.SignAsync(signingInput, cancellationToken).ConfigureAwait(false);
 
@@ -149,7 +149,7 @@ public sealed class JsonWebSignature
     /// <returns>Returns <see langword="true"/> if a matching signature is valid; otherwise, <see langword="false"/>.</returns>
     public bool Verify(JsonWebKey publicKey)
     {
-        ArgumentNullException.ThrowIfNull(publicKey);
+        RequireNotNull(publicKey);
 
         return Signatures
             .Where(signature => publicKey.KeyId is null || signature.KeyId == publicKey.KeyId)
@@ -214,7 +214,7 @@ public sealed class JsonWebSignature
     {
         target["protected"] = signature.EncodedProtectedHeader;
         if (signature.Header is { } header) target["header"] = JsonNode.Parse(header.GetRawText());
-        target["signature"] = Base64Url.Encode(signature.Signature);
+        target["signature"] = JoseJson.EncodeBytes(signature.Signature);
         return target;
     }
 }

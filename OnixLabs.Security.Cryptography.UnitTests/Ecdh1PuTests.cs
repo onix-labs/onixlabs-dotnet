@@ -72,8 +72,8 @@ public sealed class Ecdh1PuTests
         byte[] senderZs = aliceStatic.DeriveRawSharedSecret(bobStatic.GetPublicKey()).AsReadOnlySpan().ToArray();
         byte[] recipientZe = bobStatic.DeriveRawSharedSecret(aliceEphemeral.GetPublicKey()).AsReadOnlySpan().ToArray();
         byte[] recipientZs = bobStatic.DeriveRawSharedSecret(aliceStatic.GetPublicKey()).AsReadOnlySpan().ToArray();
-        Ecdh1Pu.DeriveKey(senderZe, senderZs, otherInfo, senderKey);
-        Ecdh1Pu.DeriveKey(recipientZe, recipientZs, otherInfo, recipientKey);
+        Ecdh1Pu.DeriveKey(senderZe, senderZs, senderKey, otherInfo);
+        Ecdh1Pu.DeriveKey(recipientZe, recipientZs, recipientKey, otherInfo);
 
         // Then
         Assert.Equal(Hex("9e56d91d817135d372834283bf84269cfb316ea3da806a48f6daa7798cfe90c4"), senderZe);
@@ -123,8 +123,8 @@ public sealed class Ecdh1PuTests
         byte[] bobZs = aliceStatic.DeriveRawSharedSecret(bob.GetPublicKey()).AsReadOnlySpan().ToArray();
         byte[] charlieZe = aliceEphemeral.DeriveRawSharedSecret(charlie.GetPublicKey()).AsReadOnlySpan().ToArray();
         byte[] charlieZs = aliceStatic.DeriveRawSharedSecret(charlie.GetPublicKey()).AsReadOnlySpan().ToArray();
-        Ecdh1Pu.DeriveKey(bobZe, bobZs, otherInfo, bobKek);
-        Ecdh1Pu.DeriveKey(charlieZe, charlieZs, otherInfo, charlieKek);
+        Ecdh1Pu.DeriveKey(bobZe, bobZs, bobKek, otherInfo);
+        Ecdh1Pu.DeriveKey(charlieZe, charlieZs, charlieKek, otherInfo);
 
         // Then
         Assert.Equal(Base64Url.Decode("Az2IWsISEMDJvyc5XRL-3-d-RgNBOGolCsxFFoUXFYw"), ciphertext);
@@ -138,10 +138,10 @@ public sealed class Ecdh1PuTests
         Assert.Equal(Hex("57d8126f1b7ec4ccb0584dac03cb27cc"), charlieKek);
         Assert.Equal(Base64Url.Decode(
             "pOMVA9_PtoRe7xXW1139NzzN1UhiFoio8lGto9cf0t8PyU-sjNXH8-LIRLycq8CH" +
-            "JQbDwvQeU1cSl55cQ0hGezJu2N9IY0QN"), AesKeyWrap.Wrap(bobKek, cek));
+            "JQbDwvQeU1cSl55cQ0hGezJu2N9IY0QN"), WrapKey(bobKek, cek));
         Assert.Equal(Base64Url.Decode(
             "56GVudgRLIMEElQ7DpXsijJVRSWUSDNdbWkdV3g0GUNq6hcT_GkxwnxlPIWrTXCq" +
-            "RpVKQC8fe4z3PQ2YH2afvjQ28aiCTWFE"), AesKeyWrap.Wrap(charlieKek, cek));
+            "RpVKQC8fe4z3PQ2YH2afvjQ28aiCTWFE"), WrapKey(charlieKek, cek));
         Assert.Equal(bobZe, bob.DeriveRawSharedSecret(aliceEphemeral.GetPublicKey()).AsReadOnlySpan().ToArray());
         Assert.Equal(bobZs, bob.DeriveRawSharedSecret(aliceStatic.GetPublicKey()).AsReadOnlySpan().ToArray());
     }
@@ -150,8 +150,8 @@ public sealed class Ecdh1PuTests
     public void Ecdh1PuDeriveKeyShouldThrowForMismatchedSecrets()
     {
         // When / Then
-        Assert.Throws<ArgumentException>(() => Ecdh1Pu.DeriveKey(new byte[32], new byte[48], [], new byte[16]));
-        Assert.Throws<ArgumentException>(() => Ecdh1Pu.DeriveKey([], [], [], new byte[16]));
+        Assert.Throws<ArgumentException>(() => Ecdh1Pu.DeriveKey(new byte[32], new byte[48], new byte[16], []));
+        Assert.Throws<ArgumentException>(() => Ecdh1Pu.DeriveKey([], [], new byte[16], []));
     }
 
     /// <summary>
@@ -178,5 +178,18 @@ public sealed class Ecdh1PuTests
         });
 
         return EcdhPrivateKey.Import(algorithm.ExportECPrivateKey());
+    }
+
+    /// <summary>
+    /// Wraps the specified content encryption key with the specified key-encryption key, with AES Key Wrap.
+    /// </summary>
+    /// <param name="keyEncryptionKey">The key-encryption key.</param>
+    /// <param name="contentEncryptionKey">The key to wrap.</param>
+    /// <returns>Returns the wrapped key.</returns>
+    private static byte[] WrapKey(byte[] keyEncryptionKey, byte[] contentEncryptionKey)
+    {
+        using Aes aes = Aes.Create();
+        aes.Key = keyEncryptionKey;
+        return aes.EncryptKeyWrap(contentEncryptionKey);
     }
 }

@@ -115,7 +115,7 @@ public sealed class JwsSignature
     /// </remarks>
     public bool Verify(JsonWebKey publicKey)
     {
-        ArgumentNullException.ThrowIfNull(publicKey);
+        RequireNotNull(publicKey);
 
         if (ProtectedHeader.TryGetProperty("crit", out _) || Header is { } header && header.TryGetProperty("crit", out _)) return false;
 

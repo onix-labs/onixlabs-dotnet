@@ -32,8 +32,7 @@ public sealed partial class XdhPrivateKey : PrivateKey, IXdhPrivateKey, ISpanPar
     /// </summary>
     /// <remarks>
     /// Why: deriving the public key is a full X25519 scalar multiplication, as costly as a key agreement. It is not secret, the private key
-    /// it
-    /// derives from never changes, and it is only ever derived from this key's own private key, never accepted from a caller.
+    /// it derives from never changes, and it is only ever derived from this key's own private key, never accepted from a caller.
     /// </remarks>
     private byte[]? publicKey;
 

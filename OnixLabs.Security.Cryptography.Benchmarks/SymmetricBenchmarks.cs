@@ -43,6 +43,7 @@ public class SymmetricBenchmarks
     private byte[] gcmCiphertext = null!;
     private AesCbcHmacSha2 cbcHmac = null!;
     private AesGcm gcm = null!;
+    private Aes keyWrap = null!;
 
     /// <summary>
     /// Gets or sets the length of the message encrypted by the content encryption benchmarks.
@@ -58,7 +59,9 @@ public class SymmetricBenchmarks
     public void Setup()
     {
         plaintext = RandomNumberGenerator.GetBytes(MessageLength);
-        wrapped = AesKeyWrap.Wrap(keyEncryptionKey, contentEncryptionKey);
+        keyWrap = Aes.Create();
+        keyWrap.Key = keyEncryptionKey;
+        wrapped = keyWrap.EncryptKeyWrap(contentEncryptionKey);
         cbcHmac = new AesCbcHmacSha2(contentEncryptionKey);
         gcm = new AesGcm(contentEncryptionKey.AsSpan(0, 32), 16);
         ciphertext = cbcHmac.Encrypt(iv, plaintext, tag, associatedData);
@@ -74,33 +77,34 @@ public class SymmetricBenchmarks
     {
         cbcHmac.Dispose();
         gcm.Dispose();
+        keyWrap.Dispose();
     }
 
     /// <summary>
     /// Derives a 256-bit key with the Concat KDF and SHA-256.
     /// </summary>
     [Benchmark]
-    public void ConcatKdfDeriveKey() => ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, sharedSecret, otherInfo, derivedKey);
+    public void ConcatKdfDeriveKey() => ConcatKdf.DeriveKey(HashAlgorithmName.SHA256, sharedSecret, derivedKey, otherInfo);
 
     /// <summary>
     /// Derives a 256-bit ECDH-1PU key from two 32-byte shared secrets.
     /// </summary>
     [Benchmark]
-    public void Ecdh1PuDeriveKey() => Ecdh1Pu.DeriveKey(sharedSecret, sharedSecret, otherInfo, derivedKey);
+    public void Ecdh1PuDeriveKey() => Ecdh1Pu.DeriveKey(sharedSecret, sharedSecret, derivedKey, otherInfo);
 
     /// <summary>
-    /// Wraps a 512-bit content encryption key with A256KW.
+    /// Wraps a 512-bit content encryption key with A256KW: the library's own key wrap on .NET 8 to 10, and .NET's on .NET 11.
     /// </summary>
     /// <returns>Returns the wrapped key.</returns>
     [Benchmark]
-    public byte[] AesKeyWrapWrap() => AesKeyWrap.Wrap(keyEncryptionKey, contentEncryptionKey);
+    public byte[] AesEncryptKeyWrap() => keyWrap.EncryptKeyWrap(contentEncryptionKey);
 
     /// <summary>
-    /// Unwraps a 512-bit content encryption key with A256KW.
+    /// Unwraps a 512-bit content encryption key with A256KW: the library's own key wrap on .NET 8 to 10, and .NET's on .NET 11.
     /// </summary>
-    /// <returns>Returns <see langword="true"/> if the key passed its integrity check; otherwise, <see langword="false"/>.</returns>
+    /// <returns>Returns the length of the unwrapped key.</returns>
     [Benchmark]
-    public bool AesKeyWrapTryUnwrap() => AesKeyWrap.TryUnwrap(keyEncryptionKey, wrapped, unwrapped, out int _);
+    public int AesDecryptKeyWrap() => keyWrap.DecryptKeyWrap(wrapped, unwrapped);
 
     /// <summary>
     /// Encrypts the message with A256CBC-HS512.

@@ -32,7 +32,7 @@ public static class JweKeyAgreement
     /// <returns>Returns a new <see cref="IJweKeyAgreement"/>.</returns>
     public static IJweKeyAgreement Create(XdhPrivateKey key, string? keyId = null)
     {
-        ArgumentNullException.ThrowIfNull(key);
+        RequireNotNull(key);
         return new XdhKeyAgreement(key, JsonWebKey.Create(key.GetPublicKey(), keyId));
     }
 
@@ -44,7 +44,7 @@ public static class JweKeyAgreement
     /// <returns>Returns a new <see cref="IJweKeyAgreement"/>.</returns>
     public static IJweKeyAgreement Create(EcdhPrivateKey key, string? keyId = null)
     {
-        ArgumentNullException.ThrowIfNull(key);
+        RequireNotNull(key);
         return new EcdhKeyAgreement(key, JsonWebKey.Create(key.GetPublicKey(), keyId));
     }
 

@@ -85,6 +85,7 @@ Strongly typed cryptographic primitives and structures with value semantics, des
 -   Public and private key abstractions (`PublicKey`, `PrivateKey`)
 -   ECDH, ECDSA, and RSA key implementations
 -   Fully managed EdDSA (Ed25519) key implementation (`EddsaPrivateKey`, `EddsaPublicKey`)
+-   Ed25519 to X25519 public key conversion (`EddsaPublicKey.ToXdhPublicKey`), by the birational map of RFC 7748, refusing invalid keys and points of small order
 -   X25519 Diffie-Hellman key implementation (`XdhPrivateKey`, `XdhPublicKey`) on every target framework, using .NET's own X25519 where it is supported and managed code elsewhere
 -   Raw shared secrets for key derivation (`DeriveRawSharedSecret`) as well as hashed ones (`DeriveSharedSecret`), on both ECDH and X25519 keys, with public key validation
 -   secp256k1 ECDSA signature verification (JOSE `ES256K`) through `EcdsaPublicKey` on every platform, using the platform's implementation where it supports the curve and managed code elsewhere

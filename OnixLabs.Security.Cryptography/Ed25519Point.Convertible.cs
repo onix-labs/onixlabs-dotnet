@@ -102,6 +102,32 @@ internal readonly partial struct Ed25519Point
     }
 
     /// <summary>
+    /// Attempts to convert a 32-byte Ed25519 point encoding to the u-coordinate of the equivalent Curve25519 point,
+    /// by the birational map u = (1 + y) / (1 - y) of RFC 7748 §4.1.
+    /// </summary>
+    /// <param name="encoded">The 32-byte little-endian point encoding.</param>
+    /// <param name="destination">The 32-byte destination buffer that receives the little-endian u-coordinate.</param>
+    /// <returns>
+    /// Returns <see langword="false"/> if the input does not decode to a valid point per RFC 8032 §5.1.3, or decodes to a point of
+    /// small order, including the identity; otherwise, <see langword="true"/>.
+    /// </returns>
+    public static bool TryConvertToMontgomery(ReadOnlySpan<byte> encoded, Span<byte> destination)
+    {
+        if (!TryDecode(encoded, out Ed25519Point point)) return false;
+
+        // Why: a point has small order exactly when multiplying it by the cofactor, 8, gives the identity. That covers the identity
+        // itself, whose u-coordinate would divide by zero, and the seven other torsion points, whose u-coordinates are X25519 keys
+        // of small order that no key agreement accepts.
+        if (Double(Double(Double(point))) == Identity) return false;
+
+        // In projective form, u = (Z + Y) / (Z - Y). Z - Y is never zero here, because only the identity has y = 1.
+        Ed25519FieldElement u = (point.z + point.y) * Ed25519FieldElement.Invert(point.z - point.y);
+        u.WriteBytes(destination);
+
+        return true;
+    }
+
+    /// <summary>
     /// Determines whether the specified 32-byte little-endian y-coordinate (with the sign bit
     /// already cleared) is strictly less than the field prime p, that is, in canonical form.
     /// </summary>

@@ -520,6 +520,128 @@ public sealed class EddsaKeyTests
         Assert.Equal(expectedSignature, signature);
     }
 
+    [Fact(DisplayName = "EddsaPublicKey.ToXdhPublicKey should match the did:key specification's Ed25519 example")]
+    public void EddsaPublicKeyToXdhPublicKeyShouldMatchDidKeyExample()
+    {
+        // Given — the did:key specification's Ed25519 example (https://w3c-ccg.github.io/did-key-spec/):
+        // did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK has the X25519 key-agreement method
+        // #z6LSj72tK8brWgZja8NLRwPigth2T9QRiG1uH9oKZuKjdh9p. The bytes below are those identifiers decoded from base58btc,
+        // without their multicodec prefixes (0xed 0x01 for Ed25519, 0xec 0x01 for X25519).
+        EddsaPublicKey publicKey = new(DecodeHex("2e6fcce36701dc791488e0d0b1745cc1e33a4c1c9fcc41c63bd343dbbe0970e6"));
+        byte[] expected = DecodeHex("6e5ff79202a9cfd8e0b20df9d0236e1dafe440bdc1eb41a2fbdf1699d416da1f");
+
+        // When
+        XdhPublicKey actual = publicKey.ToXdhPublicKey();
+
+        // Then
+        Assert.Equal(expected, actual.AsReadOnlySpan().ToArray());
+    }
+
+    [Fact(DisplayName = "EddsaPublicKey.ToXdhPublicKey should match libsodium's crypto_sign_ed25519_pk_to_curve25519 test")]
+    public void EddsaPublicKeyToXdhPublicKeyShouldMatchLibsodium()
+    {
+        // Given — libsodium's test/default/ed25519_convert.c and its .exp file: the seed, and the X25519 public and private keys it
+        // prints for that seed's Ed25519 key pair.
+        EddsaPrivateKey privateKey = EddsaPrivateKey.Import(DecodeHex("421151a459faeade3d247115f94aedae42318124095afabe4d1451a559faedee"));
+        byte[] expectedPublicKey = DecodeHex("f1814f0e8ff1043d8a44d25babff3cedcae6c22c3edaa48f857ae70de2baae50");
+        byte[] expectedPrivateKey = DecodeHex("8052030376d47112be7f73ed7a019293dd12ad910b654455798b4667d73de166");
+
+        // When
+        XdhPublicKey actual = privateKey.GetPublicKey().ToXdhPublicKey();
+
+        // Then
+        Assert.Equal(expectedPublicKey, actual.AsReadOnlySpan().ToArray());
+        Assert.Equal(expectedPrivateKey, ToXdhPrivateKeyData(privateKey));
+        Assert.Equal(actual, new XdhPrivateKey(expectedPrivateKey).GetPublicKey());
+    }
+
+    [Fact(DisplayName = "EddsaPublicKey.ToXdhPublicKey should agree with the X25519 public key of the converted private key")]
+    public void EddsaPublicKeyToXdhPublicKeyShouldAgreeWithConvertedPrivateKey()
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            // Given
+            EddsaPrivateKey privateKey = EddsaPrivateKey.Create();
+            XdhPrivateKey xdhPrivateKey = new(ToXdhPrivateKeyData(privateKey));
+
+            // When
+            XdhPublicKey actual = privateKey.GetPublicKey().ToXdhPublicKey();
+
+            // Then
+            Assert.Equal(xdhPrivateKey.GetPublicKey(), actual);
+        }
+    }
+
+    [Fact(DisplayName = "EddsaPublicKey.ToXdhPublicKey should give a key that agrees the same secret from both sides")]
+    public void EddsaPublicKeyToXdhPublicKeyShouldAgreeSameSecretFromBothSides()
+    {
+        // Given
+        EddsaPrivateKey bob = EddsaPrivateKey.Create();
+        XdhPrivateKey bobXdh = new(ToXdhPrivateKeyData(bob));
+        XdhPrivateKey alice = XdhPrivateKey.Create();
+
+        // When
+        Secret aliceSecret = alice.DeriveRawSharedSecret(bob.GetPublicKey().ToXdhPublicKey());
+        Secret bobSecret = bobXdh.DeriveRawSharedSecret(alice.GetPublicKey());
+
+        // Then
+        Assert.Equal(aliceSecret, bobSecret);
+    }
+
+    /// <summary>
+    /// Verifies that every point of small order is refused. The encodings are the eight points of the curve's torsion subgroup, as
+    /// RFC 8032 §5.1.3 decodes them, computed independently of this implementation.
+    /// </summary>
+    [Theory(DisplayName = "EddsaPublicKey.ToXdhPublicKey should throw for a point of small order")]
+    [InlineData("0100000000000000000000000000000000000000000000000000000000000000")] // The identity, order 1.
+    [InlineData("ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f")] // y = -1, order 2.
+    [InlineData("0000000000000000000000000000000000000000000000000000000000000000")] // y = 0, order 4.
+    [InlineData("0000000000000000000000000000000000000000000000000000000000000080")] // y = 0, order 4.
+    [InlineData("26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05")] // Order 8.
+    [InlineData("26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc85")] // Order 8.
+    [InlineData("c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a")] // Order 8.
+    [InlineData("c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac03fa")] // Order 8.
+    public void EddsaPublicKeyToXdhPublicKeyShouldThrowForSmallOrderPoint(string encoding)
+    {
+        // Given
+        EddsaPublicKey publicKey = new(DecodeHex(encoding));
+
+        // When / Then
+        Assert.Throws<CryptographicException>(() => publicKey.ToXdhPublicKey());
+    }
+
+    [Theory(DisplayName = "EddsaPublicKey.ToXdhPublicKey should throw for an encoding that is not a valid point")]
+    [InlineData("edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f")] // y = p, not canonical.
+    [InlineData("eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f")] // y = p + 1, a non-canonical identity.
+    [InlineData("0100000000000000000000000000000000000000000000000000000000000080")] // x = 0 with the sign bit set.
+    [InlineData("0200000000000000000000000000000000000000000000000000000000000000")] // y = 2, which has no x.
+    [InlineData("00000000000000000000000000000000000000000000000000000000000000")] // 31 bytes.
+    [InlineData("000000000000000000000000000000000000000000000000000000000000000000")] // 33 bytes.
+    [InlineData("")] // Empty.
+    public void EddsaPublicKeyToXdhPublicKeyShouldThrowForInvalidEncoding(string encoding)
+    {
+        // Given
+        EddsaPublicKey publicKey = new(DecodeHex(encoding));
+
+        // When / Then
+        Assert.Throws<CryptographicException>(() => publicKey.ToXdhPublicKey());
+    }
+
+    /// <summary>
+    /// Converts an Ed25519 private key to its X25519 private key: the first 32 bytes of SHA-512 of the seed, clamped, per RFC 8032
+    /// §5.1.5. The library leaves this out on purpose; the tests need it to check the public key conversion against the private side.
+    /// </summary>
+    /// <param name="privateKey">The Ed25519 private key to convert.</param>
+    /// <returns>Returns the 32-byte X25519 private key.</returns>
+    private static byte[] ToXdhPrivateKeyData(EddsaPrivateKey privateKey)
+    {
+        byte[] result = SHA512.HashData(privateKey.AsReadOnlySpan())[..32];
+        result[0] &= 248;
+        result[31] &= 127;
+        result[31] |= 64;
+        return result;
+    }
+
     private static byte[] DecodeHex(string value) =>
         IBaseCodec.Base16.Decode(value, Base16FormatProvider.Invariant);
 }

@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Security.Cryptography;
+
 namespace OnixLabs.Security.Cryptography;
 
 public sealed partial class EddsaPublicKey
@@ -23,4 +26,20 @@ public sealed partial class EddsaPublicKey
 
     /// <inheritdoc/>
     public override NamedPublicKey ToNamedPublicKey() => new(this, KeyName);
+
+    /// <summary>
+    /// Converts the current Ed25519 public key to the X25519 public key of the same key pair, by the birational map of RFC 7748 §4.1.
+    /// </summary>
+    /// <returns>Returns the X25519 public key.</returns>
+    /// <exception cref="CryptographicException">
+    /// Thrown when the current key is not a valid Ed25519 public key, or is one of the points of small order, including the identity.
+    /// </exception>
+    public XdhPublicKey ToXdhPublicKey()
+    {
+        Span<byte> destination = stackalloc byte[X25519.PublicKeySizeInBytes];
+
+        return Ed25519Point.TryConvertToMontgomery(KeyData, destination)
+            ? new XdhPublicKey(destination)
+            : throw new CryptographicException("The Ed25519 public key is not a valid point on the curve, or is a point of small order.");
+    }
 }
